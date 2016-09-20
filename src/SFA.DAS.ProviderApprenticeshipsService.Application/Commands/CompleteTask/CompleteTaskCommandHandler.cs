@@ -1,7 +1,7 @@
 ﻿using System;
 using MediatR;
 using SFA.DAS.Tasks.Api.Client;
-using SFA.DAS.Tasks.Domain.Entities;
+using SFA.DAS.Tasks.Api.Types;
 using Task = System.Threading.Tasks.Task;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CompleteTask

@@ -116,9 +116,9 @@
       <Project>{e442b238-0c69-449e-a2c5-fd890cf6a7dc}</Project>
       <Name>SFA.DAS.Tasks.Api.Client</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.Tasks.Domain\SFA.DAS.Tasks.Domain.csproj">
-      <Project>{9bbab098-4c62-4dfc-aeea-20a0d9bd1e2c}</Project>
-      <Name>SFA.DAS.Tasks.Domain</Name>
+    <ProjectReference Include="..\SFA.DAS.Tasks.Api.Types\SFA.DAS.Tasks.Api.Types.csproj">
+      <Project>{E1E60BA1-5838-474E-BDA0-810D7A5B126E}</Project>
+      <Name>SFA.DAS.Tasks.Api.Types</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

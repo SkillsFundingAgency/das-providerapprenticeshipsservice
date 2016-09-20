@@ -23,7 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Tests.Queries.GetTa
         [Test]
         public async Task EmptyListReturnedIfNoTasks()
         {
-            var expected = new List<Tasks.Domain.Entities.Task>();
+            var expected = new List<Tasks.Api.Types.Task>();
 
             _tasksApi.Setup(x => x.GetTasks(It.IsAny<string>())).ReturnsAsync(expected);
 
