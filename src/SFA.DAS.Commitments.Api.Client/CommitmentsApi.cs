@@ -52,20 +52,14 @@ namespace SFA.DAS.Commitments.Api.Client
         {
             var url = $"{_baseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}";
 
-            var change = new CommitmentStatusChange
-            {
-                Status = status,
-                Message = ""
-            };
-
-            await PatchCommitment(url, change);
+            await PatchCommitment(url, status);
         }
 
-        public async Task PostProviderCommitmentTask(long providerId, long commitmentId, CommitmentTask task)
+        public async Task PatchProviderCommitment(long providerId, long commitmentId, CommitmentStatus status)
         {
-            var url = $"{_baseUrl}api/provider/{providerId}/commitments/{commitmentId}/tasks";
+            var url = $"{_baseUrl}api/provider/{providerId}/commitments/{commitmentId}";
 
-            await PostCommitmentTask(url, task);
+            await PatchCommitment(url, status);
         }
 
         public async Task UpdateEmployerApprenticeship(long employerAccountId, long commitmentId, long apprenticeshipId, Apprenticeship apprenticeship)
@@ -73,6 +67,13 @@ namespace SFA.DAS.Commitments.Api.Client
             var url = $"{_baseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
 
             await PutApprenticeship(url, apprenticeship);
+        }
+
+        public async Task PatchEmployerApprenticeship(long employerAccountId, long commitmentId, long apprenticeshipId, ApprenticeshipStatus status)
+        {
+            var url = $"{_baseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
+
+            await PatchApprenticeship(url, status);
         }
 
         public async Task<Apprenticeship> GetProviderApprenticeship(long providerId, long commitmentId, long apprenticeshipId)
@@ -119,15 +120,15 @@ namespace SFA.DAS.Commitments.Api.Client
             return JsonConvert.DeserializeObject<Commitment>(content);
         }
 
-        private async Task PostCommitmentTask(string url, CommitmentTask task)
-        {
-            var data = JsonConvert.SerializeObject(task);
-            await PostAsync(url, data);
-        }
-
-        private async Task PatchCommitment(string url, CommitmentStatusChange change)
+        private async Task PatchCommitment(string url, CommitmentStatus change)
         {
             var data = JsonConvert.SerializeObject(change);
+            await PatchAsync(url, data);
+        }
+
+        private async Task PatchApprenticeship(string url, ApprenticeshipStatus status)
+        {
+            var data = JsonConvert.SerializeObject(status);
             await PatchAsync(url, data);
         }
 
