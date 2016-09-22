@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
+using Newtonsoft.Json;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTask;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTasks;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.Tasks.Api.Types.Templates;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -40,9 +42,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 TaskId = taskId
             });
 
+            var taskTemplate = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(response.Task.Body);
+
             return new TaskViewModel
             {
-                Task = response.Task
+                ProviderId = providerId,
+                Task = response.Task,
+                LinkId = taskTemplate.CommitmentId,
+                Message = taskTemplate.Message
             };
         }
     }

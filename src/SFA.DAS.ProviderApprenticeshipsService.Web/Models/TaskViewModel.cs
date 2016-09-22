@@ -6,5 +6,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
     {
         public long ProviderId { get; set; }
         public Task Task { get; set; }
+        public long LinkId { get; set; }
+        public string Message { get; set; }
     }
 }

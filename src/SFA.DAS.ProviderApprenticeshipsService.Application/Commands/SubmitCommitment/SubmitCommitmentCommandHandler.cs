@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
+using Newtonsoft.Json;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Tasks.Api.Client;
+using SFA.DAS.Tasks.Api.Types.Templates;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment
 {
@@ -38,11 +40,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
 
             if (!string.IsNullOrWhiteSpace(message.Message))
             {
-                var assignee = $"EMPLOYER-{commitment.EmployerAccountId}";
-                var task = TaskFactory.Create(commitment.EmployerAccountId, "SubmitCommitment", message.Message);
+                var taskTemplate = new SubmitCommitmentTemplate
+                {
+                    CommitmentId = message.CommitmentId,
+                    Message = message.Message,
+                    Source = $"PROVIDER-{message.ProviderId}"
+                };
 
-                await _tasksApi.CreateTask(assignee, task);
+                var task = new Tasks.Api.Types.Task
+                {
+                    Assignee = $"EMPLOYER-{commitment.EmployerAccountId}",
+                    TaskTemplateId = SubmitCommitmentTemplate.TemplateId,
+                    Name = "Submit Commitment",
+                    Body = JsonConvert.SerializeObject(taskTemplate)
+                };
 
+                await _tasksApi.CreateTask(task.Assignee, task);
             }
         }
     }
