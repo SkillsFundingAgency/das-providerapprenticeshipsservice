@@ -2,7 +2,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Create apprenticeship</h1>
+        <h1 class="heading-xlarge">Add apprentice</h1>
         <hr />
     </div>
 </div>
@@ -10,17 +10,17 @@
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("Create")">
             <div class="form-group">
-                <label class="form-label" for="FirstName">First Name</label>
+                <label class="form-label" for="FirstName">First name</label>
                 <input class="form-control form-control-3-4" id="FirstName" name="FirstName" type="text"
                        aria-required="true" value="@Model.Apprenticeship.FirstName" />
             </div>
             <div class="form-group">
-                <label class="form-label" for="LastName">Last Name</label>
+                <label class="form-label" for="LastName">Last name</label>
                 <input class="form-control form-control-3-4" id="LastName" name="LastName" type="text"
                        aria-required="true" value="@Model.Apprenticeship.LastName" />
             </div>
             <div class="form-group">
-                <label class="form-label" for="ULN">ULN</label>
+                <label class="form-label" for="ULN">Unique learner number</label>
                 <input class="form-control form-control-3-4" id="ULN" name="ULN" type="text"
                        aria-required="true" value="@Model.Apprenticeship.ULN" />
             </div>
@@ -83,7 +83,7 @@
             <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.Apprenticeship.AgreementStatus" />
             <input type="hidden" id="providerId" name="providerId" value="@Model.Apprenticeship.ProviderId" />
             <input type="hidden" id="commitmentId" name="commitmentId" value="@Model.Apprenticeship.CommitmentId" />
-            <button type="submit" class="button">Create</button>
+            <button type="submit" class="button">Add apprentice</button>
         </form>
     </div>
 </div>
