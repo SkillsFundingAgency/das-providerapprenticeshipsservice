@@ -3,15 +3,20 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">View commitment</h1>
-        <hr />
-        <div class="form-group">
-            <label class="form-label" for="Name">Name</label>
-            <label class="form-label" id="Name">@Model.Commitment.Name</label>
-        </div>
-        <div class="form-group">
-            <label class="form-label" for="LegalEntity">Legal Entity</label>
-            <label class="form-label" id="LegalEntity">@Model.Commitment.LegalEntityName</label>
-        </div>
+        <table>
+            <tbody>
+                <tr>
+                    <th scope="row">Name</th>
+                    <td>@Model.Commitment.Name</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Legal Entity</th>
+                    <td>@Model.Commitment.LegalEntityName</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <div class="grid-row">

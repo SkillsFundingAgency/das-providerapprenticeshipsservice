@@ -29,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
 
         protected override async Task HandleCore(SubmitCommitmentCommand message)
         {
-            var validationResult = _validator.Validate(message);
+             var validationResult = _validator.Validate(message);
 
             if (!validationResult.IsValid)
                 throw new InvalidRequestException(validationResult.Errors);
@@ -44,14 +44,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                 {
                     CommitmentId = message.CommitmentId,
                     Message = message.Message,
-                    Source = $"PROVIDER-{message.ProviderId}"
+                    Source = $"PROVIDER-{message.ProviderId}-{commitment.ProviderName}"
                 };
 
                 var task = new Tasks.Api.Types.Task
                 {
                     Assignee = $"EMPLOYER-{commitment.EmployerAccountId}",
                     TaskTemplateId = SubmitCommitmentTemplate.TemplateId,
-                    Name = "Submit Commitment",
+                    Name = $"Submit Commitment - {commitment.Name}",
                     Body = JsonConvert.SerializeObject(taskTemplate)
                 };
 
