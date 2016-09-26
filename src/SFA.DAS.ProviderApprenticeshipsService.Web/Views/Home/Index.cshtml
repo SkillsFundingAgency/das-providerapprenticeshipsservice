@@ -8,21 +8,21 @@
 
 <div class="grid-row">
     <div class="column-full">
-        <h1 class="heading-xlarge">
-            Provider commitments
-        </h1>
-        <p class="">Use this service to:</p>
+        <h1 class="heading-xlarge">Provider commitments</h1>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <p>Use this service to:</p>
         <ul>
             <li>view new commitments</li>
             <li>manage open commitments</li>
             <li>agree to commitments</li>
         </ul>
-    </div>
-</div>
-
-<div class="grid-row">
-    <div class="column-one-third">
-        <a class="button button-start" href="@Url.Action("Index","Commitment", new { providerId = Model.ProviderId })">View commitments</a>
+        <form action="@Url.Action("Index","Commitment")" method="GET">
+            <input type="hidden" name="providerId" value="@Model.ProviderId" />
+            <button type="submit" name="task" class="button">View commitments</button>
+        </form>
     </div>
 </div>
     

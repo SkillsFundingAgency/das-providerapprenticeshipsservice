@@ -1,4 +1,5 @@
-﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CommitmentViewModel
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CommitmentViewModel
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -53,7 +54,7 @@
                         </div>
                         <div class="responsive-td">
                             <div class="responsive-inner-caption">Status</div>
-                            <div>@apprenticeship.Status</div>
+                            <div>@apprenticeship.Status.GetDescription()</div>
                         </div>
                         <div class="responsive-td">
                             <div>
@@ -74,7 +75,11 @@
     </div>
 </div>
 <form action="@Url.Action("Create")" method="GET">
-    <input type="hidden" name="providerId" value="@Model.Commitment.ProviderId" />
-    <input type="hidden" name="commitmentId" value="@Model.Commitment.Id" />
+    <input type="hidden" name="providerId" value="@Model.Commitment.ProviderId"/>
+    <input type="hidden" name="commitmentId" value="@Model.Commitment.Id"/>
     <button type="submit" name="commitment" class="button">Add apprentice</button>
+</form>
+<form action="@Url.Action("Index")" method="GET">
+    <input type="hidden" name="providerId" value="@Model.Commitment.ProviderId" />
+    <button type="submit" name="commitment" class="button">Back</button>
 </form>
