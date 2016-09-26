@@ -7,7 +7,8 @@
         <h1 class="heading-xlarge">Add a note</h1>
         <hr />
         <div class="form-group">
-            <p>You can add an optional note to this commitment before you send it. Your note will appear in the employer's account, along with details of the commitment.</p>
+            <p>You are about to send your commitment back to the employer. Once you send it they will be able to see it in their online account.</p>
+            <p>You can add a note for them to read.</p>
         </div>
         <form method="POST" action="@Url.Action("Submit")">
             <div class="form-group">
@@ -27,7 +28,7 @@
             </div>
             <input type="hidden" id="providerId" name="providerId" value="@Model.SubmitCommitmentModel.ProviderId" />
             <input type="hidden" id="commitmentId" name="commitmentId" value="@Model.SubmitCommitmentModel.CommitmentId" />
-            <button type="submit" class="button">Save</button>
+            <button type="submit" class="button">Send to employer</button>
         </form>
 </div>
 </div>
