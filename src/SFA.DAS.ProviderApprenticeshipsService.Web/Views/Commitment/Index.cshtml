@@ -47,6 +47,7 @@
                         <div class="responsive-th">Employer</div>
                         <div class="responsive-th">Name</div>
                         <div class="responsive-th"> </div>
+                        <div class="responsive-th"> </div>
                     </div>
                 </div>
                 <div class="responsive-tbody">
@@ -68,6 +69,10 @@
                                         <input type="hidden" name="commitmentId" value="@commitment.Id"/>
                                         <button type="submit" name="commitment" class="button">View</button>
                                     </form>
+                                </div>
+                            </div>
+                            <div class="responsive-td">
+                                <div>
                                     <form action="@Url.Action("Submit")" method="GET">
                                         <input type="hidden" name="providerId" value="@commitment.ProviderId" />
                                         <input type="hidden" name="commitmentId" value="@commitment.Id" />

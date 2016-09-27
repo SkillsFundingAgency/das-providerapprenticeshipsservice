@@ -1,4 +1,4 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extentions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
 @model TaskListViewModel
@@ -35,7 +35,7 @@
                         <div class="responsive-tr">
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">CreatedOn</div>
-                                <div>@task.CreatedOn.ToString("d MMM yyyy")</div>
+                                <div>@task.CreatedOn.ToGdsFormat()</div>
                             </div>
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">Name</div>
@@ -62,7 +62,7 @@
         }
         <form action="@Url.Action("Index", "Commitment")" method="GET">
             <input type="hidden" name="providerId" value="@Model.ProviderId" />
-            <button type="submit" name="commitment" class="button">Submit</button>
+            <button type="submit" name="commitment" class="button">Back</button>
         </form>
 
     </div>
