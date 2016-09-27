@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Extentions
 
 @model ExtendedApprenticeshipViewModel
 
@@ -85,13 +86,14 @@
         </div>
         <div class="form-group">
             <label class="form-label" for="status">Status</label>
-            <label class="" id="status" name="status" >@Model.Apprenticeship.Status</label>
+            <label class="" id="status" name="status" >@Model.Apprenticeship.Status.GetDescription()</label>
         </div>
         <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.Apprenticeship.AgreementStatus" />
         <input type="hidden" id="providerId" name="providerId" value="@Model.Apprenticeship.ProviderId" />
         <input type="hidden" id="commitmentId" name="commitmentId" value="@Model.Apprenticeship.CommitmentId" />
         <input type="hidden" id="id" name="id" value="@Model.Apprenticeship.Id" />
         <button type="submit" class="button">Update</button>
+        
     </form>
     </div>
 </div>

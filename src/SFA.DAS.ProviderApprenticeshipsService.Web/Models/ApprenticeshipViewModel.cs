@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
@@ -23,7 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public int? StartYear { get; set; }
         public int? EndMonth { get; set; }
         public int? EndYear { get; set; }
-        public string Status { get; set; }
-        public string AgreementStatus { get; set; }
+        public ApprenticeshipStatus Status { get; set; }
+        public AgreementStatus AgreementStatus { get; set; }
     }
 }

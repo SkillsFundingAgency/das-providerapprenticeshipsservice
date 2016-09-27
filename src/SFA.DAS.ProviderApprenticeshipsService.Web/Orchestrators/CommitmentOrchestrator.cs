@@ -141,8 +141,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 StartYear = apprenticeship.StartDate?.Year,
                 EndMonth = apprenticeship.EndDate?.Month,
                 EndYear = apprenticeship.EndDate?.Year,
-                Status = apprenticeship.Status.ToString(),
-                AgreementStatus = apprenticeship.AgreementStatus.ToString()
+                Status = apprenticeship.Status,
+                AgreementStatus = apprenticeship.AgreementStatus
             };
         }
 

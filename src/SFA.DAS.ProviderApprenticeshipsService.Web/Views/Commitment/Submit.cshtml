@@ -10,15 +10,20 @@
             <p>You are about to send your commitment back to the employer. Once you send it they will be able to see it in their online account.</p>
             <p>You can add a note for them to read.</p>
         </div>
+        <table>
+            <tbody>
+            <tr>
+                <th scope="row">Name</th>
+                <td>@Model.Commitment.Name</td>
+            </tr>
+            <tr>
+                <th scope="row">Legal entity</th>
+                <td>@Model.Commitment.LegalEntityName</td>
+            </tr>
+            </tbody>
+        </table>
+        <p></p>
         <form method="POST" action="@Url.Action("Submit")">
-            <div class="form-group">
-                <label class="form-label" for="Name">Name</label>
-                <label class="form-label" id="Name">@Model.Commitment.Name</label>
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="LegalEntity">Legal entity</label>
-                <label class="form-label" id="LegalEntity">@Model.Commitment.LegalEntityName</label>
-            </div>
             <div class="form-group">
                 <label class="form-label" for="Message">Note</label>
                 <p>For example, this is the commitment for 25 x level 3 engineers against contract 53241</p>

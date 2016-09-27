@@ -23,7 +23,7 @@
             <div class="responsive-table">
                 <div class="responsive-thead">
                     <div class="responsive-tr">
-                        <div class="responsive-th">CreatedOn</div>
+                        <div class="responsive-th">Created date</div>
                         <div class="responsive-th">Name</div>
                         <div class="responsive-th">Status</div>
                         <div class="responsive-th"> </div>
@@ -60,6 +60,7 @@
                 </div>
             </div>
         }
+        <p></p>
         <form action="@Url.Action("Index", "Commitment")" method="GET">
             <input type="hidden" name="providerId" value="@Model.ProviderId" />
             <button type="submit" name="commitment" class="button">Back</button>
