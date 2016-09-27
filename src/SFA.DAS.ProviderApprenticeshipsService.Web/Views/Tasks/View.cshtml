@@ -1,4 +1,5 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extentions
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
 @model TaskViewModel
  
@@ -14,7 +15,7 @@
                 </tr>
                 <tr>
                     <th scope="row">Created Date</th>
-                    <td>@Model.Task.CreatedOn.ToString("d MMM yyyy")</td>
+                    <td>@Model.Task.CreatedOn.ToGdsFormat()</td>
                     <td></td>
                 </tr>
                 <tr>

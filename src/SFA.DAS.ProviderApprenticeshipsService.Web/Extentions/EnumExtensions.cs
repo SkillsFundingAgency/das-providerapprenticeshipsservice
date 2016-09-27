@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extentions
 {
     public static class EnumExtensions
     {
