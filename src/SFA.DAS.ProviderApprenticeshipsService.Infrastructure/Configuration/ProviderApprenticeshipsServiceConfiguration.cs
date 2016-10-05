@@ -16,12 +16,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
     {
         public string BaseUrl { get; set; }
-        public string ClientSecret { get; set; }
+        public string ClientToken { get; set; }
     }
 
     public class TasksApiClientConfiguration : ITasksApiClientConfiguration
     {
         public string BaseUrl { get; set; }
-        public string ClientSecret { get; set; }
+        public string ClientToken { get; set; }
     }
 }

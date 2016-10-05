@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -6,6 +7,13 @@ namespace SFA.DAS.Commitments.Api.Client
 {
     public abstract class HttpClientBase
     {
+        private readonly string _authorizationToken;
+
+        protected HttpClientBase(string authorizationToken)
+        {
+            _authorizationToken = authorizationToken;
+        }
+
         protected async Task<string> GetAsync(string url)
         {
             var content = "";
@@ -16,10 +24,7 @@ namespace SFA.DAS.Commitments.Api.Client
                 {
                     var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
 
-                    // Add custom headers
-                    //requestMessage.Headers.Add("User-Agent", "User-Agent-Here");
-
-                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("WRAP", "bigAccessToken");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authorizationToken);
                     var response = await client.SendAsync(requestMessage);
                     content = await response.Content.ReadAsStringAsync();
                     response.EnsureSuccessStatusCode();
@@ -47,10 +52,7 @@ namespace SFA.DAS.Commitments.Api.Client
                         Content = new StringContent(data, Encoding.UTF8, "application/json")
                     };
 
-                    // Add custom headers
-                    //requestMessage.Headers.Add("User-Agent", "User-Agent-Here");
-
-                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("WRAP", "bigAccessToken");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authorizationToken);
                     var response = await client.SendAsync(requestMessage);
                     content = await response.Content.ReadAsStringAsync();
                     response.EnsureSuccessStatusCode();
@@ -77,10 +79,7 @@ namespace SFA.DAS.Commitments.Api.Client
                         Content = new StringContent(data, Encoding.UTF8, "application/json")
                     };
 
-                    // Add custom headers
-                    //requestMessage.Headers.Add("User-Agent", "User-Agent-Here");
-
-                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("WRAP", "bigAccessToken");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authorizationToken);
                     var response = await client.SendAsync(requestMessage);
                     content = await response.Content.ReadAsStringAsync();
                     response.EnsureSuccessStatusCode();
@@ -107,10 +106,7 @@ namespace SFA.DAS.Commitments.Api.Client
                         Content = new StringContent(data, Encoding.UTF8, "application/json")
                     };
 
-                    // Add custom headers
-                    //requestMessage.Headers.Add("User-Agent", "User-Agent-Here");
-
-                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("WRAP", "bigAccessToken");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authorizationToken);
                     var response = await client.SendAsync(requestMessage);
                     content = await response.Content.ReadAsStringAsync();
                     response.EnsureSuccessStatusCode();
@@ -123,6 +119,5 @@ namespace SFA.DAS.Commitments.Api.Client
 
             return content;
         }
-
     }
 }
