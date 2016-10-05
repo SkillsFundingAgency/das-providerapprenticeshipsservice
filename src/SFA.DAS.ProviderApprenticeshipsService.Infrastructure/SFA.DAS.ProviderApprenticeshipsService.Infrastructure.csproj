@@ -59,6 +59,14 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.1.0.12247, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.1.0.12247\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.1.0.12247, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.1.0.12247\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.Configuration, Version=1.0.0.6634, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Configuration.1.0.0.6634\lib\net45\SFA.DAS.Configuration.dll</HintPath>
       <Private>True</Private>
@@ -70,6 +78,10 @@
     <Reference Include="SFA.DAS.Configuration.FileStorage, Version=1.0.0.6634, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Configuration.FileStorage.1.0.0.6634\lib\net45\SFA.DAS.Configuration.FileStorage.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.3.0.12308, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.3.0.12308\lib\net45\SFA.DAS.Tasks.Api.Client.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=4.2.0.402, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\structuremap.4.2.0.402\lib\net40\StructureMap.dll</HintPath>
@@ -103,17 +115,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">
-      <Project>{DEA2C098-EC17-4485-961D-A7F48720D37D}</Project>
-      <Name>SFA.DAS.Commitments.Api.Client</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj">
       <Project>{B3484618-78A0-411E-BC02-AC84C8694C3D}</Project>
       <Name>SFA.DAS.ProviderApprenticeshipsService.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.Tasks.Api.Client\SFA.DAS.Tasks.Api.Client.csproj">
-      <Project>{E442B238-0C69-449E-A2C5-FD890CF6A7DC}</Project>
-      <Name>SFA.DAS.Tasks.Api.Client</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

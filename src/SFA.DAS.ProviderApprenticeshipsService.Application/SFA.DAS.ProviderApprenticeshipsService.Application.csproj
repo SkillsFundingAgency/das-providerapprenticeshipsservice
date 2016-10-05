@@ -43,6 +43,22 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.1.0.12247, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.1.0.12247\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.1.0.12247, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.1.0.12247\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.4.0.12323, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.4.0.12323\lib\net45\SFA.DAS.Tasks.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Tasks.Api.Types, Version=1.4.0.12323, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.4.0.12323\lib\net45\SFA.DAS.Tasks.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -97,14 +113,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">
-      <Project>{DEA2C098-EC17-4485-961D-A7F48720D37D}</Project>
-      <Name>SFA.DAS.Commitments.Api.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.Commitments.Api.Types\SFA.DAS.Commitments.Api.Types.csproj">
-      <Project>{B3D79E6A-7A5E-4B52-9A78-6AE6F1009166}</Project>
-      <Name>SFA.DAS.Commitments.Api.Types</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj">
       <Project>{B3484618-78A0-411E-BC02-AC84C8694C3D}</Project>
       <Name>SFA.DAS.ProviderApprenticeshipsService.Domain</Name>
@@ -112,14 +120,6 @@
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Infrastructure\SFA.DAS.ProviderApprenticeshipsService.Infrastructure.csproj">
       <Project>{380868C8-FA69-4DA7-B054-45AC924EC48E}</Project>
       <Name>SFA.DAS.ProviderApprenticeshipsService.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.Tasks.Api.Client\SFA.DAS.Tasks.Api.Client.csproj">
-      <Project>{e442b238-0c69-449e-a2c5-fd890cf6a7dc}</Project>
-      <Name>SFA.DAS.Tasks.Api.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.Tasks.Api.Types\SFA.DAS.Tasks.Api.Types.csproj">
-      <Project>{E1E60BA1-5838-474E-BDA0-810D7A5B126E}</Project>
-      <Name>SFA.DAS.Tasks.Api.Types</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
