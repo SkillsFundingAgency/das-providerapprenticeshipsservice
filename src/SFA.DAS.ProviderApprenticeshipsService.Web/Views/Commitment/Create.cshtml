@@ -10,6 +10,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("Create")">
+            @Html.AntiForgeryToken()
             <div class="form-group">
                 <label class="form-label" for="FirstName">First name</label>
                 <input class="form-control form-control-3-4" id="FirstName" name="FirstName" type="text"

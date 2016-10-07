@@ -43,6 +43,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Update(ApprenticeshipViewModel apprenticeship)
         {
             await _commitmentOrchestrator.UpdateApprenticeship(apprenticeship);
@@ -59,6 +60,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(ApprenticeshipViewModel apprenticeship)
         {
             await _commitmentOrchestrator.CreateApprenticeship(apprenticeship);
@@ -85,6 +87,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Submit(SubmitCommitmentModel model)
         {
             await _commitmentOrchestrator.SubmitApprenticeship(model);
