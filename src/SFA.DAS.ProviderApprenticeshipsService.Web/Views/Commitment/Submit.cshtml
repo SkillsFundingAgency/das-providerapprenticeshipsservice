@@ -24,6 +24,7 @@
         </table>
         <p></p>
         <form method="POST" action="@Url.Action("Submit")">
+            @Html.AntiForgeryToken()
             <div class="form-group">
                 <label class="form-label" for="Message">Note</label>
                 <p>For example, this is the commitment for 25 x level 3 engineers against contract 53241</p>
