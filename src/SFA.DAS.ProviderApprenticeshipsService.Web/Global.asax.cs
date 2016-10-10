@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -20,6 +21,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Name;
             Logger.Info("Starting up");
+        }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            Exception ex = Server.GetLastError().GetBaseException();
+
+            Logger.Error(ex, "Unhanded Exception");
         }
     }
 }
