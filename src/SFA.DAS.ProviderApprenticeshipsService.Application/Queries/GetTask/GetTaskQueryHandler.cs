@@ -20,7 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTask
         {
             var assignee = $"PROVIDER-{message.ProviderId}";
 
-            var task = await _tasksApi.GetTask(message.TaskId, assignee);
+            var task = await _tasksApi.GetTask(assignee, message.TaskId);
 
             return new GetTaskQueryResponse
             {
