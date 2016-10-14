@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.Apprenticeships.Api.Client;
+using SFA.DAS.Apprenticeships.Api.Client.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using Framework = SFA.DAS.ProviderApprenticeshipsService.Domain.Framework;
 using Provider = SFA.DAS.ProviderApprenticeshipsService.Domain.Provider;
 using StandardSummary = SFA.DAS.Apprenticeships.Api.Client.Models.StandardSummary;
 
@@ -39,11 +41,49 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
             return await _cache.GetCustomValueAsync<StandardsView>(key);
         }
 
+        public async Task<FrameworksView> GetFrameworksAsync(string key, bool refreshCache = false)
+        {
+            if (!await _cache.ExistsAsync(key) || refreshCache)
+            {
+                var api = new FrameworkApiClient(_configuration.BaseUrl);
+
+                var frameworks = api.FindAll().ToList();
+
+                await _cache.SetCustomValueAsync(key, MapFrom(frameworks));
+            }
+
+            return await _cache.GetCustomValueAsync<FrameworksView>(key);
+        }
+
         public ProvidersView GetProvider(int ukPrn)
         {
             var api = new ProviderApiClient(_configuration.BaseUrl);
 
             return MapFrom(api.Get(ukPrn));
+        }
+
+        private static FrameworksView MapFrom(List<FrameworkSummary> frameworks)
+        {
+            return new FrameworksView
+            {
+                CreatedDate = DateTime.UtcNow,
+                Frameworks = frameworks.Select(x => new Framework
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    FrameworkCode = x.FrameworkCode,
+                    FrameworkName = x.FrameworkName,
+                    Level = x.Level,
+                    PathwayCode = x.PathwayCode,
+                    PathwayName = x.PathwayName,
+                    Duration = new Duration
+                    {
+                        From = x.TypicalLength.From,
+                        To = x.TypicalLength.To,
+                        Unit = x.TypicalLength.Unit
+                    }
+                }).ToList()
+            };
         }
 
         private static ProvidersView MapFrom(IEnumerable<Sfa.Das.ApprenticeshipInfoService.Core.Models.Provider> providers)

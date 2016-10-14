@@ -20,7 +20,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider
         {
             var provider = _apprenticeshipInfoServiceWrapper.GetProvider(message.UKPRN);
 
-            return new GetProviderQueryResponse();
+            return await Task.FromResult(new GetProviderQueryResponse
+            {
+                ProvidersView = provider
+            });
         }
     }
 }
