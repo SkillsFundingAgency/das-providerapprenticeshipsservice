@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SFA.DAS.Apprenticeships.Api.Client;
-using SFA.DAS.Apprenticeships.Api.Client.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using Provider = SFA.DAS.ProviderApprenticeshipsService.Domain.Provider;
+using StandardSummary = SFA.DAS.Apprenticeships.Api.Client.Models.StandardSummary;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application
 {
-    public class ApprenticeshipInfoServiceWrapper
+    public class ApprenticeshipInfoServiceWrapper : IApprenticeshipInfoServiceWrapper
     {
         private readonly ICache _cache;
         private readonly IApprenticeshipInfoServiceConfiguration _configuration;
@@ -23,20 +25,41 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
             _configuration = configuration;
         }
 
-        public StandardsView GetStandards(string key, bool refreshCache = false)
+        public async Task<StandardsView> GetStandardsAsync(string key, bool refreshCache = false)
         {
-            if (!_cache.Exists(key) || refreshCache)
+            if (! await _cache.ExistsAsync(key) || refreshCache)
             {
-                Console.WriteLine("Refreshing cache");
-
                 var api = new StandardApiClient(_configuration.BaseUrl);
 
                 var standards = api.FindAll().ToList();
 
-                _cache.SetCustomValue(key, MapFrom(standards));
+                await _cache.SetCustomValueAsync(key, MapFrom(standards));
             }
 
-            return _cache.GetCustomValue<StandardsView>(key);
+            return await _cache.GetCustomValueAsync<StandardsView>(key);
+        }
+
+        public ProvidersView GetProvider(int ukPrn)
+        {
+            var api = new ProviderApiClient(_configuration.BaseUrl);
+
+            return MapFrom(api.Get(ukPrn));
+        }
+
+        private static ProvidersView MapFrom(IEnumerable<Sfa.Das.ApprenticeshipInfoService.Core.Models.Provider> providers)
+        {
+            return new ProvidersView
+            {
+                CreatedDate = DateTime.UtcNow,
+                Providers = providers.Select(x => new Provider
+                {
+                    Ukprn = x.Ukprn,
+                    ProviderName = x.ProviderName,
+                    Email = x.Email,
+                    Phone = x.Phone,
+                    NationalProvider = x.NationalProvider
+                }).ToList()
+            };
         }
 
         private static StandardsView MapFrom(List<StandardSummary> standards)

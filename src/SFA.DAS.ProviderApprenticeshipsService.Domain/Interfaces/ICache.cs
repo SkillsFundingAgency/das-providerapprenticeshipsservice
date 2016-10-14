@@ -1,9 +1,11 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
     public interface ICache
     {
-        bool Exists(string key);
-        T GetCustomValue<T>(string key);
-        void SetCustomValue<T>(string key, T customType, int secondsInCache = 300);
+        Task<bool> ExistsAsync(string key);
+        Task<T> GetCustomValueAsync<T>(string key);
+        Task SetCustomValueAsync<T>(string key, T customType, int secondsInCache = 300);
     }
 }

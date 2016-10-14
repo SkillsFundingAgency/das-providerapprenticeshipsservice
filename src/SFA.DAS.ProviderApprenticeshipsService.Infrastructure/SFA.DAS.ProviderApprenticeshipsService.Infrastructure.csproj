@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Caching\RedisCache.cs" />
+    <Compile Include="Caching\TaskSynchronizationScope.cs" />
     <Compile Include="Configuration\ConfigurationPolicy.cs" />
     <Compile Include="Configuration\ProviderApprenticeshipsServiceConfiguration.cs" />
     <Compile Include="Data\FileSystemRepository.cs" />
