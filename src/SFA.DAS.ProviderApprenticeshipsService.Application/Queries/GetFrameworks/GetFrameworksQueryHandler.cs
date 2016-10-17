@@ -18,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFramewor
 
         public async Task<GetFrameworksQueryResponse> Handle(GetFrameworksQueryRequest message)
         {
-            var data = await _apprenticeshipInfoServiceWrapper.GetFrameworksAsync("Frameworks");
+            var data = await _apprenticeshipInfoServiceWrapper.GetFrameworksAsync();
 
             return new GetFrameworksQueryResponse
             {

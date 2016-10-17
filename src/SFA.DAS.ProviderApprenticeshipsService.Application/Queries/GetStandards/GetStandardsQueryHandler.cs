@@ -18,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandard
 
         public async Task<GetStandardsQueryResponse> Handle(GetStandardsQueryRequest message)
         {
-            var standards = await _apprenticeshipInfoServiceWrapper.GetStandardsAsync("Standards");
+            var standards = await _apprenticeshipInfoServiceWrapper.GetStandardsAsync();
 
             return new GetStandardsQueryResponse
             {

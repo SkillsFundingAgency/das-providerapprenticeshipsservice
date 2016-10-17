@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.Apprenticeships.Api.Client;
-using SFA.DAS.Apprenticeships.Api.Client.Models;
+using SFA.DAS.Apprenticeships.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using Framework = SFA.DAS.ProviderApprenticeshipsService.Domain.Framework;
 using Provider = SFA.DAS.ProviderApprenticeshipsService.Domain.Provider;
-using StandardSummary = SFA.DAS.Apprenticeships.Api.Client.Models.StandardSummary;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application
 {
     public class ApprenticeshipInfoServiceWrapper : IApprenticeshipInfoServiceWrapper
     {
+        private const string StandardsKey = "Standards";
+        private const string FrameworksKey = "Frameworks";
+
         private readonly ICache _cache;
         private readonly IApprenticeshipInfoServiceConfiguration _configuration;
 
@@ -27,32 +29,32 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
             _configuration = configuration;
         }
 
-        public async Task<StandardsView> GetStandardsAsync(string key, bool refreshCache = false)
+        public async Task<StandardsView> GetStandardsAsync(bool refreshCache = false)
         {
-            if (! await _cache.ExistsAsync(key) || refreshCache)
+            if (! await _cache.ExistsAsync(StandardsKey) || refreshCache)
             {
                 var api = new StandardApiClient(_configuration.BaseUrl);
 
                 var standards = api.FindAll().ToList();
 
-                await _cache.SetCustomValueAsync(key, MapFrom(standards));
+                await _cache.SetCustomValueAsync(StandardsKey, MapFrom(standards));
             }
 
-            return await _cache.GetCustomValueAsync<StandardsView>(key);
+            return await _cache.GetCustomValueAsync<StandardsView>(StandardsKey);
         }
 
-        public async Task<FrameworksView> GetFrameworksAsync(string key, bool refreshCache = false)
+        public async Task<FrameworksView> GetFrameworksAsync(bool refreshCache = false)
         {
-            if (!await _cache.ExistsAsync(key) || refreshCache)
+            if (!await _cache.ExistsAsync(FrameworksKey) || refreshCache)
             {
                 var api = new FrameworkApiClient(_configuration.BaseUrl);
 
                 var frameworks = api.FindAll().ToList();
 
-                await _cache.SetCustomValueAsync(key, MapFrom(frameworks));
+                await _cache.SetCustomValueAsync(FrameworksKey, MapFrom(frameworks));
             }
 
-            return await _cache.GetCustomValueAsync<FrameworksView>(key);
+            return await _cache.GetCustomValueAsync<FrameworksView>(FrameworksKey);
         }
 
         public ProvidersView GetProvider(int ukPrn)
@@ -86,7 +88,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
             };
         }
 
-        private static ProvidersView MapFrom(IEnumerable<Sfa.Das.ApprenticeshipInfoService.Core.Models.Provider> providers)
+        private static ProvidersView MapFrom(IEnumerable<SFA.DAS.Apprenticeships.Api.Types.Provider> providers)
         {
             return new ProvidersView
             {
@@ -109,7 +111,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
                 CreationDate = DateTime.UtcNow,
                 Standards = standards.Select(x => new Domain.Standard
                 {
-                    Id = x.Id,
+                    Id = int.Parse(x.Id),
                     Level = x.Level,
                     Title = x.Title,
                     Duration = new Duration

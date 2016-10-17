@@ -4,8 +4,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
     public interface IApprenticeshipInfoServiceWrapper
     {
-        Task<StandardsView> GetStandardsAsync(string key, bool refreshCache = false);
-        Task<FrameworksView> GetFrameworksAsync(string key, bool refreshCache = false);
+        Task<StandardsView> GetStandardsAsync(bool refreshCache = false);
+        Task<FrameworksView> GetFrameworksAsync(bool refreshCache = false);
         ProvidersView GetProvider(int ukPrn);
     }
 }
