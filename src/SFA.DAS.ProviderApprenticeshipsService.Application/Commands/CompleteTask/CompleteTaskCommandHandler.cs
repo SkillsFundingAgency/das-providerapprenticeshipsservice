@@ -28,11 +28,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CompleteTa
 
             var assignee = $"PROVIDER-{message.ProviderId}";
 
-            var task = await _tasksApi.GetTask(message.TaskId, assignee);
+            var task = await _tasksApi.GetTask(assignee, message.TaskId);
 
             task.TaskStatus = TaskStatuses.Complete;
 
-            await _tasksApi.UpdateTask(message.TaskId, task);
+            await _tasksApi.UpdateTask(assignee, message.TaskId, task);
         }
     }
 }
