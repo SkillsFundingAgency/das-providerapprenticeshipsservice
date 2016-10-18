@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Configuration;
 using System.Threading.Tasks;
+using Microsoft.Azure;
 using Newtonsoft.Json;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using StackExchange.Redis;
@@ -9,11 +9,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Caching
 {
     public class RedisCache : ICache
     {
-        private IDatabase _cache;
+        private readonly IDatabase _cache;
 
         public RedisCache()
         {
-            var connectionMultiplexer = ConnectionMultiplexer.Connect(ConfigurationManager.AppSettings["RedisConnection"]);
+            var connectionMultiplexer = ConnectionMultiplexer.Connect(CloudConfigurationManager.GetSetting("RedisConnection"));
             _cache = connectionMultiplexer.GetDatabase();
         }
 

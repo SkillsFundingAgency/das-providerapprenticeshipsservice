@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderApprenticeshipsService.Application", "SFA.DAS.ProviderApprenticeshipsService.Application\SFA.DAS.ProviderApprenticeshipsService.Application.csproj", "{849E452B-2B68-445A-980C-995311311AF0}"
 EndProject
@@ -22,6 +22,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderApprenticeshipsService.Application.Tests", "SFA.DAS.ProviderApprenticeshipsService.Application.Tests\SFA.DAS.ProviderApprenticeshipsService.Application.Tests.csproj", "{C4528A1E-2F4B-4DA1-A1EE-CAC2F2DE3AF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderApprenticeshipsService.Domain.Tests", "SFA.DAS.ProviderApprenticeshipsService.Domain.Tests\SFA.DAS.ProviderApprenticeshipsService.Domain.Tests.csproj", "{4717ABE0-CD8E-4C9A-8DCE-6920F1CC8A30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,11 +55,16 @@ Global
 		{C4528A1E-2F4B-4DA1-A1EE-CAC2F2DE3AF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4528A1E-2F4B-4DA1-A1EE-CAC2F2DE3AF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4528A1E-2F4B-4DA1-A1EE-CAC2F2DE3AF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4717ABE0-CD8E-4C9A-8DCE-6920F1CC8A30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4717ABE0-CD8E-4C9A-8DCE-6920F1CC8A30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4717ABE0-CD8E-4C9A-8DCE-6920F1CC8A30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4717ABE0-CD8E-4C9A-8DCE-6920F1CC8A30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C4528A1E-2F4B-4DA1-A1EE-CAC2F2DE3AF5} = {C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}
+		{4717ABE0-CD8E-4C9A-8DCE-6920F1CC8A30} = {C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}
 	EndGlobalSection
 EndGlobal

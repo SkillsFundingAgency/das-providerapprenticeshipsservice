@@ -38,9 +38,9 @@
                     <option value=""></option>
                     @foreach (var standard in Model.Standards)
                     {
-                        <option value="@standard.Name" @if (standard.Name == Model.Apprenticeship.TrainingId)
+                        <option value="@standard.Title" @if (standard.Title == Model.Apprenticeship.TrainingId)
                                                        {
-                                                           @Html.Raw("selected=''");}>@standard.Name</option>
+                                                           @Html.Raw("selected=''");}>@standard.Title</option>
                     }
                 </select>
             </div>
