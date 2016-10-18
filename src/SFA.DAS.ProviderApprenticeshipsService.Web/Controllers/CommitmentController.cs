@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.ProviderApprenticeshipsService.Application;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
@@ -56,14 +57,30 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var model = await _commitmentOrchestrator.GetApprenticeship(providerId, commitmentId);
 
-            return View(model);
+            ViewBag.ApprenticeshipProducts = model.Standards;
+
+            return View(model.Apprenticeship);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(ApprenticeshipViewModel apprenticeship)
         {
-            await _commitmentOrchestrator.CreateApprenticeship(apprenticeship);
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return await RedisplayCreateApprenticeshipView(apprenticeship);
+                }
+
+                await _commitmentOrchestrator.CreateApprenticeship(apprenticeship);
+            }
+            catch (InvalidRequestException ex)
+            {
+                AddErrorsToModelState(ex);
+
+                return await RedisplayCreateApprenticeshipView(apprenticeship);
+            }
 
             return RedirectToAction("Details", new { providerId = apprenticeship.ProviderId, commitmentId = apprenticeship.CommitmentId });
         }
@@ -93,6 +110,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             await _commitmentOrchestrator.SubmitApprenticeship(model);
 
             return RedirectToAction("Index", new { providerId = model.ProviderId });
+        }
+
+        private void AddErrorsToModelState(InvalidRequestException ex)
+        {
+            foreach (var error in ex.ErrorMessages)
+            {
+                ModelState.AddModelError(error.Key, error.Value);
+            }
+        }
+
+        private async Task<ActionResult> RedisplayCreateApprenticeshipView(ApprenticeshipViewModel apprenticeship)
+        {
+            var model = await _commitmentOrchestrator.GetApprenticeship(apprenticeship.ProviderId, apprenticeship.CommitmentId);
+            model.Apprenticeship = apprenticeship;
+            ViewBag.ApprenticeshipProducts = model.Standards;
+
+            return View(model.Apprenticeship);
         }
     }
 }

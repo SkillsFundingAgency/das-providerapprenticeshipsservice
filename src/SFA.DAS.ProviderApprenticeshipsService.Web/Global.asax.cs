@@ -4,6 +4,7 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using FluentValidation.Mvc;
 using NLog;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
@@ -20,6 +21,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Name;
+            FluentValidationModelValidatorProvider.Configure();
+
             Logger.Info("Starting up");
         }
 
