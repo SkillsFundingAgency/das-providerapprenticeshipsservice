@@ -57,6 +57,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Tests
         [TestCase("123-Fred-3")]
         [TestCase("123-3-Fred")]
         [TestCase("123-3-78-1")]
+        [TestCase("-3-67")]
+        [TestCase("123--67")]
+        [TestCase("123-3-")]
         public void DecodeFailureTest(string invalidCode)
         {
             Assert.Throws<InvalidOperationException>(() => Training.Decode(invalidCode, title));

@@ -51,6 +51,7 @@
     <Compile Include="Standard.cs" />
     <Compile Include="StandardsView.cs" />
     <Compile Include="Training.cs" />
+    <Compile Include="TrainingType.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Users.cs" />
   </ItemGroup>

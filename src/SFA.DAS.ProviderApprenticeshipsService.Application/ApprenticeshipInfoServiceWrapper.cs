@@ -35,7 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
             {
                 var api = new StandardApiClient(_configuration.BaseUrl);
 
-                var standards = api.FindAll().ToList();
+                var standards = api.FindAll().OrderBy(x => x.Title).ToList();
 
                 await _cache.SetCustomValueAsync(StandardsKey, MapFrom(standards));
             }
@@ -49,7 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
             {
                 var api = new FrameworkApiClient(_configuration.BaseUrl);
 
-                var frameworks = api.FindAll().ToList();
+                var frameworks = api.FindAll().OrderBy(x => x.Title).ToList();
 
                 await _cache.SetCustomValueAsync(FrameworksKey, MapFrom(frameworks));
             }
@@ -113,7 +113,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
                 {
                     Id = int.Parse(x.Id),
                     Level = x.Level,
-                    Title = x.Title,
+                    Title = GetTitle(x),
                     Duration = new Duration
                     {
                         From = x.TypicalLength.From,
@@ -122,6 +122,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
                     }
                 }).ToList()
             };
+        }
+
+        private static string GetTitle(StandardSummary standard)
+        {
+            var training = new Training(TrainingType.Standard, standard.Title, int.Parse(standard.Id), 0, 0);
+
+            return $"{training.Title} ({training.Code})";
         }
     }
 }

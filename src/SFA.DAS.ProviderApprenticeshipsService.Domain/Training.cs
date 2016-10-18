@@ -19,38 +19,33 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain
         public int Level { get; private set; }
         public int PathwayCode { get; private set; }
 
-        public string Code => $"{Id}-{Level}-{PathwayCode}";
+        public string Code => TrainingType == TrainingType.Framework ? $"{Id}-{Level}-{PathwayCode}" : $"{Id}";
 
         public static Training Decode(string code, string title)
         {
-            if (string.IsNullOrWhiteSpace(code))
-                throw new InvalidOperationException($"The code '' is not valid");
-
-            try
+            if (!string.IsNullOrWhiteSpace(code))
             {
-                var parts = code.Split(char.Parse("-"));
+                try
+                {
+                    var parts = code.Split(char.Parse("-"));
 
-                if (parts.Length == 1)
-                {
-                    return new Training(TrainingType.Standard, title, int.Parse(code), 0, 0);
+                    if (parts.Length == 1)
+                    {
+                        return new Training(TrainingType.Standard, title, int.Parse(code), 0, 0);
+                    }
+                    if (parts.Length == 3)
+                    {
+                        return new Training(TrainingType.Framework, title, int.Parse(parts[0]), int.Parse(parts[1]),
+                            int.Parse(parts[2]));
+                    }
                 }
-                if (parts.Length == 3)
+                catch (FormatException ex)
                 {
-                    return new Training(TrainingType.Framework, title, int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
+                    //Let it fall through to the IOE below.
                 }
-            }
-            catch (FormatException ex)
-            {
-                //Let it fall through to the IOE below.
             }
 
             throw new InvalidOperationException($"The code '{code}' is not valid");
         } 
-    }
-
-    public enum TrainingType
-    {
-        Standard = 0,
-        Framework = 1
     }
 }
