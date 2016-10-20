@@ -387,8 +387,6 @@
     <Content Include="Views\Tasks\View.cshtml" />
     <Content Include="Views\Commitment\Submit.cshtml" />
     <Content Include="Views\Shared\ValidationSummary.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\FormString.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\FormCurrencyString.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

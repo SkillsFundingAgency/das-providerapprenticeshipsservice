@@ -8,7 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         public ApprenticeshipViewModelValidator()
         {
             RuleFor(x => x.ULN).Matches("^$|^[1-9]{1}[0-9]{9}$").WithMessage("'ULN' is not in the correct format.");
-            RuleFor(x => x.Cost).Matches("^$|^[1-9]{1}[0-9]*$");
+            RuleFor(x => x.Cost).Matches("^$|^[1-9]{1}[0-9]*$").WithMessage("Cost is not in the correct format");
         }
     }
 }
