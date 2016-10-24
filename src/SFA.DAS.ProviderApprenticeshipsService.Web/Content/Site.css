@@ -204,3 +204,7 @@ hr.wide {
 table.full-width, .responsive-table.full-width {
     max-width:100%;
 }
+
+.validation-summary-valid{
+    display:none;
+}
