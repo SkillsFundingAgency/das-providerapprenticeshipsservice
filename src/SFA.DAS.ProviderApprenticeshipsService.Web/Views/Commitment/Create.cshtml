@@ -37,10 +37,10 @@
             </div>
             <!--input controls html format -->
             
-             <div class="form-group @Html.AddClassIfPropertyInError(x => x.ULN, "error")"  aria-describedby = "'ULN' not in the correct format">
-                @Html.LabelFor(m => m.ULN, "Unique learner number", new { @class = "form-label" })
+             <div class="form-group @Html.AddClassIfPropertyInError(x => x.ULN, "error")">
+                @Html.LabelFor(m => m.ULN, "Unique learner number", new { @class = "form-label-bold" })
           
-                @Html.ValidationMessageFor(m => m.ULN, null, new { id = "error-message-" + Html.IdFor(m => m.ULN) })
+                @Html.ValidationMessageFor(m => m.ULN, null, new { id = "error-message-" + Html.IdFor(m => m.ULN) }) <!-- this id to be moved to the input below -->
                  @Html.TextBoxFor(m => m.ULN, new { @class = "form-control form-control-3-4", type = "number" })   <!-- aria-describedby = "ULN not in the correct format" -->  
             
                  </div>
