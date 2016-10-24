@@ -40,7 +40,7 @@
                     <span class="form-label-bold">Cost</span>
                     @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
                 </label>
-                <b>£</b>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
+                <span class="bold-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
             </div>
 
             <div class="form-group">
