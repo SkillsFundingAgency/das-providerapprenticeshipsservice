@@ -2370,7 +2370,7 @@ input[type=number] {
 .validation-error,.input-validation-error {
     border-left: 3px solid #df3034;
     box-sizing: content-box;
-    margin-left: -13px;
+    margin-left: 0;
     padding: 0 0 0 10px
 }
 
@@ -2388,7 +2388,7 @@ input[type=number] {
 
 @media(min-width: 641px) {
     .validation-error,.input-validation-error {
-        margin-left:-18px;
+       
         padding-left: 15px
     }
 }
@@ -2595,9 +2595,8 @@ input[type=number] {
     }
 }
 
-.validation-summary,.validation-summary-errors {
+.validation-summary {
     background: #fef7f7;
-    border-left: 3px solid #df3034;
     box-sizing: content-box;
     margin-bottom: 30px;
     margin-left: -18px;
