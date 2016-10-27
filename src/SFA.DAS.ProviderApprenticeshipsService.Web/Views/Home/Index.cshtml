@@ -7,19 +7,37 @@
 }
 
 <div class="grid-row">
-    <div class="column-full">
-        <h1 class="heading-xlarge">Provider commitments</h1>
-    </div>
-</div>
-<div class="grid-row">
     <div class="column-two-thirds">
-        <p>Use this service to:</p>
-        <ul class="list list-bullet">
-            <li>view new commitments</li>
-            <li>manage open commitments</li>
-            <li>agree to commitments</li>
-        </ul>
-        <a class="button button-start" id="view_commitments" href="@Url.Action("Index","Commitment", new {providerId = Model.ProviderId})">View commitments</a>
+        <h1 class="heading-xlarge rj-headings-border" id="">Hackney skills and training<span class="heading-secondary" style="font-size:16px;padding-top:0px">UK PRN: 12345678</span></h1>
+
+        <!--h2 class="heading-large" style="margin:0px 0 50px 0">
+
+
+        Funding</h2-->
+        <div style="max-width:90%">
+            <div class="grid-row">
+                <div class="column-half ">
+                    <h3 class="heading-medium looks-like-a-link-underline-h2" style="margin-top:0 ">
+                        <!--a href="/commitPT
+
+
+
+                        /finance"-->
+                        Contracts
+                    </h3>
+                    <p class="rj-home-spacer"><span class="looks-like-a-link-underline">View and sign your contracts</span> with the SFA online.</p>
+                </div>
+
+                <div class="column-half">
+                    <h3 class="heading-medium rj-top-border-mobile" style="margin-top:0;  "><a href="@Url.Action("Index", "Commitment", new { providerId = Model.ProviderId })">Apprentices</a></h3>
+                    <p class="rj-home-spacer">View, update and agree <a href="/commitPT&#10;&#10;&#10;&#10;/contracts/provider-in-progress/overview">employer requests</a>, or <span class="looks-like-a-link-underline">update existing apprentice details.</span></p>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+
 </div>
+
     

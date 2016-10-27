@@ -86,18 +86,34 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Submit(long providerId, long commitmentId)
+        public ActionResult FinishEditing(long providerId)
         {
-            var commitment = await _commitmentOrchestrator.Get(providerId, commitmentId);
+            ViewBag.ProviderId = providerId;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult FinishedEditingChoice(long providerId)
+        {
+            return RedirectToAction("Submit", new { providerId = providerId });
+        }
+
+        [HttpGet]
+        // public async Task<ActionResult> Submit(long providerId, long commitmentId)
+        public ActionResult Submit(long providerId)
+        {
+            // TODO: LWA Need to pass in parameters from request.
+            //var commitment = await _commitmentOrchestrator.Get(providerId, commitmentId);
 
             var model = new SubmitCommitmentViewModel
             {
                 SubmitCommitmentModel = new SubmitCommitmentModel
                 {
                     ProviderId = providerId,
-                    CommitmentId = commitmentId
+                    //CommitmentId = commitmentId
                 },
-                Commitment = commitment.Commitment
+                //Commitment = commitment.Commitment
             };
 
             return View(model);
@@ -105,11 +121,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Submit(SubmitCommitmentModel model)
+        public ActionResult Submit(SubmitCommitmentModel model)
         {
-            await _commitmentOrchestrator.SubmitApprenticeship(model);
+            //await _commitmentOrchestrator.SubmitApprenticeship(model);
 
-            return RedirectToAction("Index", new { providerId = model.ProviderId });
+            return RedirectToAction("Acknowledgement", new { providerId = model.ProviderId });
+        }
+
+        [HttpGet]
+        public ActionResult Acknowledgement(long providerId)
+        {
+            ViewBag.ProviderId = providerId;
+
+            return View();
         }
 
         private void AddErrorsToModelState(InvalidRequestException ex)

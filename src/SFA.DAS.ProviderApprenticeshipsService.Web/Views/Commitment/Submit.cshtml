@@ -14,11 +14,11 @@
             <tbody>
             <tr>
                 <th scope="row">Name</th>
-                <td>@Model.Commitment.Name</td>
+                <td>TODO</td>
             </tr>
             <tr>
                 <th scope="row">Legal entity</th>
-                <td>@Model.Commitment.LegalEntityName</td>
+                <td>TODO</td>
             </tr>
             </tbody>
         </table>
@@ -33,7 +33,7 @@
                           aria-required="true">@Model.SubmitCommitmentModel.Message</textarea>
             </div>
             <input type="hidden" id="providerId" name="providerId" value="@Model.SubmitCommitmentModel.ProviderId" />
-            <input type="hidden" id="commitmentId" name="commitmentId" value="@Model.SubmitCommitmentModel.CommitmentId" />
+            @*@<input type="hidden" id="commitmentId" name="commitmentId" value="@Model.SubmitCommitmentModel.CommitmentId" />*@
             <button type="submit" class="button">Send to employer</button>
         </form>
 </div>
