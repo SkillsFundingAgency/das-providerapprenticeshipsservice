@@ -39,12 +39,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         }
         public async Task Create(User registerUser)
         {
-            throw new NotImplementedException();
+            await Task.Run(() => { });
         }
         public async Task Update(User user)
         {
-            throw new NotImplementedException();
-
+            await Task.Run(() => { });
         }
 
         public async Task<Users> GetAllUsers()

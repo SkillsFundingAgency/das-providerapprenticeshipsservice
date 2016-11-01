@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C94BD4C5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderApprenticeshipsService.Application.Tests", "SFA.DAS.ProviderApprenticeshipsService.Application.Tests\SFA.DAS.ProviderApprenticeshipsService.Application.Tests.csproj", "{C4528A1E-2F4B-4DA1-A1EE-CAC2F2DE3AF5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderApprenticeshipsService.Domain.Tests", "SFA.DAS.ProviderApprenticeshipsService.Domain.Tests\SFA.DAS.ProviderApprenticeshipsService.Domain.Tests.csproj", "{4717ABE0-CD8E-4C9A-8DCE-6920F1CC8A30}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderApprenticeshipsService.Web.Tests", "SFA.DAS.ProviderApprenticeshipsService.Web.Tests\SFA.DAS.ProviderApprenticeshipsService.Web.Tests.csproj", "{6A7B6642-3880-46B1-BF2D-17461D087331}"
 EndProject
 Global
@@ -59,6 +61,10 @@ Global
 		{6A7B6642-3880-46B1-BF2D-17461D087331}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A7B6642-3880-46B1-BF2D-17461D087331}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A7B6642-3880-46B1-BF2D-17461D087331}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4717ABE0-CD8E-4C9A-8DCE-6920F1CC8A30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4717ABE0-CD8E-4C9A-8DCE-6920F1CC8A30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4717ABE0-CD8E-4C9A-8DCE-6920F1CC8A30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4717ABE0-CD8E-4C9A-8DCE-6920F1CC8A30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,5 +72,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C4528A1E-2F4B-4DA1-A1EE-CAC2F2DE3AF5} = {C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}
 		{6A7B6642-3880-46B1-BF2D-17461D087331} = {C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}
+		{4717ABE0-CD8E-4C9A-8DCE-6920F1CC8A30} = {C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}
 	EndGlobalSection
 EndGlobal

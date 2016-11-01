@@ -11,6 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string ServiceBusConnectionString { get; set; }
         public CommitmentsApiClientConfiguration CommitmentsApi { get; set; }
         public TasksApiClientConfiguration TasksApi { get; set; }
+        public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }
     }
 
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
@@ -23,5 +24,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
     {
         public string BaseUrl { get; set; }
         public string ClientToken { get; set; }
+    }
+
+    public class ApprenticeshipInfoServiceConfiguration : IApprenticeshipInfoServiceConfiguration
+    {
+        public string BaseUrl { get; set; }
     }
 }
