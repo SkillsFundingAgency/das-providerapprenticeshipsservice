@@ -138,7 +138,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 TrainingType = apprenticeship.TrainingType,
                 TrainingCode = apprenticeship.TrainingCode,
                 TrainingName = apprenticeship.TrainingName,
-                Cost = apprenticeship.Cost,
+                Cost = apprenticeship.Cost.ToString(),
                 StartMonth = apprenticeship.StartDate?.Month, 
                 StartYear = apprenticeship.StartDate?.Year,
                 EndMonth = apprenticeship.EndDate?.Month,
@@ -160,7 +160,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 TrainingType = viewModel.TrainingType,
                 TrainingCode = viewModel.TrainingCode,
                 TrainingName = viewModel.TrainingName,
-                Cost = viewModel.Cost,
+                Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
                 StartDate = GetDateTime(viewModel.StartMonth, viewModel.StartYear),
                 EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear)
             };

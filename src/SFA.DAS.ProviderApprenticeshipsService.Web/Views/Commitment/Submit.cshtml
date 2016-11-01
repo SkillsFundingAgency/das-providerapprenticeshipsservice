@@ -14,16 +14,17 @@
             <tbody>
             <tr>
                 <th scope="row">Name</th>
-                <td>@Model.Commitment.Name</td>
+                <td>TODO</td>
             </tr>
             <tr>
                 <th scope="row">Legal entity</th>
-                <td>@Model.Commitment.LegalEntityName</td>
+                <td>TODO</td>
             </tr>
             </tbody>
         </table>
         <p></p>
         <form method="POST" action="@Url.Action("Submit")">
+            @Html.AntiForgeryToken()
             <div class="form-group">
                 <label class="form-label" for="Message">Note</label>
                 <p>For example, this is the commitment for 25 x level 3 engineers against contract 53241</p>
@@ -32,7 +33,7 @@
                           aria-required="true">@Model.SubmitCommitmentModel.Message</textarea>
             </div>
             <input type="hidden" id="providerId" name="providerId" value="@Model.SubmitCommitmentModel.ProviderId" />
-            <input type="hidden" id="commitmentId" name="commitmentId" value="@Model.SubmitCommitmentModel.CommitmentId" />
+            @*@<input type="hidden" id="commitmentId" name="commitmentId" value="@Model.SubmitCommitmentModel.CommitmentId" />*@
             <button type="submit" class="button">Send to employer</button>
         </form>
 </div>
