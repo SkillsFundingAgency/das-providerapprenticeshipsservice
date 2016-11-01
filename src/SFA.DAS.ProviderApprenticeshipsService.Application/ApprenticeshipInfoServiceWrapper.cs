@@ -71,7 +71,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
                 CreatedDate = DateTime.UtcNow,
                 Frameworks = frameworks.Select(x => new Framework
                 {
-                    Id = x.Id,
+                    Id = int.Parse(x.Id),
                     Title = x.Title,
                     FrameworkCode = x.FrameworkCode,
                     FrameworkName = x.FrameworkName,

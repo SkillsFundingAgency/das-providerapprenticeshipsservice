@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
+using Domain = SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
     public class ExtendedApprenticeshipViewModel
     {
         public ApprenticeshipViewModel Apprenticeship { get; set; }
-        public List<Standard> Standards { get; set; }
+        public List<Domain.Standard> Standards { get; set; }
     }
 
     public class ApprenticeshipViewModel
@@ -18,7 +18,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ULN { get; set; }
-        public string TrainingId { get; set; } //standard or framework
+        public TrainingType TrainingType { get; set; }
+        public string TrainingCode { get; set; }
+        public string TrainingName { get; set; }
         public decimal? Cost { get; set; }
         public int? StartMonth { get; set; }
         public int? StartYear { get; set; }
