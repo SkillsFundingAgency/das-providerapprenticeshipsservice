@@ -1,8 +1,8 @@
 ﻿{
   "UserList": [
     {
-      "Id": 3, 
-      "ProviderId":  1, 
+      "Id": 3,
+      "ProviderId": 1,
       "UserRef": "DF11DAEB-CA1B-47DC-AAD8-F7F37B7F4EAC",
       "FirstName": "Daniel",
       "LastName": "Ashton",
@@ -39,6 +39,14 @@
       "FirstName": "Simon",
       "LastName": "Bull",
       "Email": "simon.bull@test.local"
+    },
+    {
+      "Id": 6,
+      "ProviderId": 10000415,
+      "UserRef": "19341B3A-A0A5-4CE2-B117-9364755D01E1",
+      "FirstName": "Lee",
+      "LastName": "Wadhams",
+      "Email": "lee.wadhams@test.local"
     }
   ]
 }
