@@ -4,7 +4,7 @@
     <Sites>
       <Site name="Web">
         <Bindings>
-         <Binding name="Httpsin" endpointName="Httpsin" />
+          <Binding name="Endpoint1" endpointName="Endpoint1" />
         </Bindings>
       </Site>
     </Sites>
@@ -18,7 +18,7 @@
       <Setting name="RedisConnection" />
     </ConfigurationSettings>
     <Endpoints>
-      <InputEndpoint name="Httpsin" protocol="https" port="443" certificate="WebSslCert" />
+      <InputEndpoint name="Endpoint1" protocol="http" port="80" />
     </Endpoints>
   </WebRole>
 </ServiceDefinition>
