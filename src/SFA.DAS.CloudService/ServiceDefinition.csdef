@@ -5,6 +5,7 @@
       <Site name="Web">
         <Bindings>
          <Binding name="Httpsin" endpointName="Httpsin" />
+         <Binding name="Httpin" endpointName="Httpin" />
         </Bindings>
       </Site>
     </Sites>
@@ -19,6 +20,8 @@
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Httpsin" protocol="https" port="443" certificate="WebSslCert" />
+      <InputEndpoint name="Httpin" protocol="http" port="80"/>
+      
     </Endpoints>
   </WebRole>
 </ServiceDefinition>
