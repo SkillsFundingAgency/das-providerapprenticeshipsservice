@@ -21,7 +21,9 @@
     <Endpoints>
       <InputEndpoint name="Httpsin" protocol="https" port="443" certificate="WebSslCert" />
       <InputEndpoint name="Httpin" protocol="http" port="80"/>
-      
     </Endpoints>
+    <Certificates>
+      <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
+    </Certificates>
   </WebRole>
 </ServiceDefinition>
