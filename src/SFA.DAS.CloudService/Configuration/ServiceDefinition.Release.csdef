@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition name="SFA.DAS.CloudService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6">
-  <WebRole name="SFA.DAS.ProviderApprenticeshipsService.Web" vmsize="Small">
+  <WebRole name="SFA.DAS.ProviderApprenticeshipsService.Web" vmsize="Standard_D2_v2">
     <Sites>
       <Site name="Web">
         <Bindings>
@@ -18,7 +18,7 @@
       <Setting name="RedisConnection" />
     </ConfigurationSettings>
     <Endpoints>
-      <InputEndpoint name="Httpsin" protocol="https" port="443" certificate="WebSslCert" />
+      <InputEndpoint name="Httpsin" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-prd-pas-lb"/>
     </Endpoints>
     <Certificates>
       <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
