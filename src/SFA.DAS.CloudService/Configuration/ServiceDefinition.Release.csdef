@@ -18,7 +18,7 @@
       <Setting name="RedisConnection" />
     </ConfigurationSettings>
     <Endpoints>
-      <InputEndpoint name="Httpsin" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-prd-pas-lb"/>
+      <InputEndpoint name="Httpsin" protocol="https" port="443" certificate="WebSslCert"/>
     </Endpoints>
     <Certificates>
       <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
