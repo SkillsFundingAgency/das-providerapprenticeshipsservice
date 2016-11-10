@@ -91,8 +91,14 @@
             <div class="column-full">   
                 @if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
-                    <span>Hi @HttpContext.Current.User.Identity.Name</span>
-                    <span><a href="@Url.Action("SignOut","Home")">Log out</a></span>
+
+                    <div class="user-menu logged-in">
+                        <ul id="service-info-list" role="navigation">
+                            <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
+                            <li><a href="@Url.Action("SignOut","Home")">Log out</a></li>
+                        </ul>
+                    </div>
+                     
                 }
                 else
                 {
