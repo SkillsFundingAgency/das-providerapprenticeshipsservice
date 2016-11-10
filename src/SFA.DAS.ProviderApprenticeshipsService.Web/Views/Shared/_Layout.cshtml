@@ -88,8 +88,7 @@
             </div>
         </div>
         <div class="grid-row">
-            <div class="column-one-third">&ensp;</div>
-            <div class="column-two-thirds rightalign">
+            <div class="column-full">   
                 @if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
                     <span>Hi @HttpContext.Current.User.Identity.Name</span>
