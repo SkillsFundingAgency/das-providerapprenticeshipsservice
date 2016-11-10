@@ -24,6 +24,7 @@ using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Caching;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.Tasks.Api.Client;
@@ -53,6 +54,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<ICommitmentsApi>().Use<CommitmentsApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<ITasksApi>().Use<TasksApi>().Ctor<ITasksApiClientConfiguration>().Is(config.TasksApi);
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
+            For<ICache>().Use<InMemoryCache>(); //RedisCache
 
             RegisterMediator();
         }
