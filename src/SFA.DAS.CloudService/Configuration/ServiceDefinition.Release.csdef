@@ -13,8 +13,8 @@
       <Setting name="EnvironmentName" />
       <Setting name="StorageConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
-      <Setting name="EventHubConnectionString" />
-      <Setting name="EventHubName" />
+      <Setting name="LoggingRedisConnnectionString"/>
+      <Setting name="LoggingRedisKey"/>
       <Setting name="RedisConnection" />
     </ConfigurationSettings>
     <Endpoints>

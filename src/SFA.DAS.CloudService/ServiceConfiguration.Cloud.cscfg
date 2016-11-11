@@ -7,8 +7,8 @@
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="StorageConnectionString" value="__ConfigurationStorageConnectionString__" />
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
-      <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
-      <Setting name="EventHubName" value="__EventHubName__" />
+      <Setting name="LoggingRedisConnnectionString" value="__LoggingRedisConnnectionString__"/>
+      <Setting name="LoggingRedisKey" value="__LoggingRedisKey__"/>
       <Setting name="RedisConnection" value="__RedisConnection__" />
     </ConfigurationSettings>
     <Certificates>
