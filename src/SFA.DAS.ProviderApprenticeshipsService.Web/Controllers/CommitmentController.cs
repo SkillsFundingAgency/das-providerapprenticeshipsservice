@@ -20,6 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
         
         [HttpGet]
+        [Route("{providerId}/Commitments")]
         public async Task<ActionResult> Index(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAll(providerId);
@@ -28,6 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{providerId}/Commitment/{commitmentId}")]
         public async Task<ActionResult> Details(long providerId, long commitmentId)
         {
             var model = await _commitmentOrchestrator.Get(providerId, commitmentId);
@@ -36,10 +38,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{providerId}/Commitment/{commitmentId}/Edit/{apprenticeshipId}")]
         public async Task<ActionResult> Edit(long providerId, long commitmentId, long apprenticeshipId)
         {
             var model = await _commitmentOrchestrator.GetApprenticeship(providerId, commitmentId, apprenticeshipId);
-
             return View(model);
         }
 
@@ -53,10 +55,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{providerId}/commitment/{CommitmentId}/AddApprentice")]
         public async Task<ActionResult> Create(long providerId, long commitmentId)
         {
             var model = await _commitmentOrchestrator.GetApprenticeship(providerId, commitmentId);
-
             ViewBag.ApprenticeshipProducts = model.Standards;
 
             return View(model.Apprenticeship);
@@ -64,6 +66,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("{providerId}/commitment/{CommitmentId}/AddApprentice")]
         public async Task<ActionResult> Create(ApprenticeshipViewModel apprenticeship)
         {
             try
