@@ -1,15 +1,15 @@
 ﻿
 .home-page{
 
-.grey-text{
-    color: #6f777b;
-    margin-top: 0;
-    font-weight:700;
-}
+    .grey-text{
+        color: #6f777b;
+        margin-top: 0;
+        font-weight:700;
+    }
 
-h1.heading-xlarge{
-    margin-bottom:0;
-}
+    h1.heading-xlarge{
+        margin-bottom:0;
+    }
 
 
 } // home-page 
@@ -21,7 +21,24 @@ h1.heading-xlarge{
     }
 }
 
+.emptyStateAlert {
+    background-color: #eaf4f9;
+    border-left: 8px solid #2b8cc4;
+    margin: 0 auto;
+    min-height: 110px;
+    width: 85%;
 
+        .emptyStateCopy {
+            padding-top: 40px;
+            text-align: center;
+            }
+
+        .emptyStateCopyDetails{
+                padding-top:25px;
+                text-align: center;
+            }
+
+}
 
 
 
@@ -81,26 +98,11 @@ only screen and (max-width: 760px),
 
 
 	/*
-	Label for the data
+	Labels for the data
 	*/
-	.viewCommitment td:nth-of-type(1):before { content: "Apprentice"; font-weight:bold; margin-top:5px; min-height:30px; }
-	.viewCommitment td:nth-of-type(2):before { content: "Training"; font-weight:bold; margin-top:5px; }
-	.viewCommitment td:nth-of-type(3):before { content: "Status"; font-weight:bold; margin-top:5px;}
+	.employerListing td:nth-of-type(1):before { content: "Employer"; font-weight:bold; margin-top:5px; min-height:30px; }
+	.employerListing td:nth-of-type(2):before { content: "Reference"; font-weight:bold; margin-top:5px; }
 	
-    .cohort td:nth-of-type(1):before { content: "Training provider"; font-weight:bold; margin-top:5px; }
-	.cohort td:nth-of-type(2):before { content: "Organisation"; font-weight:bold; margin-top:5px; }
-	.cohort td:nth-of-type(3):before { content: "Reference"; font-weight:bold; margin-top:5px;}
-
-    .levyAccountsListing td:nth-of-type(1):before { content: "Account name"; font-weight:bold; margin-top:5px; }
-	.levyAccountsListing td:nth-of-type(2):before { content: "What you can do"; font-weight:bold; margin-top:5px; }
-
-     .orgListing td:nth-of-type(1):before { content: "Name"; font-weight:bold; margin-top:5px; }
-	.orgListing td:nth-of-type(2):before { content: "Agreement status"; font-weight:bold; margin-top:5px; }
-
-
-    /*finished editing button spacing*/
-    .column-one-third .finishEditingBtn{margin-top:0.25em;}
-
 }
 
 

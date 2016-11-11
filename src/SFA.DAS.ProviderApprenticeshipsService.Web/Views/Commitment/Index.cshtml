@@ -4,7 +4,7 @@
     <div class="column-two-thirds">
     @if (Model.NumberOfTasks > 0)
     {
-        <h2 class="heading-medium">Tasks</h2>
+        @*<h2 class="heading-medium">Tasks</h2>
         <p>Any commitments that need your attention are shown below:</p>
         if (Model.NumberOfTasks == 1)
          {
@@ -20,70 +20,69 @@
          {
              <a href="@Url.Action("Index", "Tasks", new {providerId = Model.ProviderId})" class="link">View tasks</a>
          }
-        <hr/>
+        <hr/>*@
     }
     </div>
 </div>
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Commitments</h1>
-        <hr/>
-        <p>Any commitments that are new or that you are discussing with an employer are listed below:</p>
-    </div>
-</div>
+
 <div class="grid-row">
     <div class="column-full">
+
+        <h1 class="heading-xlarge">Requests in progress</h1>
+
+        <p>Any commitments that are new or that you are discussing with an employer are listed below:</p>
+
         @if (Model.Commitments.Count == 0)
         {
-            <p class="panel panel-info">
-                No commitments exist for this account.
-            </p>
+            <div class="emptyStateAlert">
+                <div class="emptyStateCopyDetails" aria-label="Information">
+                    <p>No commitments exist for this account.</p>
+                </div>
+            </div>
+
         }
         else
         {
-            <div class="responsive-table">
-                <div class="responsive-thead">
-                    <div class="responsive-tr">
-                        <div class="responsive-th">Employer</div>
-                        <div class="responsive-th">Name</div>
-                        <div class="responsive-th"> </div>
-                        <div class="responsive-th"> </div>
-                    </div>
-                </div>
-                <div class="responsive-tbody">
+
+
+            <table class="tableResponsive employerListing">
+                <thead>
+                    <tr>
+                        <th>Employer</th>
+                        <th colspan="3">Reference</th>
+                    
+                    </tr>
+                </thead>
+                <tbody>
                     @foreach (var commitment in Model.Commitments)
                     {
-                        <div class="responsive-tr">
-                            <div class="responsive-td">
-                                <div>@commitment.LegalEntityName</div>
-                                <div class="responsive-inner-caption"></div>
-                            </div>
-                            <div class="responsive-td">
-                                <div class="responsive-inner-caption">Role</div>
-                                <div>@commitment.Name</div>
-                            </div>
-                            <div class="responsive-td">
-                                <div>
+                        <tr>
+                            <td>
+                                @commitment.LegalEntityName  
+                            </td>
+                            <td>
+                                @commitment.Name
+                            </td>
+                            
+                            <td>
                                     <form action="@Url.Action("Details")" method="GET">
                                         <input type="hidden" name="providerId" value="@commitment.ProviderId"/>
                                         <input type="hidden" name="commitmentId" value="@commitment.Id"/>
-                                        <button type="submit" name="commitment" class="button">View</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="responsive-td">
-                                <div>
+                                        <button type="submit" name="commitment">View</button>
+                                    </form>   
+                            </td>
+
+                            <td>
                                     <form action="@Url.Action("Submit")" method="GET">
                                         <input type="hidden" name="providerId" value="@commitment.ProviderId" />
                                         <input type="hidden" name="commitmentId" value="@commitment.Id" />
-                                        <button type="submit" name="commitment" class="button">Submit</button>
+                                        <button type="submit" name="commitment">Submit</button>
                                     </form>
-                                </div>
-                            </div>
-                        </div>
+                            </td>
+                        </tr>
                     }
-                </div>
-            </div>
+                </tbody>
+            </table>
         }
     </div>
 </div>
