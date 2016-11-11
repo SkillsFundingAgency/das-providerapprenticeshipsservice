@@ -12,9 +12,9 @@
 
 <div class="grid-row">
     <div class="column-one-half employer-details">
-        <p><span class="strong">Employer: </span>Acme Coventry Ltd ( .net )</p>
-        <p><span class="strong">Reference: </span>98HGS3F (.net )</p>
-        <p><span class="strong">Status: </span>Needs provider input (.net )</p>
+        <p><span class="strong">Employer: </span>@Model.Commitment.EmployerAccountName</p>
+        <p><span class="strong">Reference: </span>@Model.Commitment.Name</p>
+        <p><span class="strong">Status: </span>@Model.Commitment.Status.GetDescription()</p>
     </div>
 
     <div class="column-one-half employer-details">
@@ -28,12 +28,9 @@
     <div class="column-full">
         <p class="heading-medium">3 Apprentices (.net )</p>
         <hr />
-
-       
         <a href="@Url.Action("Create", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id })"
            class="button" name="commitment" aria-label="Add an apprentice">Add an apprentice</a>
             <a class="button finishEditingBtn" href="@Url.Action("FinishEditing", new { providerId = Model.Commitment.ProviderId })" aria-label="Finished editing">Finish editing</a>
-     
         <hr />
     </div>
 </div>
@@ -93,33 +90,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>Name .... </td>
-                    <td>ULN Number.... </td>
-                    <td>Training name ?</td>
-                    <td>01-12-2016 to 01-12-2018</td>
-                    <td>10000</td>
-                    <td><a href="#">Edit</a> </td>
+                    @foreach (var item in Model.Commitment.Apprenticeships)
+                    {
+                        <tr>
+                            <td>@item.FirstName + " " + @item.LastName</td>
+                            <td>@item.ULN</td>
+                            <td>@item.TrainingName</td>
+                            <td>@item.StartDate to @item.EndDate</td>
+                            <td>@item.Cost</td>
+                            <td><a href="#">Edit</a> </td>
 
-                </tr>
-                <tr>
-                    <td>Name .... </td>
-                    <td>ULN Number.... </td>
-                    <td>Training name ?</td>
-                    <td>01-12-2016 to 01-12-2018</td>
-                    <td>10000</td>
-                    <td><a href="#">Edit</a> </td>
-
-                </tr>
-                <tr>
-                    <td>Name .... </td>
-                    <td>ULN Number.... </td>
-                    <td>Training name ?</td>
-                    <td>01-12-2016 to 01-12-2018</td>
-                    <td>10000</td>
-                    <td><a href="#">Edit</a> </td>
-
-                </tr>
+                        </tr>
+                    }
                 </tbody>
             </table>
 
