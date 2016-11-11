@@ -2,39 +2,27 @@
 
 @model SubmitCommitmentViewModel
 
-<div class="grid-row">
+<div class="grid-row submit-page">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Add a note</h1>
-        <hr />
-        <div class="form-group">
-            <p>You are about to send your commitment back to the employer. Once you send it they will be able to see it in their online account.</p>
+        <h1 class="heading-xlarge">Instructions for the employer</h1>
+           
+            <p class="lede">Let <span class="strong">Hackney Skills and Training Ltd (.net) </span> know what you'd like them to do next.</p>
             <p>You can add a note for them to read.</p>
-        </div>
-        <table>
-            <tbody>
-            <tr>
-                <th scope="row">Name</th>
-                <td>TODO</td>
-            </tr>
-            <tr>
-                <th scope="row">Legal entity</th>
-                <td>TODO</td>
-            </tr>
-            </tbody>
-        </table>
+   
+
         <p></p>
         <form method="POST" action="@Url.Action("Submit")">
             @Html.AntiForgeryToken()
             <div class="form-group">
-                <label class="form-label" for="Message">Note</label>
-                <p>For example, this is the commitment for 25 x level 3 engineers against contract 53241</p>
-                <textarea class="form-control form-control-3-4" id="Message" name="Message"
+                <label class="form-label strong" for="Message">Instructions (Optional)</label>
+                <p class="form-hint">For example, please can you review and approve the apprentices added to this request.</p>
+                <textarea class="form-control form-control-3-4 message" id="Message" name="Message"
                           cols="40" rows="10"
                           aria-required="true">@Model.SubmitCommitmentModel.Message</textarea>
             </div>
             <input type="hidden" id="providerId" name="providerId" value="@Model.SubmitCommitmentModel.ProviderId" />
-            @*@<input type="hidden" id="commitmentId" name="commitmentId" value="@Model.SubmitCommitmentModel.CommitmentId" />*@
-            <button type="submit" class="button">Send to employer</button>
+           
+            <button type="submit" class="button">Send</button>
         </form>
 </div>
 </div>

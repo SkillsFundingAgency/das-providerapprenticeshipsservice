@@ -55,12 +55,64 @@ a.links{
         margin-bottom:5px;
     }
 
-
 }
 
 .finishEditingBtn {
     float: right;
 }
+
+.submit-page .message{
+    width:100%;
+}
+
+
+.govuk-box-highlight{ 
+
+    .heading-xlarge {margin: 0 0 10px;}
+
+}
+
+.instructions-sent{ 
+    
+    td{width:25%;}
+    
+    td.strong{
+    font-weight:bold;
+    width:75%;
+     }
+
+}
+
+.column-one-third {
+
+    aside {margin-top: 50px;}
+
+}
+
+.govuk-box-highlight {
+    margin-top: 50px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* responsive table */ 
