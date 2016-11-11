@@ -5,7 +5,6 @@
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
-      <Setting name="StorageConnectionString" value="__ConfigurationStorageConnectionString__" />
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
       <Setting name="LoggingRedisConnnectionString" value="__LoggingRedisConnnectionString__"/>
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__"/>
