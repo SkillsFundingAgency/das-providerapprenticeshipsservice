@@ -133,7 +133,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
         }
 
-        public async Task SubmitApprenticeship(SubmitCommitmentViewModel model)
+        public async Task SubmitCommitment(SubmitCommitmentViewModel model)
         {
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {
@@ -141,6 +141,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = model.CommitmentId,
                 Message = model.Message
             });
+        }
+
+        public Task ApproveCommitment(long providerId, long commitmentId)
+        {
+            throw new NotImplementedException();
         }
 
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)

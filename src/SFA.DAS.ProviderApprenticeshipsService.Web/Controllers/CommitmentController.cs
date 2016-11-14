@@ -117,19 +117,33 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("{commitmentId}/Finished")]
-        public ActionResult FinishEditing(FinishEditingViewModel viewModel)
+        public async Task<ActionResult> FinishEditing(FinishEditingViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 return View(viewModel);
             }
 
-            if (viewModel.SaveOrSend == "save-no-send")
+            if (viewModel.SaveOrSend == "send-approve")
             {
-                return RedirectToAction("Index", new { providerId = viewModel.ProviderId });
+                try
+                {
+                    await _commitmentOrchestrator.ApproveCommitment(viewModel.ProviderId, viewModel.CommitmentId);
+
+                    return RedirectToAction("Index", new { providerId = viewModel.ProviderId });
+                }
+                catch (InvalidRequestException)
+                {
+                    // TODO: LWA - What do we do??
+                }
             }
 
-            return RedirectToAction("Submit", new { providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId });
+            if (viewModel.SaveOrSend == "send-amend")
+            {
+                return RedirectToAction("Submit", new { providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId });
+            }
+
+            return RedirectToAction("Index", new { providerId = viewModel.ProviderId });
         }
 
         [HttpGet]
@@ -150,9 +164,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Submit(SubmitCommitmentViewModel model)
+        public async Task<ActionResult> Submit(SubmitCommitmentViewModel model)
         {
-            //await _commitmentOrchestrator.SubmitApprenticeship(model);
+            await _commitmentOrchestrator.SubmitCommitment(model);
 
             return RedirectToAction("Acknowledgement", new 
             {
