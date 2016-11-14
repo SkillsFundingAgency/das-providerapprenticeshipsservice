@@ -42,9 +42,37 @@
             <div id="addApprenticesEmptyState" class="emptyState">
                 <div class="emptyStateAlert">
                     <div class="emptyStateCopyDetails" aria-label="Information">
-                        <p>        You haven't added any apprentices yet. Use the options on this page to add apprentices or finish editing.</p>
+                        <p> You haven't added any apprentices yet. Use the options on this page to add apprentices or finish editing.</p>
 
                     </div>
+                </div>
+                <div class="responsive-tbody">
+                    @foreach (var apprenticeship in Model.Commitment.Apprenticeships)
+                    {
+                        <div class="responsive-tr">
+                            <div class="responsive-td">
+                                <div class="responsive-inner-caption">ApprenticeshipName</div>
+                                <div>@apprenticeship.ApprenticeshipName</div>
+                            </div>
+                            <div class="responsive-td">
+                                <div class="responsive-inner-caption">Training</div>
+                                <div>@apprenticeship.TrainingName</div>
+                            </div>
+                            <div class="responsive-td">
+                                <div class="responsive-inner-caption">Status</div>
+                                <div>@apprenticeship.Status.GetDescription()</div>
+                            </div>
+                            <div class="responsive-td">
+                                <div>
+                                    <a href="@Url.Action("Edit", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id, apprenticeshipId = apprenticeship.Id })"
+                                       class="button" aria-label="Edit an apprentice">View</a>
+
+
+                                </div>
+                                <div class="responsive-inner-caption"></div>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         }
@@ -52,43 +80,43 @@
         {
             <table class="tableResponsive providerList">
                 <thead>
-                    <tr>
+                <tr>
 
-                        <th scope="col">Name</th>
-                        <th scope="col">ULN</th>
-                        <th scope="col">Training name</th>
-                        <th scope="col">Training dates</th>
-                        <th scope="col" colspan="2">Cost</th>
-                    </tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">ULN</th>
+                    <th scope="col">Training name</th>
+                    <th scope="col">Training dates</th>
+                    <th scope="col" colspan="2">Cost</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Name .... </td>
-                        <td>ULN Number.... </td>
-                        <td>Training name ?</td>
-                        <td>01-12-2016 to 01-12-2018</td>
-                        <td>10000</td>
-                        <td><a href="#">Edit</a> </td>
+                <tr>
+                    <td>Name .... </td>
+                    <td>ULN Number.... </td>
+                    <td>Training name ?</td>
+                    <td>01-12-2016 to 01-12-2018</td>
+                    <td>10000</td>
+                    <td><a href="#">Edit</a> </td>
 
-                    </tr>
-                    <tr>
-                        <td>Name .... </td>
-                        <td>ULN Number.... </td>
-                        <td>Training name ?</td>
-                        <td>01-12-2016 to 01-12-2018</td>
-                        <td>10000</td>
-                        <td><a href="#">Edit</a> </td>
+                </tr>
+                <tr>
+                    <td>Name .... </td>
+                    <td>ULN Number.... </td>
+                    <td>Training name ?</td>
+                    <td>01-12-2016 to 01-12-2018</td>
+                    <td>10000</td>
+                    <td><a href="#">Edit</a> </td>
 
-                    </tr>
-                    <tr>
-                        <td>Name .... </td>
-                        <td>ULN Number.... </td>
-                        <td>Training name ?</td>
-                        <td>01-12-2016 to 01-12-2018</td>
-                        <td>10000</td>
-                        <td><a href="#">Edit</a> </td>
+                </tr>
+                <tr>
+                    <td>Name .... </td>
+                    <td>ULN Number.... </td>
+                    <td>Training name ?</td>
+                    <td>01-12-2016 to 01-12-2018</td>
+                    <td>10000</td>
+                    <td><a href="#">Edit</a> </td>
 
-                    </tr>
+                </tr>
                 </tbody>
             </table>
 
@@ -96,5 +124,11 @@
         }
     </div>
 </div>
-<a href="#">Back</a>
 
+
+<p></p>
+<a href="@Url.Action("Create", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id })"
+   class="button" name="commitment" aria-label="Add an apprentice">Add an apprentice</a>
+
+<a href="@Url.Action("Index", new { providerId = Model.Commitment.ProviderId })"
+   class="button" aria-label="Back">Back</a>

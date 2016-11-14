@@ -65,11 +65,8 @@
                             </td>
                             
                             <td>
-                                    <form action="@Url.Action("Details")" method="GET">
-                                        <input type="hidden" name="providerId" value="@commitment.ProviderId"/>
-                                        <input type="hidden" name="commitmentId" value="@commitment.Id"/>
-                                        <button type="submit" name="commitment">View</button>
-                                    </form>   
+                                <a class="button" href="@Url.Action("Details",
+                                      new { providerId = commitment.ProviderId, commitmentId = commitment.Id })" aria-label="View">View</a>
                             </td>
 
                             <td>
