@@ -45,6 +45,7 @@
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\ICache.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
+    <Compile Include="ITrainingProgramme.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provider.cs" />
     <Compile Include="ProvidersView.cs" />

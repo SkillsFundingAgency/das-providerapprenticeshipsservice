@@ -5,5 +5,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
     public class CommitmentViewModel
     {
         public Commitment Commitment { get; set; }
+        public string LatestMessage { get; set; }
     }
 }

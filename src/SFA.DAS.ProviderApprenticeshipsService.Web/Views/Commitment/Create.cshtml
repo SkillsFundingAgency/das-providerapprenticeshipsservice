@@ -53,12 +53,9 @@
                     <!-- <span class="helpText" aria-label="Search by course name">Search by course name</span> -->
                     <select name="TrainingCode" id="TrainingCode" class="form-control" aria-label="Training standard">
                         <option value=""></option>
-                        @foreach (var standard in ViewBag.ApprenticeshipProducts)
+                        @foreach (var programme in ViewBag.ApprenticeshipProgrammes)
                         {
-                            <option value="@standard.Id" @if (standard.Id.ToString() == Model.TrainingCode)
-                            {
-                                @Html.Raw("selected=''");}
-                                    >@standard.Title</option>
+                            <option value="@programme.Id">@programme.Title</option>
                         }
                     </select>
 

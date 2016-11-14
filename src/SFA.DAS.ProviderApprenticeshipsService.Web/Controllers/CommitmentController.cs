@@ -42,6 +42,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Edit(long providerId, long commitmentId, long apprenticeshipId)
         {
             var model = await _commitmentOrchestrator.GetApprenticeship(providerId, commitmentId, apprenticeshipId);
+            ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
+
             return View(model);
         }
 
@@ -59,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Create(long providerId, long commitmentId)
         {
             var model = await _commitmentOrchestrator.GetApprenticeship(providerId, commitmentId);
-            ViewBag.ApprenticeshipProducts = model.Standards;
+            ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
 
             return View(model.Apprenticeship);
         }
@@ -151,7 +153,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var model = await _commitmentOrchestrator.GetApprenticeship(apprenticeship.ProviderId, apprenticeship.CommitmentId);
             model.Apprenticeship = apprenticeship;
-            ViewBag.ApprenticeshipProducts = model.Standards;
+            ViewBag.ApprenticeshipProducts = model.ApprenticeshipProgrammes;
 
             return View(model.Apprenticeship);
         }

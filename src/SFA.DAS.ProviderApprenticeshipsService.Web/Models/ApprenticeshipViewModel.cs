@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentValidation.Attributes;
 using SFA.DAS.Commitments.Api.Types;
-using Domain = SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
@@ -9,7 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
     public class ExtendedApprenticeshipViewModel
     {
         public ApprenticeshipViewModel Apprenticeship { get; set; }
-        public List<Domain.Standard> Standards { get; set; }
+        public List<Domain.ITrainingProgramme> ApprenticeshipProgrammes { get; set; }
     }
 
     [Validator(typeof(ApprenticeshipViewModelValidator))]
