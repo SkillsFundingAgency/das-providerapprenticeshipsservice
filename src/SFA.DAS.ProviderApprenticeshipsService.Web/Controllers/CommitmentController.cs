@@ -154,15 +154,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             //await _commitmentOrchestrator.SubmitApprenticeship(model);
 
-            return RedirectToAction("Acknowledgement", new { providerId = model.ProviderId });
+            return RedirectToAction("Acknowledgement", new 
+            {
+                providerId = model.ProviderId,
+                commitmentId = model.CommitmentId,
+                message = model.Message
+            });
         }
 
         [HttpGet]
-        public ActionResult Acknowledgement(long providerId)
+        public async Task<ActionResult> Acknowledgement(long providerId, long commitmentId, string message)
         {
-            ViewBag.ProviderId = providerId;
+            var commitment = (await _commitmentOrchestrator.Get(providerId, commitmentId)).Commitment;
 
-            return View();
+            return View(new AcknowledgementViewModel
+            {
+                CommitmentReference = commitment.Name,
+                EmployerName = commitment.LegalEntityName,
+                ProviderName = commitment.ProviderName,
+                Message = message
+            });
         }
 
         private void AddErrorsToModelState(InvalidRequestException ex)
