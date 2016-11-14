@@ -8,5 +8,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extentions
         {
             return date.ToString("d MMM yyyy");
         }
+
+        public static string ToGdsFormatWithoutDay(this DateTime date)
+        {
+            return date.ToString("MMM yyyy");
+        }
     }
 }

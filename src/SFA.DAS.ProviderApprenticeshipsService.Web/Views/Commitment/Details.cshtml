@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extentions
+@using SFA.DAS.Commitments.Api.Types
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CommitmentViewModel
 
 <div class="grid-row">
@@ -12,28 +13,53 @@
 
 <div class="grid-row">
     <div class="column-one-half employer-details">
-        <p><span class="strong">Employer: </span>Acme Coventry Ltd ( .net )</p>
-        <p><span class="strong">Reference: </span>98HGS3F (.net )</p>
-        <p><span class="strong">Status: </span>Needs provider input (.net )</p>
+        <p><span class="strong">Employer: </span>@Model.Commitment.EmployerAccountName</p>
+        <p><span class="strong">Reference: </span>@Model.Commitment.Name</p>
+        <p><span class="strong">Status: </span>@Model.Commitment.Status.GetDescription()</p>
     </div>
 
     <div class="column-one-half employer-details">
         <p class="strong">Last message / Instructions:</p>
-        <p>No note added</p>
-
+        <p>@(string.IsNullOrWhiteSpace(Model.LatestMessage) ? "No note added" : Model.LatestMessage)</p>
     </div>
 </div>
 
+@functions {
+    public string GetApprenticesCountText(List<Apprenticeship> apprenticeships)
+    {
+        if (apprenticeships.Count == 1)
+            return "1 Apprentice";
+
+        return $"{apprenticeships.Count} Apprentices";
+    }
+
+    public string GetFullName(string firstname, string lastname)
+    {
+        return $"{firstname} {lastname}".Trim(' ');
+    }
+
+    public string GetDateValue(DateTime? date)
+    {
+        if (!date.HasValue)
+            return " - ";
+
+        return date.Value.ToGdsFormatWithoutDay();
+    }
+
+    public string FormatCost(decimal? cost)
+    {
+        if (!cost.HasValue)
+            return string.Empty;
+
+        return string.Format("{0:#}", cost.Value);
+    }
+}
 <div class="grid-row">
     <div class="column-full">
-        <p class="heading-medium">3 Apprentices (.net )</p>
+        <p class="heading-medium">@GetApprenticesCountText(Model.Commitment.Apprenticeships)</p>
         <hr />
-
-       
-        <a href="@Url.Action("Create", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id })"
-           class="button" name="commitment" aria-label="Add an apprentice">Add an apprentice</a>
+            <a href="@Url.Action("Create", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id })" class="button" aria-label="Add an apprentice">Add an apprentice</a>
             <a class="button finishEditingBtn" href="@Url.Action("FinishEditing", new { providerId = Model.Commitment.ProviderId })" aria-label="Finished editing">Finish editing</a>
-     
         <hr />
     </div>
 </div>
@@ -48,34 +74,6 @@
                         <p> You haven't added any apprentices yet. Use the options on this page to add apprentices or finish editing.</p>
 
                     </div>
-                </div>
-                <div class="responsive-tbody">
-                    @foreach (var apprenticeship in Model.Commitment.Apprenticeships)
-                    {
-                        <div class="responsive-tr">
-                            <div class="responsive-td">
-                                <div class="responsive-inner-caption">ApprenticeshipName</div>
-                                <div>@apprenticeship.ApprenticeshipName</div>
-                            </div>
-                            <div class="responsive-td">
-                                <div class="responsive-inner-caption">Training</div>
-                                <div>@apprenticeship.TrainingName</div>
-                            </div>
-                            <div class="responsive-td">
-                                <div class="responsive-inner-caption">Status</div>
-                                <div>@apprenticeship.Status.GetDescription()</div>
-                            </div>
-                            <div class="responsive-td">
-                                <div>
-                                    <a href="@Url.Action("Edit", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id, apprenticeshipId = apprenticeship.Id })"
-                                       class="button" aria-label="Edit an apprentice">View</a>
-
-
-                                </div>
-                                <div class="responsive-inner-caption"></div>
-                            </div>
-                        </div>
-                    }
                 </div>
             </div>
         }
@@ -93,33 +91,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>Name .... </td>
-                    <td>ULN Number.... </td>
-                    <td>Training name ?</td>
-                    <td>01-12-2016 to 01-12-2018</td>
-                    <td>10000</td>
-                    <td><a href="#">Edit</a> </td>
-
-                </tr>
-                <tr>
-                    <td>Name .... </td>
-                    <td>ULN Number.... </td>
-                    <td>Training name ?</td>
-                    <td>01-12-2016 to 01-12-2018</td>
-                    <td>10000</td>
-                    <td><a href="#">Edit</a> </td>
-
-                </tr>
-                <tr>
-                    <td>Name .... </td>
-                    <td>ULN Number.... </td>
-                    <td>Training name ?</td>
-                    <td>01-12-2016 to 01-12-2018</td>
-                    <td>10000</td>
-                    <td><a href="#">Edit</a> </td>
-
-                </tr>
+                    @foreach (var item in Model.Commitment.Apprenticeships)
+                    {
+                        <tr>
+                            <td>@GetFullName(item.FirstName, item.LastName)</td>
+                            <td>@item.ULN</td>
+                            <td>@item.TrainingName</td>
+                            <td>@GetDateValue(item.StartDate) to @GetDateValue(item.EndDate)</td>
+                            <td>@FormatCost(item.Cost)</td>
+                            <td><a href="@Url.Action("Edit", new { commitmentId = Model.Commitment.Id, id = item.Id })">Edit</a></td>
+                        </tr>
+                    }
                 </tbody>
             </table>
 

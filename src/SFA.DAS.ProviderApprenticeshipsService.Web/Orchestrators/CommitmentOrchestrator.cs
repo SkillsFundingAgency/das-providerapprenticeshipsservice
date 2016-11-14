@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using Newtonsoft.Json;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
@@ -8,9 +11,12 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateApprenti
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTasks;
+using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.Tasks.Api.Types.Templates;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -53,9 +59,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
+            var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { ProviderId = providerId });
+
+            var taskForCommitment = allTasks.Tasks
+                .Select(x => JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body))
+                .Where(y => y != null && y.CommitmentId == commitmentId)
+                .SingleOrDefault();
+
             return new CommitmentViewModel
             {
-                Commitment = data.Commitment
+                Commitment = data.Commitment,
+                LatestMessage = taskForCommitment?.Message ?? string.Empty
             };
         }
 
@@ -77,7 +91,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                Standards = standards.Standards
+                ApprenticeshipProgrammes = await GetTrainingProgrammes()
             };
         }
 
@@ -94,7 +108,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                Standards = standards.Standards
+                ApprenticeshipProgrammes = await GetTrainingProgrammes()
             };
         }
 
@@ -103,7 +117,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             await _mediator.SendAsync(new UpdateApprenticeshipCommand
             {
                 ProviderId = apprenticeship.ProviderId,
-                Apprenticeship = MapFrom(apprenticeship)
+                Apprenticeship = await MapFrom(apprenticeship)
             });
         }
 
@@ -112,7 +126,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             await _mediator.SendAsync(new CreateApprenticeshipCommand
             {
                 ProviderId = apprenticeship.ProviderId,
-                Apprenticeship = MapFrom(apprenticeship)
+                Apprenticeship = await MapFrom(apprenticeship)
             });
         }
 
@@ -148,22 +162,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        private Apprenticeship MapFrom(ApprenticeshipViewModel viewModel)
+        private async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)
         {
-            return new Apprenticeship
+            var apprenticeship =  new Apprenticeship
             {
                 Id = viewModel.Id,
                 CommitmentId = viewModel.CommitmentId,
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
                 ULN = viewModel.ULN,
-                TrainingType = viewModel.TrainingType,
-                TrainingCode = viewModel.TrainingCode,
-                TrainingName = viewModel.TrainingName,
                 Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
                 StartDate = GetDateTime(viewModel.StartMonth, viewModel.StartYear),
                 EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear)
             };
+
+            if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
+            {
+                var training = await GetTrainingProgramme(viewModel.TrainingCode);
+                apprenticeship.TrainingType = training is Standard ? Commitments.Api.Types.TrainingType.Standard : Commitments.Api.Types.TrainingType.Framework;
+                apprenticeship.TrainingCode = viewModel.TrainingCode;
+                apprenticeship.TrainingName = training.Title;
+            }
+
+            return apprenticeship;
         }
 
         private DateTime? GetDateTime(int? month, int? year)
@@ -172,6 +193,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 return new DateTime(year.Value, month.Value, 1);
 
             return null;
+        }
+
+        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
+        {
+            var id = int.Parse(trainingCode);
+
+            return (await GetTrainingProgrammes()).Where(x => x.Id == id).Single();
+        }
+
+        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
+        {
+            var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
+            var frameworksTask = _mediator.SendAsync(new GetFrameworksQueryRequest());
+
+            await Task.WhenAll(standardsTask, frameworksTask);
+
+            return standardsTask.Result.Standards.Cast<ITrainingProgramme>().Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>()).ToList();
         }
     }
 }

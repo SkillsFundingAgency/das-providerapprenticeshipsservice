@@ -38,18 +38,35 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{providerId}/Commitment/{commitmentId}/Edit/{apprenticeshipId}")]
-        public async Task<ActionResult> Edit(long providerId, long commitmentId, long apprenticeshipId)
+        [Route("{providerId}/Commitment/{commitmentId}/Edit/{id}")]
+        public async Task<ActionResult> Edit(long providerId, long commitmentId, long id)
         {
-            var model = await _commitmentOrchestrator.GetApprenticeship(providerId, commitmentId, apprenticeshipId);
-            return View(model);
+            var model = await _commitmentOrchestrator.GetApprenticeship(providerId, commitmentId, id);
+            ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
+
+            return View(model.Apprenticeship);
         }
 
         [HttpPost]
+        [Route("{providerId}/commitment/{commitmentId}/Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Update(ApprenticeshipViewModel apprenticeship)
+        public async Task<ActionResult> Edit(ApprenticeshipViewModel apprenticeship)
         {
-            await _commitmentOrchestrator.UpdateApprenticeship(apprenticeship);
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return await RedisplayApprenticeshipView(apprenticeship);
+                }
+
+                await _commitmentOrchestrator.UpdateApprenticeship(apprenticeship);
+            }
+            catch (InvalidRequestException ex)
+            {
+                AddErrorsToModelState(ex);
+
+                return await RedisplayApprenticeshipView(apprenticeship);
+            }
 
             return RedirectToAction("Details", new {providerId = apprenticeship.ProviderId, commitmentId = apprenticeship.CommitmentId });
         }
@@ -59,7 +76,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Create(long providerId, long commitmentId)
         {
             var model = await _commitmentOrchestrator.GetApprenticeship(providerId, commitmentId);
-            ViewBag.ApprenticeshipProducts = model.Standards;
+            ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
 
             return View(model.Apprenticeship);
         }
@@ -73,7 +90,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return await RedisplayCreateApprenticeshipView(apprenticeship);
+                    return await RedisplayApprenticeshipView(apprenticeship);
                 }
 
                 await _commitmentOrchestrator.CreateApprenticeship(apprenticeship);
@@ -82,7 +99,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             {
                 AddErrorsToModelState(ex);
 
-                return await RedisplayCreateApprenticeshipView(apprenticeship);
+                return await RedisplayApprenticeshipView(apprenticeship);
             }
 
             return RedirectToAction("Details", new { providerId = apprenticeship.ProviderId, commitmentId = apprenticeship.CommitmentId });
@@ -147,11 +164,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
         }
 
-        private async Task<ActionResult> RedisplayCreateApprenticeshipView(ApprenticeshipViewModel apprenticeship)
+        private async Task<ActionResult> RedisplayApprenticeshipView(ApprenticeshipViewModel apprenticeship)
         {
             var model = await _commitmentOrchestrator.GetApprenticeship(apprenticeship.ProviderId, apprenticeship.CommitmentId);
             model.Apprenticeship = apprenticeship;
-            ViewBag.ApprenticeshipProducts = model.Standards;
+            ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
 
             return View(model.Apprenticeship);
         }
