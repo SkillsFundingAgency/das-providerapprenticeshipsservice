@@ -8,6 +8,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [Authorize]
+    [RoutePrefix("{providerId}/apprentices")]
     public class CommitmentController : Controller
     {
         private readonly CommitmentOrchestrator _commitmentOrchestrator;
@@ -20,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
         
         [HttpGet]
-        [Route("{providerId}/Commitments")]
+        [Route("Home")]
         public async Task<ActionResult> Index(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAll(providerId);
@@ -29,7 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{providerId}/Commitment/{commitmentId}")]
+        [Route("{commitmentId}/Details")]
         public async Task<ActionResult> Details(long providerId, long commitmentId)
         {
             var model = await _commitmentOrchestrator.Get(providerId, commitmentId);
@@ -38,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{providerId}/Commitment/{commitmentId}/Edit/{id}")]
+        [Route("{commitmentId}/Edit/{id}")]
         public async Task<ActionResult> Edit(long providerId, long commitmentId, long id)
         {
             var model = await _commitmentOrchestrator.GetApprenticeship(providerId, commitmentId, id);
@@ -48,7 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        [Route("{providerId}/commitment/{commitmentId}/Edit/{id}")]
+        [Route("{commitmentId}/Edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(ApprenticeshipViewModel apprenticeship)
         {
@@ -72,7 +73,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{providerId}/commitment/{CommitmentId}/AddApprentice")]
+        [Route("{CommitmentId}/AddApprentice")]
         public async Task<ActionResult> Create(long providerId, long commitmentId)
         {
             var model = await _commitmentOrchestrator.GetApprenticeship(providerId, commitmentId);
@@ -83,7 +84,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("{providerId}/commitment/{CommitmentId}/AddApprentice")]
+        [Route("{CommitmentId}/AddApprentice")]
         public async Task<ActionResult> Create(ApprenticeshipViewModel apprenticeship)
         {
             try
@@ -106,6 +107,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{commitmentId}/Finished")]
         public ActionResult FinishEditing(long providerId)
         {
             ViewBag.ProviderId = providerId;
@@ -114,9 +116,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult FinishedEditingChoice(long providerId)
+        [Route("{commitmentId}/Finished")]
+        public ActionResult FinishEditing(FinishEditingViewModel viewModel)
         {
-            return RedirectToAction("Submit", new { providerId = providerId });
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            if (viewModel.SaveOrSend == "save-no-send")
+            {
+                return RedirectToAction("Index", new { providerId = viewModel.ProviderId });
+            }
+
+            return RedirectToAction("Submit", new { providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId });
         }
 
         [HttpGet]
