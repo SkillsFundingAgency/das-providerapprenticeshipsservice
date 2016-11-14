@@ -3,6 +3,8 @@
 
 <div class="grid-row">
     <div class="column-full">
+        <a href="@Url.Action("Index", new { providerId = Model.Commitment.ProviderId })" aria-label="Back" class="link-back">Back</a>
+
         <h1 class="heading-xlarge">Add apprentices</h1>
     </div>
 
@@ -28,7 +30,8 @@
         <hr />
 
        
-            <a href="#" class="button" aria-label="Add an apprentice">Add an apprentice</a>
+        <a href="@Url.Action("Create", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id })"
+           class="button" name="commitment" aria-label="Add an apprentice">Add an apprentice</a>
             <a class="button finishEditingBtn" href="@Url.Action("FinishEditing", new { providerId = Model.Commitment.ProviderId })" aria-label="Finished editing">Finish editing</a>
      
         <hr />
@@ -120,16 +123,14 @@
                 </tbody>
             </table>
 
-
+            <p>
+                <a href="@Url.Action("Create", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id })"
+                   class="button" name="commitment" aria-label="Add an apprentice">Add an apprentice</a>
+            </p>
         }
     </div>
 </div>
 
 
-<p>
-    <a href="@Url.Action("Create", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id })"
-       class="button" name="commitment" aria-label="Add an apprentice">Add an apprentice</a>
-</p>
-<p>
-<a href="@Url.Action("Index", new { providerId = Model.Commitment.ProviderId })" aria-label="Back">Back</a>
-</p>
+
+

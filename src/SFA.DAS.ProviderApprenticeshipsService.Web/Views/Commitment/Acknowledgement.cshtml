@@ -1,6 +1,7 @@
 ﻿<div class="grid-row">
     <div class="column-two-thirds">
-        
+        @*<a href="#" aria-label="Back" class="link-back">Back</a>*@
+
         <div class="govuk-box-highlight">
             <h1 class="heading-xlarge" id="changeHeadline">
                 Instructions sent
@@ -43,7 +44,7 @@
         <h2 class="heading-medium">What happens next?</h2>
         <p id="changeMainCopy">Your training provider will review your request and contact you as soon as possible - either with questions or to ask you to review the details they've added.</p>
 
-        <a class="button" href="@Url.Action("/")">Continue</a>
+        <a class="button" href="@Url.Action("Index","Home")" aria-label="Continue">Continue</a>
     </div>
 
         <div class="column-one-third">
