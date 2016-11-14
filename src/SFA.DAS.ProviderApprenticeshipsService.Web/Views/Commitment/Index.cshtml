@@ -49,7 +49,10 @@
                 <thead>
                     <tr>
                         <th>Employer</th>
-                        <th colspan="3">Reference</th>
+                       
+                        <th>Reference</th>
+
+                        <th colspan="2">Status</th>
                     
                     </tr>
                 </thead>
@@ -63,19 +66,22 @@
                             <td>
                                 @commitment.Name
                             </td>
+                            <td>
+                               Status.....
+                            </td>
                             
                             <td>
-                                <a class="button" href="@Url.Action("Details",
+                                <a href="@Url.Action("Details",
                                       new { providerId = commitment.ProviderId, commitmentId = commitment.Id })" aria-label="View">View</a>
                             </td>
 
-                            <td>
+                            @*<td>
                                     <form action="@Url.Action("Submit")" method="GET">
                                         <input type="hidden" name="providerId" value="@commitment.ProviderId" />
                                         <input type="hidden" name="commitmentId" value="@commitment.Id" />
                                         <button type="submit" name="commitment">Submit</button>
                                     </form>
-                            </td>
+                            </td>*@
                         </tr>
                     }
                 </tbody>
