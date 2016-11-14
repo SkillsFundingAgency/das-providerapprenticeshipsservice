@@ -99,7 +99,7 @@
                             <td>@item.TrainingName</td>
                             <td>@GetDateValue(item.StartDate) to @GetDateValue(item.EndDate)</td>
                             <td>@FormatCost(item.Cost)</td>
-                            <td><a href="@Url.Action("Edit", new { commitmentId = Model.Commitment.Id, apprenticeshipId = item.Id })">Edit</a></td>
+                            <td><a href="@Url.Action("Edit", new { commitmentId = Model.Commitment.Id, id = item.Id })">Edit</a></td>
                         </tr>
                     }
                 </tbody>

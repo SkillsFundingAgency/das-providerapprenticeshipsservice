@@ -9,12 +9,8 @@
     <div class="column-two-thirds">
         <a href="#" aria-label="Back" class="link-back">Back</a>
         <form method="POST" action="@Url.Action("Create")">
-            
-            @Html.HiddenFor(m => m.CommitmentId)
-            @Html.HiddenFor(m => m.ProviderId)
 
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
-
             @Html.AntiForgeryToken()
 
             <h1 class="heading-xlarge">Add an apprentice</h1>
@@ -120,8 +116,10 @@
                     <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
                 </div>
 
-                <input type="hidden" id="status" name="status" value="@Model.Status" />
-                <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.AgreementStatus" />
+                @Html.HiddenFor(m => m.CommitmentId)
+                @Html.HiddenFor(m => m.ProviderId)
+                @Html.HiddenFor(m => m.Status)
+                @Html.HiddenFor(m => m.AgreementStatus)
                 <button type="submit" class="button" aria-label="Save">Save</button>
                 <a class="links" href="@Url.Action("Details", 
                                       new { Model.ProviderId, Model.CommitmentId })" aria-label="Cancel">Cancel</a>
