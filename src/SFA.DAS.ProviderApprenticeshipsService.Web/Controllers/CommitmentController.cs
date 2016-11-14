@@ -134,19 +134,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         // public async Task<ActionResult> Submit(long providerId, long commitmentId)
-        public ActionResult Submit(long providerId)
+        public ActionResult Submit(long providerId, long commitmentId, string saveOrSend)
         {
-            // TODO: LWA Need to pass in parameters from request.
-            //var commitment = await _commitmentOrchestrator.Get(providerId, commitmentId);
-
             var model = new SubmitCommitmentViewModel
             {
-                SubmitCommitmentModel = new SubmitCommitmentModel
-                {
-                    ProviderId = providerId,
-                    //CommitmentId = commitmentId
-                },
-                //Commitment = commitment.Commitment
+                ProviderId = providerId,
+                CommitmentId = commitmentId,
+                SaveOrSend = saveOrSend
             };
 
             return View(model);
@@ -154,7 +148,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Submit(SubmitCommitmentModel model)
+        public ActionResult Submit(SubmitCommitmentViewModel model)
         {
             //await _commitmentOrchestrator.SubmitApprenticeship(model);
 

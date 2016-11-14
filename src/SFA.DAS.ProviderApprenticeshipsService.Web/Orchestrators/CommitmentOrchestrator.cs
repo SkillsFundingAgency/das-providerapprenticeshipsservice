@@ -130,7 +130,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
         }
 
-        public async Task SubmitApprenticeship(SubmitCommitmentModel model)
+        public async Task SubmitApprenticeship(SubmitCommitmentViewModel model)
         {
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {

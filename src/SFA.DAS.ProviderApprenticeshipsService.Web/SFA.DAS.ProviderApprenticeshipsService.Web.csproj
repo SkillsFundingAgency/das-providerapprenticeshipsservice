@@ -303,7 +303,6 @@
     <Compile Include="Models\HomeIndexModel.cs" />
     <Compile Include="Models\SignInUserModel.cs" />
     <Compile Include="Models\SignInUserViewModel.cs" />
-    <Compile Include="Models\SubmitCommitmentModel.cs" />
     <Compile Include="Models\SubmitCommitmentViewModel.cs" />
     <Compile Include="Models\SystemDetails.cs" />
     <Compile Include="Models\TaskListViewModel.cs" />

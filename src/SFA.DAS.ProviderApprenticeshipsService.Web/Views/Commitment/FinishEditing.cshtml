@@ -6,15 +6,18 @@
 
         <h1 class="heading-xlarge">Finished editing</h1>
         <div>
-            <p>
-                What do you want to do with this commitment?
-            </p>
-
             <form action="@Url.Action("FinishEditing")" method="POST">
+                @Html.AntiForgeryToken()
+                @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+
+                <p>
+                    What do you want to do with this commitment?
+                </p>
+
                 <legend class="visuallyhidden">Things to do next</legend>
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.SaveOrSend, "error")">
                     <div>
-                        @Html.ValidationMessageFor(m => m.SaveOrSend, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SaveOrSend) + "-SendAmend" })
+                        @Html.ValidationMessageFor(m => m.SaveOrSend, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SaveOrSend) })
                     </div>
                     <label class="block-label" for="@Html.IdFor(m => m.SaveOrSend)-SendAmend">
                         @Html.RadioButtonFor(m => m.SaveOrSend, "send-amend", new { id = Html.IdFor(m => m.SaveOrSend) + "-SendAmend" })
