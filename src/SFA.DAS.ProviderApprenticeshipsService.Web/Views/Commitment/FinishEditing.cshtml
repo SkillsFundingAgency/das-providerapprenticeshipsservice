@@ -21,7 +21,6 @@
                     </div>
                     <label class="block-label" for="@Html.IdFor(m => m.SaveOrSend)-SendAmend">
                         @Html.RadioButtonFor(m => m.SaveOrSend, "send-amend", new { id = Html.IdFor(m => m.SaveOrSend) + "-SendAmend" })
-                        <input id="radio-1" type="radio" name="radio-group" value="send-amend">
                         <span id="changeOne">Send to provider to amend or add details</span>
                     </label>
                     <label class="block-label" for="@Html.IdFor(m => m.SaveOrSend)-SendApprove">
@@ -35,10 +34,10 @@
                 </div>
 
                 <div style="margin-top:20px;">
+                    @Html.HiddenFor(m => m.ProviderId)
+                    @Html.HiddenFor(m => m.CommitmentId)
                     <input type="submit" class="button" id="paymentPlan" value="Save and continue" />
-                    <input type="hidden" name="providerId" value="@ViewBag.ProviderId" />
                 </div>
-                @Html.HiddenFor(m => m.CommitmentId)
             </form>
 
         </div>

@@ -10,9 +10,8 @@
 
         <h1 class="heading-xlarge">Instructions for the employer</h1>
            
-            <p class="lede">Let <span class="strong">Hackney Skills and Training Ltd (.net) </span> know what you'd like them to do next.</p>
+            <p class="lede">Let <span class="strong">@Model.EmployerName</span> know what you'd like them to do next.</p>
             <p>You can add a note for them to read.</p>
-   
 
         <p></p>
         <form method="POST" action="@Url.Action("Submit")">
@@ -22,10 +21,12 @@
                 <p class="form-hint">For example, please can you review and approve the apprentices added to this request.</p>
                 <textarea class="form-control form-control-3-4 message" id="Message" name="Message"
                           cols="40" rows="10"
-                          aria-required="true">@Model.SubmitCommitmentModel.Message</textarea>
+                          aria-required="true">@Model.Message</textarea>
             </div>
-            <input type="hidden" id="providerId" name="providerId" value="@Model.SubmitCommitmentModel.ProviderId" />
-           
+
+            @Html.HiddenFor(m => m.ProviderId)
+            @Html.HiddenFor(m => m.CommitmentId)
+            @Html.HiddenFor(m => m.SaveOrSend)
             <button type="submit" class="button">Send</button>
         </form>
 </div>

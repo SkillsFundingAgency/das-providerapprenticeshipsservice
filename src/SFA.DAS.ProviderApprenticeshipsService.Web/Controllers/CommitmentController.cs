@@ -108,11 +108,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("{commitmentId}/Finished")]
-        public ActionResult FinishEditing(long providerId)
+        public ActionResult FinishEditing(long providerId, long commitmentId)
         {
             ViewBag.ProviderId = providerId;
 
-            return View();
+            return View(new FinishEditingViewModel { ProviderId = providerId, CommitmentId = commitmentId });
         }
 
         [HttpPost]
@@ -133,13 +133,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        // public async Task<ActionResult> Submit(long providerId, long commitmentId)
-        public ActionResult Submit(long providerId, long commitmentId, string saveOrSend)
+        public async Task<ActionResult> Submit(long providerId, long commitmentId, string saveOrSend)
         {
+            var commitment = await _commitmentOrchestrator.Get(providerId, commitmentId);
+
             var model = new SubmitCommitmentViewModel
             {
                 ProviderId = providerId,
                 CommitmentId = commitmentId,
+                EmployerName = commitment.Commitment.LegalEntityName,
                 SaveOrSend = saveOrSend
             };
 
