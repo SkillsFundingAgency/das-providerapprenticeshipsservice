@@ -104,18 +104,16 @@
             <div class="column-full">   
                 @if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
-
                     <div class="user-menu logged-in">
                         <ul id="service-info-list" role="navigation">
                             <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
-                            <li><a href="@Url.Action("SignOut","Home")">Log out</a></li>
+                            <li><a href="@Url.RouteUrl("signout")">Sign out</a></li>
                         </ul>
                     </div>
-                     
                 }
                 else
                 {
-                    <a href="@Url.Action("Index","Home")">Sign in / Register</a>
+                    <a href="@Url.RouteUrl("signin")">Sign in</a>
                 }
             </div>
         </div>
@@ -133,7 +131,10 @@
                     <ul class="platform-help-links">
                         <li><a href="mailto:DASPrivateBeta@apprenticeships.gov.uk?subject=Digital Apprenticeship Service beta query">Contact us</a></li>
                         <li><a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank">Feedback</a></li>
-                        <li><a href="@Url.Action("Privacy", "Home")">Privacy and cookies</a></li>
+                    </ul>
+                    <ul class="platform-help-links">
+                        <li><a href="@Url.RouteUrl("privacy")">Privacy and cookies</a></li>
+                        <li><a href="@Url.RouteUrl("terms")">Terms and conditions</a></li>
                         <li>Built by the <a href="http://gov.uk/sfa" target="_blank">Skills Funding Agency</a></li>
                     </ul>
                     <div class="open-government-licence">
