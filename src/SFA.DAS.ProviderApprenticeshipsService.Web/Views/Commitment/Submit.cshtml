@@ -8,16 +8,16 @@
         <a href="#" aria-label="Back" class="link-back">Back</a>
 
 
-        <h1 class="heading-xlarge">Instructions for the employer</h1>
+        <h1 class="heading-xlarge">Add instructions</h1>
            
-            <p class="lede">Let <span class="strong">@Model.EmployerName</span> know what you'd like them to do next.</p>
-            <p>You can add a note for them to read.</p>
+            <p class="lede">Let <span class="strong">@Model.EmployerName</span> know what you'd like them to do.</p>
+         
 
         <p></p>
         <form method="POST" action="@Url.Action("Submit")">
             @Html.AntiForgeryToken()
             <div class="form-group">
-                <label class="form-label strong" for="Message">Instructions (Optional)</label>
+                <label class="form-label strong" for="Message">Instructions</label>
                 <p class="form-hint">For example, please can you review and approve the apprentices added to this request.</p>
                 <textarea class="form-control form-control-3-4 message" id="Message" name="Message"
                           cols="40" rows="10"

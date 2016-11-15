@@ -6,7 +6,7 @@
     <div class="column-full">
         <a href="@Url.Action("Index", new { providerId = Model.Commitment.ProviderId })" aria-label="Back" class="link-back">Back</a>
 
-        <h1 class="heading-xlarge">Add apprentices</h1>
+        <h1 class="heading-xlarge">Add an apprentice</h1>
     </div>
 
 </div>
@@ -59,7 +59,7 @@
         <p class="heading-medium">@GetApprenticesCountText(Model.Commitment.Apprenticeships)</p>
         <hr />
             <a href="@Url.Action("Create", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id })" class="button" aria-label="Add an apprentice">Add an apprentice</a>
-            <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="Finished editing">Finish editing</a>
+            <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="Finished editing">Save and continue</a>
         <hr />
     </div>
 </div>
@@ -71,7 +71,7 @@
             <div id="addApprenticesEmptyState" class="emptyState">
                 <div class="emptyStateAlert">
                     <div class="emptyStateCopyDetails" aria-label="Information">
-                        <p> You haven't added any apprentices yet. Use the options on this page to add apprentices or finish editing.</p>
+                        <p>You haven't added any apprentices yet.</p>
 
                     </div>
                 </div>
@@ -105,10 +105,10 @@
                 </tbody>
             </table>
 
-            <p>
+            @*<p>
                 <a href="@Url.Action("Create", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id })"
                    class="button" name="commitment" aria-label="Add an apprentice">Add an apprentice</a>
-            </p>
+            </p>*@
         }
     </div>
 </div>

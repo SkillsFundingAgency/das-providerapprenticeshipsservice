@@ -2402,6 +2402,16 @@ tr.total td {
   margin-bottom: 0;
 }
 
+.validation-summary-valid,
+.field-validation-valid {
+  display: none;
+}
+
+.field-validation-error {
+  color: #b10e1e;
+  font-weight: bold;
+}
+
 .side-panel aside {
   margin-top: 70px;
 }
