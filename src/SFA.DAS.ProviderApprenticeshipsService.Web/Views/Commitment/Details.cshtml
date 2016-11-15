@@ -94,11 +94,11 @@
                     @foreach (var item in Model.Commitment.Apprenticeships)
                     {
                         <tr>
-                            <td>@GetFullName(item.FirstName, item.LastName)</td>
-                            <td>@item.ULN</td>
-                            <td>@item.TrainingName</td>
-                            <td>@GetDateValue(item.StartDate) to @GetDateValue(item.EndDate)</td>
-                            <td>@FormatCost(item.Cost)</td>
+                            <td>@GetFullName(item.FirstName, item.LastName) &nbsp;</td>
+                            <td>@item.ULN &nbsp;</td>
+                            <td>@item.TrainingName &nbsp;</td>
+                            <td>@GetDateValue(item.StartDate) to @GetDateValue(item.EndDate) &nbsp;</td>
+                            <td>@FormatCost(item.Cost) &nbsp;</td>
                             <td><a href="@Url.Action("Edit", new { commitmentId = Model.Commitment.Id, id = item.Id })" title="Edit @GetFullName(item.FirstName, item.LastName)" aria-label="Edit @GetFullName(item.FirstName, item.LastName)">Edit</a></td>
                         </tr>
                     }

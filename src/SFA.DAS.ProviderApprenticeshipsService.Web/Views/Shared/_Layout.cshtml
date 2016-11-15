@@ -113,9 +113,15 @@
                 }
                 else
                 {
-                    <a href="@Url.RouteUrl("signin")">Sign in</a>
-                }
-            </div>
+                    <div class="user-menu logged-in">
+                        <ul id="service-info-list" role="navigation">
+                            <li>
+                                 <a href="@Url.RouteUrl("signin")" aria-label="Sign in">Sign in</a>
+                            </li>
+                        </ul>
+                    </div>
+                        }
+                    </div>
         </div>
 
         <div id="content">
