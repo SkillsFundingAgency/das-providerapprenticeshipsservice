@@ -2,7 +2,7 @@
 {
     public class AccountHomeViewModel
     {
-        public string ProviderId { get; set; }
+        public int ProviderId { get; set; }
         public string ProviderName { get; set; }
     }
 }

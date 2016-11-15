@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using MediatR;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.WsFederation;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 
@@ -11,12 +15,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly IMediator _mediator;
+
+        public AccountController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         [Route("~/signin", Name = "signin")]
         public void SignIn()
         {
             if (!Request.IsAuthenticated)
             {
-                HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties {RedirectUri = "/"},
+                HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = "/" },
                     WsFederationAuthenticationDefaults.AuthenticationType);
             }
         }
@@ -29,7 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var auth = Request.GetOwinContext().Authentication;
 
             auth.SignOut(
-                new AuthenticationProperties {RedirectUri = callbackUrl},
+                new AuthenticationProperties { RedirectUri = callbackUrl },
                 WsFederationAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
         }
 
@@ -46,13 +57,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [Authorize]
         [Route("~/account", Name = "account-home")]
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            //todo: account home model needs to read more claims
+            //todo: move to orchestrator?
+            var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
+
+            var providers = await _mediator.SendAsync(new GetProviderQueryRequest { UKPRN = providerId });
+
+            var provider = providers.ProvidersView.Providers.First();
+
             var model = new AccountHomeViewModel
             {
-                ProviderId = User.Identity.GetClaim("http://schemas.portal.com/ukprn"),
-                ProviderName = "Hackney skills and training"
+                ProviderId = provider.Ukprn,
+                ProviderName = provider.ProviderName
             };
 
             return View(model);
