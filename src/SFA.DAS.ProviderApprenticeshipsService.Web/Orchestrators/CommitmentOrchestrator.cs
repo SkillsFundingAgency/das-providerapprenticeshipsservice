@@ -62,14 +62,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { ProviderId = providerId });
 
             var taskForCommitment = allTasks.Tasks
-                .Select(x => JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body))
-                .Where(y => y != null && y.CommitmentId == commitmentId)
-                .SingleOrDefault();
+                .Select(x => new { Task = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body), CreateDate = x.CreatedOn })
+                .Where(x => x.Task != null && x.Task.CommitmentId == commitmentId)
+                .OrderByDescending(x => x.CreateDate)
+                .FirstOrDefault();
+
+            var message = taskForCommitment?.Task?.Message ?? string.Empty;
 
             return new CommitmentViewModel
             {
                 Commitment = data.Commitment,
-                LatestMessage = taskForCommitment?.Message ?? string.Empty
+                LatestMessage = message
             };
         }
 
@@ -130,7 +133,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
         }
 
-        public async Task SubmitApprenticeship(SubmitCommitmentModel model)
+        public async Task SubmitCommitment(SubmitCommitmentViewModel model)
         {
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {
@@ -138,6 +141,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = model.CommitmentId,
                 Message = model.Message
             });
+        }
+
+        public Task ApproveCommitment(long providerId, long commitmentId)
+        {
+            throw new NotImplementedException();
         }
 
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
