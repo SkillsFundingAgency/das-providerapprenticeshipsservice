@@ -8,6 +8,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [Authorize]
+    [RoutePrefix("{providerId}/apprentices")]
     public class CommitmentController : Controller
     {
         private readonly CommitmentOrchestrator _commitmentOrchestrator;
@@ -20,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
         
         [HttpGet]
-        [Route("{providerId}/Commitments")]
+        [Route("Home")]
         public async Task<ActionResult> Index(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAll(providerId);
@@ -29,7 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{providerId}/Commitment/{commitmentId}")]
+        [Route("{commitmentId}/Details")]
         public async Task<ActionResult> Details(long providerId, long commitmentId)
         {
             var model = await _commitmentOrchestrator.Get(providerId, commitmentId);
@@ -38,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{providerId}/Commitment/{commitmentId}/Edit/{id}")]
+        [Route("{commitmentId}/Edit/{id}")]
         public async Task<ActionResult> Edit(long providerId, long commitmentId, long id)
         {
             var model = await _commitmentOrchestrator.GetApprenticeship(providerId, commitmentId, id);
@@ -48,7 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        [Route("{providerId}/commitment/{commitmentId}/Edit/{id}")]
+        [Route("{commitmentId}/Edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(ApprenticeshipViewModel apprenticeship)
         {
@@ -72,7 +73,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{providerId}/commitment/{CommitmentId}/AddApprentice")]
+        [Route("{CommitmentId}/AddApprentice")]
         public async Task<ActionResult> Create(long providerId, long commitmentId)
         {
             var model = await _commitmentOrchestrator.GetApprenticeship(providerId, commitmentId);
@@ -83,7 +84,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("{providerId}/commitment/{CommitmentId}/AddApprentice")]
+        [Route("{CommitmentId}/AddApprentice")]
         public async Task<ActionResult> Create(ApprenticeshipViewModel apprenticeship)
         {
             try
@@ -106,34 +107,56 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult FinishEditing(long providerId)
+        [Route("{commitmentId}/Finished")]
+        public ActionResult FinishEditing(long providerId, long commitmentId)
         {
             ViewBag.ProviderId = providerId;
 
-            return View();
+            return View(new FinishEditingViewModel { ProviderId = providerId, CommitmentId = commitmentId });
         }
 
         [HttpPost]
-        public ActionResult FinishedEditingChoice(long providerId)
+        [Route("{commitmentId}/Finished")]
+        public async Task<ActionResult> FinishEditing(FinishEditingViewModel viewModel)
         {
-            return RedirectToAction("Submit", new { providerId = providerId });
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            if (viewModel.SaveOrSend == "send-approve")
+            {
+                try
+                {
+                    await _commitmentOrchestrator.ApproveCommitment(viewModel.ProviderId, viewModel.CommitmentId);
+
+                    return RedirectToAction("Index", new { providerId = viewModel.ProviderId });
+                }
+                catch (InvalidRequestException)
+                {
+                    // TODO: LWA - What do we do??
+                }
+            }
+
+            if (viewModel.SaveOrSend == "send-amend")
+            {
+                return RedirectToAction("Submit", new { providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId });
+            }
+
+            return RedirectToAction("Index", new { providerId = viewModel.ProviderId });
         }
 
         [HttpGet]
-        // public async Task<ActionResult> Submit(long providerId, long commitmentId)
-        public ActionResult Submit(long providerId)
+        public async Task<ActionResult> Submit(long providerId, long commitmentId, string saveOrSend)
         {
-            // TODO: LWA Need to pass in parameters from request.
-            //var commitment = await _commitmentOrchestrator.Get(providerId, commitmentId);
+            var commitment = await _commitmentOrchestrator.Get(providerId, commitmentId);
 
             var model = new SubmitCommitmentViewModel
             {
-                SubmitCommitmentModel = new SubmitCommitmentModel
-                {
-                    ProviderId = providerId,
-                    //CommitmentId = commitmentId
-                },
-                //Commitment = commitment.Commitment
+                ProviderId = providerId,
+                CommitmentId = commitmentId,
+                EmployerName = commitment.Commitment.LegalEntityName,
+                SaveOrSend = saveOrSend
             };
 
             return View(model);
@@ -141,19 +164,30 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Submit(SubmitCommitmentModel model)
+        public async Task<ActionResult> Submit(SubmitCommitmentViewModel model)
         {
-            //await _commitmentOrchestrator.SubmitApprenticeship(model);
+            await _commitmentOrchestrator.SubmitCommitment(model);
 
-            return RedirectToAction("Acknowledgement", new { providerId = model.ProviderId });
+            return RedirectToAction("Acknowledgement", new 
+            {
+                providerId = model.ProviderId,
+                commitmentId = model.CommitmentId,
+                message = model.Message
+            });
         }
 
         [HttpGet]
-        public ActionResult Acknowledgement(long providerId)
+        public async Task<ActionResult> Acknowledgement(long providerId, long commitmentId, string message)
         {
-            ViewBag.ProviderId = providerId;
+            var commitment = (await _commitmentOrchestrator.Get(providerId, commitmentId)).Commitment;
 
-            return View();
+            return View(new AcknowledgementViewModel
+            {
+                CommitmentReference = commitment.Name,
+                EmployerName = commitment.LegalEntityName,
+                ProviderName = commitment.ProviderName,
+                Message = message
+            });
         }
 
         private void AddErrorsToModelState(InvalidRequestException ex)

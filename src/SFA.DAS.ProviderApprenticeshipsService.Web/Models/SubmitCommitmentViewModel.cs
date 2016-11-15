@@ -1,11 +1,11 @@
-﻿using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
-
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
     public class SubmitCommitmentViewModel
     {
-        public Commitment Commitment { get; set; }
-        public SubmitCommitmentModel SubmitCommitmentModel { get; set; }
+        public long ProviderId { get; set; }
+        public long CommitmentId { get; set; }
+        public string Message { get; set; }
+        public string SaveOrSend { get; internal set; }
+        public string EmployerName { get; internal set; }
     }
 }

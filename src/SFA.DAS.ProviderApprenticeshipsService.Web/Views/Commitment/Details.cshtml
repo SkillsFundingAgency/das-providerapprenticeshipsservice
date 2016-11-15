@@ -13,7 +13,7 @@
 
 <div class="grid-row">
     <div class="column-one-half employer-details">
-        <p><span class="strong">Employer: </span>@Model.Commitment.EmployerAccountName</p>
+        <p><span class="strong">Employer: </span>@Model.Commitment.LegalEntityName</p>
         <p><span class="strong">Reference: </span>@Model.Commitment.Name</p>
         <p><span class="strong">Status: </span>@Model.Commitment.Status.GetDescription()</p>
     </div>
@@ -59,7 +59,7 @@
         <p class="heading-medium">@GetApprenticesCountText(Model.Commitment.Apprenticeships)</p>
         <hr />
             <a href="@Url.Action("Create", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id })" class="button" aria-label="Add an apprentice">Add an apprentice</a>
-            <a class="button finishEditingBtn" href="@Url.Action("FinishEditing", new { providerId = Model.Commitment.ProviderId })" aria-label="Finished editing">Finish editing</a>
+            <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="Finished editing">Finish editing</a>
         <hr />
     </div>
 </div>
