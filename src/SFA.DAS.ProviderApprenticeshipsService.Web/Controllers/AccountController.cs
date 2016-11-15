@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.WsFederation;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
@@ -57,16 +56,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             };
 
             return View(model);
-        }
-    }
-
-    public static class ClaimsHelper
-    {
-        public static string GetClaim(this IIdentity identity, string claim)
-        {
-            var claimsPrincipal = new ClaimsPrincipal(identity);
-
-            return claimsPrincipal.FindFirst(c => c.Type == claim).Value;
         }
     }
 }
