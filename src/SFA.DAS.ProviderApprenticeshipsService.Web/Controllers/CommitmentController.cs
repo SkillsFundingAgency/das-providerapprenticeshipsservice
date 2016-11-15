@@ -19,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 throw new ArgumentNullException(nameof(commitmentOrchestrator));
             _commitmentOrchestrator = commitmentOrchestrator;
         }
-        
+
         [HttpGet]
         [Route("Home")]
         public async Task<ActionResult> Index(long providerId)
@@ -69,7 +69,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return await RedisplayApprenticeshipView(apprenticeship);
             }
 
-            return RedirectToAction("Details", new {providerId = apprenticeship.ProviderId, commitmentId = apprenticeship.CommitmentId });
+            return RedirectToAction("Details", new {providerId = apprenticeship.ProviderId, commitmentId = apprenticeship.CommitmentId});
         }
 
         [HttpGet]
@@ -103,7 +103,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return await RedisplayApprenticeshipView(apprenticeship);
             }
 
-            return RedirectToAction("Details", new { providerId = apprenticeship.ProviderId, commitmentId = apprenticeship.CommitmentId });
+            return RedirectToAction("Details", new {providerId = apprenticeship.ProviderId, commitmentId = apprenticeship.CommitmentId});
         }
 
         [HttpGet]
@@ -112,7 +112,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             ViewBag.ProviderId = providerId;
 
-            return View(new FinishEditingViewModel { ProviderId = providerId, CommitmentId = commitmentId });
+            return View(new FinishEditingViewModel {ProviderId = providerId, CommitmentId = commitmentId});
         }
 
         [HttpPost]
@@ -130,7 +130,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 {
                     await _commitmentOrchestrator.ApproveCommitment(viewModel.ProviderId, viewModel.CommitmentId);
 
-                    return RedirectToAction("Index", new { providerId = viewModel.ProviderId });
+                    return RedirectToAction("Index", new {providerId = viewModel.ProviderId});
                 }
                 catch (InvalidRequestException)
                 {
@@ -140,10 +140,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (viewModel.SaveOrSend == "send-amend")
             {
-                return RedirectToAction("Submit", new { providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId });
+                return RedirectToAction("Submit", new {providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId});
             }
 
-            return RedirectToAction("Index", new { providerId = viewModel.ProviderId });
+            return RedirectToAction("Index", new {providerId = viewModel.ProviderId});
         }
 
         [HttpGet]
@@ -168,7 +168,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             await _commitmentOrchestrator.SubmitCommitment(model);
 
-            return RedirectToAction("Acknowledgement", new 
+            return RedirectToAction("Acknowledgement", new
             {
                 providerId = model.ProviderId,
                 commitmentId = model.CommitmentId,

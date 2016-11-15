@@ -116,9 +116,6 @@
     <Compile Include="Queries\GetTask\GetTaskQueryHandler.cs" />
     <Compile Include="Queries\GetTask\GetTaskQueryRequest.cs" />
     <Compile Include="Queries\GetTask\GetTaskQueryResponse.cs" />
-    <Compile Include="Queries\GetUsers\GetUsersQueryHandler.cs" />
-    <Compile Include="Queries\GetUsers\GetUsersQueryRequest.cs" />
-    <Compile Include="Queries\GetUsers\GetUsersQueryResponse.cs" />
     <Compile Include="TaskFactory.cs" />
   </ItemGroup>
   <ItemGroup>
