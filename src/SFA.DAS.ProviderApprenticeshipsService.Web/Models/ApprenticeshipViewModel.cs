@@ -28,7 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public int? StartYear { get; set; }
         public int? EndMonth { get; set; }
         public int? EndYear { get; set; }
-        public ApprenticeshipStatus Status { get; set; }
+        public PaymentStatus PaymentStatus { get; set; }
         public AgreementStatus AgreementStatus { get; set; }
     }
 }

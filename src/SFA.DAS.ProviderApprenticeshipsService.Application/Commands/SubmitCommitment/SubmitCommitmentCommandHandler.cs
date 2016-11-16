@@ -51,7 +51,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                 {
                     Assignee = $"EMPLOYER-{commitment.EmployerAccountId}",
                     TaskTemplateId = SubmitCommitmentTemplate.TemplateId,
-                    Name = $"Submit Commitment - {commitment.Name}",
+                    Name = $"Submit Commitment - {commitment.Reference}",
                     Body = JsonConvert.SerializeObject(taskTemplate)
                 };
 
