@@ -2491,6 +2491,13 @@ span.helpText {
   width: 60px;
 }
 
+@media only screen and (max-width: 379px) {
+  .finishEditingBtn {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}
+
 /* responsive table */
 @media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
   /* Force table to not be like tables anymore */
@@ -2526,7 +2533,6 @@ span.helpText {
   }
   .finishEditingBtn {
     margin-left: 0px;
-    margin-top: 20px;
   }
   td.link-right {
     padding-right: 0;

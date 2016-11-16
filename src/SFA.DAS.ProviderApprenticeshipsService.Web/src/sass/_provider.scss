@@ -145,6 +145,13 @@ span.helpText {
 
 
 
+@media only screen and (max-width: 379px){
+    .finishEditingBtn{
+        margin-top:20px;
+        margin-bottom:20px;      
+    }
+
+}
 
 
 /* responsive table */ 
@@ -188,7 +195,7 @@ only screen and (max-width: 760px),
 	
     .finishEditingBtn{
         margin-left:0px;
-        margin-top:20px;
+      
     }
     td.link-right {
        padding-right: 0;
