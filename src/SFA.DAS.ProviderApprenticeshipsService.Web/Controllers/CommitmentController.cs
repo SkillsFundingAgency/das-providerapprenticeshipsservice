@@ -183,7 +183,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             return View(new AcknowledgementViewModel
             {
-                CommitmentReference = commitment.Name,
+                CommitmentReference = commitment.Reference,
                 EmployerName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
                 Message = message
