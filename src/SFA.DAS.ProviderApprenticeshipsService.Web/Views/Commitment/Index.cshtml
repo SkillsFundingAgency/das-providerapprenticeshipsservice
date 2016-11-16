@@ -64,14 +64,15 @@
                     @foreach (var commitment in Model.Commitments)
                     {
                         <tr>
+            
                             <td>
-                                @commitment.LegalEntityName  &nbsp;
+                      
+
+                                @commitment.Reference
                             </td>
                             <td>
-                                @commitment.Name &nbsp;
-                            </td>
-                            <td>
-                               @commitment.Status.GetDescription() &nbsp;
+                               @commitment.CommitmentStatus.GetDescription()
+
                             </td>
                             
                             <td>
