@@ -14,8 +14,8 @@
 <div class="grid-row">
     <div class="column-one-half employer-details">
         <p><span class="strong">Employer: </span>@Model.Commitment.LegalEntityName</p>
-        <p><span class="strong">Reference: </span>@Model.Commitment.Name</p>
-        <p><span class="strong">Status: </span>@Model.Commitment.Status.GetDescription()</p>
+        <p><span class="strong">Reference: </span>@Model.Commitment.Reference</p>
+        <p><span class="strong">Status: </span>@Model.Commitment.CommitmentStatus.GetDescription()</p>
     </div>
 
     <div class="column-one-half employer-details">
