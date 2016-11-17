@@ -124,13 +124,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return View(viewModel);
             }
 
+            // TODO: Refactor out these magic strings
             if (viewModel.SaveOrSend == "send-approve")
             {
                 try
                 {
-                    await _commitmentOrchestrator.ApproveCommitment(viewModel.ProviderId, viewModel.CommitmentId);
-
-                    return RedirectToAction("Index", new {providerId = viewModel.ProviderId});
+                    // ToDo: 
+                    return RedirectToAction("Submit", new { providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId});
                 }
                 catch (InvalidRequestException)
                 {
@@ -141,6 +141,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (viewModel.SaveOrSend == "send-amend")
             {
                 return RedirectToAction("Submit", new {providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId});
+            }
+
+            if (viewModel.SaveOrSend == "approve")
+            {
+                await _commitmentOrchestrator.ApproveCommitment(viewModel.ProviderId, viewModel.CommitmentId, viewModel.SaveOrSend);
+
+                return RedirectToAction("Index", new { providerId = viewModel.ProviderId });
             }
 
             return RedirectToAction("Index", new {providerId = viewModel.ProviderId});

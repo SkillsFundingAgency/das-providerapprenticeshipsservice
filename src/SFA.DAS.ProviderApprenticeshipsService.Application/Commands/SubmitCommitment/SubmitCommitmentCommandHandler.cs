@@ -36,26 +36,41 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
 
             var commitment = await _commitmentsApi.GetProviderCommitment(message.ProviderId, message.CommitmentId);
 
-            await _commitmentsApi.PatchProviderCommitment(message.ProviderId, message.CommitmentId, CommitmentStatus.Active);
+            var agreementStatus = AgreementStatus.NotAgreed;
+            // TODO: Refactor out these magic strings
+            if (message.SaveOrSend != "save-no-send")
+            {
+                agreementStatus = AgreementStatus.ProviderAgreed;
+            }
 
+            await _commitmentsApi.PatchProviderCommitment(message.ProviderId, message.CommitmentId, agreementStatus);
+
+            // TODO: Refactor out these magic strings
+            if (message.SaveOrSend != "approve")
+                await CreateTask(message, commitment);
+        }
+
+        private async Task CreateTask(SubmitCommitmentCommand message, Commitment commitment)
+        {
             if (!string.IsNullOrWhiteSpace(message.Message))
             {
                 var taskTemplate = new SubmitCommitmentTemplate
-                {
-                    CommitmentId = message.CommitmentId,
-                    Message = message.Message,
-                    Source = $"PROVIDER-{message.ProviderId}-{commitment.ProviderName}"
-                };
+                    {
+                        CommitmentId = message.CommitmentId,
+                        Message = message.Message,
+                        Source =
+                            $"PROVIDER-{message.ProviderId}-{commitment.ProviderName}"
+                    };
 
                 var task = new Tasks.Api.Types.Task
-                {
-                    Assignee = $"EMPLOYER-{commitment.EmployerAccountId}",
-                    TaskTemplateId = SubmitCommitmentTemplate.TemplateId,
-                    Name = $"Submit Commitment - {commitment.Reference}",
-                    Body = JsonConvert.SerializeObject(taskTemplate)
-                };
+                    {
+                        Assignee = $"EMPLOYER-{commitment.EmployerAccountId}",
+                        TaskTemplateId = SubmitCommitmentTemplate.TemplateId,
+                        Name = $"Submit Commitment - {commitment.Reference}",
+                        Body = JsonConvert.SerializeObject(taskTemplate)
+                    };
 
-                await _tasksApi.CreateTask(task.Assignee, task);
+                await this._tasksApi.CreateTask(task.Assignee, task);
             }
         }
     }
