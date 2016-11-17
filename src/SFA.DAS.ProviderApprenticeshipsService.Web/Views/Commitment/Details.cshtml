@@ -15,7 +15,15 @@
     <div class="column-one-half employer-details">
         <p><span class="strong">Employer: </span>@Model.Commitment.LegalEntityName</p>
         <p><span class="strong">Reference: </span>@Model.Commitment.Reference</p>
-        <p><span class="strong">Status: </span>@Model.Commitment.CommitmentStatus.GetDescription()</p>
+        <p><span class="strong">Status: </span>
+            @if (Model.Commitment.EditStatus == EditStatus.ProviderOnly)
+            {
+                @Html.Raw("ready for review")
+            }
+            else
+            {
+                @Model.Commitment.CommitmentStatus
+            }
     </div>
 
     <div class="column-one-half employer-details">
@@ -59,7 +67,7 @@
         <p class="heading-medium">@GetApprenticesCountText(Model.Commitment.Apprenticeships)</p>
         <hr />
             <a href="@Url.Action("Create", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id })" class="button" aria-label="Add an apprentice">Add an apprentice</a>
-            <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="Finished editing">Save and continue</a>
+            <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="Continue to approval">Continue to approval</a>
         <hr />
     </div>
 </div>

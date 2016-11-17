@@ -1,4 +1,5 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+﻿@using SFA.DAS.Commitments.Api.Types
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CommitmentListViewModel
 
 <div class="grid-row">
@@ -64,20 +65,28 @@
                     @foreach (var commitment in Model.Commitments)
                     {
                         <tr>
-            
                             <td>
-                      
-
+                                @commitment.LegalEntityName &nbsp;
+                            </td>
+                            <td>
                                 @commitment.Reference &nbsp;
                             </td>
                             <td>
-                               @commitment.CommitmentStatus.GetDescription() &nbsp;
-
+                                @if (commitment.EditStatus == EditStatus.ProviderOnly)
+                                {
+                                    @Html.Raw("ready for review")
+                                }
+                                else
+                                {
+                                    @commitment.CommitmentStatus
+                                }
                             </td>
-                            
+
                             <td>
-                                <a href="@Url.Action("Details",
-                                      new { providerId = commitment.ProviderId, commitmentId = commitment.Id })" title="View  @commitment.LegalEntityName" aria-label="View  @commitment.LegalEntityName">View</a>
+                                @if (commitment.EditStatus == EditStatus.ProviderOnly || commitment.EditStatus == EditStatus.Both)
+                                {
+                                    <a href="@Url.Action("Details", new { providerId = commitment.ProviderId, commitmentId = commitment.Id })" title="View  @commitment.LegalEntityName" aria-label="View  @commitment.LegalEntityName">View</a>
+                                }
                             </td>
 
                             @*<td>
