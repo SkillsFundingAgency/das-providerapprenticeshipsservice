@@ -9,5 +9,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         [Required(ErrorMessage = "Select an option")]
         public string SaveOrSend { get; set; }
+
+        public bool ApproveAndSend { get; set; }
     }
 }

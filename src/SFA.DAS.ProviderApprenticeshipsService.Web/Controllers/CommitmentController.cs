@@ -7,6 +7,10 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
+    using System.Linq;
+
+    using SFA.DAS.Commitments.Api.Types;
+
     [Authorize]
     [RoutePrefix("{providerId}/apprentices")]
     public class CommitmentController : Controller
@@ -108,11 +112,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("{commitmentId}/Finished")]
-        public ActionResult FinishEditing(long providerId, long commitmentId)
+        public async Task<ActionResult> FinishEditing(long providerId, long commitmentId)
         {
-            ViewBag.ProviderId = providerId;
-
-            return View(new FinishEditingViewModel {ProviderId = providerId, CommitmentId = commitmentId});
+            var viewModel = await _commitmentOrchestrator.GetFinishEditing(providerId, commitmentId);
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -125,29 +128,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
 
             // TODO: Refactor out these magic strings
-            if (viewModel.SaveOrSend == "send-approve")
+            if (viewModel.SaveOrSend.StartsWith("send"))
+            {
+                return RedirectToAction("Submit", 
+                    new { providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId, saveOrSend = viewModel.SaveOrSend});
+            }
+
+            if (viewModel.SaveOrSend == "approve")
             {
                 try
                 {
-                    // ToDo: 
-                    return RedirectToAction("Submit", new { providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId});
+                    await _commitmentOrchestrator.ApproveCommitment(viewModel.ProviderId, viewModel.CommitmentId, viewModel.SaveOrSend);
                 }
                 catch (InvalidRequestException)
                 {
                     // TODO: LWA - What do we do??
                 }
-            }
-
-            if (viewModel.SaveOrSend == "send-amend")
-            {
-                return RedirectToAction("Submit", new {providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId});
-            }
-
-            if (viewModel.SaveOrSend == "approve")
-            {
-                await _commitmentOrchestrator.ApproveCommitment(viewModel.ProviderId, viewModel.CommitmentId, viewModel.SaveOrSend);
-
-                return RedirectToAction("Index", new { providerId = viewModel.ProviderId });
             }
 
             return RedirectToAction("Index", new {providerId = viewModel.ProviderId});

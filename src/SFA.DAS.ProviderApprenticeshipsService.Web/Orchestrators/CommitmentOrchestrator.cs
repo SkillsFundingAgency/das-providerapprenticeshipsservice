@@ -155,6 +155,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
         }
 
+        public async Task<FinishEditingViewModel> GetFinishEditing(long providerId, long commitmentId)
+        {
+            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
+            var approveAndSend = data.Commitment?.Apprenticeships
+                ?.Any(m => m.AgreementStatus == AgreementStatus.NotAgreed
+                       || m.AgreementStatus == AgreementStatus.ProviderAgreed) ?? false;
+
+            return new FinishEditingViewModel
+                {
+                    CommitmentId = commitmentId,
+                    ProviderId = providerId,
+                    ApproveAndSend = approveAndSend
+                };
+        }
+
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
         {
             return new ApprenticeshipViewModel
