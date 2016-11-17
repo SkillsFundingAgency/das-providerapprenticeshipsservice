@@ -2548,7 +2548,7 @@ span.helpText {
     min-height: 30px;
   }
   .employerListing td:nth-of-type(2):before {
-    content: "Reference";
+    content: "Cohort reference";
     font-weight: bold;
     margin-top: 5px;
   }
