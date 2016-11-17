@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Configuration;
+using Microsoft.Azure;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.WsFederation;
@@ -9,20 +9,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
     public partial class Startup
     {
-        private static readonly string Realm = ConfigurationManager.AppSettings["ida:Wtrealm"];
-        private static readonly string AdfsMetadata = ConfigurationManager.AppSettings["ida:ADFSMetadata"];
-
         public void ConfigureAuth(IAppBuilder app)
         {
             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions());
 
+            var realm = CloudConfigurationManager.GetSetting("IdamsRealm");
+            var adfsMetadata = CloudConfigurationManager.GetSetting("IdamsADFSMetadata");
+
             //todo: may need more options here
             var options = new WsFederationAuthenticationOptions
             {
-                Wtrealm = Realm,
-                MetadataAddress = AdfsMetadata
+                Wtrealm = realm,
+                MetadataAddress = adfsMetadata
                 //,Wreply = "?"
                 //,SignOutWreply = "?"
             };
