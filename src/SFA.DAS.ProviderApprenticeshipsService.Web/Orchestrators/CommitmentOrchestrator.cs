@@ -139,13 +139,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = model.ProviderId,
                 CommitmentId = model.CommitmentId,
-                Message = model.Message
+                Message = model.Message,
+                SaveOrSend = model.SaveOrSend
             });
         }
 
-        public Task ApproveCommitment(long providerId, long commitmentId)
+        public async Task ApproveCommitment(long providerId, long commitmentId, string saveOrSend)
         {
-            throw new NotImplementedException();
+            await _mediator.SendAsync(new SubmitCommitmentCommand
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId,
+                Message = string.Empty,
+                SaveOrSend = saveOrSend
+            });
         }
 
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
