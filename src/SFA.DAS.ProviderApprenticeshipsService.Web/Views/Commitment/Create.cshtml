@@ -24,13 +24,13 @@
             <fieldset>
                 <legend class="visuallyhidden">Add an apprentice</legend>
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
-                    @Html.LabelFor(m => m.FirstName, "First name", new { @class = "form-label" })
+                    @Html.LabelFor(m => m.FirstName, "First name", new { @class = "form-label form-label-bold" })
                     @Html.ValidationMessageFor(m => m.FirstName, null, new { id = "error-message-" + Html.IdFor(m => m.FirstName) })
                     @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-control-3-4" })
 
                 </div>
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.LastName, "error")">
-                    @Html.LabelFor(m => m.LastName, "Last name", new { @class = "form-label" })
+                    @Html.LabelFor(m => m.LastName, "Last name", new { @class = "form-label form-label-bold" })
                     @Html.ValidationMessageFor(m => m.LastName, null, new { id = "error-message-" + Html.IdFor(m => m.LastName) })
                     @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
 
@@ -39,7 +39,7 @@
                 <div class="form-group @Html.AddClassIfPropertyInError(x => x.ULN, "error")">
                     <hr />
                     <label for="@Html.IdFor(m => m.ULN)">
-                        <span class="form-label">Unique learner number</span>
+                        <span class="form-label form-label-bold">Unique learner number</span>
                         @Html.ValidationMessageFor(m => m.ULN, null, new { id = "error-message-" + Html.IdFor(m => m.ULN), @class = "error-message" })
                     </label>
                     @Html.TextBoxFor(m => m.ULN, new { @class = "form-control form-control-3-4", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.ULN) })
@@ -111,7 +111,8 @@
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.Cost, "error")">
                     <hr />
                     <label for="@Html.IdFor(m => m.Cost)">
-                        <span class="form-label-bold">Total agreed training cost</span>
+                        <span class="form-label-bold">Total agreed training cost (excluding VAT)</span>
+                        <span class="helpText">For example, for £1,500.18 enter 1500.18</span>
                         @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
                     </label>
                     <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
@@ -120,7 +121,7 @@
                 @Html.HiddenFor(m => m.CommitmentId)
                 @Html.HiddenFor(m => m.ProviderId)
                 @Html.HiddenFor(m => m.AgreementStatus)
-                <button type="submit" class="button" aria-label="Save">Save</button>
+                <button type="submit" class="button" aria-label="Add">Add</button>
                 <a class="links" href="@Url.Action("Details", 
                                       new { Model.ProviderId, Model.CommitmentId })" aria-label="Cancel">Cancel</a>
             </fieldset>

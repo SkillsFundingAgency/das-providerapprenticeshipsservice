@@ -137,19 +137,18 @@ span.helpText {
 
 
 
-@media only screen and (max-width: 379px){
-    .finishEditingBtn{
+
+//mobile iphone 6 / 6+ media query
+@media only screen 
+    and (max-device-width: 640px), 
+    only screen and (max-device-width: 667px), 
+    only screen and (max-width: 480px) {
+   
+     .finishEditingBtn{
         margin-top:20px;
         margin-bottom:20px;      
-    }
+        }
 
-}
-
-
-/* responsive table */ 
-@media 
-only screen and (max-width: 760px),
-(min-device-width: 768px) and (max-device-width: 1024px)  {
 
 	/* Force table to not be like tables anymore */
 	table.tableResponsive, .tableResponsive thead, .tableResponsive tbody, .tableResponsive th, .tableResponsive td, .tableResponsive tr { 
