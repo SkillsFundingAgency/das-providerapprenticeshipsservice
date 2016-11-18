@@ -61,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { ProviderId = providerId });
 
-            var taskForCommitment = allTasks.Tasks
+            var taskForCommitment = allTasks?.Tasks
                 .Select(x => new { Task = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body), CreateDate = x.CreatedOn })
                 .Where(x => x.Task != null && x.Task.CommitmentId == commitmentId)
                 .OrderByDescending(x => x.CreateDate)
@@ -72,7 +72,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return new CommitmentViewModel
             {
                 Commitment = data.Commitment,
-                LatestMessage = message
+                LatestMessage = message,
+                PendingChanges = PendingChanges(data.Commitment?.Apprenticeships)
             };
         }
 
@@ -163,16 +164,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
-            var approveAndSend = data.Commitment?.Apprenticeships
-                ?.Any(m => m.AgreementStatus == AgreementStatus.NotAgreed
-                       || m.AgreementStatus == AgreementStatus.ProviderAgreed) ?? false;
+            bool approveAndSend = PendingChanges(data.Commitment?.Apprenticeships);
 
             return new FinishEditingViewModel
-                {
-                    CommitmentId = commitmentId,
-                    ProviderId = providerId,
-                    ApproveAndSend = approveAndSend
-                };
+            {
+                CommitmentId = commitmentId,
+                ProviderId = providerId,
+                ApproveAndSend = approveAndSend
+            };
+        }
+
+        private static bool PendingChanges(List<Apprenticeship> apprenticeships)
+        {
+            if (apprenticeships == null || !apprenticeships.Any()) return true;
+            return apprenticeships?.Any(m => m.AgreementStatus == AgreementStatus.NotAgreed
+                                   || m.AgreementStatus == AgreementStatus.ProviderAgreed) ?? false;
         }
 
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)

@@ -1,7 +1,6 @@
 ﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests.Orchestrators
 {
     using System.Collections.Generic;
-    using System.Threading.Tasks;
     using FluentAssertions;
     using MediatR;
     using Moq;
@@ -11,10 +10,11 @@
     using Application.Queries.GetCommitment;
     using Web.Orchestrators;
 
-    [TestFixture]
-    public class WhenFinishEditing
+    using Task = System.Threading.Tasks.Task;
+
+    public class WhenGettingCommitmentViewModel
     {
-        [Test(Description = "Should return false on ApproveAndSend if no ProviderAgreed or no NotAgreed in at least one apprenticeship ")]
+        [Test(Description = "Should return false on PendingChanges if no ProviderAgreed or no NotAgreed in at least one apprenticeship ")]
         public void ShouldCommitmentWithEmployerAndBothAgreed()
         {
             var apprenticeships = new List<Apprenticeship>
@@ -26,12 +26,12 @@
             var mockMediator = GetMediator(apprenticeships);
             var _sut = new CommitmentOrchestrator(mockMediator.Object);
 
-            var result = _sut.GetFinishEditing(1L, 2L).Result;
+            var result = _sut.Get(1L, 2L).Result;
 
-            result.ApproveAndSend.ShouldBeEquivalentTo(false);
+            result.PendingChanges.ShouldBeEquivalentTo(false);
         }
 
-        [Test(Description = "Should return true on ApproveAndSend if at least one apprenticeship is ProviderAgreed ")]
+        [Test(Description = "Should return true on PendingChanges if at least one apprenticeship is ProviderAgreed ")]
         public void CommitmentWithOneProviderAgreed()
         {
             var apprenticeships = new List<Apprenticeship>
@@ -44,12 +44,12 @@
             var mockMediator = GetMediator(apprenticeships);
             var _sut = new CommitmentOrchestrator(mockMediator.Object);
 
-            var result = _sut.GetFinishEditing(1L, 2L).Result;
+            var result = _sut.Get(1L, 2L).Result;
 
-            result.ApproveAndSend.ShouldBeEquivalentTo(true);
+            result.PendingChanges.ShouldBeEquivalentTo(true);
         }
 
-        [Test(Description = "Should return true on ApproveAndSend if at least one apprenticeship is NotAgreed ")]
+        [Test(Description = "Should return true on PendingChanges if at least one apprenticeship is NotAgreed ")]
         public void CommitmentWithOneNotAgreed()
         {
             var apprenticeships = new List<Apprenticeship>
@@ -62,9 +62,9 @@
             var mockMediator = GetMediator(apprenticeships);
             var _sut = new CommitmentOrchestrator(mockMediator.Object);
 
-            var result = _sut.GetFinishEditing(1L, 2L).Result;
+            var result = _sut.Get(1L, 2L).Result;
 
-            result.ApproveAndSend.ShouldBeEquivalentTo(true);
+            result.PendingChanges.ShouldBeEquivalentTo(true);
         }
 
         // --- Helpers ---
