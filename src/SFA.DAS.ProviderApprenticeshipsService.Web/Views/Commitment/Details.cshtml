@@ -14,7 +14,7 @@
 <div class="grid-row">
     <div class="column-one-half employer-details">
         <p><span class="strong">Employer: </span>@Model.Commitment.LegalEntityName</p>
-        <p><span class="strong">Reference: </span>@Model.Commitment.Reference</p>
+        <p><span class="strong">Cohort reference: </span>@Model.Commitment.Reference</p>
         <p><span class="strong">Status: </span>
             @if (Model.Commitment.EditStatus == EditStatus.ProviderOnly)
             {
@@ -27,7 +27,7 @@
     </div>
 
     <div class="column-one-half employer-details">
-        <p class="strong">Last message / Instructions:</p>
+        <p class="strong">Instructions:</p>
         <p>@(string.IsNullOrWhiteSpace(Model.LatestMessage) ? "No note added" : Model.LatestMessage)</p>
     </div>
 </div>
@@ -93,7 +93,7 @@
 
                     <th scope="col">Name</th>
                     <th scope="col">ULN</th>
-                    <th scope="col">Training name</th>
+                    <th scope="col">Training course</th>
                     <th scope="col">Training dates</th>
                     <th scope="col" colspan="2">Cost</th>
                 </tr>

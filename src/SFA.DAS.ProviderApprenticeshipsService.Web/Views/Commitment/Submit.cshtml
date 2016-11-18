@@ -17,8 +17,8 @@
         <form method="POST" action="@Url.Action("Submit")">
             @Html.AntiForgeryToken()
             <div class="form-group">
-                <label class="form-label strong" for="Message">Instructions</label>
-                <p class="form-hint">For example, please can you review and approve the apprentices added to this request.</p>
+                <label class="form-label strong" for="Message">Instructions (optional)</label>
+              
                 <textarea class="form-control form-control-3-4 message" id="Message" name="Message"
                           cols="40" rows="10"
                           aria-required="true">@Model.Message</textarea>
