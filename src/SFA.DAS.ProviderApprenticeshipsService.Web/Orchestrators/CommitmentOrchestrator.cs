@@ -163,6 +163,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = apprenticeship.CommitmentId,
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
+                DateOfBirth = apprenticeship.DateOfBirth?.ToShortDateString(),
+                NINumber = apprenticeship.NINumber,
                 ULN = apprenticeship.ULN,
                 TrainingType = apprenticeship.TrainingType,
                 TrainingCode = apprenticeship.TrainingCode,
@@ -173,7 +175,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 EndMonth = apprenticeship.EndDate?.Month,
                 EndYear = apprenticeship.EndDate?.Year,
                 PaymentStatus = apprenticeship.PaymentStatus,
-                AgreementStatus = apprenticeship.AgreementStatus
+                AgreementStatus = apprenticeship.AgreementStatus,
+                ProviderRef = apprenticeship.ProviderRef
             };
         }
         private static string NullableDecimalToString(decimal? item)
@@ -183,16 +186,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)
         {
+            DateTime? dateOfBirth = null;
+            DateTime dateOfBirthOut;
+            if(DateTime.TryParse(viewModel.DateOfBirth, out dateOfBirthOut))
+            {
+                dateOfBirth = dateOfBirthOut;
+            }
+
             var apprenticeship =  new Apprenticeship
             {
                 Id = viewModel.Id,
                 CommitmentId = viewModel.CommitmentId,
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
+                DateOfBirth = dateOfBirth,
+                NINumber = viewModel.NINumber,
                 ULN = viewModel.ULN,
                 Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
                 StartDate = GetDateTime(viewModel.StartMonth, viewModel.StartYear),
-                EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear)
+                EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear),
+                ProviderRef = viewModel.ProviderRef
             };
 
             if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
