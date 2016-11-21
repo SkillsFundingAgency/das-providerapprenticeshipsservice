@@ -49,8 +49,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
 
             await _commitmentsApi.PatchProviderCommitment(message.ProviderId, message.CommitmentId, agreementStatus);
 
+
             // TODO: Refactor out these magic strings
-            if (message.SaveOrSend != "approve")
+            if (message.CreateTask)
                 await CreateTask(message, commitment);
         }
 

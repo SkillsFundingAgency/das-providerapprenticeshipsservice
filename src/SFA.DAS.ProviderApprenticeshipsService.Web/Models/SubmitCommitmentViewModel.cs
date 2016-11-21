@@ -5,7 +5,9 @@
         public long ProviderId { get; set; }
         public long CommitmentId { get; set; }
         public string Message { get; set; }
-        public string SaveOrSend { get; internal set; }
+
         public string EmployerName { get; internal set; }
+
+        public SaveOrSendStatus SaveOrSendStatus { get; set; }
     }
 }

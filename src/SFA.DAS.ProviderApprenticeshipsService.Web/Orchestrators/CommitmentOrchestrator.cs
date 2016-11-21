@@ -161,28 +161,40 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task SubmitCommitment(SubmitCommitmentViewModel model)
         {
-            Logger.Info($"Submitting ({model.SaveOrSend}) Commitment for provider:{model.ProviderId} commitment:{model.CommitmentId}");
+            Logger.Info($"Submitting ({model.SaveOrSendStatus}) Commitment for provider:{model.ProviderId} commitment:{model.CommitmentId}");
 
+            // ToDo: Unit tests
+            // ToDo: Merge with ApproveCommitment method?
+            var agreementStatus = model.SaveOrSendStatus != SaveOrSendStatus.Save
+                                ? AgreementStatus.ProviderAgreed
+                                : AgreementStatus.NotAgreed;
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {
                 ProviderId = model.ProviderId,
                 CommitmentId = model.CommitmentId,
                 Message = model.Message,
-                SaveOrSend = model.SaveOrSend
-            });
+                AgreementStatus = agreementStatus,
+                CreateTask = model.SaveOrSendStatus != SaveOrSendStatus.Approve
+        });
         }
 
-        public async Task ApproveCommitment(long providerId, long commitmentId, string saveOrSend)
+        public async Task ApproveCommitment(long providerId, long commitmentId, SaveOrSendStatus saveOrSendStatus)
         {
-            Logger.Info($"Approving ({saveOrSend}) Commitment for provider:{providerId} commitment:{commitmentId}");
+            Logger.Info($"Approving ({saveOrSendStatus}) Commitment for provider:{providerId} commitment:{commitmentId}");
+
+            // ToDo: Unit tests
+            var agreementStatus = saveOrSendStatus != SaveOrSendStatus.Save
+                                ? AgreementStatus.ProviderAgreed
+                                : AgreementStatus.NotAgreed;
 
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {
                 ProviderId = providerId,
                 CommitmentId = commitmentId,
                 Message = string.Empty,
-                SaveOrSend = saveOrSend
-            });
+                AgreementStatus = agreementStatus,
+                CreateTask = saveOrSendStatus != SaveOrSendStatus.Approve
+        });
         }
 
         public async Task<FinishEditingViewModel> GetFinishEditing(long providerId, long commitmentId)

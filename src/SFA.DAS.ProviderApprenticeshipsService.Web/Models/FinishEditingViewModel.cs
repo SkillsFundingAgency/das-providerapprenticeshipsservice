@@ -8,8 +8,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public long CommitmentId { get; set; }
 
         [Required(ErrorMessage = "Select an option")]
-        public string SaveOrSend { get; set; }
+        public SaveOrSendStatus SaveOrSendStatus { get; set; }
 
         public bool ApproveAndSend { get; set; }
+    }
+
+    public enum SaveOrSendStatus
+    {
+        // ToDo: Move to file
+        Save = 0,
+        Approve = 1,
+        ApproveAndSend = 2,
+        AmendAndSend = 3
     }
 }

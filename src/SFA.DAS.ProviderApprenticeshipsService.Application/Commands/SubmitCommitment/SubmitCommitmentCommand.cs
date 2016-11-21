@@ -2,6 +2,8 @@
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment
 {
+    using SFA.DAS.Commitments.Api.Types;
+
     public class SubmitCommitmentCommand : IAsyncRequest
     {
         public long ProviderId { get; set; }
@@ -11,5 +13,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
         public string Message { get; set; }
 
         public string SaveOrSend { get; set; }
+
+        public AgreementStatus AgreementStatus { get; set; }
+
+        public bool CreateTask { get; set; }
     }
 }

@@ -123,23 +123,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return View(viewModel);
             }
 
-            // TODO: Refactor out these magic strings
-            if (!string.IsNullOrEmpty(viewModel.SaveOrSend) && viewModel.SaveOrSend.StartsWith("send"))
+            if(viewModel.SaveOrSendStatus == SaveOrSendStatus.ApproveAndSend || viewModel.SaveOrSendStatus == SaveOrSendStatus.AmendAndSend)
             {
-                return RedirectToAction("Submit", 
-                    new { providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId, saveOrSend = viewModel.SaveOrSend});
+                return RedirectToAction("Submit", new { providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId});
             }
 
-            if (viewModel.SaveOrSend == "approve")
+            if(viewModel.SaveOrSendStatus == SaveOrSendStatus.Approve)
             {
-                await _commitmentOrchestrator.ApproveCommitment(viewModel.ProviderId, viewModel.CommitmentId, viewModel.SaveOrSend);
+                await _commitmentOrchestrator.ApproveCommitment(viewModel.ProviderId, viewModel.CommitmentId, viewModel.SaveOrSendStatus);
+
+                return RedirectToAction("Index", new { providerId = viewModel.ProviderId });
             }
 
             return RedirectToAction("Index", new {providerId = viewModel.ProviderId});
         }
 
         [HttpGet]
-        public async Task<ActionResult> Submit(long providerId, long commitmentId, string saveOrSend)
+        public async Task<ActionResult> Submit(long providerId, long commitmentId, SaveOrSendStatus saveOrSendStatus)
         {
             var commitment = await _commitmentOrchestrator.GetCommitment(providerId, commitmentId);
 
@@ -148,7 +148,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 ProviderId = providerId,
                 CommitmentId = commitmentId,
                 EmployerName = commitment.LegalEntityName,
-                SaveOrSend = saveOrSend
+                SaveOrSendStatus = saveOrSendStatus
             };
 
             return View(model);
