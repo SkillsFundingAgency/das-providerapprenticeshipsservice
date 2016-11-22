@@ -41,11 +41,6 @@
         return $"{apprenticeships.Count} Apprentices";
     }
 
-    public string GetFullName(string firstname, string lastname)
-    {
-        return $"{firstname} {lastname}".Trim(' ');
-    }
-
     public string GetDateValue(DateTime? date)
     {
         if (!date.HasValue)
@@ -102,12 +97,12 @@
                     @foreach (var item in Model.Commitment.Apprenticeships)
                     {
                         <tr>
-                            <td>@GetFullName(item.FirstName, item.LastName) &nbsp;</td>
+                            <td>@item.ApprenticeshipName &nbsp;</td>
                             <td>@item.ULN &nbsp;</td>
                             <td>@item.TrainingName &nbsp;</td>
                             <td>@GetDateValue(item.StartDate) to @GetDateValue(item.EndDate) &nbsp;</td>
                             <td>@FormatCost(item.Cost) &nbsp;</td>
-                            <td><a href="@Url.Action("Edit", new { commitmentId = Model.Commitment.Id, id = item.Id })" title="Edit @GetFullName(item.FirstName, item.LastName)" aria-label="Edit @GetFullName(item.FirstName, item.LastName)">Edit</a></td>
+                            <td><a href="@Url.Action("Edit", new { commitmentId = Model.Commitment.Id, id = item.Id })" title="Edit @item.ApprenticeshipName" aria-label="Edit @item.ApprenticeshipName">Edit</a></td>
                         </tr>
                     }
                 </tbody>
