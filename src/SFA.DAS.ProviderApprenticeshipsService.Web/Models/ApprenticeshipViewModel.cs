@@ -24,6 +24,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public string DateOfBirth { get; set; }
 
+        public int? DateOfBirthDay { get; set; }
+
+        public int? DateOfBirthMonth { get; set; }
+
+        public int? DateOfBirthYear { get; set; }
+
         public string NINumber { get; set; }
 
         public string ULN { get; set; }
@@ -39,5 +45,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public AgreementStatus AgreementStatus { get; set; }
 
         public string ProviderRef { get; set; }
+
+        public string EmployerRef { get; set; }
     }
 }
