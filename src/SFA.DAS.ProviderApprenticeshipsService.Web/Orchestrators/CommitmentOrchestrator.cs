@@ -20,6 +20,8 @@ using SFA.DAS.Tasks.Api.Types.Templates;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
+    using System.Globalization;
+
     public class CommitmentOrchestrator
     {
         private readonly IMediator _mediator;
@@ -183,38 +185,54 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
         {
+            var dateOfBirth = apprenticeship.DateOfBirth;
             return new ApprenticeshipViewModel
             {
                 Id = apprenticeship.Id,
                 CommitmentId = apprenticeship.CommitmentId,
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
+                DateOfBirthDay = dateOfBirth?.Day,
+                DateOfBirthMonth = dateOfBirth?.Month,
+                DateOfBirthYear = dateOfBirth?.Year,
+                NINumber = apprenticeship.NINumber,
                 ULN = apprenticeship.ULN,
                 TrainingType = apprenticeship.TrainingType,
                 TrainingCode = apprenticeship.TrainingCode,
                 TrainingName = apprenticeship.TrainingName,
-                Cost = apprenticeship.Cost.ToString(),
+                Cost = NullableDecimalToString(apprenticeship.Cost),
                 StartMonth = apprenticeship.StartDate?.Month, 
                 StartYear = apprenticeship.StartDate?.Year,
                 EndMonth = apprenticeship.EndDate?.Month,
                 EndYear = apprenticeship.EndDate?.Year,
                 PaymentStatus = apprenticeship.PaymentStatus,
-                AgreementStatus = apprenticeship.AgreementStatus
+                AgreementStatus = apprenticeship.AgreementStatus,
+                ProviderRef = apprenticeship.ProviderRef,
+                EmployerRef = apprenticeship.EmployerRef
             };
+        }
+        private static string NullableDecimalToString(decimal? item)
+        {
+            return (item.HasValue) ? string.Format("{0:#}", item.Value) : "";
         }
 
         private async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)
         {
+
             var apprenticeship =  new Apprenticeship
             {
                 Id = viewModel.Id,
                 CommitmentId = viewModel.CommitmentId,
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
+                DateOfBirth = GetDateTime(viewModel.DateOfBirthDay, viewModel.DateOfBirthMonth, viewModel.DateOfBirthYear),
+                NINumber = viewModel.NINumber,
                 ULN = viewModel.ULN,
                 Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
                 StartDate = GetDateTime(viewModel.StartMonth, viewModel.StartYear),
-                EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear)
+                EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear),
+                ProviderRef = viewModel.ProviderRef,
+                EmployerRef = viewModel.EmployerRef
             };
 
             if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
@@ -232,6 +250,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             if (month.HasValue && year.HasValue)
                 return new DateTime(year.Value, month.Value, 1);
+
+            return null;
+        }
+
+        private DateTime? GetDateTime(int? day, int? month, int? year)
+        {
+            if (day.HasValue && month.HasValue && year.HasValue)
+            {
+                DateTime dateOfBirthOut;
+                if (DateTime.TryParseExact(
+                    $"{year.Value}-{month.Value}-{day.Value}",
+                    "yyyy-MM-dd",
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirthOut))
+                {
+                    return dateOfBirthOut;
+                }
+            }
 
             return null;
         }
