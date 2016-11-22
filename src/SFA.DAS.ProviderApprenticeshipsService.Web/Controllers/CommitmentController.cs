@@ -128,7 +128,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
 
             // TODO: Refactor out these magic strings
-            if (viewModel.SaveOrSend.StartsWith("send"))
+            if (!string.IsNullOrEmpty(viewModel.SaveOrSend) && viewModel.SaveOrSend.StartsWith("send"))
             {
                 return RedirectToAction("Submit", 
                     new { providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId, saveOrSend = viewModel.SaveOrSend});
