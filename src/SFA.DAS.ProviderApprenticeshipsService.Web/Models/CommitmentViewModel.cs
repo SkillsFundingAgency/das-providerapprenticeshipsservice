@@ -6,5 +6,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
     {
         public Commitment Commitment { get; set; }
         public string LatestMessage { get; set; }
+
+        public bool PendingChanges { get; set; }
     }
 }

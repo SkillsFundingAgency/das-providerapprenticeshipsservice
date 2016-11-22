@@ -5,6 +5,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class ExtendedApprenticeshipViewModel
     {
         public ApprenticeshipViewModel Apprenticeship { get; set; }
@@ -19,6 +21,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public long ProviderId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
+
+        public int? DateOfBirthDay { get; set; }
+
+        public int? DateOfBirthMonth { get; set; }
+
+        public int? DateOfBirthYear { get; set; }
+
+        public string NINumber { get; set; }
+
         public string ULN { get; set; }
         public TrainingType TrainingType { get; set; }
         public string TrainingCode { get; set; }
@@ -30,5 +42,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public int? EndYear { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public AgreementStatus AgreementStatus { get; set; }
+
+        public string ProviderRef { get; set; }
+
+        public string EmployerRef { get; set; }
     }
 }

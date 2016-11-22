@@ -1,9 +1,11 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+﻿@using SFA.DAS.Commitments.Api.Types
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.FinishEditingViewModel
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <a href="@Url.Action("Details", new { providerId = Model.ProviderId, commitmentId = Model.CommitmentId })" aria-label="Back" class="link-back">Back</a>
+        <a href="@Url.Action("Details", 
+                new { providerId = Model.ProviderId, commitmentId = Model.CommitmentId })" aria-label="Back" class="link-back">Back</a>
 
         <h1 class="heading-xlarge">Finish editing</h1>
         <div>
@@ -18,11 +20,20 @@
                     <div>
                         @Html.ValidationMessageFor(m => m.SaveOrSend, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SaveOrSend) })
                     </div>
-          
-                    <label class="block-label" for="@Html.IdFor(m => m.SaveOrSend)-Approve">
-                        @Html.RadioButtonFor(m => m.SaveOrSend, "approve", new { id = Html.IdFor(m => m.SaveOrSend) + "-Approve" })
-                        <span id="changeOne">Approve</span>
-                    </label>
+                    @if (Model.ApproveAndSend)
+                    {
+                        <label class="block-label" for="@Html.IdFor(m => m.SaveOrSend)-SendApprove">
+                            @Html.RadioButtonFor(m => m.SaveOrSend, "send-approve", new { id = Html.IdFor(m => m.SaveOrSend) + "-SendApprove" })
+                            <span id="changeOne">Approve and send to employer for approval</span>
+                        </label>
+                    }
+                    else
+                    {
+                        <label class="block-label" for="@Html.IdFor(m => m.SaveOrSend)-Approve">
+                            @Html.RadioButtonFor(m => m.SaveOrSend, "approve", new { id = Html.IdFor(m => m.SaveOrSend) + "-Approve" })
+                            <span id="changeOne">Approve</span>
+                        </label>
+                    }
                     <label class="block-label" for="@Html.IdFor(m => m.SaveOrSend)-SendAmend">
                         @Html.RadioButtonFor(m => m.SaveOrSend, "send-amend", new { id = Html.IdFor(m => m.SaveOrSend) + "-SendAmend" })
                         <span id="changeTwo">Send to employer to review or add details</span>
