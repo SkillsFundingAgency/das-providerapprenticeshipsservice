@@ -39,3 +39,16 @@ sfa.homePage = {
 }
 
 var selectionButtons = new GOVUK.SelectionButtons("label input[type='radio'], label input[type='checkbox']");
+
+(function () {
+
+    // https://select2.github.io/examples.html
+    var init = function() {
+        console.log("apprenticePage  Init new");
+        if ($("#TrainingCode")) {
+            $("#TrainingCode").select2();
+        }
+    };
+
+    init();
+}() );
