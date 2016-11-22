@@ -76,22 +76,22 @@
                 @Html.TextBoxFor(m => m.ULN, new { @class = "form-control form-control-3-4", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.ULN) })
             </div>
 
-                <div class="form-group">
-                    <hr />
-                    <label class="form-label-bold" for="TrainingId">Apprenticeship training course</label>
-                    <select name="TrainingCode" id="TrainingCode" class="form-control form-control-3-4" aria-label="Training standard">
-                        <option value=""></option>
-                        @foreach (var programme in ViewBag.ApprenticeshipProgrammes)
-                        {
-                            <option value="@programme.Id" @if (programme.Id.ToString() == Model.TrainingCode)
-                                                          {
-                                                              @Html.Raw("selected")
-                                                          }>
-                                @programme.Title, Level: @programme.Level
-                            </option>
-                        }
-                    </select>
-
+            <div class="form-group">
+                <hr />
+                <label class="form-label-bold" for="TrainingId">Apprenticeship training course</label>
+                <select name="TrainingCode" id="TrainingCode" class="form-control form-control-3-4" aria-label="Training standard">
+                    <option value=""></option>
+                    @foreach (var programme in ViewBag.ApprenticeshipProgrammes)
+                    {
+                        <option value="@programme.Id" @if (programme.Id.ToString() == Model.TrainingCode)
+                                                        {
+                                                            @Html.Raw("selected")
+                                                        }>
+                            @programme.Title, Level: @programme.Level
+                        </option>
+                    }
+                </select>
+            </div>
 
             <div class="form-group">
                 <hr/>
