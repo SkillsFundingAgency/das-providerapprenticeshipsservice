@@ -86,7 +86,9 @@
                         <option value=""></option>
                         @foreach (var programme in ViewBag.ApprenticeshipProgrammes)
                         {
-                            <option value="@programme.Id">@programme.Title</option>
+                            <option value="@programme.Id">
+                                @programme.Title, Level: @programme.Level
+                            </option>
                         }
                     </select>
 

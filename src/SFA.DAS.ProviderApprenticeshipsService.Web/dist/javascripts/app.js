@@ -44,7 +44,6 @@ var selectionButtons = new GOVUK.SelectionButtons("label input[type='radio'], la
 
     // https://select2.github.io/examples.html
     var init = function() {
-        console.log("apprenticePage  Init new");
         if ($("#TrainingCode")) {
             $("#TrainingCode").select2();
         }
