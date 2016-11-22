@@ -261,7 +261,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 DateTime dateOfBirthOut;
                 if (DateTime.TryParseExact(
                     $"{year.Value}-{month.Value}-{day.Value}",
-                    "yyyy-MM-dd",
+                    "yyyy-M-d",
                     CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirthOut))
                 {
                     return dateOfBirthOut;
