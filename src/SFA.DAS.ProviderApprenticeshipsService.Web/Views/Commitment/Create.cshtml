@@ -81,7 +81,7 @@
                 <div class="form-group">
                     <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
                     <select name="TrainingCode" id="TrainingCode" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
-                        <option value=""></option>
+                        <option value="">Please select</option>
                         @foreach (var programme in ViewBag.ApprenticeshipProgrammes)
                         {
                             <option value="@programme.Id">

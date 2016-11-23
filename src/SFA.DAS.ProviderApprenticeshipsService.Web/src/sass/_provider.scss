@@ -129,13 +129,27 @@ span.helpText {
          width: 60px;
     }
 
-
-
-
 }
 
+//dropdown styles
+.select2-container--default{ 
 
+    .select2-selection--single{
+        border:2px solid #6f777b;
+        border-radius:0;
+        height: 37px;
+    }
+    .select2-dropdown{
+          border:2px solid #6f777b;
+          border-radius: 0;
+          border-top:1px solid #6f777b;
+    }
+    .select2-results__option--highlighted[aria-selected] {
+          background-color: #ddd;
+          color: #000;
+    }
 
+}
 
 
 //mobile iphone 6 / 6+ media query
@@ -144,11 +158,21 @@ span.helpText {
     only screen and (max-device-width: 667px), 
     only screen and (max-width: 480px) {
    
+     // select box mobile fix
+     .select2-container--default{ 
+        width:100% !important;
+       .select2-selection--single .select2-selection__rendered{
+           width:200px !important;
+       }
+
+     }
+
      .finishEditingBtn{
         margin-top:20px;
         margin-bottom:20px;      
         }
-
+    
+  
 
 	/* Force table to not be like tables anymore */
 	table.tableResponsive, .tableResponsive thead, .tableResponsive tbody, .tableResponsive th, .tableResponsive td, .tableResponsive tr { 

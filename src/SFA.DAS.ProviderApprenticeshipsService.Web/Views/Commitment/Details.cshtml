@@ -62,7 +62,7 @@
         <p class="heading-medium">@GetApprenticesCountText(Model.Commitment.Apprenticeships)</p>
         <hr/>
             @{ var finishEditingText = Model.PendingChanges ? "Finished editing" : "Continue to approval"; }
-            <a href="@Url.Action("Create", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id })" class="button-link" aria-label="Add an apprentice">Add an apprentice</a>
+            <a href="@Url.Action("Create", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id })" class="button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
             <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
         <hr />
     </div>
@@ -72,13 +72,10 @@
     <div class="column-full">
         @if (Model.Commitment.Apprenticeships.Count == 0)
         {
-            <div id="addApprenticesEmptyState" class="emptyState">
-                <div class="emptyStateAlert">
-                    <div class="emptyStateCopyDetails" aria-label="Information">
+            <div class="panel panel-filled">
+              
                         <p>You haven't added any apprentices yet.</p>
-
-                    </div>
-                </div>
+                
             </div>
         }
         else
