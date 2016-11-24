@@ -22,6 +22,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     using System.Globalization;
 
+    using WebGrease.Css.Extensions;
+
     public class CommitmentOrchestrator
     {
         private readonly IMediator _mediator;
@@ -199,7 +201,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ULN = apprenticeship.ULN,
                 TrainingType = apprenticeship.TrainingType,
                 TrainingCode = apprenticeship.TrainingCode,
-                TrainingName = apprenticeship.TrainingName,
                 Cost = NullableDecimalToString(apprenticeship.Cost),
                 StartMonth = apprenticeship.StartDate?.Month, 
                 StartYear = apprenticeship.StartDate?.Year,
@@ -275,7 +276,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var id = int.Parse(trainingCode);
 
-            return (await GetTrainingProgrammes()).Where(x => x.Id == id).Single();
+            return (await GetTrainingProgrammes()).Single(x => x.Id == id);
         }
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()

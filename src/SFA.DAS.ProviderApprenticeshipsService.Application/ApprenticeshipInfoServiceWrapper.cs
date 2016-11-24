@@ -72,7 +72,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
                 Frameworks = frameworks.Select(x => new Framework
                 {
                     Id = int.Parse(x.Id),
-                    Title = x.FrameworkName .Trim() == x.PathwayName.Trim() ? x.FrameworkName : x.Title,
+                    Title = GetTitle(x.FrameworkName.Trim() == x.PathwayName.Trim() ? x.FrameworkName : x.Title, x.Level),
                     FrameworkCode = x.FrameworkCode,
                     FrameworkName = x.FrameworkName,
                     Level = x.Level,
@@ -113,7 +113,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
                 {
                     Id = int.Parse(x.Id),
                     Level = x.Level,
-                    Title = GetTitle(x),
+                    Title = GetTitle(x.Title, x.Level),
                     Duration = new Duration
                     {
                         From = x.TypicalLength.From,
@@ -124,11 +124,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
             };
         }
 
-        private static string GetTitle(StandardSummary standard)
+        private static string GetTitle(string title, int level)
         {
-            var training = new Training(TrainingType.Standard, standard.Title, int.Parse(standard.Id), 0, 0);
-
-            return $"{training.Title}";
+            return $"{title}, Level: {level}";
         }
     }
 }
