@@ -5,7 +5,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
-    using System.ComponentModel.DataAnnotations;
 
     public class ExtendedApprenticeshipViewModel
     {
@@ -32,6 +31,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string NINumber { get; set; }
 
         public string ULN { get; set; }
+
         public TrainingType TrainingType { get; set; }
         public string TrainingCode { get; set; }
         public string TrainingName { get; set; }
