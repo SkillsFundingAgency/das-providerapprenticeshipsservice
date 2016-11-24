@@ -83,7 +83,6 @@
             <table class="tableResponsive providerList">
                 <thead>
                 <tr>
-
                     <th scope="col">Name</th>
                     <th scope="col">ULN</th>
                     <th scope="col">Training course</th>
@@ -98,7 +97,14 @@
                             <td>@item.ApprenticeshipName &nbsp;</td>
                             <td>@item.ULN &nbsp;</td>
                             <td>@item.TrainingName &nbsp;</td>
-                            <td>@GetDateValue(item.StartDate) to @GetDateValue(item.EndDate) &nbsp;</td>
+                            <td>
+                                @if (item.StartDate != null && item.EndDate != null)
+                                {
+                                    <span>
+                                        GetDateValue(item.StartDate) to @GetDateValue(item.EndDate) &nbsp;
+                                    </span>
+                                }
+                            </td>
                             <td>@FormatCost(item.Cost) &nbsp;</td>
                             <td><a href="@Url.Action("Edit", new { commitmentId = Model.Commitment.Id, id = item.Id })" title="Edit @item.ApprenticeshipName" aria-label="Edit @item.ApprenticeshipName">Edit</a></td>
                         </tr>

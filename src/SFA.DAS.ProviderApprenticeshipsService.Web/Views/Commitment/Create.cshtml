@@ -7,7 +7,10 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <a href="#" aria-label="Back" class="link-back">Back</a>
+
+        <a href="@Url.Action("Details", 
+                new { providerId = Model.ProviderId, commitmentId = Model.CommitmentId })" aria-label="Back" class="link-back">Back</a>
+
         <form method="POST" action="@Url.Action("Create")">
 
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
@@ -85,7 +88,7 @@
                         @foreach (var programme in ViewBag.ApprenticeshipProgrammes)
                         {
                             <option value="@programme.Id">
-                                @programme.Title, Level: @programme.Level
+                                @programme.Title
                             </option>
                         }
                     </select>
