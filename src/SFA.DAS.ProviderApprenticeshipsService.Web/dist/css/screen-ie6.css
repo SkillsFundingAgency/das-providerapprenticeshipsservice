@@ -1913,7 +1913,7 @@ legend {
   margin-bottom: 0;
 }
 
-.button-link {
+.button-secondary {
   background-color: #dee0e2;
   position: relative;
   display: -moz-inline-stack;
@@ -1938,33 +1938,33 @@ legend {
   color: #0b0c0c;
 }
 
-.button-link:visited {
+.button-secondary:visited {
   background-color: #dee0e2;
 }
 
-.button-link:hover, .button-link:focus {
+.button-secondary:hover, .button-secondary:focus {
   background-color: #d0d3d6;
 }
 
-.button-link:active {
+.button-secondary:active {
   top: 2px;
   -webkit-box-shadow: 0 0 0 #dee0e2;
   -moz-box-shadow: 0 0 0 #dee0e2;
   box-shadow: 0 0 0 #dee0e2;
 }
 
-.button-link.disabled, .button-link[disabled="disabled"], .button-link[disabled] {
+.button-secondary.disabled, .button-secondary[disabled="disabled"], .button-secondary[disabled] {
   zoom: 1;
   filter: alpha(opacity=50);
   opacity: 0.5;
 }
 
-.button-link.disabled:hover, .button-link[disabled="disabled"]:hover, .button-link[disabled]:hover {
+.button-secondary.disabled:hover, .button-secondary[disabled="disabled"]:hover, .button-secondary[disabled]:hover {
   cursor: default;
   background-color: #dee0e2;
 }
 
-.button-link.disabled:active, .button-link[disabled="disabled"]:active, .button-link[disabled]:active {
+.button-secondary.disabled:active, .button-secondary[disabled="disabled"]:active, .button-secondary[disabled]:active {
   top: 0;
   -webkit-box-shadow: 0 2px 0 #b5babe;
   -moz-box-shadow: 0 2px 0 #b5babe;
@@ -1972,11 +1972,11 @@ legend {
   border-bottom: 2px solid #b5babe;
 }
 
-.button-link:link, .button-link:hover, .button-link:focus, .button-link:visited {
+.button-secondary:link, .button-secondary:hover, .button-secondary:focus, .button-secondary:visited {
   color: #0b0c0c;
 }
 
-.button-link:before {
+.button-secondary:before {
   content: "";
   height: 110%;
   width: 100%;
@@ -1987,25 +1987,25 @@ legend {
   left: 0;
 }
 
-.button-link:active:before {
+.button-secondary:active:before {
   top: -10%;
   height: 120%;
   top: auto;
   height: 100%;
 }
 
-.button-link[rel="external"]:after {
+.button-secondary[rel="external"]:after {
   display: none;
   content: none;
   margin-left: 0;
   margin-right: 0;
 }
 
-.button-link[type="submit"], .button-link[type="reset"], .button-link[type="button"] {
+.button-secondary[type="submit"], .button-secondary[type="reset"], .button-secondary[type="button"] {
   filter: chroma(color=#0b0c0c);
 }
 
-.button-link[type=submit].button {
+.button-secondary[type=submit].button {
   filter: none;
 }
 

@@ -285,7 +285,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             await Task.WhenAll(standardsTask, frameworksTask);
 
-            return standardsTask.Result.Standards.Cast<ITrainingProgramme>().Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>()).ToList();
+            return
+                standardsTask.Result.Standards.Cast<ITrainingProgramme>()
+                    .Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>())
+                    .OrderBy(m => m.Title)
+                    .ToList();
         }
     }
 }
