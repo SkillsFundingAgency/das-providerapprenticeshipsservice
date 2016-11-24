@@ -33,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{commitmentId}/Details")]
         public async Task<ActionResult> Details(long providerId, long commitmentId)
         {
-            var model = await _commitmentOrchestrator.Get(providerId, commitmentId);
+            var model = await _commitmentOrchestrator.GetCommitmentDetails(providerId, commitmentId);
 
             return View(model);
         }
@@ -148,13 +148,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> Submit(long providerId, long commitmentId, string saveOrSend)
         {
-            var commitment = await _commitmentOrchestrator.Get(providerId, commitmentId);
+            var commitment = await _commitmentOrchestrator.GetCommitment(providerId, commitmentId);
 
             var model = new SubmitCommitmentViewModel
             {
                 ProviderId = providerId,
                 CommitmentId = commitmentId,
-                EmployerName = commitment.Commitment.LegalEntityName,
+                EmployerName = commitment.LegalEntityName,
                 SaveOrSend = saveOrSend
             };
 
@@ -178,7 +178,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> Acknowledgement(long providerId, long commitmentId, string message)
         {
-            var commitment = (await _commitmentOrchestrator.Get(providerId, commitmentId)).Commitment;
+            var commitment = (await _commitmentOrchestrator.GetCommitment(providerId, commitmentId));
 
             return View(new AcknowledgementViewModel
             {

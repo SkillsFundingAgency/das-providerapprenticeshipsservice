@@ -24,7 +24,7 @@
             };
 
             var mockMediator = GetMediator(apprenticeships);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object);
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>());
 
             var result = _sut.GetFinishEditing(1L, 2L).Result;
 
@@ -42,7 +42,7 @@
             };
 
             var mockMediator = GetMediator(apprenticeships);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object);
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>());
 
             var result = _sut.GetFinishEditing(1L, 2L).Result;
 
@@ -60,7 +60,7 @@
             };
 
             var mockMediator = GetMediator(apprenticeships);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object);
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>());
 
             var result = _sut.GetFinishEditing(1L, 2L).Result;
 

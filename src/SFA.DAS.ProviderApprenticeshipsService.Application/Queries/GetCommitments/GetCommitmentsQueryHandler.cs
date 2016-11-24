@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client;
@@ -23,6 +24,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitme
             return new GetCommitmentsQueryResponse
             {
                 Commitments = response
+                    .Where(x => x.CommitmentStatus == Commitments.Api.Types.CommitmentStatus.Active)
+                    .ToList()
             };
         }
     }
