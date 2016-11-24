@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Newtonsoft.Json;
@@ -35,6 +36,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                 throw new InvalidRequestException(validationResult.Errors);
 
             var commitment = await _commitmentsApi.GetProviderCommitment(message.ProviderId, message.CommitmentId);
+
+            if (commitment.ProviderId != message.ProviderId)
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commiment does not belong to this Provider " } });
 
             var agreementStatus = AgreementStatus.NotAgreed;
             // TODO: Refactor out these magic strings

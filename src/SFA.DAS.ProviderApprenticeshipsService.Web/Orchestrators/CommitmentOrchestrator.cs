@@ -27,12 +27,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
     public class CommitmentOrchestrator
     {
         private readonly IMediator _mediator;
+        private readonly ICommitmentStatusCalculator _statusCalculator;
 
-        public CommitmentOrchestrator(IMediator mediator)
+        public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
+            if (statusCalculator == null)
+                throw new ArgumentNullException(nameof(statusCalculator));
+
             _mediator = mediator;
+            _statusCalculator = statusCalculator;
         }
 
         public async Task<CommitmentListViewModel> GetAll(long providerId)
@@ -42,20 +47,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderId = providerId
             });
 
-            var tasks = await _mediator.SendAsync(new GetTasksQueryRequest
-            {
-                ProviderId = providerId
-            });
-
             return new CommitmentListViewModel
             {
                 ProviderId = providerId,
-                NumberOfTasks = tasks.Tasks.Count,
-                Commitments = data.Commitments
+                Commitments = MapFrom(data.Commitments)
             };
         }
 
-        public async Task<CommitmentViewModel> Get(long providerId, long commitmentId)
+        public async Task<CommitmentDetailsViewModel> GetCommitmentDetails(long providerId, long commitmentId)
         {
             var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
             {
@@ -63,22 +62,46 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
-            var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { ProviderId = providerId });
+            string message = await GetLatestMessage(providerId, commitmentId);
 
-            var taskForCommitment = allTasks?.Tasks
-                .Select(x => new { Task = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body), CreateDate = x.CreatedOn })
-                .Where(x => x.Task != null && x.Task.CommitmentId == commitmentId)
-                .OrderByDescending(x => x.CreateDate)
-                .FirstOrDefault();
-
-            var message = taskForCommitment?.Task?.Message ?? string.Empty;
-
-            return new CommitmentViewModel
+            return new CommitmentDetailsViewModel
             {
-                Commitment = data.Commitment,
+                ProviderId = providerId,
+                CommitmentId = data.Commitment.Id,
+                LegalEntityName = data.Commitment.LegalEntityName,
+                Reference = data.Commitment.Reference,
+                Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.AgreementStatus),
+                Apprenticeships = MapFrom(data.Commitment.Apprenticeships),
                 LatestMessage = message,
-                PendingChanges = PendingChanges(data.Commitment?.Apprenticeships)
+                PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed
             };
+        }
+
+        public async Task<CommitmentListItemViewModel> GetCommitment(long providerId, long commitmentId)
+        {
+            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
+            return MapFrom(data.Commitment);
+        }
+
+        private IList<ApprenticeshipListItemViewModel> MapFrom(List<Apprenticeship> apprenticeships)
+        {
+            var apprenticeViewModels = apprenticeships.Select(x => new ApprenticeshipListItemViewModel
+            {
+                ApprenticeshipId = x.Id,
+                ApprenticeshipName = x.ApprenticeshipName,
+                ULN = x.ULN,
+                TrainingName = x.TrainingName,
+                StartDate = x.StartDate,
+                EndDate = x.EndDate,
+                Cost = x.Cost
+            }).ToList();
+
+            return apprenticeViewModels;
         }
 
         public async Task<ExtendedApprenticeshipViewModel> GetApprenticeship(long providerId, long commitmentId, long apprenticeshipId)
@@ -178,11 +201,60 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
+        private async Task<string> GetLatestMessage(long providerId, long commitmentId)
+        {
+            var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { ProviderId = providerId });
+
+            var taskForCommitment = allTasks?.Tasks
+                .Select(x => new { Task = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body), CreateDate = x.CreatedOn })
+                .Where(x => x.Task != null && x.Task.CommitmentId == commitmentId)
+                .OrderByDescending(x => x.CreateDate)
+                .FirstOrDefault();
+
+            var message = taskForCommitment?.Task?.Message ?? string.Empty;
+
+            return message;
+        }
+
         private static bool PendingChanges(List<Apprenticeship> apprenticeships)
         {
             if (apprenticeships == null || !apprenticeships.Any()) return true;
             return apprenticeships?.Any(m => m.AgreementStatus == AgreementStatus.NotAgreed
                                    || m.AgreementStatus == AgreementStatus.ProviderAgreed) ?? false;
+        }
+
+        // TODO: Move mappers into own class
+        private List<CommitmentListItemViewModel> MapFrom(List<CommitmentListItem> commitments)
+        {
+            var commitmentsList = commitments.Select(x => MapFrom(x)).ToList();
+
+            return commitmentsList;
+        }
+
+        private CommitmentListItemViewModel MapFrom(CommitmentListItem listItem)
+        {
+            return new CommitmentListItemViewModel
+            {
+                CommitmentId = listItem.Id,
+                Reference = listItem.Reference,
+                LegalEntityName = listItem.LegalEntityName,
+                ProviderName = listItem.ProviderName,
+                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.ApprenticeshipCount, listItem.AgreementStatus),
+                ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly
+            };
+        }
+
+        private CommitmentListItemViewModel MapFrom(Commitment listItem)
+        {
+            return new CommitmentListItemViewModel
+            {
+                CommitmentId = listItem.Id,
+                Reference = listItem.Reference,
+                LegalEntityName = listItem.LegalEntityName,
+                ProviderName = listItem.ProviderName,
+                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.AgreementStatus),
+                ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly
+            };
         }
 
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)

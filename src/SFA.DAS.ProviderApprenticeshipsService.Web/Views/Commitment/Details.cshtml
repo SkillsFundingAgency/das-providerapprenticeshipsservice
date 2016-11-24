@@ -1,29 +1,20 @@
-﻿@using SFA.DAS.Commitments.Api.Types
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
-@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CommitmentViewModel
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
+@model CommitmentDetailsViewModel
+
 
 <div class="grid-row">
     <div class="column-full">
-        <a href="@Url.Action("Index", new { providerId = Model.Commitment.ProviderId })" aria-label="Back" class="link-back">Back</a>
-
+        <a href="@Url.Action("Index", new { providerId = Model.ProviderId })" aria-label="Back" class="link-back">Back</a>
         <h1 class="heading-xlarge">Add an apprentice</h1>
     </div>
-
 </div>
 
 <div class="grid-row">
     <div class="column-one-half employer-details">
-        <p><span class="strong">Employer: </span>@Model.Commitment.LegalEntityName</p>
-        <p><span class="strong">Cohort reference: </span>@Model.Commitment.Reference</p>
-        <p><span class="strong">Status: </span>
-            @if (Model.Commitment.EditStatus == EditStatus.ProviderOnly)
-            {
-                @Html.Raw("Ready for review")
-            }
-            else
-            {
-                @Model.Commitment.CommitmentStatus
-            }
+        <p><span class="strong">Employer: </span>@Model.LegalEntityName</p>
+        <p><span class="strong">Cohort reference: </span>@Model.Reference</p>
+        <p><span class="strong">Status: </span>@Model.Status.GetDescription()</p>
     </div>
 
     <div class="column-one-half employer-details">
@@ -33,7 +24,7 @@
 </div>
 
 @functions {
-    public string GetApprenticesCountText(List<Apprenticeship> apprenticeships)
+    public string GetApprenticesCountText(IList<ApprenticeshipListItemViewModel> apprenticeships)
     {
         if (apprenticeships.Count == 1)
             return "1 Apprentice";
@@ -59,10 +50,12 @@
 }
 <div class="grid-row">
     <div class="column-full">
-        <p class="heading-medium">@GetApprenticesCountText(Model.Commitment.Apprenticeships)</p>
+        <p class="heading-medium">@GetApprenticesCountText(Model.Apprenticeships)</p>
         <hr/>
-            @{ var finishEditingText = Model.PendingChanges ? "Save and continue" : "Continue to approval"; }
-            <a href="@Url.Action("Create", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id })" class="button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
+
+            @{ var finishEditingText = Model.PendingChanges ? "Finished editing" : "Continue to approval"; }
+            <a href="@Url.Action("Create", new { providerId = Model.ProviderId, commitmentId = Model.CommitmentId })" class="button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
+
             <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
         <hr />
     </div>
@@ -70,7 +63,7 @@
 
 <div class="grid-row">
     <div class="column-full">
-        @if (Model.Commitment.Apprenticeships.Count == 0)
+        @if (Model.Apprenticeships.Count == 0)
         {
             <div class="panel panel-filled">
               
@@ -91,7 +84,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.Commitment.Apprenticeships)
+                    @foreach (var item in Model.Apprenticeships)
                     {
                         <tr>
                             <td>@item.ApprenticeshipName &nbsp;</td>
@@ -106,16 +99,11 @@
                                 }
                             </td>
                             <td>@FormatCost(item.Cost) &nbsp;</td>
-                            <td><a href="@Url.Action("Edit", new { commitmentId = Model.Commitment.Id, id = item.Id })" title="Edit @item.ApprenticeshipName" aria-label="Edit @item.ApprenticeshipName">Edit</a></td>
+                            <td><a href="@Url.Action("Edit", new { commitmentId = Model.CommitmentId, id = item.ApprenticeshipId })" title="Edit @item.ApprenticeshipName" aria-label="Edit @item.ApprenticeshipName">Edit</a></td>
                         </tr>
                     }
                 </tbody>
             </table>
-
-            @*<p>
-                <a href="@Url.Action("Create", new { providerId = Model.Commitment.ProviderId, commitmentId = Model.Commitment.Id })"
-                   class="button" name="commitment" aria-label="Add an apprentice">Add an apprentice</a>
-            </p>*@
         }
     </div>
 </div>

@@ -1,17 +1,10 @@
-﻿using System.Collections.Generic;
-using FluentValidation.Attributes;
+﻿using FluentValidation.Attributes;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
-
-    public class ExtendedApprenticeshipViewModel
-    {
-        public ApprenticeshipViewModel Apprenticeship { get; set; }
-        public List<Domain.ITrainingProgramme> ApprenticeshipProgrammes { get; set; }
-    }
-
     [Validator(typeof(ApprenticeshipViewModelValidator))]
     public class ApprenticeshipViewModel
     {
@@ -20,16 +13,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public long ProviderId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
-
         public int? DateOfBirthDay { get; set; }
-
         public int? DateOfBirthMonth { get; set; }
-
         public int? DateOfBirthYear { get; set; }
-
         public string NINumber { get; set; }
-
         public string ULN { get; set; }
 
         public TrainingType TrainingType { get; set; }
@@ -42,9 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public int? EndYear { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public AgreementStatus AgreementStatus { get; set; }
-
         public string ProviderRef { get; set; }
-
         public string EmployerRef { get; set; }
     }
 }
