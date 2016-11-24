@@ -296,6 +296,7 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CommitmentController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
@@ -469,6 +470,9 @@
     <Content Include="Views\Home\Privacy.cshtml" />
     <Content Include="Views\Home\Terms.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Error\_Error404.cshtml" />
+    <Content Include="Views\Error\_Error400.cshtml" />
+    <Content Include="Views\Error\_Error500.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

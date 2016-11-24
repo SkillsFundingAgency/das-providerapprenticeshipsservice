@@ -29,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception ex = Server.GetLastError().GetBaseException();
-
+            
             Logger.Error(ex, "Unhanded Exception");
         }
     }

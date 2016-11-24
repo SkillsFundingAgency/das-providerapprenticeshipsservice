@@ -7,10 +7,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
-    using System.Linq;
-
-    using SFA.DAS.Commitments.Api.Types;
-
     [Authorize]
     [RoutePrefix("{providerId}/apprentices")]
     public class CommitmentController : Controller
