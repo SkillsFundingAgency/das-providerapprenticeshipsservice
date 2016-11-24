@@ -151,8 +151,18 @@ span.helpText {
 
 }
 
+//adding focus to span element using jquery in dropdown.js file 
+.form-group{
+    .select2-container--default:focus {
+        outline:3px solid #ffbf47; 
+        border:0;     
+    }
 
-//mobile iphone 6 / 6+ media query
+}
+
+
+
+//all mobile media query breakpoints
 @media only screen 
     and (max-device-width: 640px), 
     only screen and (max-device-width: 667px), 

@@ -380,11 +380,11 @@
     <Content Include="dist\css\images\govuk-crest.png" />
     <Content Include="dist\css\images\open-government-licence.png" />
     <Content Include="dist\css\images\open-government-licence_2x.png" />
-    <Content Include="dist\css\dropdown-select.css" />
+    <Content Include="dist\css\screen-ie6.css" />
     <Content Include="dist\css\screen-ie7.css" />
     <Content Include="dist\css\screen-ie8.css" />
     <Content Include="dist\css\screen.css" />
-    <Content Include="dist\css\select2.min.css" />
+    <Content Include="dist\css\dropdown-select.min.css" />
     <Content Include="dist\images\apple-touch-icon-120x120.png" />
     <Content Include="dist\images\apple-touch-icon-152x152.png" />
     <Content Include="dist\images\apple-touch-icon-60x60.png" />
