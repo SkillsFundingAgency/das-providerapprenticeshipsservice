@@ -10,7 +10,9 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <a href="#" aria-label="Back" class="link-back">Back</a>
+
+        <a href="@Url.Action("Details",
+                new { providerId = Model.ProviderId, commitmentId = Model.CommitmentId })" aria-label="Back" class="link-back">Back</a>
 
         <form method="POST" action="@Url.Action("Edit")">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
@@ -23,7 +25,7 @@
 
                 </p>
             </div>
-            <hr />
+            <hr/>
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
                 @Html.LabelFor(m => m.FirstName, "First name", new { @class = "form-label form-label-bold" })
                 @Html.ValidationMessageFor(m => m.FirstName, null, new { id = "error-message-" + Html.IdFor(m => m.FirstName) })
@@ -131,13 +133,16 @@
             </div>
 
             <div class="form-group">
-                <hr />
+                <hr/>
                 <label class="form-label-bold" for="TrainingId">Apprenticeship training course</label>
                 <select name="TrainingCode" id="TrainingCode" class="form-control" aria-label="Training standard">
                     <option value=""></option>
                     @foreach (var programme in ViewBag.ApprenticeshipProgrammes)
                     {
-                        <option value="@programme.Id" @if (programme.Id.ToString() == Model.TrainingCode) { @Html.Raw("selected")    }> @programme.Title</option>
+                        <option value="@programme.Id" @if (programme.Id.ToString() == Model.TrainingCode)
+                                                      {
+                                                          @Html.Raw("selected")
+                                                      }> @programme.Title</option>
                     }
                 </select>
 
@@ -168,31 +173,31 @@
                 </fieldset>
             </div>
 
-                <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.EndMonth, "error") @Html.AddClassIfPropertyInError(x => x.EndYear, "error")">
-                    <fieldset>
-                        <legend>
-                            <span class="form-label-bold">Projected finish date</span>
-                            <span class="helpText">For example, 02 2019</span>
-                        </legend>
-                        <div class="form-date">
-                            @Html.ValidationMessageFor(m => m.EndMonth, "Please enter a valid month", new { id = "error-message-" + Html.IdFor(m => m.EndMonth), @class = "error-message" })
-                            @Html.ValidationMessageFor(m => m.EndYear, "Please enter a valid year", new { id = "error-message-" + Html.IdFor(m => m.EndYear), @class = "error-message" })
-                            <div class="form-group form-group-month">
-                                <label for="@Html.IdFor(m => m.EndMonth)">
-                                    <span class="form-label-bold">Month</span>
-                                </label>
-                                @Html.TextBoxFor(m => m.EndMonth, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.EndMonth) })
-                            </div>
-                            <div class="form-group form-group-month">
-                                <label for="@Html.IdFor(m => m.EndYear)">
-                                    <span class="form-label-bold">Year</span>
-                                </label>
-                                @Html.TextBoxFor(m => m.EndYear, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.EndYear) })
-                            </div>
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.EndMonth, "error") @Html.AddClassIfPropertyInError(x => x.EndYear, "error")">
+                <fieldset>
+                    <legend>
+                        <span class="form-label-bold">Projected finish date</span>
+                        <span class="helpText">For example, 02 2019</span>
+                    </legend>
+                    <div class="form-date">
+                        @Html.ValidationMessageFor(m => m.EndMonth, "Please enter a valid month", new { id = "error-message-" + Html.IdFor(m => m.EndMonth), @class = "error-message" })
+                        @Html.ValidationMessageFor(m => m.EndYear, "Please enter a valid year", new { id = "error-message-" + Html.IdFor(m => m.EndYear), @class = "error-message" })
+                        <div class="form-group form-group-month">
+                            <label for="@Html.IdFor(m => m.EndMonth)">
+                                <span class="form-label-bold">Month</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.EndMonth, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.EndMonth) })
                         </div>
-                    </fieldset>
+                        <div class="form-group form-group-month">
+                            <label for="@Html.IdFor(m => m.EndYear)">
+                                <span class="form-label-bold">Year</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.EndYear, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.EndYear) })
+                        </div>
+                    </div>
+                </fieldset>
 
-                </div>
+            </div>
 
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.Cost, "error")">
                 <hr/>
@@ -210,13 +215,13 @@
                 @Html.TextBoxFor(m => m.ProviderRef, new { @class = "form-control form-control-3-4" })
             </div>
 
-                @Html.HiddenFor(m => m.CommitmentId)
-                @Html.HiddenFor(m => m.ProviderId)
-                @Html.HiddenFor(m => m.AgreementStatus)
+            @Html.HiddenFor(m => m.CommitmentId)
+            @Html.HiddenFor(m => m.ProviderId)
+            @Html.HiddenFor(m => m.AgreementStatus)
             @Html.HiddenFor(m => m.EmployerRef)
 
-                <button type="submit" class="button">Save</button>
-                <a class="links" href="@Url.Action("Details", new { commitmentId = Model.CommitmentId })" aria-label="Cancel">Cancel</a>
-</form>
+            <button type="submit" class="button">Save</button>
+            <a class="links" href="@Url.Action("Details", new { commitmentId = Model.CommitmentId })" aria-label="Cancel">Cancel</a>
+        </form>
     </div>
 </div>
