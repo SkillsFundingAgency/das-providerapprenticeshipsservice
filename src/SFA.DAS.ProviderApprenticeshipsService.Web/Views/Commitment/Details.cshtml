@@ -44,8 +44,8 @@
     {
         if (!cost.HasValue)
             return string.Empty;
-
-        return string.Format("{0:#}", cost.Value);
+        
+        return $"{cost.Value:£0,0}";
     }
 }
 <div class="grid-row">
@@ -94,7 +94,7 @@
                                 @if (item.StartDate != null && item.EndDate != null)
                                 {
                                     <span>
-                                        GetDateValue(item.StartDate) to @GetDateValue(item.EndDate) &nbsp;
+                                        @GetDateValue(item.StartDate) to @GetDateValue(item.EndDate) &nbsp;
                                     </span>
                                 }
                             </td>
