@@ -9,13 +9,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests
     public class WhenValidatingApprenticeshipViewModel
     {
         private ApprenticeshipViewModelValidator _validator = new ApprenticeshipViewModelValidator();
+        private ApprenticeshipViewModel _validModel;
 
-        [Test]
+        [SetUp]
+        public void Setup()
+        {
+            _validModel = new ApprenticeshipViewModel { ULN = "1001234567" };
+        }
+
+    [Test]
         public void ULNMustBeNumericAnd10DigitsInLength()
         {
             var viewModel = new ApprenticeshipViewModel { ULN = "1001234567" };
 
-            var result = _validator.Validate(viewModel);
+            var result = _validator.Validate(_validModel);
 
             result.IsValid.Should().BeTrue();
         }
@@ -45,9 +52,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests
         [TestCase("1")]
         public void CostIsWholeNumberGreaterThanZeroIsValid(string cost)
         {
-            var viewModel = new ApprenticeshipViewModel { Cost = cost };
+            _validModel.Cost = cost;
 
-            var result = _validator.Validate(viewModel);
+            var result = _validator.Validate(_validModel);
 
             result.IsValid.Should().BeTrue();
         }
@@ -59,9 +66,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests
         [TestCase("123.000")]
         public void CostNotNumericOrIsNotAWholeNumber(string cost)
         {
-            var viewModel = new ApprenticeshipViewModel { Cost = cost };
+            _validModel.Cost = cost;
 
-            var result = _validator.Validate(viewModel);
+            var result = _validator.Validate(_validModel);
 
             result.IsValid.Should().BeFalse();
         }
@@ -74,9 +81,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests
         [TestCase("-0.001")]
         public void CostThatIsZeroOrNegativeNumberIsInvalid(string cost)
         {
-            var viewModel = new ApprenticeshipViewModel { Cost = cost };
+            _validModel.Cost = cost;
 
-            var result = _validator.Validate(viewModel);
+            var result = _validator.Validate(_validModel);
 
             result.IsValid.Should().BeFalse();
         }
