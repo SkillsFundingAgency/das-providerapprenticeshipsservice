@@ -53,8 +53,8 @@
     {
         if (!cost.HasValue)
             return string.Empty;
-
-        return string.Format("{0:#}", cost.Value);
+        
+        return $"{cost.Value:£#}";
     }
 }
 <div class="grid-row">
