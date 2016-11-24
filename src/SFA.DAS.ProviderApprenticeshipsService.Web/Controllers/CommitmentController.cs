@@ -132,14 +132,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (viewModel.SaveOrSend == "approve")
             {
-                try
-                {
-                    await _commitmentOrchestrator.ApproveCommitment(viewModel.ProviderId, viewModel.CommitmentId, viewModel.SaveOrSend);
-                }
-                catch (InvalidRequestException)
-                {
-                    // TODO: LWA - What do we do??
-                }
+                await _commitmentOrchestrator.ApproveCommitment(viewModel.ProviderId, viewModel.CommitmentId, viewModel.SaveOrSend);
             }
 
             return RedirectToAction("Index", new {providerId = viewModel.ProviderId});
