@@ -153,7 +153,7 @@ span.helpText {
 
 //adding focus to span element using jquery in dropdown.js file 
 .form-group{
-    .select2-container--default:focus {
+    .select2-selection--single:focus {
         outline:3px solid #ffbf47; 
         border:0;     
     }

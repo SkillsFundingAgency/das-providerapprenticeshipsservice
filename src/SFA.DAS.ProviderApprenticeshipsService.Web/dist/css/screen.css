@@ -2508,7 +2508,7 @@ span.helpText {
   color: #000;
 }
 
-.form-group .select2-container--default:focus {
+.form-group .select2-selection--single:focus {
   outline: 3px solid #ffbf47;
   border: 0;
 }
