@@ -14,66 +14,55 @@
 
     public class WhenGettingCommitmentViewModel
     {
-        [Test(Description = "Should return false on PendingChanges if no ProviderAgreed or no NotAgreed in at least one apprenticeship ")]
+        [Test(Description = "Should return false on PendingChanges if overall agreement status is EmployerAgreed")]
         public void ShouldCommitmentWithEmployerAndBothAgreed()
         {
-            var apprenticeships = new List<Apprenticeship>
+            var commitment = new Commitment
             {
-                new Apprenticeship { AgreementStatus = AgreementStatus.EmployerAgreed },
-                new Apprenticeship { AgreementStatus = AgreementStatus.BothAgreed }
+                AgreementStatus = AgreementStatus.EmployerAgreed,
+                Apprenticeships = new List<Apprenticeship>
+                {
+                    new Apprenticeship (),
+                    new Apprenticeship ()
+                }
             };
 
-            var mockMediator = GetMediator(apprenticeships);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object);
+            var mockMediator = GetMediator(commitment);
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>());
 
-            var result = _sut.Get(1L, 2L).Result;
+            var result = _sut.GetCommitmentDetails(1L, 2L).Result;
 
             result.PendingChanges.ShouldBeEquivalentTo(false);
         }
 
-        [Test(Description = "Should return true on PendingChanges if at least one apprenticeship is ProviderAgreed ")]
+        [Test(Description = "Should return true on PendingChanges overall agreement status isn't EmployerAgreed")]
         public void CommitmentWithOneProviderAgreed()
         {
-            var apprenticeships = new List<Apprenticeship>
+            var commitment = new Commitment
             {
-                new Apprenticeship { AgreementStatus = AgreementStatus.BothAgreed },
-                new Apprenticeship { AgreementStatus = AgreementStatus.EmployerAgreed },
-                new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed }
+                AgreementStatus = AgreementStatus.BothAgreed,
+                Apprenticeships = new List<Apprenticeship>
+                {
+                    new Apprenticeship (),
+                    new Apprenticeship ()
+                }
             };
 
-            var mockMediator = GetMediator(apprenticeships);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object);
+            var mockMediator = GetMediator(commitment);
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>());
 
-            var result = _sut.Get(1L, 2L).Result;
-
-            result.PendingChanges.ShouldBeEquivalentTo(true);
-        }
-
-        [Test(Description = "Should return true on PendingChanges if at least one apprenticeship is NotAgreed ")]
-        public void CommitmentWithOneNotAgreed()
-        {
-            var apprenticeships = new List<Apprenticeship>
-            {
-                new Apprenticeship { AgreementStatus = AgreementStatus.BothAgreed },
-                new Apprenticeship { AgreementStatus = AgreementStatus.EmployerAgreed },
-                new Apprenticeship { AgreementStatus = AgreementStatus.NotAgreed }
-            };
-
-            var mockMediator = GetMediator(apprenticeships);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object);
-
-            var result = _sut.Get(1L, 2L).Result;
+            var result = _sut.GetCommitmentDetails(1L, 2L).Result;
 
             result.PendingChanges.ShouldBeEquivalentTo(true);
         }
 
         // --- Helpers ---
 
-        private static Mock<IMediator> GetMediator(List<Apprenticeship> apprenticeships)
+        private static Mock<IMediator> GetMediator(Commitment commitment)
         {
             var respons = new GetCommitmentQueryResponse
             {
-                Commitment = new Commitment { Apprenticeships = apprenticeships }
+                Commitment = commitment
             };
 
             var mockMediator = new Mock<IMediator>();
