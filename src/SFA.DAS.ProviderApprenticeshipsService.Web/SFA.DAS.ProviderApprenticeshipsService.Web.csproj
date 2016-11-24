@@ -380,7 +380,7 @@
     <Content Include="dist\css\images\govuk-crest.png" />
     <Content Include="dist\css\images\open-government-licence.png" />
     <Content Include="dist\css\images\open-government-licence_2x.png" />
-    <Content Include="dist\css\screen-ie6.css" />
+    <Content Include="dist\css\dropdown-select.css" />
     <Content Include="dist\css\screen-ie7.css" />
     <Content Include="dist\css\screen-ie8.css" />
     <Content Include="dist\css\screen.css" />

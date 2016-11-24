@@ -24,7 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             bundles.Add(new ScriptBundle("~/bundles/jqueryvalcustom").Include(
                       "~/Scripts/jquery.validate.js", "~/Scripts/jquery.validate.unobtrusive.custom.js"));
 
-            bundles.Add(new StyleBundle("~/bundles/dropdown-select").Include("~/dist/css/dropdown-select.css"));
+            
             bundles.Add(new StyleBundle("~/bundles/screenie6").Include("~/dist/css/screen-ie6.css"));
             bundles.Add(new StyleBundle("~/bundles/screenie7").Include("~/dist/css/screen-ie7.css"));
             bundles.Add(new StyleBundle("~/bundles/screenie8").Include("~/dist/css/screen-ie8.css"));
