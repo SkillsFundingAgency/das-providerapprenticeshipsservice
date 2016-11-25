@@ -1,6 +1,11 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CommitmentListViewModel
 
+@{
+    ViewBag.Title = "Requests in progress";
+    ViewBag.PageId = "requests-in-progress";
+}
+
 <div class="grid-row">
     <div class="column-full">
         <a href="@Url.Action("Index","Home")" aria-label="Back" class="link-back">Back</a>
