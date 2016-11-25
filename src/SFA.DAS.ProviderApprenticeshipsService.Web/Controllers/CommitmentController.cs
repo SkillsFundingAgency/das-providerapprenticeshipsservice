@@ -76,7 +76,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{CommitmentId}/AddApprentice")]
         public async Task<ActionResult> Create(long providerId, long commitmentId)
         {
-            var model = await _commitmentOrchestrator.GetApprenticeship(providerId, commitmentId);
+            var model = await _commitmentOrchestrator.GetCreateApprenticeshipViewModel(providerId, commitmentId);
             ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
 
             return View(model.Apprenticeship);
@@ -192,7 +192,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         private async Task<ActionResult> RedisplayApprenticeshipView(ApprenticeshipViewModel apprenticeship)
         {
-            var model = await _commitmentOrchestrator.GetApprenticeship(apprenticeship.ProviderId, apprenticeship.CommitmentId);
+            var model = await _commitmentOrchestrator.GetCreateApprenticeshipViewModel(apprenticeship.ProviderId, apprenticeship.CommitmentId);
             model.Apprenticeship = apprenticeship;
             ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
 
