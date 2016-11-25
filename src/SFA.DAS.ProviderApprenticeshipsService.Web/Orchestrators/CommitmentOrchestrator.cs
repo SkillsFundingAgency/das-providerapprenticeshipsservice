@@ -366,9 +366,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
         {
-            var id = int.Parse(trainingCode);
-
-            return (await GetTrainingProgrammes()).Single(x => x.Id == id);
+            return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
         }
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()

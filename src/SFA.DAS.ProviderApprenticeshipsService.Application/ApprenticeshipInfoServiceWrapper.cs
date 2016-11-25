@@ -71,7 +71,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
                 CreatedDate = DateTime.UtcNow,
                 Frameworks = frameworks.Select(x => new Framework
                 {
-                    Id = int.Parse(x.Id),
+                    Id = x.Id,
                     Title = GetTitle(x.FrameworkName.Trim() == x.PathwayName.Trim() ? x.FrameworkName : x.Title, x.Level),
                     FrameworkCode = x.FrameworkCode,
                     FrameworkName = x.FrameworkName,
@@ -111,7 +111,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
                 CreationDate = DateTime.UtcNow,
                 Standards = standards.Select(x => new Domain.Standard
                 {
-                    Id = int.Parse(x.Id),
+                    Id = x.Id,
                     Level = x.Level,
                     Title = GetTitle(x.Title, x.Level),
                     Duration = new Duration
