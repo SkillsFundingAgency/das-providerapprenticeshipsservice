@@ -1,6 +1,11 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipViewModel
 
+@{
+    ViewBag.Title = "Add an apprentice";
+    ViewBag.PageId = "add-apprentice";
+}
+
 @section pageSpecificJS {
     @Scripts.Render("~/bundles/apprentice");
 }

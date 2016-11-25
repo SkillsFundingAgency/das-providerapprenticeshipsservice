@@ -1,5 +1,4 @@
-﻿@using System.Web
-@using Microsoft.ApplicationInsights.Extensibility
+﻿@using Microsoft.ApplicationInsights.Extensibility
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -56,7 +55,14 @@
     </script>
 
 </head>
-<body>
+<body id="@ViewBag.PageId">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T3CZC2"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
     <div id="skiplink-container">
@@ -66,20 +72,12 @@
     </div>
 
     <div id="global-cookie-message">
-        <p>GOV.UK uses cookies to make the site simpler. <a href="https://www.gov.uk/help/cookies">Find out more about cookies</a></p>
+        <p>GOV.UK uses cookies to make the site simpler. <a href="https://www.gov.uk/help/cookies">Find out more about cookies</a>
+        </p>
     </div>
 
     <header role="banner" id="global-header" class="">
-        @*<div class="header-wrapper">
-            <div class="header-global">
-                <div class="header-logo">
-                    <a href="https://www.gov.uk/" title="Go to the GOV.UK homepage" id="logo" class="content">
-                        <img src="/assets/images/gov.uk_logotype_crown_invert_trans.png" width="35" height="31" alt=""> GOV.UK
-                    </a>
-                </div>
-            </div>
-        </div>*@
-
+    
         <div class="header-wrapper">
             <div class="header-global">
 
@@ -104,7 +102,7 @@
             </div>
         </div>
         <div class="grid-row">
-            <div class="column-full">   
+            <div class="column-full">
                 @if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
                     <div class="user-menu logged-in">
@@ -119,12 +117,12 @@
                     <div class="user-menu logged-in">
                         <ul id="service-info-list" role="navigation">
                             <li>
-                                 <a href="@Url.RouteUrl("signin")" aria-label="Sign in">Sign in</a>
+                                <a href="@Url.RouteUrl("signin")" aria-label="Sign in">Sign in</a>
                             </li>
                         </ul>
                     </div>
-                        }
-                    </div>
+                }
+            </div>
         </div>
 
         <div id="content">
@@ -157,7 +155,7 @@
 
                     </div>
                 </div>
-         
+
             </div>
         </div>
     </footer>
@@ -166,5 +164,5 @@
     @Scripts.Render("~/bundles/sfajs")
 
     @RenderSection("pageSpecificJS", required: false)
-</body>
+    </body>
 </html>
