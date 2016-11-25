@@ -53,7 +53,7 @@
         <p class="heading-medium">@GetApprenticesCountText(Model.Apprenticeships)</p>
         <hr/>
 
-            @{ var finishEditingText = Model.PendingChanges ? "Finished editing" : "Continue to approval"; }
+            @{ var finishEditingText = Model.PendingChanges ? "Save and continue" : "Continue to approval"; }
             <a href="@Url.Action("Create", new { providerId = Model.ProviderId, commitmentId = Model.CommitmentId })" class="button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
 
             <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
