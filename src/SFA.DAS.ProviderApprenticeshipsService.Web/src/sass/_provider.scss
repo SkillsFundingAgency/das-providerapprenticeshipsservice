@@ -14,6 +14,10 @@
 
 } // home-page 
 
+.form-control{
+    border:2px solid $black;
+}
+
 
 .validation-summary-valid,
 .field-validation-valid{
@@ -135,14 +139,14 @@ span.helpText {
 .select2-container--default{ 
 
     .select2-selection--single{
-        border:2px solid #6f777b;
+        border:2px solid $black;
         border-radius:0;
         height: 37px;
     }
     .select2-dropdown{
-          border:2px solid #6f777b;
+          border:2px solid $black;
           border-radius: 0;
-          border-top:1px solid #6f777b;
+          border-top:1px solid $black;
     }
     .select2-results__option--highlighted[aria-selected] {
           background-color: #ddd;
@@ -155,10 +159,15 @@ span.helpText {
 .form-group{
     .select2-selection--single:focus {
         outline:3px solid #ffbf47; 
-        border:0;     
+        
     }
 
 }
+.select2-container--default .select2-selection--single .select2-selection__rendered:focus{
+     outline:3px solid #ffbf47; 
+}
+
+
 
 // select box arrow/border color/spacing
 .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -169,10 +178,11 @@ span.helpText {
     }
 
 .select2-container--default .select2-selection--single{
-    border: 2px solid #0b0c0c;
+    border: 2px solid $black;
 }
-.select2-container--default .select2-selection--single .select2-selection__arrow b{
-    border-color: #0b0c0c transparent;
+.select2-container--default .select2-selection--single .select2-selection__arrow b,
+.select2-container--default .select2-selection--single .select2-selection__arrow{
+    border-color: $black transparent;
 }
 
 
