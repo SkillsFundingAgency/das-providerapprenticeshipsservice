@@ -17,17 +17,16 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTasks;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.Tasks.Api.Types.Templates;
+using System.Globalization;
+using NLog;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
-    using System.Globalization;
-
-    using WebGrease.Css.Extensions;
-
     public class CommitmentOrchestrator
     {
         private readonly IMediator _mediator;
         private readonly ICommitmentStatusCalculator _statusCalculator;
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator)
         {
@@ -42,6 +41,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<CommitmentListViewModel> GetAll(long providerId)
         {
+            Logger.Info($"Getting all commitments for provider:{providerId}");
+
             var data = await _mediator.SendAsync(new GetCommitmentsQueryRequest
             {
                 ProviderId = providerId
@@ -56,6 +57,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<CommitmentDetailsViewModel> GetCommitmentDetails(long providerId, long commitmentId)
         {
+            Logger.Info($"Getting commitment details:{commitmentId} for provider:{providerId}");
+
             var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
             {
                 ProviderId = providerId,
@@ -79,6 +82,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<CommitmentListItemViewModel> GetCommitment(long providerId, long commitmentId)
         {
+            Logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}");
+
             var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
             {
                 ProviderId = providerId,
@@ -88,24 +93,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return MapFrom(data.Commitment);
         }
 
-        private IList<ApprenticeshipListItemViewModel> MapFrom(List<Apprenticeship> apprenticeships)
-        {
-            var apprenticeViewModels = apprenticeships.Select(x => new ApprenticeshipListItemViewModel
-            {
-                ApprenticeshipId = x.Id,
-                ApprenticeshipName = x.ApprenticeshipName,
-                ULN = x.ULN,
-                TrainingName = x.TrainingName,
-                StartDate = x.StartDate,
-                EndDate = x.EndDate,
-                Cost = x.Cost
-            }).ToList();
-
-            return apprenticeViewModels;
-        }
-
         public async Task<ExtendedApprenticeshipViewModel> GetApprenticeship(long providerId, long commitmentId, long apprenticeshipId)
         {
+            Logger.Info($"Getting apprenticeship:{apprenticeshipId} for provider:{providerId}");
+
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
             {
                 ProviderId = providerId,
@@ -126,8 +117,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<ExtendedApprenticeshipViewModel> GetApprenticeship(long providerId, long commitmentId)
+        public async Task<ExtendedApprenticeshipViewModel> GetCreateApprenticeshipViewModel(long providerId, long commitmentId)
         {
+            Logger.Info($"Getting info for creating apprenticeship for provider:{providerId} commitment:{commitmentId}");
+
             var standards = await _mediator.SendAsync(new GetStandardsQueryRequest());
 
             var apprenticeship = new ApprenticeshipViewModel
@@ -143,17 +136,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task UpdateApprenticeship(ApprenticeshipViewModel apprenticeship)
-        {
-            await _mediator.SendAsync(new UpdateApprenticeshipCommand
-            {
-                ProviderId = apprenticeship.ProviderId,
-                Apprenticeship = await MapFrom(apprenticeship)
-            });
-        }
-
         public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
         {
+            Logger.Info($"Creating apprenticeship for provider:{apprenticeship.ProviderId} commitment:{apprenticeship.CommitmentId}");
+
             await _mediator.SendAsync(new CreateApprenticeshipCommand
             {
                 ProviderId = apprenticeship.ProviderId,
@@ -161,8 +147,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
         }
 
+        public async Task UpdateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        {
+            Logger.Info($"Updating apprenticeship for provider:{apprenticeship.ProviderId} commitment:{apprenticeship.CommitmentId}");
+
+            await _mediator.SendAsync(new UpdateApprenticeshipCommand
+            {
+                ProviderId = apprenticeship.ProviderId,
+                Apprenticeship = await MapFrom(apprenticeship)
+            });
+        }
+
+
         public async Task SubmitCommitment(SubmitCommitmentViewModel model)
         {
+            Logger.Info($"Submitting ({model.SaveOrSend}) Commitment for provider:{model.ProviderId} commitment:{model.CommitmentId}");
+
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {
                 ProviderId = model.ProviderId,
@@ -174,6 +174,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task ApproveCommitment(long providerId, long commitmentId, string saveOrSend)
         {
+            Logger.Info($"Approving ({saveOrSend}) Commitment for provider:{providerId} commitment:{commitmentId}");
+
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {
                 ProviderId = providerId,
@@ -185,6 +187,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<FinishEditingViewModel> GetFinishEditing(long providerId, long commitmentId)
         {
+            Logger.Info($"Get info for finish editing options for provider:{providerId} commitment:{commitmentId}");
+
             var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
             {
                 ProviderId = providerId,
@@ -199,6 +203,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderId = providerId,
                 ApproveAndSend = approveAndSend
             };
+        }
+
+        private IList<ApprenticeshipListItemViewModel> MapFrom(List<Apprenticeship> apprenticeships)
+        {
+            var apprenticeViewModels = apprenticeships.Select(x => new ApprenticeshipListItemViewModel
+            {
+                ApprenticeshipId = x.Id,
+                ApprenticeshipName = x.ApprenticeshipName,
+                ULN = x.ULN,
+                TrainingName = x.TrainingName,
+                StartDate = x.StartDate,
+                EndDate = x.EndDate,
+                Cost = x.Cost
+            }).ToList();
+
+            return apprenticeViewModels;
         }
 
         private async Task<string> GetLatestMessage(long providerId, long commitmentId)
@@ -346,9 +366,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
         {
-            var id = int.Parse(trainingCode);
-
-            return (await GetTrainingProgrammes()).Single(x => x.Id == id);
+            return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
         }
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()

@@ -1,6 +1,11 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipViewModel
 
+@{
+    ViewBag.Title = "Add an apprentice";
+    ViewBag.PageId = "add-apprentice";
+}
+
 @section pageSpecificJS {
     @Scripts.Render("~/bundles/apprentice");
 }
@@ -87,7 +92,7 @@
                         <option value="">Please select</option>
                         @foreach (var programme in ViewBag.ApprenticeshipProgrammes)
                         {
-                            <option value="@programme.Id">
+                            <option value="@programme.Id" @if (programme.Id.ToString() == Model.TrainingCode) { @Html.Raw("selected")  }>
                                 @programme.Title
                             </option>
                         }
