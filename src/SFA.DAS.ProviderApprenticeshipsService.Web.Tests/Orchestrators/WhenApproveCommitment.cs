@@ -18,30 +18,24 @@
     [TestFixture]
     public class WhenApproveCommitment
     {
-        [TestCase(SaveStatus.Save, AgreementStatus.NotAgreed, false)]
-        public async Task  Bla(SaveStatus input, AgreementStatus test1, bool test2)
+        [TestCase(SaveStatus.Save, AgreementStatus.NotAgreed, true)]
+        [TestCase(SaveStatus.ApproveAndSend, AgreementStatus.ProviderAgreed, true)]
+        [TestCase(SaveStatus.AmendAndSend, AgreementStatus.ProviderAgreed, true)]
+        [TestCase(SaveStatus.Approve, AgreementStatus.ProviderAgreed, false)]
+        public async Task  CheckStatusUpdate(SaveStatus input, AgreementStatus expectedAgreementStatus, bool expectedCreateTaskBool)
         {
-            var s = new SubmitCommitmentCommand
-                        {
-                ProviderId = 1L,
-                CommitmentId = 2L,
-                Message = string.Empty,
-                AgreementStatus = AgreementStatus.BothAgreed,
-                CreateTask = false
-            };
             var mockMediator = new Mock<IMediator>();
 
             var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>());
-            await _sut.ApproveCommitment(1L, 2L, SaveStatus.Save);
+            await _sut.ApproveCommitment(1L, 2L, input);
+
             mockMediator.Verify(m => m
                 .SendAsync(It.Is<SubmitCommitmentCommand>(
                     p => p.ProviderId == 1L &&
                     p.CommitmentId == 2L &&
                     p.Message == string.Empty &&
-                    p.AgreementStatus == AgreementStatus.NotAgreed &&
-                    p.CreateTask == false )));
-            
-            //ApproveCommitment
+                    p.AgreementStatus == expectedAgreementStatus &&
+                    p.CreateTask == expectedCreateTaskBool )));
         }
     }
 }

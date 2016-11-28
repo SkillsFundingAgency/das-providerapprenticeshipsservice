@@ -66,7 +66,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                         Body = JsonConvert.SerializeObject(taskTemplate)
                     };
 
-                await this._tasksApi.CreateTask(task.Assignee, task);
+                await _tasksApi.CreateTask(task.Assignee, task);
             }
         }
     }
