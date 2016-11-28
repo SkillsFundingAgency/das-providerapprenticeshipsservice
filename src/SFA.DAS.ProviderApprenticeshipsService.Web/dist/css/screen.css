@@ -2472,8 +2472,8 @@ a.links {
   width: 75%;
 }
 
-.column-one-third aside {
-  margin-top: 50px;
+#instructions-sent-end aside {
+  margin-top: 10px;
 }
 
 .govuk-box-highlight {
@@ -2547,6 +2547,9 @@ span.helpText {
   }
   .select2-container--default .select2-selection--single .select2-selection__rendered {
     width: 200px !important;
+  }
+  #instructions-sent-end aside {
+    margin-top: 30px;
   }
   .finishEditingBtn {
     margin-top: 20px;
