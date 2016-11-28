@@ -1,5 +1,7 @@
 ﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
+    using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+
     public class SubmitCommitmentViewModel
     {
         public long ProviderId { get; set; }
@@ -8,6 +10,6 @@
 
         public string EmployerName { get; internal set; }
 
-        public SaveOrSendStatus SaveOrSendStatus { get; set; }
+        public SaveStatus SaveStatus { get; set; }
     }
 }

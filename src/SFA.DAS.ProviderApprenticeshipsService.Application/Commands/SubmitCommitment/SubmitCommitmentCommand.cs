@@ -12,8 +12,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
 
         public string Message { get; set; }
 
-        public string SaveOrSend { get; set; }
-
         public AgreementStatus AgreementStatus { get; set; }
 
         public bool CreateTask { get; set; }

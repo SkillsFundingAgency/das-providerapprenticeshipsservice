@@ -22,6 +22,8 @@ using NLog;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
+    using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+
     public class CommitmentOrchestrator
     {
         private readonly IMediator _mediator;
@@ -161,29 +163,30 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task SubmitCommitment(SubmitCommitmentViewModel model)
         {
-            Logger.Info($"Submitting ({model.SaveOrSendStatus}) Commitment for provider:{model.ProviderId} commitment:{model.CommitmentId}");
+            Logger.Info($"Submitting ({model.SaveStatus}) Commitment for provider:{model.ProviderId} commitment:{model.CommitmentId}");
 
-            // ToDo: Unit tests
+            model.SaveStatus.IsApproveWithoutSend();
+
             // ToDo: Merge with ApproveCommitment method?
-            var agreementStatus = model.SaveOrSendStatus != SaveOrSendStatus.Save
+            var agreementStatus = model.SaveStatus != SaveStatus.Save
                                 ? AgreementStatus.ProviderAgreed
                                 : AgreementStatus.NotAgreed;
+
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {
                 ProviderId = model.ProviderId,
                 CommitmentId = model.CommitmentId,
                 Message = model.Message,
                 AgreementStatus = agreementStatus,
-                CreateTask = model.SaveOrSendStatus != SaveOrSendStatus.Approve
+                CreateTask = model.SaveStatus != SaveStatus.Approve
         });
         }
 
-        public async Task ApproveCommitment(long providerId, long commitmentId, SaveOrSendStatus saveOrSendStatus)
+        public async Task ApproveCommitment(long providerId, long commitmentId, SaveStatus saveStatus)
         {
-            Logger.Info($"Approving ({saveOrSendStatus}) Commitment for provider:{providerId} commitment:{commitmentId}");
+            Logger.Info($"Approving ({saveStatus}) Commitment for provider:{providerId} commitment:{commitmentId}");
 
-            // ToDo: Unit tests
-            var agreementStatus = saveOrSendStatus != SaveOrSendStatus.Save
+            var agreementStatus = saveStatus != SaveStatus.Save
                                 ? AgreementStatus.ProviderAgreed
                                 : AgreementStatus.NotAgreed;
 
@@ -193,7 +196,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId,
                 Message = string.Empty,
                 AgreementStatus = agreementStatus,
-                CreateTask = saveOrSendStatus != SaveOrSendStatus.Approve
+                CreateTask = saveStatus != SaveStatus.Approve
         });
         }
 

@@ -7,6 +7,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
+    using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+
     [Authorize]
     [RoutePrefix("{providerId}/apprentices")]
     public class CommitmentController : Controller
@@ -123,14 +125,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return View(viewModel);
             }
 
-            if(viewModel.SaveOrSendStatus == SaveOrSendStatus.ApproveAndSend || viewModel.SaveOrSendStatus == SaveOrSendStatus.AmendAndSend)
+            if (viewModel.SaveStatus.IsSend())
             {
-                return RedirectToAction("Submit", new { providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId});
+                return RedirectToAction("Submit", 
+                    new { providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId, viewModel.SaveStatus });
             }
 
-            if(viewModel.SaveOrSendStatus == SaveOrSendStatus.Approve)
+            if(viewModel.SaveStatus == SaveStatus.Approve)
             {
-                await _commitmentOrchestrator.ApproveCommitment(viewModel.ProviderId, viewModel.CommitmentId, viewModel.SaveOrSendStatus);
+                await _commitmentOrchestrator.ApproveCommitment(viewModel.ProviderId, viewModel.CommitmentId, viewModel.SaveStatus);
 
                 return RedirectToAction("Index", new { providerId = viewModel.ProviderId });
             }
@@ -139,7 +142,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Submit(long providerId, long commitmentId, SaveOrSendStatus saveOrSendStatus)
+        public async Task<ActionResult> Submit(long providerId, long commitmentId, SaveStatus saveStatus)
         {
             var commitment = await _commitmentOrchestrator.GetCommitment(providerId, commitmentId);
 
@@ -148,7 +151,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 ProviderId = providerId,
                 CommitmentId = commitmentId,
                 EmployerName = commitment.LegalEntityName,
-                SaveOrSendStatus = saveOrSendStatus
+                SaveStatus = saveStatus
             };
 
             return View(model);

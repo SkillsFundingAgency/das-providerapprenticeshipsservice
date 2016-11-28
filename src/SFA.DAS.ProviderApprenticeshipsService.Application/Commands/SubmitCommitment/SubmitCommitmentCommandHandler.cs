@@ -40,17 +40,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
             if (commitment.ProviderId != message.ProviderId)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commiment does not belong to this Provider " } });
 
-            var agreementStatus = AgreementStatus.NotAgreed;
-            // TODO: Refactor out these magic strings
-            if (message.SaveOrSend != "save-no-send")
-            {
-                agreementStatus = AgreementStatus.ProviderAgreed;
-            }
+            await _commitmentsApi.PatchProviderCommitment(message.ProviderId, message.CommitmentId, message.AgreementStatus);
 
-            await _commitmentsApi.PatchProviderCommitment(message.ProviderId, message.CommitmentId, agreementStatus);
-
-
-            // TODO: Refactor out these magic strings
             if (message.CreateTask)
                 await CreateTask(message, commitment);
         }
