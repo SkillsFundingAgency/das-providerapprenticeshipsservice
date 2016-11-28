@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using MediatR;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.WsFederation;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IMediator _mediator;
+        private readonly AccountOrchestrator _accountOrchestrator;
 
-        public AccountController(IMediator mediator)
+        public AccountController(AccountOrchestrator accountOrchestrator)
         {
-            _mediator = mediator;
+            _accountOrchestrator = accountOrchestrator;
         }
 
         [Route("~/signin", Name = "signin")]
@@ -27,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             if (!Request.IsAuthenticated)
             {
-                HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = "/" },
+                HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties {RedirectUri = "/"},
                     WsFederationAuthenticationDefaults.AuthenticationType);
             }
         }
@@ -40,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var auth = Request.GetOwinContext().Authentication;
 
             auth.SignOut(
-                new AuthenticationProperties { RedirectUri = callbackUrl },
+                new AuthenticationProperties {RedirectUri = callbackUrl},
                 WsFederationAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
         }
 
@@ -59,20 +57,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("~/account", Name = "account-home")]
         public async Task<ActionResult> Index()
         {
-            //todo: move to orchestrator?
             var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
 
-            var providers = await _mediator.SendAsync(new GetProviderQueryRequest { UKPRN = providerId });
+            var model = await _accountOrchestrator.GetProvider(providerId);
 
-            var provider = providers.ProvidersView.Providers.First();
-
-            var model = new AccountHomeViewModel
+            switch (model.AccountStatus)
             {
-                ProviderId = provider.Ukprn,
-                ProviderName = provider.ProviderName
-            };
+                case AccountStatus.NotListed:
+                    return View("NoAgreement", model);
 
-            return View(model);
+                case AccountStatus.NoAgreement:
+                    return View("NoAccount");
+
+                case AccountStatus.Active:
+                default:
+                    return View(model);
+            }
         }
     }
 }
