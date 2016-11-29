@@ -8,6 +8,9 @@
 
     using Commitments.Api.Types;
     using Application.Queries.GetCommitment;
+
+    using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+
     using Web.Orchestrators;
 
     using Task = System.Threading.Tasks.Task;
@@ -28,9 +31,9 @@
             };
 
             var mockMediator = GetMediator(commitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
 
-            var result = _sut.GetCommitmentDetails(1L, 2L).Result;
+            var result = _sut.GetCommitmentDetails(1L, "ABBA123").Result;
 
             result.PendingChanges.ShouldBeEquivalentTo(false);
         }
@@ -49,9 +52,9 @@
             };
 
             var mockMediator = GetMediator(commitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
 
-            var result = _sut.GetCommitmentDetails(1L, 2L).Result;
+            var result = _sut.GetCommitmentDetails(1L, "ABBA213").Result;
 
             result.PendingChanges.ShouldBeEquivalentTo(true);
         }

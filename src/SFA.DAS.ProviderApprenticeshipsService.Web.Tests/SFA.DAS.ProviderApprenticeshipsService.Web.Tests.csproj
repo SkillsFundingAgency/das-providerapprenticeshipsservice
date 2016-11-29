@@ -88,6 +88,10 @@
       <Project>{849E452B-2B68-445A-980C-995311311AF0}</Project>
       <Name>SFA.DAS.ProviderApprenticeshipsService.Application</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj">
+      <Project>{B3484618-78A0-411E-BC02-AC84C8694C3D}</Project>
+      <Name>SFA.DAS.ProviderApprenticeshipsService.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Web\SFA.DAS.ProviderApprenticeshipsService.Web.csproj">
       <Project>{94E473E1-2217-43C3-A228-00B8BE2BE0F1}</Project>
       <Name>SFA.DAS.ProviderApprenticeshipsService.Web</Name>

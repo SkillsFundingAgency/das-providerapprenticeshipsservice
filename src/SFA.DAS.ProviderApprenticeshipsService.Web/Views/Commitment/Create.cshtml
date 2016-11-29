@@ -14,7 +14,7 @@
     <div class="column-two-thirds">
 
         <a href="@Url.Action("Details", 
-                new { providerId = Model.ProviderId, commitmentId = Model.CommitmentId })" aria-label="Back" class="link-back">Back</a>
+                new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Back" class="link-back">Back</a>
 
         <form method="POST" action="@Url.Action("Create")">
 
@@ -167,14 +167,14 @@
                     @Html.TextBoxFor(m => m.ProviderRef, new { @class = "form-control form-control-3-4" })
                 </div>
 
-                @Html.HiddenFor(m => m.CommitmentId)
+                @Html.HiddenFor(m => m.HashedCommitmentId)
                 @Html.HiddenFor(m => m.ProviderId)
                 @Html.HiddenFor(m => m.AgreementStatus)
                 @Html.HiddenFor(m => m.EmployerRef)
 
                 <button type="submit" class="button" aria-label="Add">Add</button>
                 <a class="links" href="@Url.Action("Details", 
-                                      new { Model.ProviderId, Model.CommitmentId })" aria-label="Cancel">Cancel</a>
+                                      new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Cancel">Cancel</a>
             </fieldset>
         </form>
     </div>

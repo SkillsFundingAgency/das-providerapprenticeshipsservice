@@ -58,7 +58,7 @@
         <hr/>
 
             @{ var finishEditingText = Model.PendingChanges ? "Save and continue" : "Continue to approval"; }
-            <a href="@Url.Action("Create", new { providerId = Model.ProviderId, commitmentId = Model.CommitmentId })" class="button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
+            <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })" class="button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
 
             <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
         <hr />
@@ -103,7 +103,7 @@
                                 }
                             </td>
                             <td>@FormatCost(item.Cost) &nbsp;</td>
-                            <td><a href="@Url.Action("Edit", new { commitmentId = Model.CommitmentId, id = item.ApprenticeshipId })" title="Edit @item.ApprenticeshipName" aria-label="Edit @item.ApprenticeshipName">Edit</a></td>
+                            <td><a href="@Url.Action("Edit", new { Model.HashedCommitmentId, id = item.ApprenticeshipId })" title="Edit @item.ApprenticeshipName" aria-label="Edit @item.ApprenticeshipName">Edit</a></td>
                         </tr>
                     }
                 </tbody>

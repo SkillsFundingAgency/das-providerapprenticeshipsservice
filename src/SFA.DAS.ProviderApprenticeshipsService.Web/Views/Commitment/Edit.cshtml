@@ -16,7 +16,7 @@
     <div class="column-two-thirds">
 
         <a href="@Url.Action("Details",
-                new { providerId = Model.ProviderId, commitmentId = Model.CommitmentId })" aria-label="Back" class="link-back">Back</a>
+                new { Model.ProviderId, Model.HashedCommitmentId})" aria-label="Back" class="link-back">Back</a>
 
         <form method="POST" action="@Url.Action("Edit")">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
@@ -173,13 +173,13 @@
                 @Html.TextBoxFor(m => m.ProviderRef, new { @class = "form-control form-control-3-4" })
             </div>
 
-            @Html.HiddenFor(m => m.CommitmentId)
+            @Html.HiddenFor(m => m.HashedCommitmentId)
             @Html.HiddenFor(m => m.ProviderId)
             @Html.HiddenFor(m => m.AgreementStatus)
             @Html.HiddenFor(m => m.EmployerRef)
 
             <button type="submit" class="button">Save</button>
-            <a class="links" href="@Url.Action("Details", new { commitmentId = Model.CommitmentId })" aria-label="Cancel">Cancel</a>
+            <a class="links" href="@Url.Action("Details", new { Model.HashedCommitmentId })" aria-label="Cancel">Cancel</a>
         </form>
     </div>
 </div>
