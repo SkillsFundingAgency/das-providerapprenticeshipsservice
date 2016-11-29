@@ -38,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
             var commitment = await _commitmentsApi.GetProviderCommitment(message.ProviderId, message.CommitmentId);
 
             if (commitment.ProviderId != message.ProviderId)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commiment does not belong to this Provider " } });
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commitment does not belong to this Provider" } });
 
             var agreementStatus = AgreementStatus.NotAgreed;
             // TODO: Refactor out these magic strings
