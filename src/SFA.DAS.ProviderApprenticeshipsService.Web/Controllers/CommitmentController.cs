@@ -41,17 +41,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{hashedCommitmentId}/Edit/{id}")]
-        public async Task<ActionResult> Edit(long providerId, string hashedCommitmentId, long id)
+        [Route("{hashedCommitmentId}/Edit/{hashedApprenticeshipId}")]
+        public async Task<ActionResult> Edit(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
-            var model = await _commitmentOrchestrator.GetApprenticeship(providerId, hashedCommitmentId, id);
+            var model = await _commitmentOrchestrator.GetApprenticeship(providerId, hashedCommitmentId, hashedApprenticeshipId);
             ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
 
             return View(model.Apprenticeship);
         }
 
         [HttpPost]
-        [Route("{hashedCommitmentId}/Edit/{id}")]
+        [Route("{hashedCommitmentId}/Edit/{hashedApprenticeshipId}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(ApprenticeshipViewModel apprenticeship)
         {

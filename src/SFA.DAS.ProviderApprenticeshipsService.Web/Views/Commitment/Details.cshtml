@@ -103,7 +103,7 @@
                                 }
                             </td>
                             <td>@FormatCost(item.Cost) &nbsp;</td>
-                            <td><a href="@Url.Action("Edit", new { Model.HashedCommitmentId, id = item.ApprenticeshipId })" title="Edit @item.ApprenticeshipName" aria-label="Edit @item.ApprenticeshipName">Edit</a></td>
+                            <td><a href="@Url.Action("Edit", new { Model.HashedCommitmentId, item.HashedApprenticeshipId })" title="Edit @item.ApprenticeshipName" aria-label="Edit @item.ApprenticeshipName">Edit</a></td>
                         </tr>
                     }
                 </tbody>

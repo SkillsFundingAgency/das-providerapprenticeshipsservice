@@ -102,9 +102,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return MapFrom(data.Commitment);
         }
 
-        public async Task<ExtendedApprenticeshipViewModel> GetApprenticeship(long providerId, string hashedCommitmentId, long apprenticeshipId)
+        public async Task<ExtendedApprenticeshipViewModel> GetApprenticeship(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
-
+            var apprenticeshipId = this._hashingService.DecodeValue(hashedApprenticeshipId);
             Logger.Info($"Getting apprenticeship:{apprenticeshipId} for provider:{providerId}");
 
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
@@ -237,7 +237,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var apprenticeViewModels = apprenticeships.Select(x => new ApprenticeshipListItemViewModel
             {
-                ApprenticeshipId = x.Id,
+                HashedApprenticeshipId = this._hashingService.HashValue(x.Id),
                 ApprenticeshipName = x.ApprenticeshipName,
                 ULN = x.ULN,
                 TrainingName = x.TrainingName,
@@ -311,7 +311,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var dateOfBirth = apprenticeship.DateOfBirth;
             return new ApprenticeshipViewModel
             {
-                Id = apprenticeship.Id,
+                HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
                 HashedCommitmentId = _hashingService.HashValue(apprenticeship.CommitmentId),
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
@@ -340,10 +340,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)
         {
+            var hashedApprenticeshipId = string.IsNullOrEmpty(viewModel.HashedApprenticeshipId) ?
+                0
+                : _hashingService.DecodeValue(viewModel.HashedApprenticeshipId);
 
             var apprenticeship =  new Apprenticeship
             {
-                Id = viewModel.Id,
+                Id = hashedApprenticeshipId,
                 CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,

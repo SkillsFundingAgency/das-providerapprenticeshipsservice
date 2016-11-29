@@ -7,7 +7,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
     [Validator(typeof(ApprenticeshipViewModelValidator))]
     public class ApprenticeshipViewModel
     {
-        public long Id { get; set; }
+        public string HashedApprenticeshipId { get; set; }
 
         public string HashedCommitmentId { get; set; }
 
