@@ -24,9 +24,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
-        public async Task<ActionResult> View(long taskId, long providerId)
+        public async Task<ActionResult> View(string hashedTaskId, long providerId)
         {
-            var model = await _taskOrchestrator.GetTask(taskId, providerId);
+            var model = await _taskOrchestrator.GetTask(hashedTaskId, providerId);
 
             return View(model);
         }
