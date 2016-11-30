@@ -2729,7 +2729,21 @@ span.helpText {
   margin-top: 22px;
 }
 
-#add-apprentice-entry hr {
+#add-apprentice-entry hr,
+#edit-apprentice hr {
   margin-top: 0;
   margin-bottom: 22px;
+}
+
+.button.text-link {
+  background-color: transparent;
+  border: medium none;
+  box-shadow: none;
+  color: #005ea5;
+  text-decoration: underline;
+}
+
+.alert-default {
+  background-color: #eaf4f9;
+  border-color: #2b8cc4;
 }

@@ -15,7 +15,8 @@
 
 // add apprentice entry
 
-#add-apprentice-entry{
+#add-apprentice-entry,
+#edit-apprentice{
 
     hr{
         margin-top:0;
@@ -23,3 +24,44 @@
     }
 
 }
+
+.button.text-link {
+    background-color: transparent;
+    border: medium none;
+    box-shadow: none;
+    color: #005ea5;
+    text-decoration: underline;
+}
+
+.alert-default {
+    background-color: #eaf4f9;
+    border-color: #2b8cc4;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

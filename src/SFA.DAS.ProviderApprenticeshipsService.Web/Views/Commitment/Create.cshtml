@@ -176,7 +176,7 @@
                 @Html.HiddenFor(m => m.EmployerRef)
 
                 <button type="submit" class="button" aria-label="Add">Add</button>
-                <a class="links" href="@Url.Action("Details", 
+                <a class="button text-link" href="@Url.Action("Details", 
                                       new { Model.ProviderId, Model.CommitmentId })" aria-label="Cancel">Cancel</a>
             </fieldset>
         </form>

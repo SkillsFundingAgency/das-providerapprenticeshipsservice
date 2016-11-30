@@ -58,7 +58,7 @@
         <hr class="hr-top">
 
             @{ var finishEditingText = Model.PendingChanges ? "Save and continue" : "Continue to approval"; }
-            <a href="@Url.Action("Create", new { providerId = Model.ProviderId, commitmentId = Model.CommitmentId })" class="button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
+            <a href="@Url.Action("Create", new { providerId = Model.ProviderId, commitmentId = Model.CommitmentId })" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
 
             <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
         <hr class="hr-bottom">
@@ -69,7 +69,7 @@
     <div class="column-full">
         @if (Model.Apprenticeships.Count == 0)
         {
-            <div class="panel panel-filled">          
+            <div class="panel panel-border-wide alert-default">          
                 <p>You haven't added any apprentices yet. Use the options on this page to add apprentices.</p>          
             </div>
         }
