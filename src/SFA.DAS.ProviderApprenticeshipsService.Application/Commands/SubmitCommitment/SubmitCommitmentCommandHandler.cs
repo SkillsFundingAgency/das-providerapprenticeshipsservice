@@ -40,17 +40,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
             if (commitment.ProviderId != message.ProviderId)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commitment does not belong to this Provider" } });
 
-            var agreementStatus = AgreementStatus.NotAgreed;
-            // TODO: Refactor out these magic strings
-            if (message.SaveOrSend != "save-no-send")
-            {
-                agreementStatus = AgreementStatus.ProviderAgreed;
-            }
+            await _commitmentsApi.PatchProviderCommitment(message.ProviderId, message.CommitmentId, message.AgreementStatus);
 
-            await _commitmentsApi.PatchProviderCommitment(message.ProviderId, message.CommitmentId, agreementStatus);
-
-            // TODO: Refactor out these magic strings
-            if (message.SaveOrSend != "approve")
+            if (message.CreateTask)
                 await CreateTask(message, commitment);
         }
 
@@ -74,7 +66,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                         Body = JsonConvert.SerializeObject(taskTemplate)
                     };
 
-                await this._tasksApi.CreateTask(task.Assignee, task);
+                await _tasksApi.CreateTask(task.Assignee, task);
             }
         }
     }

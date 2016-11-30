@@ -320,6 +320,7 @@
     <Compile Include="Models\FinishEditingViewModel.cs" />
     <Compile Include="Models\AccountHomeViewModel.cs" />
     <Compile Include="Models\RequestStatus.cs" />
+    <Compile Include="Models\Types\SaveOrSendStatus.cs" />
     <Compile Include="Models\SignInUserModel.cs" />
     <Compile Include="Models\SignInUserViewModel.cs" />
     <Compile Include="Models\SubmitCommitmentViewModel.cs" />

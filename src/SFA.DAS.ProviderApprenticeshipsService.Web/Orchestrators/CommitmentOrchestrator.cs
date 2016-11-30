@@ -22,6 +22,8 @@ using NLog;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
+    using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+
     public class CommitmentOrchestrator
     {
         private readonly IMediator _mediator;
@@ -161,28 +163,41 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task SubmitCommitment(SubmitCommitmentViewModel model)
         {
-            Logger.Info($"Submitting ({model.SaveOrSend}) Commitment for provider:{model.ProviderId} commitment:{model.CommitmentId}");
+            Logger.Info($"Submitting ({model.SaveStatus}) Commitment for provider:{model.ProviderId} commitment:{model.CommitmentId}");
+
+            model.SaveStatus.IsApproveWithoutSend();
+
+            // ToDo: Merge with ApproveCommitment method?
+            var agreementStatus = model.SaveStatus != SaveStatus.Save
+                                ? AgreementStatus.ProviderAgreed
+                                : AgreementStatus.NotAgreed;
 
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {
                 ProviderId = model.ProviderId,
                 CommitmentId = model.CommitmentId,
                 Message = model.Message,
-                SaveOrSend = model.SaveOrSend
-            });
+                AgreementStatus = agreementStatus,
+                CreateTask = model.SaveStatus != SaveStatus.Approve
+        });
         }
 
-        public async Task ApproveCommitment(long providerId, long commitmentId, string saveOrSend)
+        public async Task ApproveCommitment(long providerId, long commitmentId, SaveStatus saveStatus)
         {
-            Logger.Info($"Approving ({saveOrSend}) Commitment for provider:{providerId} commitment:{commitmentId}");
+            Logger.Info($"Approving ({saveStatus}) Commitment for provider:{providerId} commitment:{commitmentId}");
+
+            var agreementStatus = saveStatus != SaveStatus.Save
+                                ? AgreementStatus.ProviderAgreed
+                                : AgreementStatus.NotAgreed;
 
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {
                 ProviderId = providerId,
                 CommitmentId = commitmentId,
                 Message = string.Empty,
-                SaveOrSend = saveOrSend
-            });
+                AgreementStatus = agreementStatus,
+                CreateTask = saveStatus != SaveStatus.Approve
+        });
         }
 
         public async Task<FinishEditingViewModel> GetFinishEditing(long providerId, long commitmentId)

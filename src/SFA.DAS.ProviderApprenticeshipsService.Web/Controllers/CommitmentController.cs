@@ -7,6 +7,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
+    using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+
     [Authorize]
     [RoutePrefix("{providerId}/apprentices")]
     public class CommitmentController : Controller
@@ -123,23 +125,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return View(viewModel);
             }
 
-            // TODO: Refactor out these magic strings
-            if (!string.IsNullOrEmpty(viewModel.SaveOrSend) && viewModel.SaveOrSend.StartsWith("send"))
+            if (viewModel.SaveStatus.IsSend())
             {
                 return RedirectToAction("Submit", 
-                    new { providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId, saveOrSend = viewModel.SaveOrSend});
+                    new { providerId = viewModel.ProviderId, commitmentId = viewModel.CommitmentId, viewModel.SaveStatus });
             }
 
-            if (viewModel.SaveOrSend == "approve")
+            if(viewModel.SaveStatus == SaveStatus.Approve)
             {
-                await _commitmentOrchestrator.ApproveCommitment(viewModel.ProviderId, viewModel.CommitmentId, viewModel.SaveOrSend);
+                await _commitmentOrchestrator.ApproveCommitment(viewModel.ProviderId, viewModel.CommitmentId, viewModel.SaveStatus);
+
+                return RedirectToAction("Index", new { providerId = viewModel.ProviderId });
             }
 
             return RedirectToAction("Index", new {providerId = viewModel.ProviderId});
         }
 
         [HttpGet]
-        public async Task<ActionResult> Submit(long providerId, long commitmentId, string saveOrSend)
+        public async Task<ActionResult> Submit(long providerId, long commitmentId, SaveStatus saveStatus)
         {
             var commitment = await _commitmentOrchestrator.GetCommitment(providerId, commitmentId);
 
@@ -148,7 +151,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 ProviderId = providerId,
                 CommitmentId = commitmentId,
                 EmployerName = commitment.LegalEntityName,
-                SaveOrSend = saveOrSend
+                SaveStatus = saveStatus
             };
 
             return View(model);
