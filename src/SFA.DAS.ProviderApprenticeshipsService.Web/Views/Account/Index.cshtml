@@ -6,35 +6,27 @@
 }
 
 <div class="grid-row">
-    <div class="column-two-thirds home-page">
+    <div class="column-full home-page">
         <h1 class="heading-xlarge">@Model.ProviderName</h1>
         <p class="grey-text">UK PRN: @Model.ProviderId</p>
-        <hr/>
-
-        <div class="grid-row">
-            @*<div class="column-one-half">
-                <h2 class="heading-medium"><a href="@Url.Action("Index", "Commitment", new { providerId = Model.ProviderId })">Contracts</a></h2>
-                <p><a href="#">View and sign your contracts</a> with the SFA online</p>
-            </div>*@
-
-            <div class="column-one-half">
-                <h2 class="heading-medium">
-                    <a href="@Url.Action("Index", "Commitment", new {providerId = Model.ProviderId})">Apprentices</a>
-                </h2>
-                <p>View, update and agree <a href="@Url.Action("Index", "Commitment", new {providerId = Model.ProviderId})">employer requests</a>, or <a href="#">update existing apprentice details</a>.
-                </p>
-            </div>
-        </div>
+        <hr class="hr-double">
     </div>
-
-    <div class="column-one-third side-panel">
-        @*<aside>
-            <div class="panel panel-filled">
-                <h2 class="heading-medium">Help us improve this section</h2>
-                <p>Take a 3 minute survey about adding apprentices so that we can improve the service.</p>
-                <a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank" class="button" title="Take the survey" aria-label="Take the survey">Take the survey</a>
-            </div>
-        </aside>*@
-    </div>
-
 </div>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <div class="grid-row">
+                <div class="column-one-half">
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("Index", "Commitment", new {providerId = Model.ProviderId})">Apprentices</a>
+                    </h2>
+                    <p>View, update and agree <a href="@Url.Action("Index", "Commitment", new {providerId = Model.ProviderId})">employer requests</a>, or <a href="#">update existing apprentice details</a>.
+                    </p>
+                    <hr />
+                </div>
+          </div>
+    </div>
+</div>
+
+
+

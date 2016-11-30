@@ -1,0 +1,25 @@
+﻿// custom to overwrite the GDS defaults
+
+.hr-double{
+    border-bottom: 4px solid #bfc1c3;
+    margin-bottom: 20px;
+}
+
+.hr-top{
+    margin-bottom:20px;
+}
+
+.hr-bottom{
+    margin-top:22px;
+}
+
+// add apprentice entry
+
+#add-apprentice-entry{
+
+    hr{
+        margin-top:0;
+        margin-bottom: 22px;
+    }
+
+}
