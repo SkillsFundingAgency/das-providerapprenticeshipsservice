@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Newtonsoft.Json;
+using NLog;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
@@ -17,8 +19,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTasks;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.Tasks.Api.Types.Templates;
-using System.Globalization;
-using NLog;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -65,7 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
-            string message = await GetLatestMessage(providerId, commitmentId);
+            var message = await GetLatestMessage(providerId, commitmentId);
 
             return new CommitmentDetailsViewModel
             {
@@ -105,7 +105,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
 
             var standards = await _mediator.SendAsync(new GetStandardsQueryRequest());
-            
+
             var apprenticeship = MapFrom(data.Apprenticeship);
 
             apprenticeship.ProviderId = providerId;
@@ -158,7 +158,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
         }
 
-
         public async Task SubmitCommitment(SubmitCommitmentViewModel model)
         {
             Logger.Info($"Submitting ({model.SaveOrSend}) Commitment for provider:{model.ProviderId} commitment:{model.CommitmentId}");
@@ -195,7 +194,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
-            bool approveAndSend = PendingChanges(data.Commitment?.Apprenticeships);
+            var approveAndSend = PendingChanges(data.Commitment?.Apprenticeships);
 
             return new FinishEditingViewModel
             {
@@ -223,10 +222,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private async Task<string> GetLatestMessage(long providerId, long commitmentId)
         {
-            var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { ProviderId = providerId });
+            var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest {ProviderId = providerId});
 
             var taskForCommitment = allTasks?.Tasks
-                .Select(x => new { Task = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body), CreateDate = x.CreatedOn })
+                .Select(x => new {Task = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body), CreateDate = x.CreatedOn})
                 .Where(x => x.Task != null && x.Task.CommitmentId == commitmentId)
                 .OrderByDescending(x => x.CreateDate)
                 .FirstOrDefault();
@@ -240,7 +239,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             if (apprenticeships == null || !apprenticeships.Any()) return true;
             return apprenticeships?.Any(m => m.AgreementStatus == AgreementStatus.NotAgreed
-                                   || m.AgreementStatus == AgreementStatus.ProviderAgreed) ?? false;
+                                             || m.AgreementStatus == AgreementStatus.ProviderAgreed) ?? false;
         }
 
         // TODO: Move mappers into own class
@@ -294,7 +293,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 TrainingType = apprenticeship.TrainingType,
                 TrainingCode = apprenticeship.TrainingCode,
                 Cost = NullableDecimalToString(apprenticeship.Cost),
-                StartMonth = apprenticeship.StartDate?.Month, 
+                StartMonth = apprenticeship.StartDate?.Month,
                 StartYear = apprenticeship.StartDate?.Year,
                 EndMonth = apprenticeship.EndDate?.Month,
                 EndYear = apprenticeship.EndDate?.Year,
@@ -304,6 +303,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 EmployerRef = apprenticeship.EmployerRef
             };
         }
+
         private static string NullableDecimalToString(decimal? item)
         {
             return (item.HasValue) ? string.Format("{0:#}", item.Value) : "";
@@ -311,8 +311,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)
         {
-
-            var apprenticeship =  new Apprenticeship
+            var apprenticeship = new Apprenticeship
             {
                 Id = viewModel.Id,
                 CommitmentId = viewModel.CommitmentId,

@@ -459,7 +459,6 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
@@ -479,6 +478,7 @@
     <Content Include="Views\Error\_Error404.cshtml" />
     <Content Include="Views\Error\_Error400.cshtml" />
     <Content Include="Views\Error\_Error500.cshtml" />
+    <Content Include="Views\Error\_Error403.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

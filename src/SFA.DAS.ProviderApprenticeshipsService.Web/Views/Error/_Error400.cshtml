@@ -1,4 +1,4 @@
-﻿@model string
+﻿@model HandleErrorInfo
 
 @{
     ViewBag.Title = "Bad request - Error 400";
@@ -11,13 +11,13 @@
 
             <div class="hgroup">
                 <h1 class="heading-xlarge">
-                    @if (string.IsNullOrEmpty(Model))
+                    @if (string.IsNullOrEmpty(Model.Exception.Message))
                     {
-                        @Html.Raw("Bad request");
+                        @Html.Raw("Bad request")
                     }
                     else
                     {
-                        @Model
+                        @Model.Exception.Message
                     }
                 </h1>
             </div>

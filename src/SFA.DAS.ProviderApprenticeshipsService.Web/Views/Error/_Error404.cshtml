@@ -1,4 +1,4 @@
-﻿@model string
+﻿@model HandleErrorInfo
 
 @{
     ViewBag.Title = "Page not found - Error 404";
@@ -11,13 +11,13 @@
 
             <div class="hgroup">
                 <h1 class="heading-xlarge">
-                    @if (string.IsNullOrEmpty(Model))
+                    @if (string.IsNullOrEmpty(Model.Exception.Message))
                     {
-                        @Html.Raw("Page not found");
+                        @Html.Raw("Page not found")
                     }
                     else
                     {
-                        @Model
+                        @Model.Exception.Message
                     }
                 </h1>
             </div>
