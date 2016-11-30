@@ -479,6 +479,7 @@
     <Content Include="Views\Error\_Error404.cshtml" />
     <Content Include="Views\Error\_Error400.cshtml" />
     <Content Include="Views\Error\_Error500.cshtml" />
+    <Content Include="Views\Error\_Error403.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
