@@ -167,48 +167,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             Logger.Info($"Updated apprenticeship for provider:{apprenticeshipViewModel.ProviderId} commitment:{apprenticeship.CommitmentId}");
         }
 
-
-        public async Task SubmitCommitment(SubmitCommitmentViewModel model)
+        public async Task SubmitCommitment(long providerId, long commitmentId, SaveStatus saveStatus, string message)
         {
-            
-            // ToDo: Merge with ApproveCommitment method?
-            var agreementStatus = model.SaveStatus != SaveStatus.Save
-                                ? AgreementStatus.ProviderAgreed
-                                : AgreementStatus.NotAgreed;
+            Logger.Info($"Submitting ({saveStatus}) Commitment for provider:{providerId} commitment:{commitmentId}");
 
-            model.SaveStatus.IsApproveWithoutSend();
-
-            var commitmentId = _hashingService.DecodeValue(model.HashedCommitmentId);
-            Logger.Info($"Submitting ({model.SaveStatus}) Commitment for provider:{model.ProviderId} commitment:{commitmentId}");
-
-            await _mediator.SendAsync(new SubmitCommitmentCommand
+            if (saveStatus != SaveStatus.Save)
             {
-                ProviderId = model.ProviderId,
-                CommitmentId = commitmentId,
-                Message = model.Message,
-                AgreementStatus = agreementStatus,
-                CreateTask = model.SaveStatus != SaveStatus.Approve
-        });
-        }
+                var lastAction = saveStatus == SaveStatus.AmendAndSend ? LastAction.Amend : LastAction.Approve;
 
-        public async Task ApproveCommitment(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
-        {
-            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
-            Logger.Info($"Approving ({saveStatus}) Commitment for provider:{providerId} commitment:{commitmentId}");
-
-            var agreementStatus = saveStatus != SaveStatus.Save
-                                ? AgreementStatus.ProviderAgreed
-                                : AgreementStatus.NotAgreed;
-
-            Logger.Info($"Approving ({saveStatus}) Commitment for provider:{providerId} commitment:{commitmentId}");
-            await _mediator.SendAsync(new SubmitCommitmentCommand
+                await
+                    _mediator.SendAsync(
+                        new SubmitCommitmentCommand
+                            {
+                                ProviderId = providerId,
+                                CommitmentId = commitmentId,
+                                Message = message,
+                                LastAction = lastAction,
+                                CreateTask = saveStatus != SaveStatus.Approve
+                            });
+            }
+            else
             {
-                ProviderId = providerId,
-                CommitmentId = commitmentId,
-                Message = string.Empty,
-                AgreementStatus = agreementStatus,
-                CreateTask = saveStatus != SaveStatus.Approve
-        });
+                Logger.Warn($"Commitment submited with illegal state, Save Status: {saveStatus}");
+            }
         }
 
         public async Task<FinishEditingViewModel> GetFinishEditing(long providerId, string hashedCommitmentId)

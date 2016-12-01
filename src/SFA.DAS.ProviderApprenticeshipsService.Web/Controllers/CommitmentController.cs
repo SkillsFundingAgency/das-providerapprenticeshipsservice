@@ -133,7 +133,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if(viewModel.SaveStatus == SaveStatus.Approve)
             {
-                await _commitmentOrchestrator.ApproveCommitment(viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus);
+                await _commitmentOrchestrator.SubmitCommitment(viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty);
 
                 return RedirectToAction("Index", new { providerId = viewModel.ProviderId });
             }
@@ -161,7 +161,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Submit(SubmitCommitmentViewModel model)
         {
-            await _commitmentOrchestrator.SubmitCommitment(model);
+            await _commitmentOrchestrator.SubmitCommitment(model.ProviderId, model.CommitmentId, model.SaveStatus, model.Message);
 
             return RedirectToAction("Acknowledgement", new
             {
