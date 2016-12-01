@@ -325,6 +325,7 @@
     <Compile Include="Models\SignInUserViewModel.cs" />
     <Compile Include="Models\SubmitCommitmentViewModel.cs" />
     <Compile Include="Models\SystemDetails.cs" />
+    <Compile Include="Models\TaskItemViewModel.cs" />
     <Compile Include="Models\TaskListViewModel.cs" />
     <Compile Include="Models\TaskViewModel.cs" />
     <Compile Include="Orchestrators\CommitmentOrchestrator.cs" />

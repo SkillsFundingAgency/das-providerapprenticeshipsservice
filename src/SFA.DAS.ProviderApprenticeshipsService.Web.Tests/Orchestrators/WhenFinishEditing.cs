@@ -9,6 +9,9 @@
 
     using Commitments.Api.Types;
     using Application.Queries.GetCommitment;
+
+    using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+
     using Web.Orchestrators;
 
     [TestFixture]
@@ -24,9 +27,9 @@
             };
 
             var mockMediator = GetMediator(apprenticeships);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
 
-            var result = _sut.GetFinishEditing(1L, 2L).Result;
+            var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
             result.ApproveAndSend.ShouldBeEquivalentTo(false);
         }
@@ -42,9 +45,9 @@
             };
 
             var mockMediator = GetMediator(apprenticeships);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
 
-            var result = _sut.GetFinishEditing(1L, 2L).Result;
+            var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
             result.ApproveAndSend.ShouldBeEquivalentTo(true);
         }
@@ -60,9 +63,9 @@
             };
 
             var mockMediator = GetMediator(apprenticeships);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
 
-            var result = _sut.GetFinishEditing(1L, 2L).Result;
+            var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
             result.ApproveAndSend.ShouldBeEquivalentTo(true);
         }

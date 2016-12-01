@@ -11,7 +11,7 @@
     <div class="column-two-thirds">
 
         <a href="@Url.Action("FinishEditing",
-                new { providerId = Model.ProviderId, commitmentId = Model.CommitmentId })" aria-label="Back" class="link-back">Back</a>
+                new { Model.ProviderId, Model.HashedCommitmentId})" aria-label="Back" class="link-back">Back</a>
 
 
         <h1 class="heading-xlarge">Add instructions</h1>
@@ -31,8 +31,9 @@
             </div>
 
             @Html.HiddenFor(m => m.ProviderId)
-            @Html.HiddenFor(m => m.CommitmentId)
             @Html.HiddenFor(m => m.SaveStatus)
+            @Html.HiddenFor(m => m.HashedCommitmentId)
+
             <button type="submit" class="button">Send</button>
         </form>
 </div>

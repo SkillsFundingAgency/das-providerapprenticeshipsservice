@@ -12,6 +12,7 @@
     using Models.Types;
 
     using SFA.DAS.Commitments.Api.Types;
+    using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
     using Web.Orchestrators;
 
@@ -25,9 +26,11 @@
         public async Task  CheckStatusUpdate(SaveStatus input, AgreementStatus expectedAgreementStatus, bool expectedCreateTaskBool)
         {
             var mockMediator = new Mock<IMediator>();
+            var mockHashingService = new Mock<IHashingService>();
+            mockHashingService.Setup(m => m.DecodeValue("ABBA99")).Returns(2L);
 
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>());
-            await _sut.ApproveCommitment(1L, 2L, input);
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), mockHashingService.Object);
+            await _sut.ApproveCommitment(1L, "ABBA99", input);
 
             mockMediator.Verify(m => m
                 .SendAsync(It.Is<SubmitCommitmentCommand>(
