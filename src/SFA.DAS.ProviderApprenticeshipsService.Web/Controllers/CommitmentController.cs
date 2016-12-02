@@ -161,7 +161,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Submit(SubmitCommitmentViewModel model)
         {
-            await _commitmentOrchestrator.SubmitCommitment(model.ProviderId, model.CommitmentId, model.SaveStatus, model.Message);
+            await _commitmentOrchestrator.SubmitCommitment(model.ProviderId, model.HashedCommitmentId, model.SaveStatus, model.Message);
 
             return RedirectToAction("Acknowledgement", new
             {

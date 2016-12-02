@@ -167,8 +167,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             Logger.Info($"Updated apprenticeship for provider:{apprenticeshipViewModel.ProviderId} commitment:{apprenticeship.CommitmentId}");
         }
 
-        public async Task SubmitCommitment(long providerId, long commitmentId, SaveStatus saveStatus, string message)
+        public async Task SubmitCommitment(long providerId, string hashedCommitmentId, SaveStatus saveStatus, string message)
         {
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             Logger.Info($"Submitting ({saveStatus}) Commitment for provider:{providerId} commitment:{commitmentId}");
 
             if (saveStatus != SaveStatus.Save)

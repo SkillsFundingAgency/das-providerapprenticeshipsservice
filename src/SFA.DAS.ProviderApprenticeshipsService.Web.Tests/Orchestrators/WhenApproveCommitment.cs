@@ -29,7 +29,7 @@
             mockHashingService.Setup(m => m.DecodeValue("ABBA99")).Returns(2L);
 
             var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), mockHashingService.Object);
-            await _sut.SubmitCommitment(1L, 2L, input, string.Empty);
+            await _sut.SubmitCommitment(1L, "ABBA99", input, string.Empty);
 
             mockMediator.Verify(m => m
                 .SendAsync(It.Is<SubmitCommitmentCommand>(
@@ -46,7 +46,7 @@
             var mockMediator = new Mock<IMediator>();
 
             var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
-            await _sut.SubmitCommitment(1L, 2L, SaveStatus.Save, "");
+            await _sut.SubmitCommitment(1L, "ABBA12", SaveStatus.Save, "");
 
             mockMediator.Verify(m => m
                 .SendAsync(It.IsAny<SubmitCommitmentCommand>()), Times.Never);
