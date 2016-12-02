@@ -34,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 return RequestStatus.ReadyForReview;
 
             if (lastAction == LastAction.Approve)
-                return RequestStatus.None;
+                return RequestStatus.ReadyForApproval;
 
             return RequestStatus.None;
         }

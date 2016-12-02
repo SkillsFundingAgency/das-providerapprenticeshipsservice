@@ -61,6 +61,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests
             status.Should().Be(expectedResult);
         }
 
+        [TestCase(RequestStatus.ReadyForApproval, EditStatus.ProviderOnly, 2, LastAction.Approve, TestName = "Employer approves")]
+        [TestCase(RequestStatus.Approved, EditStatus.Both, 2, LastAction.Approve, TestName = "Provider approves")]
+        public void Scenario3(RequestStatus expectedResult, EditStatus editStatus, int numberOfApprenticeships, LastAction lastAction)
+        {
+            // Scenario 3
+            var status = _calculator.GetStatus(editStatus, numberOfApprenticeships, lastAction);
+
+            status.Should().Be(expectedResult);
+        }
+
         [TestCase(RequestStatus.NewRequest, 0, LastAction.Amend, TestName = "With no apprenticeships")]
         [TestCase(RequestStatus.ReadyForReview, 2, LastAction.Amend, TestName = "With last action is Amend")]
         [TestCase(RequestStatus.None, 2, LastAction.Approve, TestName = "With last action is Approve")]

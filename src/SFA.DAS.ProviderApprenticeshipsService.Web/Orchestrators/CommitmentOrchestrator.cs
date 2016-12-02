@@ -110,7 +110,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
             {
                 ProviderId = providerId,
-                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
                 AppenticeshipId = apprenticeshipId
             });
             
