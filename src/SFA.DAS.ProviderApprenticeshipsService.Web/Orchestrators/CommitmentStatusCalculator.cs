@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private RequestStatus GetEmployerOnlyStatus(LastAction lastAction, bool hasApprenticeships)
         {
-            if (!hasApprenticeships)
+            if (!hasApprenticeships || lastAction == LastAction.None)
                 return RequestStatus.None;
 
             if(lastAction == LastAction.Amend)

@@ -30,6 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests
 
         public void EmployerSendsToProviderToAddApprentices(RequestStatus expectedResult, EditStatus editStatus, int numberOfApprenticeships, LastAction lastAction)
         {
+            // Scenario 1
             var status = _calculator.GetStatus(editStatus, numberOfApprenticeships, lastAction);
 
             status.Should().Be(expectedResult);
@@ -42,6 +43,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests
         {
             var editStatus = EditStatus.EmployerOnly;
 
+            var status = _calculator.GetStatus(editStatus, numberOfApprenticeships, lastAction);
+
+            status.Should().Be(expectedResult);
+        }
+
+        [TestCase(RequestStatus.None, AgreementStatus.NotAgreed, EditStatus.EmployerOnly, 0, LastAction.None, TestName = "Employer creates a new cohort")]
+        [TestCase(RequestStatus.None, AgreementStatus.NotAgreed, EditStatus.EmployerOnly, 2, LastAction.None, TestName = "Employer adds an apprentice")]
+        [TestCase(RequestStatus.None, AgreementStatus.NotAgreed, EditStatus.EmployerOnly, 2, LastAction.None, TestName = "Employer saves for later")]
+        [TestCase(RequestStatus.ReadyForReview, AgreementStatus.NotAgreed, EditStatus.ProviderOnly, 2, LastAction.Amend, TestName = "Employer sends to provider for amendment")]
+        [TestCase(RequestStatus.ReadyForReview, AgreementStatus.NotAgreed, EditStatus.ProviderOnly, 2, LastAction.Amend, TestName = "Provider adds apprentice")]
+        public void EmployerCreatesANewCohort(RequestStatus expectedResult, AgreementStatus agreementStatus, EditStatus editStatus, int numberOfApprenticeships, LastAction lastAction)
+        {
+            // Scenario 2
             var status = _calculator.GetStatus(editStatus, numberOfApprenticeships, lastAction);
 
             status.Should().Be(expectedResult);
