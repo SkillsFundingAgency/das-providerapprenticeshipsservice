@@ -81,7 +81,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 HashedCommitmentId = hashedCommitmentId,
                 LegalEntityName = data.Commitment.LegalEntityName,
                 Reference = data.Commitment.Reference,
-                Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.AgreementStatus),
+                Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction),
                 Apprenticeships = MapFrom(data.Commitment.Apprenticeships),
                 LatestMessage = message,
                 PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed
@@ -110,7 +110,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
             {
                 ProviderId = providerId,
-                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
                 AppenticeshipId = apprenticeshipId
             });
             
@@ -167,48 +166,30 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             Logger.Info($"Updated apprenticeship for provider:{apprenticeshipViewModel.ProviderId} commitment:{apprenticeship.CommitmentId}");
         }
 
-
-        public async Task SubmitCommitment(SubmitCommitmentViewModel model)
-        {
-            
-            // ToDo: Merge with ApproveCommitment method?
-            var agreementStatus = model.SaveStatus != SaveStatus.Save
-                                ? AgreementStatus.ProviderAgreed
-                                : AgreementStatus.NotAgreed;
-
-            model.SaveStatus.IsApproveWithoutSend();
-
-            var commitmentId = _hashingService.DecodeValue(model.HashedCommitmentId);
-            Logger.Info($"Submitting ({model.SaveStatus}) Commitment for provider:{model.ProviderId} commitment:{commitmentId}");
-
-            await _mediator.SendAsync(new SubmitCommitmentCommand
-            {
-                ProviderId = model.ProviderId,
-                CommitmentId = commitmentId,
-                Message = model.Message,
-                AgreementStatus = agreementStatus,
-                CreateTask = model.SaveStatus != SaveStatus.Approve
-        });
-        }
-
-        public async Task ApproveCommitment(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
+        public async Task SubmitCommitment(long providerId, string hashedCommitmentId, SaveStatus saveStatus, string message)
         {
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
-            Logger.Info($"Approving ({saveStatus}) Commitment for provider:{providerId} commitment:{commitmentId}");
+            Logger.Info($"Submitting ({saveStatus}) Commitment for provider:{providerId} commitment:{commitmentId}");
 
-            var agreementStatus = saveStatus != SaveStatus.Save
-                                ? AgreementStatus.ProviderAgreed
-                                : AgreementStatus.NotAgreed;
-
-            Logger.Info($"Approving ({saveStatus}) Commitment for provider:{providerId} commitment:{commitmentId}");
-            await _mediator.SendAsync(new SubmitCommitmentCommand
+            if (saveStatus != SaveStatus.Save)
             {
-                ProviderId = providerId,
-                CommitmentId = commitmentId,
-                Message = string.Empty,
-                AgreementStatus = agreementStatus,
-                CreateTask = saveStatus != SaveStatus.Approve
-        });
+                var lastAction = saveStatus == SaveStatus.AmendAndSend ? LastAction.Amend : LastAction.Approve;
+
+                await
+                    _mediator.SendAsync(
+                        new SubmitCommitmentCommand
+                            {
+                                ProviderId = providerId,
+                                CommitmentId = commitmentId,
+                                Message = message,
+                                LastAction = lastAction,
+                                CreateTask = saveStatus != SaveStatus.Approve
+                            });
+            }
+            else
+            {
+                Logger.Warn($"Commitment submited with illegal state, Save Status: {saveStatus}");
+            }
         }
 
         public async Task<FinishEditingViewModel> GetFinishEditing(long providerId, string hashedCommitmentId)
@@ -288,7 +269,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Reference = listItem.Reference,
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
-                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.ApprenticeshipCount, listItem.AgreementStatus),
+                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.ApprenticeshipCount, listItem.LastAction),
                 ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly
             };
         }
@@ -301,7 +282,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Reference = listItem.Reference,
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
-                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.AgreementStatus),
+                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.LastAction),
                 ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly
             };
         }

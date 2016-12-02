@@ -5,7 +5,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public sealed class CommitmentStatusCalculator : ICommitmentStatusCalculator
     {
-        public RequestStatus GetStatus(EditStatus editStatus, int apprenticeshipCount, AgreementStatus? overallAgreementStatus)
+        public RequestStatus GetStatus(EditStatus editStatus, int apprenticeshipCount, LastAction lastAction)
         {
             bool hasApprenticeships = apprenticeshipCount > 0;
 
@@ -14,20 +14,43 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             if (editStatus == EditStatus.ProviderOnly)
             {
-
-                if (hasApprenticeships && overallAgreementStatus == AgreementStatus.NotAgreed)
-                    return RequestStatus.NewRequest;
-
-                if (hasApprenticeships && overallAgreementStatus == AgreementStatus.EmployerAgreed)
-                    return RequestStatus.ReadyForApproval;
-
-                return RequestStatus.NewRequest;
+                return GetProviderOnlyStatus(lastAction, hasApprenticeships);
             }
 
-            if (hasApprenticeships && overallAgreementStatus == AgreementStatus.ProviderAgreed)
+            if (editStatus == EditStatus.EmployerOnly)
+            {
+                return GetEmployerOnlyStatus(lastAction, hasApprenticeships);
+            }
+
+            return RequestStatus.None;
+        }
+
+        private static RequestStatus GetProviderOnlyStatus(LastAction lastAction, bool hasApprenticeships)
+        {
+            if (!hasApprenticeships || lastAction == LastAction.None)
+                return RequestStatus.NewRequest;
+
+            if (lastAction == LastAction.Amend)
+                return RequestStatus.ReadyForReview;
+
+            if (lastAction == LastAction.Approve)
+                return RequestStatus.ReadyForApproval;
+
+            return RequestStatus.None;
+        }
+
+        private RequestStatus GetEmployerOnlyStatus(LastAction lastAction, bool hasApprenticeships)
+        {
+            if (!hasApprenticeships || lastAction == LastAction.None)
+                return RequestStatus.None;
+
+            if(lastAction == LastAction.Amend)
+                return RequestStatus.SentForReview;
+
+            if (lastAction == LastAction.Approve)
                 return RequestStatus.WithEmployerForApproval;
 
-            return RequestStatus.SentToEmployer;
+            return RequestStatus.SentForReview;
         }
     }
 }
