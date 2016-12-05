@@ -9,7 +9,7 @@
 
 <div class="grid-row">
     <div class="column-full">
-        @*<a href="@Url.Action("Index", new { providerId = Model.ProviderId })" aria-label="Back" class="link-back">Back</a>*@
+        <a href="@Url.Action("Index", new { providerId = Model.ProviderId })" aria-label="Back" class="link-back">Back</a>
         <h1 class="heading-xlarge">Add an apprentice</h1>
     </div>
 </div>
@@ -58,12 +58,7 @@
         <hr class="hr-top">
 
             @{ var finishEditingText = Model.PendingChanges ? "Save and continue" : "Continue to approval"; }
-<<<<<<< HEAD
-            <a href="@Url.Action("Create", new { providerId = Model.ProviderId, commitmentId = Model.CommitmentId })" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
-=======
             <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })" class="button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
->>>>>>> 353f75fc8bc5e54c763236b93ff8a90ca773ed5b
-
             <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
         <hr class="hr-bottom">
     </div>

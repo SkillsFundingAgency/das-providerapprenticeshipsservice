@@ -13,13 +13,9 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-<<<<<<< HEAD
-        @*<a href="@Url.Action("Details", 
-                new { providerId = Model.ProviderId, commitmentId = Model.CommitmentId })" aria-label="Back" class="link-back">Back</a>*@
-=======
         <a href="@Url.Action("Details", 
                 new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Back" class="link-back">Back</a>
->>>>>>> 353f75fc8bc5e54c763236b93ff8a90ca773ed5b
+
 
         <form method="POST" action="@Url.Action("Create")">
 
@@ -181,13 +177,10 @@
                 @Html.HiddenFor(m => m.EmployerRef)
 
                 <button type="submit" class="button" aria-label="Add">Add</button>
-<<<<<<< HEAD
-                <a class="button text-link" href="@Url.Action("Details", 
-                                      new { Model.ProviderId, Model.CommitmentId })" aria-label="Cancel">Cancel</a>
-=======
+
                 <a class="links" href="@Url.Action("Details", 
                                       new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Cancel">Cancel</a>
->>>>>>> 353f75fc8bc5e54c763236b93ff8a90ca773ed5b
+
             </fieldset>
         </form>
     </div>
