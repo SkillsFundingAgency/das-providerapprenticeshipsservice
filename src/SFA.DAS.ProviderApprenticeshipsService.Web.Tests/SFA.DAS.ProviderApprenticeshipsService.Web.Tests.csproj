@@ -75,6 +75,9 @@
     <Compile Include="Orchestrators\WhenApproveCommitment.cs" />
     <Compile Include="Orchestrators\WhenGettingCommitmentViewModel.cs" />
     <Compile Include="Orchestrators\WhenFinishEditing.cs" />
+    <Compile Include="StatusCalculator\WhenEditStatusIsWithEmployer.cs" />
+    <Compile Include="StatusCalculator\WhenEditStatusIsWithBoth.cs" />
+    <Compile Include="StatusCalculator\WhenEditStatusIsWithProvider.cs" />
     <Compile Include="WhenGettingStatusOfCommitment.cs" />
     <Compile Include="WhenValidatingApprenticeshipViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
