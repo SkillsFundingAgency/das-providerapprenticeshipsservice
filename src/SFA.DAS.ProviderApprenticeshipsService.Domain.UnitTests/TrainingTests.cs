@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Tests
+namespace SFA.DAS.ProviderApprenticeshipsService.Domain.UnitTests
 {
     [TestFixture]
     public class TrainingTests

@@ -1,21 +1,15 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests.Orchestrators
+﻿using System.Threading.Tasks;
+using MediatR;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
 {
-    using System.Threading.Tasks;
-
-    using MediatR;
-
-    using Moq;
-
-    using NUnit.Framework;
-
-    using Application.Commands.SubmitCommitment;
-    using Models.Types;
-
-    using SFA.DAS.Commitments.Api.Types;
-    using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-
-    using Web.Orchestrators;
-
     [TestFixture]
     public class WhenApproveCommitment
     {

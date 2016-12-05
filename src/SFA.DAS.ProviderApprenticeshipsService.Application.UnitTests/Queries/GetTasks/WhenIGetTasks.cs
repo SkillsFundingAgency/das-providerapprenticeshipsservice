@@ -5,7 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTasks;
 using SFA.DAS.Tasks.Api.Client;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Tests.Queries.GetTasks
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.GetTasks
 {
     [TestFixture]
     public class WhenIGetTasks
