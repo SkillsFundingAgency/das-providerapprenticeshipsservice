@@ -7,8 +7,8 @@
     <ProjectGuid>{6A7B6642-3880-46B1-BF2D-17461D087331}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SFA.DAS.ProviderApprenticeshipsService.Web.Tests</RootNamespace>
-    <AssemblyName>SFA.DAS.ProviderApprenticeshipsService.Web.Tests</AssemblyName>
+    <RootNamespace>SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests</RootNamespace>
+    <AssemblyName>SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -58,8 +58,8 @@
       <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.11.0.16373, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.11.0.16373\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.14.0.17022, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.14.0.17022\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -75,6 +75,9 @@
     <Compile Include="Orchestrators\WhenApproveCommitment.cs" />
     <Compile Include="Orchestrators\WhenGettingCommitmentViewModel.cs" />
     <Compile Include="Orchestrators\WhenFinishEditing.cs" />
+    <Compile Include="StatusCalculator\WhenEditStatusIsWithEmployer.cs" />
+    <Compile Include="StatusCalculator\WhenEditStatusIsWithBoth.cs" />
+    <Compile Include="StatusCalculator\WhenEditStatusIsWithProvider.cs" />
     <Compile Include="WhenGettingStatusOfCommitment.cs" />
     <Compile Include="WhenValidatingApprenticeshipViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,6 +90,10 @@
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Application\SFA.DAS.ProviderApprenticeshipsService.Application.csproj">
       <Project>{849E452B-2B68-445A-980C-995311311AF0}</Project>
       <Name>SFA.DAS.ProviderApprenticeshipsService.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj">
+      <Project>{B3484618-78A0-411E-BC02-AC84C8694C3D}</Project>
+      <Name>SFA.DAS.ProviderApprenticeshipsService.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Web\SFA.DAS.ProviderApprenticeshipsService.Web.csproj">
       <Project>{94E473E1-2217-43C3-A228-00B8BE2BE0F1}</Project>

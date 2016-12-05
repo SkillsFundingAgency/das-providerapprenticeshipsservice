@@ -40,7 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
             if (commitment.ProviderId != message.ProviderId)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commitment does not belong to this Provider" } });
 
-            await _commitmentsApi.PatchProviderCommitment(message.ProviderId, message.CommitmentId, message.AgreementStatus);
+            await _commitmentsApi.PatchProviderCommitment(message.ProviderId, message.CommitmentId, message.LastAction);
 
             if (message.CreateTask)
                 await CreateTask(message, commitment);

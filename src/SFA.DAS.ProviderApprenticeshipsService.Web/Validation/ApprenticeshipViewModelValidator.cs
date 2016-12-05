@@ -12,9 +12,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             var currentYear = System.DateTime.Now.Year;
 
             RuleFor(x => x.ULN)
-                .NotEmpty().WithMessage("Please enter a valid unique learner number")
                 .Matches("^$|^[1-9]{1}[0-9]{9}$").WithMessage("Please enter a valid unique learner number");
 
+            RuleFor(x => x.FirstName).NotEmpty().WithMessage("Please enter first name");
+            RuleFor(x => x.LastName).NotEmpty().WithMessage("Please enter last name");
             RuleFor(x => x.StartMonth).InclusiveBetween(1, 12).WithMessage("Please enter a valid start month for training");
             RuleFor(x => x.StartYear).InclusiveBetween(currentYear, 9999).WithMessage("Please enter a valid start year for training");
             RuleFor(x => x.EndMonth).InclusiveBetween(1, 12).WithMessage("Please enter a valid finish month for training");

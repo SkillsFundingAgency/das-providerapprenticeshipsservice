@@ -11,8 +11,13 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
+<<<<<<< HEAD
         @*<a href="@Url.Action("Details", 
                 new { providerId = Model.ProviderId, commitmentId = Model.CommitmentId })" aria-label="Back" class="link-back">Back</a>*@
+=======
+        <a href="@Url.Action("Details", 
+                new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Back" class="link-back">Back</a>
+>>>>>>> 353f75fc8bc5e54c763236b93ff8a90ca773ed5b
 
         <h1 class="heading-xlarge">Finish editing</h1>
         <div>
@@ -55,7 +60,7 @@
 
                 <div style="margin-top:20px;">
                     @Html.HiddenFor(m => m.ProviderId)
-                    @Html.HiddenFor(m => m.CommitmentId)
+                    @Html.HiddenFor(m => m.HashedCommitmentId)
                     <input type="submit" class="button" id="paymentPlan" value="Continue" />
                 </div>
             </form>

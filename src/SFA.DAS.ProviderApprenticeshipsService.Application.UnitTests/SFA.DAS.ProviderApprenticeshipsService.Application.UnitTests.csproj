@@ -7,8 +7,8 @@
     <ProjectGuid>{C4528A1E-2F4B-4DA1-A1EE-CAC2F2DE3AF5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SFA.DAS.ProviderApprenticeshipsService.Application.Tests</RootNamespace>
-    <AssemblyName>SFA.DAS.ProviderApprenticeshipsService.Application.Tests</AssemblyName>
+    <RootNamespace>SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests</RootNamespace>
+    <AssemblyName>SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

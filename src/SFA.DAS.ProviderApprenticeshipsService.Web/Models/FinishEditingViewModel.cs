@@ -7,7 +7,8 @@
     public sealed class FinishEditingViewModel
     {
         public long ProviderId { get; set; }
-        public long CommitmentId { get; set; }
+
+        public string HashedCommitmentId { get; set; }
 
         [Required(ErrorMessage = "Select an option")]
         public SaveStatus SaveStatus { get; set; }

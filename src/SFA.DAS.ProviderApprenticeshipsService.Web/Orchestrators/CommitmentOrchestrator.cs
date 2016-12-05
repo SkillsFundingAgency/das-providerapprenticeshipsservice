@@ -22,15 +22,19 @@ using NLog;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
-    using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+    using Models.Types;
+    using Domain.Interfaces;
 
     public class CommitmentOrchestrator
     {
         private readonly IMediator _mediator;
         private readonly ICommitmentStatusCalculator _statusCalculator;
+
+        private readonly IHashingService _hashingService;
+
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
-        public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator)
+        public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator, IHashingService hashingService)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -39,6 +43,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             _mediator = mediator;
             _statusCalculator = statusCalculator;
+            this._hashingService = hashingService;
         }
 
         public async Task<CommitmentListViewModel> GetAll(long providerId)
@@ -57,8 +62,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<CommitmentDetailsViewModel> GetCommitmentDetails(long providerId, long commitmentId)
+        public async Task<CommitmentDetailsViewModel> GetCommitmentDetails(long providerId, string hashedCommitmentId)
         {
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             Logger.Info($"Getting commitment details:{commitmentId} for provider:{providerId}");
 
             var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
@@ -72,20 +78,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return new CommitmentDetailsViewModel
             {
                 ProviderId = providerId,
-                CommitmentId = data.Commitment.Id,
+                HashedCommitmentId = hashedCommitmentId,
                 LegalEntityName = data.Commitment.LegalEntityName,
                 Reference = data.Commitment.Reference,
-                Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.AgreementStatus),
+                Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus),
                 Apprenticeships = MapFrom(data.Commitment.Apprenticeships),
                 LatestMessage = message,
                 PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed
             };
         }
 
-        public async Task<CommitmentListItemViewModel> GetCommitment(long providerId, long commitmentId)
+        public async Task<CommitmentListItemViewModel> GetCommitment(long providerId, string hashedCommitmentId)
         {
-            Logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}");
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
 
+            Logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}");
             var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
             {
                 ProviderId = providerId,
@@ -95,18 +102,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return MapFrom(data.Commitment);
         }
 
-        public async Task<ExtendedApprenticeshipViewModel> GetApprenticeship(long providerId, long commitmentId, long apprenticeshipId)
+        public async Task<ExtendedApprenticeshipViewModel> GetApprenticeship(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
+            var apprenticeshipId = this._hashingService.DecodeValue(hashedApprenticeshipId);
             Logger.Info($"Getting apprenticeship:{apprenticeshipId} for provider:{providerId}");
 
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
             {
                 ProviderId = providerId,
-                CommitmentId = commitmentId,
                 AppenticeshipId = apprenticeshipId
             });
-
-            var standards = await _mediator.SendAsync(new GetStandardsQueryRequest());
             
             var apprenticeship = MapFrom(data.Apprenticeship);
 
@@ -119,16 +124,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<ExtendedApprenticeshipViewModel> GetCreateApprenticeshipViewModel(long providerId, long commitmentId)
+        public async Task<ExtendedApprenticeshipViewModel> GetCreateApprenticeshipViewModel(long providerId, string hashedCommitmentId)
         {
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             Logger.Info($"Getting info for creating apprenticeship for provider:{providerId} commitment:{commitmentId}");
-
-            var standards = await _mediator.SendAsync(new GetStandardsQueryRequest());
 
             var apprenticeship = new ApprenticeshipViewModel
             {
                 ProviderId = providerId,
-                CommitmentId = commitmentId,
+                HashedCommitmentId = hashedCommitmentId
             };
 
             return new ExtendedApprenticeshipViewModel
@@ -138,70 +142,60 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeshipViewModel)
         {
-            Logger.Info($"Creating apprenticeship for provider:{apprenticeship.ProviderId} commitment:{apprenticeship.CommitmentId}");
-
+            var apprenticeship = await MapFrom(apprenticeshipViewModel);
             await _mediator.SendAsync(new CreateApprenticeshipCommand
             {
-                ProviderId = apprenticeship.ProviderId,
-                Apprenticeship = await MapFrom(apprenticeship)
+                ProviderId = apprenticeshipViewModel.ProviderId,
+                Apprenticeship = apprenticeship
             });
+
+            Logger.Info($"Created apprenticeship for provider:{apprenticeshipViewModel.ProviderId} commitment:{apprenticeship.CommitmentId}");
         }
 
-        public async Task UpdateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        public async Task UpdateApprenticeship(ApprenticeshipViewModel apprenticeshipViewModel)
         {
-            Logger.Info($"Updating apprenticeship for provider:{apprenticeship.ProviderId} commitment:{apprenticeship.CommitmentId}");
-
+            var apprenticeship = await MapFrom(apprenticeshipViewModel);
             await _mediator.SendAsync(new UpdateApprenticeshipCommand
             {
-                ProviderId = apprenticeship.ProviderId,
-                Apprenticeship = await MapFrom(apprenticeship)
+                ProviderId = apprenticeshipViewModel.ProviderId,
+                Apprenticeship = apprenticeship
             });
+
+            Logger.Info($"Updated apprenticeship for provider:{apprenticeshipViewModel.ProviderId} commitment:{apprenticeship.CommitmentId}");
         }
 
-
-        public async Task SubmitCommitment(SubmitCommitmentViewModel model)
+        public async Task SubmitCommitment(long providerId, string hashedCommitmentId, SaveStatus saveStatus, string message)
         {
-            Logger.Info($"Submitting ({model.SaveStatus}) Commitment for provider:{model.ProviderId} commitment:{model.CommitmentId}");
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            Logger.Info($"Submitting ({saveStatus}) Commitment for provider:{providerId} commitment:{commitmentId}");
 
-            model.SaveStatus.IsApproveWithoutSend();
-
-            // ToDo: Merge with ApproveCommitment method?
-            var agreementStatus = model.SaveStatus != SaveStatus.Save
-                                ? AgreementStatus.ProviderAgreed
-                                : AgreementStatus.NotAgreed;
-
-            await _mediator.SendAsync(new SubmitCommitmentCommand
+            if (saveStatus != SaveStatus.Save)
             {
-                ProviderId = model.ProviderId,
-                CommitmentId = model.CommitmentId,
-                Message = model.Message,
-                AgreementStatus = agreementStatus,
-                CreateTask = model.SaveStatus != SaveStatus.Approve
-        });
-        }
+                var lastAction = saveStatus == SaveStatus.AmendAndSend ? LastAction.Amend : LastAction.Approve;
 
-        public async Task ApproveCommitment(long providerId, long commitmentId, SaveStatus saveStatus)
-        {
-            Logger.Info($"Approving ({saveStatus}) Commitment for provider:{providerId} commitment:{commitmentId}");
-
-            var agreementStatus = saveStatus != SaveStatus.Save
-                                ? AgreementStatus.ProviderAgreed
-                                : AgreementStatus.NotAgreed;
-
-            await _mediator.SendAsync(new SubmitCommitmentCommand
+                await
+                    _mediator.SendAsync(
+                        new SubmitCommitmentCommand
+                            {
+                                ProviderId = providerId,
+                                CommitmentId = commitmentId,
+                                Message = message,
+                                LastAction = lastAction,
+                                CreateTask = saveStatus != SaveStatus.Approve
+                            });
+            }
+            else
             {
-                ProviderId = providerId,
-                CommitmentId = commitmentId,
-                Message = string.Empty,
-                AgreementStatus = agreementStatus,
-                CreateTask = saveStatus != SaveStatus.Approve
-        });
+                Logger.Warn($"Commitment submited with illegal state, Save Status: {saveStatus}");
+            }
         }
 
-        public async Task<FinishEditingViewModel> GetFinishEditing(long providerId, long commitmentId)
+        public async Task<FinishEditingViewModel> GetFinishEditing(long providerId, string hashedCommitmentId)
         {
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
             Logger.Info($"Get info for finish editing options for provider:{providerId} commitment:{commitmentId}");
 
             var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
@@ -214,7 +208,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             return new FinishEditingViewModel
             {
-                CommitmentId = commitmentId,
+                HashedCommitmentId = hashedCommitmentId,
                 ProviderId = providerId,
                 ApproveAndSend = approveAndSend
             };
@@ -224,7 +218,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var apprenticeViewModels = apprenticeships.Select(x => new ApprenticeshipListItemViewModel
             {
-                ApprenticeshipId = x.Id,
+                HashedApprenticeshipId = this._hashingService.HashValue(x.Id),
                 ApprenticeshipName = x.ApprenticeshipName,
                 ULN = x.ULN,
                 TrainingName = x.TrainingName,
@@ -270,11 +264,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             return new CommitmentListItemViewModel
             {
-                CommitmentId = listItem.Id,
+
+                HashedCommitmentId = _hashingService.HashValue(listItem.Id),
                 Reference = listItem.Reference,
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
-                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.ApprenticeshipCount, listItem.AgreementStatus),
+                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.ApprenticeshipCount, listItem.LastAction, listItem.AgreementStatus),
                 ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly
             };
         }
@@ -283,11 +278,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             return new CommitmentListItemViewModel
             {
-                CommitmentId = listItem.Id,
+                HashedCommitmentId = _hashingService.HashValue(listItem.Id),
                 Reference = listItem.Reference,
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
-                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.AgreementStatus),
+                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.LastAction, listItem.AgreementStatus),
                 ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly
             };
         }
@@ -297,8 +292,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var dateOfBirth = apprenticeship.DateOfBirth;
             return new ApprenticeshipViewModel
             {
-                Id = apprenticeship.Id,
-                CommitmentId = apprenticeship.CommitmentId,
+                HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
+                HashedCommitmentId = _hashingService.HashValue(apprenticeship.CommitmentId),
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
                 DateOfBirthDay = dateOfBirth?.Day,
@@ -326,11 +321,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)
         {
+            var hashedApprenticeshipId = string.IsNullOrEmpty(viewModel.HashedApprenticeshipId) ?
+                0
+                : _hashingService.DecodeValue(viewModel.HashedApprenticeshipId);
 
             var apprenticeship =  new Apprenticeship
             {
-                Id = viewModel.Id,
-                CommitmentId = viewModel.CommitmentId,
+                Id = hashedApprenticeshipId,
+                CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
                 DateOfBirth = GetDateTime(viewModel.DateOfBirthDay, viewModel.DateOfBirthMonth, viewModel.DateOfBirthYear),

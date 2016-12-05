@@ -4,11 +4,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
     public enum RequestStatus
     {
+        None, 
+
         [Description("New request")]
         NewRequest,
 
-        [Description("Sent to employer")]
-        SentToEmployer,
+        [Description("Sent for review")]
+        SentForReview,
 
         [Description("Ready for review")]
         ReadyForReview,

@@ -43,13 +43,13 @@
                             </div>
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">Status</div>
-                                <div>@task.TaskStatus.GetDescription()</div>
+                                <div>@task.TaskStatus</div>
                             </div>
                             <div class="responsive-td">
                                 <div>
                                     <form action="@Url.Action("View")" method="GET">
-                                        <input type="hidden" name="providerId" value="@Model.ProviderId" />
-                                        <input type="hidden" name="taskId" value="@task.Id" />
+                                        @Html.HiddenFor(m => m.ProviderId)
+                                        <input type="hidden" name="hashedTaskId" value="@task.HashedTaskId"/>
                                         <button type="submit" name="task" class="button">View</button>
                                     </form>
                                 </div>
@@ -62,7 +62,7 @@
         }
         <p></p>
         <form action="@Url.Action("Index", "Commitment")" method="GET">
-            <input type="hidden" name="providerId" value="@Model.ProviderId" />
+            @Html.HiddenFor(m => m.ProviderId)
             <button type="submit" name="commitment" class="button">Back</button>
         </form>
 

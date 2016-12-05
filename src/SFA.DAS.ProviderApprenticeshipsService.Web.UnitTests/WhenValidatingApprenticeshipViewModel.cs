@@ -3,7 +3,7 @@ using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
 {
     [TestFixture]
     public class WhenValidatingApprenticeshipViewModel
@@ -14,14 +14,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests
         [SetUp]
         public void Setup()
         {
-            _validModel = new ApprenticeshipViewModel { ULN = "1001234567" };
+            _validModel = new ApprenticeshipViewModel { ULN = "1001234567", FirstName = "TestFirstName", LastName = "TestLastName"};
         }
 
     [Test]
         public void ULNMustBeNumericAnd10DigitsInLength()
         {
-            var viewModel = new ApprenticeshipViewModel { ULN = "1001234567" };
-
             var result = _validator.Validate(_validModel);
 
             result.IsValid.Should().BeTrue();

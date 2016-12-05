@@ -11,7 +11,7 @@
                 <tr>
                     <th scope="row">Name</th>
                     <td>@Model.Task.Name</td>
-                    <td><a href="@Url.Action("Details", "Commitment", new {providerId = Model.ProviderId, commitmentId = Model.LinkId})" class="link">View commitment</a></td>
+                    <td><a href="@Url.Action("Details", "Commitment", new { Model.ProviderId, Model.HashedCommitmentId})" class="link">View commitment</a></td>
                 </tr>
                 <tr>
                     <th scope="row">Created Date</th>
