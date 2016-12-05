@@ -78,7 +78,6 @@
     <Compile Include="StatusCalculator\WhenEditStatusIsWithEmployer.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithBoth.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithProvider.cs" />
-    <Compile Include="WhenGettingStatusOfCommitment.cs" />
     <Compile Include="WhenValidatingApprenticeshipViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
