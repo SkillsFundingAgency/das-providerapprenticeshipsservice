@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
@@ -7,7 +6,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            // Not required - filters.Add(new HandleErrorAttribute()); 
         }
     }
 }
