@@ -15,9 +15,6 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-        <a href="@Url.Action("Details",
-                new { Model.ProviderId, Model.HashedCommitmentId})" aria-label="Back" class="link-back">Back</a>
-
         <form method="POST" action="@Url.Action("Edit")">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             @Html.AntiForgeryToken()
@@ -188,3 +185,12 @@
         </form>
     </div>
 </div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "Home")" aria-label="Back" class="back-link">Back</a></li>
+        </ol>
+    </div>
+}

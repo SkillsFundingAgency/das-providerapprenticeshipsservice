@@ -13,10 +13,6 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-        <a href="@Url.Action("Details", 
-                new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Back" class="link-back">Back</a>
-
-
         <form method="POST" action="@Url.Action("Create")">
 
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
@@ -186,15 +182,12 @@
     </div>
 </div>
 
-@*@section breadcrumb {
-        <div class="breadcrumbs">
-            <ol role="navigation">
-                <li><a href="/">Your User Profile</a></li>
-                <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.HashedAccountId})">Employer Account Homepage</a></li>
-                <li><a href="@Url.Action("Index", new {hashedAccountId = @Model.HashedAccountId})">Apprenticeships Home</a></li>
-                <li><a href="@Url.Action("Details", new {providerId = Model.ProviderId, commitmentId = Model.CommitmentId })">Add apprentices</a></li>
-                <li>Add an apprentice</li>
-            </ol>
-        </div>
-    }*@
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "Home")" aria-label="Back" class="back-link">Back</a></li>
+        </ol>
+    </div>
+}
 

@@ -124,7 +124,7 @@
                 }
             </div>
         </div>
-
+        @RenderSection("breadcrumb", required: false)
         <div id="content">
             @*@Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)*@
             @RenderBody()
@@ -164,5 +164,7 @@
     @Scripts.Render("~/bundles/sfajs")
 
     @RenderSection("pageSpecificJS", required: false)
+
+
     </body>
 </html>
