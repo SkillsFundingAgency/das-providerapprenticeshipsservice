@@ -1,19 +1,16 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests.Orchestrators
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using FluentAssertions;
+using MediatR;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using FluentAssertions;
-    using MediatR;
-    using Moq;
-    using NUnit.Framework;
-
-    using Commitments.Api.Types;
-    using Application.Queries.GetCommitment;
-
-    using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-
-    using Web.Orchestrators;
-
     [TestFixture]
     public class WhenFinishEditing
     {

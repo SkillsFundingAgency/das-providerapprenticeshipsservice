@@ -4,7 +4,7 @@ using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
 {
     [TestFixture]
     public sealed class WhenGettingStatusOfCommitment

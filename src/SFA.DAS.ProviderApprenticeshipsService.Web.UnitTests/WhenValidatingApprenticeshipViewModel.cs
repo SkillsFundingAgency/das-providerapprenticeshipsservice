@@ -3,7 +3,7 @@ using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
 {
     [TestFixture]
     public class WhenValidatingApprenticeshipViewModel
