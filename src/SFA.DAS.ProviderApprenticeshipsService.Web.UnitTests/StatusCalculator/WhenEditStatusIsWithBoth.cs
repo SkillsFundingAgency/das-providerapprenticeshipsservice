@@ -11,7 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.StatusCalculator
     {
         private static readonly ICommitmentStatusCalculator _calculator = new CommitmentStatusCalculator();
 
-        [TestCase(RequestStatus.Approved, LastAction.Approve, TestName = "Approved Request by both parties")]
+        [TestCase(RequestStatus.Approved, LastAction.Approve, TestName = "Approved by both parties")]
         public void WhenThereAreNoApprentices(RequestStatus expectedResult, LastAction lastAction)
         {
             var status = _calculator.GetStatus(EditStatus.Both, 2, lastAction, AgreementStatus.BothAgreed);
