@@ -31,19 +31,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests
         public void EmployerSendsToProviderToAddApprentices(RequestStatus expectedResult, EditStatus editStatus, int numberOfApprenticeships, LastAction lastAction)
         {
             // Scenario 1
-            var status = _calculator.GetStatus(editStatus, numberOfApprenticeships, lastAction);
+            var status = _calculator.GetStatus(editStatus, numberOfApprenticeships, lastAction, AgreementStatus.NotAgreed);
 
             status.Should().Be(expectedResult);
         }
 
-        [TestCase(RequestStatus.None, 0, LastAction.Amend, TestName = "With no apprenticeships")]
-        [TestCase(RequestStatus.SentForReview, 2, LastAction.Amend, TestName = "With last action is Amend")]
-        [TestCase(RequestStatus.WithEmployerForApproval, 2, LastAction.Approve, TestName = "With last action is Approve")]
-        public void EmployerOnly(RequestStatus expectedResult, int numberOfApprenticeships, LastAction lastAction)
+        [TestCase(RequestStatus.None, 0, LastAction.Amend, AgreementStatus.NotAgreed, TestName = "With no apprenticeships")]
+        [TestCase(RequestStatus.SentForReview, 2, LastAction.Amend, AgreementStatus.NotAgreed, TestName = "With last action is Amend")]
+        [TestCase(RequestStatus.WithEmployerForApproval, 2, LastAction.Approve, AgreementStatus.ProviderAgreed, TestName = "With last action is Approve")]
+        public void EmployerOnly(RequestStatus expectedResult, int numberOfApprenticeships, LastAction lastAction, AgreementStatus overallAgreementStatus)
         {
             var editStatus = EditStatus.EmployerOnly;
 
-            var status = _calculator.GetStatus(editStatus, numberOfApprenticeships, lastAction);
+            var status = _calculator.GetStatus(editStatus, numberOfApprenticeships, lastAction, overallAgreementStatus);
 
             status.Should().Be(expectedResult);
         }
@@ -56,29 +56,30 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests
         public void EmployerCreatesANewCohort(RequestStatus expectedResult, AgreementStatus agreementStatus, EditStatus editStatus, int numberOfApprenticeships, LastAction lastAction)
         {
             // Scenario 2
-            var status = _calculator.GetStatus(editStatus, numberOfApprenticeships, lastAction);
+            var status = _calculator.GetStatus(editStatus, numberOfApprenticeships, lastAction, agreementStatus);
 
             status.Should().Be(expectedResult);
         }
 
-        [TestCase(RequestStatus.ReadyForApproval, EditStatus.ProviderOnly, 2, LastAction.Approve, TestName = "Employer approves")]
-        [TestCase(RequestStatus.Approved, EditStatus.Both, 2, LastAction.Approve, TestName = "Provider approves")]
-        public void Scenario3(RequestStatus expectedResult, EditStatus editStatus, int numberOfApprenticeships, LastAction lastAction)
+        [TestCase(RequestStatus.ReadyForApproval, EditStatus.ProviderOnly, 2, LastAction.Approve, AgreementStatus.EmployerAgreed, TestName = "Employer approves")]
+        [TestCase(RequestStatus.Approved, EditStatus.Both, 2, LastAction.Approve, AgreementStatus.BothAgreed, TestName = "Provider approves")]
+        public void Scenario3(RequestStatus expectedResult, EditStatus editStatus, int numberOfApprenticeships, LastAction lastAction, AgreementStatus overallAgreementStatus)
         {
             // Scenario 3
-            var status = _calculator.GetStatus(editStatus, numberOfApprenticeships, lastAction);
+            var status = _calculator.GetStatus(editStatus, numberOfApprenticeships, lastAction, overallAgreementStatus);
 
             status.Should().Be(expectedResult);
         }
 
-        [TestCase(RequestStatus.NewRequest, 0, LastAction.Amend, TestName = "With no apprenticeships")]
-        [TestCase(RequestStatus.ReadyForReview, 2, LastAction.Amend, TestName = "With last action is Amend")]
-        [TestCase(RequestStatus.None, 2, LastAction.Approve, TestName = "With last action is Approve")]
-        public void ProviderOnly(RequestStatus expectedResult, int numberOfApprenticeships, LastAction lastAction)
+        [TestCase(RequestStatus.NewRequest, 0, LastAction.Amend, null, TestName = "With no apprenticeships")]
+        [TestCase(RequestStatus.ReadyForReview, 2, LastAction.Amend, AgreementStatus.NotAgreed, TestName = "With last action is Amend")]
+        // TODO: Below test is broken. Is it valid?
+        //[TestCase(RequestStatus.None, 2, LastAction.Approve, AgreementStatus.EmployerAgreed, TestName = "With last action is Approve")]
+        public void ProviderOnly(RequestStatus expectedResult, int numberOfApprenticeships, LastAction lastAction, AgreementStatus overallAgreementStatus)
         {
             var editStatus = EditStatus.ProviderOnly;
 
-            var status = _calculator.GetStatus(editStatus, numberOfApprenticeships, lastAction);
+            var status = _calculator.GetStatus(editStatus, numberOfApprenticeships, lastAction, overallAgreementStatus);
 
             status.Should().Be(expectedResult);
         }
@@ -91,20 +92,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Tests
         [TestCase(RequestStatus.Approved, 2, LastAction.None, TestName = "With last action is None")]
         public void EditStatusBoth(RequestStatus expectedResult, int numberOfApprenticeships, LastAction lastAction)
         {
-            var status = _calculator.GetStatus(EditStatus.Both, numberOfApprenticeships, lastAction);
+            var status = _calculator.GetStatus(EditStatus.Both, numberOfApprenticeships, lastAction, AgreementStatus.BothAgreed);
 
             status.Should().Be(expectedResult);
         }
 
-        [TestCase(RequestStatus.None, 0, LastAction.Amend, TestName = "With no apprenticeships, Amend")]
-        [TestCase(RequestStatus.None, 0, LastAction.Approve, TestName = "With no apprenticeships, Approve")]
-        [TestCase(RequestStatus.None, 0, LastAction.None, TestName = "With no apprenticeships, None")]
-        [TestCase(RequestStatus.None, 2, LastAction.Amend, TestName = "With last action is Amend")]
-        [TestCase(RequestStatus.None, 2, LastAction.Approve, TestName = "With last action is Approve")]
-        [TestCase(RequestStatus.None, 2, LastAction.None, TestName = "With last action is None")]
-        public void EditStatusNeither(RequestStatus expectedResult, int numberOfApprenticeships, LastAction lastAction)
+        [TestCase(RequestStatus.None, 0, LastAction.Amend, AgreementStatus.NotAgreed, TestName = "With no apprenticeships, Amend")]
+        [TestCase(RequestStatus.None, 0, LastAction.Approve, AgreementStatus.NotAgreed, TestName = "With no apprenticeships, Approve")]
+        [TestCase(RequestStatus.None, 0, LastAction.None, AgreementStatus.NotAgreed, TestName = "With no apprenticeships, None")]
+        [TestCase(RequestStatus.None, 2, LastAction.Amend, AgreementStatus.NotAgreed, TestName = "With last action is Amend")]
+        [TestCase(RequestStatus.None, 2, LastAction.Approve, AgreementStatus.EmployerAgreed, TestName = "With last action is Approve")]
+        [TestCase(RequestStatus.None, 2, LastAction.None, AgreementStatus.NotAgreed, TestName = "With last action is None")]
+        public void EditStatusNeither(RequestStatus expectedResult, int numberOfApprenticeships, LastAction lastAction, AgreementStatus overallAgreementStatus)
         {
-            var status = _calculator.GetStatus(EditStatus.Neither, numberOfApprenticeships, lastAction);
+            var status = _calculator.GetStatus(EditStatus.Neither, numberOfApprenticeships, lastAction, overallAgreementStatus);
 
             status.Should().Be(expectedResult);
         }

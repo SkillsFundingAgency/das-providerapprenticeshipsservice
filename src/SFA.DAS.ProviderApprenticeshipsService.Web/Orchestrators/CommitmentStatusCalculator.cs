@@ -5,7 +5,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public sealed class CommitmentStatusCalculator : ICommitmentStatusCalculator
     {
-        public RequestStatus GetStatus(EditStatus editStatus, int apprenticeshipCount, LastAction lastAction)
+        public RequestStatus GetStatus(EditStatus editStatus, int apprenticeshipCount, LastAction lastAction, AgreementStatus overallAgreementStatus)
         {
             bool hasApprenticeships = apprenticeshipCount > 0;
 
@@ -14,7 +14,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             if (editStatus == EditStatus.ProviderOnly)
             {
-                return GetProviderOnlyStatus(lastAction, hasApprenticeships);
+                return GetProviderOnlyStatus(lastAction, hasApprenticeships, overallAgreementStatus);
             }
 
             if (editStatus == EditStatus.EmployerOnly)
@@ -25,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return RequestStatus.None;
         }
 
-        private static RequestStatus GetProviderOnlyStatus(LastAction lastAction, bool hasApprenticeships)
+        private static RequestStatus GetProviderOnlyStatus(LastAction lastAction, bool hasApprenticeships, AgreementStatus overallAgreementStatus)
         {
             if (!hasApprenticeships || lastAction == LastAction.None)
                 return RequestStatus.NewRequest;
@@ -34,7 +34,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 return RequestStatus.ReadyForReview;
 
             if (lastAction == LastAction.Approve)
-                return RequestStatus.ReadyForApproval;
+            {
+                if (overallAgreementStatus == AgreementStatus.NotAgreed)
+                    return RequestStatus.ReadyForReview;
+                else
+                    return RequestStatus.ReadyForApproval;
+            }
 
             return RequestStatus.None;
         }

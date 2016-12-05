@@ -81,7 +81,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 HashedCommitmentId = hashedCommitmentId,
                 LegalEntityName = data.Commitment.LegalEntityName,
                 Reference = data.Commitment.Reference,
-                Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction),
+                Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus),
                 Apprenticeships = MapFrom(data.Commitment.Apprenticeships),
                 LatestMessage = message,
                 PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed
@@ -269,7 +269,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Reference = listItem.Reference,
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
-                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.ApprenticeshipCount, listItem.LastAction),
+                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.ApprenticeshipCount, listItem.LastAction, listItem.AgreementStatus),
                 ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly
             };
         }
@@ -282,7 +282,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Reference = listItem.Reference,
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
-                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.LastAction),
+                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.LastAction, listItem.AgreementStatus),
                 ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly
             };
         }
