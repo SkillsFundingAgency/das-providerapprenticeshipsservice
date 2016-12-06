@@ -2095,11 +2095,6 @@ td.link-right {
   padding-right: 0;
 }
 
-table th, table td {
-  font-size: 14px;
-  font-size: 16px;
-}
-
 tr.total th {
   border: none;
 }
