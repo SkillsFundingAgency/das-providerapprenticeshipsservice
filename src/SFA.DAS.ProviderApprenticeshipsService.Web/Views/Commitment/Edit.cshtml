@@ -15,9 +15,6 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-        <a href="@Url.Action("Details",
-                new { Model.ProviderId, Model.HashedCommitmentId})" aria-label="Back" class="link-back">Back</a>
-
         <form method="POST" action="@Url.Action("Edit")">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             @Html.AntiForgeryToken()
@@ -50,6 +47,7 @@
             </div>
 
             <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.DateOfBirthDay, "error") @Html.AddClassIfPropertyInError(x => x.DateOfBirthMonth, "error") @Html.AddClassIfPropertyInError(x => x.DateOfBirthYear, "error")">
+                <hr />
                 <span class="form-label-bold">Date of birth</span>
                 <span class="form-hint">For example, 08 12 2001</span>
 
@@ -80,6 +78,7 @@
 
 
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.ULN, "error")">
+                <hr />
                 <label for="@Html.IdFor(m => m.ULN)">
                     <span class="form-label form-label-bold">Unique learner number</span>
                     @Html.ValidationMessageFor(m => m.ULN, null, new { id = "error-message-" + Html.IdFor(m => m.ULN), @class = "error-message" })
@@ -106,6 +105,7 @@
             </div>
 
             <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.StartMonth, "error") @Html.AddClassIfPropertyInError(x => x.StartYear, "error")">
+
                 <fieldset>
                     <legend>
                         <span class="form-label-bold">Planned training start date</span>
@@ -179,7 +179,18 @@
             @Html.HiddenFor(m => m.EmployerRef)
 
             <button type="submit" class="button">Save</button>
+
             <a class="links" href="@Url.Action("Details", new { Model.HashedCommitmentId })" aria-label="Cancel">Cancel</a>
+
         </form>
     </div>
 </div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Details", new { Model.HashedCommitmentId })" aria-label="Back" class="back-link">Back</a></li>
+        </ol>
+    </div>
+}

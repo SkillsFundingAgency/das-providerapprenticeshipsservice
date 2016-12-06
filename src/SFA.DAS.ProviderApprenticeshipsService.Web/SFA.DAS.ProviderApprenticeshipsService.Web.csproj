@@ -18,7 +18,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort>44388</IISExpressSSLPort>
+    <IISExpressSSLPort>44309</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -486,6 +486,7 @@
     <Content Include="Views\Error\_Error404.cshtml" />
     <Content Include="Views\Error\_Error400.cshtml" />
     <Content Include="Views\Error\_Error500.cshtml" />
+    <Content Include="src\sass\_custom.scss" />
     <Content Include="Views\Account\NoAgreement.cshtml" />
     <Content Include="Views\Account\NoAccount.cshtml" />
   </ItemGroup>

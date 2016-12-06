@@ -9,5 +9,11 @@
 
     init();
     // add focus to span element for accessibility while using tabs 
-    $('span.select2').attr('tabindex', 0);
+    //$('span.select2').attr('tabindex', 0);
+
+    // open dropdownon on focus
+    $(document).on('focus', '.select2', function () {
+        $(this).siblings('select').select2('open');
+    });
+
 }());

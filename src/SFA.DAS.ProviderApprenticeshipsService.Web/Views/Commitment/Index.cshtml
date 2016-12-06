@@ -8,12 +8,12 @@
 
 <div class="grid-row">
     <div class="column-full">
-        <a href="@Url.Action("Index","Home")" aria-label="Back" class="link-back">Back</a>
+       
         <h1 class="heading-xlarge">Requests in progress</h1>
 
         @if (Model.Commitments.Count == 0)
         {
-            <div class="panel panel-filled">
+            <div class="panel panel-border-wide alert-default">
                
                     <p>You don’t have any requests in progress.</p>
                
@@ -59,3 +59,12 @@
         }
     </div>
 </div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "Home")" aria-label="Back" class="back-link">Back</a></li>
+        </ol>
+    </div>
+}

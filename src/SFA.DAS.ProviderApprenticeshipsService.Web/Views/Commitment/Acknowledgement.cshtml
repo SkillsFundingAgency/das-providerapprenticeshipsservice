@@ -5,15 +5,21 @@
     ViewBag.PageId = "instructions-sent-end";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        @*<a href="#" aria-label="Back" class="link-back">Back</a>*@
 
+<div class="grid-row">
+    <div class="column-full">
         <div class="govuk-box-highlight">
             <h1 class="heading-xlarge" id="changeHeadline">
                 Instructions sent
             </h1>
         </div>
+    </div>
+
+</div>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        @*<a href="#" aria-label="Back" class="link-back">Back</a>*@
 
         <table class="instructions-sent">
             <tbody>
@@ -50,7 +56,7 @@
         <h2 class="heading-medium">What happens next?</h2>
         <p id="changeMainCopy">The updated request will appear in the employer’s account for them to review.</p>
 
-        <a class="button" href="@Url.Action("Index","Home")" aria-label="Continue">Continue</a>
+        @*<a class="button" href="@Url.Action("Index","Home")" aria-label="Continue">Continue</a>*@
     </div>
 
         <div class="column-one-third">

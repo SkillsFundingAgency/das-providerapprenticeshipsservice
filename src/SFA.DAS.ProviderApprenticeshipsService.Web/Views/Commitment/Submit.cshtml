@@ -10,10 +10,6 @@
 <div class="grid-row submit-page">
     <div class="column-two-thirds">
 
-        <a href="@Url.Action("FinishEditing",
-                new { Model.ProviderId, Model.HashedCommitmentId})" aria-label="Back" class="link-back">Back</a>
-
-
         <h1 class="heading-xlarge">Add instructions</h1>
            
             <p class="lede">Let <span class="strong">@Model.EmployerName</span> know what you'd like them to do.</p>
@@ -39,3 +35,11 @@
 </div>
 </div>
 
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("FinishEditing", "Commitment", new { providerId = Model.ProviderId, hashedCommitmentId = Model.HashedCommitmentId })" aria-label="Back" class="back-link">Back</a></li>
+        </ol>
+    </div>
+}
