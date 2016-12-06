@@ -12,7 +12,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-        <h1 class="heading-xlarge">Finish editing</h1>
+        <h1 class="heading-xlarge">Choose an option</h1>
         <div>
             <form action="@Url.Action("FinishEditing")" method="POST">
                 @Html.AntiForgeryToken()
@@ -42,7 +42,7 @@
 
                     <label class="block-label" for="@RadioButtonId(SaveStatus.AmendAndSend)">
                         @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.AmendAndSend, new { id = RadioButtonId(SaveStatus.AmendAndSend) })
-                        <span id="changeTwo">Send to employer to amend or add details</span>
+                        <span id="changeTwo">Send to employer to review or add details</span>
                     </label>
 
                     <label class="block-label" for="@RadioButtonId(SaveStatus.Save)">
