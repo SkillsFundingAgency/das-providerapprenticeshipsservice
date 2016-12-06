@@ -2751,3 +2751,7 @@ span.helpText {
   background-color: #eaf4f9;
   border-color: #2b8cc4;
 }
+
+.field-validation-error {
+  display: block;
+}
