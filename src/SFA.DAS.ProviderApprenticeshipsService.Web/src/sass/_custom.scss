@@ -29,8 +29,7 @@
     border-color: #2b8cc4;
 }
 
-//all mobile media query breakpoints
-//==================================
+//mobile first approach needed later - using mixins
 @media only screen 
     and (max-device-width: 640px), 
     only screen and (max-device-width: 667px), 
