@@ -126,10 +126,6 @@
         </div>
         @RenderSection("breadcrumb", required: false)
         <div id="content">
-            @if (ViewBag.FlashMessage != null)
-            {
-                <div>@ViewBag.FlashMessage</div>
-            }
             @*@Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)*@
             @RenderBody()
         </div>

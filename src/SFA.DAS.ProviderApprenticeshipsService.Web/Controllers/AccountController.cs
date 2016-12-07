@@ -55,13 +55,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [Authorize]
         [Route("~/account", Name = "account-home")]
-        public async Task<ActionResult> Index(string message)
+        public async Task<ActionResult> Index()
         {
             var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
 
             var model = await _accountOrchestrator.GetProvider(providerId);
-
-            ViewBag.FlashMessage = message;
 
             switch (model.AccountStatus)
             {
