@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Security.Claims;
 using System.Web.Helpers;
 using System.Web.Mvc;
@@ -29,8 +30,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
         protected void Application_Error(object sender, EventArgs e)
         {
             var ex = Server.GetLastError().GetBaseException();
-            
             Logger.Error(ex, "Unhanded Exception");
+
+            if (ex.GetType() == typeof(ArgumentException))
+            {
+                Server.ClearError();
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
         }
     }
 }
