@@ -2103,3 +2103,290 @@ tr.total td {
   border-bottom: 2px solid #0b0c0c;
   font-weight: 700;
 }
+
+.home-page .grey-text {
+  color: #6f777b;
+  margin-top: 0;
+  font-weight: 700;
+}
+
+.home-page h1.heading-xlarge {
+  margin-bottom: 0;
+}
+
+.form-control {
+  border: 2px solid #0b0c0c;
+}
+
+.validation-summary-valid,
+.field-validation-valid {
+  display: none;
+}
+
+.field-validation-error {
+  color: #b10e1e;
+  font-weight: bold;
+}
+
+.side-panel aside {
+  margin-top: 70px;
+}
+
+.emptyStateAlert {
+  background-color: #eaf4f9;
+  border-left: 8px solid #2b8cc4;
+  margin: 0 auto;
+  min-height: 110px;
+  width: 85%;
+}
+
+.emptyStateAlert .emptyStateCopy {
+  padding-top: 40px;
+  text-align: center;
+}
+
+.emptyStateAlert .emptyStateCopyDetails {
+  padding-top: 25px;
+  text-align: center;
+}
+
+.strong {
+  font-weight: bold;
+}
+
+a.links {
+  margin-top: 30px;
+  display: block;
+}
+
+.employer-details p {
+  margin-bottom: 5px;
+}
+
+.finishEditingBtn {
+  float: right;
+}
+
+.submit-page .message {
+  width: 100%;
+}
+
+.govuk-box-highlight .heading-xlarge {
+  margin: 0 0 10px;
+}
+
+.instructions-sent td {
+  width: 25%;
+}
+
+.instructions-sent td.strong {
+  font-weight: bold;
+  width: 75%;
+}
+
+#instructions-sent-end aside {
+  margin-top: 10px;
+}
+
+.govuk-box-highlight {
+  margin-top: 50px;
+}
+
+span.helpText {
+  clear: both;
+  color: #6f777b;
+  display: block;
+}
+
+.form-group input#Cost {
+  width: 200px;
+}
+
+.form-date input#StartYear, .form-date input#EndYear {
+  width: 60px;
+}
+
+.select2-container--default .select2-selection--single {
+  border: 2px solid #0b0c0c;
+  border-radius: 0;
+  height: 37px;
+}
+
+.select2-container--default .select2-dropdown {
+  border: 2px solid #0b0c0c;
+  border-radius: 0;
+  border-top: 1px solid #0b0c0c;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background-color: #ddd;
+  color: #000;
+}
+
+.form-group .select2-selection--single:focus {
+  outline: 3px solid #ffbf47;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered:focus,
+.select2-container--default .select2-selection--single:focus,
+.select2-container:focus {
+  outline: 3px solid #ffbf47;
+  height: 37px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  margin-top: 3px;
+  color: #0b0c0c;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  top: 5px;
+}
+
+.select2-container--default .select2-selection--single {
+  border: 2px solid #0b0c0c;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b,
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  border-color: #0b0c0c transparent;
+}
+
+@media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
+  .select2-container--default {
+    width: 100% !important;
+  }
+  .select2-container--default .select2-selection--single .select2-selection__rendered {
+    width: 200px !important;
+  }
+  #instructions-sent-end aside {
+    margin-top: 30px;
+  }
+  .finishEditingBtn {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  /* Force table to not be like tables anymore */
+  table.tableResponsive,
+  .tableResponsive thead,
+  .tableResponsive tbody,
+  .tableResponsive th,
+  .tableResponsive td,
+  .tableResponsive tr {
+    display: block;
+  }
+  /* Hide table headers (but not display: none;, for accessibility) */
+  .tableResponsive thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  .tableResponsive tr {
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
+  .tableResponsive td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    font-weight: bold;
+  }
+  .tableResponsive td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 6px;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+  }
+  .finishEditingBtn {
+    margin-left: 0px;
+  }
+  td.link-right {
+    padding-right: 0;
+    text-align: left;
+  }
+  /*Labels for the data*/
+  .employerListing td:nth-of-type(1):before {
+    content: "Employer";
+    font-weight: normal;
+    margin-top: 5px;
+    min-height: 30px;
+  }
+  .employerListing td:nth-of-type(2):before {
+    content: "Cohort reference";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  .employerListing td:nth-of-type(3):before {
+    content: "Status";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  .providerList td:nth-of-type(1):before {
+    content: "Name";
+    font-weight: normal;
+    margin-top: 5px;
+    min-height: 30px;
+  }
+  .providerList td:nth-of-type(2):before {
+    content: "ULN";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  .providerList td:nth-of-type(3):before {
+    content: "Training name";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  .providerList td:nth-of-type(4):before {
+    content: "Training dates";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  .providerList td:nth-of-type(5):before {
+    content: "Cost";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+}
+
+.hr-double {
+  border-bottom: 4px solid #bfc1c3;
+  margin-bottom: 20px;
+}
+
+.hr-top {
+  margin-bottom: 20px;
+}
+
+.hr-bottom {
+  margin-top: 22px;
+}
+
+#add-apprentice-entry hr,
+#edit-apprentice hr {
+  margin-top: 0;
+  margin-bottom: 22px;
+}
+
+.button.text-link {
+  background-color: transparent;
+  border: medium none;
+  box-shadow: none;
+  color: #005ea5;
+  text-decoration: underline;
+}
+
+.alert-default {
+  background-color: #eaf4f9;
+  border-color: #2b8cc4;
+}
+
+.field-validation-error {
+  display: block;
+}
