@@ -7,6 +7,13 @@ td.link-right {
     padding-right: 0;
 }
 
+table th, table td {
+    vertical-align: top;
+    @include media(tablet) {
+
+    }
+}
+
 tr.total {
     th {
         border: none;
@@ -15,4 +22,14 @@ tr.total {
         border-bottom: 2px solid $black;
         font-weight: 700;
     }
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+.description {
+    font-size: 90%;
+    display:inline-block;
+    line-height: 1.3;
 }
