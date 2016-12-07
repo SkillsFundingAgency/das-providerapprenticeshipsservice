@@ -6,9 +6,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     public class HomeController : Controller
     {
         [Route("~/", Name = "home")]
-        public ActionResult Index()
+        public ActionResult Index(string message)
         {
-            if (User.Identity.IsAuthenticated) return RedirectToRoute("account-home");
+            if (User.Identity.IsAuthenticated) return RedirectToRoute("account-home", new {message});
+
+            ViewBag.FlashMessage = message;
 
             return View();
         }
