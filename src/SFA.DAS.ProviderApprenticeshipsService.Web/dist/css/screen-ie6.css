@@ -2267,7 +2267,6 @@ tr.total td {
   font-weight: 700;
 }
 
-<<<<<<< HEAD
 .no-wrap {
   white-space: nowrap;
 }
@@ -2291,8 +2290,6 @@ tr.total td {
   background: #dee0e2;
 }
 
-=======
->>>>>>> d2e9f7d4d5a3358cf92a701357bd43d333d51532
 .home-page .grey-text {
   color: #6f777b;
   margin-top: 0;
@@ -2563,11 +2560,7 @@ span.helpText {
   margin-bottom: 22px;
 }
 
-<<<<<<< HEAD
 .button.text-link, .text-link.button-link {
-=======
-.button.text-link {
->>>>>>> d2e9f7d4d5a3358cf92a701357bd43d333d51532
   background-color: transparent;
   border: medium none;
   box-shadow: none;
@@ -2582,4 +2575,8 @@ span.helpText {
 
 .field-validation-error {
   display: block;
+}
+
+#finish-editing .heading-xlarge {
+  margin-top: 0.625em;
 }
