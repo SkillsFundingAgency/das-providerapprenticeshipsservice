@@ -209,7 +209,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
             var approveAndSend = PendingChanges(data.Commitment?.Apprenticeships);
-
+            
             return new FinishEditingViewModel
             {
                 HashedCommitmentId = hashedCommitmentId,
@@ -247,13 +247,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var message = taskForCommitment?.Task?.Message ?? string.Empty;
 
             return message;
-        }
-
-        private static bool PendingChanges(List<Apprenticeship> apprenticeships)
-        {
-            if (apprenticeships == null || !apprenticeships.Any()) return true;
-            return apprenticeships?.Any(m => m.AgreementStatus == AgreementStatus.NotAgreed
-                                             || m.AgreementStatus == AgreementStatus.ProviderAgreed) ?? false;
         }
 
         // TODO: Move mappers into own class
