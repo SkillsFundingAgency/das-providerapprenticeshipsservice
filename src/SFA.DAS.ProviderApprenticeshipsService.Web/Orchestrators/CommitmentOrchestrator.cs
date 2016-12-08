@@ -20,6 +20,8 @@ using SFA.DAS.Tasks.Api.Types.Templates;
 using System.Globalization;
 using NLog;
 
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
+
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     using Models.Types;
@@ -117,10 +119,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             apprenticeship.ProviderId = providerId;
 
+            var warningValidator = new ApprenticeshipViewModelApproveValidator();
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes()
+                ApprenticeshipProgrammes = await GetTrainingProgrammes(),
+                WarningValidation = warningValidator.Validate(apprenticeship)
             };
         }
 

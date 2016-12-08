@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WhenValidatingApprenticeshipViewModelForApproval.cs" />
     <Compile Include="Orchestrators\WhenApproveCommitment.cs" />
     <Compile Include="Orchestrators\WhenGettingCommitmentViewModel.cs" />
     <Compile Include="Orchestrators\WhenFinishEditing.cs" />
