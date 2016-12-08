@@ -44,7 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
-            result.State.ApprovalState.Should().Be(ApprovalState.NotReadyForApproval);
+            result.NotReadyForApproval.Should().BeTrue();
         }
 
         [Test(Description = "Should return message detailing a cohort must have an apprentice for approval")]
@@ -55,8 +55,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
-            result.State.ApprovalState.Should().Be(ApprovalState.NotReadyForApproval);
-            result.State.Message.Should().Be("There needs to be at least 1 apprentice in a cohort");
+            result.Message.Should().Be("There needs to be at least 1 apprentice in a cohort");
         }
 
         [Test(Description = "Should return message detailing a cohort has an invalid apprenticeship")]
@@ -73,8 +72,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
-            result.State.ApprovalState.Should().Be(ApprovalState.NotReadyForApproval);
-            result.State.Message.Should().Be("There is 1 apprentice that has incomplete details");
+            result.Message.Should().Be("There is 1 apprentice that has incomplete details");
         }
 
         [Test(Description = "Should return message detailing a cohort has multiple invalid apprenticeships")]
@@ -93,8 +91,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
-            result.State.ApprovalState.Should().Be(ApprovalState.NotReadyForApproval);
-            result.State.Message.Should().Be("There are 2 apprentices that have incomplete details");
+            result.Message.Should().Be("There are 2 apprentices that have incomplete details");
         }
 
         [Test(Description = "Should return ApproveAndSend if at least one apprenticeship is ProviderAgreed")]
@@ -113,7 +110,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
-            result.State.ApprovalState.Should().Be(ApprovalState.ApproveAndSend);
+            result.IsApproveAndSend.Should().BeTrue();
         }
 
         [Test(Description = "Should return ApproveAndSend if at least one apprenticeship is NotAgreed")]
@@ -132,7 +129,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
-            result.State.ApprovalState.Should().Be(ApprovalState.ApproveAndSend);
+            result.IsApproveAndSend.Should().BeTrue();
         }
 
         [Test(Description = "Should return ApproveOnly all are Employer Agreed")]
@@ -151,7 +148,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
-            result.State.ApprovalState.Should().Be(ApprovalState.ApproveOnly);
+            result.IsApproveAndSend.Should().BeFalse();
         }
 
         // --- Helpers ---

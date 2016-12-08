@@ -214,8 +214,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 HashedCommitmentId = hashedCommitmentId,
                 ProviderId = providerId,
-                ApproveAndSend = approveAndSend
+                ApprovalState = GetApprovalState(data.Commitment),
+                Message = GetInvalidStateForApprovalMessage(data.Commitment)
             };
+        }
+
+        private static string GetInvalidStateForApprovalMessage(Commitment commitment)
+        {
+            if (commitment.CanBeApproved)
+                return string.Empty;
+
+            if (commitment.Apprenticeships.Count == 0)
+                return "There needs to be at least 1 apprentice in a cohort";
+
+            var invalidCount = commitment.Apprenticeships.Count(x => x.CanBeApproved == false);
+
+            return invalidCount == 1
+                ? "There is 1 apprentice that has incomplete details"
+                : $"There are {invalidCount} apprentices that have incomplete details";
         }
 
         private IList<ApprenticeshipListItemViewModel> MapFrom(IEnumerable<Apprenticeship> apprenticeships)
