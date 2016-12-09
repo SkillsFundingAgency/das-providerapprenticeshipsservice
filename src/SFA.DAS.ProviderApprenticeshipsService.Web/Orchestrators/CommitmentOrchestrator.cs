@@ -24,6 +24,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.Tasks.Api.Types.Templates;
 using TrainingType = SFA.DAS.Commitments.Api.Types.TrainingType;
 
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
+
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public class CommitmentOrchestrator
@@ -118,10 +120,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             apprenticeship.ProviderId = providerId;
 
+            var warningValidator = new ApprenticeshipViewModelApproveValidator();
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes()
+                ApprenticeshipProgrammes = await GetTrainingProgrammes(),
+                WarningValidation = warningValidator.Validate(apprenticeship)
             };
         }
 
