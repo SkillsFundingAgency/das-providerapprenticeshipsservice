@@ -12,6 +12,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public DateTime? StartDate { get; internal set; }
         public string TrainingName { get; internal set; }
         public string ULN { get; internal set; }
+        public bool CanBeApprove { get; internal set; }
 
     }
 }
