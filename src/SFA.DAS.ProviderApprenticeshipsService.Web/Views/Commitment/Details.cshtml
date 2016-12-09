@@ -36,20 +36,24 @@
         return $"{apprenticeships.Count} Apprentices";
     }
 
-    public string GetDateValue(DateTime? date)
-    {
-        if (!date.HasValue)
-            return " - ";
-
-        return date.Value.ToGdsFormatWithoutDay();
-    }
-
     public string FormatCost(decimal? cost)
     {
         if (!cost.HasValue)
             return string.Empty;
-        
+
         return $"{cost.Value:£0,0}";
+    }
+
+}
+
+@helper GetValueOrDefault(string property) {
+    if (!string.IsNullOrEmpty(property))
+    {
+            <span>@property &nbsp;</span>
+    }
+    else
+    {
+            <span>@Html.Raw("&ndash;")</span>
     }
 }
 <div class="grid-row">
@@ -88,18 +92,28 @@
                     @foreach (var item in Model.Apprenticeships)
                     {
                         <tr>
-                            <td>@item.ApprenticeshipName &nbsp;</td>
-                            <td>@item.ULN &nbsp;</td>
-                            <td>@item.TrainingName &nbsp;</td>
+                            <td>
+                                @GetValueOrDefault(item.ApprenticeshipName)
+                            </td>
+                            <td>
+                                @GetValueOrDefault(item.ULN)
+                            </td>
+                            <td>
+                                @GetValueOrDefault(item.TrainingName)
+                            </td>
                             <td>
                                 @if (item.StartDate != null && item.EndDate != null)
                                 {
                                     <span>
-                                        @GetDateValue(item.StartDate) to @GetDateValue(item.EndDate) &nbsp;
+                                        @item.StartDate.Value.ToGdsFormatWithoutDay() to @item.EndDate.Value.ToGdsFormatWithoutDay() &nbsp;
                                     </span>
                                 }
+                                else
+                                {
+                                    <span>&ndash;</span>
+                                }
                             </td>
-                            <td>@FormatCost(item.Cost) &nbsp;</td>
+                            <td>@GetValueOrDefault(FormatCost(item.Cost))</td>
                             <td><a href="@Url.Action("Edit", new { Model.HashedCommitmentId, item.HashedApprenticeshipId })" title="Edit @item.ApprenticeshipName" aria-label="Edit @item.ApprenticeshipName">Edit</a></td>
                         </tr>
                     }
