@@ -110,9 +110,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Finished")]
+        [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> FinishEditing(long providerId, string hashedCommitmentId)
         {
             var viewModel = await _commitmentOrchestrator.GetFinishEditing(providerId, hashedCommitmentId);
+
             return View(viewModel);
         }
 
