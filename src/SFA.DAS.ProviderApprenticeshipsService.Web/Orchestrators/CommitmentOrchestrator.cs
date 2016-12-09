@@ -78,6 +78,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var message = await GetLatestMessage(providerId, commitmentId);
 
+            var apprenticeships = MapFrom(data.Commitment.Apprenticeships);
+
             return new CommitmentDetailsViewModel
             {
                 ProviderId = providerId,
@@ -85,7 +87,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 LegalEntityName = data.Commitment.LegalEntityName,
                 Reference = data.Commitment.Reference,
                 Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus),
-                Apprenticeships = MapFrom(data.Commitment.Apprenticeships),
+                HasApprenticeships = apprenticeships.Count > 0,
+                IncompleteApprenticeships = apprenticeships.Where(x => x.CanBeApprove == false).ToList(),
+                CompleteApprenticeships = apprenticeships.Where(x => x.CanBeApprove == true).ToList(),
                 LatestMessage = message,
                 PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed
             };
@@ -256,7 +260,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 TrainingName = x.TrainingName,
                 StartDate = x.StartDate,
                 EndDate = x.EndDate,
-                Cost = x.Cost
+                Cost = x.Cost,
+                CanBeApprove = x.CanBeApproved
             }).ToList();
 
             return apprenticeViewModels;
