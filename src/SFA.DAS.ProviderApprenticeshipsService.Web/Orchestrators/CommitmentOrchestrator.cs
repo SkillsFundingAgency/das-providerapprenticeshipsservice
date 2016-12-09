@@ -208,14 +208,38 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             AssertCommitmentStatus(data.Commitment, EditStatus.ProviderOnly);
             AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
-            var approveAndSend = PendingChanges(data.Commitment?.Apprenticeships);
-
             return new FinishEditingViewModel
             {
                 HashedCommitmentId = hashedCommitmentId,
                 ProviderId = providerId,
-                ApproveAndSend = approveAndSend
+                NotReadyForApproval = !data.Commitment.CanBeApproved,
+                ApprovalState = GetApprovalState(data.Commitment),
+                Message = GetInvalidStateForApprovalMessage(data.Commitment)
             };
+        }
+
+        private static ApprovalState GetApprovalState(Commitment commitment)
+        {
+            if (!commitment.Apprenticeships.Any()) return ApprovalState.ApproveAndSend;
+
+            var approvalState = commitment.Apprenticeships.Any(m => m.AgreementStatus == AgreementStatus.NotAgreed
+                                   || m.AgreementStatus == AgreementStatus.ProviderAgreed) ? ApprovalState.ApproveAndSend : ApprovalState.ApproveOnly;
+
+            return approvalState;
+        }
+        private static string GetInvalidStateForApprovalMessage(Commitment commitment)
+        {
+            if (commitment.CanBeApproved)
+                return string.Empty;
+
+            if (commitment.Apprenticeships.Count == 0)
+                return "There needs to be at least 1 apprentice in a cohort";
+
+            var invalidCount = commitment.Apprenticeships.Count(x => x.CanBeApproved == false);
+
+            return invalidCount == 1
+                ? "There is 1 apprentice that has incomplete details"
+                : $"There are {invalidCount} apprentices that have incomplete details";
         }
 
         private IList<ApprenticeshipListItemViewModel> MapFrom(IEnumerable<Apprenticeship> apprenticeships)
@@ -247,13 +271,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var message = taskForCommitment?.Task?.Message ?? string.Empty;
 
             return message;
-        }
-
-        private static bool PendingChanges(List<Apprenticeship> apprenticeships)
-        {
-            if (apprenticeships == null || !apprenticeships.Any()) return true;
-            return apprenticeships?.Any(m => m.AgreementStatus == AgreementStatus.NotAgreed
-                                             || m.AgreementStatus == AgreementStatus.ProviderAgreed) ?? false;
         }
 
         // TODO: Move mappers into own class

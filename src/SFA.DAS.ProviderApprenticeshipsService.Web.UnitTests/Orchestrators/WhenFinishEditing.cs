@@ -7,6 +7,7 @@ using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
@@ -14,66 +15,149 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
     [TestFixture]
     public class WhenFinishEditing
     {
-        [Test(Description = "Should return false on ApproveAndSend if no ProviderAgreed or no NotAgreed in at least one apprenticeship ")]
-        public void ShouldCommitmentWithEmployerAndBothAgreed()
-        {
-            var apprenticeships = new List<Apprenticeship>
-            {
-                new Apprenticeship { AgreementStatus = AgreementStatus.EmployerAgreed },
-                new Apprenticeship { AgreementStatus = AgreementStatus.BothAgreed }
-            };
+        private Commitment _testCommitment;
 
-            var mockMediator = GetMediator(apprenticeships);
+        [SetUp]
+        public void Setup()
+        {
+            _testCommitment = new Commitment
+            {
+                EditStatus = EditStatus.ProviderOnly,
+                ProviderId = 1L,
+                Apprenticeships = new List<Apprenticeship>
+                {
+                }
+            };
+        }
+
+        [Test(Description = "Should return NotReadyForApproval if the commitment is marked as not ready")]
+        public void ShouldReturnNotReadyForApprovalWhenCommitmentNotReady()
+        {
+            _testCommitment.Apprenticeships = new List<Apprenticeship>
+                {
+                    new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed, CanBeApproved = false },
+                    new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed, CanBeApproved = true }
+                };
+
+            var mockMediator = GetMediator(_testCommitment);
             var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
-            result.ApproveAndSend.ShouldBeEquivalentTo(false);
+            result.NotReadyForApproval.Should().BeTrue();
         }
 
-        [Test(Description = "Should return true on ApproveAndSend if at least one apprenticeship is ProviderAgreed ")]
+        [Test(Description = "Should return message detailing a cohort must have an apprentice for approval")]
+        public void ShouldReturnMessageWhenCohortIsEmpty()
+        {
+            var mockMediator = GetMediator(_testCommitment);
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
+
+            var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
+
+            result.Message.Should().Be("There needs to be at least 1 apprentice in a cohort");
+        }
+
+        [Test(Description = "Should return message detailing a cohort has an invalid apprenticeship")]
+        public void ShouldReturnMessageSingleIncompleteApprenticeship()
+        {
+            _testCommitment.Apprenticeships = new List<Apprenticeship>
+                {
+                    new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed, CanBeApproved = false },
+                    new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed, CanBeApproved = true }
+                };
+
+            var mockMediator = GetMediator(_testCommitment);
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
+
+            var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
+
+            result.Message.Should().Be("There is 1 apprentice that has incomplete details");
+        }
+
+        [Test(Description = "Should return message detailing a cohort has multiple invalid apprenticeships")]
+        public void ShouldReturnMessageMultipleIncompleteApprenticeships()
+        {
+            _testCommitment.Apprenticeships = new List<Apprenticeship>
+                {
+                    new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed, CanBeApproved = true },
+                    new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed, CanBeApproved = false },
+                    new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed, CanBeApproved = false },
+                    new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed, CanBeApproved = true }
+                };
+
+            var mockMediator = GetMediator(_testCommitment);
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
+
+            var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
+
+            result.Message.Should().Be("There are 2 apprentices that have incomplete details");
+        }
+
+        [Test(Description = "Should return ApproveAndSend if at least one apprenticeship is ProviderAgreed")]
         public void CommitmentWithOneProviderAgreed()
         {
-            var apprenticeships = new List<Apprenticeship>
-            {
-                new Apprenticeship { AgreementStatus = AgreementStatus.BothAgreed },
-                new Apprenticeship { AgreementStatus = AgreementStatus.EmployerAgreed },
-                new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed }
-            };
+            _testCommitment.CanBeApproved = true;
+            _testCommitment.Apprenticeships = new List<Apprenticeship>
+                {
+                    new Apprenticeship { AgreementStatus = AgreementStatus.BothAgreed },
+                    new Apprenticeship { AgreementStatus = AgreementStatus.EmployerAgreed },
+                    new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed }
+                };
 
-            var mockMediator = GetMediator(apprenticeships);
+            var mockMediator = GetMediator(_testCommitment);
             var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
-            result.ApproveAndSend.ShouldBeEquivalentTo(true);
+            result.IsApproveAndSend.Should().BeTrue();
         }
 
-        [Test(Description = "Should return true on ApproveAndSend if at least one apprenticeship is NotAgreed ")]
+        [Test(Description = "Should return ApproveAndSend if at least one apprenticeship is NotAgreed")]
         public void CommitmentWithOneNotAgreed()
         {
-            var apprenticeships = new List<Apprenticeship>
-            {
-                new Apprenticeship { AgreementStatus = AgreementStatus.BothAgreed },
-                new Apprenticeship { AgreementStatus = AgreementStatus.EmployerAgreed },
-                new Apprenticeship { AgreementStatus = AgreementStatus.NotAgreed }
-            };
-
-            var mockMediator = GetMediator(apprenticeships);
+            _testCommitment.CanBeApproved = true;
+            _testCommitment.Apprenticeships = new List<Apprenticeship>
+                {
+                    new Apprenticeship { AgreementStatus = AgreementStatus.BothAgreed },
+                    new Apprenticeship { AgreementStatus = AgreementStatus.EmployerAgreed },
+                    new Apprenticeship { AgreementStatus = AgreementStatus.NotAgreed }
+                };
+           
+            var mockMediator = GetMediator(_testCommitment);
             var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
-            result.ApproveAndSend.ShouldBeEquivalentTo(true);
+            result.IsApproveAndSend.Should().BeTrue();
+        }
+
+        [Test(Description = "Should return ApproveOnly all are Employer Agreed")]
+        public void CommitmentAllEmployerAgreed()
+        {
+            _testCommitment.CanBeApproved = true;
+            _testCommitment.Apprenticeships = new List<Apprenticeship>
+                {
+                    new Apprenticeship { AgreementStatus = AgreementStatus.EmployerAgreed },
+                    new Apprenticeship { AgreementStatus = AgreementStatus.EmployerAgreed },
+                    new Apprenticeship { AgreementStatus = AgreementStatus.EmployerAgreed }
+                };
+
+            var mockMediator = GetMediator(_testCommitment);
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
+
+            var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
+
+            result.IsApproveAndSend.Should().BeFalse();
         }
 
         // --- Helpers ---
 
-        private static Mock<IMediator> GetMediator(List<Apprenticeship> apprenticeships)
+        private static Mock<IMediator> GetMediator(Commitment commitment)
         {
             var respons = new GetCommitmentQueryResponse
             {
-                Commitment = new Commitment { Apprenticeships = apprenticeships, EditStatus = EditStatus.ProviderOnly }
+                Commitment = commitment
             };
 
             var mockMediator = new Mock<IMediator>();
