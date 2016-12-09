@@ -208,8 +208,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             AssertCommitmentStatus(data.Commitment, EditStatus.ProviderOnly);
             AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
-            var approveAndSend = PendingChanges(data.Commitment?.Apprenticeships);
-            
             return new FinishEditingViewModel
             {
                 HashedCommitmentId = hashedCommitmentId,
