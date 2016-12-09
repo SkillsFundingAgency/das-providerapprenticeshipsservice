@@ -35,7 +35,7 @@
                     @if (Model.IsApproveAndSend)
                     {
                         <label class="block-label" for="@RadioButtonId(SaveStatus.ApproveAndSend)">
-                            @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.ApproveAndSend, GetRadioButtonAttributes(SaveStatus.AmendAndSend, Model.NotReadyForApproval))
+                            @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.ApproveAndSend, GetRadioButtonAttributes(SaveStatus.ApproveAndSend, Model.NotReadyForApproval))
                             <span id="changeOne">Approve and send to employer for approval</span>
                         </label>
                     }
