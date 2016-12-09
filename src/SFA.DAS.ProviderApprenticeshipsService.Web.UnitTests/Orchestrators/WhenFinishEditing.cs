@@ -73,7 +73,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
         {
             var respons = new GetCommitmentQueryResponse
             {
-                Commitment = new Commitment { Apprenticeships = apprenticeships }
+                Commitment = new Commitment { Apprenticeships = apprenticeships, EditStatus = EditStatus.ProviderOnly }
             };
 
             var mockMediator = new Mock<IMediator>();
