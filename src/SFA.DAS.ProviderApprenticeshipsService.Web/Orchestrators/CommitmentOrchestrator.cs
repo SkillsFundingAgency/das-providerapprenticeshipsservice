@@ -214,11 +214,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 HashedCommitmentId = hashedCommitmentId,
                 ProviderId = providerId,
+                NotReadyForApproval = !data.Commitment.CanBeApproved,
                 ApprovalState = GetApprovalState(data.Commitment),
                 Message = GetInvalidStateForApprovalMessage(data.Commitment)
             };
         }
 
+        private static ApprovalState GetApprovalState(Commitment commitment)
+        {
+            if (!commitment.Apprenticeships.Any()) return ApprovalState.ApproveAndSend;
+
+            var approvalState = commitment.Apprenticeships.Any(m => m.AgreementStatus == AgreementStatus.NotAgreed
+                                   || m.AgreementStatus == AgreementStatus.ProviderAgreed) ? ApprovalState.ApproveAndSend : ApprovalState.ApproveOnly;
+
+            return approvalState;
+        }
         private static string GetInvalidStateForApprovalMessage(Commitment commitment)
         {
             if (commitment.CanBeApproved)

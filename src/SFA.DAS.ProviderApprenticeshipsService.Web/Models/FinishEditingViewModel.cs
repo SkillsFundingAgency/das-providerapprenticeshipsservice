@@ -18,15 +18,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public ApprovalState ApprovalState { get; internal set; }
 
-        public bool NotReadyForApproval => ApprovalState == ApprovalState.NotReadyForApproval;
+        public bool NotReadyForApproval { get; internal set; }
 
         public bool IsApproveAndSend => ApprovalState == ApprovalState.ApproveAndSend;
     }
 
     public enum ApprovalState
     {
-        NotReadyForApproval = 0,
-        ApproveAndSend = 1,
-        ApproveOnly = 2
+        ApproveAndSend = 0,
+        ApproveOnly = 1
     }
 }
