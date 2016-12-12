@@ -47,6 +47,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var model = await _commitmentOrchestrator.GetApprenticeship(providerId, hashedCommitmentId, hashedApprenticeshipId);
             ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
 
+            ViewBag.ApprovalWarningState = model.WarningValidation;
+
             return View(model.Apprenticeship);
         }
 
@@ -110,9 +112,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Finished")]
+        [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> FinishEditing(long providerId, string hashedCommitmentId)
         {
             var viewModel = await _commitmentOrchestrator.GetFinishEditing(providerId, hashedCommitmentId);
+
             return View(viewModel);
         }
 
