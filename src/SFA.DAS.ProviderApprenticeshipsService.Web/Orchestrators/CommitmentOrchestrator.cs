@@ -222,7 +222,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderId = providerId,
                 NotReadyForApproval = !data.Commitment.CanBeApproved,
                 ApprovalState = GetApprovalState(data.Commitment),
-                Message = GetInvalidStateForApprovalMessage(data.Commitment)
+                HasApprenticeships = data.Commitment.Apprenticeships.Any(),
+                InvalidApprenticeshipCount = data.Commitment.Apprenticeships.Count(x => !x.CanBeApproved)
             };
         }
 
@@ -234,20 +235,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                                    || m.AgreementStatus == AgreementStatus.ProviderAgreed) ? ApprovalState.ApproveAndSend : ApprovalState.ApproveOnly;
 
             return approvalState;
-        }
-        private static string GetInvalidStateForApprovalMessage(Commitment commitment)
-        {
-            if (commitment.CanBeApproved)
-                return string.Empty;
-
-            if (commitment.Apprenticeships.Count == 0)
-                return "There needs to be at least 1 apprentice in a cohort";
-
-            var invalidCount = commitment.Apprenticeships.Count(x => x.CanBeApproved == false);
-
-            return invalidCount == 1
-                ? "There is 1 apprentice that has incomplete details"
-                : $"There are {invalidCount} apprentices that have incomplete details";
         }
 
         private IList<ApprenticeshipListItemViewModel> MapFrom(IEnumerable<Apprenticeship> apprenticeships)

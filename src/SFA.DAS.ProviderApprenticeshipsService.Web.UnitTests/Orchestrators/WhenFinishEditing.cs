@@ -47,53 +47,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
             result.NotReadyForApproval.Should().BeTrue();
         }
 
-        [Test(Description = "Should return message detailing a cohort must have an apprentice for approval")]
-        public void ShouldReturnMessageWhenCohortIsEmpty()
-        {
-            var mockMediator = GetMediator(_testCommitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
-
-            var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
-
-            result.Message.Should().Be("There needs to be at least 1 apprentice in a cohort");
-        }
-
-        [Test(Description = "Should return message detailing a cohort has an invalid apprenticeship")]
-        public void ShouldReturnMessageSingleIncompleteApprenticeship()
-        {
-            _testCommitment.Apprenticeships = new List<Apprenticeship>
-                {
-                    new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed, CanBeApproved = false },
-                    new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed, CanBeApproved = true }
-                };
-
-            var mockMediator = GetMediator(_testCommitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
-
-            var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
-
-            result.Message.Should().Be("There is 1 apprentice that has incomplete details");
-        }
-
-        [Test(Description = "Should return message detailing a cohort has multiple invalid apprenticeships")]
-        public void ShouldReturnMessageMultipleIncompleteApprenticeships()
-        {
-            _testCommitment.Apprenticeships = new List<Apprenticeship>
-                {
-                    new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed, CanBeApproved = true },
-                    new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed, CanBeApproved = false },
-                    new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed, CanBeApproved = false },
-                    new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed, CanBeApproved = true }
-                };
-
-            var mockMediator = GetMediator(_testCommitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
-
-            var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
-
-            result.Message.Should().Be("There are 2 apprentices that have incomplete details");
-        }
-
         [Test(Description = "Should return ApproveAndSend if at least one apprenticeship is ProviderAgreed")]
         public void CommitmentWithOneProviderAgreed()
         {
