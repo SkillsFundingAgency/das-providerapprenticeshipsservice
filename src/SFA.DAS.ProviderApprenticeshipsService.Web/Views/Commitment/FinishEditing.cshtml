@@ -17,7 +17,7 @@
         @if (Model.NotReadyForApproval)
         {
             <div>
-                @Model.Message
+                @Html.Raw(GetInvalidStateForApprovalMessage(Model.HasApprenticeships, Model.InvalidApprenticeshipCount))
             </div>
         }
         <div>
@@ -93,6 +93,18 @@
             htmlAttributes.Add("disabled", "disabled");
 
         return htmlAttributes;
+    }
+
+    public string GetInvalidStateForApprovalMessage(bool hasApprenticeships, int invalidApprentieshipCount)
+    {
+        if (!hasApprenticeships)
+            return "You need to add details for at least one apprentice - " + Html.ActionLink("add an apprentice", "Details", new { hashedAccountId = Model.ProviderId, hashedCommitmentId = Model.HashedCommitmentId });
+
+        var emptyLink = Html.ActionLink("go back and add details", "Details", new { hashedAccountId = Model.ProviderId, hashedCommitmentId = Model.HashedCommitmentId });
+
+        return invalidApprentieshipCount == 1
+            ? "You have 1 apprentice with incomplete details - " + emptyLink
+            : $"You have {invalidApprentieshipCount} apprentices with incomplete details - " + emptyLink;
     }
 }
 
