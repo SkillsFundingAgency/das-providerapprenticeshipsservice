@@ -2598,3 +2598,7 @@ span.helpText {
   border-color: #d53880;
   color: #d53880;
 }
+
+.cant-approve .panel p {
+  font-weight: bold;
+}
