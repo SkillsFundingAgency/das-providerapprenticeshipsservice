@@ -13,7 +13,7 @@
 
     // open dropdownon on focus
     $(document).on('focus', '.select2', function () {
-        $(this).siblings('select').select2('open');
+        $(this).siblings('select').select2('open'); 
     });
 
 }());
