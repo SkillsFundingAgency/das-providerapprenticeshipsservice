@@ -62,7 +62,7 @@
 
         @{ var finishEditingText = Model.PendingChanges ? "Save and continue" : "Continue to approval"; }
         <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
-        <a href="@Url.Action("UploadApprenticeships", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
+        <a href="@Url.Action("UploadApprenticeships", "BulkUpload", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
             <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
         <hr class="hr-bottom">
     </div>

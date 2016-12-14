@@ -299,6 +299,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BulkUploadController.cs" />
     <Compile Include="Controllers\CommitmentController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -491,8 +492,8 @@
     <Content Include="src\sass\_custom.scss" />
     <Content Include="Views\Account\NoAgreement.cshtml" />
     <Content Include="Views\Account\NoAccount.cshtml" />
-    <Content Include="Views\Commitment\UploadApprenticeships.cshtml" />
-    <Content Include="Views\Commitment\UploadApprenticeshipsUnsuccessful.cshtml" />
+    <Content Include="Views\BulkUpload\UploadApprenticeships.cshtml" />
+    <Content Include="Views\BulkUpload\UploadApprenticeshipsUnsuccessful.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
