@@ -1,0 +1,18 @@
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.UploadApprenticeshipsViewModel
+
+@{
+    ViewBag.Title = "Upload apprenticeships";
+    ViewBag.PageId = "upload-apprenticeships";
+}
+
+<h2>Choose file and upload page</h2>
+
+<form method="POST" action="@Url.Action("UploadApprenticeships")" enctype="multipart/form-data">
+    <input id="files-upload" accept=".csv" type="file" name="Attachment" >
+
+    @Html.HiddenFor(m => m.ProviderId)
+    @Html.HiddenFor(m => m.HashedCommitmentId)
+    <input class="button" id="search-provider" type="submit" value="Upload file">
+</form>
+
+<a href="@Url.Action("UploadApprenticeshipsUnsuccessful", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary" aria-label="Bulk upload unsuccessful">Bulk upload unsuccessful</a>

@@ -333,6 +333,7 @@
     <Compile Include="Models\TaskItemViewModel.cs" />
     <Compile Include="Models\TaskListViewModel.cs" />
     <Compile Include="Models\TaskViewModel.cs" />
+    <Compile Include="Models\UploadApprenticeshipsViewModel.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
     <Compile Include="Orchestrators\CommitmentOrchestrator.cs" />
     <Compile Include="Orchestrators\CommitmentStatusCalculator.cs" />
@@ -490,6 +491,8 @@
     <Content Include="src\sass\_custom.scss" />
     <Content Include="Views\Account\NoAgreement.cshtml" />
     <Content Include="Views\Account\NoAccount.cshtml" />
+    <Content Include="Views\Commitment\UploadApprenticeships.cshtml" />
+    <Content Include="Views\Commitment\UploadApprenticeshipsUnsuccessful.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
