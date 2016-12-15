@@ -38,10 +38,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var errors  = _sut.ValidateFile(_file.Object).ToList();
 
             errors.Count.Should().Be(4);
-            errors.Count(m => m.Contains("File name must end with .csv")).Should().Be(1);
-            errors.Count(m => m.Contains("File name must start with APPDATA")).Should().Be(1);
-            errors.Count(m => m.Contains("File name must include the date with fomat: yyyyMMdd-HHmmss")).Should().Be(1);
-            errors.Count(m => m.Contains("File size cannot be larger then ")).Should().Be(1);
+            errors.Count(m => m.ErrorCode.Contains("Filename_01")).Should().Be(3);
+            errors.Count(m => m.Message.Contains("File name must end with .csv")).Should().Be(1);
+            errors.Count(m => m.Message.Contains("File name must start with APPDATA")).Should().Be(1);
+            errors.Count(m => m.Message.Contains("File name must include the date with fomat: yyyyMMdd-HHmmss")).Should().Be(1);
+            errors.Count(m => m.Message.Contains("File size cannot be larger then ")).Should().Be(1);
         }
 
         [TestCase("APPDATA-20051131-220546.csv", Description = "Date invalid 31 of November")]
@@ -54,7 +55,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var errors = _sut.ValidateFile(_file.Object).ToList();
 
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().ShouldAllBeEquivalentTo("Date in file name is not valid");
+            errors.FirstOrDefault().Message.ShouldAllBeEquivalentTo("Date in file name is not valid");
+            errors.FirstOrDefault().ErrorCode.ShouldAllBeEquivalentTo("Filename_01");
         }
 
         [TestCase("APPDATA-051131-220546.csv", Description = "Year not comlete")]
@@ -67,7 +69,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var errors = _sut.ValidateFile(_file.Object).ToList();
 
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().ShouldAllBeEquivalentTo("File name must include the date with fomat: yyyyMMdd-HHmmss");
+            errors.FirstOrDefault().Message.ShouldAllBeEquivalentTo("File name must include the date with fomat: yyyyMMdd-HHmmss");
+            errors.FirstOrDefault().ErrorCode.ShouldAllBeEquivalentTo("Filename_01");
+        }
+
+        [Test(Description = "Date in the past")]
+        public void FileValidationDateInThePastStringError()
+        {
+            _file.Setup(m => m.FileName).Returns("APPDATA-18820905-175300.csv");
+
+            var errors = _sut.ValidateFile(_file.Object).ToList();
+
+            errors.Count.Should().Be(1);
+            errors.FirstOrDefault().Message.ShouldAllBeEquivalentTo("Date and time must be bofore now");
+            errors.FirstOrDefault().ErrorCode.ShouldAllBeEquivalentTo("Filename_02");
         }
 
         [Test]

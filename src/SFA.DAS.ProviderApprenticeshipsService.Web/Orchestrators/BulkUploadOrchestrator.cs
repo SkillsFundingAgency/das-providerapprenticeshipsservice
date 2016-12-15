@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -26,30 +28,36 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _bulkUploader = bulkUploader;
         }
 
-        public IEnumerable<string> UploadFile(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
+        public BulkUploadResult UploadFile(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
         {
             var fileValidationErrors = _bulkUploader.ValidateFile(uploadApprenticeshipsViewModel.Attachment).ToList();
             if (fileValidationErrors.Any())
             {
                 logger.Warn($"Failed validation bulk upload file with {fileValidationErrors.Count} errors"); // ToDo: Log what errors?
-                return fileValidationErrors;
+                return new BulkUploadResult {Errors = fileValidationErrors };
             }
 
-            // ToDo: Try catch on CsvHelper.CsvMissingFieldException AND CsvMissingFieldException
-            var data = _bulkUploader.CreateViewModels(uploadApprenticeshipsViewModel.Attachment);
+            IEnumerable<ApprenticeshipViewModel> data;
+            try
+            {
+                data = _bulkUploader.CreateViewModels(uploadApprenticeshipsViewModel.Attachment);
+            }
+            catch (Exception exception)
+            {
+                return new BulkUploadResult { Errors = new List<UploadError> {new UploadError(exception.Message) } };
+            }
 
             var trainingProgrammes = GetTrainingProgrammes().Result;
             var validationErrors = _bulkUploader.ValidateFields(data, trainingProgrammes).ToList();
             if (validationErrors.Any())
             {
                 logger.Warn($"Failed validation bulk upload records with {validationErrors.Count} errors"); // ToDo: Log what errors?
-                return validationErrors;
+                return new BulkUploadResult { Errors = validationErrors };
             }
 
             // ToDo: Send date to commitment _repository.uploadData(data);
 
-            // Create new view Model with errors if any
-            return new List<string>();
+            return new BulkUploadResult { Errors = new List<UploadError>() };
         }
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()

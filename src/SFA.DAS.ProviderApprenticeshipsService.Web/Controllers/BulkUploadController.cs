@@ -36,8 +36,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedCommitmentId}/UploadApprenticeships")]
         public ActionResult UploadApprenticeships(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
         {
-            var errors = _bulkUploadController.UploadFile(uploadApprenticeshipsViewModel);
-            if (!errors.Any())
+            var result = _bulkUploadController.UploadFile(uploadApprenticeshipsViewModel);
+            if (!result.Errors.Any())
             {
                 // ToDo: Flash message, or other feedback to customer
                 return RedirectToAction("Details", "Commitment", new { uploadApprenticeshipsViewModel.ProviderId, uploadApprenticeshipsViewModel.HashedCommitmentId });

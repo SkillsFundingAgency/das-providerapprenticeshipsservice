@@ -323,6 +323,7 @@
     <Compile Include="Models\AcknowledgementViewModel.cs" />
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
+    <Compile Include="Models\BulkUpload\BulkUploadResult.cs" />
     <Compile Include="Models\CommitmentListItemViewModel.cs" />
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentDetailsViewModel.cs" />
