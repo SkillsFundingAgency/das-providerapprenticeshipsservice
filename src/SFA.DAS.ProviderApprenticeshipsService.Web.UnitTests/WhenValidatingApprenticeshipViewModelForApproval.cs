@@ -3,6 +3,7 @@
 using NUnit.Framework;
 
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
@@ -23,14 +24,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
                                   LastName = "Last Name",
                                   ULN = "ULN",
                                   Cost = "COST",
-                                  StartMonth = 5,
-                                  StartYear = 2005,
-                                  EndMonth = 5,
-                                  EndYear = 2015,
+                                  StartDate = new DateTimeViewModel(1, 5, 2200),
+                                  EndDate= new DateTimeViewModel(1, 5, 2200),
                                   TrainingCode = "5",
-                                  DateOfBirthDay = 5,
-                                  DateOfBirthMonth = 9,
-                                  DateOfBirthYear = 1882,
+                                  DateOfBirth = new DateTimeViewModel(5, 9, 1882),
                                   NINumber = "SE000NI00NUKBER"
                               };
         }
@@ -40,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         {
             var result = _validator.Validate(new ApprenticeshipViewModel());
             result.IsValid.Should().BeFalse();
-            result.Errors.Count.ShouldBeEquivalentTo(13);
+            result.Errors.Count.ShouldBeEquivalentTo(11);
         }
 
         [Test]
