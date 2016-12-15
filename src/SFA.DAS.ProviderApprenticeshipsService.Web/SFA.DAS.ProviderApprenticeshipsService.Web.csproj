@@ -340,9 +340,11 @@
     <Compile Include="Models\TaskViewModel.cs" />
     <Compile Include="Models\UploadApprenticeshipsViewModel.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
+    <Compile Include="Orchestrators\BulkUploader.cs" />
     <Compile Include="Orchestrators\BulkUploadOrchestrator.cs" />
     <Compile Include="Orchestrators\CommitmentOrchestrator.cs" />
     <Compile Include="Orchestrators\CommitmentStatusCalculator.cs" />
+    <Compile Include="Models\BulkUpload\CsvRecords.cs" />
     <Compile Include="Orchestrators\ICommitmentStatusCalculator.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Orchestrators\TaskOrchestrator.cs" />

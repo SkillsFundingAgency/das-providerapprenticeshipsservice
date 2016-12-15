@@ -8,8 +8,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
     {
         public ApprenticeshipViewModelApproveValidator()
         {
-            RuleFor(r => r.FirstName).NotEmpty();
-            RuleFor(r => r.LastName).NotEmpty();
             RuleFor(r => r.ULN).NotEmpty();
             RuleFor(r => r.Cost).NotEmpty();
 

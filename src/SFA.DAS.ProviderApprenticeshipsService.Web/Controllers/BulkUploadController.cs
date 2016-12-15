@@ -27,6 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             {
                 ProviderId = providerid,
                 HashedCommitmentId = hashedcommitmentid
+                // ToDo: The count of current apprenticeships so that we can display to user what will be deleted
             };
             return View(model);
         }
@@ -35,16 +36,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedCommitmentId}/UploadApprenticeships")]
         public ActionResult UploadApprenticeships(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
         {
-            var b = _bulkUploadController.UploadFile(uploadApprenticeshipsViewModel);
-            // ToDo: sent to orchestrator
-            // branch on returning model error count
-            if (b.Any())
+            var errors = _bulkUploadController.UploadFile(uploadApprenticeshipsViewModel);
+            if (!errors.Any())
             {
                 // ToDo: Flash message, or other feedback to customer
                 return RedirectToAction("Details", "Commitment", new { uploadApprenticeshipsViewModel.ProviderId, uploadApprenticeshipsViewModel.HashedCommitmentId });
             }
 
-            // ToDo: Need to return errors
+            // ToDo: Need to return errors in view model
             return RedirectToAction("UploadApprenticeshipsUnsuccessful", uploadApprenticeshipsViewModel);
         }
 
