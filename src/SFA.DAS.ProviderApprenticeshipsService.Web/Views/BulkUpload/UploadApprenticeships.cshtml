@@ -5,14 +5,42 @@
     ViewBag.PageId = "upload-apprenticeships";
 }
 
-<h2>Choose file and upload page</h2>
 
-<form method="POST" action="@Url.Action("UploadApprenticeships")" enctype="multipart/form-data">
-    <input id="files-upload" accept=".csv" type="file" name="Attachment" >
 
-    @Html.HiddenFor(m => m.ProviderId)
-    @Html.HiddenFor(m => m.HashedCommitmentId)
-    <input class="button" id="search-provider" type="submit" value="Upload file">
-</form>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Upload apprenticeships</h1>
+        <p>You can only upload files with a .csv extension.</p>
 
-<a href="@Url.Action("UploadApprenticeshipsUnsuccessful", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary" aria-label="Bulk upload unsuccessful">Bulk upload unsuccessful</a>
+        <details>
+            <summary><span class="summary">Help with uploading files</span></summary>
+            <div class="panel panel-border-narrow">
+                <p>
+                    Help with file types, file formatting and uploading a file.
+                </p>
+            </div>
+        </details>
+
+        <form method="POST" action="@Url.Action("UploadApprenticeships")" enctype="multipart/form-data">
+            <label class="form-label hidden" for="files-upload">Upload file</label>
+            <input id="files-upload" accept=".csv" type="file" name="Attachment">
+
+            @Html.HiddenFor(m => m.ProviderId)
+            @Html.HiddenFor(m => m.HashedCommitmentId)
+          
+            <input class="button upload-file-btn" type="submit" value="Upload file">
+        </form>
+
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+
+            <li><a href="@Url.Action("Details", "Commitment")" aria-label="Back" class="back-link">Back</a></li>
+
+        </ol>
+    </div>
+}
