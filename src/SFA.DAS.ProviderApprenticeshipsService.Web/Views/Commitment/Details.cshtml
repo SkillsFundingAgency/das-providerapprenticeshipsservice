@@ -69,12 +69,14 @@
 </div>
 
 <div class="grid-row">
-    @if (!Model.HasApprenticeships)
-    {
-        <div class="panel panel-border-wide alert-default">
-            <p>You haven't added any apprentices yet. Use the options on this page to add apprentices.</p>
-        </div>
-    }
+    <div class="column-full">
+        @if (!Model.HasApprenticeships)
+        {
+            <div class="panel panel-border-wide alert-default">
+                <p>You haven't added any apprentices yet. Use the options on this page to add apprentices.</p>
+            </div>
+        }
+    </div>
 </div>
 
 @if (Model.IncompleteApprenticeships.Count > 0)
