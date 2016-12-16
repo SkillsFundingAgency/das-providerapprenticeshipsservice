@@ -88,8 +88,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Reference = data.Commitment.Reference,
                 Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus),
                 HasApprenticeships = apprenticeships.Count > 0,
-                IncompleteApprenticeships = apprenticeships.Where(x => x.CanBeApprove == false).ToList(),
-                CompleteApprenticeships = apprenticeships.Where(x => x.CanBeApprove == true).ToList(),
+                Apprenticeships = apprenticeships,
                 LatestMessage = message,
                 PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed
             };
