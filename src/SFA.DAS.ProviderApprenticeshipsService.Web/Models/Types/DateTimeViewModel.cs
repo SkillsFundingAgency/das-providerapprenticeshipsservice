@@ -11,12 +11,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
 
         public DateTimeViewModel(DateTime? date)
         {
-            if (date != null)
-            {
-                Day = date.Value.Day;
-                Month = date.Value.Month;
-                Year = date.Value.Year;
-            }
+            Day = date?.Day;
+            Month = date?.Month;
+            Year = date?.Year;
         }
 
         public DateTimeViewModel(int? day, int? month, int? year)
@@ -26,26 +23,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
             Year = year;
         }
 
-        public int? Day { get; }
+        public DateTime? DateTime => ToDateTime();
 
-        public int? Month { get; }
+        public int? Day { get; set; }
 
-        public int? Year { get; }
+        public int? Month { get; set; }
 
-        public DateTime? ToDateTime()
+        public int? Year { get; set; }
+
+        private DateTime? ToDateTime()
         {
-            var year = Year < 1000 && Year > 0 
-                ? Year + 2000 
-                : Year;
-            return GetDateTime(Day ?? 1, Month, year);
+            var year = Year;
+            if (year.HasValue && year.Value < 100 && year.Value > -1)
+                year = CultureInfo.InvariantCulture.Calendar.ToFourDigitYear(year.Value);
+
+            return CreateDateTime(Day ?? 1, Month, year);
         }
         
-        private DateTime? GetDateTime(int? day, int? month, int? year)
+        private DateTime? CreateDateTime(int? day, int? month, int? year)
         {
             if (day.HasValue && month.HasValue && year.HasValue)
             {
                 DateTime dateOfBirthOut;
-                if (DateTime.TryParseExact(
+                if (System.DateTime.TryParseExact(
                     $"{year.Value}-{month.Value}-{day.Value}",
                     "yyyy-M-d",
                     CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirthOut))

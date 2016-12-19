@@ -343,12 +343,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
-                DateOfBirth = viewModel.DateOfBirth.ToDateTime(),
+                DateOfBirth = viewModel.DateOfBirth.DateTime,
                 NINumber = viewModel.NINumber,
                 ULN = viewModel.ULN,
                 Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
-                StartDate = viewModel.StartDate.ToDateTime(),
-                EndDate = viewModel.EndDate.ToDateTime(),
+                StartDate = viewModel.StartDate.DateTime,
+                EndDate = viewModel.EndDate.DateTime,
                 ProviderRef = viewModel.ProviderRef,
                 EmployerRef = viewModel.EmployerRef
             };

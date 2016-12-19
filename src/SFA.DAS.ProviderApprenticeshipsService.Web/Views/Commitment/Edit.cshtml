@@ -159,7 +159,7 @@
                         <span class="form-hint">For example, 02 2019</span>
                     </legend>
                     <div class="form-date">
-                        @Html.ValidationMessageFor(m => m.EndDate, "Enter a valid date", new { id = "error-message-" + Html.IdFor(m => m.EndYear), @class = "error-message" })
+                        @Html.ValidationMessageFor(m => m.EndDate, "Enter a valid date", new { id = "error-message-" + Html.IdFor(m => m.EndDate), @class = "error-message" })
                         <div class="form-group form-group-month">
                             <label for="@Html.IdFor(m => m.EndDate)">
                                 <span class="form-label-bold">Month</span>

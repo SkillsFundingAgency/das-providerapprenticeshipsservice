@@ -13,7 +13,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models
         public void SholudBeNull()
         {
             var sut = new DateTimeViewModel(null);
-            sut.ToDateTime().Should().Be(null);
+            sut.DateTime.Should().Be(null);
         }
 
         [TestCase(1, 2, null)]
@@ -26,25 +26,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models
         public void ShouldBeNull(int? day, int? month, int? year)
         {
             var sut = new DateTimeViewModel(day, month, year);
-            sut.ToDateTime().Should().NotHaveValue();
+            sut.DateTime.Should().NotHaveValue();
         }
 
         [Test]
         public void ShouldBeValid()
         {
             var sut = new DateTimeViewModel(DateTime.Parse("2009-09-25"));
-            sut.ToDateTime()?.ToShortDateString().Should().Be("25/09/2009");
+            sut.DateTime?.ToShortDateString().Should().Be("25/09/2009");
         }
 
         [TestCase(null, 2, 3, "01/02/2003")]
         [TestCase(28, 2, 13, "28/02/2013")]
-        [TestCase(null, 2, 99, "01/02/2099")]
+        [TestCase(null, 2, 99, "01/02/1999")]
         [TestCase(15, 12, 1995, "15/12/1995")]
         [TestCase(12, 12, 2024, "12/12/2024")]
         public void ShouldBeValid(int? day, int? month, int? year, string expected)
         {
             var sut = new DateTimeViewModel(day, month, year);
-            sut.ToDateTime()?.ToShortDateString().Should().Be(expected);
+            sut.DateTime?.ToShortDateString().Should().Be(expected);
         }
     }
 }
