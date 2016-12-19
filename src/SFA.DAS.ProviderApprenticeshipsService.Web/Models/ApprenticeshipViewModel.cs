@@ -2,6 +2,7 @@
 using FluentValidation.Results;
 
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
@@ -16,9 +17,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public long ProviderId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int? DateOfBirthDay { get; set; }
-        public int? DateOfBirthMonth { get; set; }
-        public int? DateOfBirthYear { get; set; }
+
+        public DateTimeViewModel DateOfBirth { get; set; }
+
         public string NINumber { get; set; }
         public string ULN { get; set; }
 
@@ -26,13 +27,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string TrainingCode { get; set; }
         public string TrainingName { get; set; }
         public string Cost { get; set; }
-        public int? StartMonth { get; set; }
-        public int? StartYear { get; set; }
-        public int? EndMonth { get; set; }
-        public int? EndYear { get; set; }
+
+        public DateTimeViewModel StartDate { get; set; }
+
+        public DateTimeViewModel EndDate { get; set; }
+
         public PaymentStatus PaymentStatus { get; set; }
         public AgreementStatus AgreementStatus { get; set; }
         public string ProviderRef { get; set; }
-        public string EmployerRef { get; set; }
+        public string EmployerRef { get; set; }   
     }
 }
