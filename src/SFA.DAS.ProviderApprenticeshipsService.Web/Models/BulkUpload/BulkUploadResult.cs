@@ -29,5 +29,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
         public string ErrorCode { get; set; }
 
         public int?  Row { get; set; }
+
+        public override string ToString()
+        {
+            if(Row.HasValue)
+                return $"Row:{Row} - {Message}";
+            return $"{Message}";
+        }
     }
 }

@@ -73,15 +73,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             errors.FirstOrDefault().ErrorCode.ShouldAllBeEquivalentTo("Filename_01");
         }
 
-        [Test(Description = "Date in the past")]
+        [Test(Description = "Date must be in the past")]
         public void FileValidationDateInThePastStringError()
         {
-            _file.Setup(m => m.FileName).Returns("APPDATA-18820905-175300.csv");
+            _file.Setup(m => m.FileName).Returns("APPDATA-21820905-175300.csv");
 
             var errors = _sut.ValidateFile(_file.Object).ToList();
 
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().Message.ShouldAllBeEquivalentTo("Date and time must be bofore now");
+            errors.FirstOrDefault().Message.ShouldAllBeEquivalentTo("Date and time must be before now");
             errors.FirstOrDefault().ErrorCode.ShouldAllBeEquivalentTo("Filename_02");
         }
 

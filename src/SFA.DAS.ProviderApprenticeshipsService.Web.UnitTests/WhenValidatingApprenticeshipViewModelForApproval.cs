@@ -40,7 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         {
             var result = _validator.Validate(new ApprenticeshipViewModel());
             result.IsValid.Should().BeFalse();
-            result.Errors.Count.ShouldBeEquivalentTo(13);
+            result.Errors.Count.ShouldBeEquivalentTo(11);
         }
 
         [Test]

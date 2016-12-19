@@ -33,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         {
             var errors = _sut.ValidateFields(new ApprenticeshipViewModel[0], TrainingProgrammes()).ToList();
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().ShouldBeEquivalentTo("File contains no records");
+            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("File contains no records");
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         {
             var errors = _sut.ValidateFields(GetTestData(), new List<ITrainingProgramme>()).ToList();
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().ShouldBeEquivalentTo("Not a valid training code: 2");
+            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("Not a valid training code: 2");
         }
 
         [Test]
@@ -49,10 +49,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         {
             var errors = _sut.ValidateFields(GetFailingTestData(), TrainingProgrammes()).ToList();
             errors.Count.Should().Be(4);
-            errors[0].ShouldBeEquivalentTo("Row:1 - Enter a first name");
-            errors[1].ShouldBeEquivalentTo("Row:1 - Last name cannot contain more then 100 chatacters");
-            errors[2].ShouldBeEquivalentTo("Row:2 - First name cannot contain more then 100 chatacters");
-            errors[3].ShouldBeEquivalentTo("Row:2 - Enter a last name");
+            errors[0].ToString().ShouldBeEquivalentTo("Row:1 - Enter a first name");
+            errors[1].ToString().ShouldBeEquivalentTo("Row:1 - Last name cannot contain more then 100 chatacters");
+            errors[2].ToString().ShouldBeEquivalentTo("Row:2 - First name cannot contain more then 100 chatacters");
+            errors[3].ToString().ShouldBeEquivalentTo("Row:2 - Enter a last name");
         }
 
         private List<ITrainingProgramme> TrainingProgrammes()

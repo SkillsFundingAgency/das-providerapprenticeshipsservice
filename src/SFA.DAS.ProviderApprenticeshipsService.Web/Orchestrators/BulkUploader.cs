@@ -39,8 +39,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 errors.Add(new UploadError($"File name must include the date with fomat: yyyyMMdd-HHmmss", "Filename_01"));
             else if (!dateParseSuccess)
                 errors.Add(new UploadError($"Date in file name is not valid", "Filename_01"));
-            else if(outDateTime < DateTime.Now)
-                errors.Add(new UploadError("Date and time must be bofore now", "Filename_02"));
+            else if(outDateTime > DateTime.Now)
+                errors.Add(new UploadError("Date and time must be before now", "Filename_02"));
 
             if (!attachment.FileName.EndsWith(fileEnding))
                 errors.Add(new UploadError($"File name must end with {fileEnding}", "Filename_01"));

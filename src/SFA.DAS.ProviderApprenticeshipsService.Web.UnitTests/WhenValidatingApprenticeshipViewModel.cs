@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System.Net.NetworkInformation;
+
+using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
@@ -8,7 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
     [TestFixture]
     public class WhenValidatingApprenticeshipViewModel
     {
-        private ApprenticeshipViewModelValidator _validator = new ApprenticeshipViewModelValidator();
+        private readonly ApprenticeshipViewModelValidator _validator = new ApprenticeshipViewModelValidator();
         private ApprenticeshipViewModel _validModel;
 
         [SetUp]
@@ -30,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         [TestCase(" ")]
         public void ULNThatIsNotNumericOr10DigitsInLengthIsIvalid(string uln)
         {
-            var viewModel = new ApprenticeshipViewModel { ULN = uln };
+            var viewModel = new ApprenticeshipViewModel { ULN = uln, Cost = string.Empty};
 
             var result = _validator.Validate(viewModel);
 
@@ -84,6 +86,137 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             var result = _validator.Validate(_validModel);
 
             result.IsValid.Should().BeFalse();
+        }
+
+        [Test]
+        public void TestNamesNotNull()
+        {
+            _validModel.FirstName = null;
+            _validModel.LastName = null;
+
+            var result = _validator.Validate(_validModel);
+            result.Errors.Count.Should().Be(2);
+            
+            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("Enter a first name");
+            result.Errors[0].ErrorCode.ShouldAllBeEquivalentTo("GivenNames_01");
+            result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("Enter a last name");
+            result.Errors[1].ErrorCode.ShouldAllBeEquivalentTo("FamilyName_01");
+            
+        }
+
+        [TestCase(99, 0)]
+        [TestCase(100, 0)]
+        [TestCase(101, 2)]
+        public void TestLengthOfNames(int length, int expectedErrorCount)
+        {
+            _validModel.FirstName = new string('*', length);
+            _validModel.LastName = new string('*', length);
+
+            var result = _validator.Validate(_validModel);
+            result.Errors.Count.Should().Be(expectedErrorCount);
+            if (expectedErrorCount > 0)
+            {
+                result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("First name cannot contain more then 100 chatacters");
+                result.Errors[0].ErrorCode.ShouldAllBeEquivalentTo("GivenNames_02");
+                result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("Last name cannot contain more then 100 chatacters");
+                result.Errors[1].ErrorCode.ShouldAllBeEquivalentTo("FamilyName_02");
+            }
+        }
+
+        [Test]
+        public void NationalInsurnceNumberCanBeNull()
+        {
+            _validModel.NINumber = null;
+
+            _validator
+                .Validate(_validModel)
+                .Errors.Count.Should().Be(0);
+        }
+
+        [TestCase("DE123456A", Description = "First char not allowed")]
+        [TestCase("FE123456A", Description = "First char not allowed")]
+        [TestCase("SO123456A", Description = "Second char not allowed")]
+        [TestCase("SQ123456A", Description = "Second char not allowed")]
+
+        [TestCase("SE12345A", Description = "Not enough numbers")]
+        [TestCase("SE123456E", Description = "Last char not allowed")]
+        [TestCase("SE123456", Description = "Not enought chars")]
+        public void NationalInsurnceNumberShouldFail(string nino)
+        {
+            _validModel.NINumber = nino;
+
+            var result = _validator
+                .Validate(_validModel);
+
+            result.Errors.Count.Should().Be(1);
+            result.Errors[0].ErrorMessage.ShouldAllBeEquivalentTo("Enter a valid national insurance number");
+        }
+
+        [TestCase("SE1234567A", Description = "Too many numbers")]
+        [TestCase("SE123456  ", Description = "Too many chars")]
+        public void NationalInsurnceNumberShouldFailTooManyChars(string nino)
+        {
+            _validModel.NINumber = nino;
+
+            var result = _validator
+                .Validate(_validModel);
+
+            result.Errors.Count.Should().Be(2);
+            result.Errors[0].ErrorMessage.ShouldAllBeEquivalentTo("National insurance number needs to be 10 characters long");
+        }
+
+
+        [TestCase("SE123456 ")]
+        [TestCase("SE123456A")]
+        public void NationalInsurnceNumberShouldValidate(string nino)
+        {
+            _validModel.NINumber = nino;
+
+            var result = _validator
+                .Validate(_validModel);
+            result.Errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void EmployerRef()
+        {
+            _validModel.ProviderRef = string.Empty;
+
+            var result = _validator
+                .Validate(_validModel);
+            result.Errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void EmployerRef2()
+        {
+            _validModel.ProviderRef = null;
+
+            var result = _validator
+                .Validate(_validModel);
+            result.Errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void EmployerRef3()
+        {
+            _validModel.ProviderRef = "abba 123 !";
+
+            var result = _validator
+                .Validate(_validModel);
+            result.Errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void EmployerRef4()
+        {
+            _validModel.ProviderRef = new string('*', 21);
+
+            var result = _validator
+                .Validate(_validModel);
+            result.Errors.Count.Should().Be(1);
+            result.Errors[0].ErrorMessage.Should().Be("Provider reference must not contain more than 20 characters");
+            result.Errors[0].ErrorCode.Should().Be("ProvRef_01");
         }
     }
 }
