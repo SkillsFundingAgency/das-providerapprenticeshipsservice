@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 using MediatR;
 using NLog;
 
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -20,12 +23,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private readonly BulkUploader _bulkUploader;
 
+        private readonly IHashingService _hashingService;
+
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
-        public BulkUploadOrchestrator(IMediator mediator, BulkUploader bulkUploader)
+        public BulkUploadOrchestrator(IMediator mediator, BulkUploader bulkUploader, IHashingService hashingService)
         {
             _mediator = mediator;
             _bulkUploader = bulkUploader;
+            _hashingService = hashingService;
         }
 
         public async Task<BulkUploadResult> UploadFile(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
@@ -37,13 +43,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 return new BulkUploadResult {Errors = fileValidationErrors };
             }
 
-            IEnumerable<ApprenticeshipViewModel> data;
+            IEnumerable<ApprenticeshipUploadModel> data;
             try
             {
                 data = _bulkUploader.CreateViewModels(uploadApprenticeshipsViewModel.Attachment);
             }
             catch (Exception exception)
             {
+                // Move to bulkUpload
                 return new BulkUploadResult { Errors = new List<UploadError> {new UploadError(exception.Message) } };
             }
 
@@ -72,6 +79,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     .Union(frameworksTask.Result.Frameworks)
                     .OrderBy(m => m.Title)
                     .ToList();
+        }
+
+        public async Task<UploadApprenticeshipsViewModel> GetUploadModel(long providerid, string hashedcommitmentid)
+        {
+            var commitmentId = _hashingService.DecodeValue(hashedcommitmentid);
+            var result = await _mediator.SendAsync(new GetCommitmentQueryRequest
+                                              {
+                                                  ProviderId = providerid,
+                                                  CommitmentId = commitmentId
+                                              });
+
+            var model = new UploadApprenticeshipsViewModel
+            {
+                ProviderId = providerid,
+                HashedCommitmentId = hashedcommitmentid,
+                ApprenticeshipCount = result.Commitment.Apprenticeships.Count
+            };
+
+            return model;
         }
     }
 }

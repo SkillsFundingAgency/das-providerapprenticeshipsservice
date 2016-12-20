@@ -24,15 +24,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/UploadApprenticeships")]
-        public ActionResult UploadApprenticeships(long providerid, string hashedcommitmentid)
+        public async Task<ActionResult> UploadApprenticeships(long providerid, string hashedcommitmentid)
         {
-            var model = new UploadApprenticeshipsViewModel
-            {
-                ProviderId = providerid,
-                HashedCommitmentId = hashedcommitmentid
-                // ToDo: The count of current apprenticeships so that we can display to user what will be deleted
-            };
-            return View(model);
+            var viewModel = await _bulkUploadController.GetUploadModel(providerid, hashedcommitmentid);
+            return View(viewModel);
         }
 
         [HttpPost]

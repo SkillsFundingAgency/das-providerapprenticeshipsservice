@@ -15,6 +15,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
 using WebGrease.Css.Extensions;
@@ -53,7 +54,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return errors;
         }
 
-        public IEnumerable<ApprenticeshipViewModel> CreateViewModels(HttpPostedFileBase attachment)
+        public IEnumerable<ApprenticeshipUploadModel> CreateViewModels(HttpPostedFileBase attachment)
         {
             string result = new StreamReader(attachment.InputStream).ReadToEnd();
             using (TextReader tr = new StringReader(result))
@@ -64,12 +65,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
                 try
                 {
-                    return csvReader.GetRecords<CsvRecords>().ToList().Select(MapTo);
+                    return csvReader.GetRecords<CsvRecord>()
+                        .ToList()
+                        .Select(MapTo);
                 }
                 catch (CsvMissingFieldException exception)
                 {
                     var exceptionData = exception.Data["CsvHelper"];
-                    _logger.Warn(
+                    _logger.Error(
                         exception,
                         $"Failed to create files from bulk upload. {typeof(CsvMissingFieldException)} Data CsvHelper {exceptionData}");
                     throw new Exception("Cannot read all file");
@@ -77,7 +80,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 catch (Exception exception)
                 {
                     var exceptionData = exception.Data["CsvHelper"];
-                    _logger.Warn(
+                    _logger.Error(
                         exception,
                         $"Failed to create files from bulk upload. Exception Data CsvHelper {exceptionData}");
                     throw new Exception("Failed to create apprentices from file");
@@ -85,41 +88,47 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             }
         }
 
-        public virtual IEnumerable<UploadError> ValidateFields(IEnumerable<ApprenticeshipViewModel> records, List<ITrainingProgramme> trainingProgrammes)
+        public virtual IEnumerable<UploadError> ValidateFields(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes)
         {
             var errors = new List<UploadError>();
 
             if (!records.Any()) return new[] { new UploadError("File contains no records") };
 
-            var index = 0;
+            var index = 1;
             foreach (var record in records)
             {
+                var viewModel = record.ApprenticeshipViewModel;
                 index++;
 
                 var viewModelValidator = new ApprenticeshipViewModelValidator();
                 var approvalValidator = new ApprenticeshipViewModelApproveValidator();
+                var csvRecordValidator = new CsvRecordValidator();
 
                 // Validate view model 
-                var validationResult = viewModelValidator.Validate(record);
+                var validationResult = viewModelValidator.Validate(viewModel);
                 validationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, index)));
 
                 // Validate view model for approval
-                var approvalValidationResult = approvalValidator.Validate(record);
+                var approvalValidationResult = approvalValidator.Validate(viewModel);
                 approvalValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, index)));
 
-                if(trainingProgrammes.All(m => m.Id != record.TrainingCode))
-                    errors.Add(new UploadError($"Not a valid training code: {record.TrainingCode}", "StdCode_04", index)); // ToDo: Add error code StdCode_04
+                // Validate csv record
+                var csvValidationResult = csvRecordValidator.Validate(record.CsvRecord);
+                csvValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, index)));
+
+                if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode) && trainingProgrammes.All(m => m.Id != viewModel.TrainingCode))
+                    errors.Add(new UploadError($"Not a valid training code {viewModel.TrainingCode}", "StdCode_04", index));
             }
             return errors;
         }
 
-        private ApprenticeshipViewModel MapTo(CsvRecords record)
+        private ApprenticeshipUploadModel MapTo(CsvRecord record)
         {
             var dateOfBirth = GetValidDate(record.DateOfBirth);
             var learnerStartDate = GetValidDate(record.LearnStartDate);
             var learnerEndDate = GetValidDate(record.LearnPlanEndDate);
 
-            var trainingCode = record.StdCode != null
+            var trainingCode = record.ProgType == 25
                                    ? record.StdCode.ToString()
                                    : $"{record.FworkCode}-{record.ProgType}-{record.PwayCode}"; // ToDo: Confirm // ProgType => 2,3,20,21,22,23
 
@@ -136,9 +145,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderRef = record.ProvRef,
                 StartDate = new DateTimeViewModel(learnerStartDate),
                 EndDate = new DateTimeViewModel(learnerEndDate),
+                ProgType = record.ProgType,
                 TrainingCode = trainingCode
             };
-            return apprenticeshipViewModel;
+            return new ApprenticeshipUploadModel
+                       {
+                           ApprenticeshipViewModel = apprenticeshipViewModel,
+                           CsvRecord = record
+                       };
         }
 
         private DateTime? GetValidDate(string date)

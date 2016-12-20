@@ -14,5 +14,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string HashedCommitmentId { get; set; }
 
         public IEnumerable<UploadError> Errors { get; set; }
+
+        public int ApprenticeshipCount { get; set; }
     }
 }

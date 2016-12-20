@@ -21,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             _validModel = new ApprenticeshipViewModel { ULN = "1001234567", FirstName = "TestFirstName", LastName = "TestLastName"};
         }
 
-    [Test]
+        [Test]
         public void ULNMustBeNumericAnd10DigitsInLength()
         {
             var result = _validator.Validate(_validModel);

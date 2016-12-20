@@ -1,6 +1,6 @@
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
 {
-    internal class CsvRecords
+    public class CsvRecord
     {
         public long? ULN { get; set; }
 

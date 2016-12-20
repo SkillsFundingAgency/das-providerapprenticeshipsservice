@@ -13,10 +13,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         public ApprenticeshipViewModelValidator()
         {
             Func<string, int, bool> lengthLessThan = (str, lenth) => (str?.Length ?? 0) <= lenth;
-            RuleFor(x => x.ULN).Matches("^$|^[1-9]{1}[0-9]{9}$").WithMessage("Enter a valid unique learner number");
 
             var now = DateTime.Now;
             var yesterday= DateTime.Now.AddDays(-1);
+
+            RuleFor(x => x.ULN)
+                .Matches("^$|^[1-9]{1}[0-9]{9}$").WithMessage("Enter a valid unique learner number")
+                .When(m => m.ULN == "9999999999").WithMessage("Not a valid value: 9999999999").WithErrorCode("ULN_02");
 
             RuleFor(x => x.FirstName)
                 .Must(m => !string.IsNullOrEmpty(m)).WithMessage("Enter a first name").WithErrorCode("GivenNames_01")

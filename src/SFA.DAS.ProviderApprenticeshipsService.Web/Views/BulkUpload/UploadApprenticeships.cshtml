@@ -27,8 +27,11 @@
 
             @Html.HiddenFor(m => m.ProviderId)
             @Html.HiddenFor(m => m.HashedCommitmentId)
-          
+
             <input class="button upload-file-btn" type="submit" value="Upload file">
+            <div style="color: purple; padding: 0.5em; font-weight: bold;">
+                This will delete @Model.ApprenticeshipCount apprentices from request
+            </div>
         </form>
 
     </div>
