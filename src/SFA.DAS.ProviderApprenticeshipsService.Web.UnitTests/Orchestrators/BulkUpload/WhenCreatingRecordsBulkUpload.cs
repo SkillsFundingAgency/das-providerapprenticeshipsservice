@@ -21,11 +21,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                 Chris,Froberg,SE1233211C,,,,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559";
 
         const string TestData =
-            @"GivenName,FamilyName,DateOfBirth,NINumber,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TrainingPrice,EPAPrice,EPAOrgId,EmpRef,ProvRef,ULN
+            @"GivenNames,FamilyName,DateOfBirth,NINumber,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TrainingPrice,EPAPrice,EPAOrgId,EmpRef,ProvRef,ULN
                 Chris,Froberg,1998-12-08,SE1233211C,,,,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559
                 Chris1,Froberg1,1998-12-08,SE1233211C,,,,3,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559
                 Chris2,Froberg2,1998-12-08,SE1233211C,,,,4,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559
-                Chris3,Froberg3,1998-12-08,SE1233211C,,,,5,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559";
+                Chris3,Froberg3,1998-12-08,SE1233211C,,,,5,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559
+                ,,,,,,,,,,,,,,,
+                Chris3,Froberg3,1998-12-08,SE1233211E,,,,5,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559
+                Chris2,StartEndDateError,1998-12-08,SE1233211C,,,,4,2020-08-01,2019-08-01,1500,,,Employer ref,Provider ref,1113335559";
 
         private Mock<HttpPostedFileBase> _file;
 
@@ -47,7 +50,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         public void CreatingViewModels()
         {
             var records = _sut.CreateViewModels(_file.Object);
-            records.Count().Should().Be(4);
+            records.Count().Should().Be(7);
         }
     }
 }

@@ -311,18 +311,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 HashedCommitmentId = _hashingService.HashValue(apprenticeship.CommitmentId),
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
-                DateOfBirthDay = dateOfBirth?.Day,
-                DateOfBirthMonth = dateOfBirth?.Month,
-                DateOfBirthYear = dateOfBirth?.Year,
+                DateOfBirth = new DateTimeViewModel(dateOfBirth?.Day, dateOfBirth?.Month, dateOfBirth?.Year),
                 NINumber = apprenticeship.NINumber,
                 ULN = apprenticeship.ULN,
                 TrainingType = apprenticeship.TrainingType,
                 TrainingCode = apprenticeship.TrainingCode,
                 Cost = NullableDecimalToString(apprenticeship.Cost),
-                StartMonth = apprenticeship.StartDate?.Month,
-                StartYear = apprenticeship.StartDate?.Year,
-                EndMonth = apprenticeship.EndDate?.Month,
-                EndYear = apprenticeship.EndDate?.Year,
+                StartDate = new DateTimeViewModel(apprenticeship.StartDate),
+                EndDate = new DateTimeViewModel(apprenticeship.EndDate),
                 PaymentStatus = apprenticeship.PaymentStatus,
                 AgreementStatus = apprenticeship.AgreementStatus,
                 ProviderRef = apprenticeship.ProviderRef,
@@ -347,12 +343,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
-                DateOfBirth = GetDateTime(viewModel.DateOfBirthDay, viewModel.DateOfBirthMonth, viewModel.DateOfBirthYear),
+                DateOfBirth = viewModel.DateOfBirth.DateTime,
                 NINumber = viewModel.NINumber,
                 ULN = viewModel.ULN,
                 Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
-                StartDate = GetDateTime(viewModel.StartMonth, viewModel.StartYear),
-                EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear),
+                StartDate = viewModel.StartDate.DateTime,
+                EndDate = viewModel.EndDate.DateTime,
                 ProviderRef = viewModel.ProviderRef,
                 EmployerRef = viewModel.EmployerRef
             };
@@ -366,31 +362,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             }
 
             return apprenticeship;
-        }
-
-        private DateTime? GetDateTime(int? month, int? year)
-        {
-            if (month.HasValue && year.HasValue)
-                return new DateTime(year.Value, month.Value, 1);
-
-            return null;
-        }
-
-        private DateTime? GetDateTime(int? day, int? month, int? year)
-        {
-            if (day.HasValue && month.HasValue && year.HasValue)
-            {
-                DateTime dateOfBirthOut;
-                if (DateTime.TryParseExact(
-                    $"{year.Value}-{month.Value}-{day.Value}",
-                    "yyyy-M-d",
-                    CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirthOut))
-                {
-                    return dateOfBirthOut;
-                }
-            }
-
-            return null;
         }
 
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)

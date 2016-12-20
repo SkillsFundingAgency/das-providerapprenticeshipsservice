@@ -14,6 +14,7 @@ using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
 using WebGrease.Css.Extensions;
@@ -128,17 +129,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PaymentStatus = PaymentStatus.Active,
                 FirstName = record.GivenNames,
                 LastName = record.FamilyName,
-                DateOfBirthYear = dateOfBirth?.Year,
-                DateOfBirthMonth = dateOfBirth?.Month,
-                DateOfBirthDay = dateOfBirth?.Day,
+                DateOfBirth = new DateTimeViewModel(dateOfBirth),
                 ULN = record.ULN.ToString(),
                 NINumber = record.NINumber,
                 Cost = record.TrainingPrice.ToString(),
                 ProviderRef = record.ProvRef,
-                StartMonth = learnerStartDate?.Month,
-                StartYear = learnerStartDate?.Year,
-                EndMonth = learnerEndDate?.Month,
-                EndYear = learnerEndDate?.Year,
+                StartDate = new DateTimeViewModel(learnerStartDate),
+                EndDate = new DateTimeViewModel(learnerEndDate),
                 TrainingCode = trainingCode
             };
             return apprenticeshipViewModel;
