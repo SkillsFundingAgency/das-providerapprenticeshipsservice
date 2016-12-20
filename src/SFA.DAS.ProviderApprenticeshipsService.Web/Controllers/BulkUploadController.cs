@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
@@ -34,24 +37,31 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("{hashedCommitmentId}/UploadApprenticeships")]
-        public ActionResult UploadApprenticeships(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
+        public async Task<ActionResult> UploadApprenticeships(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
         {
-            var result = _bulkUploadController.UploadFile(uploadApprenticeshipsViewModel);
+            var result = await _bulkUploadController.UploadFile(uploadApprenticeshipsViewModel);
             if (!result.Errors.Any())
             {
                 // ToDo: Flash message, or other feedback to customer
                 return RedirectToAction("Details", "Commitment", new { uploadApprenticeshipsViewModel.ProviderId, uploadApprenticeshipsViewModel.HashedCommitmentId });
             }
 
-            // ToDo: Need to return errors in view model
-            return RedirectToAction("UploadApprenticeshipsUnsuccessful", uploadApprenticeshipsViewModel);
+            TempData["errors"] = result.Errors.ToList();
+            return RedirectToAction("UploadApprenticeshipsUnsuccessful", new { uploadApprenticeshipsViewModel.ProviderId, uploadApprenticeshipsViewModel.HashedCommitmentId , errors = result.Errors });
         }
 
 
         [Route("{hashedCommitmentId}/UploadApprenticeships/Unsuccessful")]
-        public ActionResult UploadApprenticeshipsUnsuccessful(long providerid, string hashedcommitmentid)
+        public ActionResult UploadApprenticeshipsUnsuccessful(long providerId, string hashedCommitmentId, IEnumerable<UploadError> errors)
         {
-            return View();
+            var model = new UploadApprenticeshipsViewModel
+                            {
+                                ProviderId = providerId,
+                                HashedCommitmentId = hashedCommitmentId,
+                                Errors = TempData["errors"] as List<UploadError>
+            };
+
+            return View(model);
         }
     }
 }

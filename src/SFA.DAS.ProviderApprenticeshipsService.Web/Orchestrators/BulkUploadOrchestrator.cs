@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using MediatR;
-
 using NLog;
 
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
@@ -21,19 +20,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private readonly BulkUploader _bulkUploader;
 
-        private ILogger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
-        public BulkUploadOrchestrator(BulkUploader bulkUploader)
+        public BulkUploadOrchestrator(IMediator mediator, BulkUploader bulkUploader)
         {
+            _mediator = mediator;
             _bulkUploader = bulkUploader;
         }
 
-        public BulkUploadResult UploadFile(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
+        public async Task<BulkUploadResult> UploadFile(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
         {
             var fileValidationErrors = _bulkUploader.ValidateFile(uploadApprenticeshipsViewModel.Attachment).ToList();
             if (fileValidationErrors.Any())
             {
-                logger.Warn($"Failed validation bulk upload file with {fileValidationErrors.Count} errors"); // ToDo: Log what errors?
+                _logger.Warn($"Failed validation bulk upload file with {fileValidationErrors.Count} errors"); // ToDo: Log what errors?
                 return new BulkUploadResult {Errors = fileValidationErrors };
             }
 
@@ -47,11 +47,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 return new BulkUploadResult { Errors = new List<UploadError> {new UploadError(exception.Message) } };
             }
 
-            var trainingProgrammes = GetTrainingProgrammes().Result;
+            var trainingProgrammes = await GetTrainingProgrammes();
             var validationErrors = _bulkUploader.ValidateFields(data, trainingProgrammes).ToList();
             if (validationErrors.Any())
             {
-                logger.Warn($"Failed validation bulk upload records with {validationErrors.Count} errors"); // ToDo: Log what errors?
+                _logger.Warn($"Failed validation bulk upload records with {validationErrors.Count} errors"); // ToDo: Log what errors?
                 return new BulkUploadResult { Errors = validationErrors };
             }
 
@@ -69,7 +69,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             return
                 standardsTask.Result.Standards.Cast<ITrainingProgramme>()
-                    .Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>())
+                    .Union(frameworksTask.Result.Frameworks)
                     .OrderBy(m => m.Title)
                     .ToList();
         }

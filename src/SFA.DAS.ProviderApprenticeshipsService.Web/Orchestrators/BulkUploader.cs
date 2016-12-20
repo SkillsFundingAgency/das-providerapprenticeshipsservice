@@ -59,6 +59,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 var csvReader = new CsvReader(tr);
                 csvReader.Configuration.HasHeaderRecord = true;
+                csvReader.Configuration.IsHeaderCaseSensitive = false;
 
                 try
                 {
@@ -81,39 +82,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     throw new Exception("Failed to create apprentices from file");
                 }
             }
-        }
-
-        private ApprenticeshipViewModel MapTo(CsvRecords record)
-        {
-            var dateOfBirth = GetValidDate(record.DateOfBirth);
-            var learnerStartDate = GetValidDate(record.LearnStartDate);
-            var learnerEndDate = GetValidDate(record.LearnPlanEndDate);
-
-            var trainingCode = record.StdCode != null
-                                   ? record.StdCode.ToString()
-                                   : $"{record.FworkCode}-{record.ProgType}-{record.PwayCode}"; // ToDo: Confirm // ProgType => 2,3,20,21,22,23,25
-
-            var apprenticeshipViewModel = new ApprenticeshipViewModel
-            {
-                AgreementStatus = AgreementStatus.NotAgreed,
-                PaymentStatus = PaymentStatus.Active,
-                FirstName = record.GivenName,
-                LastName = record.FamilyName,
-                DateOfBirthYear = dateOfBirth?.Year,
-                DateOfBirthMonth = dateOfBirth?.Month,
-                DateOfBirthDay = dateOfBirth?.Day,
-                ULN = record.ULN.ToString(),
-                NINumber = record.NINumber,
-                Cost = record.TrainingPrice.ToString(),
-                ProviderRef = record.ProvRef,
-                EmployerRef = record.EmpRef, // ToDo: Do we set employer ref?
-                StartMonth = learnerStartDate?.Month,
-                StartYear = learnerStartDate?.Year,
-                EndMonth = learnerEndDate?.Month,
-                EndYear = learnerEndDate?.Year,
-                TrainingCode = trainingCode
-            };
-            return apprenticeshipViewModel;
         }
 
         public virtual IEnumerable<UploadError> ValidateFields(IEnumerable<ApprenticeshipViewModel> records, List<ITrainingProgramme> trainingProgrammes)
@@ -139,9 +107,41 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 approvalValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, index)));
 
                 if(trainingProgrammes.All(m => m.Id != record.TrainingCode))
-                    errors.Add(new UploadError($"Not a valid training code: {record.TrainingCode}")); // ToDo: Add error code StdCode_04
+                    errors.Add(new UploadError($"Not a valid training code: {record.TrainingCode}", "StdCode_04", index)); // ToDo: Add error code StdCode_04
             }
             return errors;
+        }
+
+        private ApprenticeshipViewModel MapTo(CsvRecords record)
+        {
+            var dateOfBirth = GetValidDate(record.DateOfBirth);
+            var learnerStartDate = GetValidDate(record.LearnStartDate);
+            var learnerEndDate = GetValidDate(record.LearnPlanEndDate);
+
+            var trainingCode = record.StdCode != null
+                                   ? record.StdCode.ToString()
+                                   : $"{record.FworkCode}-{record.ProgType}-{record.PwayCode}"; // ToDo: Confirm // ProgType => 2,3,20,21,22,23
+
+            var apprenticeshipViewModel = new ApprenticeshipViewModel
+            {
+                AgreementStatus = AgreementStatus.NotAgreed,
+                PaymentStatus = PaymentStatus.Active,
+                FirstName = record.GivenNames,
+                LastName = record.FamilyName,
+                DateOfBirthYear = dateOfBirth?.Year,
+                DateOfBirthMonth = dateOfBirth?.Month,
+                DateOfBirthDay = dateOfBirth?.Day,
+                ULN = record.ULN.ToString(),
+                NINumber = record.NINumber,
+                Cost = record.TrainingPrice.ToString(),
+                ProviderRef = record.ProvRef,
+                StartMonth = learnerStartDate?.Month,
+                StartYear = learnerStartDate?.Year,
+                EndMonth = learnerEndDate?.Month,
+                EndYear = learnerEndDate?.Year,
+                TrainingCode = trainingCode
+            };
+            return apprenticeshipViewModel;
         }
 
         private DateTime? GetValidDate(string date)

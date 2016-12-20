@@ -1,4 +1,4 @@
-﻿@model dynamic
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.UploadApprenticeshipsViewModel
 
 @{
     ViewBag.Title = "Upload apprenticeships unsuccessful";
@@ -8,8 +8,16 @@
 <h1 class="heading-xlarge">Upload apprenticeships unsuccessful</h1>
 
 
+<ul>
+    
+    @foreach (var error in Model.Errors)
+    {
+        <li>
+            @error.ToString()
+        </li>
+    }
 
-
+</ul>
 
 
 
