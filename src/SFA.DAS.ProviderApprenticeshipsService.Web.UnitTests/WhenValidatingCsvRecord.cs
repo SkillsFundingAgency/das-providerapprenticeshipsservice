@@ -73,7 +73,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         [TestCase(22, 10, 1000, null, "Pathway code must be less than 1000 characters", "PwayCode_01")]
         [TestCase(23, 10, null, null, "Pathway code must be greater then 0 for this prog type", "PwayCode_02")]
         [TestCase(23, 10, -1, null, "Pathway code must be greater then 0 for this prog type", "PwayCode_02")]
-        //[TestCase(3, null, null, null, "Pathway code must be greater then 0 for this prog type", "FworkCode_02")]        
         public void PathwayCodeValidationFail(int? progType, int? frameworkCode, int? pathwayCode, int? standardCode, string message, string errorCode)
         {
             _validModel.ProgType = progType;

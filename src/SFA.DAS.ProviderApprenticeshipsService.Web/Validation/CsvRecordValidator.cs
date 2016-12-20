@@ -12,7 +12,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
     {
         public CsvRecordValidator()
         {
-            //Func<string, int, bool> lengthLessThan = (str, lenth) => (str?.Length ?? 0) <= lenth;
             Func<int?, IEnumerable<int>, bool> inList = (v, l) => !v.HasValue || l.Contains(v.Value);
 
             RuleFor(r => r.ProgType)

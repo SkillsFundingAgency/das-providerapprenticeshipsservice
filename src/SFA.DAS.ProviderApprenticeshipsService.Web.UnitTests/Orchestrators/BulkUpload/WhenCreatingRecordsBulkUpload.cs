@@ -4,9 +4,7 @@ using System.Text;
 using System.Web;
 
 using FluentAssertions;
-
 using Moq;
-
 using NUnit.Framework;
 
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;

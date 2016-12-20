@@ -130,7 +130,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var trainingCode = record.ProgType == 25
                                    ? record.StdCode.ToString()
-                                   : $"{record.FworkCode}-{record.ProgType}-{record.PwayCode}"; // ToDo: Confirm // ProgType => 2,3,20,21,22,23
+                                   : $"{record.FworkCode}-{record.ProgType}-{record.PwayCode}";
 
             var apprenticeshipViewModel = new ApprenticeshipViewModel
             {
