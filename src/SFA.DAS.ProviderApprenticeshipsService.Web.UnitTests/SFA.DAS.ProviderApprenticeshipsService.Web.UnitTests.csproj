@@ -73,14 +73,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\DateTimeViewModelTests.cs" />
-    <Compile Include="WhenValidatingApprenticeshipViewModelForApproval.cs" />
+    <Compile Include="Validation\WhenValidatingApprenticeshipViewModelForApproval.cs" />
     <Compile Include="Orchestrators\WhenApproveCommitment.cs" />
     <Compile Include="Orchestrators\WhenGettingCommitmentViewModel.cs" />
     <Compile Include="Orchestrators\WhenFinishEditing.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithEmployer.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithBoth.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithProvider.cs" />
-    <Compile Include="WhenValidatingApprenticeshipViewModel.cs" />
+    <Compile Include="Validation\WhenValidatingApprenticeshipViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
