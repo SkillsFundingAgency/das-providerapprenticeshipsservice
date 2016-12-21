@@ -23,6 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models
         [TestCase(1, 0, 2015)]
         [TestCase(1, 13, 2015)]
         [TestCase(1, 12, -1)]
+        [TestCase(1, 12, 999)]
         public void ShouldBeNull(int? day, int? month, int? year)
         {
             var sut = new DateTimeViewModel(day, month, year);
