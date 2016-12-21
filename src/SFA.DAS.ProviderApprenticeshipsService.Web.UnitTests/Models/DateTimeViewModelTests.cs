@@ -44,7 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models
         public void ShouldBeValid(int? day, int? month, int? year, string expected)
         {
             var sut = new DateTimeViewModel(day, month, year);
-            sut.DateTime?.ToShortDateString().Should().Be(expected);
+            sut.DateTime?.ToString("dd/MM/yyyy").Should().Be(expected);
         }
     }
 }
