@@ -20,6 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public DateTimeViewModel DateOfBirth { get; set; }
 
         public string NINumber { get; set; }
+
         public string ULN { get; set; }
 
         public TrainingType TrainingType { get; set; }

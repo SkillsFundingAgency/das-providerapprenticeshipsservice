@@ -12,10 +12,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
     {
         public ApprenticeshipViewModelApproveValidator()
         {
+            var text = new Text.ApprenticeshipValidationText();
             Func<string, int, bool> lengthLessThan = (str, lenth) => (str?.Length ?? 0) <= lenth;
 
             RuleFor(r => r.ULN)
-                .NotEmpty().WithMessage("ULN cannot be empty").WithErrorCode("ULN_01");
+                .NotEmpty().WithMessage(text.Uln01.Text).WithErrorCode(text.Uln01.ErrorCode);
                 //.Must(Checksumvalidation).WithErrorCode("ULN_03")
                 //.Must(The ULN is already in use on another record for this LearnStartDate).WithErrorCode("ULN_04")
                 ;
@@ -25,7 +26,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Must(m => lengthLessThan(m, 6)).WithMessage("Cost must be less than one million").WithErrorCode("TrainingPrice_02");
 
             RuleFor(r => r.DateOfBirth)
-                .Must(m => m.DateTime != null).WithMessage("Date of birth must not be empty");
+                .Must(m => m?.DateTime != null)
+                    .WithMessage(text.DateOfBirth01.Text).WithErrorCode(text.DateOfBirth01.ErrorCode);
 
             RuleFor(r => r.StartDate).NotNull();
             RuleFor(r => r.EndDate).NotNull();

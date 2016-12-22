@@ -46,7 +46,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         {
             var errors = _sut.ValidateFields(GetTestData(), new List<ITrainingProgramme>()).ToList();
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("Row:2 - Not a valid training code 2");
+            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("Row:2 - Not a valid training code");
         }
 
         [Test]
@@ -54,10 +54,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         {
             var errors = _sut.ValidateFields(GetFailingTestData(), TrainingProgrammes()).ToList();
             errors.Count.Should().Be(4);
-            errors[0].ToString().ShouldBeEquivalentTo("Row:2 - Enter a first name");
-            errors[1].ToString().ShouldBeEquivalentTo("Row:2 - Last name cannot contain more then 100 chatacters");
-            errors[2].ToString().ShouldBeEquivalentTo("Row:3 - First name cannot contain more then 100 chatacters");
-            errors[3].ToString().ShouldBeEquivalentTo("Row:3 - Enter a last name");
+            errors[0].ToString().ShouldBeEquivalentTo("Row:2 - The Given names must be entered");
+            errors[1].ToString().ShouldBeEquivalentTo("Row:2 - The Given names must be entered and must not be more than 100 characters in length");
+            errors[2].ToString().ShouldBeEquivalentTo("Row:3 - The Family name must be entered and must not be more than 100 characters in length");
+            errors[3].ToString().ShouldBeEquivalentTo("Row:3 - The Given names must be entered");
         }
 
         private List<ITrainingProgramme> TrainingProgrammes()

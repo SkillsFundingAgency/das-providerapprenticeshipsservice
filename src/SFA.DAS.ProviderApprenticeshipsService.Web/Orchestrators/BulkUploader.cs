@@ -17,6 +17,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 using WebGrease.Css.Extensions;
 
@@ -37,19 +38,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var dateMatch = regex.Match(attachment.FileName);
             DateTime outDateTime;
             var dateParseSuccess = DateTime.TryParseExact(dateMatch.Value, "yyyyMMdd-HHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out outDateTime);
-            if (!dateMatch.Success)
-                errors.Add(new UploadError($"File name must include the date with fomat: yyyyMMdd-HHmmss", "Filename_01"));
-            else if (!dateParseSuccess)
-                errors.Add(new UploadError($"Date in file name is not valid", "Filename_01"));
-            else if(outDateTime > DateTime.Now)
-                errors.Add(new UploadError("Date and time must be before now", "Filename_02"));
+            if (!dateMatch.Success || !dateParseSuccess)
+                errors.Add(new UploadError(ApprenticeshipFileValidationText.FilenameFormat.Text, ApprenticeshipFileValidationText.FilenameFormat.ErrorCode));
 
-            if (!attachment.FileName.EndsWith(fileEnding))
-                errors.Add(new UploadError($"File name must end with {fileEnding}", "Filename_01"));
-            if (!attachment.FileName.StartsWith(fileStart))
-                errors.Add(new UploadError($"File name must start with {fileStart}", "Filename_01"));
+            else if(outDateTime > DateTime.Now)
+                errors.Add(new UploadError(ApprenticeshipFileValidationText.FilenameFormatDate.Text, ApprenticeshipFileValidationText.FilenameFormatDate.ErrorCode));
+
+            else if (!attachment.FileName.EndsWith(fileEnding) || !attachment.FileName.StartsWith(fileStart))
+                errors.Add(new UploadError(ApprenticeshipFileValidationText.FilenameFormat.Text, ApprenticeshipFileValidationText.FilenameFormat.ErrorCode));
+            
             if (attachment.ContentLength > maxFileSize)
-                errors.Add(new UploadError($"File size cannot be larger then {maxFileSize}"));
+                errors.Add(new UploadError(ApprenticeshipFileValidationText.MaxFileSizeMessage(maxFileSize)));
 
             return errors;
         }
@@ -92,7 +91,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var errors = new List<UploadError>();
 
-            if (!records.Any()) return new[] { new UploadError("File contains no records") };
+            if (!records.Any()) return new[] { new UploadError(ApprenticeshipFileValidationText.NoRecords) };
 
             var index = 1;
             foreach (var record in records)
@@ -100,7 +99,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 var viewModel = record.ApprenticeshipViewModel;
                 index++;
 
-                var viewModelValidator = new ApprenticeshipViewModelValidator();
+                var viewModelValidator = new ApprenticeshipBulkUploadValidator();
                 var approvalValidator = new ApprenticeshipViewModelApproveValidator();
                 var csvRecordValidator = new CsvRecordValidator();
 
@@ -117,7 +116,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 csvValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, index)));
 
                 if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode) && trainingProgrammes.All(m => m.Id != viewModel.TrainingCode))
-                    errors.Add(new UploadError($"Not a valid training code {viewModel.TrainingCode}", "StdCode_04", index));
+                    errors.Add(new UploadError("Not a valid training code", "StdCode_04", index));
             }
             return errors;
         }

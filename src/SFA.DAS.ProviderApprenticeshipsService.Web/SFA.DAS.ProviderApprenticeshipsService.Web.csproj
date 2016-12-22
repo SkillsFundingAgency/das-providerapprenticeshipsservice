@@ -357,6 +357,9 @@
     <Compile Include="Validation\ApprenticeshipViewModelApproveValidator.cs" />
     <Compile Include="Validation\CsvRecordValidator.cs" />
     <Compile Include="Validation\FinishEditingViewModelValidator.cs" />
+    <Compile Include="Validation\Text\ApprenticeshipFileValidationText.cs" />
+    <Compile Include="Validation\Text\ApprenticeshipValidationText.cs" />
+    <Compile Include="Validation\Text\ValidationMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\images\apple-touch-icon-120x120.png" />

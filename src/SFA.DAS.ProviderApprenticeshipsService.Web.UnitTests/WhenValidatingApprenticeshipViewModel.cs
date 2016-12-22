@@ -1,5 +1,4 @@
-﻿using System.Net.NetworkInformation;
-﻿using System;
+﻿﻿using System;
 
 using FluentAssertions;
 using NUnit.Framework;
@@ -32,9 +31,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         [TestCase("abc123")]
         [TestCase("123456789")]
         [TestCase(" ")]
+        [TestCase("9999999999")]
         public void ULNThatIsNotNumericOr10DigitsInLengthIsIvalid(string uln)
         {
             var viewModel = new ApprenticeshipViewModel { ULN = uln, Cost = string.Empty};
+
+            var result = _validator.Validate(viewModel);
+
+            result.IsValid.Should().BeFalse();
+        }
+
+        
+        [Test]
+        public void ULN9999999999IsNotVal()
+        {
+        var viewModel = new ApprenticeshipViewModel { ULN = "9999999999", Cost = string.Empty };
 
             var result = _validator.Validate(viewModel);
 
@@ -99,11 +110,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             var result = _validator.Validate(_validModel);
             result.Errors.Count.Should().Be(2);
             
-            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("Enter a first name");
-            result.Errors[0].ErrorCode.ShouldAllBeEquivalentTo("GivenNames_01");
-            result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("Enter a last name");
-            result.Errors[1].ErrorCode.ShouldAllBeEquivalentTo("FamilyName_01");
-            
+            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("First names must be entered");
+            result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("Last name must be entered");
         }
 
         [TestCase(99, 0)]
@@ -118,10 +126,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             result.Errors.Count.Should().Be(expectedErrorCount);
             if (expectedErrorCount > 0)
             {
-                result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("First name cannot contain more then 100 chatacters");
-                result.Errors[0].ErrorCode.ShouldAllBeEquivalentTo("GivenNames_02");
-                result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("Last name cannot contain more then 100 chatacters");
-                result.Errors[1].ErrorCode.ShouldAllBeEquivalentTo("FamilyName_02");
+                result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("First names must be entered and must not be more than 100 characters in length");
+                result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("The Last name must be entered and must not be more than 100 characters in length");
             }
         }
 
@@ -166,7 +172,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             result.Errors.Count.Should().Be(2);
             result.Errors[0].ErrorMessage.ShouldAllBeEquivalentTo("National insurance number needs to be 10 characters long");
         }
-
 
         [TestCase("SE123456 ")]
         [TestCase("SE123456A")]
@@ -217,20 +222,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             var result = _validator
                 .Validate(_validModel);
             result.Errors.Count.Should().Be(1);
-            result.Errors[0].ErrorMessage.Should().Be("Provider reference must not contain more than 20 characters");
-            result.Errors[0].ErrorCode.Should().Be("ProvRef_01");
+            result.Errors[0].ErrorMessage.Should().Be("The Provider reference must not be more than 20 characters in length");
+            result.Errors[0].ErrorCode.Should().Be("ProviderRef_01");
         }
 
         #region DateOfBirth
 
-        [TestCase(31, 2, 13, "Date of birth is not valid")]
-        //[TestCase(31, 12, 1899, "Date of birth is not valid")]
-        [TestCase(5, null, 1998, "Date of birth is not valid")]
-        [TestCase(5, 9, null, "Date of birth is not valid")]
-        [TestCase(null, 9, 1998, "Date of birth is not valid")]
-        [TestCase(5, 9, -1, "Date of birth is not valid")]
-        [TestCase(0, 0,  0, "Date of birth is not valid")]
-        [TestCase(1, 18, 1998, "Date of birth is not valid")]
+        [TestCase(31, 2, 13, "The Date of birth must be entered")]
+        [TestCase(5, null, 1998, "The Date of birth must be entered")]
+        [TestCase(5, 9, null, "The Date of birth must be entered")]
+        [TestCase(null, 9, 1998, "The Date of birth must be entered")]
+        [TestCase(5, 9, -1, "The Date of birth must be entered")]
+        [TestCase(0, 0,  0, "The Date of birth must be entered")]
+        [TestCase(1, 18, 1998, "The Date of birth must be entered")]
         public void ShouldFailValidationOnDateOfBirth(int? day, int? month, int? year, string expected)
         {
             _validModel.DateOfBirth = new DateTimeViewModel(day, month, year);
@@ -269,13 +273,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
 
         #region StartDate
 
-        [TestCase(31, 2, 2121, "Start date is not a valid date")]
-        [TestCase(5, null, 2121, "Start date is not a valid date")]
-        [TestCase(5, 9, null, "Start date is not a valid date")]
-        [TestCase(5, 9, -1, "Start date is not a valid date")]
-        [TestCase(0, 0, 0, "Start date is not a valid date")]
-        [TestCase(1, 18, 2121, "Start date is not a valid date")]
-        [TestCase(5, 9, 1998, "Learner start date must be in the future")]
+        [TestCase(31, 2, 2121, "The Learning start end date is not valid")]
+        [TestCase(5, null, 2121, "The Learning start end date is not valid")]
+        [TestCase(5, 9, null, "The Learning start end date is not valid")]
+        [TestCase(5, 9, -1, "The Learning start end date is not valid")]
+        [TestCase(0, 0, 0, "The Learning start end date is not valid")]
+        [TestCase(1, 18, 2121, "The Learning start end date is not valid")]
+        //[TestCase(5, 9, 1998, "Learner start date must be in the future")]
         public void ShouldFailValidationForStartDate(int? day, int? month, int? year, string expected)
         {
             
@@ -317,13 +321,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
 
         #region PlanedEndDate
 
-        [TestCase(31, 2, 2121, "Planed end date is not a valid date")]
-        [TestCase(5, null, 2121, "Planed end date is not a valid date")]
-        [TestCase(5, 9, null, "Planed end date is not a valid date")]
-        [TestCase(5, 9, -1, "Planed end date is not a valid date")]
-        [TestCase(0, 0, 0, "Planed end date is not a valid date")]
-        [TestCase(1, 18, 2121, "Planed end date is not a valid date")]
-        [TestCase(5, 9, 1998, "Learner planed end date must be in the future")]
+        [TestCase(31, 2, 2121, "The Learning planned end date is not valid")]
+        [TestCase(5, null, 2121, "The Learning planned end date is not valid")]
+        [TestCase(5, 9, null, "The Learning planned end date is not valid")]
+        [TestCase(5, 9, -1, "The Learning planned end date is not valid")]
+        [TestCase(0, 0, 0, "The Learning planned end date is not valid")]
+        [TestCase(1, 18, 2121, "The Learning planned end date is not valid")]
+        [TestCase(5, 9, 1998, "The Learning planned end date must not be in the past")]
         public void ShouldFailValidationForPlanedEndDate(int? day, int? month, int? year, string expected)
         {
 
@@ -357,7 +361,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             var result = _validator.Validate(_validModel);
 
             result.IsValid.Should().BeFalse();
-            result.Errors[0].ErrorMessage.Should().Be("Learner planed end date must be in the future");
+            result.Errors[0].ErrorMessage.Should().Be("The Learning planned end date must not be in the past");
         }
 
         [Test]
@@ -369,7 +373,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             var result = _validator.Validate(_validModel);
 
             result.IsValid.Should().BeFalse();
-            result.Errors[0].ErrorMessage.Should().Be("Learner planed end date must be greater than start date");
+            result.Errors[0].ErrorMessage.Should().Be("The Learning planned end date must not be on or before the Learning start date");
         }
 
         [Test]
