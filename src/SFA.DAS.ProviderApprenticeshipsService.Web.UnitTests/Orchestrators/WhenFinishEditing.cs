@@ -40,7 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
                 };
 
             var mockMediator = GetMediator(_testCommitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<ICommitmentsLogger>());
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
@@ -59,7 +59,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
                 };
 
             var mockMediator = GetMediator(_testCommitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<ICommitmentsLogger>());
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
@@ -78,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
                 };
            
             var mockMediator = GetMediator(_testCommitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<ICommitmentsLogger>());
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
@@ -97,7 +97,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
                 };
 
             var mockMediator = GetMediator(_testCommitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<ICommitmentsLogger>());
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
