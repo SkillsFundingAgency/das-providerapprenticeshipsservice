@@ -16,4 +16,15 @@
         $(this).siblings('select').select2('open'); 
     });
 
+
+    // retain tabbed order after selection
+    $('#TrainingCode').on('select2:select', function () {
+        $("#StartDate_Month").focus();
+    });
+
+    // retain tabbed order on close without selection
+    $('#TrainingCode').on('select2:close', function () {
+        $("#StartDate_Month").focus();
+    });
+
 }());
