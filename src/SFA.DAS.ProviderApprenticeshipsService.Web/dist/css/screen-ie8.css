@@ -2550,3 +2550,13 @@ span.helpText {
   font-weight: bold;
   font-size: 19px;
 }
+
+.form-group #StartDate_Month,
+.form-group #EndDate_Month {
+  width: 40px;
+}
+
+.form-group #StartDate_Year,
+.form-group #EndDate_Year {
+  width: 55px;
+}
