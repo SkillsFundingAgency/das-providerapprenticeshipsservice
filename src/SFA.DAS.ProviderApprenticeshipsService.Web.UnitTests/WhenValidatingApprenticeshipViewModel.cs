@@ -257,18 +257,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             result.IsValid.Should().BeTrue();
         }
 
-        [Test]
-        public void ShouldFailValidationOnDateOfBirth()
-        {
-            var date = DateTime.Now;
-            _validModel.DateOfBirth = new DateTimeViewModel(date.Day, date.Month, date.Year);
-
-            var result = _validator.Validate(_validModel);
-
-            result.IsValid.Should().BeFalse();
-            result.Errors[0].ErrorMessage.Should().Be("Date of birth must be in the past");
-        }
-
         #endregion
 
         #region StartDate
@@ -304,18 +292,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             result.IsValid.Should().BeTrue();
         }
 
-
-        [Test]
-        public void ShouldFailValidationForStartDate()
-        {
-            var date = DateTime.Now;
-            _validModel.StartDate = new DateTimeViewModel(date.Day, date.Month, date.Year);
-
-            var result = _validator.Validate(_validModel);
-
-            result.IsValid.Should().BeFalse();
-            result.Errors[0].ErrorMessage.Should().Be("Learner start date must be in the future");
-        }
 
         #endregion
 

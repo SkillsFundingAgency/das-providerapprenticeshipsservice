@@ -353,6 +353,8 @@
     <Compile Include="Orchestrators\TaskOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Validation\ApprenticeshipBaseValidator.cs" />
+    <Compile Include="Validation\ApprenticeshipBulkUploadValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelApproveValidator.cs" />
     <Compile Include="Validation\CsvRecordValidator.cs" />
