@@ -6,7 +6,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
-    public sealed class ApprenticeshipViewModelValidator : ApprenticeshipBaseValidator // : AbstractValidator<ApprenticeshipViewModel>
+    public sealed class ApprenticeshipViewModelValidator : ApprenticeshipBaseValidator
     {
         public ApprenticeshipViewModelValidator()
         {
