@@ -15,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         [SetUp]
         public void Setup()
         {
-            _validModel = new CsvRecord();
+            _validModel = new CsvRecord { CohortRef = "abba123" };
         }
 
         [TestCase(1, "The Programme type is not a valid value", "ProgType_02")]
