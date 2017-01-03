@@ -18,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public DateTimeViewModel DateOfBirth { get; set; }
+        public DateTimeViewModel DateOfBirth { get; set; } = new DateTimeViewModel(false);
 
         public string NINumber { get; set; }
         public string ULN { get; set; }

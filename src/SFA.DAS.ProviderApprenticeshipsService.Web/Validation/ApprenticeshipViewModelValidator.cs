@@ -12,7 +12,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
     {
         public ApprenticeshipViewModelValidator()
         {
-            var now = DateTime.Now;
             var yesterday= DateTime.Now.AddDays(-1);
 
             RuleFor(x => x.ULN)
