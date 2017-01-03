@@ -78,25 +78,25 @@
                 <span class="form-hint">For example, 08 12 2001</span>
 
                 <div class="form-date">
-                    @Html.ValidationMessageFor(m => m.DateOfBirth, "Enter a valid date", new { id = "error-message-" + Html.IdFor(m => m.DateOfBirth), @class = "error-message" })
+                    @Html.ValidationMessageFor(m => m.DateOfBirth, null, new { id = "error-message-" + Html.IdFor(m => m.DateOfBirth), @class = "error-message" })
 
                     <div class="form-group form-group-day">
-                        <label for="@Html.IdFor(m => m.DateOfBirth)">
+                        <label for="@Html.IdFor(m => m.DateOfBirth.Day)">
                             Day
                         </label>
-                        @Html.TextBoxFor(m => m.DateOfBirth.Day, new { @class = "form-control", type = "number", min = 0, max = 31, aria_labelledby = Html.IdFor(m => m.DateOfBirth) })
+                        @Html.TextBoxFor(m => m.DateOfBirth.Day, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Day) })
                     </div>
                     <div class="form-group form-group-month">
-                        <label for="@Html.IdFor(m => m.DateOfBirth)">
+                        <label for="@Html.IdFor(m => m.DateOfBirth.Month)">
                             Month
                         </label>
-                        @Html.TextBoxFor(m => m.DateOfBirth.Month, new { @class = "form-control", type = "number", min = 0, max = 12, aria_labelledby =  Html.IdFor(m => m.DateOfBirth) })
+                        @Html.TextBoxFor(m => m.DateOfBirth.Month, new { @class = "form-control", type = "number", aria_labelledby =  Html.IdFor(m => m.DateOfBirth.Month) })
                     </div>
                     <div class="form-group form-group-year">
-                        <label for="@Html.IdFor(m => m.DateOfBirth)">
+                        <label for="@Html.IdFor(m => m.DateOfBirth.Year)">
                             Year
                         </label>
-                        @Html.TextBoxFor(m => m.DateOfBirth.Year, new { @class = "form-control", type = "number", min = 0, max = 9999, aria_labelledby = Html.IdFor(m => m.DateOfBirth) })
+                        @Html.TextBoxFor(m => m.DateOfBirth.Year, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Year) })
                     </div>
                 </div>
             </div>
@@ -135,18 +135,18 @@
                     <span class="form-hint">For example, 09 2017</span>
                 </legend>
                 <div class="form-date">
-                    @Html.ValidationMessageFor(m => m.StartDate, "Enter a valid date", new { id = "error-message-" + Html.IdFor(m => m.StartDate), @class = "error-message" })
+                    @Html.ValidationMessageFor(m => m.StartDate, null, new { id = "error-message-" + Html.IdFor(m => m.StartDate), @class = "error-message" })
                     <div class="form-group form-group-month">
-                        <label for="@Html.IdFor(m => m.StartDate)">
+                        <label for="@Html.IdFor(m => m.StartDate.Month)">
                             <span class="form-label-bold">Month</span>
                         </label>
-                        @Html.TextBoxFor(m => m.StartDate.Month, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.StartDate) })
+                        @Html.TextBoxFor(m => m.StartDate.Month, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.StartDate.Month) })
                     </div>
                     <div class="form-group form-group-month">
                         <label for="@Html.IdFor(m => m.StartDate)">
                             <span class="form-label-bold">Year</span>
                         </label>
-                        @Html.TextBoxFor(m => m.StartDate.Year, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.StartDate), @id = "EndYear" })
+                        @Html.TextBoxFor(m => m.StartDate.Year, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.StartDate) })
                     </div>
                 </div>
             </fieldset>
@@ -159,18 +159,18 @@
                         <span class="form-hint">For example, 02 2019</span>
                     </legend>
                     <div class="form-date">
-                        @Html.ValidationMessageFor(m => m.EndDate, "Enter a valid date", new { id = "error-message-" + Html.IdFor(m => m.EndDate), @class = "error-message" })
+                        @Html.ValidationMessageFor(m => m.EndDate, null, new { id = "error-message-" + Html.IdFor(m => m.EndDate), @class = "error-message" })
                         <div class="form-group form-group-month">
-                            <label for="@Html.IdFor(m => m.EndDate)">
+                            <label for="@Html.IdFor(m => m.EndDate.Month)">
                                 <span class="form-label-bold">Month</span>
                             </label>
-                            @Html.TextBoxFor(m => m.EndDate.Month, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.EndDate) })
+                            @Html.TextBoxFor(m => m.EndDate.Month, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.EndDate.Month) })
                         </div>
                         <div class="form-group form-group-month">
-                            <label for="@Html.IdFor(m => m.EndDate)">
+                            <label for="@Html.IdFor(m => m.EndDate.Year)">
                                 <span class="form-label-bold">Year</span>
                             </label>
-                            @Html.TextBoxFor(m => m.EndDate.Year, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.EndDate), @id = "EndYear"})
+                            @Html.TextBoxFor(m => m.EndDate.Year, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.EndDate.Month)})
                         </div>
                     </div>
                 </fieldset>

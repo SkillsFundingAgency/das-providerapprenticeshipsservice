@@ -54,10 +54,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         {
             var errors = _sut.ValidateFields(GetFailingTestData(), TrainingProgrammes()).ToList();
             errors.Count.Should().Be(4);
-            errors[0].ToString().ShouldBeEquivalentTo("Row:2 - The Given names must be entered");
-            errors[1].ToString().ShouldBeEquivalentTo("Row:2 - The Given names must be entered and must not be more than 100 characters in length");
-            errors[2].ToString().ShouldBeEquivalentTo("Row:3 - The Family name must be entered and must not be more than 100 characters in length");
-            errors[3].ToString().ShouldBeEquivalentTo("Row:3 - The Given names must be entered");
+            var messages = errors.Select(m => m.ToString()).ToList();
+            messages.Should().Contain("Row:2 - The Given names must be entered");
+            messages.Should().Contain("Row:2 - The Given names must be entered and must not be more than 100 characters in length");
+            messages.Should().Contain("Row:3 - The Family name must be entered and must not be more than 100 characters in length");
+            messages.Should().Contain("Row:3 - The Given names must be entered");
         }
 
         private List<ITrainingProgramme> TrainingProgrammes()

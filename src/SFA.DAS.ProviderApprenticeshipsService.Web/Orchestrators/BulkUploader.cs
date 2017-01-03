@@ -105,21 +105,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 record =>
                     {
                         var viewModel = record.ApprenticeshipViewModel;
-                        index++;
+                        var i = ++index;
 
                         // Validate view model for approval
                         var validationResult = viewModelValidator.Validate(viewModel);
-                        validationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, index)));
+                        validationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i)));
 
                         var approvalValidationResult = approvalValidator.Validate(viewModel);
-                        approvalValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, index)));
+                        approvalValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i)));
 
                         // Validate csv record
                         var csvValidationResult = csvRecordValidator.Validate(record.CsvRecord);
-                        csvValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, index)));
+                        csvValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i)));
 
                         if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode) && trainingProgrammes.All(m => m.Id != viewModel.TrainingCode))
-                            errors.Add(new UploadError("Not a valid training code", "StdCode_04", index));
+                            errors.Add(new UploadError("Not a valid training code", "StdCode_04", i));
                     });
             return errors;
         }

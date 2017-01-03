@@ -5,7 +5,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
 {
     [TestFixture]
     public class WhenValidatingApprenticeshipViewModelForApproval

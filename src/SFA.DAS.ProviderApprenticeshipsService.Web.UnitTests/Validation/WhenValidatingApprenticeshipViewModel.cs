@@ -6,7 +6,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
 {
     [TestFixture]
     public class WhenValidatingApprenticeshipViewModel
@@ -257,6 +257,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             result.IsValid.Should().BeTrue();
         }
 
+        [Test]
+        public void ShouldFailValidationOnDateOfBirthWithTodayAsValue()
+        {
+            var date = DateTime.Now;
+            _validModel.DateOfBirth = new DateTimeViewModel(date.Day, date.Month, date.Year);
+
+            var result = _validator.Validate(_validModel);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors[0].ErrorMessage.Should().Be("The date of birth must be in the past");
+        }
+
         #endregion
 
         #region StartDate
@@ -292,10 +304,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             result.IsValid.Should().BeTrue();
         }
 
-
         #endregion
 
-        #region PlanedEndDate
+        #region PlannedEndDate
 
         [TestCase(31, 2, 2121, "The Learning planned end date is not valid")]
         [TestCase(5, null, 2121, "The Learning planned end date is not valid")]
@@ -319,7 +330,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         [TestCase(5, 9, 2100)]
         [TestCase(1, 1, 2023)]
         [TestCase(null, 9, 2067)]
-        public void ShouldNotFailValidationForPlanedEndDate(int? day, int? month, int? year)
+        public void ShouldNotFailValidationForPlannedEndDate(int? day, int? month, int? year)
         {
             _validModel.EndDate = new DateTimeViewModel(day, month, year);
 
@@ -341,6 +352,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         }
 
         [Test]
+
         public void ShouldFailIfStartDateIsAfterEndDate()
         {
             _validModel.StartDate = new DateTimeViewModel(DateTime.Parse("2121-05-10"));
