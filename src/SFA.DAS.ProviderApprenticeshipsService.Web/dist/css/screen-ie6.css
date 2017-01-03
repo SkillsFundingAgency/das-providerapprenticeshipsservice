@@ -2593,7 +2593,8 @@ span.helpText {
   margin-bottom: 20px;
 }
 
-#upload-apprenticeships .upload-file-btn {
+#upload-apprenticeships .upload-file-btn,
+#upload-error .upload-file-btn {
   display: block;
   margin-top: 35px;
 }
@@ -2606,4 +2607,14 @@ span.helpText {
 .form-group #StartDate_Year,
 .form-group #EndDate_Year {
   width: 60px;
+}
+
+.error-grid .alert-default {
+  background-color: #ecc3c7;
+  border-color: #b10e1e;
+}
+
+.warning-grid .alert-default {
+  background-color: #fcddcd;
+  border-color: #f47738;
 }
