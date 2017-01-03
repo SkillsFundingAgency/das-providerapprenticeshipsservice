@@ -54,7 +54,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         public void ValidatingViewModels()
         {
             var records = _sut.CreateViewModels(_file.Object);
-            var result = _sut.ValidateFields(records, new List<ITrainingProgramme>());
+            var result = _sut.ValidateFields(records, new List<ITrainingProgramme>(), "ABBA123");
             result.Count().Should().Be(58);
             result.Select(m => m.ToString())
                 .Contains("Row:8 - The Learning planned end date must be entered and be in the format yyyy-mm-dd")
