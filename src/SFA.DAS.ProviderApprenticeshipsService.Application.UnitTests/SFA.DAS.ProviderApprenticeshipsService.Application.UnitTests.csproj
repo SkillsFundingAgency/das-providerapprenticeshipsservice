@@ -57,6 +57,10 @@
       <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.16.0.17918, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.16.0.17918\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.6.0.12635\lib\net45\SFA.DAS.Tasks.Api.Client.dll</HintPath>
       <Private>True</Private>
@@ -89,7 +93,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Commands\" />
+    <Folder Include="Commands\BulkUploadApprenticeships\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
