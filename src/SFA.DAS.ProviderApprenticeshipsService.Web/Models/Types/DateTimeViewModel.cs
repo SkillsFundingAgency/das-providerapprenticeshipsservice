@@ -9,28 +9,30 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
     {
         public DateTimeViewModel()
         {
-            MaxYear = System.DateTime.Now.Year + 100;
+            MaxYear = System.DateTime.Now.Year + 99;
         }
 
         public DateTimeViewModel(DateTime? date, bool future = true)
         {
+            MaxYear = future ? System.DateTime.Now.Year + 99 : System.DateTime.Now.Year;
+
             Day = date?.Day;
             Month = date?.Month;
             Year = date?.Year;
-            MaxYear = future ? System.DateTime.Now.Year + 100 : System.DateTime.Now.Year;
         }
 
         public DateTimeViewModel(int? day, int? month, int? year, bool future = true)
         {
+            MaxYear = future ? System.DateTime.Now.Year  + 99 :  System.DateTime.Now.Year;
+
             Day = day;
             Month = month;
             Year = year;
-            MaxYear = future ? System.DateTime.Now.Year  + 100 :  System.DateTime.Now.Year;
         }
 
         public DateTimeViewModel(bool future = true)
         {
-            MaxYear = future ? System.DateTime.Now.Year + 100 : System.DateTime.Now.Year;
+            MaxYear = future ? System.DateTime.Now.Year + 99 : System.DateTime.Now.Year;
         }
 
         public DateTime? DateTime => ToDateTime();
@@ -39,7 +41,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
 
         public int? Month { get; set; }
 
-        public int? Year { get; set; }
+        private int? _year;
+        public int? Year {
+            get
+            {
+                return _year;
+            }
+            set
+            {
+                if (value < 100)
+                {
+                    var culture = (CultureInfo)Thread.CurrentThread.CurrentCulture.Clone();
+                    culture.DateTimeFormat.Calendar.TwoDigitYearMax = MaxYear;
+                    DateTime dateTimeOut;
+                    _year = System.DateTime.TryParseExact(
+                        $"{value.Value.ToString("00")}-1-1",
+                        "yy-M-d",
+                        culture,
+                        DateTimeStyles.None,
+                        out dateTimeOut) ? dateTimeOut.Year : value;
+                }
+                else _year = value;
+            }
+        }
 
         private int MaxYear { get; }
 
@@ -52,16 +76,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
         {
             if (day.HasValue && month.HasValue && year.HasValue)
             {
-                var culture = (CultureInfo)Thread.CurrentThread.CurrentCulture.Clone();
-                culture.DateTimeFormat.Calendar.TwoDigitYearMax = MaxYear;
-                var yFormat = Year < 99 ? "yy" : "yyyy" ;
-                DateTime dateOfBirthOut;
+                DateTime dateTimeOut;
                 if (System.DateTime.TryParseExact(
                     $"{year.Value}-{month.Value}-{day.Value}",
-                    $"{yFormat}-M-d",
-                    culture, DateTimeStyles.None, out dateOfBirthOut))
+                    "yyyy-M-d",
+                    CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTimeOut))
                 {
-                    return dateOfBirthOut;
+                    return dateTimeOut;
                 }
             }
 

@@ -96,7 +96,7 @@
                         <label for="@Html.IdFor(m => m.DateOfBirth.Year)">
                             Year
                         </label>
-                        @Html.TextBoxFor(m => m.DateOfBirth.Year, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Year) })
+                        <input aria-labelledby="@Html.IdFor(m => m.DateOfBirth.Year)" class="form-control" data-val="true" data-val-number="The field Year must be a number." id="@Html.IdFor(m => m.DateOfBirth.Year)" name="DateOfBirth.Year" type="number" value="@Model.DateOfBirth.Year">
                     </div>
                 </div>
             </div>
@@ -146,7 +146,7 @@
                         <label for="@Html.IdFor(m => m.StartDate)">
                             <span class="form-label-bold">Year</span>
                         </label>
-                        @Html.TextBoxFor(m => m.StartDate.Year, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.StartDate) })
+                        <input aria-labelledby="StartDate" class="form-control" data-val="true" data-val-number="The field Year must be a number." id="@Html.IdFor(m => m.StartDate.Year)" name="@Html.NameFor(m => m.StartDate.Year)" type="number" value="@Model.StartDate.Year">
                     </div>
                 </div>
             </fieldset>
@@ -170,7 +170,7 @@
                             <label for="@Html.IdFor(m => m.EndDate.Year)">
                                 <span class="form-label-bold">Year</span>
                             </label>
-                            @Html.TextBoxFor(m => m.EndDate.Year, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.EndDate.Month)})
+                            <input aria-labelledby="EndDate" class="form-control" data-val="true" data-val-number="The field Year must be a number." id="@Html.IdFor(m => m.EndDate.Year)" name="@Html.NameFor(m => m.EndDate.Year)" type="number" value="@Model.EndDate.Year">
                         </div>
                     </div>
                 </fieldset>
