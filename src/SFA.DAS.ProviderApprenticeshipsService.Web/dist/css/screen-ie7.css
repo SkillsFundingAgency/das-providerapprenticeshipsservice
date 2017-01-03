@@ -2589,3 +2589,13 @@ span.helpText {
   display: block;
   margin-top: 35px;
 }
+
+.form-group #StartDate_Month,
+.form-group #EndDate_Month {
+  width: 40px;
+}
+
+.form-group #StartDate_Year,
+.form-group #EndDate_Year {
+  width: 60px;
+}

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
 
 using CsvHelper;
@@ -27,25 +29,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
     {
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
+        ApprenticeshipBulkUploadValidator viewModelValidator = new ApprenticeshipBulkUploadValidator();
+        ApprenticeshipViewModelApproveValidator approvalValidator = new ApprenticeshipViewModelApproveValidator();
+        CsvRecordValidator csvRecordValidator = new CsvRecordValidator();
+
         public IEnumerable<UploadError> ValidateFile(HttpPostedFileBase attachment)
         {
             var errors = new List<UploadError>();
             var maxFileSize = 512 * 1000; // ToDo: Move to config
-            var fileEnding = ".csv";
-            var fileStart = "APPDATA";
 
             var regex = new Regex(@"\d{8}-\d{6}");
             var dateMatch = regex.Match(attachment.FileName);
             DateTime outDateTime;
             var dateParseSuccess = DateTime.TryParseExact(dateMatch.Value, "yyyyMMdd-HHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out outDateTime);
-            if (!dateMatch.Success || !dateParseSuccess)
+            if (!dateMatch.Success || !dateParseSuccess || !Regex.IsMatch(attachment.FileName, @"APPDATA-\d{8}-\d{6}.csv"))
                 errors.Add(new UploadError(ApprenticeshipFileValidationText.FilenameFormat.Text, ApprenticeshipFileValidationText.FilenameFormat.ErrorCode));
 
             else if(outDateTime > DateTime.Now)
                 errors.Add(new UploadError(ApprenticeshipFileValidationText.FilenameFormatDate.Text, ApprenticeshipFileValidationText.FilenameFormatDate.ErrorCode));
-
-            else if (!attachment.FileName.EndsWith(fileEnding) || !attachment.FileName.StartsWith(fileStart))
-                errors.Add(new UploadError(ApprenticeshipFileValidationText.FilenameFormat.Text, ApprenticeshipFileValidationText.FilenameFormat.ErrorCode));
             
             if (attachment.ContentLength > maxFileSize)
                 errors.Add(new UploadError(ApprenticeshipFileValidationText.MaxFileSizeMessage(maxFileSize)));
@@ -53,10 +54,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return errors;
         }
 
+        public Task<IEnumerable<ApprenticeshipUploadModel>> CreateViewModelsAsync(HttpPostedFileBase attachment)
+        {
+            //return await Task.Factory.StartNew(() => CreateViewModels(attachment));
+            var xxx = new Task<IEnumerable<ApprenticeshipUploadModel>>(() => CreateViewModels(attachment));
+            return xxx;
+        }
+
         public IEnumerable<ApprenticeshipUploadModel> CreateViewModels(HttpPostedFileBase attachment)
         {
-            string result = new StreamReader(attachment.InputStream).ReadToEnd();
-            using (TextReader tr = new StringReader(result))
+            string fileInput = new StreamReader(attachment.InputStream).ReadToEnd();
+            using (TextReader tr = new StringReader(fileInput))
             {
                 var csvReader = new CsvReader(tr);
                 csvReader.Configuration.HasHeaderRecord = true;
@@ -89,35 +97,30 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public virtual IEnumerable<UploadError> ValidateFields(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes)
         {
-            var errors = new List<UploadError>();
-
+            var errors = new ConcurrentBag<UploadError>();
             if (!records.Any()) return new[] { new UploadError(ApprenticeshipFileValidationText.NoRecords) };
 
             var index = 1;
-            foreach (var record in records)
-            {
-                var viewModel = record.ApprenticeshipViewModel;
-                index++;
+            Parallel.ForEach(records,
+                record =>
+                    {
+                        var viewModel = record.ApprenticeshipViewModel;
+                        var i = ++index;
 
-                var viewModelValidator = new ApprenticeshipBulkUploadValidator();
-                var approvalValidator = new ApprenticeshipViewModelApproveValidator();
-                var csvRecordValidator = new CsvRecordValidator();
+                        // Validate view model for approval
+                        var validationResult = viewModelValidator.Validate(viewModel);
+                        validationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i)));
 
-                // Validate view model 
-                var validationResult = viewModelValidator.Validate(viewModel);
-                validationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, index)));
+                        var approvalValidationResult = approvalValidator.Validate(viewModel);
+                        approvalValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i)));
 
-                // Validate view model for approval
-                var approvalValidationResult = approvalValidator.Validate(viewModel);
-                approvalValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, index)));
+                        // Validate csv record
+                        var csvValidationResult = csvRecordValidator.Validate(record.CsvRecord);
+                        csvValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i)));
 
-                // Validate csv record
-                var csvValidationResult = csvRecordValidator.Validate(record.CsvRecord);
-                csvValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, index)));
-
-                if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode) && trainingProgrammes.All(m => m.Id != viewModel.TrainingCode))
-                    errors.Add(new UploadError("Not a valid training code", "StdCode_04", index));
-            }
+                        if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode) && trainingProgrammes.All(m => m.Id != viewModel.TrainingCode))
+                            errors.Add(new UploadError("Not a valid training code", "StdCode_04", i));
+                    });
             return errors;
         }
 

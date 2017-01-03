@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -54,11 +55,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 return new BulkUploadResult { Errors = new List<UploadError> {new UploadError(exception.Message) } };
             }
 
-            var trainingProgrammes = await GetTrainingProgrammes();
-            var validationErrors = _bulkUploader.ValidateFields(data, trainingProgrammes).ToList();
+            var trainingProgrammes = GetTrainingProgrammes();
+            var validationErrors = _bulkUploader.ValidateFields(data, await trainingProgrammes).ToList();
+
             if (validationErrors.Any())
             {
-                _logger.Warn($"Failed validation bulk upload records with {validationErrors.Count} errors"); // ToDo: Log what errors?
+                _logger.Warn($"Failed validation bulk upload records with {validationErrors.Count()} errors"); // ToDo: Log what errors?
                 return new BulkUploadResult { Errors = validationErrors };
             }
 
