@@ -78,6 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApprenticeshipInfoServiceWrapper.cs" />
+    <Compile Include="Commands\BulkUploadApprenticeships\BulkUploadApprenticeshipsCommand.cs" />
+    <Compile Include="Commands\BulkUploadApprenticeships\BulkUploadApprenticeshipsCommandHandler.cs" />
+    <Compile Include="Commands\BulkUploadApprenticeships\BulkUploadApprenticeshipsCommandValidator.cs" />
     <Compile Include="Commands\CompleteTask\CompleteTaskCommand.cs" />
     <Compile Include="Commands\CompleteTask\CompleteTaskCommandHandler.cs" />
     <Compile Include="Commands\CompleteTask\CompleteTaskCommandValidator.cs" />
