@@ -90,7 +90,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             }
         }
 
-        public virtual IEnumerable<UploadError> ValidateFields(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes)
+        public virtual IEnumerable<UploadError> ValidateFields(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes, string cohortReference)
         {
             var errors = new ConcurrentBag<UploadError>();
 
@@ -100,6 +100,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != apprenticeshipUploadModels.First().CsvRecord.CohortRef))
             {
                 errors.Add(new UploadError("The Cohort Reference must be the same for all learners in the file", "CohortRef_03"));
+            }
+
+            if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != cohortReference))
+            {
+                errors.Add(new UploadError("The Cohort Reference does not match the current cohort", "CohortRef_04"));
             }
 
             Parallel.ForEach(apprenticeshipUploadModels,

@@ -61,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             }
 
             var trainingProgrammes = GetTrainingProgrammes();
-            var validationErrors = _bulkUploader.ValidateFields(data, await trainingProgrammes).ToList();
+            var validationErrors = _bulkUploader.ValidateFields(data, await trainingProgrammes, uploadApprenticeshipsViewModel.HashedCommitmentId).ToList();
 
             if (validationErrors.Any())
             {
