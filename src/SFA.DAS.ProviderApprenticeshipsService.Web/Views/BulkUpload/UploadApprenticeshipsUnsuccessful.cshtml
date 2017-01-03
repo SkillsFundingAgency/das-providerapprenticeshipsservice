@@ -37,7 +37,7 @@
             <summary><span class="summary">Help with uploading files</span></summary>
             <div class="panel panel-border-narrow">
                 <p>
-                    Help with file types, file formatting and uploading a file.
+                    You must use a csv file to upload details.  Some management information systems can create the file for you.  Alternatively, you can download and <a href="sampleCSVfile.csv" title="download apprentice upload template">use the apprentice upload template</a>.
                 </p>
             </div>
         </details>
@@ -50,9 +50,7 @@
             @Html.HiddenFor(m => m.HashedCommitmentId)
 
             <input class="button upload-file-btn" type="submit" value="Upload a new file">
-            <div style="color: purple; padding: 0.5em; font-weight: bold;">
-                This will delete @Model.ApprenticeshipCount apprentices from request
-            </div>
+         
         </form>
 
 
