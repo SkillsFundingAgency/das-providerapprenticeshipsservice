@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -53,14 +52,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
         }
 
         [Test]
-        public async Task TestPerformance()
+        public void TestPerformance()
         {
-            var testDataHead = @"GivenNames,FamilyName,DateOfBirth,NINumber,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TrainingPrice,EPAPrice,EPAOrgId,EmpRef,ProvRef,ULN";
-            var upper = 80 * 1000;
+            var testDataHead = @"CohortRef,GivenNames,FamilyName,DateOfBirth,NINumber,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TrainingPrice,EPAPrice,EPAOrgId,EmpRef,ProvRef,ULN";
+            var upper = 40 * 1000;
             var testData = new List<string>();
             for (int i = 0; i < upper; i++)
             {
-                testData.Add("\n\rChris,Froberg,1998-12-08,SE1233211C,,,,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559");
+                testData.Add("\n\rAbba123,Chris,Froberg,1998-12-08,SE1233211C,,,,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559");
             }
             var str = testDataHead + string.Join("", testData);
 
@@ -71,8 +70,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
             var stopwatch = Stopwatch.StartNew();
             var result = _sut.UploadFile(model);
             stopwatch.Stop(); System.Console.WriteLine($"Time TOTAL: {stopwatch.Elapsed.Seconds}");
-            result.Result.Errors.Count().Should().Be(400 * 1000);
-            stopwatch.Elapsed.Seconds.Should().BeLessThan(7);
+            result.Result.Errors.Count().Should().Be(200 * 1000);
+            stopwatch.Elapsed.Seconds.Should().BeLessThan(7);   
         }
     }
 }

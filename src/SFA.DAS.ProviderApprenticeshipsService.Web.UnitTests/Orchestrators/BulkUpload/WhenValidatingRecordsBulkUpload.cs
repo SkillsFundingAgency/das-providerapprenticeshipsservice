@@ -46,7 +46,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         {
             var errors = _sut.ValidateFields(GetTestData(), new List<ITrainingProgramme>()).ToList();
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("Row:2 - Not a valid training code");
+            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("Row:1 - Not a valid training code");
         }
 
         [Test]
@@ -55,10 +55,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var errors = _sut.ValidateFields(GetFailingTestData(), TrainingProgrammes()).ToList();
             errors.Count.Should().Be(4);
             var messages = errors.Select(m => m.ToString()).ToList();
+            messages.Should().Contain("Row:1 - The Given names must be entered");
+            messages.Should().Contain("Row:1 - The Given names must be entered and must not be more than 100 characters in length");
+            messages.Should().Contain("Row:2 - The Family name must be entered and must not be more than 100 characters in length");
             messages.Should().Contain("Row:2 - The Given names must be entered");
-            messages.Should().Contain("Row:2 - The Given names must be entered and must not be more than 100 characters in length");
-            messages.Should().Contain("Row:3 - The Family name must be entered and must not be more than 100 characters in length");
-            messages.Should().Contain("Row:3 - The Given names must be entered");
+        }
+
+        [Test]
+        public void FailingValidationCohortRef()
+        {
+            var testData = GetFailingTestData().ToList();
+            var first = testData[0];
+            var second = testData[1];
+            first.CsvRecord.CohortRef = "Abba123";
+            second.CsvRecord.CohortRef = "Other reference";
+
+            var errors = _sut.ValidateFields(new List<ApprenticeshipUploadModel> { first, second } , TrainingProgrammes()).ToList();
+            errors.Count.Should().Be(5);
+            var messages = errors.Select(m => m.ToString()).ToList();
+            messages.Should().Contain("The Cohort Reference must be the same for all learners in the file");
         }
 
         private List<ITrainingProgramme> TrainingProgrammes()
@@ -84,7 +99,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             };
             var records = new List<CsvRecord>
                               {
-                                  new CsvRecord { ProgType = 23, FworkCode = 18, PwayCode = 26 }
+                                  new CsvRecord { ProgType = 23, FworkCode = 18, PwayCode = 26, CohortRef = "Abba123" }
                               };
             return apprenticeships.Zip(
                 records,
@@ -109,8 +124,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
 
             var records = new List<CsvRecord>
             {
-                new CsvRecord { ProgType = 25, StdCode = 2 },
-                new CsvRecord { ProgType = 25, StdCode = 2 }
+                new CsvRecord { ProgType = 25, StdCode = 2, CohortRef = "Abba123" },
+                new CsvRecord { ProgType = 25, StdCode = 2, CohortRef = "Abba123" }
             };
 
             return apprenticeships.Zip(
