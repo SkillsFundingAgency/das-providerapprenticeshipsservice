@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -9,9 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 
 using FluentAssertions;
-
 using MediatR;
-
 using Moq;
 
 using NUnit.Framework;
@@ -26,10 +23,10 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
 {
     [TestFixture]
-    public class WhenUploadingFile
+    public sealed class WhenUploadingFile
     {
+        private const string HeaderLine = @"GivenNames,FamilyName,DateOfBirth,NINumber,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TrainingPrice,EPAPrice,EPAOrgId,EmpRef,ProvRef,ULN";
         private BulkUploadOrchestrator _sut;
-
         private Mock<HttpPostedFileBase> _file;
         private Mock<IMediator> _mockMediator;
 
@@ -60,14 +57,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
         [Test]
         public async Task TestPerformance()
         {
-            var testDataHead = @"GivenNames,FamilyName,DateOfBirth,NINumber,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TrainingPrice,EPAPrice,EPAOrgId,EmpRef,ProvRef,ULN";
             var upper = 80 * 1000;
             var testData = new List<string>();
             for (int i = 0; i < upper; i++)
             {
                 testData.Add("\n\rChris,Froberg,1998-12-08,SE1233211C,,,,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559");
             }
-            var str = testDataHead + string.Join("", testData);
+            var str = HeaderLine + string.Join("", testData);
 
             var textStream = new MemoryStream(Encoding.UTF8.GetBytes(str));
             _file.Setup(m => m.InputStream).Returns(textStream);
@@ -83,9 +79,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
         [Test]
         public async Task ShouldCallMediatorPassingInMappedApprenticeships()
         {
-            var headerLine = @"GivenNames,FamilyName,DateOfBirth,NINumber,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TrainingPrice,EPAPrice,EPAOrgId,EmpRef,ProvRef,ULN";
             var dataLine = "\n\rChris,Froberg,1998-12-08,SE123321C,,,25,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559";
-            var fileContents = headerLine + dataLine;
+            var fileContents = HeaderLine + dataLine;
             var textStream = new MemoryStream(Encoding.UTF8.GetBytes(fileContents));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
