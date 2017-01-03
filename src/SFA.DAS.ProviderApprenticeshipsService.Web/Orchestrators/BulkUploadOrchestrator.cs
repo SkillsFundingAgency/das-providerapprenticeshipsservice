@@ -77,11 +77,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return new BulkUploadResult { Errors = new List<UploadError>() };
         }
 
-        private async Task<IEnumerable<Apprenticeship>> MapFrom(long commitmentId, IEnumerable<ApprenticeshipUploadModel> data)
+        private async Task<IList<Apprenticeship>> MapFrom(long commitmentId, IEnumerable<ApprenticeshipUploadModel> data)
         {
             var trainingProgrammes = await GetTrainingProgrammes();
 
-            return data.Select(x => MapFrom(commitmentId, x.ApprenticeshipViewModel, trainingProgrammes));
+            return data.Select(x => MapFrom(commitmentId, x.ApprenticeshipViewModel, trainingProgrammes)).ToList();
         }
 
         private Apprenticeship MapFrom(long commitmentId, ApprenticeshipViewModel viewModel, IList<ITrainingProgramme> trainingProgrammes)

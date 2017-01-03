@@ -8,6 +8,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUpload
     {
         public long ProviderId { get; set; }
         public long CommitmentId { get; set; }
-        public IEnumerable<Apprenticeship> Apprenticeships { get; set; }
+        public IList<Apprenticeship> Apprenticeships { get; set; }
     }
 }
