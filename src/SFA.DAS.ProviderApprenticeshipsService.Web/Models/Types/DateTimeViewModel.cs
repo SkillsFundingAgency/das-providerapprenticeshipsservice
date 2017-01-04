@@ -6,15 +6,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
 {
     public  class DateTimeViewModel
     {
+        private const int NinetyYearsInTheFuture = 90;
+        private int? _year;
+
+        public DateTimeViewModel() : this(NinetyYearsInTheFuture)
+        {
+        }
+
         /// <summary>
         /// View Model representing a date entry field
         /// </summary>
         /// <param name="date"></param>
         /// <param name="twoDigitMaxYear">Optional: Number of years from current year where to pivot 2 digit year dates</param>
-        public DateTimeViewModel(DateTime? date, int twoDigitMaxYear = 90)
+        public DateTimeViewModel(DateTime? date, int twoDigitMaxYear = NinetyYearsInTheFuture) : this(twoDigitMaxYear)
         {
-            MaxYear = System.DateTime.Now.Year + twoDigitMaxYear;
-
             Day = date?.Day;
             Month = date?.Month;
             Year = date?.Year;
@@ -27,10 +32,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
         /// <param name="month"></param>
         /// <param name="year"></param>
         /// <param name="twoDigitMaxYear">Optional: Number of years from current year where to pivot 2 digit year dates</param>
-        public DateTimeViewModel(int? day, int? month, int? year, int twoDigitMaxYear = 90)
+        public DateTimeViewModel(int? day, int? month, int? year, int twoDigitMaxYear = NinetyYearsInTheFuture) : this(twoDigitMaxYear)
         {
-            MaxYear = System.DateTime.Now.Year + twoDigitMaxYear;
-
             Day = day;
             Month = month;
             Year = year;
@@ -40,9 +43,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
         /// View Model representing a date entry field
         /// </summary>
         /// <param name="twoDigitMaxYear">Optional: Number of years from current year where to pivot 2 digit year dates</param>
-        public DateTimeViewModel(int twoDigitMaxYear = 90)
+        public DateTimeViewModel(int twoDigitMaxYear = NinetyYearsInTheFuture)
         {
-            MaxYear = System.DateTime.Now.Year + twoDigitMaxYear;
+            MaxYear = System.DateTime.UtcNow.Year + twoDigitMaxYear;
         }
 
         public DateTime? DateTime => ToDateTime();
@@ -51,7 +54,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
 
         public int? Month { get; set; }
 
-        private int? _year;
         public int? Year {
             get
             {
@@ -71,7 +73,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
                         DateTimeStyles.None,
                         out dateTimeOut) ? dateTimeOut.Year : value;
                 }
-                else _year = value;
+                else
+                {
+                    _year = value;
+                }
             }
         }
 
