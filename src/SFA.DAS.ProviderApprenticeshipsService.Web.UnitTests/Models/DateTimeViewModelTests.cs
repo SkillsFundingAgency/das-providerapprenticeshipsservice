@@ -31,7 +31,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models
         }
 
         [Test]
-        public void ShouldBeValid1()
+        public void ShouldBeValid()
         {
             var sut = new DateTimeViewModel(DateTime.Parse("2009-09-25"));
             sut.DateTime?.ToString("dd/MM/yyyy").Should().Be("25/09/2009");
