@@ -27,7 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
             RuleFor(x => x.Cost)
                 .Matches("^$|^[1-9]{1}[0-9]*$").WithMessage("Enter the total agreed training cost")
-                .Must(m => lengthLessThan(m, 6)).WithMessage("Cost must be entered and must not be more than 6 characters in length");
+                .Must(m => lengthLessThan(m, 6)).WithMessage("The cost must be 6 numbers or fewer, for example 25000");
 
             RuleFor(r => r.StartDate)
                 .Must(ValidateStartDate).Unless(m => m.StartDate == null).WithMessage("The Learning start end date is not valid");

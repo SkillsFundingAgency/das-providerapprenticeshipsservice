@@ -5,21 +5,77 @@
     ViewBag.PageId = "upload-error";
 }
 
-<h1 class="heading-xlarge">Upload apprenticeships unsuccessful</h1>
+
+<!--Static HTML code to replace with required functionality -->
+<div class="grid">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Review and fix upload errors</h1>
+        <p>Your upload contained the following XX errors. Please review the issues and try again.</p>
+    </div>
+</div>
+
+<div class="grid error-grid">
+    <div class="column-two-thirds">
+        <div class="panel panel-border-wide alert-default">
+            <p>2 errors found</p>
+        </div>
+    </div>
+</div>
+
+<div class="grid warning-grid">
+    <div class="column-two-thirds">
+        <div class="panel panel-border-wide alert-default">
+            <p>12 warnings found</p>
+        </div>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="column-two-thirds">
+        <hr />
+        <details>
+            <summary><span class="summary">Help with uploading files</span></summary>
+            <div class="panel panel-border-narrow">
+                <p>
+                    You must use a csv file to upload details.  Some management information systems can create the file for you.  Alternatively, you can download and <a href="sampleCSVfile.csv" title="download apprentice upload template">use the apprentice upload template</a>.
+                </p>
+            </div>
+        </details>
+
+        <form method="POST" action="@Url.Action("UploadApprenticeships")" enctype="multipart/form-data">
+            <label class="form-label hidden" for="files-upload">Upload file</label>
+            <input id="files-upload" accept=".csv" type="file" name="Attachment">
+
+            @Html.HiddenFor(m => m.ProviderId)
+            @Html.HiddenFor(m => m.HashedCommitmentId)
+
+            <input class="button upload-file-btn" type="submit" value="Upload a new file">
+         
+        </form>
 
 
-<ul>
-    
-    @foreach (var error in Model.Errors)
-    {
-        <li>
-            @error.ToString()
-        </li>
-    }
+    </div>
+</div>
 
-</ul>
+<!--Static HTML ENDS -->
+<div class="grid">
+    <div class="column-two-thirds">
+
+        <h1 class="heading-xlarge">Upload apprenticeships unsuccessful</h1>
 
 
+        <ul>
+
+            @foreach (var error in Model.Errors)
+            {
+                <li>
+                    @error.ToString()
+                </li>
+            }
+
+        </ul>
+    </div>
+</div>
 
 
 
