@@ -4,35 +4,45 @@ using System.Threading;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
 {
-
-    public class DateTimeViewModel
+    public  class DateTimeViewModel
     {
-        public DateTimeViewModel()
+        /// <summary>
+        /// View Model representing a date entry field
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="twoDigitMaxYear">Optional: Number of years from current year where to pivot 2 digit year dates</param>
+        public DateTimeViewModel(DateTime? date, int twoDigitMaxYear = 90)
         {
-            MaxYear = System.DateTime.Now.Year + 99;
-        }
-
-        public DateTimeViewModel(DateTime? date, bool future = true)
-        {
-            MaxYear = future ? System.DateTime.Now.Year + 99 : System.DateTime.Now.Year;
+            MaxYear = System.DateTime.Now.Year + twoDigitMaxYear;
 
             Day = date?.Day;
             Month = date?.Month;
             Year = date?.Year;
         }
 
-        public DateTimeViewModel(int? day, int? month, int? year, bool future = true)
+        /// <summary>
+        /// View Model representing a date entry field
+        /// </summary>
+        /// <param name="day"></param>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <param name="twoDigitMaxYear">Optional: Number of years from current year where to pivot 2 digit year dates</param>
+        public DateTimeViewModel(int? day, int? month, int? year, int twoDigitMaxYear = 90)
         {
-            MaxYear = future ? System.DateTime.Now.Year  + 99 :  System.DateTime.Now.Year;
+            MaxYear = System.DateTime.Now.Year + twoDigitMaxYear;
 
             Day = day;
             Month = month;
             Year = year;
         }
 
-        public DateTimeViewModel(bool future = true)
+        /// <summary>
+        /// View Model representing a date entry field
+        /// </summary>
+        /// <param name="twoDigitMaxYear">Optional: Number of years from current year where to pivot 2 digit year dates</param>
+        public DateTimeViewModel(int twoDigitMaxYear = 90)
         {
-            MaxYear = future ? System.DateTime.Now.Year + 99 : System.DateTime.Now.Year;
+            MaxYear = System.DateTime.Now.Year + twoDigitMaxYear;
         }
 
         public DateTime? DateTime => ToDateTime();

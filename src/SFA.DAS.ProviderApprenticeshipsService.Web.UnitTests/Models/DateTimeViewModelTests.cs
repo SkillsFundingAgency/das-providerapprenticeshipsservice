@@ -38,7 +38,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models
         }
 
         [TestCase(null, 2, 3, "01/02/2103")]
-        [TestCase(28, 2, 13, "28/02/2113")]
         [TestCase(null, 2, 99, "01/02/2099")]
         [TestCase(15, 12, 1995, "15/12/1995")]
         [TestCase(12, 12, 2024, "12/12/2024")]
@@ -57,7 +56,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models
             var year = DateTime.Now.Year - 5;
             var yearTwoDigit = int.Parse(year.ToString().Substring(2));
             
-            var sut = new DateTimeViewModel(null, 2, yearTwoDigit, false);
+            var sut = new DateTimeViewModel(null, 2, yearTwoDigit, 0);
             (sut.DateTime == null).Should().BeFalse();
             sut.DateTime?.ToString("dd/MM/yyyy").Should().Be("01/02/" + year);
         }
