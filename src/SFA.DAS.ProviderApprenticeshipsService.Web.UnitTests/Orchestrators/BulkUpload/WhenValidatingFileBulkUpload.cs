@@ -7,6 +7,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.BulkUpload
 {
@@ -15,7 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
     {
         private Mock<HttpPostedFileBase> _file;
 
-        private BulkUploader _sut;
+        private BulkUploadValidator _sut;
 
         [SetUp]
         public void SetUp()
@@ -26,7 +27,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var textStream = new MemoryStream(Encoding.UTF8.GetBytes("hello world"));
 
             _file.Setup(m => m.InputStream).Returns(textStream);
-            _sut = new BulkUploader();
+
+            _sut = new BulkUploadValidator();
         }
 
         [Test]

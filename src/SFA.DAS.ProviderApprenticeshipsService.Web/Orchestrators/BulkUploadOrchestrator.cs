@@ -35,49 +35,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _hashingService = hashingService;
         }
 
-        public async Task<BulkUploadResult> UploadFile(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
+        public async Task<BulkUploadResult> UploadFileAsync(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
         {
-            if (uploadApprenticeshipsViewModel.Attachment == null)
-            {
-                return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("No file chosen") } };
-            }
 
-            var fileValidationErrors = _bulkUploader.ValidateFile(uploadApprenticeshipsViewModel.Attachment).ToList();
-            if (fileValidationErrors.Any())
-            {
-                _logger.Warn($"Failed validation bulk upload file with {fileValidationErrors.Count} errors"); // ToDo: Log what errors?
-                return new BulkUploadResult {Errors = fileValidationErrors };
-            }
+            var result = await _bulkUploader.UploadFile(uploadApprenticeshipsViewModel);
 
-            IEnumerable<ApprenticeshipUploadModel> data;
-            try
-            {
-                data = _bulkUploader.CreateViewModels(uploadApprenticeshipsViewModel.Attachment);
-            }
-            catch (Exception exception)
-            {
-                // Move to bulkUpload
-                return new BulkUploadResult { Errors = new List<UploadError> {new UploadError(exception.Message) } };
-            }
-
-            var trainingProgrammes = GetTrainingProgrammes();
-            var validationErrors = _bulkUploader.ValidateFields(data, await trainingProgrammes, uploadApprenticeshipsViewModel.HashedCommitmentId).ToList();
-
-            if (validationErrors.Any())
-            {
-                _logger.Warn($"Failed validation bulk upload records with {validationErrors.Count()} errors"); // ToDo: Log what errors?
-                return new BulkUploadResult { Errors = validationErrors };
-            }
+            if (result.Errors.Any()) return result;
 
             var commitmentId = _hashingService.DecodeValue(uploadApprenticeshipsViewModel.HashedCommitmentId);
-
             await _mediator.SendAsync(new BulkUploadApprenticeshipsCommand
             {
                 ProviderId = uploadApprenticeshipsViewModel.ProviderId,
                 CommitmentId = commitmentId,
-                Apprenticeships = await MapFrom(commitmentId, data)
+                Apprenticeships = await MapFrom(commitmentId, result.Data)
             });
-            // ToDo: Send date to commitment _repository.uploadData(data);
 
             return new BulkUploadResult { Errors = new List<UploadError>() };
         }
@@ -114,12 +85,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             }
 
             return apprenticeship;
-        }
-
-        //TODO: These are duplicated in Commitment Orchestrator - needs to be shared
-        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
-        {
-            return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
         }
 
         //TODO: These are duplicated in Commitment Orchestrator - needs to be shared

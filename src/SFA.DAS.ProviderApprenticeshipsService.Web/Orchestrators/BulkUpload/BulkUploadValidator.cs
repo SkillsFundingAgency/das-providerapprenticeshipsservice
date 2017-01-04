@@ -17,15 +17,14 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 using WebGrease.Css.Extensions;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 {
-    public class BulkUploader
+    public class BulkUploadValidator
     {
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
@@ -56,7 +55,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return errors;
         }
 
-        public IEnumerable<ApprenticeshipUploadModel> CreateViewModels(HttpPostedFileBase attachment)
+        public BulkUploadResult CreateViewModels(HttpPostedFileBase attachment)
         {
             string fileInput = new StreamReader(attachment.InputStream).ReadToEnd();
             using (TextReader tr = new StringReader(fileInput))
@@ -67,9 +66,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
                 try
                 {
-                    return csvReader.GetRecords<CsvRecord>()
-                        .ToList()
-                        .Select(MapTo);
+                    return new BulkUploadResult
+                               {
+                                   Data = csvReader.GetRecords<CsvRecord>()
+                                    .ToList()
+                                    .Select(MapTo)
+                               };
                 }
                 catch (CsvMissingFieldException exception)
                 {
@@ -77,7 +79,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     _logger.Error(
                         exception,
                         $"Failed to create files from bulk upload. {typeof(CsvMissingFieldException)} Data CsvHelper {exceptionData}");
-                    throw new Exception("Cannot read all file");
+                    return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("Cannot read all file" ) } };
                 }
                 catch (Exception exception)
                 {
@@ -85,12 +87,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     _logger.Error(
                         exception,
                         $"Failed to create files from bulk upload. Exception Data CsvHelper {exceptionData}");
-                    throw new Exception("Failed to create apprentices from file");
+                    return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("Failed to create apprentices from file") } };
                 }
             }
         }
 
-        public virtual IEnumerable<UploadError> ValidateFields(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes, string cohortReference)
+        public IEnumerable<UploadError> ValidateFields(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes, string cohortReference)
         {
             var errors = new ConcurrentBag<UploadError>();
 
@@ -98,14 +100,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             if (!apprenticeshipUploadModels.Any()) return new[] { new UploadError(ApprenticeshipFileValidationText.NoRecords) };
 
             if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != apprenticeshipUploadModels.First().CsvRecord.CohortRef))
-            {
                 errors.Add(new UploadError("The Cohort Reference must be the same for all learners in the file", "CohortRef_03"));
-            }
 
             if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != cohortReference))
-            {
                 errors.Add(new UploadError("The Cohort Reference does not match the current cohort", "CohortRef_04"));
-            }
 
             Parallel.ForEach(apprenticeshipUploadModels,
                 (record, state, index) =>

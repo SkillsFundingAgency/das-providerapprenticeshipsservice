@@ -324,6 +324,7 @@
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
     <Compile Include="Models\BulkUpload\BulkUploadResult.cs" />
+    <Compile Include="Models\BulkUpload\UploadError.cs" />
     <Compile Include="Models\CommitmentListItemViewModel.cs" />
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentDetailsViewModel.cs" />
@@ -342,9 +343,10 @@
     <Compile Include="Models\TaskViewModel.cs" />
     <Compile Include="Models\UploadApprenticeshipsViewModel.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
-    <Compile Include="Orchestrators\BulkUploader.cs" />
+    <Compile Include="Orchestrators\BulkUpload\BulkUploadValidator.cs" />
     <Compile Include="Orchestrators\BulkUploadOrchestrator.cs" />
     <Compile Include="Orchestrators\BulkUpload\ApprenticeshipUploadModel.cs" />
+    <Compile Include="Orchestrators\BulkUpload\BulkUploader.cs" />
     <Compile Include="Orchestrators\CommitmentOrchestrator.cs" />
     <Compile Include="Orchestrators\CommitmentStatusCalculator.cs" />
     <Compile Include="Models\BulkUpload\CsvRecord.cs" />

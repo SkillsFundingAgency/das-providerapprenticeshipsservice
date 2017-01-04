@@ -10,6 +10,7 @@ using NUnit.Framework;
 
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.BulkUpload
 {
@@ -29,7 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
 
         private Mock<HttpPostedFileBase> _file;
 
-        BulkUploader _sut;
+        BulkUploadValidator _sut;
 
         [SetUp]
         public void Setup()
@@ -40,22 +41,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var textStream = new MemoryStream(Encoding.UTF8.GetBytes(TestData));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
-            _sut = new BulkUploader();
+            _sut = new BulkUploadValidator();
         }
 
         [Test]
         public void CreatingViewModels()
         {
             var records = _sut.CreateViewModels(_file.Object);
-            records.Count().Should().Be(8);
+            records.Data.Count().Should().Be(8);
+            records.Errors.Should().NotBeNull();
+            records.Errors.Should().BeEmpty();
         }
 
         [Test]
         public void ValidatingViewModels()
         {
             var records = _sut.CreateViewModels(_file.Object);
-            var result = _sut.ValidateFields(records, new List<ITrainingProgramme>(), "ABBA123");
-            result.Count().Should().Be(58);
+            var result = _sut.ValidateFields(records.Data, new List<ITrainingProgramme>(), "ABBA123");
+            result.Count().Should().Be(59);
             result.Select(m => m.ToString())
                 .Contains("Row:8 - The Learning planned end date must be entered and be in the format yyyy-mm-dd")
                 .Should()

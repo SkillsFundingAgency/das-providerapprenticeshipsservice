@@ -19,6 +19,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
 {
@@ -51,35 +52,35 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
                                                                                           {
                                                                                               new Framework { Id = "1-2-3" }
                                                                                           } }));
-            _sut = new BulkUploadOrchestrator(_mockMediator.Object, new BulkUploader(), mockHashingService.Object);
+            _sut = new BulkUploadOrchestrator(_mockMediator.Object, new BulkUploader(_mockMediator.Object, new BulkUploadValidator()), mockHashingService.Object);
         }
 
         [Test]
-        public void TestPerformance()
+        public async Task TestPerformance()
         {
             var upper = 40 * 1000;
             var testData = new List<string>();
             for (int i = 0; i < upper; i++)
             {
-                testData.Add("\n\rAbba123,Chris,Froberg,1998-12-08,SE1233211C,,,,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559");
+                testData.Add("\n\rABBA123,Chris,Froberg,1998-12-08,SE1233211C,,,,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559");
             }
             var str = HeaderLine + string.Join("", testData);
 
             var textStream = new MemoryStream(Encoding.UTF8.GetBytes(str));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
-            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object };
+            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123" };
             var stopwatch = Stopwatch.StartNew();
-            var result = _sut.UploadFile(model);
-            stopwatch.Stop(); System.Console.WriteLine($"Time TOTAL: {stopwatch.Elapsed.Seconds}");
-            result.Result.Errors.Count().Should().Be(200 * 1000);
+            var result = await _sut.UploadFileAsync(model);
+            stopwatch.Stop(); Console.WriteLine($"Time TOTAL: {stopwatch.Elapsed.Seconds}");
+            result.Errors.Count().Should().Be(200 * 1000);
             stopwatch.Elapsed.Seconds.Should().BeLessThan(7);   
         }
 
         [Test]
         public async Task ShouldCallMediatorPassingInMappedApprenticeships()
         {
-            var dataLine = "\n\rAbba123,Chris,Froberg,1998-12-08,SE123321C,,,25,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559";
+            var dataLine = "\n\rABBA123,Chris,Froberg,1998-12-08,SE123321C,,,25,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559";
             var fileContents = HeaderLine + dataLine;
             var textStream = new MemoryStream(Encoding.UTF8.GetBytes(fileContents));
             _file.Setup(m => m.InputStream).Returns(textStream);
@@ -89,8 +90,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
                 .ReturnsAsync(new Unit())
                 .Callback((object x) => commandArgument = x as BulkUploadApprenticeshipsCommand);
 
-            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "qwerewrqwe", ProviderId = 111 };
-            var result = await _sut.UploadFile(model);
+            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111 };
+            var result = await _sut.UploadFileAsync(model);
 
             _mockMediator.Verify(x => x.SendAsync(It.IsAny<BulkUploadApprenticeshipsCommand>()), Times.Once);
 

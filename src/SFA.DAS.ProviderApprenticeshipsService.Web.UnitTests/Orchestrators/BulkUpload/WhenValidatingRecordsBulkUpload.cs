@@ -10,18 +10,20 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 
+using BulkUploadValidator = SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload.BulkUploadValidator;
+
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.BulkUpload
 {
 
     [TestFixture]
     public class WhenValidatingRecordsBulkUpload
     {
-        BulkUploader _sut;
+        BulkUploadValidator _sut;
 
         [SetUp]
         public void SetUp()
         {
-            _sut = new BulkUploader();
+            _sut = new BulkUploadValidator();
         }
 
         [Test]
