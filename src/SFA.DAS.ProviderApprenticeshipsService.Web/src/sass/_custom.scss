@@ -56,15 +56,12 @@
   
 }
 
-#upload-apprenticeships{
+#upload-apprenticeships,
+#upload-error{
       .upload-file-btn{
         display:block;
         margin-top:35px;      
     }
-
-
-
-
 }
 
 .form-group {
@@ -78,4 +75,20 @@
         width:60px;
     }
     
+}
+
+// bulk upload error screen
+
+.error-grid{
+    .alert-default{
+        background-color:#ecc3c7;
+        border-color:$red;
+    }
+}
+
+.warning-grid{
+    .alert-default{
+        background-color:#fcddcd;
+        border-color:#f47738;
+    }
 }
