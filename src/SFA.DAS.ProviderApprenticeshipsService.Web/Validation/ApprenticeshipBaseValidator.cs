@@ -17,14 +17,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             Func<string, int, bool> lengthLessThan = (str, lenth) => (str?.Length ?? 0) <= lenth;
 
             RuleFor(x => x.ULN)
-                .Matches("^$|^[1-9]{1}[0-9]{9}$").WithMessage(text.Uln01.Text).WithErrorCode(text.Uln01.ErrorCode)
-                .When(m => m.ULN == "9999999999").WithMessage(text.Uln02.Text).WithErrorCode(text.Uln02.ErrorCode);
+                .Matches("^$|^[1-9]{1}[0-9]{9}$").When(m => m.ULN.Length < 11).WithMessage(text.Uln01.Text).WithErrorCode(text.Uln01.ErrorCode)
+                .Must(m => m.Length < 11).WithMessage(text.Uln01.Text).WithErrorCode(text.Uln01.ErrorCode)
+                .Must(m => m != "9999999999").WithMessage(text.Uln02.Text).WithErrorCode(text.Uln02.ErrorCode);
             // ToDo: text.UlnPassChecksum
             // ToDo text.UlnAlreadyInUse
 
             RuleFor(r => r.DateOfBirth)
                 .Must(ValidateDateOfBirth).Unless(m => m.DateOfBirth == null).WithMessage(text.DateOfBirth01.Text).WithErrorCode(text.DateOfBirth01.ErrorCode);
-                //.Must(m => CheckIfNotNull(m?.DateTime, m?.DateTime < yesterday)).WithMessage("Date of birth must be in the past"); // ToDo: Delete?
             // ToDo: Date of birth -> DateOfBirth_02 - DateOfBirth_06
 
             RuleFor(x => x.NINumber)

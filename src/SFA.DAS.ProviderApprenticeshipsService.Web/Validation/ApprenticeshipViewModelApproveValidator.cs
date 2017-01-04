@@ -22,8 +22,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 ;
 
             RuleFor(r => r.Cost)
-                .NotEmpty().WithMessage("Cost cannot be empty").WithErrorCode("TrainingPrice_01")
-                .Must(m => lengthLessThan(m, 6)).WithMessage("Cost must be less than one million").WithErrorCode("TrainingPrice_02");
+                .NotEmpty().WithMessage("The cost must be 6 numbers or fewer, for example 25000").WithErrorCode("TrainingPrice_01")
+                .Must(m => lengthLessThan(m, 6)).WithMessage("The cost must be 6 numbers or fewer, for example 25000").WithErrorCode("TrainingPrice_02");
 
             RuleFor(r => r.DateOfBirth)
                 .Must(m => m?.DateTime != null)
