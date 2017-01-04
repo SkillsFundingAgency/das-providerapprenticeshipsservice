@@ -26,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Must(m => lengthLessThan(m, 100)).WithMessage("The Last name must be entered and must not be more than 100 characters in length");
 
             RuleFor(x => x.Cost)
-                .Matches("^$|^[1-9]{1}[0-9]*$").WithMessage("Enter the total agreed training cost")
+                .Matches("^$|^[1-9]{1}[0-9]*$").When(m => lengthLessThan(m.Cost, 6)).WithMessage("Enter the total agreed training cost")
                 .Must(m => lengthLessThan(m, 6)).WithMessage("The cost must be 6 numbers or fewer, for example 25000");
 
             RuleFor(r => r.StartDate)
@@ -38,21 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                             .Must(m => CheckIfNotNull(m?.DateTime, m?.DateTime > now)).WithMessage(text.LearnPlanEndDate06.Text);
 
             RuleFor(r => r.DateOfBirth)
-                .Must(ValidateDateOfBirth).Unless(m => m.DateOfBirth == null).WithMessage("Enter a valid date of birth")
                 .Must(m => _checkIfNotNull(m?.DateTime, m?.DateTime < yesterday)).WithMessage("The date of birth must be in the past");
-        }
-
-        private bool ValidateDateOfBirth(DateTimeViewModel date)
-        {
-            if (date.DateTime == null)
-            {
-                if (!date.Day.HasValue && !date.Month.HasValue && !date.Year.HasValue) return true;
-                return false;
-            }
-
-            if (!date.Day.HasValue || !date.Month.HasValue || !date.Year.HasValue) return false;
-
-            return true;
         }
     }
 }

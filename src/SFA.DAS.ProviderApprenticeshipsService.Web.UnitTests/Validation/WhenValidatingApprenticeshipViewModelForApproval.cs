@@ -47,26 +47,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             result.IsValid.Should().BeTrue();
             result.Errors.Count.ShouldBeEquivalentTo(0);
         }
-
-        [TestCase(25, "")]
-        [TestCase(25, null)]
-        [TestCase(25, "  ")]
-
-        [TestCase(2, "2")]
-        [TestCase(3, "2")]
-        [TestCase(20, "2")]
-        [TestCase(21, "2")]
-        [TestCase(22, "2")]
-        [TestCase(23, "2")]
-        public void TestTrainingCodeValidation(int? progType, string trainingCode)
-        {
-            _validModel.ProgType = progType;
-            _validModel.TrainingCode = trainingCode;
-
-            var result = _validator.Validate(_validModel);
-            result.IsValid.Should().BeFalse();
-            result.Errors.Count.ShouldBeEquivalentTo(1);
-
-        }
     }
 }
