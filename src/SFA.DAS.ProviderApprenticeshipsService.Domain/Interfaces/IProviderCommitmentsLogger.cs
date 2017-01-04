@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
-    public interface ICommitmentsLogger
+    public interface IProviderCommitmentsLogger
     {
         void Trace(string message, long? providerId = default(long?), long? commitmentId = default(long?), long? apprenticeshipId = default(long?));
         void Debug(string message, long? providerId = default(long?), long? commitmentId = default(long?), long? apprenticeshipId = default(long?));

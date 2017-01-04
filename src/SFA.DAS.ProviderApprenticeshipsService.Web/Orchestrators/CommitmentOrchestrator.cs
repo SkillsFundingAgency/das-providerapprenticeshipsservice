@@ -32,9 +32,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly ICommitmentStatusCalculator _statusCalculator;
         private readonly IHashingService _hashingService;
-        private readonly ICommitmentsLogger _logger;
+        private readonly IProviderCommitmentsLogger _logger;
 
-        public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator, IHashingService hashingService, ICommitmentsLogger logger)
+        public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator, IHashingService hashingService, IProviderCommitmentsLogger logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));

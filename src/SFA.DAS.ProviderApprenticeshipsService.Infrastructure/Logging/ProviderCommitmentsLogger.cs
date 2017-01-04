@@ -5,11 +5,11 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging
 {
-    public sealed class CommitmentsLogger : ICommitmentsLogger
+    public sealed class ProviderCommitmentsLogger : IProviderCommitmentsLogger
     {
         private readonly ILog _logger;
 
-        public CommitmentsLogger(ILog logger)
+        public ProviderCommitmentsLogger(ILog logger)
         {
             _logger = logger;
         }

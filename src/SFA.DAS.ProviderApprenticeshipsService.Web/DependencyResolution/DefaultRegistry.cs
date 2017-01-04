@@ -66,16 +66,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         private void ConfigureLogging()
         {
             For<IRequestContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
-            For<ICommitmentsLogger>().Use(x => GetBaseLogger(x)).AlwaysUnique();
+            For<IProviderCommitmentsLogger>().Use(x => GetBaseLogger(x)).AlwaysUnique();
             For<ILog>().Use(x => new NLogLogger(
                 x.ParentType,
                 x.GetInstance<IRequestContext>())).AlwaysUnique();
         }
 
-        private ICommitmentsLogger GetBaseLogger(IContext x)
+        private IProviderCommitmentsLogger GetBaseLogger(IContext x)
         {
             var parentType = x.ParentType;
-            return new CommitmentsLogger(new NLogLogger(parentType, x.GetInstance<IRequestContext>()));
+            return new ProviderCommitmentsLogger(new NLogLogger(parentType, x.GetInstance<IRequestContext>()));
         }
 
         private ProviderApprenticeshipsServiceConfiguration GetConfiguration()
