@@ -16,5 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public IEnumerable<UploadError> Errors { get; set; }
 
         public int ApprenticeshipCount { get; set; }
+
+        public IEnumerable<UploadError> Warnings { get; set; }
     }
 }

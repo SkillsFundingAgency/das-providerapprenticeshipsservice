@@ -1,4 +1,5 @@
-﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.UploadApprenticeshipsViewModel
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.UploadApprenticeshipsViewModel
 
 @{
     ViewBag.Title = "Upload apprenticeships unsuccessful";
@@ -10,25 +11,31 @@
 <div class="grid">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Review and fix upload errors</h1>
-        <p>Your upload contained the following XX errors. Please review the issues and try again.</p>
+        <p>Your upload contained the following @Model.Errors.Count() errors. Please review the issues and try again.</p>
     </div>
 </div>
 
-<div class="grid error-grid">
-    <div class="column-two-thirds">
-        <div class="panel panel-border-wide alert-default">
-            <p>2 errors found</p>
+@if (!Model.Errors.IsNullOrEmpty())
+{
+    <div class="grid error-grid">
+        <div class="column-two-thirds">
+            <div class="panel panel-border-wide alert-default">
+                <p>@Model.Errors.Count() errors found</p>
+            </div>
         </div>
     </div>
-</div>
+}
 
-<div class="grid warning-grid">
-    <div class="column-two-thirds">
-        <div class="panel panel-border-wide alert-default">
-            <p>12 warnings found</p>
+@if (!Model.Warnings.IsNullOrEmpty())
+{
+    <div class="grid warning-grid">
+        <div class="column-two-thirds">
+            <div class="panel panel-border-wide alert-default">
+                <p>@Model.Warnings.Count() warnings found</p>
+            </div>
         </div>
     </div>
-</div>
+}
 
 <div class="grid">
     <div class="column-two-thirds">
@@ -56,31 +63,6 @@
 
     </div>
 </div>
-
-<!--Static HTML ENDS -->
-<div class="grid">
-    <div class="column-two-thirds">
-
-        <h1 class="heading-xlarge">Upload apprenticeships unsuccessful</h1>
-
-
-        <ul>
-
-            @foreach (var error in Model.Errors)
-            {
-                <li>
-                    @error.ToString()
-                </li>
-            }
-
-        </ul>
-    </div>
-</div>
-
-
-
-
-
 
 @section breadcrumb {
     <div class="breadcrumbs">
