@@ -11,6 +11,7 @@
       <Setting name="RedisConnection" value="__RedisConnection__" />
       <Setting name="IdamsRealm" value="__IdamsRealm__" />
       <Setting name="IdamsADFSMetadata" value="__IdamsADFSMetadata__" />
+      <Setting name="InstrumentationKey" value="__InstrumentationKey__" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="E1ED3D898100C041C912BFA02A2B9AAAF5E4C568" thumbprintAlgorithm="sha1" />

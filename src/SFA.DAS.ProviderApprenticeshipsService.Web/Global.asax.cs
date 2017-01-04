@@ -6,6 +6,8 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using FluentValidation.Mvc;
 using SFA.DAS.NLog.Logger;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Azure;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
@@ -22,6 +24,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Name;
             FluentValidationModelValidatorProvider.Configure();
+
+            TelemetryConfiguration.Active.InstrumentationKey = CloudConfigurationManager.GetSetting("InstrumentationKey");
 
             Logger.Info("Starting up");
         }
