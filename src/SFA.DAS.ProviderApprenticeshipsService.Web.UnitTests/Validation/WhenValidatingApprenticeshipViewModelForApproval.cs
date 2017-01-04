@@ -37,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
         {
             var result = _validator.Validate(new ApprenticeshipViewModel());
             result.IsValid.Should().BeFalse();
-            result.Errors.Count.ShouldBeEquivalentTo(9);
+            result.Errors.Count.Should().Be(8);
         }
 
         [Test]
@@ -45,8 +45,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
         {
             var result = _validator.Validate(_validModel);
             result.IsValid.Should().BeTrue();
-            result.Errors.Count.ShouldBeEquivalentTo(0);
-            result.Errors.Count.ShouldBeEquivalentTo(0);
+            result.Errors.Count.Should().Be(0);
+            result.Errors.Count.Should().Be(0);
         }
     }
 }
