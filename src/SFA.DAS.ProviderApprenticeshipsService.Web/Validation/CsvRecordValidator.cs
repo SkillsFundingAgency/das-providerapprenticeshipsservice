@@ -16,6 +16,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             var text = new ApprenticeshipValidationText();
             Func<int?, IEnumerable<int>, bool> inList = (v, l) => !v.HasValue || l.Contains(v.Value);
 
+            RuleFor(r => r.CohortRef)
+                .NotNull().WithMessage(text.CohortRef01.Text).WithErrorCode(text.CohortRef01.ErrorCode)
+                .NotEmpty().WithMessage(text.CohortRef02.Text).WithErrorCode(text.CohortRef02.ErrorCode)
+                .Must(m => (m?.Length ?? 0) < 21).WithMessage(text.CohortRef02.Text).WithErrorCode(text.CohortRef02.ErrorCode)
+                ;
+
             RuleFor(r => r.ProgType)
                 .NotEmpty().WithMessage(text.ProgType01.Text).WithErrorCode(text.ProgType01.ErrorCode)
                 .LessThanOrEqualTo(99).WithMessage(text.ProgType01.Text).WithErrorCode(text.ProgType01.ErrorCode)
@@ -50,6 +56,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
             RuleFor(r => r.DateOfBirth)
                 .Matches(@"^\d{4}-\d{2}-\d{2}$").WithMessage(text.DateOfBirth02.Text).WithErrorCode(text.DateOfBirth02.ErrorCode);
+
+            RuleFor(r => r.LearnStartDate)
+                .Matches(@"^\d{4}-\d{2}-\d{2}$").WithMessage(text.LearnStartDate02.Text).WithErrorCode(text.LearnStartDate02.ErrorCode);
+
+            RuleFor(r => r.LearnPlanEndDate)
+                .Matches(@"^\d{4}-\d{2}-\d{2}$").WithMessage(text.LearnPlanEndDate02.Text).WithErrorCode(text.LearnPlanEndDate02.ErrorCode);
         }
     }
 }

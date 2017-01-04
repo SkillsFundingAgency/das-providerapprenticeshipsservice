@@ -2,6 +2,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
 {
     public class CsvRecord
     {
+        public string CohortRef { get; set; }
+
         public long? ULN { get; set; }
 
         public string GivenNames { get; set; }

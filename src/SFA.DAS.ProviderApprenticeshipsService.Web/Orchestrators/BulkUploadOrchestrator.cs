@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
 using MediatR;
 using NLog;
-
+using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
@@ -37,6 +37,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<BulkUploadResult> UploadFile(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
         {
+            if (uploadApprenticeshipsViewModel.Attachment == null)
+            {
+                return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("No file chosen") } };
+            }
+
             var fileValidationErrors = _bulkUploader.ValidateFile(uploadApprenticeshipsViewModel.Attachment).ToList();
             if (fileValidationErrors.Any())
             {
@@ -56,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             }
 
             var trainingProgrammes = GetTrainingProgrammes();
-            var validationErrors = _bulkUploader.ValidateFields(data, await trainingProgrammes).ToList();
+            var validationErrors = _bulkUploader.ValidateFields(data, await trainingProgrammes, uploadApprenticeshipsViewModel.HashedCommitmentId).ToList();
 
             if (validationErrors.Any())
             {
@@ -64,11 +69,60 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 return new BulkUploadResult { Errors = validationErrors };
             }
 
+            var commitmentId = _hashingService.DecodeValue(uploadApprenticeshipsViewModel.HashedCommitmentId);
+
+            await _mediator.SendAsync(new BulkUploadApprenticeshipsCommand
+            {
+                ProviderId = uploadApprenticeshipsViewModel.ProviderId,
+                CommitmentId = commitmentId,
+                Apprenticeships = await MapFrom(commitmentId, data)
+            });
             // ToDo: Send date to commitment _repository.uploadData(data);
 
             return new BulkUploadResult { Errors = new List<UploadError>() };
         }
 
+        private async Task<IList<Apprenticeship>> MapFrom(long commitmentId, IEnumerable<ApprenticeshipUploadModel> data)
+        {
+            var trainingProgrammes = await GetTrainingProgrammes();
+
+            return data.Select(x => MapFrom(commitmentId, x.ApprenticeshipViewModel, trainingProgrammes)).ToList();
+        }
+
+        private Apprenticeship MapFrom(long commitmentId, ApprenticeshipViewModel viewModel, IList<ITrainingProgramme> trainingProgrammes)
+        {
+            var apprenticeship = new Apprenticeship
+            {
+                CommitmentId = commitmentId,
+                FirstName = viewModel.FirstName,
+                LastName = viewModel.LastName,
+                DateOfBirth = viewModel.DateOfBirth.DateTime,
+                NINumber = viewModel.NINumber,
+                ULN = viewModel.ULN,
+                Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
+                StartDate = viewModel.StartDate.DateTime,
+                EndDate = viewModel.EndDate.DateTime,
+                ProviderRef = viewModel.ProviderRef
+            };
+
+            if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
+            {
+                var training = trainingProgrammes.Single(x => x.Id == viewModel.TrainingCode);
+                apprenticeship.TrainingType = training is Standard ? Commitments.Api.Types.TrainingType.Standard : Commitments.Api.Types.TrainingType.Framework;
+                apprenticeship.TrainingCode = viewModel.TrainingCode;
+                apprenticeship.TrainingName = training.Title;
+            }
+
+            return apprenticeship;
+        }
+
+        //TODO: These are duplicated in Commitment Orchestrator - needs to be shared
+        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
+        {
+            return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
+        }
+
+        //TODO: These are duplicated in Commitment Orchestrator - needs to be shared
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
             var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());

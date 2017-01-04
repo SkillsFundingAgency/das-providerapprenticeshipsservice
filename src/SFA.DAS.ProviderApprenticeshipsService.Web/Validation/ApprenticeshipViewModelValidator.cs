@@ -26,10 +26,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Must(m => lengthLessThan(m, 100)).WithMessage("The Last name must be entered and must not be more than 100 characters in length");
 
             RuleFor(x => x.Cost)
-                .Matches("^$|^[1-9]{1}[0-9]*$").WithMessage("Cost must be entered")
+                .Matches("^$|^[1-9]{1}[0-9]*$").WithMessage("Enter the total agreed training cost")
                 .Must(m => lengthLessThan(m, 6)).WithMessage("Cost must be entered and must not be more than 6 characters in length");
 
-            
             RuleFor(r => r.StartDate)
                 .Must(ValidateStartDate).Unless(m => m.StartDate == null).WithMessage("The Learning start end date is not valid");
 
@@ -41,8 +40,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             RuleFor(r => r.DateOfBirth)
                 .Must(ValidateDateOfBirth).Unless(m => m.DateOfBirth == null).WithMessage("Enter a valid date of birth")
                 .Must(m => _checkIfNotNull(m?.DateTime, m?.DateTime < yesterday)).WithMessage("The date of birth must be in the past");
-
-            RuleFor(x => x.Cost).Matches("^$|^[1-9]{1}[0-9]*$").WithMessage("Enter the total agreed training cost");
         }
 
         private bool BeGreaterThanStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel date)

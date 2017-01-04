@@ -27,7 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void EverythingIsValidating()
         {
-            var errors = _sut.ValidateFields(GetTestData(), TrainingProgrammes());
+            var errors = _sut.ValidateFields(GetTestData(), TrainingProgrammes(), "ABBA123");
             errors.Count().Should().Be(0);
         }
 
@@ -36,7 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         {
             var errors = _sut.ValidateFields(
                 new ApprenticeshipUploadModel[0], 
-                TrainingProgrammes()).ToList();
+                TrainingProgrammes(), "ABBA123").ToList();
             errors.Count.Should().Be(1);
             errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("File contains no records");
         }
@@ -44,21 +44,53 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void MissingTraingCode()
         {
-            var errors = _sut.ValidateFields(GetTestData(), new List<ITrainingProgramme>()).ToList();
+            var errors = _sut.ValidateFields(GetTestData(), new List<ITrainingProgramme>(), "ABBA123").ToList();
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("Row:2 - Not a valid training code");
+            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("Row:1 - Not a valid training code");
         }
 
         [Test]
         public void FailingValidationOnName()
         {
-            var errors = _sut.ValidateFields(GetFailingTestData(), TrainingProgrammes()).ToList();
+            var errors = _sut.ValidateFields(GetFailingTestData(), TrainingProgrammes(), "ABBA123").ToList();
             errors.Count.Should().Be(4);
             var messages = errors.Select(m => m.ToString()).ToList();
+            messages.Should().Contain("Row:1 - The Given names must be entered");
+            messages.Should().Contain("Row:1 - The Given names must be entered and must not be more than 100 characters in length");
+            messages.Should().Contain("Row:2 - The Family name must be entered and must not be more than 100 characters in length");
             messages.Should().Contain("Row:2 - The Given names must be entered");
-            messages.Should().Contain("Row:2 - The Given names must be entered and must not be more than 100 characters in length");
-            messages.Should().Contain("Row:3 - The Family name must be entered and must not be more than 100 characters in length");
-            messages.Should().Contain("Row:3 - The Given names must be entered");
+        }
+
+        [Test]
+        public void FailingValidationCohortRef()
+        {
+            var testData = GetFailingTestData().ToList();
+            var first = testData[0];
+            var second = testData[1];
+            first.CsvRecord.CohortRef = "Abba123";
+            second.CsvRecord.CohortRef = "Other reference";
+
+            var errors = _sut.ValidateFields(new List<ApprenticeshipUploadModel> { first, second } , TrainingProgrammes(), "ABBA123").ToList();
+            errors.Count.Should().Be(6);
+            var messages = errors.Select(m => m.ToString()).ToList();
+            messages.Should().Contain("The Cohort Reference must be the same for all learners in the file");
+            messages.Should().Contain("The Cohort Reference does not match the current cohort");
+        }
+
+        [Test]
+        public void FailingValidationCohortRefNotCurrentRef()
+        {
+            var testData = GetFailingTestData().ToList();
+            var first = testData[0];
+            var second = testData[1];
+            first.CsvRecord.CohortRef = "Other ref";
+            second.CsvRecord.CohortRef = "Other ref";
+
+            var errors = _sut.ValidateFields(new List<ApprenticeshipUploadModel> { first, second }, TrainingProgrammes(), "ABBA123").ToList();
+            errors.Count.Should().Be(5);
+            var messages = errors.Select(m => m.ToString()).ToList();
+            messages.Should().NotContain("The Cohort Reference must be the same for all learners in the file");
+            messages.Should().Contain("The Cohort Reference does not match the current cohort");
         }
 
         private List<ITrainingProgramme> TrainingProgrammes()
@@ -84,7 +116,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             };
             var records = new List<CsvRecord>
                               {
-                                  new CsvRecord { ProgType = 23, FworkCode = 18, PwayCode = 26 }
+                                  new CsvRecord { ProgType = 23, FworkCode = 18, PwayCode = 26, CohortRef = "ABBA123" }
                               };
             return apprenticeships.Zip(
                 records,
@@ -98,7 +130,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                 new ApprenticeshipViewModel
                 {
                     FirstName = "", LastName = new string('*', 101), DateOfBirth = new DateTimeViewModel(8, 12, 1998), TrainingCode = "2", ULN = "1234567890", ProgType = 25,
-                    StartDate = new DateTimeViewModel(null, 8, 2120), EndDate = new DateTimeViewModel(null, 12, 2125), Cost = "15000", NINumber = "SE345678A", EmployerRef = "Abba123"
+                    StartDate = new DateTimeViewModel(null, 8, 2120), EndDate = new DateTimeViewModel(null, 12, 2125), Cost = "15000", NINumber = "SE345678A", EmployerRef = "Ab123"
                 },
                 new ApprenticeshipViewModel
                 {
@@ -109,8 +141,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
 
             var records = new List<CsvRecord>
             {
-                new CsvRecord { ProgType = 25, StdCode = 2 },
-                new CsvRecord { ProgType = 25, StdCode = 2 }
+                new CsvRecord { ProgType = 25, StdCode = 2, CohortRef = "ABBA123" },
+                new CsvRecord { ProgType = 25, StdCode = 2, CohortRef = "ABBA123" }
             };
 
             return apprenticeships.Zip(
