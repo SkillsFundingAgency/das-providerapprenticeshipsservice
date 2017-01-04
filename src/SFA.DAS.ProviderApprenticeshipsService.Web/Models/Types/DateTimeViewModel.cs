@@ -6,14 +6,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
 {
     public  class DateTimeViewModel
     {
+        private const int NinetyYearsInTheFuture = 90;
         private int? _year;
+
+        public DateTimeViewModel() : this(NinetyYearsInTheFuture)
+        {
+        }
 
         /// <summary>
         /// View Model representing a date entry field
         /// </summary>
         /// <param name="date"></param>
         /// <param name="twoDigitMaxYear">Optional: Number of years from current year where to pivot 2 digit year dates</param>
-        public DateTimeViewModel(DateTime? date, int twoDigitMaxYear = 90) : this(twoDigitMaxYear)
+        public DateTimeViewModel(DateTime? date, int twoDigitMaxYear = NinetyYearsInTheFuture) : this(twoDigitMaxYear)
         {
             Day = date?.Day;
             Month = date?.Month;
@@ -27,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
         /// <param name="month"></param>
         /// <param name="year"></param>
         /// <param name="twoDigitMaxYear">Optional: Number of years from current year where to pivot 2 digit year dates</param>
-        public DateTimeViewModel(int? day, int? month, int? year, int twoDigitMaxYear = 90) : this(twoDigitMaxYear)
+        public DateTimeViewModel(int? day, int? month, int? year, int twoDigitMaxYear = NinetyYearsInTheFuture) : this(twoDigitMaxYear)
         {
             Day = day;
             Month = month;
@@ -38,7 +43,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
         /// View Model representing a date entry field
         /// </summary>
         /// <param name="twoDigitMaxYear">Optional: Number of years from current year where to pivot 2 digit year dates</param>
-        public DateTimeViewModel(int twoDigitMaxYear = 90)
+        public DateTimeViewModel(int twoDigitMaxYear = NinetyYearsInTheFuture)
         {
             MaxYear = System.DateTime.UtcNow.Year + twoDigitMaxYear;
         }
