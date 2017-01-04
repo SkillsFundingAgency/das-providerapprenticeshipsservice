@@ -5,13 +5,13 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using FluentValidation.Mvc;
-using NLog;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static ILog Logger = new NLogLogger();
 
         protected void Application_Start()
         {

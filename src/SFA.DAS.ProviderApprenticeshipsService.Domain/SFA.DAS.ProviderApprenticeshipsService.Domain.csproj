@@ -43,6 +43,7 @@
     <Compile Include="Interfaces\IApprenticeshipInfoServiceConfiguration.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\ICache.cs" />
+    <Compile Include="Interfaces\IProviderCommitmentsLogger.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\IHashingService.cs" />
     <Compile Include="ITrainingProgramme.cs" />

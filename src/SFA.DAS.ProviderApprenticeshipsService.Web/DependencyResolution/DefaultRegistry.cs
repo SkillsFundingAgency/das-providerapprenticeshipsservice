@@ -17,15 +17,18 @@
 
 using System;
 using System.Reflection;
+using System.Web;
 using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Caching;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.Tasks.Api.Client;
 using SFA.DAS.Tasks.Api.Client.Configuration;
@@ -57,6 +60,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<ICache>().Use<InMemoryCache>(); //RedisCache
 
             RegisterMediator();
+            ConfigureLogging();
+        }
+
+        private void ConfigureLogging()
+        {
+            For<IRequestContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
+            For<IProviderCommitmentsLogger>().Use(x => GetBaseLogger(x)).AlwaysUnique();
+            For<ILog>().Use(x => new NLogLogger(
+                x.ParentType,
+                x.GetInstance<IRequestContext>())).AlwaysUnique();
+        }
+
+        private IProviderCommitmentsLogger GetBaseLogger(IContext x)
+        {
+            var parentType = x.ParentType;
+            return new ProviderCommitmentsLogger(new NLogLogger(parentType, x.GetInstance<IRequestContext>()));
         }
 
         private ProviderApprenticeshipsServiceConfiguration GetConfiguration()
