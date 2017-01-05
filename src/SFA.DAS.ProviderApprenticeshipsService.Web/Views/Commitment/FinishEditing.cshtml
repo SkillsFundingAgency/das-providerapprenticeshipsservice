@@ -64,6 +64,10 @@
                 <div style="margin-top:20px;">
                     @Html.HiddenFor(m => m.ProviderId)
                     @Html.HiddenFor(m => m.HashedCommitmentId)
+
+                    @Html.HiddenFor(m => m.HasApprenticeships)
+                    @Html.HiddenFor(m => m.InvalidApprenticeshipCount)
+                    @Html.HiddenFor(m => m.NotReadyForApproval)
                     <input type="submit" class="button" id="paymentPlan" value="Continue" />
                 </div>
             </form>
