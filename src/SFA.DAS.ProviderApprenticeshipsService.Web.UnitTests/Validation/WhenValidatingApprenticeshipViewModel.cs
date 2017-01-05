@@ -49,6 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             result.IsValid.Should().BeFalse();
         }
 
+        [TestCase("1234")]
         [TestCase("123")]
         [TestCase("1")]
         public void CostIsWholeNumberGreaterThanZeroIsValid(string cost)
@@ -81,6 +82,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
         [TestCase("-123.1232")]
         [TestCase("-0.001")]
         public void CostThatIsZeroOrNegativeNumberIsInvalid(string cost)
+        {
+            _validModel.Cost = cost;
+
+            var result = _validator.Validate(_validModel);
+
+            result.IsValid.Should().BeFalse();
+        }
+
+        [Test]
+        public void CostContainingValidCommaSeparatorIsValid()
+        {
+            _validModel.Cost = "1,234";
+
+            var result = _validator.Validate(_validModel);
+
+            result.IsValid.Should().BeTrue();
+        }
+
+        [TestCase(",111")]
+        [TestCase("1,22")]
+        [TestCase("1,22,222")]
+        public void CostThatContainsBadlyFormatedCommaSeparatorsIsInvalid(string cost)
         {
             _validModel.Cost = cost;
 
