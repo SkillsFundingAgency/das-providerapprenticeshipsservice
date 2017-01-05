@@ -34,6 +34,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedCommitmentId}/UploadApprenticeships")]
         public async Task<ActionResult> UploadApprenticeships(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(uploadApprenticeshipsViewModel);
+            }
+
             var result = await _bulkUploadController.UploadFileAsync(uploadApprenticeshipsViewModel);
             if (!result.Errors.Any())
             {

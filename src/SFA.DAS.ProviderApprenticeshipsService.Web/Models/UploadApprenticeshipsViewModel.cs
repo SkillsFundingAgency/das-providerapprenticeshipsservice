@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Web;
 
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
@@ -7,6 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
     public sealed class UploadApprenticeshipsViewModel
     {
+        [Required]
         public HttpPostedFileBase Attachment { get; set; }
 
         public long ProviderId { get; set; }

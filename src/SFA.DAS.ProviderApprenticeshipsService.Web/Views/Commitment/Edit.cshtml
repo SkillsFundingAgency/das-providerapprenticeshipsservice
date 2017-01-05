@@ -21,10 +21,7 @@
 
             @Html.AntiForgeryToken()
 
-            @{ var validation = Html.ViewData["ApprovalWarningState"] as FluentValidation.Results.ValidationResult;
-                var cantApproveClass = validation != null && !validation.IsValid
-                         ? "cant-approve" : "";
-                 }
+            @{ var validation = Html.ViewData["ApprovalWarningState"] as FluentValidation.Results.ValidationResult; }
 
             <h1 class="heading-xlarge">Edit an apprentice</h1>
             
