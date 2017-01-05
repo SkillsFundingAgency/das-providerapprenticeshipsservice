@@ -10,6 +10,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
     {
         private const int CurrentYearAsTwoDigitOffSet = 0;
 
+        public ApprenticeshipViewModel()
+        {
+            StartDate = new DateTimeViewModel();
+            EndDate = new DateTimeViewModel();
+        }
+
         public string HashedApprenticeshipId { get; set; }
 
         public string HashedCommitmentId { get; set; }
