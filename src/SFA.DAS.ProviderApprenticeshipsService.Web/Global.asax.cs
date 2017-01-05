@@ -5,13 +5,15 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using FluentValidation.Mvc;
-using NLog;
+using SFA.DAS.NLog.Logger;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Azure;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static ILog Logger = new NLogLogger();
 
         protected void Application_Start()
         {
@@ -22,6 +24,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Name;
             FluentValidationModelValidatorProvider.Configure();
+
+            TelemetryConfiguration.Active.InstrumentationKey = CloudConfigurationManager.GetSetting("InstrumentationKey");
 
             Logger.Info("Starting up");
         }

@@ -26,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Must(m => lengthLessThan(m, 100)).WithMessage("The Last name must be entered and must not be more than 100 characters in length");
 
             RuleFor(x => x.Cost)
-                .Matches("^$|^[1-9]{1}[0-9]*$").When(m => lengthLessThan(m.Cost, 6)).WithMessage("Enter the total agreed training cost")
+                .Matches("^$|^([1-9]{1}([0-9]{1,2})?)+(,[0-9]{3})*$").When(m => lengthLessThan(m.Cost, 6)).WithMessage("Enter the total agreed training cost")
                 .Must(m => lengthLessThan(m, 6)).WithMessage("The cost must be 6 numbers or fewer, for example 25000");
 
             RuleFor(r => r.StartDate)

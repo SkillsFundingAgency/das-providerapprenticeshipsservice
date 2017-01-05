@@ -62,6 +62,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             result.IsValid.Should().BeFalse();
         }
 
+        [TestCase("1234")]
         [TestCase("123")]
         [TestCase("1")]
         public void CostIsWholeNumberGreaterThanZeroIsValid(string cost)
@@ -239,7 +240,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             result.Errors[0].ErrorMessage.Should().Be("The Provider reference must not be more than 20 characters in length");
             result.Errors[0].ErrorCode.Should().Be("ProviderRef_01");
         }
+          
+        public void CostContainingValidCommaSeparatorIsValid()
+        {
+            _validModel.Cost = "1,234";
 
+            var result = _validator.Validate(_validModel);
+
+            result.IsValid.Should().BeTrue();
+        }
+
+        [TestCase(",111")]
+        [TestCase("1,22")]
+        [TestCase("1,22,222")]
+        public void CostThatContainsBadlyFormatedCommaSeparatorsIsInvalid(string cost)
+        {
+            _validModel.Cost = cost;
+
+            var result = _validator.Validate(_validModel);
+
+            result.IsValid.Should().BeFalse();
+          
         #region DateOfBirth
 
         [TestCase(31, 2, 13, "The Date of birth must be entered")]

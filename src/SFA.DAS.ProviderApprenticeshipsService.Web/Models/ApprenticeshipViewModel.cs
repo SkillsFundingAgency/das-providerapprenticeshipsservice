@@ -1,5 +1,4 @@
 ﻿using FluentValidation.Attributes;
-
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
@@ -9,6 +8,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
     [Validator(typeof(ApprenticeshipViewModelValidator))]
     public class ApprenticeshipViewModel
     {
+        private const int CurrentYearAsTwoDigitOffSet = 0;
+
         public string HashedApprenticeshipId { get; set; }
 
         public string HashedCommitmentId { get; set; }
@@ -17,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public DateTimeViewModel DateOfBirth { get; set; }
+        public DateTimeViewModel DateOfBirth { get; set; } = new DateTimeViewModel(CurrentYearAsTwoDigitOffSet);
 
         public string NINumber { get; set; }
 

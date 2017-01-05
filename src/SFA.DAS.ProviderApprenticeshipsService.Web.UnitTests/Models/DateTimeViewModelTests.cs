@@ -37,15 +37,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models
             sut.DateTime?.ToString("dd/MM/yyyy").Should().Be("25/09/2009");
         }
 
-        [TestCase(null, 2, 3, "01/02/2003")]
-        [TestCase(28, 2, 13, "28/02/2013")]
-        [TestCase(null, 2, 99, "01/02/1999")]
+        [TestCase(null, 2, 3, "01/02/2103")]
+        [TestCase(null, 2, 99, "01/02/2099")]
         [TestCase(15, 12, 1995, "15/12/1995")]
         [TestCase(12, 12, 2024, "12/12/2024")]
-        public void ShouldBeValid(int? day, int? month, int? year, string expected)
+        [TestCase(1, 12, 59, "01/12/2059")]
+        [TestCase(1, 12, 60, "01/12/2060")]
+        [TestCase(1, 12, 61, "01/12/2061")]
+        public void ShouldBeValidFuture(int? day, int? month, int? year, string expected)
         {
             var sut = new DateTimeViewModel(day, month, year);
             sut.DateTime?.ToString("dd/MM/yyyy").Should().Be(expected);
+        }
+
+        [Test]
+        public void ShouldBeValidPast()
+        {
+            var year = DateTime.Now.Year - 5;
+            var yearTwoDigit = int.Parse(year.ToString().Substring(2));
+            
+            var sut = new DateTimeViewModel(null, 2, yearTwoDigit, 0);
+            (sut.DateTime == null).Should().BeFalse();
+            sut.DateTime?.ToString("dd/MM/yyyy").Should().Be("01/02/" + year);
         }
     }
 }
