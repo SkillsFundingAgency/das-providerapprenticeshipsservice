@@ -13,12 +13,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             RuleFor(r => r.ULN).NotEmpty();
             RuleFor(r => r.Cost).NotEmpty();
 
-            RuleFor(r => r.StartDate).NotNull();
-            RuleFor(r => r.EndDate).NotNull();
+            RuleFor(r => r.StartDate)
+                .Must(m => m?.DateTime != null);
+            RuleFor(r => r.EndDate)
+                .Must(m => m?.DateTime != null);
 
             RuleFor(r => r.TrainingCode).NotEmpty();
 
-            RuleFor(r => r.DateOfBirth).NotNull();
+            RuleFor(r => r.DateOfBirth)
+                .Must(m => m?.DateTime != null);
 
             RuleFor(r => r.NINumber).NotEmpty();
         }
