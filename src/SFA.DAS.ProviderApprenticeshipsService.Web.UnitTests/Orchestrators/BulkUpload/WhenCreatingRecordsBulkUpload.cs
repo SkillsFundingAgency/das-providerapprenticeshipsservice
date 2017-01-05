@@ -7,8 +7,9 @@ using System.Web;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 
@@ -29,8 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                 Abba123,Chris3,Froberg3WrongDateFormat,1998-12-08,SE1233211C,,,,5,2020-08-01,01/08/25,1500,,,Employer ref,Provider ref,1113335559";
 
         private Mock<HttpPostedFileBase> _file;
-
-        BulkUploadValidator _sut;
+        private IBulkUploadFileParser _sut;
 
         [SetUp]
         public void Setup()
@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var textStream = new MemoryStream(Encoding.UTF8.GetBytes(TestData));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
-            _sut = new BulkUploadValidator();
+            _sut = new BulkUploadFileParser(Mock.Of<ILog>());
         }
 
         [Test]
@@ -51,18 +51,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             records.Data.Count().Should().Be(8);
             records.Errors.Should().NotBeNull();
             records.Errors.Should().BeEmpty();
-        }
-
-        [Test]
-        public void ValidatingViewModels()
-        {
-            var records = _sut.CreateViewModels(_file.Object);
-            var result = _sut.ValidateFields(records.Data, new List<ITrainingProgramme>(), "ABBA123");
-            result.Count().Should().Be(59);
-            result.Select(m => m.ToString())
-                .Contains("Row:8 - The Learning planned end date must be entered and be in the format yyyy-mm-dd")
-                .Should()
-                .BeTrue();
         }
     }
 }

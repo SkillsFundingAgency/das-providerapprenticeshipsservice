@@ -351,10 +351,13 @@
     <Compile Include="Models\TaskViewModel.cs" />
     <Compile Include="Models\UploadApprenticeshipsViewModel.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
+    <Compile Include="Orchestrators\BulkUpload\BulkUploadFileParser.cs" />
     <Compile Include="Orchestrators\BulkUpload\BulkUploadValidator.cs" />
     <Compile Include="Orchestrators\BulkUploadOrchestrator.cs" />
     <Compile Include="Orchestrators\BulkUpload\ApprenticeshipUploadModel.cs" />
     <Compile Include="Orchestrators\BulkUpload\BulkUploader.cs" />
+    <Compile Include="Orchestrators\BulkUpload\IBulkUploadFileParser.cs" />
+    <Compile Include="Orchestrators\BulkUpload\IBulkUploadValidator.cs" />
     <Compile Include="Orchestrators\CommitmentOrchestrator.cs" />
     <Compile Include="Orchestrators\CommitmentStatusCalculator.cs" />
     <Compile Include="Models\BulkUpload\CsvRecord.cs" />

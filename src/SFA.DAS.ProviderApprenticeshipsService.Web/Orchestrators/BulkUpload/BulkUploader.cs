@@ -1,30 +1,39 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using MediatR;
-using NLog;
-
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 {
-    public class BulkUploader
+    public sealed class BulkUploader
     {
         private readonly IMediator _mediator;
+        private readonly IBulkUploadValidator _bulkUploadValidator;
+        private readonly IProviderCommitmentsLogger _logger;
+        private readonly IBulkUploadFileParser _fileParser;
 
-        private readonly BulkUploadValidator _bulkUploadValidator;
-
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
-
-        public BulkUploader(IMediator mediator, BulkUploadValidator bulkUploadValidator)
+        public BulkUploader(IMediator mediator, IBulkUploadValidator bulkUploadValidator, IBulkUploadFileParser fileParser, IProviderCommitmentsLogger logger)
         {
+            if (mediator == null)
+                throw new ArgumentNullException(nameof(mediator));
+            if (bulkUploadValidator == null)
+                throw new ArgumentNullException(nameof(bulkUploadValidator));
+            if (fileParser == null)
+                throw new ArgumentNullException(nameof(fileParser));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
+
             _mediator = mediator;
             _bulkUploadValidator = bulkUploadValidator;
+            _fileParser = fileParser;
+            _logger = logger;
         }
 
         public async Task<BulkUploadResult> UploadFile(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
@@ -32,15 +41,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             if (uploadApprenticeshipsViewModel.Attachment == null)
                 return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("No file chosen") } };
 
-            var fileValidationErrors = _bulkUploadValidator.ValidateFile(uploadApprenticeshipsViewModel.Attachment).ToList();
+            var fileValidationErrors = _bulkUploadValidator.ValidateFileAttributes(uploadApprenticeshipsViewModel.Attachment).ToList();
+
             if (fileValidationErrors.Any())
             {
-                _logger.Warn($"Failed validation bulk upload file with {fileValidationErrors.Count} errors"); // ToDo: Log what errors?
+                _logger.Warn($"Failed validation bulk upload file with {fileValidationErrors.Count} errors", providerId: uploadApprenticeshipsViewModel.ProviderId); // ToDo: Log what errors?
+
                 return new BulkUploadResult { Errors = fileValidationErrors };
             }
 
-            BulkUploadResult uploadResult = _bulkUploadValidator.CreateViewModels(uploadApprenticeshipsViewModel.Attachment);
-            if (uploadResult.Errors.Any()) return uploadResult;
+            BulkUploadResult uploadResult = _fileParser.CreateViewModels(uploadApprenticeshipsViewModel.Attachment);
+
+            if (uploadResult.Errors.Any())
+                return uploadResult;
 
             var trainingProgrammes = GetTrainingProgrammes();
             var validationErrors = 
@@ -48,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
             if (validationErrors.Any())
             {
-                _logger.Warn($"Failed validation bulk upload records with {validationErrors.Count} errors"); // ToDo: Log what errors?
+                _logger.Warn($"Failed validation bulk upload records with {validationErrors.Count} errors", providerId: uploadApprenticeshipsViewModel.ProviderId); // ToDo: Log what errors?
                 return new BulkUploadResult { Errors = validationErrors };
             }
 

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using MediatR;
-using NLog;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
@@ -18,31 +16,47 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
-    public class BulkUploadOrchestrator
+    public sealed class BulkUploadOrchestrator
     {
         private readonly IMediator _mediator;
-
         private readonly BulkUploader _bulkUploader;
-
         private readonly IHashingService _hashingService;
+        private readonly IProviderCommitmentsLogger _logger;
 
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
-
-        public BulkUploadOrchestrator(IMediator mediator, BulkUploader bulkUploader, IHashingService hashingService)
+        public BulkUploadOrchestrator(IMediator mediator, BulkUploader bulkUploader, IHashingService hashingService, IProviderCommitmentsLogger logger)
         {
+            if (mediator == null)
+                throw new ArgumentNullException(nameof(mediator));
+            if (bulkUploader == null)
+                throw new ArgumentNullException(nameof(bulkUploader));
+            if (hashingService == null)
+                throw new ArgumentNullException(nameof(hashingService));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
+
             _mediator = mediator;
             _bulkUploader = bulkUploader;
             _hashingService = hashingService;
+            _logger = logger;
         }
 
         public async Task<BulkUploadResult> UploadFileAsync(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
         {
+            var commitmentId = _hashingService.DecodeValue(uploadApprenticeshipsViewModel.HashedCommitmentId);
 
+            _logger.Info($"Uploading file of apprentices. Filename:{uploadApprenticeshipsViewModel?.Attachment?.FileName}", providerId: uploadApprenticeshipsViewModel.ProviderId, commitmentId: commitmentId);
+            
             var result = await _bulkUploader.UploadFile(uploadApprenticeshipsViewModel);
 
-            if (result.Errors.Any()) return result;
+            var errorCount = result.Errors.Count();
 
-            var commitmentId = _hashingService.DecodeValue(uploadApprenticeshipsViewModel.HashedCommitmentId);
+            if (errorCount > 0)
+            {
+                _logger.Info($"{errorCount} Upload errors for Filename:{uploadApprenticeshipsViewModel?.Attachment?.FileName}", providerId: uploadApprenticeshipsViewModel.ProviderId, commitmentId: commitmentId);
+
+                return result;
+            }
+
             await _mediator.SendAsync(new BulkUploadApprenticeshipsCommand
             {
                 ProviderId = uploadApprenticeshipsViewModel.ProviderId,
