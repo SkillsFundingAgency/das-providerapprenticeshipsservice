@@ -260,6 +260,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             var result = _validator.Validate(_validModel);
 
             result.IsValid.Should().BeFalse();
+        }
           
         #region DateOfBirth
 
