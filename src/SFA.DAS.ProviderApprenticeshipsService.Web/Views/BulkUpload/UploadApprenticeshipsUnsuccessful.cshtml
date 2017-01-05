@@ -6,8 +6,6 @@
     ViewBag.PageId = "upload-error";
 }
 
-
-<!--Static HTML code to replace with required functionality -->
 <div class="grid">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Review and fix upload errors</h1>
@@ -20,7 +18,14 @@
     <div class="grid error-grid">
         <div class="column-two-thirds">
             <div class="panel panel-border-wide alert-default">
-                <p>@Model.Errors.Count() errors found</p>
+                @if (Model.Errors.Count() == 1)
+                {
+                    <p>1 error found</p>
+                }
+                else
+                {
+                    <p>@Model.Errors.Count() errors found</p>
+                }
             </div>
         </div>
     </div>
@@ -31,7 +36,14 @@
     <div class="grid warning-grid">
         <div class="column-two-thirds">
             <div class="panel panel-border-wide alert-default">
-                <p>@Model.Warnings.Count() warnings found</p>
+                @if (Model.Warnings.Count() == 1)
+                {
+                    <p>1 warning found</p>
+                }
+                else
+                {
+                    <p>@Model.Warnings.Count() warnings found</p>
+                }
             </div>
         </div>
     </div>
