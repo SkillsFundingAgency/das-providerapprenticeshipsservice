@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Orchestrators\WhenUploadingFile.cs" />
+    <Compile Include="Validation\WhenValidatingApprenticeshipBulkUploadViewModel.cs" />
     <Compile Include="WhenValidatingCsvRecord.cs" />
     <Compile Include="Orchestrators\BulkUpload\WhenCreatingRecordsBulkUpload.cs" />
     <Compile Include="Orchestrators\BulkUpload\WhenValidatingRecordsBulkUpload.cs" />

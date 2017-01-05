@@ -57,7 +57,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             return true;
         }
 
-        protected bool ValidateStartDate(DateTimeViewModel date)
+        protected bool ValidateDateWithoutDay(DateTimeViewModel date)
         {
             if (date.DateTime == null)
             {

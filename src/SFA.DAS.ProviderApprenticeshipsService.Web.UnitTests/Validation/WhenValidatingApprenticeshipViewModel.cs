@@ -52,6 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             result.IsValid.Should().BeFalse();
         }
 
+        [Test]
         public void ULNThatStartsWithAZeroIsInvalid()
         {
             var viewModel = new ApprenticeshipViewModel { ULN = "0123456789" };
@@ -110,6 +111,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             var result = _validator.Validate(_validModel);
             result.Errors.Count.Should().Be(2);
             
+            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("First names must be entered");
+            result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("Last name must be entered");
+        }
+
+        [Test]
+        public void NamesShouldNotBeEmpty()
+        {
+            _validModel.FirstName = " ";
+            _validModel.LastName = " ";
+
+            var result = _validator.Validate(_validModel);
+            result.Errors.Count.Should().Be(2);
+
             result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("First names must be entered");
             result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("Last name must be entered");
         }

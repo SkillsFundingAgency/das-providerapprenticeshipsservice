@@ -57,10 +57,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var errors = _sut.ValidateFields(GetFailingTestData(), TrainingProgrammes(), "ABBA123").ToList();
             errors.Count.Should().Be(4);
             var messages = errors.Select(m => m.ToString()).ToList();
-            messages.Should().Contain("Row:1 - The Given names must be entered");
             messages.Should().Contain("Row:1 - The Given names must be entered and must not be more than 100 characters in length");
+            messages.Should().Contain("Row:1 - The Family name must be entered and must not be more than 100 characters in length");
+            messages.Should().Contain("Row:2 - The Given names must be entered and must not be more than 100 characters in length");
             messages.Should().Contain("Row:2 - The Family name must be entered and must not be more than 100 characters in length");
-            messages.Should().Contain("Row:2 - The Given names must be entered");
         }
 
         [Test]
@@ -131,7 +131,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             {
                 new ApprenticeshipViewModel
                 {
-                    FirstName = "", LastName = new string('*', 101), DateOfBirth = new DateTimeViewModel(8, 12, 1998), TrainingCode = "2", ULN = "1234567890", ProgType = 25,
+                    FirstName = " ", LastName = new string('*', 101), DateOfBirth = new DateTimeViewModel(8, 12, 1998), TrainingCode = "2", ULN = "1234567890", ProgType = 25,
                     StartDate = new DateTimeViewModel(null, 8, 2120), EndDate = new DateTimeViewModel(null, 12, 2125), Cost = "15000", NINumber = "SE345678A", EmployerRef = "Ab123"
                 },
                 new ApprenticeshipViewModel

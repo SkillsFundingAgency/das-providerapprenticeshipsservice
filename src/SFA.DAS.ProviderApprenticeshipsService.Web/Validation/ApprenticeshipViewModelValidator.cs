@@ -18,11 +18,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             Func<DateTime?, bool, bool> _checkIfNotNull = (dt, b) => dt == null || b;
 
             RuleFor(x => x.FirstName)
-                .Must(m => !string.IsNullOrEmpty(m)).WithMessage("First names must be entered")
+                .NotEmpty().WithMessage("First names must be entered")
                 .Must(m => lengthLessThan(m, 100)).WithMessage("First names must be entered and must not be more than 100 characters in length");
 
             RuleFor(x => x.LastName)
-                .Must(m => !string.IsNullOrEmpty(m)).WithMessage("Last name must be entered")
+                .NotEmpty().WithMessage("Last name must be entered")
                 .Must(m => lengthLessThan(m, 100)).WithMessage("The Last name must be entered and must not be more than 100 characters in length");
 
             RuleFor(x => x.Cost)
@@ -30,10 +30,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Must(m => lengthLessThan(m, 6)).WithMessage("The cost must be 6 numbers or fewer, for example 25000");
 
             RuleFor(r => r.StartDate)
-                .Must(ValidateStartDate).Unless(m => m.StartDate == null).WithMessage("The Learning start end date is not valid");
+                .Must(ValidateDateWithoutDay).Unless(m => m.StartDate == null).WithMessage("The Learning start end date is not valid");
 
             RuleFor(r => r.EndDate)
-                            .Must(ValidateStartDate).Unless(m => m.EndDate == null).WithMessage("The Learning planned end date is not valid")
+                            .Must(ValidateDateWithoutDay).Unless(m => m.EndDate == null).WithMessage("The Learning planned end date is not valid")
                             .Must(BeGreaterThenStartDate).WithMessage(text.LearnPlanEndDate03.Text)
                             .Must(m => CheckIfNotNull(m?.DateTime, m?.DateTime > now)).WithMessage(text.LearnPlanEndDate06.Text);
 

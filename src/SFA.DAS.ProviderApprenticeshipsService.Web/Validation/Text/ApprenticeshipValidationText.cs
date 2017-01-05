@@ -21,13 +21,13 @@
             new ValidationMessage("The Unique Learner number is already in use on another record for this Learning Start Date", "ULN_04");
 
         public ValidationMessage FamilyName01 =>
-            new ValidationMessage("The Given names must be entered", "FamilyName_01");
+            new ValidationMessage("The Family name must be entered", "FamilyName_01");
         public ValidationMessage FamilyName02 =>
-            new ValidationMessage("The Given names must be entered and must not be more than 100 characters in length", "FamilyName_02");
+            new ValidationMessage("The Family name must be entered and must not be more than 100 characters in length", "FamilyName_02");
         public ValidationMessage GivenNames01 =>
             new ValidationMessage("The Given names must be entered", "GivenNames_01");
         public ValidationMessage GivenNames02 =>
-            new ValidationMessage("The Family name must be entered and must not be more than 100 characters in length", "GivenNames_02");
+            new ValidationMessage("The Given names must be entered and must not be more than 100 characters in length", "GivenNames_02");
 
         public ValidationMessage DateOfBirth01 =>
             new ValidationMessage("The Date of birth must be entered", "DateOfBirth_01");
