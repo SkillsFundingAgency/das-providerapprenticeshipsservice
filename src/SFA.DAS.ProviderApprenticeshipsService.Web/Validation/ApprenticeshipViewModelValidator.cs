@@ -19,11 +19,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
             RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage("First names must be entered")
-                .Must(m => lengthLessThan(m, 100)).WithMessage("First names must be entered and must not be more than 100 characters in length");
+                .Must(m => lengthLessThan(m, 100)).WithMessage("You must enter a first name that's no longer than 100 characters");
 
             RuleFor(x => x.LastName)
                 .NotEmpty().WithMessage("Last name must be entered")
-                .Must(m => lengthLessThan(m, 100)).WithMessage("The Last name must be entered and must not be more than 100 characters in length");
+                .Must(m => lengthLessThan(m, 100)).WithMessage("You must enter a last name that's no longer than 100 characters");
 
             RuleFor(x => x.Cost)
                 .Matches("^$|^([1-9]{1}([0-9]{1,2})?)+(,[0-9]{3})*$").When(m => lengthLessThan(m.Cost, 6)).WithMessage("Enter the total agreed training cost")
