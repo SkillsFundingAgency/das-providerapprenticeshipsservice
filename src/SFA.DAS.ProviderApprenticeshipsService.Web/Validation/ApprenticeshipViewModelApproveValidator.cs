@@ -32,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
             RuleFor(r => r.DateOfBirth)
                 .Must(m => m?.DateTime != null).WithMessage(text.DateOfBirth01.Text).WithErrorCode(text.DateOfBirth01.ErrorCode);
-        }
 
+        }
     }
 }

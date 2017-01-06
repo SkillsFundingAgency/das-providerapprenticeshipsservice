@@ -6,13 +6,15 @@ using System.Web;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.NLog.Logger;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.BulkUpload
 {
     [TestFixture]
-    public class WhenValidatingFileBulkUpload
+    public class WhenValidatingBulkUploadFileAttributes
     {
         private Mock<HttpPostedFileBase> _file;
 
@@ -28,16 +30,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
 
             _file.Setup(m => m.InputStream).Returns(textStream);
 
-            _sut = new BulkUploadValidator();
+            _sut = new BulkUploadValidator(new ProviderApprenticeshipsServiceConfiguration { MaxBulkUploadFileSize = 512 }, Mock.Of<ILog>());
         }
 
         [Test]
         public void FileValidationError()
         {
             _file.Setup(m => m.FileName).Returns("abba.csv.txt");
-            _file.Setup(m => m.ContentLength).Returns(513 * 1000);
+            _file.Setup(m => m.ContentLength).Returns(513 * 1024);
 
-            var errors  = _sut.ValidateFile(_file.Object).ToList();
+            var errors  = _sut.ValidateFileAttributes(_file.Object).ToList();
 
             errors.Count.Should().Be(2);
             errors.Count(m => m.ErrorCode.Contains("Filename_01")).Should().Be(1);
@@ -52,7 +54,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         {
             _file.Setup(m => m.FileName).Returns(fileName);
 
-            var errors = _sut.ValidateFile(_file.Object).ToList();
+            var errors = _sut.ValidateFileAttributes(_file.Object).ToList();
 
             errors.Count.Should().Be(1);
             errors.FirstOrDefault().Message.ShouldAllBeEquivalentTo("Filename must be in the correct format, eg. APPDATA-20161212-201530.csv");
@@ -66,7 +68,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         {
             _file.Setup(m => m.FileName).Returns(fileName);
 
-            var errors = _sut.ValidateFile(_file.Object).ToList();
+            var errors = _sut.ValidateFileAttributes(_file.Object).ToList();
 
             errors.Count.Should().Be(1);
             errors.FirstOrDefault().Message.ShouldAllBeEquivalentTo("Filename must be in the correct format, eg. APPDATA-20161212-201530.csv");
@@ -78,7 +80,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         {
             _file.Setup(m => m.FileName).Returns("APPDATA-21820905-175300.csv");
 
-            var errors = _sut.ValidateFile(_file.Object).ToList();
+            var errors = _sut.ValidateFileAttributes(_file.Object).ToList();
 
             errors.Count.Should().Be(1);
             errors.FirstOrDefault().Message.ShouldAllBeEquivalentTo("The file date/time must be on or before today's date/time");
@@ -88,7 +90,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void FileValidationNoErrors()
         {
-            var errors = _sut.ValidateFile(_file.Object);
+            var errors = _sut.ValidateFileAttributes(_file.Object);
 
             errors.Count().Should().Be(0);
         }

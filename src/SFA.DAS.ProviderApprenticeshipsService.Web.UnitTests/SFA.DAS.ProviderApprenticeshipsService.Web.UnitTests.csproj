@@ -54,12 +54,20 @@
       <HintPath>..\packages\Moq.4.5.28\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.3.7\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.16.0.17918, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.16.0.17918\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.17615, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.17615\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -78,7 +86,7 @@
     <Compile Include="WhenValidatingCsvRecord.cs" />
     <Compile Include="Orchestrators\BulkUpload\WhenCreatingRecordsBulkUpload.cs" />
     <Compile Include="Orchestrators\BulkUpload\WhenValidatingRecordsBulkUpload.cs" />
-    <Compile Include="Orchestrators\BulkUpload\WhenValidatingFileBulkUpload.cs" />
+    <Compile Include="Orchestrators\BulkUpload\WhenValidatingBulkUploadFileAttributes.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
     <Compile Include="Validation\WhenValidatingApprenticeshipViewModelForApproval.cs" />
     <Compile Include="Orchestrators\WhenApproveCommitment.cs" />
@@ -102,6 +110,10 @@
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj">
       <Project>{B3484618-78A0-411E-BC02-AC84C8694C3D}</Project>
       <Name>SFA.DAS.ProviderApprenticeshipsService.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Infrastructure\SFA.DAS.ProviderApprenticeshipsService.Infrastructure.csproj">
+      <Project>{380868C8-FA69-4DA7-B054-45AC924EC48E}</Project>
+      <Name>SFA.DAS.ProviderApprenticeshipsService.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Web\SFA.DAS.ProviderApprenticeshipsService.Web.csproj">
       <Project>{94E473E1-2217-43C3-A228-00B8BE2BE0F1}</Project>
