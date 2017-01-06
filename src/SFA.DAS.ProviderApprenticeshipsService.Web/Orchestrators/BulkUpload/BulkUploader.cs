@@ -45,6 +45,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
             if (fileValidationErrors.Any())
             {
+                foreach (var error in fileValidationErrors)
+                    _logger.Warn($"  -->  {error.Message}");
                 _logger.Warn($"Failed validation bulk upload file with {fileValidationErrors.Count} errors", providerId: uploadApprenticeshipsViewModel.ProviderId); // ToDo: Log what errors?
 
                 return new BulkUploadResult { Errors = fileValidationErrors };

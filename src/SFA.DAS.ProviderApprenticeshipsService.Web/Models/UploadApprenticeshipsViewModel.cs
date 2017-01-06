@@ -8,7 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
     public sealed class UploadApprenticeshipsViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "You must choose a file to upload")]
         public HttpPostedFileBase Attachment { get; set; }
 
         public long ProviderId { get; set; }
