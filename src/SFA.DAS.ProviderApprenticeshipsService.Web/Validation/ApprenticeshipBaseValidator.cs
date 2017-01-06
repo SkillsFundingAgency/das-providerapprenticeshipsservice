@@ -17,8 +17,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             Func<string, int, bool> lengthLessThan = (str, lenth) => (str?.Length ?? 0) <= lenth;
 
             RuleFor(x => x.ULN)
-                .Matches("^$|^[1-9]{1}[0-9]{9}$").When(m => m.ULN.Length < 11).WithMessage(text.Uln01.Text).WithErrorCode(text.Uln01.ErrorCode)
-                .Must(m => m.Length < 11).WithMessage(text.Uln01.Text).WithErrorCode(text.Uln01.ErrorCode)
+                .Matches("^$|^[1-9]{1}[0-9]{9}$").When(m => lengthLessThan(m.ULN, 11)).WithMessage(text.Uln01.Text).WithErrorCode(text.Uln01.ErrorCode)
+                .Must(m => lengthLessThan(m, 11)).WithMessage(text.Uln01.Text).WithErrorCode(text.Uln01.ErrorCode)
                 .Must(m => m != "9999999999").WithMessage(text.Uln02.Text).WithErrorCode(text.Uln02.ErrorCode);
             // ToDo: text.UlnPassChecksum
             // ToDo text.UlnAlreadyInUse
