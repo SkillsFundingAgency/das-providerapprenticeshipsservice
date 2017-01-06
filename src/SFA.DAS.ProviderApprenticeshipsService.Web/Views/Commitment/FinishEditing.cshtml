@@ -11,8 +11,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-
-        <h1 class="heading-xlarge">Choose an option</h1>
+       
       
         @if (Model.NotReadyForApproval)
         {
@@ -20,13 +19,13 @@
                 @Html.Raw(GetInvalidStateForApprovalMessage(Model.HasApprenticeships, Model.InvalidApprenticeshipCount))
             </p>
         }
-        <div>
+       
             <form action="@Url.Action("FinishEditing")" method="POST">
                 @Html.AntiForgeryToken()
+               
                 @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
-
+                <h1 class="heading-xlarge">Choose an option</h1>
               
-
                 <legend class="visuallyhidden">Things to do next</legend>
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.SaveStatus, "error")">
                     <div>
@@ -72,7 +71,7 @@
                 </div>
             </form>
 
-        </div>
+       
         <div style="margin-top:35px"></div>
         <div style="margin-top:50px"></div>
     </div>

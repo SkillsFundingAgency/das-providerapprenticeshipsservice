@@ -2541,6 +2541,11 @@ span.helpText {
   color: #b10e1e;
 }
 
+#finish-editing .error-summary {
+  margin-bottom: 60px;
+  margin-top: 0;
+}
+
 .cant-approve .panel {
   border-color: #b10e1e;
   color: #b10e1e;
