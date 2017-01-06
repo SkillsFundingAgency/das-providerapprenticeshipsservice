@@ -1,5 +1,4 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
-@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.UploadApprenticeshipsViewModel
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.UploadApprenticeshipsViewModel
 
 @{
     ViewBag.Title = "Upload apprenticeships unsuccessful";
@@ -9,40 +8,40 @@
 <div class="grid">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Review and fix upload errors</h1>
-        <p>Your upload contained the following @Model.Errors.Count() errors. Please review the issues and try again.</p>
+        <p>Your upload contained the following @Model.ErrorCount errors. Please review the issues and try again.</p>
     </div>
 </div>
 
-@if (!Model.Errors.IsNullOrEmpty())
+@if (Model.ErrorCount > 0)
 {
     <div class="grid error-grid">
         <div class="column-two-thirds">
             <div class="panel panel-border-wide alert-default">
-                @if (Model.Errors.Count() == 1)
+                @if (Model.ErrorCount == 1)
                 {
                     <p>1 error found</p>
                 }
                 else
                 {
-                    <p>@Model.Errors.Count() errors found</p>
+                    <p>@Model.ErrorCount errors found</p>
                 }
             </div>
         </div>
     </div>
 }
 
-@if (!Model.Warnings.IsNullOrEmpty())
+@if (Model.WarningsCount > 0)
 {
     <div class="grid warning-grid">
         <div class="column-two-thirds">
             <div class="panel panel-border-wide alert-default">
-                @if (Model.Warnings.Count() == 1)
+                @if (Model.WarningsCount == 1)
                 {
                     <p>1 warning found</p>
                 }
                 else
                 {
-                    <p>@Model.Warnings.Count() warnings found</p>
+                    <p>@Model.WarningsCount warnings found</p>
                 }
             </div>
         </div>
@@ -71,8 +70,6 @@
             <input class="button upload-file-btn" type="submit" value="Upload a new file">
          
         </form>
-
-
     </div>
 </div>
 

@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Web;
-
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
@@ -15,10 +12,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public string HashedCommitmentId { get; set; }
 
-        public IEnumerable<UploadError> Errors { get; set; }
-
         public int ApprenticeshipCount { get; set; }
 
-        public IEnumerable<UploadError> Warnings { get; set; }
+        public int ErrorCount { get; set; }
+
+        public int WarningsCount { get; set; }
     }
 }

@@ -46,19 +46,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return RedirectToAction("Details", "Commitment", new { uploadApprenticeshipsViewModel.ProviderId, uploadApprenticeshipsViewModel.HashedCommitmentId });
             }
 
-            TempData["errors"] = result.Errors.ToList();
-            return RedirectToAction("UploadApprenticeshipsUnsuccessful", new { uploadApprenticeshipsViewModel.ProviderId, uploadApprenticeshipsViewModel.HashedCommitmentId , errors = result.Errors });
+            return RedirectToAction("UploadApprenticeshipsUnsuccessful", new { uploadApprenticeshipsViewModel.ProviderId, uploadApprenticeshipsViewModel.HashedCommitmentId , errorCount = result.Errors.Count() });
         }
 
 
         [Route("{hashedCommitmentId}/UploadApprenticeships/Unsuccessful")]
-        public ActionResult UploadApprenticeshipsUnsuccessful(long providerId, string hashedCommitmentId, IEnumerable<UploadError> errors)
+        public ActionResult UploadApprenticeshipsUnsuccessful(long providerId, string hashedCommitmentId, int errorCount)
         {
             var model = new UploadApprenticeshipsViewModel
                             {
                                 ProviderId = providerId,
                                 HashedCommitmentId = hashedCommitmentId,
-                                Errors = TempData["errors"] as List<UploadError>
+                                ErrorCount = errorCount
             };
 
             return View(model);
