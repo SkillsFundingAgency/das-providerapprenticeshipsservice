@@ -2587,13 +2587,10 @@ span.helpText {
   margin-top: 0.625em;
 }
 
-.missingForApproval {
-  border-left: 5px solid #b10e1e;
-  padding-left: 15px;
-}
-
-.missingForApproval .form-label-bold {
-  color: #b10e1e;
+#apprentice-details .bulk-upload-buttons .upload-btn {
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 #finish-editing .error-summary {
@@ -2604,11 +2601,11 @@ span.helpText {
 .cant-approve .panel {
   border-color: #b10e1e;
   color: #b10e1e;
+}
 
-#apprentice-details .bulk-upload-buttons .upload-btn {
-  margin: auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
+.cant-approve .panel p {
+  font-weight: bold;
+  font-size: 19px;
 }
 
 #upload-apprenticeships .upload-file-btn,
@@ -2625,6 +2622,10 @@ span.helpText {
 .form-group #StartDate_Year,
 .form-group #EndDate_Year {
   width: 60px;
+}
+
+.breadcrumbs a {
+  font-size: 16px;
 }
 
 .error-grid .alert-default {

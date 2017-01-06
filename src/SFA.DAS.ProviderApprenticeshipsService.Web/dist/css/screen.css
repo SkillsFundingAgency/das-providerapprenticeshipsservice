@@ -2926,6 +2926,12 @@ span.helpText {
   margin-bottom: 20px;
 }
 
+@media (min-width: 641px) {
+  #apprentice-details .bulk-upload-buttons .upload-btn {
+    margin: auto;
+  }
+}
+
 #finish-editing .error-summary {
   margin-bottom: 60px;
   margin-top: 0;
@@ -2934,11 +2940,11 @@ span.helpText {
 .cant-approve .panel {
   border-color: #b10e1e;
   color: #b10e1e;
+}
 
-@media (min-width: 641px) {
-  #apprentice-details .bulk-upload-buttons .upload-btn {
-    margin: auto;
-  }
+.cant-approve .panel p {
+  font-weight: bold;
+  font-size: 19px;
 }
 
 #upload-apprenticeships .upload-file-btn,
@@ -2955,6 +2961,10 @@ span.helpText {
 .form-group #StartDate_Year,
 .form-group #EndDate_Year {
   width: 60px;
+}
+
+.breadcrumbs a {
+  font-size: 16px;
 }
 
 .error-grid .alert-default {

@@ -75,7 +75,8 @@
         }
 
         }
-  
+ }
+ 
 #upload-apprenticeships,
 #upload-error{
       .upload-file-btn{
@@ -95,6 +96,13 @@
         width:60px;
     }
     
+}
+
+
+.breadcrumbs{
+    a{
+        font-size:16px;
+    }
 }
 
 // bulk upload error screen
