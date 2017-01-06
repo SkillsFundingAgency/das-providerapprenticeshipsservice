@@ -141,8 +141,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             result.Errors.Count.Should().Be(expectedErrorCount);
             if (expectedErrorCount > 0)
             {
-                result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("First names must be entered and must not be more than 100 characters in length");
-                result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("The Last name must be entered and must not be more than 100 characters in length");
+                result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("You must enter a first name that's no longer than 100 characters");
+                result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("You must enter a last name that's no longer than 100 characters");
             }
         }
 
@@ -237,7 +237,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             var result = _validator
                 .Validate(_validModel);
             result.Errors.Count.Should().Be(1);
-            result.Errors[0].ErrorMessage.Should().Be("The Provider reference must not be more than 20 characters in length");
+            result.Errors[0].ErrorMessage.Should().Be("The reference must be 20 characters or fewer");
             result.Errors[0].ErrorCode.Should().Be("ProviderRef_01");
         }
           
