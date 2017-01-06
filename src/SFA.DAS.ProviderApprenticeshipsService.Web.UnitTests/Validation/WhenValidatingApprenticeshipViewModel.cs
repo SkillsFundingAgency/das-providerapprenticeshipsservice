@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 
 using FluentAssertions;
 using NUnit.Framework;
@@ -31,15 +31,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
         [TestCase("abc123")]
         [TestCase("123456789")]
         [TestCase(" ")]
+        [TestCase("9999999999")]
         public void ULNThatIsNotNumericOr10DigitsInLengthIsIvalid(string uln)
         {
-            var viewModel = new ApprenticeshipViewModel { ULN = uln };
+            var viewModel = new ApprenticeshipViewModel { ULN = uln, Cost = string.Empty};
 
             var result = _validator.Validate(viewModel);
 
             result.IsValid.Should().BeFalse();
         }
 
+        
+        [Test]
+        public void ULN9999999999IsNotVal()
+        {
+        var viewModel = new ApprenticeshipViewModel { ULN = "9999999999", Cost = string.Empty };
+
+            var result = _validator.Validate(viewModel);
+
+            result.IsValid.Should().BeFalse();
+        }
+
+        [Test]
         public void ULNThatStartsWithAZeroIsInvalid()
         {
             var viewModel = new ApprenticeshipViewModel { ULN = "0123456789" };
@@ -91,6 +104,143 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
         }
 
         [Test]
+        public void TestNamesNotNull()
+        {
+            _validModel.FirstName = null;
+            _validModel.LastName = null;
+
+            var result = _validator.Validate(_validModel);
+            result.Errors.Count.Should().Be(2);
+            
+            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("First names must be entered");
+            result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("Last name must be entered");
+        }
+
+        [Test]
+        public void NamesShouldNotBeEmpty()
+        {
+            _validModel.FirstName = " ";
+            _validModel.LastName = " ";
+
+            var result = _validator.Validate(_validModel);
+            result.Errors.Count.Should().Be(2);
+
+            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("First names must be entered");
+            result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("Last name must be entered");
+        }
+
+        [TestCase(99, 0)]
+        [TestCase(100, 0)]
+        [TestCase(101, 2)]
+        public void TestLengthOfNames(int length, int expectedErrorCount)
+        {
+            _validModel.FirstName = new string('*', length);
+            _validModel.LastName = new string('*', length);
+
+            var result = _validator.Validate(_validModel);
+            result.Errors.Count.Should().Be(expectedErrorCount);
+            if (expectedErrorCount > 0)
+            {
+                result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("First names must be entered and must not be more than 100 characters in length");
+                result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("The Last name must be entered and must not be more than 100 characters in length");
+            }
+        }
+
+        [Test]
+        public void NationalInsurnceNumberCanBeNull()
+        {
+            _validModel.NINumber = null;
+
+            _validator
+                .Validate(_validModel)
+                .Errors.Count.Should().Be(0);
+        }
+
+        [TestCase("DE123456A", Description = "First char not allowed")]
+        [TestCase("FE123456A", Description = "First char not allowed")]
+        [TestCase("SO123456A", Description = "Second char not allowed")]
+        [TestCase("SQ123456A", Description = "Second char not allowed")]
+
+        [TestCase("SE12345A", Description = "Not enough numbers")]
+        [TestCase("SE123456E", Description = "Last char not allowed")]
+        [TestCase("SE123456", Description = "Not enought chars")]
+        public void NationalInsurnceNumberShouldFail(string nino)
+        {
+            _validModel.NINumber = nino;
+
+            var result = _validator
+                .Validate(_validModel);
+
+            result.Errors.Count.Should().Be(1);
+            result.Errors[0].ErrorMessage.ShouldAllBeEquivalentTo("Enter a valid national insurance number");
+        }
+
+        [TestCase("SE1234567A", Description = "Too many numbers")]
+        [TestCase("SE123456  ", Description = "Too many chars")]
+        public void NationalInsurnceNumberShouldFailTooManyChars(string nino)
+        {
+            _validModel.NINumber = nino;
+
+            var result = _validator
+                .Validate(_validModel);
+
+            result.Errors.Count.Should().Be(1);
+            result.Errors[0].ErrorMessage.ShouldAllBeEquivalentTo("The National Insurance number must be entered and must not be more than 9 characters in length");
+        }
+
+        [TestCase("SE123456 ")]
+        [TestCase("SE123456A")]
+        public void NationalInsurnceNumberShouldValidate(string nino)
+        {
+            _validModel.NINumber = nino;
+
+            var result = _validator
+                .Validate(_validModel);
+            result.Errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void EmployerRef()
+        {
+            _validModel.ProviderRef = string.Empty;
+
+            var result = _validator
+                .Validate(_validModel);
+            result.Errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void EmployerRef2()
+        {
+            _validModel.ProviderRef = null;
+
+            var result = _validator
+                .Validate(_validModel);
+            result.Errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void EmployerRef3()
+        {
+            _validModel.ProviderRef = "abba 123 !";
+
+            var result = _validator
+                .Validate(_validModel);
+            result.Errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void EmployerRef4()
+        {
+            _validModel.ProviderRef = new string('*', 21);
+
+            var result = _validator
+                .Validate(_validModel);
+            result.Errors.Count.Should().Be(1);
+            result.Errors[0].ErrorMessage.Should().Be("The Provider reference must not be more than 20 characters in length");
+            result.Errors[0].ErrorCode.Should().Be("ProviderRef_01");
+        }
+          
         public void CostContainingValidCommaSeparatorIsValid()
         {
             _validModel.Cost = "1,234";
@@ -111,17 +261,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
 
             result.IsValid.Should().BeFalse();
         }
-
+          
         #region DateOfBirth
 
-        [TestCase(31, 2, 13, "Enter a valid date of birth")]
-        //[TestCase(31, 12, 1899, "Enter a valid date of birth")]
-        [TestCase(5, null, 1998, "Enter a valid date of birth")]
-        [TestCase(5, 9, null, "Enter a valid date of birth")]
-        [TestCase(null, 9, 1998, "Enter a valid date of birth")]
-        [TestCase(5, 9, -1, "Enter a valid date of birth")]
-        [TestCase(0, 0, 0, "Enter a valid date of birth")]
-        [TestCase(1, 18, 1998, "Enter a valid date of birth")]
+        [TestCase(31, 2, 13, "The Date of birth must be entered")]
+        [TestCase(5, null, 1998, "The Date of birth must be entered")]
+        [TestCase(5, 9, null, "The Date of birth must be entered")]
+        [TestCase(null, 9, 1998, "The Date of birth must be entered")]
+        [TestCase(5, 9, -1, "The Date of birth must be entered")]
+        [TestCase(0, 0,  0, "The Date of birth must be entered")]
+        [TestCase(1, 18, 1998, "The Date of birth must be entered")]
         public void ShouldFailValidationOnDateOfBirth(int? day, int? month, int? year, string expected)
         {
             _validModel.DateOfBirth = new DateTimeViewModel(day, month, year);
@@ -160,14 +309,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
 
         #region StartDate
 
-        [TestCase(31, 2, 2121, "Enter a valid start date")]
-        [TestCase(5, null, 2121, "Enter a valid start date")]
-        [TestCase(5, 9, null, "Enter a valid start date")]
-        [TestCase(5, 9, -1, "Enter a valid start date")]
-        [TestCase(0, 0, 0, "Enter a valid start date")]
-        [TestCase(1, 18, 2121, "Enter a valid start date")]
+        [TestCase(31, 2, 2121, "The Learning start end date is not valid")]
+        [TestCase(5, null, 2121, "The Learning start end date is not valid")]
+        [TestCase(5, 9, null, "The Learning start end date is not valid")]
+        [TestCase(5, 9, -1, "The Learning start end date is not valid")]
+        [TestCase(0, 0, 0, "The Learning start end date is not valid")]
+        [TestCase(1, 18, 2121, "The Learning start end date is not valid")]
         //[TestCase(5, 9, 1998, "Learner start date must be in the future")]
-        public void ShouldFailValidationForStartDateWith(int? day, int? month, int? year, string expected)
+        public void ShouldFailValidationForStartDate(int? day, int? month, int? year, string expected)
         {
             
             _validModel.StartDate = new DateTimeViewModel(day, month, year);
@@ -195,14 +344,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
 
         #region PlannedEndDate
 
-        [TestCase(31, 2, 2121, "Enter a valid training end date")]
-        [TestCase(5, null, 2121, "Enter a valid training end date")]
-        [TestCase(5, 9, null, "Enter a valid training end date")]
-        [TestCase(5, 9, -1, "Enter a valid training end date")]
-        [TestCase(0, 0, 0, "Enter a valid training end date")]
-        [TestCase(1, 18, 2121, "Enter a valid training end date")]
-        //[TestCase(5, 9, 1998, "Learner Planned end date must be in the future")]
-        public void ShouldFailValidationForPlannedEndDateWith(int? day, int? month, int? year, string expected)
+        [TestCase(31, 2, 2121, "The Learning planned end date is not valid")]
+        [TestCase(5, null, 2121, "The Learning planned end date is not valid")]
+        [TestCase(5, 9, null, "The Learning planned end date is not valid")]
+        [TestCase(5, 9, -1, "The Learning planned end date is not valid")]
+        [TestCase(0, 0, 0, "The Learning planned end date is not valid")]
+        [TestCase(1, 18, 2121, "The Learning planned end date is not valid")]
+        [TestCase(5, 9, 1998, "The Learning planned end date must not be in the past")]
+        public void ShouldFailValidationForPlanedEndDate(int? day, int? month, int? year, string expected)
         {
 
             _validModel.EndDate = new DateTimeViewModel(day, month, year);
@@ -227,6 +376,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
         }
 
         [Test]
+        public void ShouldFailValidationForPlanedEndDate()
+        {
+            var date = DateTime.Now;
+            _validModel.EndDate = new DateTimeViewModel(date.Day, date.Month, date.Year);
+
+            var result = _validator.Validate(_validModel);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors[0].ErrorMessage.Should().Be("The Learning planned end date must not be in the past");
+        }
+
+        [Test]
+
         public void ShouldFailIfStartDateIsAfterEndDate()
         {
             _validModel.StartDate = new DateTimeViewModel(DateTime.Parse("2121-05-10"));
@@ -235,7 +397,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             var result = _validator.Validate(_validModel);
 
             result.IsValid.Should().BeFalse();
-            result.Errors[0].ErrorMessage.Should().Be("The end date must be later than the start date");
+            result.Errors[0].ErrorMessage.Should().Be("The Learning planned end date must not be on or before the Learning start date");
         }
 
         [Test]

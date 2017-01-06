@@ -13,9 +13,18 @@
 
     // open dropdownon on focus
     $(document).on('focus', '.select2', function () {
-        $(this).siblings('select').select2('open'); 
+        $(this).siblings('select').select2('open');
+     });
+
+    // retain tabbed order after selection
+    $('#TrainingCode').on('select2:select', function () {
+        $("#StartMonth").focus();
     });
 
+    // retain tabbed order on close without selection
+    $('#TrainingCode').on('select2:close', function () {
+        $("#StartMonth").focus();
+    });
 
     // retain tabbed order after selection
     $('#TrainingCode').on('select2:select', function () {
@@ -26,5 +35,4 @@
     $('#TrainingCode').on('select2:close', function () {
         $("#StartDate_Month").focus();
     });
-
 }());

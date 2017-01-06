@@ -27,6 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public DateTimeViewModel DateOfBirth { get; set; } = new DateTimeViewModel(CurrentYearAsTwoDigitOffSet);
 
         public string NINumber { get; set; }
+
         public string ULN { get; set; }
 
         public TrainingType TrainingType { get; set; }
@@ -41,6 +42,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public PaymentStatus PaymentStatus { get; set; }
         public AgreementStatus AgreementStatus { get; set; }
         public string ProviderRef { get; set; }
-        public string EmployerRef { get; set; }   
+        public string EmployerRef { get; set; }
+
+        public int? ProgType { get; set; }
     }
 }

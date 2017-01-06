@@ -1,77 +1,44 @@
 ﻿using System;
 
 using FluentValidation;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
-    using System.Text.RegularExpressions;
-
-    public sealed class ApprenticeshipViewModelValidator : AbstractValidator<ApprenticeshipViewModel>
+    public sealed class ApprenticeshipViewModelValidator : ApprenticeshipBaseValidator
     {
         public ApprenticeshipViewModelValidator()
         {
-            var yesterday= DateTime.Now.AddDays(-1);
+            var now = DateTime.Now;
+            var yesterday = DateTime.Now.AddDays(-1);
+            var text = new ApprenticeshipValidationText();
+            Func<string, int, bool> lengthLessThan = (str, lenth) => (str?.Length ?? 0) <= lenth;
+            Func<DateTime?, bool, bool> _checkIfNotNull = (dt, b) => dt == null || b;
 
-            RuleFor(x => x.ULN)
-                .Matches("^$|^[1-9]{1}[0-9]{9}$").WithMessage("Enter a valid unique learner number");
+            RuleFor(x => x.FirstName)
+                .NotEmpty().WithMessage("First names must be entered")
+                .Must(m => lengthLessThan(m, 100)).WithMessage("First names must be entered and must not be more than 100 characters in length");
 
-            RuleFor(x => x.FirstName).NotEmpty().WithMessage("Enter a first name");
-            RuleFor(x => x.LastName).NotEmpty().WithMessage("Enter a last name");
-
-            RuleFor(x => x.NINumber)
-                .Matches(@"^[abceghj-prstw-z][abceghj-nprstw-z]\d{6}[abcd]$", RegexOptions.IgnoreCase)
-                .WithMessage("Enter a valid national insurance number");
-
-            RuleFor(r => r.StartDate)
-                .Must(ValidDateValue).Unless(m => m.StartDate == null).WithMessage("Enter a valid start date");
-
-            RuleFor(r => r.EndDate)
-                .Must(ValidDateValue).Unless(m => m.EndDate == null).WithMessage("Enter a valid training end date")
-                .Must(BeGreaterThanStartDate).WithMessage("The end date must be later than the start date");
-
-            RuleFor(r => r.DateOfBirth)
-                .Must(ValidateDateOfBirth).Unless(m => m.DateOfBirth == null).WithMessage("Enter a valid date of birth")
-                .Must(m => _checkIfNotNull(m?.DateTime, m?.DateTime < yesterday)).WithMessage("The date of birth must be in the past");
+            RuleFor(x => x.LastName)
+                .NotEmpty().WithMessage("Last name must be entered")
+                .Must(m => lengthLessThan(m, 100)).WithMessage("The Last name must be entered and must not be more than 100 characters in length");
 
             RuleFor(x => x.Cost)
-                .Matches("^$|^([1-9]{1}([0-9]{1,2})?)+(,[0-9]{3})*$").WithMessage("Enter the total agreed training cost");
-        }
+                .Matches("^$|^([1-9]{1}([0-9]{1,2})?)+(,[0-9]{3})*$").When(m => lengthLessThan(m.Cost, 6)).WithMessage("Enter the total agreed training cost")
+                .Must(m => lengthLessThan(m, 6)).WithMessage("The cost must be 6 numbers or fewer, for example 25000");
 
-        private bool BeGreaterThanStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel date)
-        {
-            if (viewModel.StartDate?.DateTime == null || viewModel.EndDate?.DateTime == null) return true;
+            RuleFor(r => r.StartDate)
+                .Must(ValidateDateWithoutDay).Unless(m => m.StartDate == null).WithMessage("The Learning start end date is not valid");
 
-            return viewModel.StartDate.DateTime < viewModel.EndDate.DateTime;
-        }
+            RuleFor(r => r.EndDate)
+                            .Must(ValidateDateWithoutDay).Unless(m => m.EndDate == null).WithMessage("The Learning planned end date is not valid")
+                            .Must(BeGreaterThenStartDate).WithMessage(text.LearnPlanEndDate03.Text)
+                            .Must(m => CheckIfNotNull(m?.DateTime, m?.DateTime > now)).WithMessage(text.LearnPlanEndDate06.Text);
 
-        private readonly Func<DateTime?, bool, bool> _checkIfNotNull = (dt, b) => dt == null || b ;
-
-        private bool ValidateDateOfBirth(DateTimeViewModel date)
-        {
-            if (date.DateTime == null)
-            {
-                if (!date.Day.HasValue && !date.Month.HasValue && !date.Year.HasValue) return true;
-                return false;
-            }
-
-            if (!date.Day.HasValue || !date.Month.HasValue || !date.Year.HasValue) return false;
-
-            return true;
-        }
-
-        private bool ValidDateValue(DateTimeViewModel date)
-        {
-            if (date.DateTime == null)
-            {
-                if (!date.Day.HasValue && !date.Month.HasValue && !date.Year.HasValue) return true;
-                return false;
-            }
-
-            if (!date.Month.HasValue || !date.Year.HasValue) return false;
-
-            return true;
+            RuleFor(r => r.DateOfBirth)
+                .Must(m => _checkIfNotNull(m?.DateTime, m?.DateTime < yesterday)).WithMessage("The date of birth must be in the past");
         }
     }
 }
