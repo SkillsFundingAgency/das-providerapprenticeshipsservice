@@ -73,7 +73,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
             var stopwatch = Stopwatch.StartNew();
             var result = await _sut.UploadFileAsync(model);
             stopwatch.Stop(); Console.WriteLine($"Time TOTAL: {stopwatch.Elapsed.Seconds}");
-            result.Errors.Count().Should().Be(200 * 1000);
+            result.Errors.Count().Should().Be(160 * 1000);
             stopwatch.Elapsed.Seconds.Should().BeLessThan(7);   
         }
 

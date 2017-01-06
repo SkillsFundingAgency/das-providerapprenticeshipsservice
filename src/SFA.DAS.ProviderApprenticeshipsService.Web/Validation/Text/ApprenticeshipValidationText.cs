@@ -12,7 +12,7 @@
             new ValidationMessage("The Cohort reference must match one of the current cohorts", "CohortRef_04");
 
         public ValidationMessage Uln01 =>
-            new ValidationMessage("The Unique Learner number must be entered and must not be more than 10 characters in length", "ULN_01");
+            new ValidationMessage("The Unique Learner number must be entered and must not be more than 9 characters in length", "ULN_01");
         public ValidationMessage Uln02 =>
             new ValidationMessage("The Unique Learner number of 9999999999 is not valid", "ULN_02");
         public ValidationMessage Uln03PassChecksum =>
@@ -38,7 +38,7 @@
         public ValidationMessage NINumber01 =>
             new ValidationMessage("National insurance number cannot be empty", "NINumber_01");
         public ValidationMessage NINumber02 =>
-            new ValidationMessage("National insurance number needs to be 10 characters long", "NINumber_02");
+            new ValidationMessage("The National Insurance number must be entered and must not be more than 9 characters in length", "NINumber_02");
         public ValidationMessage NINumber03 =>
             new ValidationMessage("Enter a valid national insurance number", "NINumber_03");
 

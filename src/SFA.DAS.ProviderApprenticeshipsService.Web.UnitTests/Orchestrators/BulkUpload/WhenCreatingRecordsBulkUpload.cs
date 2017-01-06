@@ -9,7 +9,6 @@ using Moq;
 using NUnit.Framework;
 
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.BulkUpload
@@ -18,15 +17,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
     public class WhenCreatingRecordsBulkUpload
     {
         const string TestData =
-            @"CohortRef,GivenNames,FamilyName,DateOfBirth,NINumber,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TrainingPrice,EPAPrice,EPAOrgId,EmpRef,ProvRef,ULN
-                Abba123,Chris,Froberg,1998-12-08,SE1233211C,,,,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559
-                Abba123,Chris1,Froberg1,1998-12-08,SE1233211C,,,,3,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559
-                Abba123,Chris2,Froberg2,1998-12-08,SE1233211C,,,,4,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559
-                Abba123,Chris3,Froberg3,1998-12-08,SE1233211C,,,,5,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559
-                ,,,,,,,,,,,,,,,,
-                Abba123,Chris3,Froberg3,1998-12-08,SE1233211E,,,,5,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559
-                Abba123,Chris2,StartEndDateError,1998-12-08,SE1233211C,,,,4,2020-08-01,2019-08-01,1500,,,Employer ref,Provider ref,1113335559
-                Abba123,Chris3,Froberg3WrongDateFormat,1998-12-08,SE1233211C,,,,5,2020-08-01,01/08/25,1500,,,Employer ref,Provider ref,1113335559";
+@"CohortRef,GivenNames,FamilyName,DateOfBirth,NINumber,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TrainingPrice,EPAPrice,EPAOrgId,EmpRef,ProvRef,ULN
+ Abba123,Chris,Froberg,1998-12-08,SE123321C,,,25,2,2120-08-01,2125-08-01,1500,,,Employer ref,Provider ref,1113335559
+ Abba123,Chris1,Froberg1,1998-12-08,SE123321C,,,25,3,2120-08-01,2125-08-01,1500,,,Employer ref,Provider ref,1113335559
+ ABBA123,Chris2,Froberg2,1998-12-08,SE123321C,,,25,3,2120-08-01,2125-08-01,1500,,,Employer ref,Provider ref,1113335559
+ ABBA123,Chris3,Froberg3,1998-12-08,SE123321C,,,25,2,2120-08-01,2125-08-01,1500,,,Employer ref,Provider ref,1113335559
+ ,,,,,,,,,,,,,,,,
+ ABBA123,Chris3,Froberg3,1998-12-08,SE123321E,,,25,2,2120-08-01,2125-08-01,1500,,,Employer ref,Provider ref,1113335559
+ ABBA123,Chris2,StartEndDateError,1998-12-08,SE123321C,,,25,2,2120-08-01,2119-08-01,1500,,,Employer ref,Provider ref,1113335559
+ ABBA123,Chris3,Froberg3WrongDateFormat,1998-12-08,SE123321C,,,25,2,2120-08-01,2125-08-01,1500,,,Employer ref,Provider ref,1113335559";
 
         private Mock<HttpPostedFileBase> _file;
 
@@ -57,12 +56,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         public void ValidatingViewModels()
         {
             var records = _sut.CreateViewModels(_file.Object);
-            var result = _sut.ValidateFields(records.Data, new List<ITrainingProgramme>(), "ABBA123");
-            result.Count().Should().Be(59);
-            result.Select(m => m.ToString())
-                .Contains("Row:8 - The Learning planned end date must be entered and be in the format yyyy-mm-dd")
-                .Should()
-                .BeTrue();
+            var result = _sut.ValidateFields(records.Data, new List<ITrainingProgramme>{ new Standard {Id = "2"}, new Standard { Id = "3" } }, "ABBA123");
+            result.Count().Should().Be(20);
+            var resultMessages = result.Select(m => m.ToString());
+
+            resultMessages.Count(m => m.StartsWith("Row:5 ")).Should().Be(16);
+            resultMessages.Count(m => m.Equals("Row:7 - The Learning planned end date must not be on or before the Learning start date")).Should().Be(1);
         }
     }
 }

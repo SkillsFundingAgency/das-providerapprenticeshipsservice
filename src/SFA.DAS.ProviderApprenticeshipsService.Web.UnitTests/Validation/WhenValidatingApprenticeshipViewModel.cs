@@ -184,8 +184,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             var result = _validator
                 .Validate(_validModel);
 
-            result.Errors.Count.Should().Be(2);
-            result.Errors[0].ErrorMessage.ShouldAllBeEquivalentTo("National insurance number needs to be 10 characters long");
+            result.Errors.Count.Should().Be(1);
+            result.Errors[0].ErrorMessage.ShouldAllBeEquivalentTo("The National Insurance number must be entered and must not be more than 9 characters in length");
         }
 
         [TestCase("SE123456 ")]
