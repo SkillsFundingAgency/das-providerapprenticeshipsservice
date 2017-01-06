@@ -56,6 +56,26 @@
   
 }
 
+#finish-editing {
+    .error-summary{
+         margin-bottom: 60px;
+         margin-top:0;
+    }
+}
+
+.cant-approve{ 
+    
+    .panel{
+	    border-color:$error-colour;
+	    color:$error-colour;
+        
+        p{
+            font-weight:bold;
+            font-size:19px;
+        }
+
+        }
+  
 #upload-apprenticeships,
 #upload-error{
       .upload-file-btn{

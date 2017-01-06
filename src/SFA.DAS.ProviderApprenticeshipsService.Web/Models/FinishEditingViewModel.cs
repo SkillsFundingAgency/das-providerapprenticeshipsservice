@@ -18,9 +18,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public SaveStatus SaveStatus { get; set; }
 
-        public ApprovalState ApprovalState { get; internal set; }
+        public ApprovalState ApprovalState { get; set; }
 
-        public bool NotReadyForApproval { get; internal set; }
+        public bool NotReadyForApproval { get; set; }
 
         public bool IsApproveAndSend => ApprovalState == ApprovalState.ApproveAndSend;
     }
