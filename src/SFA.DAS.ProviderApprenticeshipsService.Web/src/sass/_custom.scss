@@ -41,32 +41,28 @@
 }
 
 
+//bulk upload styles
 
-//validation styles
-.missingForApproval{
-    	border-left: 5px solid $error-colour;
-	    padding-left:15px;
-
-    .form-label-bold{
-	    color:$error-colour;
+#apprentice-details{
+    .bulk-upload-buttons{      
+        .upload-btn{
+              @include media(tablet) {
+                margin:auto;
+                }
+            margin-top:20px;
+            margin-bottom:20px;
+        }
     }
-
+  
 }
 
-.cant-approve{ 
-    
-    .panel{
-	    border-color:$error-colour;
-	    color:$error-colour;
-        
-        p{
-            font-weight:bold;
-            font-size:19px;
-        }
-
-        }
+#upload-apprenticeships,
+#upload-error{
+      .upload-file-btn{
+        display:block;
+        margin-top:35px;      
+    }
 }
-
 
 .form-group {
     #StartDate_Month,
@@ -81,8 +77,26 @@
     
 }
 
+
 .breadcrumbs{
     a{
         font-size:16px;
     }
 }
+
+// bulk upload error screen
+
+.error-grid{
+    .alert-default{
+        background-color:#ecc3c7;
+        border-color:$red;
+    }
+}
+
+.warning-grid{
+    .alert-default{
+        background-color:#fcddcd;
+        border-color:#f47738;
+    }
+}
+

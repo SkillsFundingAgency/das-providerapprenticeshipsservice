@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-
 using NUnit.Framework;
 
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -12,7 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
     public class WhenValidatingApprenticeshipViewModelForApproval
     {
 
-        private ApprenticeshipViewModelApproveValidator _validator = new ApprenticeshipViewModelApproveValidator();
+        private readonly ApprenticeshipViewModelApproveValidator _validator = new ApprenticeshipViewModelApproveValidator();
         private ApprenticeshipViewModel _validModel;
 
         [SetUp]
@@ -27,6 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
                                   StartDate = new DateTimeViewModel(1, 5, 2200),
                                   EndDate= new DateTimeViewModel(1, 5, 2200),
                                   TrainingCode = "5",
+                                  ProgType = 25,
                                   DateOfBirth = new DateTimeViewModel(5, 9, 1882),
                                   NINumber = "SE000NI00NUKBER"
                               };
@@ -37,6 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
         {
             var result = _validator.Validate(new ApprenticeshipViewModel());
             result.IsValid.Should().BeFalse();
+
             result.Errors.Count.Should().Be(8);
         }
 
@@ -45,7 +46,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
         {
             var result = _validator.Validate(_validModel);
             result.IsValid.Should().BeTrue();
-            result.Errors.Count.Should().Be(0);
+
             result.Errors.Count.Should().Be(0);
         }
     }

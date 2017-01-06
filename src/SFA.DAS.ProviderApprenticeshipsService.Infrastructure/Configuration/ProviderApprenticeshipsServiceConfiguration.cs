@@ -13,6 +13,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public TasksApiClientConfiguration TasksApi { get; set; }
         public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }
         public string Hashstring { get; set; }
+        // Size of file in kilobytes
+        public int MaxBulkUploadFileSize { get; set; }
     }
 
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
