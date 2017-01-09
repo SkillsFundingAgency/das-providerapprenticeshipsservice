@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
-    using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
     [Authorize]
     [RoutePrefix("{providerId}/apprentices")]
@@ -24,6 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("Home")]
         public async Task<ActionResult> Index(long providerId)
         {
@@ -33,6 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/Details")]
         public async Task<ActionResult> Details(long providerId, string hashedCommitmentId)
         {
@@ -42,6 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/Edit/{hashedApprenticeshipId}")]
         public async Task<ActionResult> Edit(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
@@ -78,6 +81,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/AddApprentice")]
         public async Task<ActionResult> Create(long providerId, string hashedCommitmentId)
         {
@@ -112,8 +116,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{hashedCommitmentId}/Finished")]
         [OutputCache(CacheProfile = "NoCache")]
+        [Route("{hashedCommitmentId}/Finished")]
         public async Task<ActionResult> FinishEditing(long providerId, string hashedCommitmentId)
         {
             var viewModel = await _commitmentOrchestrator.GetFinishEditing(providerId, hashedCommitmentId);
@@ -123,6 +127,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("{hashedCommitmentId}/Finished")]
+        // [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> FinishEditing(FinishEditingViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -147,9 +152,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> Submit(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
         {
-            var commitment = await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId);
+            var commitment = await _commitmentOrchestrator.GetCommitmentCheckState(providerId, hashedCommitmentId);
 
             var model = new SubmitCommitmentViewModel
             {
@@ -188,6 +194,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 ProviderName = commitment.ProviderName,
                 Message = message
             });
+        }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            if (filterContext.Exception is InvalidStateException)
+            {
+                filterContext.ExceptionHandled = true;
+                filterContext.Result = RedirectToAction("Index", "Account", 
+                    new { message = "You have been redirected from a page that is no longer accessible" });
+
+            }
         }
 
         private void AddErrorsToModelState(InvalidRequestException ex)

@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
+using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
@@ -23,6 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/UploadApprenticeships")]
         public async Task<ActionResult> UploadApprenticeships(long providerid, string hashedcommitmentid)
         {
@@ -49,7 +49,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return RedirectToAction("UploadApprenticeshipsUnsuccessful", new { uploadApprenticeshipsViewModel.ProviderId, uploadApprenticeshipsViewModel.HashedCommitmentId , errorCount = result.Errors.Count() });
         }
 
-
         [Route("{hashedCommitmentId}/UploadApprenticeships/Unsuccessful")]
         public ActionResult UploadApprenticeshipsUnsuccessful(long providerId, string hashedCommitmentId, int errorCount)
         {
@@ -61,6 +60,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             };
 
             return View(model);
+        }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            if (filterContext.Exception is InvalidStateException)
+            {
+                filterContext.ExceptionHandled = true;
+                filterContext.Result = RedirectToAction("Index", "Account",
+                    new { message = "You have been redirected from a page that is no longer accessible" });
+
+            }
         }
     }
 }
