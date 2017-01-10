@@ -103,6 +103,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             result.IsValid.Should().BeFalse();
         }
 
+        [TestCase("1234567")]
+        public void CostMustContain6DigitsOrLess(string value)
+        {
+            _validModel.Cost = value;
+
+            var result = _validator.Validate(_validModel);
+
+            result.IsValid.Should().BeFalse();
+        }
+
+        [TestCase("123,567")]
+        public void CostMustContain6DigitsOrLessIgnoringCommas(string value)
+        {
+            _validModel.Cost = value;
+
+            var result = _validator.Validate(_validModel);
+
+            result.IsValid.Should().BeTrue();
+        }
+
         [Test]
         public void TestNamesNotNull()
         {
