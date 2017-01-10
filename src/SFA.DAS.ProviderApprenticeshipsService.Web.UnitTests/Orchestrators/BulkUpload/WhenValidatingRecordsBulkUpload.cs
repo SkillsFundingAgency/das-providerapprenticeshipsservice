@@ -59,10 +59,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var errors = _sut.ValidateFields(GetFailingTestData(), TrainingProgrammes(), "ABBA123").ToList();
             errors.Count.Should().Be(4);
             var messages = errors.Select(m => m.ToString()).ToList();
-            messages.Should().Contain("Row:1 - The Given names must be entered and must not be more than 100 characters in length");
-            messages.Should().Contain("Row:1 - The Family name must be entered and must not be more than 100 characters in length");
-            messages.Should().Contain("Row:2 - The Given names must be entered and must not be more than 100 characters in length");
-            messages.Should().Contain("Row:2 - The Family name must be entered and must not be more than 100 characters in length");
+            messages.Should().Contain("Row:1 - You must enter given names that are no longer than 100 characters");
+            messages.Should().Contain("Row:1 - You must enter a family name that's no longer than 100 characters");
+            messages.Should().Contain("Row:2 - You must enter given names that are no longer than 100 characters");
+            messages.Should().Contain("Row:2 - You must enter a family name that's no longer than 100 characters");
         }
 
         [Test]

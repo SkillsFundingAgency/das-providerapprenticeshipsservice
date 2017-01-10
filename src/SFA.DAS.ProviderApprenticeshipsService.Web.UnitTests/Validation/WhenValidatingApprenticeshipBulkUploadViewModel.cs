@@ -28,8 +28,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             var result = _validator.Validate(_validModel);
             result.Errors.Count.Should().Be(2);
 
-            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("The Given names must be entered and must not be more than 100 characters in length");
-            result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("The Family name must be entered and must not be more than 100 characters in length");
+            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("You must enter given names that are no longer than 100 characters");
+            result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("You must enter a family name that's no longer than 100 characters");
         }
 
         [Test]
