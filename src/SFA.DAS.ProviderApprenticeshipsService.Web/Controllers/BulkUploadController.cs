@@ -2,15 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
-using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [RoutePrefix("{providerId}/apprentices")]
-    public class BulkUploadController : Controller
+    public class BulkUploadController : BaseController
     {
         private readonly BulkUploadOrchestrator _bulkUploadController;
 
@@ -53,24 +51,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public ActionResult UploadApprenticeshipsUnsuccessful(long providerId, string hashedCommitmentId, int errorCount)
         {
             var model = new UploadApprenticeshipsViewModel
-                            {
-                                ProviderId = providerId,
-                                HashedCommitmentId = hashedCommitmentId,
-                                ErrorCount = errorCount
+            {
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId,
+                ErrorCount = errorCount
             };
 
             return View(model);
-        }
-
-        protected override void OnException(ExceptionContext filterContext)
-        {
-            if (filterContext.Exception is InvalidStateException)
-            {
-                filterContext.ExceptionHandled = true;
-                filterContext.Result = RedirectToAction("Index", "Account",
-                    new { message = "You have been redirected from a page that is no longer accessible" });
-
-            }
         }
     }
 }

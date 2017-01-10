@@ -78,7 +78,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
-            await AssertCommitmentStatus(commitmentId, providerId);
+            AssertCommitmentStatus(data.Commitment, EditStatus.ProviderOnly);
+            AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
+
             var message = await GetLatestMessage(providerId, commitmentId);
 
             var apprenticeships = MapFrom(data.Commitment.Apprenticeships);
@@ -109,7 +111,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
-            await AssertCommitmentStatus(commitmentId, providerId);
+            AssertCommitmentStatus(data.Commitment, EditStatus.ProviderOnly);
+            AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
             return MapFrom(data.Commitment);
         }

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -12,7 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
     [Authorize]
     [RoutePrefix("{providerId}/apprentices")]
-    public class CommitmentController : Controller
+    public class CommitmentController : BaseController
     {
         private readonly CommitmentOrchestrator _commitmentOrchestrator;
 
@@ -194,17 +193,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 ProviderName = commitment.ProviderName,
                 Message = message
             });
-        }
-
-        protected override void OnException(ExceptionContext filterContext)
-        {
-            if (filterContext.Exception is InvalidStateException)
-            {
-                filterContext.ExceptionHandled = true;
-                filterContext.Result = RedirectToAction("Index", "Account", 
-                    new { message = "You have been redirected from a page that is no longer accessible" });
-
-            }
         }
 
         private void AddErrorsToModelState(InvalidRequestException ex)
