@@ -12,7 +12,7 @@
             new ValidationMessage("The Cohort reference must match one of the current cohorts", "CohortRef_04");
 
         public ValidationMessage Uln01 =>
-            new ValidationMessage("You must enter a number that's no longer than 9 digits", "ULN_01");
+            new ValidationMessage("You must enter a number that's no longer than 10 digits", "ULN_01");
         public ValidationMessage Uln02 =>
             new ValidationMessage("The Unique Learner number of 9999999999 is not valid", "ULN_02");
         public ValidationMessage Uln03PassChecksum =>
