@@ -132,7 +132,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             var result = _validator.Validate(_validModel);
             result.Errors.Count.Should().Be(2);
             
-            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("First names must be entered");
+            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("First name must be entered");
             result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("Last name must be entered");
         }
 
@@ -145,7 +145,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             var result = _validator.Validate(_validModel);
             result.Errors.Count.Should().Be(2);
 
-            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("First names must be entered");
+            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("First name must be entered");
             result.Errors[1].ErrorMessage.ShouldBeEquivalentTo("Last name must be entered");
         }
 
