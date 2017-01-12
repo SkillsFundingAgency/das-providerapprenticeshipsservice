@@ -351,6 +351,8 @@
     <Compile Include="Models\TaskViewModel.cs" />
     <Compile Include="Models\UploadApprenticeshipsViewModel.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
+    <Compile Include="Orchestrators\BulkUpload\InstrumentedBulkUploadValidator.cs" />
+    <Compile Include="Orchestrators\BulkUpload\InstrumentedBulkUploadFileParser.cs" />
     <Compile Include="Orchestrators\BulkUpload\BulkUploadFileParser.cs" />
     <Compile Include="Orchestrators\BulkUpload\BulkUploadValidator.cs" />
     <Compile Include="Orchestrators\BulkUploadOrchestrator.cs" />
