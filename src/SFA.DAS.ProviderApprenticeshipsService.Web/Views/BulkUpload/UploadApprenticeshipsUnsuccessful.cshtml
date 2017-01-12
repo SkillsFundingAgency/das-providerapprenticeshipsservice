@@ -5,10 +5,19 @@
     ViewBag.PageId = "upload-error";
 }
 
+@functions
+{
+
+    string PluraliseString(int errorCount, string str)
+    {
+        return errorCount > 1 ? $"{str}s" : str;
+    }
+
+}
 <div class="grid">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Review and fix upload errors</h1>
-        <p>Your upload contained the following @Model.ErrorCount errors. Please review the issues and try again.</p>
+        <p>Your upload contained the following @Model.ErrorCount @PluraliseString(Model.ErrorCount,"error"). Please review the issues and try again.</p>
     </div>
 </div>
 
@@ -17,14 +26,7 @@
     <div class="grid error-grid">
         <div class="column-two-thirds">
             <div class="panel panel-border-wide alert-default">
-                @if (Model.ErrorCount == 1)
-                {
-                    <p>1 error found</p>
-                }
-                else
-                {
-                    <p>@Model.ErrorCount errors found</p>
-                }
+                <p>@Model.ErrorCount @PluraliseString(Model.ErrorCount, "error") found</p>
             </div>
         </div>
     </div>
@@ -35,14 +37,7 @@
     <div class="grid warning-grid">
         <div class="column-two-thirds">
             <div class="panel panel-border-wide alert-default">
-                @if (Model.WarningsCount == 1)
-                {
-                    <p>1 warning found</p>
-                }
-                else
-                {
-                    <p>@Model.WarningsCount warnings found</p>
-                }
+                <p>@Model.WarningsCount @PluraliseString(Model.WarningsCount, "warning") found</p>
             </div>
         </div>
     </div>

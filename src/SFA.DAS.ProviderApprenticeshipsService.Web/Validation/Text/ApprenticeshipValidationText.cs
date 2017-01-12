@@ -12,7 +12,7 @@
             new ValidationMessage("The Cohort reference must match one of the current cohorts", "CohortRef_04");
 
         public ValidationMessage Uln01 =>
-            new ValidationMessage("You must enter a number that's no longer than 9 digits", "ULN_01");
+            new ValidationMessage("You must enter a number that's 10 digits", "ULN_01");
         public ValidationMessage Uln02 =>
             new ValidationMessage("The Unique Learner number of 9999999999 is not valid", "ULN_02");
         public ValidationMessage Uln03PassChecksum =>
@@ -23,11 +23,11 @@
         public ValidationMessage FamilyName01 =>
             new ValidationMessage("The Family name must be entered", "FamilyName_01");
         public ValidationMessage FamilyName02 =>
-            new ValidationMessage("The Family name must be entered and must not be more than 100 characters in length", "FamilyName_02");
+            new ValidationMessage("You must enter a family name that's no longer than 100 characters", "FamilyName_02");
         public ValidationMessage GivenNames01 =>
             new ValidationMessage("The Given names must be entered", "GivenNames_01");
         public ValidationMessage GivenNames02 =>
-            new ValidationMessage("The Given names must be entered and must not be more than 100 characters in length", "GivenNames_02");
+            new ValidationMessage("You must enter given names that are no longer than 100 characters", "GivenNames_02");
 
         public ValidationMessage DateOfBirth01 =>
             new ValidationMessage("The Date of birth must be entered", "DateOfBirth_01");
