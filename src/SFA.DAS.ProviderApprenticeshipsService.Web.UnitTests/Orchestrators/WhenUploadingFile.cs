@@ -26,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
     [TestFixture]
     public sealed class WhenUploadingFile
     {
-        private const string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,NINumber,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TrainingPrice,EPAPrice,EPAOrgId,EmpRef,ProvRef,ULN";
+        private const string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,NINumber,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TrainingPrice,EPAPrice,EPAOrgId,EmpRef,ProviderRef,ULN";
         private BulkUploadOrchestrator _sut;
         private Mock<HttpPostedFileBase> _file;
         private Mock<IMediator> _mockMediator;

@@ -19,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             Func<DateTime?, bool, bool> _checkIfNotNull = (dt, b) => dt == null || b;
 
             RuleFor(x => x.FirstName)
-                .NotEmpty().WithMessage("First names must be entered")
+                .NotEmpty().WithMessage("First name must be entered")
                 .Must(m => lengthLessThan(m, 100)).WithMessage("You must enter a first name that's no longer than 100 characters");
 
             RuleFor(x => x.LastName)
