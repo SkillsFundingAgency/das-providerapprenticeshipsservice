@@ -25,11 +25,13 @@ using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Caching;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.Tasks.Api.Client;
 using SFA.DAS.Tasks.Api.Client.Configuration;
 using StructureMap;
@@ -61,6 +63,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             RegisterMediator();
             ConfigureLogging();
+
+            ConfigureInstrumentedTypes();
+        }
+
+        private void ConfigureInstrumentedTypes()
+        {
+            For<IBulkUploadValidator>().Use(x => new InstrumentedBulkUploadValidator(x.GetInstance<ILog>(), x.GetInstance<BulkUploadValidator>()));
+            For<IBulkUploadFileParser>().Use(x => new InstrumentedBulkUploadFileParser(x.GetInstance<ILog>(), x.GetInstance<BulkUploadFileParser>()));
+
+            For<IAsyncRequestHandler<BulkUploadApprenticeshipsCommand, Unit>>()
+                .Use(x => new InstrumentedBulkUploadApprenticeshipsCommandHandler(x.GetInstance<IProviderCommitmentsLogger>(), x.GetInstance<BulkUploadApprenticeshipsCommandHandler>()));
         }
 
         private void ConfigureLogging()
