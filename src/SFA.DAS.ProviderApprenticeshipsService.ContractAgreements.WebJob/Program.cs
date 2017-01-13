@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed;
@@ -30,12 +31,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
                 var reader = new ContractFeedReader(httpClient);
 
                 var dataProvider = new ContractFeedProcessor(reader, new ContractFeedEventValidator(), logger);
-                var connectionString = "";
+
                 var repository = new ProviderAgreementStatusRepository(config.DatabaseConnectionString, logger);
 
                 var service = new ProviderAgreementStatusService(dataProvider, repository, logger);
 
-                service.UpdateProviderAgreementStatuses();
+                Task.Run(() => service.UpdateProviderAgreementStatuses());
+
+                //service.UpdateProviderAgreementStatuses();
 
                 logger.Info("ContractAgreements job done");
             }
