@@ -52,7 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
             var result = _validator.ValidateFields(records, trainingProgrammes, cohortReference);
 
-            _logger.Debug($"Took {stopwatch.ElapsedMilliseconds} milliseconds to validate fields for {records.Count()} items");
+            _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to validate fields for {records.Count()} items");
 
             return result;
         }
