@@ -19,33 +19,30 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
             //var host = new JobHost();
             //host.RunAndBlock();
 
-            Console.WriteLine("Hello world");
-
             try
             {
                 var container = IoC.Initialize();
                 var config = container.GetInstance<IContractFeedConfiguration>();
                 var logger = container.GetInstance<ILog>();
+
+                logger.Info("ContractAgreements job started");
                 var httpClient = new ContractFeedProcessorHttpClient(config);
                 var reader = new ContractFeedReader(httpClient);
 
-                var dataProvider = new ContractFeedProcessor(reader, new ContractFeedEventValidator());
+                var dataProvider = new ContractFeedProcessor(reader, new ContractFeedEventValidator(), logger);
                 var repository = new ProviderAgreementStatusRepository(logger);
 
-                var service = new ProviderAgreementStatusService(dataProvider, repository);
+                var service = new ProviderAgreementStatusService(dataProvider, repository, logger);
 
                 service.UpdateProviderAgreementStatuses();
 
-                Console.WriteLine("Done");
-                Console.ReadLine();
+                logger.Info("ContractAgreements job done");
             }
 
             catch (Exception ex)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Error.WriteLine(ex.Message);
-                Console.Error.WriteLine(ex.InnerException?.Message);
-                Console.ResetColor();
+                ILog exLogger = new NLogLogger();
+                exLogger.Error(ex, "Error running ContractAgreements WebJob");
             }
         }
     }

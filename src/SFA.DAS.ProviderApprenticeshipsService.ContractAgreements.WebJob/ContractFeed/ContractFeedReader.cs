@@ -11,9 +11,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Contr
 {
     public class ContractFeedReader
     {
-        private readonly ContractFeedProcessorHttpClient _httpClient;
+        private readonly IContractFeedProcessorHttpClient _httpClient;
 
-        public ContractFeedReader(ContractFeedProcessorHttpClient httpClient)
+        public ContractFeedReader(IContractFeedProcessorHttpClient httpClient)
         {
             _httpClient = httpClient;
         }

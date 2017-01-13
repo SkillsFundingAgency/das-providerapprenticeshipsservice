@@ -29,8 +29,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
         {
             var providersEvents = _repository.GetContractEvents(providerId);
 
-            //todo: derive agreement status from events;
-            return providersEvents.Any() ? ProviderAgreementStatus.Agreed : ProviderAgreementStatus.NotAgreed;
+            return providersEvents.Any(m => m.Status.Equals("approved", StringComparison.CurrentCultureIgnoreCase)) 
+                ? ProviderAgreementStatus.Agreed : ProviderAgreementStatus.NotAgreed;
         }
 
         public void UpdateProviderAgreementStatuses()
@@ -38,6 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
             var lastBookmarkedItemId = _repository.GetMostRecentBookmarkId();
 
             _logger.Info($"Bookmark: {lastBookmarkedItemId}");
+
             _dataProvider.ReadEvents(lastBookmarkedItemId, (pageNumber, events) =>
             {
                 var contractFeedEvents = events.ToList();

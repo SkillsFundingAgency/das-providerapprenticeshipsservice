@@ -5,10 +5,16 @@ using System.Xml.Linq;
 
 using FluentValidation;
 
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed
 {
+    public interface IContractDataProvider
+    {
+        void ReadEvents(Guid lastBookmarkedItemId, Action<int, IEnumerable<ContractFeedEvent>> pageHandler);
+    }
+
     public class ContractFeedProcessor : IContractDataProvider
     {
         private readonly XNamespace _nsAtom = "http://www.w3.org/2005/Atom";
@@ -18,10 +24,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Contr
 
         private readonly AbstractValidator<ContractFeedEvent> _validator;
 
-        public ContractFeedProcessor(ContractFeedReader reader, AbstractValidator<ContractFeedEvent> validator)
+        private readonly ILog _logger;
+
+        public ContractFeedProcessor(
+            ContractFeedReader reader, AbstractValidator<ContractFeedEvent> validator, ILog logger)
         {
             _reader = reader;
             _validator = validator;
+            _logger = logger;
         }
 
         public void ReadEvents(Guid lastBookmarkedItemId, Action<int, IEnumerable<ContractFeedEvent>> pageHandler)
@@ -54,7 +64,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Contr
                         newContractDataPage.Add(contractFeedEvent);
                     }
                 }
-
+                _logger.Info($"Adding: {newContractDataPage.Count} from page: {pageNumber}");
                 pageHandler(pageNumber, newContractDataPage);
 
                 return !foundLastBookmarkedItem; // return true means more pages should be processed
@@ -63,38 +73,41 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Contr
 
         private ContractFeedEvent ExtractContractFeedEvent(XContainer element)
         {
-            var id = element.Element(_nsAtom + "id")?.Value.Split(':').ElementAt(1);
-
-            var contract = element
-                .Element(_nsAtom + "content")?
-                .Descendants(_nsUrn + "contract")?.First()
-                .Element(_nsUrn + "contracts")?.Descendants(_nsUrn + "contract").First();
-
-            if (contract == null) return null;
-
-            var hierarchyType = contract.Element(_nsUrn + "hierarchyType")?.Value;
-            var fundingTypeCode = contract.Element(_nsUrn + "fundingType")?.Element(_nsUrn + "fundingTypeCode")?.Value;
-            var status = contract.Element(_nsUrn + "contractStatus")?.Element(_nsUrn + "status")?.Value;
-            var parentStatus = contract.Element(_nsUrn + "contractStatus")?.Element(_nsUrn + "parentStatus")?.Value;
-            var updatedString = element.Element(_nsAtom + "updated")?.Value;
-            var updated = DateTime.Parse(updatedString);
-            var ukprn = contract.Element(_nsUrn + "contractor")?.Element(_nsUrn + "ukprn")?.Value;
-
-            return new ContractFeedEvent
+            try
             {
-                Id = new Guid(id),
-                ProviderId = long.Parse(ukprn),
-                HierarchyType = hierarchyType,
-                FundingTypeCode = fundingTypeCode,
-                Status = status,
-                ParentStatus = parentStatus,
-                Updated = updated
-            };
-        }
-    }
+                var id = element.Element(_nsAtom + "id")?.Value.Split(':').ElementAt(1);
 
-    public interface IContractDataProvider
-    {
-        void ReadEvents(Guid lastBookmarkedItemId, Action<int, IEnumerable<ContractFeedEvent>> pageHandler);
+                var contract = element
+                    .Element(_nsAtom + "content")?
+                    .Descendants(_nsUrn + "contract")?.First()
+                    .Element(_nsUrn + "contracts")?.Descendants(_nsUrn + "contract").First();
+
+                if (contract == null) return null;
+
+                var hierarchyType = contract.Element(_nsUrn + "hierarchyType")?.Value;
+                var fundingTypeCode = contract.Element(_nsUrn + "fundingType")?.Element(_nsUrn + "fundingTypeCode")?.Value;
+                var status = contract.Element(_nsUrn + "contractStatus")?.Element(_nsUrn + "status")?.Value;
+                var parentStatus = contract.Element(_nsUrn + "contractStatus")?.Element(_nsUrn + "parentStatus")?.Value;
+                var updatedString = element.Element(_nsAtom + "updated")?.Value;
+                var updated = DateTime.Parse(updatedString);
+                var ukprn = contract.Element(_nsUrn + "contractor")?.Element(_nsUrn + "ukprn")?.Value;
+
+                return new ContractFeedEvent
+                {
+                    Id = new Guid(id),
+                    ProviderId = long.Parse(ukprn),
+                    HierarchyType = hierarchyType,
+                    FundingTypeCode = fundingTypeCode,
+                    Status = status,
+                    ParentStatus = parentStatus,
+                    Updated = updated
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.Warn(ex, "Problem extracting contract feed event");
+                return null;
+            }
+        }
     }
 }
