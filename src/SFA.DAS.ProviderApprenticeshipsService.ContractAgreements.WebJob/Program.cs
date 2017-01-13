@@ -1,0 +1,52 @@
+﻿using System;
+
+using SFA.DAS.NLog.Logger;
+using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed;
+using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.DependencyResolution;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
+
+namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
+{
+    // To learn more about Microsoft Azure WebJobs SDK, please see http://go.microsoft.com/fwlink/?LinkID=320976
+    class Program
+    {
+        // Please set the following connection strings in app.config for this WebJob to run:
+        // AzureWebJobsDashboard and AzureWebJobsStorage
+        static void Main()
+        {
+            // The following code ensures that the WebJob will be running continuously
+            //var host = new JobHost();
+            //host.RunAndBlock();
+
+            Console.WriteLine("Hello world");
+
+            try
+            {
+                var container = IoC.Initialize();
+                var config = container.GetInstance<IContractFeedConfiguration>();
+                var logger = container.GetInstance<ILog>();
+                var httpClient = new ContractFeedProcessorHttpClient(config);
+                var reader = new ContractFeedReader(httpClient);
+
+                var dataProvider = new ContractFeedProcessor(reader, new ContractFeedEventValidator());
+                var repository = new ProviderAgreementStatusRepository(logger);
+
+                var service = new ProviderAgreementStatusService(dataProvider, repository);
+
+                service.UpdateProviderAgreementStatuses();
+
+                Console.WriteLine("Done");
+                Console.ReadLine();
+            }
+
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Error.WriteLine(ex.Message);
+                Console.Error.WriteLine(ex.InnerException?.Message);
+                Console.ResetColor();
+            }
+        }
+    }
+}
