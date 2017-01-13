@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 using SFA.DAS.NLog.Logger;
@@ -27,6 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
                 var logger = container.GetInstance<ILog>();
 
                 logger.Info("ContractAgreements job started");
+                var timer = Stopwatch.StartNew();
                 var httpClient = new ContractFeedProcessorHttpClient(config);   
                 var reader = new ContractFeedReader(httpClient);
 
@@ -38,9 +40,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
 
                 Task.Run(() => service.UpdateProviderAgreementStatuses());
 
-                //service.UpdateProviderAgreementStatuses();
-
-                logger.Info("ContractAgreements job done");
+                timer.Stop();
+                logger.Info($"ContractAgreements job done, Took: {timer.ElapsedMilliseconds} milliseconds");
             }
             catch (Exception ex)
             {
