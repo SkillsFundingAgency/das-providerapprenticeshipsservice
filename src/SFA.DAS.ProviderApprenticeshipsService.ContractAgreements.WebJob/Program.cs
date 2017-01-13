@@ -26,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
                 var logger = container.GetInstance<ILog>();
 
                 logger.Info("ContractAgreements job started");
-                var httpClient = new ContractFeedProcessorHttpClient(config);
+                var httpClient = new ContractFeedProcessorHttpClient(config);   
                 var reader = new ContractFeedReader(httpClient);
 
                 var dataProvider = new ContractFeedProcessor(reader, new ContractFeedEventValidator(), logger);
