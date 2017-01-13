@@ -46,7 +46,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             _logger.Info($"Uploading file of apprentices. Filename:{uploadApprenticeshipsViewModel?.Attachment?.FileName}", providerId: uploadApprenticeshipsViewModel.ProviderId, commitmentId: commitmentId);
             
-            var result = await _bulkUploader.UploadFile(uploadApprenticeshipsViewModel);
+            var result = await _bulkUploader.Validate(uploadApprenticeshipsViewModel);
 
             var errorCount = result.Errors.Count();
 

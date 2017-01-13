@@ -25,8 +25,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUpload
                 throw new InvalidRequestException(validationResult.Errors);
 
             await _commitmentsApi.BulkUploadApprenticeships(message.ProviderId, message.CommitmentId, message.Apprenticeships);
-
-
         }
     }
 }
