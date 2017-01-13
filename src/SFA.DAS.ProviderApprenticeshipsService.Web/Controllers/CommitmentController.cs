@@ -5,10 +5,10 @@ using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
-    using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
     [Authorize]
     [RoutePrefix("{providerId}/apprentices")]
