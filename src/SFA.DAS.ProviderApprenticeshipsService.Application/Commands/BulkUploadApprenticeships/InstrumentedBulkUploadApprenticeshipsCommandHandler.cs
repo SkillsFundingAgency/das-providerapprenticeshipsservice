@@ -28,7 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUpload
 
             await _handler.Handle(message);
 
-            _logger.Debug($"Took {stopwatch.ElapsedMilliseconds} milliseconds to Bulk Upload {message.Apprenticeships.Count} apprentices to Commitments Api");
+            _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to Bulk Upload {message.Apprenticeships.Count} apprentices to Commitments Api");
         }
     }
 }
