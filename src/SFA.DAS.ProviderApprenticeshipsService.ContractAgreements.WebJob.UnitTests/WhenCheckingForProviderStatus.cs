@@ -1,4 +1,7 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Threading.Tasks;
+
+using FluentAssertions;
 
 using Moq;
 
@@ -8,6 +11,7 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitTests.MockClasses;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitTests
 {
@@ -15,24 +19,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitT
     public class WhenCheckingForProviderStatus
     {
         [Test]
-        public void GettingAgreementStatus()
+        public async Task GettingAgreementStatus()
         {
             var repository = new InMemoryProviderAgreementStatusRepository(Mock.Of<ILog>());
-            repository.AddContractEvent(new ContractFeedEvent { ProviderId = 1234565, Status = "Auto-Withdrawn" });
-            repository.AddContractEvent(new ContractFeedEvent { ProviderId = 1234566, Status = "Withdrawn By Provider" });
-            repository.AddContractEvent(new ContractFeedEvent { ProviderId = 1234567, Status = "Published To Provider" });
-            repository.AddContractEvent(new ContractFeedEvent { ProviderId = 1234560, Status = "Approved" });
+            await repository.AddContractEvent(new ContractFeedEvent { ProviderId = 1234565, Status = "Auto-Withdrawn" });
+            await repository.AddContractEvent(new ContractFeedEvent { ProviderId = 1234566, Status = "Withdrawn By Provider" });
+            await repository.AddContractEvent(new ContractFeedEvent { ProviderId = 1234567, Status = "Published To Provider" });
+            await repository.AddContractEvent(new ContractFeedEvent { ProviderId = 1234560, Status = "Approved" });
             var sut = new ProviderAgreementStatusService(Mock.Of<IContractDataProvider>(), repository, Mock.Of<ILog>());
 
-            sut.GetProviderAgreementStatus(1234565)
+            sut.GetProviderAgreementStatus(1234565).Result
                 .Should().Be(ProviderAgreementStatus.NotAgreed);
-            sut.GetProviderAgreementStatus(1234566)
+            sut.GetProviderAgreementStatus(1234566).Result
                 .Should().Be(ProviderAgreementStatus.NotAgreed);
-            sut.GetProviderAgreementStatus(1234567)
+            sut.GetProviderAgreementStatus(1234567).Result
                 .Should().Be(ProviderAgreementStatus.NotAgreed);
-            sut.GetProviderAgreementStatus(12)
+            sut.GetProviderAgreementStatus(12).Result
                 .Should().Be(ProviderAgreementStatus.NotAgreed);
-            sut.GetProviderAgreementStatus(1234560)
+            sut.GetProviderAgreementStatus(1234560).Result
                 .Should().Be(ProviderAgreementStatus.Agreed);
         }
     }

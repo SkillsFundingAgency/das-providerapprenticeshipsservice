@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed;
@@ -25,17 +26,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
             _logger = logger;
         }
 
-        public ProviderAgreementStatus GetProviderAgreementStatus(long providerId)
+        public async Task<ProviderAgreementStatus> GetProviderAgreementStatus(long providerId)
         {
-            var providersEvents = _repository.GetContractEvents(providerId);
+            var providersEvents = await _repository.GetContractEvents(providerId);
 
             return providersEvents.Any(m => m.Status.Equals("approved", StringComparison.CurrentCultureIgnoreCase)) 
                 ? ProviderAgreementStatus.Agreed : ProviderAgreementStatus.NotAgreed;
         }
 
-        public void UpdateProviderAgreementStatuses()
+        public async Task UpdateProviderAgreementStatuses()
         {
-            var lastBookmarkedItemId = _repository.GetMostRecentBookmarkId();
+            var lastBookmarkedItemId = await _repository.GetMostRecentBookmarkId();
 
             _logger.Info($"Bookmark: {lastBookmarkedItemId}");
 
@@ -53,7 +54,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
 
     public interface IProviderAgreementStatusService
     {
-        ProviderAgreementStatus GetProviderAgreementStatus(long providerId);
-        void UpdateProviderAgreementStatuses();
+        Task<ProviderAgreementStatus> GetProviderAgreementStatus(long providerId);
+
+        Task UpdateProviderAgreementStatuses();
     }
 }

@@ -30,7 +30,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
                 var reader = new ContractFeedReader(httpClient);
 
                 var dataProvider = new ContractFeedProcessor(reader, new ContractFeedEventValidator(), logger);
-                var repository = new ProviderAgreementStatusRepository(logger);
+                var connectionString = "";
+                var repository = new ProviderAgreementStatusRepository(config.DatabaseConnectionString, logger);
 
                 var service = new ProviderAgreementStatusService(dataProvider, repository, logger);
 
@@ -38,7 +39,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
 
                 logger.Info("ContractAgreements job done");
             }
-
             catch (Exception ex)
             {
                 ILog exLogger = new NLogLogger();

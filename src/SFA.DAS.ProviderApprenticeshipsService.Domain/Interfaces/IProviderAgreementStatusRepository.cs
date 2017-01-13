@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
     public interface IProviderAgreementStatusRepository
     {
-        void AddContractEvent(ContractFeedEvent contractFeedEvent);
+        Task AddContractEvent(ContractFeedEvent contractFeedEvent);
 
-        IEnumerable<ContractFeedEvent> GetContractEvents(long providerId);
+        Task<IEnumerable<ContractFeedEvent>> GetContractEvents(long providerId);
 
-        Guid GetMostRecentBookmarkId();
+        Task<Guid> GetMostRecentBookmarkId();
     }
 }

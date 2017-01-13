@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
@@ -20,18 +21,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitT
             _data = new List<ContractFeedEvent>();
         }
 
-        public void AddContractEvent(ContractFeedEvent contractFeedEvent)
+        public async Task AddContractEvent(ContractFeedEvent contractFeedEvent)
         {
             _logger.Info($"Storing event: {contractFeedEvent.Id}");
             _data.Add(contractFeedEvent);
         }
 
-        public IEnumerable<ContractFeedEvent> GetContractEvents(long providerId)
+        public async Task<IEnumerable<ContractFeedEvent>> GetContractEvents(long providerId)
         {
             return _data.Where(e => e.ProviderId == providerId);
         }
 
-        public Guid GetMostRecentBookmarkId()
+        public async Task<Guid> GetMostRecentBookmarkId()
         {
             if (_data.Count == 0) return Guid.Empty;
 
