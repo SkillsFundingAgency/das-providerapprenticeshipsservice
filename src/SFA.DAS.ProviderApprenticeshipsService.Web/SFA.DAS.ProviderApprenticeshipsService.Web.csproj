@@ -542,6 +542,7 @@
     <Content Include="Views\Account\NoAccount.cshtml" />
     <Content Include="Views\BulkUpload\UploadApprenticeships.cshtml" />
     <Content Include="Views\BulkUpload\UploadApprenticeshipsUnsuccessful.cshtml" />
+    <Content Include="Views\Commitment\ApprenticeFilter.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

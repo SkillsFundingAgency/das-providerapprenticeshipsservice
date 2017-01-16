@@ -10,7 +10,7 @@
     <div class="column-full">
         <div class="govuk-box-highlight">
             <h1 class="heading-xlarge" id="changeHeadline">
-                Instructions sent
+               Apprentice filter page UI
             </h1>
         </div>
     </div>
@@ -18,58 +18,172 @@
 </div>
 
 <div class="grid-row">
-    <div class="column-two-thirds">
-        @*<a href="#" aria-label="Back" class="link-back">Back</a>*@
+    <!-- filters section -->
+    <section class="column-one-third search-page-filters" aria-label="Search filters">
+        <form action="#" method="get">
 
-        <table class="instructions-sent">
-            <tbody>
-                <tr>
-                    <td>Cohort reference</td>
-                    <td class="strong">@Model.CommitmentReference</td>
-                </tr>
-                <tr>
-                    <td>Sent to </td>
-                    <td class="strong">@Model.EmployerName</td>
-
-                </tr>
-                @*<tr>
-                        <td>Sent from</td>
-                        <td  class="strong">Alice Jones</td>
-
-                    </tr>*@
-                <tr>
-                    <td>On behalf of</td>
-                    <td class="strong">@Model.ProviderName</td>
-                </tr>
-                @*<tr>
-                        <td>Date</td>
-                        <td  class="strong">Thursday 18 May 2017</td>
-                    </tr>*@
-                <tr>
-                    <td>Instructions</td>
-                    <td class="strong">@Model.Message</td>
-                </tr>
-            </tbody>
-        </table>
+            <div class="lot-filters">
+                <h2 class="heading-small">Choose a category</h2>
+                <ul>
+                    <li>
+                        <a href="#">Category one</a>
+                    </li>
+                    <li>
+                        <a href="#">Category two</a>
+                    </li>
+                    <li>
+                        <a href="#">Category three</a>
+                    </li>
+                </ul>
+            </div>
 
 
-        <h2 class="heading-medium">What happens next?</h2>
-        <p id="changeMainCopy">The updated request will appear in the employer’s account for them to review.</p>
-
-        @*<a class="button" href="@Url.Action("Index","Home")" aria-label="Continue">Continue</a>*@
-    </div>
-
-        <div class="column-one-third">
-            <aside>
-                <div class="panel panel-filled">
-                    <h2 class="heading-medium">Help us improve this section</h2>
-                    <p>Take a 3 minute survey about adding apprentices so that we can improve the service.</p>
-                    <a href="https://www.surveymonkey.co.uk/r/viewlevy" target="_blank" class="button" title="Take the survey" aria-label="Take the survey">Take the survey</a>
+            <div class="govuk-option-select">
+                <div class="container-head js-container-head">
+                    <div class="option-select-label">Category one</div>
                 </div>
-            </aside>
+                <div class="options-container" id="">
+                    <div class="js-auto-height-inner">
+                        <label for="freeOption">
+                            <input name="freeOption" value="true" id="freeOption" type="checkbox" aria-controls="">
+                            Free option
+                        </label>
+                        <label for="trialOption">
+                            <input name="trialOption" value="true" id="trialOption" type="checkbox" aria-controls="">
+                            Trial option
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="govuk-option-select">
+                <div class="container-head js-container-head">
+                    <div class="option-select-label">Category two</div>
+                </div>
+                <div class="options-container" id="">
+                    <div class="js-auto-height-inner">
+                        <label for="minimumContractPeriod-hour">
+                            <input name="minimumContractPeriod" value="hour" id="minimumContractPeriod-hour" type="checkbox" aria-controls="">
+                            Hour
+                        </label>
+                        <label for="minimumContractPeriod-day">
+                            <input name="minimumContractPeriod" value="day" id="minimumContractPeriod-day" type="checkbox" aria-controls="">
+                            Day
+                        </label>
+                        <label for="minimumContractPeriod-month">
+                            <input name="minimumContractPeriod" value="month" id="minimumContractPeriod-month" type="checkbox" aria-controls="">
+                            Month
+                        </label>
+                        <label for="minimumContractPeriod-year">
+                            <input name="minimumContractPeriod" value="year" id="minimumContractPeriod-year" type="checkbox" aria-controls="">
+                            Year
+                        </label>
+                        <label for="minimumContractPeriod-other">
+                            <input name="minimumContractPeriod" value="other" id="minimumContractPeriod-other" type="checkbox" aria-controls="">
+                            Other
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="govuk-option-select">
+                <div class="container-head js-container-head">
+                    <div class="option-select-label">Category three</div>
+                </div>
+                <div class="options-container" id="">
+                    <div class="js-auto-height-inner">
+                        <label for="dataExtractionRemoval">
+                            <input name="dataExtractionRemoval" value="true" id="dataExtractionRemoval" type="checkbox" aria-controls="">
+                            Lorem ipsum text
+                        </label>
+                        <label for="datacentresEUCode">
+                            <input name="datacentresEUCode" value="true" id="datacentresEUCode" type="checkbox" aria-controls="">
+                            Lorem ipsum text
+                        </label>
+                        <label for="dataBackupRecovery">
+                            <input name="dataBackupRecovery" value="true" id="dataBackupRecovery" type="checkbox" aria-controls="">
+                            Lorem ipsum text
+                        </label>
+                        <label for="selfServiceProvisioning">
+                            <input name="selfServiceProvisioning" value="true" id="selfServiceProvisioning" type="checkbox" aria-controls="">
+                            Lorem ipsum text
+                        </label>
+                        <label for="supportForThirdParties">
+                            <input name="supportForThirdParties" value="true" id="supportForThirdParties" type="checkbox" aria-controls="">
+                            Lorem ipsum text
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+
+            <button class="button" type="submit">Filter</button>
+        </form>
+    </section>
+
+
+
+    <!-- results section -->
+    <section class="column-two-thirds" aria-label="Services found">
+
+        <p class="search-summary">
+            <span class="search-summary-count">2</span> results found in <em>employer </em> with  <em>search name</em>
+        </p>
+        <div class="search-result">
+            <h2 class="search-result-title">
+                <a href="#">Virgin Media Ltd</a>
+            </h2>
+            <p class="search-result-supplier">
+                description
+            </p>
+            <p class="search-result-excerpt">
+                There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.
+            </p>
+            <ul aria-label="tags" class="search-result-metadata">
+                <li class="search-result-metadata-item">
+                    footer text if any
+                </li>
+                <li class="search-result-metadata-item">
+                    other details
+                </li>
+            </ul>
         </div>
-   
+        <div class="search-result">
+            <h2 class="search-result-title">
+                <a href="#">Salesforce Heroku</a>
+            </h2>
+            <p class="search-result-supplier">
+                Salesforce.com
+            </p>
+            <p class="search-result-excerpt">
+                There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected.
+            </p>
+            <ul aria-label="tags" class="search-result-metadata">
+                <li class="search-result-metadata-item">
+                    Platform as a Service
+                </li>
+                <li class="search-result-metadata-item">
+                    G-Cloud 7
+                </li>
+            </ul>
+        </div>
+
+
+
+        <nav role="navigation">
+            <ul class="previous-next-navigation">
+                <li class="next">
+                    <a href="#">
+                        Next <span class="visuallyhidden">page</span>
+                        <span class="page-numbers">1 of 12</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+    </section>
 </div>
+
 
 @section breadcrumb {
     <div class="breadcrumbs">
