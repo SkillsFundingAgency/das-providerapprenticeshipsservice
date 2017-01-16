@@ -2629,3 +2629,7 @@ span.helpText {
   background-color: #fcddcd;
   border-color: #f47738;
 }
+
+.tableResponsive td {
+  font-size: 16px;
+}
