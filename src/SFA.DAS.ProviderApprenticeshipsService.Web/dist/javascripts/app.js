@@ -39,3 +39,10 @@ sfa.homePage = {
 }
 
 var selectionButtons = new GOVUK.SelectionButtons("label input[type='radio'], label input[type='checkbox']");
+
+
+// Apprentice filter page :: expand/collapse functionality
+    $('.container-head').click(function () {
+        $(this).toggleClass('showHide');
+        $(this).next().toggleClass("hideOptions");
+    });
