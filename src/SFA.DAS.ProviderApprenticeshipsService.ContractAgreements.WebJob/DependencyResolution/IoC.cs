@@ -1,5 +1,4 @@
-﻿//using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-
+﻿using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 using StructureMap;

@@ -1,22 +1,15 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
 
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using ContractFeedConfiguration = SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Configuration.ContractFeedConfiguration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed
 {
-    public interface IContractFeedProcessorHttpClient
-    {
-        HttpClient GetAuthorizedHttpClient();
-
-        string BaseAddress { get; }
-    }
-
     public class ContractFeedProcessorHttpClient : IContractFeedProcessorHttpClient
     {
         private readonly AzureAuthentication _authenticationCredentials;
 
-        public ContractFeedProcessorHttpClient(IContractFeedConfiguration config)
+        public ContractFeedProcessorHttpClient(ContractFeedConfiguration config)
         {
             _authenticationCredentials = new AzureAuthentication(config.AADInstance, config.Tenant, config.ClientId, config.AppKey, config.ResourceId);
             BaseAddress = config.BaseAddress;

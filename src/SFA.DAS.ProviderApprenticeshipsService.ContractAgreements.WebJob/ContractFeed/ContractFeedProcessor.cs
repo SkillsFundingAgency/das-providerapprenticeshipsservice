@@ -3,18 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
-using FluentValidation;
-
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed
 {
-    public interface IContractDataProvider
-    {
-        void ReadEvents(Guid lastBookmarkedItemId, Action<int, IEnumerable<ContractFeedEvent>> pageHandler);
-    }
-
     public class ContractFeedProcessor : IContractDataProvider
     {
         private readonly XNamespace _nsAtom = "http://www.w3.org/2005/Atom";
@@ -22,12 +15,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Contr
 
         private readonly ContractFeedReader _reader;
 
-        private readonly AbstractValidator<ContractFeedEvent> _validator;
+        private readonly IContractFeedEventValidator _validator;
 
         private readonly ILog _logger;
 
         public ContractFeedProcessor(
-            ContractFeedReader reader, AbstractValidator<ContractFeedEvent> validator, ILog logger)
+            ContractFeedReader reader, IContractFeedEventValidator validator, ILog logger)
         {
             _reader = reader;
             _validator = validator;
@@ -59,7 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Contr
                         break; // already processed this item so ignore it and the remainder of entries in this page (as they will be older)
                     }
 
-                    if(_validator.Validate(contractFeedEvent).IsValid)
+                    if(_validator.Validate(contractFeedEvent))
                     {
                         newContractDataPage.Add(contractFeedEvent);
                     }

@@ -1,18 +1,27 @@
-﻿using FluentValidation;
-
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed
 {
-    public class ContractFeedEventValidator : AbstractValidator<ContractFeedEvent>
+    public class ContractFeedEventValidator : IContractFeedEventValidator
     {
-        public ContractFeedEventValidator()
-        {
-            RuleFor(r => r.HierarchyType).Must(m => m.ToLower() == "contract");
-            RuleFor(r => r.FundingTypeCode).Must(m => m.ToLower() == "levy");
-            RuleFor(r => r.ParentStatus).Must(m => m.ToLower() == "approved");
-            RuleFor(r => r.Status).Must(m => m.ToLower() == "approved");
 
+        public bool Validate(ContractFeedEvent contractFeedEvent)
+        {
+            if(contractFeedEvent.HierarchyType.ToLower() != "contract")
+                return false;
+            if (contractFeedEvent.FundingTypeCode.ToLower() != "levy")
+                return false;
+            if (contractFeedEvent.ParentStatus.ToLower() != "approved")
+                return false;
+            if (contractFeedEvent.Status.ToLower() != "approved")
+                return false;
+
+            return true;
         }
+    }
+
+    public interface IContractFeedEventValidator
+    {
+        bool Validate(ContractFeedEvent contractFeedEvent);
     }
 }

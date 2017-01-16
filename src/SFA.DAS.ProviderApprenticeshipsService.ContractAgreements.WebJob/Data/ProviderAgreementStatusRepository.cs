@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using Dapper;
 
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
+namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Data
 {
     public class ProviderAgreementStatusRepository : DbBaseRepository, IProviderAgreementStatusRepository
     {
@@ -18,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
         private readonly List<ContractFeedEvent> _data;
 
-        public ProviderAgreementStatusRepository(string connectionString, ILog logger) : base (connectionString)
+        public ProviderAgreementStatusRepository(ContractFeedConfiguration config, ILog logger) : base (config.DatabaseConnectionString)
         {
             _logger = logger;
             _data = new List<ContractFeedEvent>();

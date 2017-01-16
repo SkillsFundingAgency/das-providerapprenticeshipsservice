@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -11,7 +10,6 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitTests.MockClasses;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitTests
 {

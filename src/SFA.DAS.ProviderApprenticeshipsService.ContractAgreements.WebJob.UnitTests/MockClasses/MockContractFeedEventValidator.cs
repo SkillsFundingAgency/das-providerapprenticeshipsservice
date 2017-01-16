@@ -1,14 +1,14 @@
-﻿using FluentValidation;
-
+﻿using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitTests.MockClasses
 {
-    public class MockContractFeedEventValidator : AbstractValidator<ContractFeedEvent>
+    public class MockContractFeedEventValidator : IContractFeedEventValidator
     {
-        public MockContractFeedEventValidator()
+
+        public bool Validate(ContractFeedEvent contractFeedEvent)
         {
-            RuleFor(r => r.HierarchyType).Must(m => m.ToLower() == "contract");
+            return contractFeedEvent.HierarchyType.ToLower() == "contract";
         }
     }
 }

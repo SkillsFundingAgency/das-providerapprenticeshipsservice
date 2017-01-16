@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
+namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Data
 {
     public class DbBaseRepository
     {

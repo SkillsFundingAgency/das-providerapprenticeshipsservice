@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed;
+using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Data;
 using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.DependencyResolution;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
+
+using ContractFeedConfiguration = SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Configuration.ContractFeedConfiguration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
 {
@@ -24,29 +25,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
             try
             {
                 var container = IoC.Initialize();
-                var config = container.GetInstance<IContractFeedConfiguration>();
                 var logger = container.GetInstance<ILog>();
-
                 logger.Info("ContractAgreements job started");
                 var timer = Stopwatch.StartNew();
-                var httpClient = new ContractFeedProcessorHttpClient(config);   
-                var reader = new ContractFeedReader(httpClient);
 
-                var dataProvider = new ContractFeedProcessor(reader, new ContractFeedEventValidator(), logger);
-
-                var repository = new ProviderAgreementStatusRepository(config.DatabaseConnectionString, logger);
-
-                var service = new ProviderAgreementStatusService(dataProvider, repository, logger);
-
-                Task.Run(() => service.UpdateProviderAgreementStatuses());
+                var service = container.GetInstance<ProviderAgreementStatusService>();
+                service.UpdateProviderAgreementStatuses().Wait();
 
                 timer.Stop();
+
                 logger.Info($"ContractAgreements job done, Took: {timer.ElapsedMilliseconds} milliseconds");
             }
             catch (Exception ex)
             {
                 ILog exLogger = new NLogLogger();
-                exLogger.Error(ex, "Error running ContractAgreements WebJob");
+              exLogger.Error(ex, "Error running ContractAgreements WebJob");
             }
         }
     }

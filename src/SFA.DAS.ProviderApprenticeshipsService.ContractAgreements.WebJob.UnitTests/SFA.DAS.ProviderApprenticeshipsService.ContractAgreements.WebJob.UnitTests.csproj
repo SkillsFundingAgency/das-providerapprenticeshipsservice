@@ -38,10 +38,6 @@
       <HintPath>..\packages\FluentAssertions.4.15.0\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions.Core, Version=4.15.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a" />
-    <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentValidation.6.2.1.0\lib\Net45\FluentValidation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Moq, Version=4.5.28.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.5.28\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
@@ -96,10 +92,6 @@
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj">
       <Project>{B3484618-78A0-411E-BC02-AC84C8694C3D}</Project>
       <Name>SFA.DAS.ProviderApprenticeshipsService.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Infrastructure\SFA.DAS.ProviderApprenticeshipsService.Infrastructure.csproj">
-      <Project>{380868C8-FA69-4DA7-B054-45AC924EC48E}</Project>
-      <Name>SFA.DAS.ProviderApprenticeshipsService.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
