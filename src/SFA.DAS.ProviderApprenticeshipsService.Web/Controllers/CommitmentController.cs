@@ -204,5 +204,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             return View(model.Apprenticeship);
         }
+
+
+        [HttpGet]
+        [Route("ApprenticeFilter")]
+        public async Task<ActionResult> ApprenticeFilter(long providerId)
+        {
+         
+            return View();
+        }
+
     }
 }
