@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Claims;
+using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -11,7 +12,7 @@ using Microsoft.Azure;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
-    public class MvcApplication : System.Web.HttpApplication
+    public class MvcApplication : HttpApplication
     {
         private static ILog Logger = new NLogLogger();
 
@@ -28,6 +29,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             TelemetryConfiguration.Active.InstrumentationKey = CloudConfigurationManager.GetSetting("InstrumentationKey");
 
             Logger.Info("Starting up");
+        }
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            var application = sender as HttpApplication;
+            application?.Context?.Response.Headers.Remove("Server");
         }
 
         protected void Application_Error(object sender, EventArgs e)
