@@ -7,7 +7,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Contr
 
         public bool Validate(ContractFeedEvent contractFeedEvent)
         {
-            if(contractFeedEvent.HierarchyType.ToLower() != "contract")
+            if (contractFeedEvent.HierarchyType.ToLower() != "contract")
                 return false;
             if (contractFeedEvent.FundingTypeCode.ToLower() != "levy")
                 return false;

@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Configuration;
 using System.IO;
-using System.Linq;  
-using System.Net.Http;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.ServiceModel.Syndication;
 using System.Xml;
+
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed
 {
@@ -13,9 +13,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Contr
     {
         private readonly IContractFeedProcessorHttpClient _httpClient;
 
-        public ContractFeedReader(IContractFeedProcessorHttpClient httpClient)
+        private readonly ILog _logger;
+
+        public ContractFeedReader(IContractFeedProcessorHttpClient httpClient, ILog logger)
         {
             _httpClient = httpClient;
+            _logger = logger;
         }
 
         private const string MostRecentPageUrl = "/api/contracts/notifications";
@@ -73,7 +76,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Contr
         {
             var linkUri = link.Uri.AbsoluteUri;
             var pageNumber = int.Parse(linkUri.Substring(linkUri.LastIndexOf("/", StringComparison.Ordinal) + 1));
-
             return pageNumber;
         }
 
@@ -92,6 +94,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Contr
                 }
                 catch (AggregateException aex)
                 {
+                    foreach (var exception in aex.InnerExceptions)
+                    {
+                        _logger.Error(exception, $"Error in contact feed reader, calling endpoint {url}");
+                    }
                     throw aex.InnerExceptions.First();
                 }
             }

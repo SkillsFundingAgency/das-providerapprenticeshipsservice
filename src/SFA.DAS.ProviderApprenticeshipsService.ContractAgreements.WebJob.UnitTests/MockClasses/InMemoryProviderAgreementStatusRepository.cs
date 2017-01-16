@@ -21,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitT
             _data = new List<ContractFeedEvent>();
         }
 
-        public async Task AddContractEvent(ContractFeedEvent contractFeedEvent)
+        public void AddContractEvent(ContractFeedEvent contractFeedEvent)
         {
             _logger.Info($"Storing event: {contractFeedEvent.Id}");
             _data.Add(contractFeedEvent);
@@ -37,6 +37,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitT
             if (_data.Count == 0) return Guid.Empty;
 
             return _data.OrderByDescending(e => e.Updated).First().Id;
+        }
+
+        public Task SaveContractEvents()
+        {
+            return Task.FromResult(0);
         }
     }
 }

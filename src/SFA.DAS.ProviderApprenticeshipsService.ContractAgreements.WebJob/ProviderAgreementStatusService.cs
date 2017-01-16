@@ -46,9 +46,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
 
                 foreach (var contractFeedEvent in contractFeedEvents)
                 {
+                    // Only adds to inernal collection, need to save to DB with .SaveContractEvents()
                     _repository.AddContractEvent(contractFeedEvent);
                 }
             });
+
+            // Save when we know all pages have been read without exception
+            await _repository.SaveContractEvents();
         }
     }
 

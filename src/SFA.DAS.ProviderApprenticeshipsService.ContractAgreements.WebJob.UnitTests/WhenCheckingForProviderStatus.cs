@@ -20,10 +20,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitT
         public async Task GettingAgreementStatus()
         {
             var repository = new InMemoryProviderAgreementStatusRepository(Mock.Of<ILog>());
-            await repository.AddContractEvent(new ContractFeedEvent { ProviderId = 1234565, Status = "Auto-Withdrawn" });
-            await repository.AddContractEvent(new ContractFeedEvent { ProviderId = 1234566, Status = "Withdrawn By Provider" });
-            await repository.AddContractEvent(new ContractFeedEvent { ProviderId = 1234567, Status = "Published To Provider" });
-            await repository.AddContractEvent(new ContractFeedEvent { ProviderId = 1234560, Status = "Approved" });
+            repository.AddContractEvent(new ContractFeedEvent { ProviderId = 1234565, Status = "Auto-Withdrawn" });
+            repository.AddContractEvent(new ContractFeedEvent { ProviderId = 1234566, Status = "Withdrawn By Provider" });
+            repository.AddContractEvent(new ContractFeedEvent { ProviderId = 1234567, Status = "Published To Provider" });
+            repository.AddContractEvent(new ContractFeedEvent { ProviderId = 1234560, Status = "Approved" });
+
             var sut = new ProviderAgreementStatusService(Mock.Of<IContractDataProvider>(), repository, Mock.Of<ILog>());
 
             sut.GetProviderAgreementStatus(1234565).Result

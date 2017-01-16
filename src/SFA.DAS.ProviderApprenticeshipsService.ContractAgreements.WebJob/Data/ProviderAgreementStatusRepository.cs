@@ -17,7 +17,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Data
     {
         private readonly ILog _logger;
 
-        private readonly List<ContractFeedEvent> _data;
+        private List<ContractFeedEvent> _data;
 
         public ProviderAgreementStatusRepository(ContractFeedConfiguration config, ILog logger) : base (config.DatabaseConnectionString)
         {
@@ -25,34 +25,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Data
             _data = new List<ContractFeedEvent>();
         }
 
-        public async Task AddContractEvent(ContractFeedEvent contractFeedEvent)
+        public void AddContractEvent(ContractFeedEvent contractFeedEvent)
         {
-            await WithConnection(async connection =>
-                    {
-                        var parameters = new DynamicParameters();
-                        parameters.Add("@id", contractFeedEvent.Id, DbType.Guid);
-                        parameters.Add("@providerId", contractFeedEvent.ProviderId, DbType.Int64);
-                        parameters.Add("@hierarchyType", contractFeedEvent.HierarchyType, DbType.String);
-                        parameters.Add("@fundingTypeCode", contractFeedEvent.FundingTypeCode, DbType.String);
-                        parameters.Add("@status", contractFeedEvent.Status, DbType.String);
-                        parameters.Add("@parentStatus", contractFeedEvent.ParentStatus, DbType.String);
-                        parameters.Add("@updated", contractFeedEvent.Updated, DbType.DateTime);
-
-                        using (var trans = connection.BeginTransaction())
-                        {
-                            await connection.ExecuteAsync(
-                                sql:
-                                    "INSERT INTO [dbo].[ContractFeedEvent]" +
-                                    "(Id, ProviderId, HierarchyType, FundingTypeCode, Status, ParentStatus, Updated)" +
-                                    "VALUES(@id, @providerId, @hierarchyType, @fundingTypeCode, @status, @parentStatus, @updated); ",
-                                param: parameters,
-                                commandType: CommandType.Text,
-                                transaction: trans);
-                            trans.Commit();
-                        }
-                        return 1L;
-                    }
-            );
+            _data.Add(contractFeedEvent);
         }
 
         public async Task<IEnumerable<ContractFeedEvent>> GetContractEvents(long providerId)
@@ -78,13 +53,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Data
             });
 
             return contractFeedEvents;
-            throw new NotImplementedException($"Not implemented exception: {this.GetType()}");
-            //return _data.Where(e => e.ProviderId == providerId);
         }
 
         public async Task<Guid> GetMostRecentBookmarkId()
         {
-            // Do we want to cache value?
             var guid = await WithConnection<Guid>(async connection =>
                     {
                         using (var trans = connection.BeginTransaction())
@@ -104,6 +76,46 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Data
             if (guid.Equals(Guid.Empty)) 
                 _logger.Info("No provider agreements found.");
             return guid;
+        }
+
+        public async Task SaveContractEvents()
+        {
+            _logger.Info($"Saving {_data.Count} contract to database");
+            foreach (var contractFeedEvent in _data)
+            {
+                await AddContractEventPrivate(contractFeedEvent);
+            }
+            _data = new List<ContractFeedEvent>();
+        }
+
+        private async Task AddContractEventPrivate(ContractFeedEvent contractFeedEvent)
+        {
+            await WithConnection(async connection =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", contractFeedEvent.Id, DbType.Guid);
+                parameters.Add("@providerId", contractFeedEvent.ProviderId, DbType.Int64);
+                parameters.Add("@hierarchyType", contractFeedEvent.HierarchyType, DbType.String);
+                parameters.Add("@fundingTypeCode", contractFeedEvent.FundingTypeCode, DbType.String);
+                parameters.Add("@status", contractFeedEvent.Status, DbType.String);
+                parameters.Add("@parentStatus", contractFeedEvent.ParentStatus, DbType.String);
+                parameters.Add("@updated", contractFeedEvent.Updated, DbType.DateTime);
+
+                using (var trans = connection.BeginTransaction())
+                {
+                    await connection.ExecuteAsync(
+                        sql:
+                            "INSERT INTO [dbo].[ContractFeedEvent]" +
+                            "(Id, ProviderId, HierarchyType, FundingTypeCode, Status, ParentStatus, Updated)" +
+                            "VALUES(@id, @providerId, @hierarchyType, @fundingTypeCode, @status, @parentStatus, @updated); ",
+                        param: parameters,
+                        commandType: CommandType.Text,
+                        transaction: trans);
+                    trans.Commit();
+                }
+                return 1L;
+            }
+            );
         }
     }
 }

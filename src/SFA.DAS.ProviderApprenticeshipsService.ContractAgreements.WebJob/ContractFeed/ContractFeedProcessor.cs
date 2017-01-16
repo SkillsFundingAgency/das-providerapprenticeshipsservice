@@ -20,7 +20,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Contr
         private readonly ILog _logger;
 
         public ContractFeedProcessor(
-            ContractFeedReader reader, IContractFeedEventValidator validator, ILog logger)
+            ContractFeedReader reader, 
+            IContractFeedEventValidator validator, 
+            ILog logger)
         {
             _reader = reader;
             _validator = validator;

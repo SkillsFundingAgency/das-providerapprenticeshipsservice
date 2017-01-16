@@ -6,10 +6,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
     public interface IProviderAgreementStatusRepository
     {
-        Task AddContractEvent(ContractFeedEvent contractFeedEvent);
+        void AddContractEvent(ContractFeedEvent contractFeedEvent);
 
         Task<IEnumerable<ContractFeedEvent>> GetContractEvents(long providerId);
 
         Task<Guid> GetMostRecentBookmarkId();
+
+        Task SaveContractEvents();
     }
 }

@@ -33,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitT
         {
             MockFeedProcessorClient = GetMockFeedProcessorClient();
 
-            var reader = new ContractFeedReader(MockFeedProcessorClient.Object);
+            var reader = new ContractFeedReader(MockFeedProcessorClient.Object, Mock.Of<ILog>());
             var dataProvider = new ContractFeedProcessor(reader, new MockContractFeedEventValidator(), Mock.Of<ILog>());
 
             var service = new ProviderAgreementStatusService(dataProvider, repository, Mock.Of<ILog>());
