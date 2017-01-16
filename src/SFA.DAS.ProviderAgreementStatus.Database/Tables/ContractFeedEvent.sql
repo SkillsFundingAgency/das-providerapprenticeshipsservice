@@ -2,9 +2,9 @@
 (
 	[Id] uniqueidentifier NOT NULL PRIMARY KEY,
 	[ProviderId] BigInt NOT NULL,
-	[HierarchyType] NVARCHAR(50),
-	[FundingTypeCode] NVARCHAR(50),
-	[Status] NVARCHAR(50),
-	[ParentStatus] NVARCHAR(50),
-	[Updated] DateTime,
+	[HierarchyType] NVARCHAR(50) NOT NULL,
+	[FundingTypeCode] NVARCHAR(50) NOT NULL,
+	[Status] NVARCHAR(50) NOT NULL,
+	[ParentStatus] NVARCHAR(50) NOT NULL,
+	[Updated] DateTime NOT NULL,
 )
