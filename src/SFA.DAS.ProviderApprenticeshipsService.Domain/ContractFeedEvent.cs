@@ -11,5 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain
         public string Status { get; set; }
         public string ParentStatus { get; set; }
         public DateTime Updated { get; set; }
+
+        public int PageNumber { get; set; }
     }
 }

@@ -36,23 +36,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
 
         public async Task UpdateProviderAgreementStatuses()
         {
-            var lastBookmarkedItemId = await _repository.GetMostRecentBookmarkId();
+            var lastContact = await _repository.GetMostRecentContract();
+            var mostRecentPageNumber = await _repository.GetMostRecentPageNumber();
 
-            _logger.Info($"Bookmark: {lastBookmarkedItemId}");
+            // if last contact have a page number there might be more records on that page we have not read yet.
+            if (lastContact?.PageNumber > 0) mostRecentPageNumber = lastContact.PageNumber;
+            else ++mostRecentPageNumber;
 
-            _dataProvider.ReadEvents(lastBookmarkedItemId, (pageNumber, events) =>
+            _logger.Info($"Bookmark: {lastContact?.Id}, Latest page: {mostRecentPageNumber}");
+
+            _dataProvider.ReadEvents(mostRecentPageNumber, lastContact?.Id ?? Guid.Empty, (eventPageNumber, events) =>
             {
                 var contractFeedEvents = events.ToList();
 
                 foreach (var contractFeedEvent in contractFeedEvents)
                 {
-                    // Only adds to inernal collection, need to save to DB with .SaveContractEvents()
+                    contractFeedEvent.PageNumber = eventPageNumber;
                     _repository.AddContractEvent(contractFeedEvent);
                 }
             });
-
-            // Save when we know all pages have been read without exception
-            await _repository.SaveContractEvents();
         }
     }
 

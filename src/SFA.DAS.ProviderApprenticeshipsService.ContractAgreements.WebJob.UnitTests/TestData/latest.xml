@@ -1,4 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title type="text">Contract Management Contract Notifications</title><id>uuid:5EEF2DF5-2EA1-477A-91E7-2BA2AECBE930</id><updated>2016-11-03T09:47:47Z</updated><author><name>Contract Management Service</name></author><link rel="self" type="application/vnd.sfa.contract.v1+atom+xml" href="https://services-at.fct-sfa.com/api/contracts/notifications" /><link rel="prev-archive" type="application/vnd.sfa.contract.v1+atom+xml" href="https://services-at.fct-sfa.com/api/contracts/notifications/12" /><entry><id>uuid:b0f5f0ea-2315-444d-8fa0-4c4c5d6f0e3c</id><title type="text">Contract EMPF-627:1.0 was Approved</title><summary type="text">{UKPRN: 10017627, contractNumber: EMPF-627, version: 1}</summary><published>2016-11-03T09:47:20Z</published><updated>2016-11-03T09:47:20Z</updated><category term="Approved Contract" label="A contract has been approved" /><content type="application/vnd.sfa.contract.v1+atom+xml"><contract schemaVersion="10.02" xmlns="urn:sfa:schemas:contract" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+﻿<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">Contract Management Contract Notifications</title><id>uuid:5EEF2DF5-2EA1-477A-91E7-2BA2AECBE930</id>
+  <updated>2016-11-03T09:47:47Z</updated><author><name>Contract Management Service</name></author>
+  <link rel="self" type="application/vnd.sfa.contract.v1+atom+xml" href="https://services-at.fct-sfa.com/api/contracts/notifications" />
+  <link rel="prev-archive" type="application/vnd.sfa.contract.v1+atom+xml" href="https://services-at.fct-sfa.com/api/contracts/notifications/12" />
+    <entry><id>uuid:b0f5f0ea-2315-444d-8fa0-4c4c5d6f0e3c</id><title type="text">Contract EMPF-627:1.0 was Approved</title>
+    <summary type="text">{UKPRN: 10017627, contractNumber: EMPF-627, version: 1}</summary><published>2016-11-03T09:47:20Z</published>
+      <updated>2016-11-03T09:47:20Z</updated><category term="Approved Contract" label="A contract has been approved" />
+      <content type="application/vnd.sfa.contract.v1+atom+xml">
+        <contract schemaVersion="10.02" xmlns="urn:sfa:schemas:contract" xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <contracts>
     <contract>
       <fundingType>

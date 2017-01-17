@@ -7,6 +7,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Contr
 {
     public interface IContractDataProvider
     {
-        void ReadEvents(Guid lastBookmarkedItemId, Action<int, IEnumerable<ContractFeedEvent>> pageHandler);
+        void ReadEvents(int mostRecentPageNumber, Guid lastBookmarkedItemId, Action<int, IEnumerable<ContractFeedEvent>> action);
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,11 +22,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Data
         {
             _logger = logger;
             _data = new List<ContractFeedEvent>();
-        }
-
-        public void AddContractEvent(ContractFeedEvent contractFeedEvent)
-        {
-            _data.Add(contractFeedEvent);
         }
 
         public async Task<IEnumerable<ContractFeedEvent>> GetContractEvents(long providerId)
@@ -55,15 +49,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Data
             return contractFeedEvents;
         }
 
-        public async Task<Guid> GetMostRecentBookmarkId()
+        public async Task<ContractFeedEvent> GetMostRecentContract()
         {
-            var guid = await WithConnection<Guid>(async connection =>
+            var contact = await WithConnection<ContractFeedEvent>(async connection =>
                     {
                         using (var trans = connection.BeginTransaction())
                         {
-                            var r = (await connection.QueryAsync<Guid>(
+                            var r = (await connection.QueryAsync<ContractFeedEvent>(
                                 sql:
-                                    "SELECT TOP 1 [Id] "
+                                    "SELECT TOP 1 [Id], [PageNumber] "
                                   + "FROM [SFA.DAS.ProviderAgreementStatus.Database].[dbo].[ContractFeedEvent] "
                                   + "ORDER BY [Updated] desc",
                                 commandType: CommandType.Text,
@@ -73,22 +67,35 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Data
                         }
                     });
 
-            if (guid.Equals(Guid.Empty)) 
+            if (contact == null) 
                 _logger.Info("No provider agreements found.");
-            return guid;
+            return contact;
         }
 
-        public async Task SaveContractEvents()
+        public async Task<int> GetMostRecentPageNumber()
         {
-            _logger.Info($"Saving {_data.Count} contract to database");
-            foreach (var contractFeedEvent in _data)
+            var pageNumber = await WithConnection<int>(async connection =>
             {
-                await AddContractEventPrivate(contractFeedEvent);
-            }
-            _data = new List<ContractFeedEvent>();
+                using (var trans = connection.BeginTransaction())
+                {
+                    var r = (await connection.QueryAsync<int>(
+                        sql:
+                            "SELECT TOP 1 [PageNumber] "
+                          + "FROM [SFA.DAS.ProviderAgreementStatus.Database].[dbo].[ContractFeedEvent] "
+                          + "ORDER BY [PageNumber] desc",
+                        commandType: CommandType.Text,
+                        transaction: trans)).SingleOrDefault();
+                    trans.Commit();
+                    return r;
+                }
+            });
+
+            if (pageNumber.Equals(0))
+                _logger.Info("No provider agreements found.");
+            return pageNumber;
         }
 
-        private async Task AddContractEventPrivate(ContractFeedEvent contractFeedEvent)
+        public async Task AddContractEvent(ContractFeedEvent contractFeedEvent)
         {
             await WithConnection(async connection =>
             {
@@ -100,14 +107,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Data
                 parameters.Add("@status", contractFeedEvent.Status, DbType.String);
                 parameters.Add("@parentStatus", contractFeedEvent.ParentStatus, DbType.String);
                 parameters.Add("@updated", contractFeedEvent.Updated, DbType.DateTime);
+                parameters.Add("@pageNumber", contractFeedEvent.PageNumber, DbType.Int32);
 
                 using (var trans = connection.BeginTransaction())
                 {
                     await connection.ExecuteAsync(
                         sql:
                             "INSERT INTO [dbo].[ContractFeedEvent]" +
-                            "(Id, ProviderId, HierarchyType, FundingTypeCode, Status, ParentStatus, Updated)" +
-                            "VALUES(@id, @providerId, @hierarchyType, @fundingTypeCode, @status, @parentStatus, @updated); ",
+                            "(Id, ProviderId, HierarchyType, FundingTypeCode, Status, ParentStatus, Updated, PageNumber)" +
+                            "VALUES(@id, @providerId, @hierarchyType, @fundingTypeCode, @status, @parentStatus, @updated, @pageNumber); ",
                         param: parameters,
                         commandType: CommandType.Text,
                         transaction: trans);

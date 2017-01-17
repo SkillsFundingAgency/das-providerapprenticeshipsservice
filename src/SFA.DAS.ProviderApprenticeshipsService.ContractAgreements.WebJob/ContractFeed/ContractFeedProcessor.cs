@@ -29,40 +29,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Contr
             _logger = logger;
         }
 
-        public void ReadEvents(Guid lastBookmarkedItemId, Action<int, IEnumerable<ContractFeedEvent>> pageHandler)
+        public void ReadEvents(int lastPageNumber, Guid lastBookmarkedItemId, Action<int, IEnumerable<ContractFeedEvent>> saveRecordsAction)
         {
-            _reader.Read((pageNumber, pageContent) =>
+            _reader.Read(lastPageNumber, (pageNumber, pageContent) =>
             {
                 var doc = XDocument.Parse(pageContent);
 
                 // process page in reverse order as items are provided in ascending datetime from fcs
                 var entries = doc.Descendants(_nsAtom + "entry").Reverse().ToList();
 
-                var foundLastBookmarkedItem = false;
+                var newContractDataPage = entries
+                    .Select(ExtractContractFeedEvent)
+                    .Where(contractFeedEvent => contractFeedEvent != null)
+                    .TakeWhile(contractFeedEvent => lastBookmarkedItemId == Guid.Empty || contractFeedEvent.Id != lastBookmarkedItemId)
+                    .Where(_validator.Validate) // ToDo: Enable when testing
+                    .ToList();
 
-                var newContractDataPage = new List<ContractFeedEvent>();
-
-                foreach (var entry in entries)
-                {
-                    var contractFeedEvent = ExtractContractFeedEvent(entry);
-
-                    if (contractFeedEvent == null) continue;
-
-                    if (lastBookmarkedItemId != Guid.Empty && contractFeedEvent.Id == lastBookmarkedItemId)
-                    {
-                        foundLastBookmarkedItem = true;
-                        break; // already processed this item so ignore it and the remainder of entries in this page (as they will be older)
-                    }
-
-                    if(_validator.Validate(contractFeedEvent))
-                    {
-                        newContractDataPage.Add(contractFeedEvent);
-                    }
-                }
                 _logger.Info($"Adding: {newContractDataPage.Count} from page: {pageNumber}");
-                pageHandler(pageNumber, newContractDataPage);
-
-                return !foundLastBookmarkedItem; // return true means more pages should be processed
+                saveRecordsAction(pageNumber, newContractDataPage);
             });
         }
 

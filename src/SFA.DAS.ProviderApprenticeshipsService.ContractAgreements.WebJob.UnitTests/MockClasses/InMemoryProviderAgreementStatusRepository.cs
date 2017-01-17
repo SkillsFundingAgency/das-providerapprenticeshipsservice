@@ -21,10 +21,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitT
             _data = new List<ContractFeedEvent>();
         }
 
-        public void AddContractEvent(ContractFeedEvent contractFeedEvent)
+        public Task AddContractEvent(ContractFeedEvent contractFeedEvent)
         {
             _logger.Info($"Storing event: {contractFeedEvent.Id}");
             _data.Add(contractFeedEvent);
+            return Task.FromResult(0);
         }
 
         public async Task<IEnumerable<ContractFeedEvent>> GetContractEvents(long providerId)
@@ -32,16 +33,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitT
             return _data.Where(e => e.ProviderId == providerId);
         }
 
-        public async Task<Guid> GetMostRecentBookmarkId()
+        public async Task<ContractFeedEvent> GetMostRecentContract()
         {
-            if (_data.Count == 0) return Guid.Empty;
+            if (_data.Count == 0) return null;
 
-            return _data.OrderByDescending(e => e.Updated).First().Id;
+            return _data.OrderByDescending(e => e.Updated).First();
         }
 
-        public Task SaveContractEvents()
+        public Task<int> GetMostRecentPageNumber()
         {
-            return Task.FromResult(0);
+            if (_data.Count == 0) return Task.FromResult(0);
+            var pn = _data
+                .Where(m => m.PageNumber > 0)
+                .OrderByDescending(e => e.Updated).First().PageNumber;
+            return Task.FromResult(pn);
         }
     }
 }
