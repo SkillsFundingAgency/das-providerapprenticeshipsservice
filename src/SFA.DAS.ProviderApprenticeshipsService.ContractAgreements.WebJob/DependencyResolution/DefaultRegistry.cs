@@ -8,8 +8,8 @@ using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed;
-using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 
 using StructureMap;

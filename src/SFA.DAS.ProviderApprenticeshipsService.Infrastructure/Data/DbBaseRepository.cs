@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Data
+namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
     public class DbBaseRepository
     {

@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
@@ -24,14 +23,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
             _dataProvider = dataProvider;
             _repository = repository;
             _logger = logger;
-        }
-
-        public async Task<ProviderAgreementStatus> GetProviderAgreementStatus(long providerId)
-        {
-            var providersEvents = await _repository.GetContractEvents(providerId);
-
-            return providersEvents.Any(m => m.Status.Equals("approved", StringComparison.CurrentCultureIgnoreCase)) 
-                ? ProviderAgreementStatus.Agreed : ProviderAgreementStatus.NotAgreed;
         }
 
         public async Task UpdateProviderAgreementStatuses()
@@ -60,8 +51,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
 
     public interface IProviderAgreementStatusService
     {
-        Task<ProviderAgreementStatus> GetProviderAgreementStatus(long providerId);
-
         Task UpdateProviderAgreementStatuses();
     }
 }

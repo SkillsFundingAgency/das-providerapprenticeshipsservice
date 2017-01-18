@@ -41,6 +41,7 @@
     <Compile Include="Duration.cs" />
     <Compile Include="Framework.cs" />
     <Compile Include="FrameworksView.cs" />
+    <Compile Include="Interfaces\IAgreementStatusQueryRepository.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceConfiguration.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\ICache.cs" />

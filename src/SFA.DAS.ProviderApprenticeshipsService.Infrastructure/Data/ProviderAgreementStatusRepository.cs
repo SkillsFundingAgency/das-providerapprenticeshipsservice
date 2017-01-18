@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 using Dapper;
 
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Data
+namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
-    public class ProviderAgreementStatusRepository : DbBaseRepository, IProviderAgreementStatusRepository
+    public class ProviderAgreementStatusRepository : DbBaseRepository, IProviderAgreementStatusRepository, IAgreementStatusQueryRepository
     {
         private readonly ILog _logger;
 
         private List<ContractFeedEvent> _data;
 
-        public ProviderAgreementStatusRepository(ContractFeedConfiguration config, ILog logger) : base (config.DatabaseConnectionString)
+        public ProviderAgreementStatusRepository(IConfiguration config, ILog logger) : base(config.DatabaseConnectionString)
         {
             _logger = logger;
             _data = new List<ContractFeedEvent>();
@@ -52,22 +51,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Data
         public async Task<ContractFeedEvent> GetMostRecentContract()
         {
             var contact = await WithConnection<ContractFeedEvent>(async connection =>
-                    {
-                        using (var trans = connection.BeginTransaction())
-                        {
-                            var r = (await connection.QueryAsync<ContractFeedEvent>(
-                                sql:
-                                    "SELECT TOP 1 [Id], [PageNumber] "
-                                  + "FROM [SFA.DAS.ProviderAgreementStatus.Database].[dbo].[ContractFeedEvent] "
-                                  + "ORDER BY [Updated] desc",
-                                commandType: CommandType.Text,
-                                transaction: trans)).SingleOrDefault();
-                            trans.Commit();
-                            return r;
-                        }
-                    });
+            {
+                using (var trans = connection.BeginTransaction())
+                {
+                    var r = (await connection.QueryAsync<ContractFeedEvent>(
+                        sql:
+                            "SELECT TOP 1 [Id], [PageNumber] "
+                          + "FROM [SFA.DAS.ProviderAgreementStatus.Database].[dbo].[ContractFeedEvent] "
+                          + "ORDER BY [Updated] desc",
+                        commandType: CommandType.Text,
+                        transaction: trans)).SingleOrDefault();
+                    trans.Commit();
+                    return r;
+                }
+            });
 
-            if (contact == null) 
+            if (contact == null)
                 _logger.Info("No provider agreements found.");
             return contact;
         }

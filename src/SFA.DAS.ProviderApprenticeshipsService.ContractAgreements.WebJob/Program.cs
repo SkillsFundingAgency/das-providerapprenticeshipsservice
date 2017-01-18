@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
 
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed;
-using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Data;
 using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.DependencyResolution;
-
-using ContractFeedConfiguration = SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Configuration.ContractFeedConfiguration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
 {
