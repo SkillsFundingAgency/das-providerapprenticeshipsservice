@@ -62,6 +62,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             result.IsValid.Should().BeFalse();
         }
 
+        [TestCase("1000")]
         [TestCase("1234")]
         [TestCase("123")]
         [TestCase("1")]
