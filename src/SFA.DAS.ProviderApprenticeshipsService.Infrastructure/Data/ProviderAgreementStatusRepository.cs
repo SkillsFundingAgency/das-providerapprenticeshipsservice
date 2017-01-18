@@ -15,12 +15,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
     {
         private readonly ILog _logger;
 
-        private List<ContractFeedEvent> _data;
-
         public ProviderAgreementStatusRepository(IConfiguration config, ILog logger) : base(config.DatabaseConnectionString)
         {
             _logger = logger;
-            _data = new List<ContractFeedEvent>();
         }
 
         public async Task<IEnumerable<ContractFeedEvent>> GetContractEvents(long providerId)
