@@ -128,7 +128,41 @@
 }
 
 
+//cohors summary block styles
 
+#cohorts-landing-page{
+  .bingo-background{
+            background:#D53880;
+            color:#fff; 
+            margin-bottom: 20px;
+            padding: 10px 15px;
+              @include media(tablet) {
+                    min-height:160px;
+                    width:48%;
+                    padding: 0 15px;
+              }
+              h2{margin-top:20px;}
+              .heading-small{margin-bottom:20px;}
+        }
+ 
+  .block-one, .block-two{
+       @include media(tablet) {
+            margin-bottom:30px;
+            }
+  }
+
+  .block-one,.block-three{
+       @include media(tablet) {
+      margin-right:2%;
+      }
+  }
+  .block-two, .block-four{
+     @include media(tablet) {
+      margin-left:2%;
+      }
+  }
+ 
+}
 
 
 
