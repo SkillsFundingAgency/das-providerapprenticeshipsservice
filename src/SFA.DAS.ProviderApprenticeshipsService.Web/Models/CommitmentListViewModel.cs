@@ -18,7 +18,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string PageHeading2 { get; set; }
 
         public bool ShowStatus { get; set; }
-
-        public bool ShowLastMessage { get; set; }
     }
 }

@@ -33,10 +33,7 @@
                             <th>Status</th>
                         }
                         <th>Cohort reference</th>
-                        @if (Model.ShowLastMessage)
-                        {
-                            <th>Last message</th>
-                        }
+                        <th>Last message</th>
                         <th></th>
 
                     </tr>
@@ -57,12 +54,9 @@
                             <td>
                                 @commitment.Reference &nbsp;
                             </td>
-                            @if (Model.ShowLastMessage)
-                            {
-                                <td>
-                                    @commitment.LatestMessage
-                                </td>
-                            }
+                            <td>
+                                @commitment.LatestMessage
+                            </td>
                             <td>
                                 @if (commitment.ShowViewLink)
                                 {

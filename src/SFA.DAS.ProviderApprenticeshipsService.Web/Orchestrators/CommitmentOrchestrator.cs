@@ -94,8 +94,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageTitle = "Requests ready for review",
                 PageId = "requests-ready-for-review",
                 PageHeading = "Review cohorts",
-                PageHeading2 = $"You have {data.Count} cohorts that is ready for review:",
-                ShowLastMessage = true
+                PageHeading2 = $"You have {data.Count} cohorts that is ready for review:"
             };
         }
 
@@ -110,8 +109,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageTitle = "Requests ready for approval",
                 PageId = "requests-ready-for-approval",
                 PageHeading =  "Approve cohorts",
-                PageHeading2 =  $"You have {data.Count} cohorts that need your approal:",
-                ShowLastMessage = true
+                PageHeading2 =  $"You have {data.Count} cohorts that need your approal:"
             };
         }
 
