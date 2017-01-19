@@ -3003,3 +3003,21 @@ span.helpText {
 #cohorts-landing-page .bingo-background .heading-small {
   margin-bottom: 20px;
 }
+
+@media (min-width: 641px) {
+  #cohorts-landing-page .block-one, #cohorts-landing-page .block-two {
+    margin-bottom: 30px;
+  }
+}
+
+@media (min-width: 641px) {
+  #cohorts-landing-page .block-one, #cohorts-landing-page .block-three {
+    margin-right: 2%;
+  }
+}
+
+@media (min-width: 641px) {
+  #cohorts-landing-page .block-two, #cohorts-landing-page .block-four {
+    margin-left: 2%;
+  }
+}
