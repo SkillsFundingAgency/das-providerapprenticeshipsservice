@@ -36,7 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _logger = logger;
         }
 
-        public async Task<BulkUploadResult> UploadFile(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
+        public async Task<BulkUploadResult> Validate(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
         {
             if (uploadApprenticeshipsViewModel.Attachment == null)
                 return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("No file chosen") } };

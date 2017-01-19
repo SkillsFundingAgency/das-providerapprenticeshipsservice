@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using SFA.DAS.NLog.Logger;
@@ -40,16 +38,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
         {
             var errors = new List<UploadError>();
             var maxFileSize = _config.MaxBulkUploadFileSize * 1024; // Bytes
-
-            var regex = new Regex(@"\d{8}-\d{6}");
-            var dateMatch = regex.Match(attachment.FileName);
-            DateTime outDateTime;
-            var dateParseSuccess = DateTime.TryParseExact(dateMatch.Value, "yyyyMMdd-HHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out outDateTime);
-
-            if (!dateMatch.Success || !dateParseSuccess || !Regex.IsMatch(attachment.FileName, @"APPDATA-\d{8}-\d{6}.csv"))
-                errors.Add(new UploadError(ApprenticeshipFileValidationText.FilenameFormat.Text, ApprenticeshipFileValidationText.FilenameFormat.ErrorCode));
-            else if(outDateTime > DateTime.Now)
-                errors.Add(new UploadError(ApprenticeshipFileValidationText.FilenameFormatDate.Text, ApprenticeshipFileValidationText.FilenameFormatDate.ErrorCode));
             
             if (attachment.ContentLength > maxFileSize)
                 errors.Add(new UploadError(ApprenticeshipFileValidationText.MaxFileSizeMessage(maxFileSize)));
