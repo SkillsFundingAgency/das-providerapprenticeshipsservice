@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using FluentValidation;
-
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
@@ -27,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Must(m => lengthLessThan(m, 100)).WithMessage("You must enter a last name that's no longer than 100 characters");
 
             RuleFor(x => x.Cost)
-                .Matches("^$|^([1-9]{1}([0-9]{1,2})?)+(,[0-9]{3})*$").When(m => haveNumberOfDigitsFewerThan(m.Cost, 7)).WithMessage("Enter the total agreed training cost")
+                .Matches("^$|^([1-9]{1}([0-9]{1,2})?)+(,[0-9]{3})*$|^[1-9]{1}[0-9]*$").When(m => haveNumberOfDigitsFewerThan(m.Cost, 7)).WithMessage("Enter the total agreed training cost")
                 .Must(m => haveNumberOfDigitsFewerThan(m, 7)).WithMessage("The cost must be 6 numbers or fewer, for example 25000");
 
             RuleFor(r => r.StartDate)
