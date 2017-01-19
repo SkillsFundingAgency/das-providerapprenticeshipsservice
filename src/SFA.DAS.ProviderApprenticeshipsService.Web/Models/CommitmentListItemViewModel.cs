@@ -8,5 +8,7 @@
         public RequestStatus Status { get; set; }
         public bool ShowViewLink { get; set; }
         public string ProviderName { get; set; }
+
+        public string LatestMessage { get; set; }
     }
 }

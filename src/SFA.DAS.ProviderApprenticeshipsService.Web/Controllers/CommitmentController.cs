@@ -31,6 +31,46 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [Route("WithEmployer")]
+        public async Task<ActionResult> WithEmployer(long providerId)
+        {
+            // Filter by with employer
+            var model = await _commitmentOrchestrator.GetAllWithEmployer(providerId);
+
+            return View("RequestList", model);
+        }
+
+
+        [HttpGet]
+        [Route("NewRequests")]
+        public async Task<ActionResult> NewRequests(long providerId)
+        {
+            // Filter by new requests
+            var model = await _commitmentOrchestrator.GetAllNewRequests(providerId);
+
+            return View("RequestList", model);
+        }
+
+        [HttpGet]
+        [Route("ReadyForReview")]
+        public async Task<ActionResult> ReadyForReview(long providerId)
+        {
+            var model = await _commitmentOrchestrator.GetAllReadyForReview(providerId);
+
+            return View("RequestList", model);
+        }
+
+        [HttpGet]
+        [Route("ReadyForApproval")]
+        public async Task<ActionResult> ReadyForApproval(long providerId)
+        {
+            // Filter by ready for approval
+            var model = await _commitmentOrchestrator.GetAllReadyForApproval(providerId);
+
+            return View("RequestList", model);
+        }
+
+        [HttpGet]
         [Route("{hashedCommitmentId}/Details")]
         public async Task<ActionResult> Details(long providerId, string hashedCommitmentId)
         {

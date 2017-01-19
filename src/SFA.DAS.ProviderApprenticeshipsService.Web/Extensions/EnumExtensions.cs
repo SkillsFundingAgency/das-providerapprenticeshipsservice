@@ -7,6 +7,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
     {
         public static string GetDescription(this Enum enumerationValue)
         {
+            // ToDo: do we need?
             var type = enumerationValue.GetType();
             if (!type.IsEnum)
             {

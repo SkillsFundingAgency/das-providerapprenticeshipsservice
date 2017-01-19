@@ -1,0 +1,78 @@
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CommitmentListViewModel
+
+    @{
+        ViewBag.Title = Model.PageTitle;
+        ViewBag.PageId = Model.PageId;
+    }
+
+<div class="grid-row">
+    <div class="column-full">
+
+        <h1 class="heading-xlarge">@Model.PageHeading</h1>
+
+        <h2 class="heading-xlarge">@Model.PageHeading2</h2>
+
+        @if (!Model.Commitments.Any())
+        {
+            <div class="panel panel-border-wide alert-default">
+
+                <p>You don’t have any requests in progress.</p>
+
+            </div>
+        }
+        else
+        {
+            <table class="tableResponsive employerListing">
+                <thead>
+                    <tr>
+                        <th>Employer</th>
+
+                        @if (Model.ShowStatus)
+                        {
+                            <th>Status</th>
+                        }
+                        <th>Cohort reference</th>
+                        @if (Model.ShowLastMessage)
+                        {
+                            <th>Last message</th>
+                        }
+                        <th></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var commitment in Model.Commitments)
+                    {
+                        <tr>
+                            <td>
+                                @commitment.LegalEntityName &nbsp;
+                            </td>
+                            @if (Model.ShowStatus)
+                            {
+                                <td>
+                                    @commitment.Status.GetDescription()
+                                </td>
+                            }
+                            <td>
+                                @commitment.Reference &nbsp;
+                            </td>
+                            @if (Model.ShowLastMessage)
+                            {
+                                <td>
+                                    @commitment.LatestMessage
+                                </td>
+                            }
+                            <td>
+                                @if (commitment.ShowViewLink)
+                                {
+                                    <a href="@Url.Action("Details", new { Model.ProviderId, commitment.HashedCommitmentId })" title="View  @commitment.LegalEntityName" aria-label="View  @commitment.LegalEntityName">View</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

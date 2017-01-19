@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Newtonsoft.Json;
-using NLog;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
@@ -51,6 +50,86 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _logger = logger;
         }
 
+        public async Task<CommitmentListViewModel> GetAllWithEmployer(long providerId)
+        {
+            var sentForReview = await GetAllNew(providerId, RequestStatus.SentForReview);
+            var sentForApproval = await GetAllNew(providerId, RequestStatus.WithEmployerForApproval);
+            var data = sentForReview.Concat(sentForApproval).ToList();
+
+            return new CommitmentListViewModel
+            {
+                ProviderId = providerId,
+                Commitments = await MapFrom(data),
+                PageTitle = "Cohorts with employer",
+                PageId = "requests-with-employer",
+                PageHeading = "Cothorts with employer",
+                PageHeading2 = $"You have {data.Count} with employer for review:",
+                ShowStatus = true
+            };
+        }
+
+        public async Task<CommitmentListViewModel> GetAllNewRequests(long providerId)
+        {
+            var d = await GetAllNew(providerId, RequestStatus.NewRequest);
+            var data = d.ToList();
+            return new CommitmentListViewModel
+            {
+                ProviderId = providerId,
+                Commitments = await MapFrom(data),
+                PageTitle = "New requests",
+                PageId = "requests-new",
+                PageHeading = "New requests",
+                PageHeading2 = $"You have {data.ToList().Count} new cohorts:"
+            };
+        }
+
+        public async Task<CommitmentListViewModel> GetAllReadyForReview(long providerId)
+        {
+            var d = await GetAllNew(providerId, RequestStatus.ReadyForReview);
+            var data = d.ToList();
+            return new CommitmentListViewModel
+            {
+                ProviderId = providerId,
+                Commitments = await MapFrom(data),
+                PageTitle = "Requests ready for review",
+                PageId = "requests-ready-for-review",
+                PageHeading = "Review cohorts",
+                PageHeading2 = $"You have {data.Count} cohorts that is ready for review:",
+                ShowLastMessage = true
+            };
+        }
+
+        public async Task<CommitmentListViewModel> GetAllReadyForApproval(long providerId)
+        {
+            var d = await GetAllNew(providerId, RequestStatus.ReadyForApproval) ;
+            var data = d.ToList();
+            return new CommitmentListViewModel
+            {
+                ProviderId = providerId,
+                Commitments = await MapFrom(data),
+                PageTitle = "Requests ready for approval",
+                PageId = "requests-ready-for-approval",
+                PageHeading =  "Approve cohorts",
+                PageHeading2 =  $"You have {data.Count} cohorts that need your approal:",
+                ShowLastMessage = true
+            };
+        }
+
+        public async Task<IEnumerable<CommitmentListItem>> GetAllNew(long providerId, RequestStatus requestStatus)
+        {
+            _logger.Info($"Getting all commitments for provider:{providerId}", providerId);
+
+            var data = await _mediator.SendAsync(new GetCommitmentsQueryRequest
+            {
+                ProviderId = providerId
+            });
+
+            return data.Commitments.Where(
+                m => _statusCalculator.GetStatus(m.EditStatus, m.ApprenticeshipCount, m.LastAction, m.AgreementStatus)
+                    == requestStatus);
+        }
+
+        // ToDo: Do we need to do we delete?
         public async Task<CommitmentListViewModel> GetAll(long providerId)
         {
             _logger.Info($"Getting all commitments for provider:{providerId}", providerId: providerId);
@@ -63,7 +142,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return new CommitmentListViewModel
             {
                 ProviderId = providerId,
-                Commitments = MapFrom(data.Commitments)
+                Commitments = await MapFrom(data.Commitments)
             };
         }
 
@@ -274,15 +353,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         }
 
         // TODO: Move mappers into own class
-        private List<CommitmentListItemViewModel> MapFrom(List<CommitmentListItem> commitments)
+        private async Task<IEnumerable<CommitmentListItemViewModel>> MapFrom(List<CommitmentListItem> commitments)
         {
-            var commitmentsList = commitments.Select(x => MapFrom(x)).ToList();
+            var commitmentsList = commitments.Select(MapFrom).ToList();
 
-            return commitmentsList;
+            return await Task.WhenAll(commitmentsList);
         }
 
-        private CommitmentListItemViewModel MapFrom(CommitmentListItem listItem)
+        private async Task<CommitmentListItemViewModel> MapFrom(CommitmentListItem listItem)
         {
+            var message = listItem.ProviderId != null
+                              ? await GetLatestMessage(listItem.ProviderId.Value, listItem.Id)
+                              : string.Empty;
+            
             return new CommitmentListItemViewModel
             {
                 HashedCommitmentId = _hashingService.HashValue(listItem.Id),
@@ -290,7 +373,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
                 Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.ApprenticeshipCount, listItem.LastAction, listItem.AgreementStatus),
-                ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly
+                ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly,
+                LatestMessage = message
             };
         }
 
