@@ -143,22 +143,7 @@
               .heading-small{margin-bottom:20px;}
         }
  
-  .block-one, .block-two{
-       @include media(tablet) {
-            margin-bottom:30px;
-            }
-  }
 
-  .block-one,.block-three{
-       @include media(tablet) {
-      margin-right:2%;
-      }
-  }
-  .block-two, .block-four{
-     @include media(tablet) {
-      margin-left:2%;
-      }
-  }
 }
 
 
