@@ -389,7 +389,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderName = listItem.ProviderName,
                 Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.LastAction, listItem.AgreementStatus),
                 ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly
-            };
+        };
         }
 
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
