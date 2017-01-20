@@ -139,7 +139,12 @@
                     width:48%;
                     padding: 0 15px;
               }
-              h2{margin-top:20px;}
+              h2{margin-top:20px;
+                 a{
+                     text-decoration:none;
+                     color:#fff;
+                 }
+              }
               .heading-small{margin-bottom:20px;}
         }
  
@@ -162,6 +167,36 @@
 }
 
 
+    
+//all mobile media query breakpoints
+//==================================
+@media only screen and (max-device-width: 640px),
+only screen and (max-device-width: 667px),
+only screen and (max-width: 480px) {
+    
+//Progress list mobile view styles 
+.employerListing { 
+        td:nth-of-type(1):before {
+        content: "Employer";
+        font-weight: normal;
+        margin-top: 5px;
+        min-height: 30px;
+        }
+        td:nth-of-type(2):before {
+        content: "Cohort reference";
+        font-weight: normal;
+        margin-top: 5px;
+        }
+        td:nth-of-type(3):before {
+        content: "Last message";
+        font-weight: normal;
+        margin-top: 5px;
+        } 
+    }
+
+
+
+}
 
 
 

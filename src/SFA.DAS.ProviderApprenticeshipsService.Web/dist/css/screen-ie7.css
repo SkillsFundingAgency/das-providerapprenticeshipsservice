@@ -2495,22 +2495,6 @@ span.helpText {
     text-align: left;
   }
   /*Labels for the data*/
-  .employerListing td:nth-of-type(1):before {
-    content: "Employer";
-    font-weight: normal;
-    margin-top: 5px;
-    min-height: 30px;
-  }
-  .employerListing td:nth-of-type(2):before {
-    content: "Cohort reference";
-    font-weight: normal;
-    margin-top: 5px;
-  }
-  .employerListing td:nth-of-type(3):before {
-    content: "Status";
-    font-weight: normal;
-    margin-top: 5px;
-  }
   .providerList td:nth-of-type(1):before {
     content: "Name";
     font-weight: normal;
@@ -2648,6 +2632,11 @@ span.helpText {
   margin-top: 20px;
 }
 
+#cohorts-landing-page .bingo-background h2 a {
+  text-decoration: none;
+  color: #fff;
+}
+
 #cohorts-landing-page .bingo-background .heading-small {
   margin-bottom: 20px;
 }
@@ -2662,4 +2651,23 @@ span.helpText {
 
 #cohorts-landing-page .block-two, #cohorts-landing-page .block-four {
   margin-left: 2%;
+}
+
+@media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
+  .employerListing td:nth-of-type(1):before {
+    content: "Employer";
+    font-weight: normal;
+    margin-top: 5px;
+    min-height: 30px;
+  }
+  .employerListing td:nth-of-type(2):before {
+    content: "Cohort reference";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  .employerListing td:nth-of-type(3):before {
+    content: "Last message";
+    font-weight: normal;
+    margin-top: 5px;
+  }
 }
