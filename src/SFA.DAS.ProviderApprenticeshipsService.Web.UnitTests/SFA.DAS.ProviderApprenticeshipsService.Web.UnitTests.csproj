@@ -81,6 +81,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Orchestrators\Class1.cs" />
     <Compile Include="Orchestrators\WhenUploadingFile.cs" />
     <Compile Include="Validation\WhenValidatingApprenticeshipBulkUploadViewModel.cs" />
     <Compile Include="WhenValidatingCsvRecord.cs" />

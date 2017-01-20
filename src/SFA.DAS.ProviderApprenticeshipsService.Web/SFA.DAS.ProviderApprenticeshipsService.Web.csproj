@@ -350,6 +350,7 @@
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
     <Compile Include="Models\BulkUpload\BulkUploadResult.cs" />
     <Compile Include="Models\BulkUpload\UploadError.cs" />
+    <Compile Include="Models\CohortsViewModel.cs" />
     <Compile Include="Models\CommitmentListItemViewModel.cs" />
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentDetailsViewModel.cs" />
@@ -544,7 +545,7 @@
     <Content Include="Views\Account\NoAccount.cshtml" />
     <Content Include="Views\BulkUpload\UploadApprenticeships.cshtml" />
     <Content Include="Views\BulkUpload\UploadApprenticeshipsUnsuccessful.cshtml" />
-    <Content Include="Views\Commitment\ApprenticeFilter.cshtml" />
+    <Content Include="Views\Commitment\Cohorts.cshtml" />
     <Content Include="Views\Commitment\RequestList.cshtml" />
   </ItemGroup>
   <ItemGroup />

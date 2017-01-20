@@ -50,6 +50,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _logger = logger;
         }
 
+        public async Task<CohortsViewModel> GetCohorts(long providerId)
+        {
+            var data = await _mediator.SendAsync(new GetCommitmentsQueryRequest
+            {
+                ProviderId = providerId
+            });
+            var commitmentStatus =
+                data.Commitments.Select(m =>
+                    _statusCalculator.GetStatus(m.EditStatus, m.ApprenticeshipCount, m.LastAction, m.AgreementStatus)).ToList();
+
+            var model = new CohortsViewModel
+            {
+                NewRequestsCount = commitmentStatus.Count(m => m == RequestStatus.NewRequest),
+                ReadyForApprovalCount = commitmentStatus.Count(m => m == RequestStatus.ReadyForApproval),
+                ReadyForReviewCount = commitmentStatus.Count(m => m == RequestStatus.ReadyForReview),
+                WithEmployerCount = commitmentStatus.Count(m => m == RequestStatus.SentForReview || m == RequestStatus.WithEmployerForApproval)
+            };
+
+            return model;
+        }
+
         public async Task<CommitmentListViewModel> GetAllWithEmployer(long providerId)
         {
             var sentForReview = await GetAllNew(providerId, RequestStatus.SentForReview);
@@ -63,8 +84,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageTitle = "Cohorts with employer",
                 PageId = "requests-with-employer",
                 PageHeading = "Cothorts with employer",
-                PageHeading2 = $"You have {data.Count} with employer for review:",
-                ShowStatus = true
+                PageHeading2 = $"You have {data.Count} with employer for review:"
             };
         }
 
@@ -125,23 +145,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return data.Commitments.Where(
                 m => _statusCalculator.GetStatus(m.EditStatus, m.ApprenticeshipCount, m.LastAction, m.AgreementStatus)
                     == requestStatus);
-        }
-
-        // ToDo: Do we need to do we delete?
-        public async Task<CommitmentListViewModel> GetAll(long providerId)
-        {
-            _logger.Info($"Getting all commitments for provider:{providerId}", providerId: providerId);
-
-            var data = await _mediator.SendAsync(new GetCommitmentsQueryRequest
-            {
-                ProviderId = providerId
-            });
-
-            return new CommitmentListViewModel
-            {
-                ProviderId = providerId,
-                Commitments = await MapFrom(data.Commitments)
-            };
         }
 
         public async Task<CommitmentDetailsViewModel> GetCommitmentDetails(long providerId, string hashedCommitmentId)

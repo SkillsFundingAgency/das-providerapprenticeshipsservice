@@ -1,5 +1,4 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
-@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CommitmentListViewModel
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CommitmentListViewModel
 
     @{
         ViewBag.Title = Model.PageTitle;
@@ -27,11 +26,6 @@
                 <thead>
                     <tr>
                         <th>Employer</th>
-
-                        @if (Model.ShowStatus)
-                        {
-                            <th>Status</th>
-                        }
                         <th>Cohort reference</th>
                         <th>Last message</th>
                         <th></th>
@@ -45,17 +39,11 @@
                             <td>
                                 @commitment.LegalEntityName &nbsp;
                             </td>
-                            @if (Model.ShowStatus)
-                            {
-                                <td>
-                                    @commitment.Status.GetDescription()
-                                </td>
-                            }
                             <td>
                                 @commitment.Reference &nbsp;
                             </td>
                             <td>
-                                @commitment.LatestMessage
+                                @commitment.LatestMessage &nbsp;
                             </td>
                             <td>
                                 @if (commitment.ShowViewLink)

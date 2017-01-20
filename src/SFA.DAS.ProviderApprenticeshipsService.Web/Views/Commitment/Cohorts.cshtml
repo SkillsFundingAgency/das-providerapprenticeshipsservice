@@ -1,0 +1,66 @@
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CohortsViewModel
+
+@{
+    ViewBag.Title = "Your cohorts";
+    ViewBag.PageId = "cohorts-landing-page";
+}
+
+
+<div class="grid-row">  
+    <div class="column-two-thirds">
+
+        <h1 class="heading-xlarge">Your cohorts</h1>
+       
+        
+        <div class="column-one-half bingo-background block-one">
+            <h2 class="bold-xxlarge">
+                <a href="@Url.Action("NewRequests")" aria-label="View all new requests from employer">
+                    @Model.NewRequestsCount
+                </a>
+            </h2>
+            <p class="heading-small">New from employer</p>
+        </div>
+
+        <div class="column-one-half bingo-background block-two">
+            <h2 class="bold-xxlarge">
+                <a href="@Url.Action("ReadyForApproval")" aria-label="View all new requests that are ready for approval">
+                    @Model.ReadyForApprovalCount
+                </a>
+            </h2>
+            <p class="heading-small">Ready for approval</p>
+        </div>
+    
+
+        <div class="column-one-half bingo-background block-three">
+            <h2 class="bold-xxlarge">
+                <a href="@Url.Action("ReadyForReview")" aria-label="View all new requests that are ready for review">
+                    @Model.ReadyForReviewCount
+                </a>
+            </h2>
+            <p class="heading-small">Ready for review</p>
+        </div>
+
+        <div class="column-one-half bingo-background block-four">
+            <h2 class="bold-xxlarge">
+                <a href="@Url.Action("WithEmployer")" aria-label="View all new requests from that are with the employer">
+                    @Model.WithEmployerCount
+                </a>
+            </h2>
+            <p class="heading-small">With employers</p>
+        </div>
+
+     </div>
+
+     <div class="column-one-third">  </div>   
+    
+
+
+</div>
+
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Index", "Home")" aria-label="Back to Account home" class="back-link">Back</a>
+    </div>
+}

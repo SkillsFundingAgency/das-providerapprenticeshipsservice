@@ -22,15 +22,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Home")]
-        public async Task<ActionResult> Index(long providerId)
-        {
-            var model = await _commitmentOrchestrator.GetAll(providerId);
-
-            return View(model);
-        }
-
-        [HttpGet]
         [Route("WithEmployer")]
         public async Task<ActionResult> WithEmployer(long providerId)
         {
@@ -178,10 +169,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             {
                 await _commitmentOrchestrator.SubmitCommitment(viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty);
 
-                return RedirectToAction("Index", new { providerId = viewModel.ProviderId });
+                return RedirectToAction("Cohorts", new { providerId = viewModel.ProviderId });
             }
 
-            return RedirectToAction("Index", new {providerId = viewModel.ProviderId});
+            return RedirectToAction("Cohorts", new {providerId = viewModel.ProviderId});
         }
 
         [HttpGet]
@@ -247,11 +238,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
 
         [HttpGet]
-        [Route("ApprenticeFilter")]
-        public async Task<ActionResult> ApprenticeFilter(long providerId)
+        [Route("Cohorts")]
+        public async Task<ActionResult> Cohorts(long providerId)
         {
-         
-            return View();
+            var model = await _commitmentOrchestrator.GetCohorts(providerId);
+            return View(model);
         }
 
     }
