@@ -547,6 +547,7 @@
     <Content Include="Views\BulkUpload\UploadApprenticeshipsUnsuccessful.cshtml" />
     <Content Include="Views\Commitment\Cohorts.cshtml" />
     <Content Include="Views\Commitment\RequestList.cshtml" />
+    <Content Include="Views\Commitment\RequestApproved.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

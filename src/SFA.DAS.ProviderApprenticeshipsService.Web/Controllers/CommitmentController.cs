@@ -12,6 +12,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     [RoutePrefix("{providerId}/apprentices")]
     public class CommitmentController : Controller
     {
+        private const string LastCohortPageSessionKey = "lastCohortPageSessionKey";
+
         private readonly CommitmentOrchestrator _commitmentOrchestrator;
 
         public CommitmentController(CommitmentOrchestrator commitmentOrchestrator)
@@ -45,7 +47,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> NewRequests(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAllNewRequests(providerId);
-
+            Session[LastCohortPageSessionKey] = RequestStatus.NewRequest; // Can probably find out anyway. 
             return View("RequestList", model);
         }
 
@@ -54,7 +56,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> ReadyForReview(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAllReadyForReview(providerId);
-
+            Session[LastCohortPageSessionKey] = RequestStatus.ReadyForReview;
             return View("RequestList", model);
         }
 
@@ -63,7 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> ReadyForApproval(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAllReadyForApproval(providerId);
-
+            Session[LastCohortPageSessionKey] = RequestStatus.ReadyForApproval;
             return View("RequestList", model);
         }
 
@@ -174,15 +176,35 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if(viewModel.SaveStatus == SaveStatus.Approve)
             {
                 await _commitmentOrchestrator.SubmitCommitment(viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty);
-                TempData["FlashMessage"] = $"Cohort has been approved by you and the employer.";
-                return RedirectToAction("ReadyForApproval", new { providerId = viewModel.ProviderId });
+                return RedirectToAction("Approved", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
             }
 
             return RedirectToAction("Cohorts", new {providerId = viewModel.ProviderId});
         }
 
         [HttpGet]
-        [Route("Submit")]
+        [Route("{hashedCommitmentId}/RequestApproved")]
+        public async Task<ActionResult> Approved(long providerId, string hashedCommitmentId)
+        {
+            var commitment = await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId);
+            var url = Url.Action("ReadyForApproval", new { ProviderId = providerId });
+
+            TempData["FlashMessage"] = $"Cohort has been approved by you and the employer.";
+            var model = new AcknowledgementViewModel
+                            {
+                                CommitmentReference = commitment.Reference,
+                                EmployerName = commitment.LegalEntityName,
+                                ProviderName = commitment.ProviderName,
+                                Message = string.Empty,
+                                RedirectUrl = url
+                            };
+
+            return View("RequestApproved", model);
+
+        }
+
+        [HttpGet]
+        [Route("{hashedCommitmentId}/Submit")]
         public async Task<ActionResult> Submit(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
         {
             var commitment = await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId);
@@ -200,27 +222,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Submit")]
+        [Route("{hashedCommitmentId}/Submit")]
         public async Task<ActionResult> Submit(SubmitCommitmentViewModel model)
         {
-            var commitment = await _commitmentOrchestrator.GetCommitment(model.ProviderId, model.HashedCommitmentId);
             await _commitmentOrchestrator.SubmitCommitment(model.ProviderId, model.HashedCommitmentId, model.SaveStatus, model.Message);
 
             return RedirectToAction("Acknowledgement", new
             {
                 providerId = model.ProviderId,
                 hashedCommitmentId = model.HashedCommitmentId,
-                message = model.Message,
-                requestStatus = commitment.Status
+                message = model.Message
             });
         }
 
         [HttpGet]
-        [Route("Acknowledgement")]
-        public async Task<ActionResult> Acknowledgement(long providerId, string hashedCommitmentId, string message, RequestStatus requestStatus)
+        [Route("{hashedCommitmentId}/Acknowledgement")]
+        public async Task<ActionResult> Acknowledgement(long providerId, string hashedCommitmentId, string message)
         {
             var commitment = await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId);
             var url = string.Empty;
+            var requestStatus = GetRequestStatusFromSession();
             switch (requestStatus)
             {
                 case RequestStatus.ReadyForReview:
@@ -245,6 +266,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 Message = message,
                 RedirectUrl = url
             });
+        }
+
+        private RequestStatus GetRequestStatusFromSession()
+        {
+
+            var status = (RequestStatus?)Session[LastCohortPageSessionKey] ?? RequestStatus.None;
+            return status;
         }
 
         private void SetTempMessage(RequestStatus oldRequestStatus, RequestStatus newRequestStatus)
