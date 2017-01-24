@@ -3,7 +3,7 @@ using System.Web.Mvc;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         [Route("~/", Name = "home")]
         public ActionResult Index()

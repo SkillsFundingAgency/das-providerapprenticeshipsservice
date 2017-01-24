@@ -8,7 +8,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [RoutePrefix("{providerId}/apprentices")]
-    public class BulkUploadController : Controller
+    public class BulkUploadController : BaseController
     {
         private readonly BulkUploadOrchestrator _bulkUploadController;
 
