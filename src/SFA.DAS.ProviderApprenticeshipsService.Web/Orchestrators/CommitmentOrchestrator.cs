@@ -9,6 +9,7 @@ using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateApprenticeship;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
@@ -17,6 +18,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTasks;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -34,7 +36,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IHashingService _hashingService;
         private readonly IProviderCommitmentsLogger _logger;
 
-        public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator, IHashingService hashingService, IProviderCommitmentsLogger logger)
+        private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
+
+        public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator, IHashingService hashingService, 
+                                      IProviderCommitmentsLogger logger, ProviderApprenticeshipsServiceConfiguration configuration)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -44,16 +49,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 throw new ArgumentNullException(nameof(hashingService));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
+            if (configuration == null)
+                throw new ArgumentNullException(nameof(configuration));
 
             _mediator = mediator;
             _statusCalculator = statusCalculator;
             _hashingService = hashingService;
             _logger = logger;
+            _configuration = configuration;
         }
 
         public async Task<CommitmentListViewModel> GetAll(long providerId)
         {
             _logger.Info($"Getting all commitments for provider:{providerId}", providerId: providerId);
+            var isSigned = await IsSignedAgreement(providerId);
 
             var data = await _mediator.SendAsync(new GetCommitmentsQueryRequest
             {
@@ -63,8 +72,31 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return new CommitmentListViewModel
             {
                 ProviderId = providerId,
-                Commitments = MapFrom(data.Commitments)
+                Commitments = MapFrom(data.Commitments),
+                HasSignedAgreement = isSigned
             };
+        }
+
+        public async Task<AgreementNotSignedViewModel> GetAgreementPage(long providerId, string hashedCommitmentId)
+        {
+            var iss = await IsSignedAgreement(providerId);
+            var model = new AgreementNotSignedViewModel
+            {
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId,
+                ReviewAgreementUrl = _configuration.ContractAgreementsUrl,
+                IsSignedAgreement = iss
+            };
+            return model;
+        }
+
+        public async Task<bool> IsSignedAgreement(long providerId)
+        {
+            var data = await _mediator.SendAsync(new GetProviderAgreementQueryRequest
+                                                     {
+                                                         ProviderId = providerId
+                                                     });
+            return data.HasAgreement;
         }
 
         public async Task<CommitmentDetailsViewModel> GetCommitmentDetails(long providerId, string hashedCommitmentId)

@@ -145,6 +145,7 @@
     <Compile Include="Data\ProviderAgreementStatusRepository.cs" />
     <Compile Include="Data\DbBaseRepository.cs" />
     <Compile Include="Data\FileSystemRepository.cs" />
+    <Compile Include="Data\ProviderAgreementStatusRepository.cs" />
     <Compile Include="Logging\ProviderCommitmentsLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\HashingService.cs" />

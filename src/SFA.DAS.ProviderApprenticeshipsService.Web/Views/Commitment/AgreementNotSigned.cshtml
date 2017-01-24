@@ -1,0 +1,23 @@
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.AgreementNotSignedViewModel
+
+@{
+    ViewBag.Title = "Agreement not signed";
+    ViewBag.PageId = "agreement-not-signed";
+}
+
+<div class="grid-row">
+    <div class="column-full">
+
+        <h1 class="heading-xlarge">Agreement not signed</h1>
+
+        <p>You must sign your apprenticeship training provider agreement with
+            the Skills Funding Agency before you can approve cohorts.
+        </p>
+
+        <a class="button" href="@Model.ReviewAgreementUrl" aria-label="Review your agreement">Review your agreement</a>
+
+        <a href="@Url.Action("Details", new { Model.ProviderId, Model.HashedCommitmentId })">
+            Continue to cohort
+        </a>
+    </div>
+</div>
