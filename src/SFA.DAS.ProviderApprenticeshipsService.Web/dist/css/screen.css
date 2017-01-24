@@ -3015,6 +3015,46 @@ span.helpText {
   }
 }
 
+#review-cohorts {
+  color: #fff;
+}
+
+#review-cohorts .all-apps {
+  background: #2e3391;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+@media (min-width: 641px) {
+  #review-cohorts .all-apps {
+    margin: auto;
+  }
+}
+
+#review-cohorts .incomplete-apps {
+  background: #8e2a8d;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 641px) {
+  #review-cohorts .incomplete-apps {
+    margin: auto;
+  }
+}
+
+#review-cohorts .total-cost {
+  background: #d03a84;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+@media (min-width: 641px) {
+  #review-cohorts .total-cost {
+    margin: auto;
+  }
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   .employerListing td:nth-of-type(1):before {
     content: "Employer";

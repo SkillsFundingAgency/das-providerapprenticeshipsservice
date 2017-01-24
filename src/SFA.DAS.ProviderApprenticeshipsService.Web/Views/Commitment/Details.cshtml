@@ -81,9 +81,32 @@
 
 @if (Model.Apprenticeships.Count > 0)
 {
+    <div class="grid-row" id="review-cohorts">
+        <div class="column-one-third">
+            <div class="all-apps">
+                <h2 class="bold-xlarge">10</h2>
+                <p class="heading-small">Apprentices</p>
+            </div>
+        </div>
+        <div class="column-one-third">
+            <div class="incomplete-apps">
+                <h2 class="bold-xlarge">4</h2>
+                <p class="heading-small">Incomplete records</p>
+            </div>
+        </div>
+        <div class="column-one-third">
+            <div class="total-cost">
+                <h2 class="bold-xlarge">&pound;13,816</h2>
+                <p class="heading-small">Total cost</p>
+            </div>
+        </div>
+    </div>
+
     <div class="grid-row">
     <div class="column-full">
-        <p class="heading-medium">@GetApprenticesCountText(Model.Apprenticeships)</p>
+        <p class="heading-medium">Review your cohort @GetApprenticesCountText(Model.Apprenticeships)</p>
+
+
         <table class="tableResponsive providerList">
             <thead>
             <tr>

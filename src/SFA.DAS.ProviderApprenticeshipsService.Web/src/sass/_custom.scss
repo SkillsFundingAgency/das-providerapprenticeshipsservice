@@ -172,6 +172,56 @@
 }
 
 
+//review cohorts page styles
+
+#review-cohorts{
+    color:#fff;
+    .all-apps{
+        background:#2e3391;
+        padding:20px;
+        margin:20px 0;
+         @include media(tablet) {
+            margin:auto;
+            }
+    }
+    .incomplete-apps{
+        background:#8e2a8d;
+        padding:20px;
+        margin-bottom:20px;
+        @include media(tablet) {
+            margin:auto;
+            }
+    }
+    .total-cost{
+        background:#d03a84;
+        padding:20px;
+        margin-bottom:30px;
+        @include media(tablet) {
+            margin:auto;
+            }
+    }
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 //all mobile media query breakpoints
 //==================================
