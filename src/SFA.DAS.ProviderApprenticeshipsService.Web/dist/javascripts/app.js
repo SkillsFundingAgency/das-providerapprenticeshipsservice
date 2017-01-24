@@ -42,6 +42,8 @@ var selectionButtons = new GOVUK.SelectionButtons("label input[type='radio'], la
 
 // cohorts bingo balls - making a div clickable
 $(".bingo-background").click(function () {
-    window.location = $(this).find("a").attr("href");
+    var url = $(this).find("a").attr("href");
+    if (url)
+        window.location = url;
     return false;
 });

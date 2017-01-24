@@ -8,9 +8,12 @@
 <div class="grid-row">
     <div class="column-full">
 
-        <p class="flash-message">
-            @TempData["FlashMessage"]
-        </p>
+        @if(TempData["FlashMessage"] != null)
+        {
+            <p class="flash-message">
+                @TempData["FlashMessage"]
+            </p>
+        }
 
         <h1 class="heading-xlarge">@Model.PageHeading</h1>
 
