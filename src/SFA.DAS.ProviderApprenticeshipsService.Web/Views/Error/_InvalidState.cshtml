@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Invalid state";
+    ViewBag.PageId = "invalid-state";
+}
+
+<main id="content" role="main" class="error-404">
+    <div class="grid-row">
+        <div class="column-two-thirds">
+
+            <div class="hgroup">
+                <h1 class="heading-xlarge">
+                    @Html.Raw("Invald state")
+                </h1>
+            </div>
+
+            <div class="inner">
+                <p>
+                    You can return to the
+                    <a href="@Url.Action("Index", "Home")">start page</a>
+                    to try again.
+                </p>
+            </div>
+        </div>
+    </div>
+</main>

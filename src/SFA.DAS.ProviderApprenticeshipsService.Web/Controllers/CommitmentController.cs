@@ -8,10 +8,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
-<<<<<<< HEAD
-
-=======
->>>>>>> master
     [Authorize]
     [RoutePrefix("{providerId}/apprentices")]
     public class CommitmentController : BaseController

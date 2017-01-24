@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Net;
+using System.Web.Mvc;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -24,6 +25,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             Response.StatusCode = 500;
             return View("_Error500");
+        }
+
+        public ActionResult InvalidState()
+        {
+            return View("_InvalidState");
         }
     }
 }
