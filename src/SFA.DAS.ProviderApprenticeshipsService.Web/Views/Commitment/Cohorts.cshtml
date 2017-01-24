@@ -6,13 +6,13 @@
 }
 
 
-<div class="grid-row">  
+<div class="grid-row">
     <div class="column-two-thirds">
 
         <h1 class="heading-xlarge">Your cohorts</h1>
-       
-        
-        <div class="column-one-half bingo-background block-one">
+
+
+        <div class="column-one-half bingo-background block-one @GetClickableClass(Model.NewRequestsCount)">
             <h2 class="bold-xxlarge">
                 @if (Model.NewRequestsCount > 0)
                 {
@@ -28,7 +28,7 @@
             <p class="heading-small">New from employer</p>
         </div>
 
-        <div class="column-one-half bingo-background block-two">
+        <div class="column-one-half bingo-background block-two @GetClickableClass(Model.ReadyForApprovalCount)">
             <h2 class="bold-xxlarge">
                 @if (Model.ReadyForApprovalCount > 0)
                 {
@@ -43,9 +43,9 @@
             </h2>
             <p class="heading-small">Ready for approval</p>
         </div>
-    
 
-        <div class="column-one-half bingo-background block-three">
+
+        <div class="column-one-half bingo-background block-three @GetClickableClass(Model.ReadyForReviewCount)">
             <h2 class="bold-xxlarge">
                 @if (Model.ReadyForReviewCount > 0)
                 {
@@ -61,7 +61,7 @@
             <p class="heading-small">Ready for review</p>
         </div>
 
-        <div class="column-one-half bingo-background block-four">
+        <div class="column-one-half bingo-background block-four @GetClickableClass(Model.WithEmployerCount)">
             <h2 class="bold-xxlarge">
                 @if (Model.WithEmployerCount > 0)
                 {
@@ -77,13 +77,17 @@
             <p class="heading-small">With employers</p>
         </div>
 
-     </div>
+    </div>
 
-     <div class="column-one-third">  </div>   
-    
-
-
+    <div class="column-one-third"> </div>
 </div>
+
+@functions {
+    private string GetClickableClass(int requestsCount)
+    {
+        return requestsCount > 0 ? "clickable" : "";
+    }
+}
 
 
 
