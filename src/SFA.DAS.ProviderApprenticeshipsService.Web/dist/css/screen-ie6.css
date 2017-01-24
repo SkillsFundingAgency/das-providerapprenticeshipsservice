@@ -2631,6 +2631,7 @@ span.helpText {
   color: #fff;
   margin-bottom: 20px;
   padding: 10px 15px;
+  cursor: pointer;
   min-height: 160px;
   width: 48%;
   padding: 0 15px;
