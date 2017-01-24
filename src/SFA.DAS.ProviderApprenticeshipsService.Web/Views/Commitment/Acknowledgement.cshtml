@@ -18,7 +18,7 @@
 </div>
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
 
         <table class="instructions-sent">
             <tbody>
@@ -48,12 +48,16 @@
 
         @if (!string.IsNullOrEmpty(Model.RedirectUrl))
         {
-            <a href="@Model.RedirectUrl" aria-label="Go back to cohort list" >Go back to view cohorts</a>
+            <p>
+                <a href="@Model.RedirectUrl" aria-label="Go back to cohort list">Go back to view cohorts</a>
+            </p>
         }
 
     </div>
+</div>
 
-        <div class="column-one-third">
+<div class="grid-row">
+        <div class="column-full">
             <aside>
                 <div class="panel panel-filled">
                     <h2 class="heading-medium">Help us improve this section</h2>

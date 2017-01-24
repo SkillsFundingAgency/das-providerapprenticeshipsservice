@@ -8,59 +8,59 @@
 <div class="grid-row">
     <div class="column-full">
 
-        <p class="flash-message">
-            @TempData["FlashMessage"]
-        </p>
+        <div class="panel panel-border-wide alert-default">
+            <p> @TempData["FlashMessage"]</p>
+         </div>
 
-        <h1 class="heading-xlarge">@Model.PageHeading</h1>
+            <h1 class="heading-xlarge">@Model.PageHeading</h1>
 
-        <h2 class="heading-xlarge">@Model.PageHeading2</h2>
+            <p>@Model.PageHeading2</p>
 
-        @if (!Model.Commitments.Any())
-        {
-            <div class="panel panel-border-wide alert-default">
+            @if (!Model.Commitments.Any())
+            {
+                <div class="panel panel-border-wide alert-default">
 
-                <p>You don’t have any requests in progress.</p>
+                    <p>You don’t have any requests in progress.</p>
 
-            </div>
-        }
-        else
-        {
-            <table class="tableResponsive employerListing">
-                <thead>
-                    <tr>
-                        <th>Employer</th>
-                        <th>Cohort reference</th>
-                        <th>Last message</th>
-                        <th></th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var commitment in Model.Commitments)
-                    {
+                </div>
+            }
+            else
+            {
+                <table class="tableResponsive employerListing">
+                    <thead>
                         <tr>
-                            <td>
-                                @commitment.LegalEntityName &nbsp;
-                            </td>
-                            <td>
-                                @commitment.Reference &nbsp;
-                            </td>
-                            <td>
-                                @commitment.LatestMessage &nbsp;
-                            </td>
-                            <td>
-                                @if (commitment.ShowViewLink)
-                                {
-                                    <a href="@Url.Action("Details", new { Model.ProviderId, commitment.HashedCommitmentId })" title="View  @commitment.LegalEntityName" aria-label="View  @commitment.LegalEntityName">View</a>
-                                }
-                            </td>
+                            <th>Employer</th>
+                            <th>Cohort reference</th>
+                            <th>Last message</th>
+                            <th></th>
+
                         </tr>
-                    }
-                </tbody>
-            </table>
-        }
-    </div>
+                    </thead>
+                    <tbody>
+                        @foreach (var commitment in Model.Commitments)
+                        {
+                            <tr>
+                                <td>
+                                    @commitment.LegalEntityName &nbsp;
+                                </td>
+                                <td>
+                                    @commitment.Reference &nbsp;
+                                </td>
+                                <td>
+                                    @commitment.LatestMessage &nbsp;
+                                </td>
+                                <td>
+                                    @if (commitment.ShowViewLink)
+                                    {
+                                        <a href="@Url.Action("Details", new { Model.ProviderId, commitment.HashedCommitmentId })" title="View  @commitment.LegalEntityName" aria-label="View  @commitment.LegalEntityName">View</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
 </div>
 
 

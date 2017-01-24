@@ -2571,12 +2571,15 @@ span.helpText {
   font-size: 16px;
 }
 
+.js-enabled .bingo-background {
+  cursor: pointer;
+}
+
 #cohorts-landing-page .bingo-background {
   background: #D53880;
   color: #fff;
   margin-bottom: 20px;
   padding: 10px 15px;
-  cursor: pointer;
   min-height: 160px;
   width: 48%;
   padding: 0 15px;

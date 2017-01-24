@@ -128,13 +128,17 @@
 }
 
 //cohors summary block styles
+.js-enabled{
+    .bingo-background{cursor:pointer;}
+}
+
 #cohorts-landing-page{
   .bingo-background{
             background:#D53880;
             color:#fff; 
             margin-bottom: 20px;
             padding: 10px 15px;
-            cursor:pointer;
+            
               @include media(tablet) {
                     min-height:160px;
                     width:48%;
