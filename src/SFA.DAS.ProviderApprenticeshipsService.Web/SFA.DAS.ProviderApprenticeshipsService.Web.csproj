@@ -200,10 +200,6 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RedisAspNetProviders, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RedisAspNetProviders.1.0.1\lib\net45\RedisAspNetProviders.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=0.9.140.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.9.140\lib\net45\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
       <Private>True</Private>
