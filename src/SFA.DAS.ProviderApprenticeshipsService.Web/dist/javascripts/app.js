@@ -40,7 +40,7 @@ sfa.homePage = {
 
 var selectionButtons = new GOVUK.SelectionButtons("label input[type='radio'], label input[type='checkbox']");
 
-// cohorts bingo balls - making a div clickable
+// cohorts bingo balls - clickable block
 $(".bingo-background").on('click touchstart', (function () {
     window.location = $(this).find("a").attr("href");
     return false;

@@ -14,18 +14,32 @@
         
         <div class="column-one-half bingo-background block-one">
             <h2 class="bold-xxlarge">
-                <a href="@Url.Action("NewRequests")" title="@Model.NewRequestsCount new from employer" aria-label="View all new requests from employer">
-                    @Model.NewRequestsCount
-                </a>
+                @if (Model.NewRequestsCount > 0)
+                {
+                    <a href="@Url.Action("NewRequests")" title="@Model.NewRequestsCount new from employer" aria-label="View all new requests from employer">
+                        @Model.NewRequestsCount
+                    </a>
+                }
+                else
+                {
+                    <span>0</span>
+                }
             </h2>
             <p class="heading-small">New from employer</p>
         </div>
 
         <div class="column-one-half bingo-background block-two">
             <h2 class="bold-xxlarge">
-                <a href="@Url.Action("ReadyForApproval")" title="@Model.ReadyForApprovalCount ready for approval" aria-label="View all new requests that are ready for approval">
-                    @Model.ReadyForApprovalCount
-                </a>
+                @if (Model.ReadyForApprovalCount > 0)
+                {
+                    <a href="@Url.Action("ReadyForApproval")" title="@Model.ReadyForApprovalCount ready for approval" aria-label="View all new requests that are ready for approval">
+                        @Model.ReadyForApprovalCount
+                    </a>
+                }
+                else
+                {
+                    <span>0</span>
+                }
             </h2>
             <p class="heading-small">Ready for approval</p>
         </div>
@@ -33,18 +47,32 @@
 
         <div class="column-one-half bingo-background block-three">
             <h2 class="bold-xxlarge">
-                <a href="@Url.Action("ReadyForReview")" title=" @Model.ReadyForReviewCount ready for review" aria-label="View all new requests that are ready for review">
-                    @Model.ReadyForReviewCount
-                </a>
+                @if (Model.ReadyForReviewCount > 0)
+                {
+                    <a href="@Url.Action("ReadyForReview")" title=" @Model.ReadyForReviewCount ready for review" aria-label="View all new requests that are ready for review">
+                        @Model.ReadyForReviewCount
+                    </a>
+                }
+                else
+                {
+                    <span>0</span>
+                }
             </h2>
             <p class="heading-small">Ready for review</p>
         </div>
 
         <div class="column-one-half bingo-background block-four">
             <h2 class="bold-xxlarge">
-                <a href="@Url.Action("WithEmployer")" title="@Model.WithEmployerCount with employers" aria-label="View all new requests from that are with the employer">
-                    @Model.WithEmployerCount
-                </a>
+                @if (Model.WithEmployerCount > 0)
+                {
+                    <a href="@Url.Action("WithEmployer")" title="@Model.WithEmployerCount with employers" aria-label="View all new requests from that are with the employer">
+                        @Model.WithEmployerCount
+                    </a>
+                }
+                else
+                {
+                    <span>0</span>
+                }
             </h2>
             <p class="heading-small">With employers</p>
         </div>

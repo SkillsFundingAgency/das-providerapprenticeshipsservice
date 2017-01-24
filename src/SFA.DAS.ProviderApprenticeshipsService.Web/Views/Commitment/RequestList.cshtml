@@ -8,9 +8,13 @@
 <div class="grid-row">
     <div class="column-full">
 
-        <div class="panel panel-border-wide alert-default">
-            <p> @TempData["FlashMessage"]</p>
-         </div>
+
+        @if (TempData["FlashMessage"] != null)
+        {
+            <div class="panel panel-border-wide alert-default">
+                <p> @TempData["FlashMessage"]</p>
+            </div>
+        }
 
             <h1 class="heading-xlarge">@Model.PageHeading</h1>
 
