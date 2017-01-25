@@ -7,8 +7,8 @@
     <ProjectGuid>{D71127E9-9881-4B6E-B1C6-155CF2B579D1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitTests</RootNamespace>
-    <AssemblyName>SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitTests</AssemblyName>
+    <RootNamespace>SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests</RootNamespace>
+    <AssemblyName>SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
