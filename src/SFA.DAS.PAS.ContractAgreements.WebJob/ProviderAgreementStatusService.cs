@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed;
+using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
+namespace SFA.DAS.PAS.ContractAgreements.WebJob
 {
     public class ProviderAgreementStatusService : IProviderAgreementStatusService
     {

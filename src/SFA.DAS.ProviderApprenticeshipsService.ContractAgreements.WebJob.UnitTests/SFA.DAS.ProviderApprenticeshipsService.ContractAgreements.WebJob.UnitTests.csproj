@@ -85,9 +85,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob\SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.csproj">
-      <Project>{7B2683C6-4A4A-41B3-9F2D-BA05B960681D}</Project>
-      <Name>SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob</Name>
+    <ProjectReference Include="..\SFA.DAS.PAS.ContractAgreements.WebJob\SFA.DAS.PAS.ContractAgreements.WebJob.csproj">
+      <Project>{7b2683c6-4a4a-41b3-9f2d-ba05b960681d}</Project>
+      <Name>SFA.DAS.PAS.ContractAgreements.WebJob</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj">
       <Project>{B3484618-78A0-411E-BC02-AC84C8694C3D}</Project>

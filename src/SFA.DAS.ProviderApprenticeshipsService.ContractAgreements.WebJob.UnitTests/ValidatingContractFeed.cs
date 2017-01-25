@@ -2,7 +2,7 @@
 
 using NUnit.Framework;
 
-using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed;
+using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitTests
