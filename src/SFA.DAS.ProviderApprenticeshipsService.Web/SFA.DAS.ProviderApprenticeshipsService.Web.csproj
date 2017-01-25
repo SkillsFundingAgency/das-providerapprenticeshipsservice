@@ -533,7 +533,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
-    <Content Include="Views\Commitment\Index.cshtml" />
     <Content Include="Views\Commitment\Details.cshtml" />
     <Content Include="Views\Commitment\Edit.cshtml" />
     <Content Include="Views\Commitment\Create.cshtml" />
