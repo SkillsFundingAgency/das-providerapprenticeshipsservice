@@ -31,7 +31,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitT
 
             helper.MockFeedProcessorClient.Verify(m => m.GetAuthorizedHttpClient(), Times.Exactly(13));
 
-            var bookmark = repository.GetMostRecentContract().Result;
+            var bookmark = repository.GetMostRecentContractFeedEvent().Result;
 
             // Call a second time with latest
             var helper2 = new TestHelper("latest", urlToApi);
@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitT
 
             helper2.MockFeedProcessorClient.Verify(m => m.GetAuthorizedHttpClient(), Times.Exactly(2));
 
-            var bookmark2 = repository.GetMostRecentContract().Result;
+            var bookmark2 = repository.GetMostRecentContractFeedEvent().Result;
 
             bookmark2.Should().Be(bookmark);
         }
@@ -76,13 +76,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitT
             var service = helper.SetUpProviderAgreementStatusService(repository);
 
             repository.GetMostRecentPageNumber().Result.Should().Be(11);
-            repository.GetMostRecentContract().Result.PageNumber.Should().Be(11);
+            repository.GetMostRecentContractFeedEvent().Result.PageNumber.Should().Be(11);
 
             await service.UpdateProviderAgreementStatuses();
 
             helper.MockFeedProcessorClient.Verify(m => m.GetAuthorizedHttpClient(), Times.Exactly(3));
             repository.GetMostRecentPageNumber().Result.Should().Be(12);
-            repository.GetMostRecentContract().Result.PageNumber.Should().Be(0);
+            repository.GetMostRecentContractFeedEvent().Result.PageNumber.Should().Be(0);
         }
 
         [TestCase(6, 11, 3, Description = "When latest contract have page number that page should be parsed first")]
@@ -116,13 +116,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitT
             var service = helper.SetUpProviderAgreementStatusService(repository);
 
             repository.GetMostRecentPageNumber().Result.Should().Be(Math.Max(firstPn, secondPn));
-            repository.GetMostRecentContract().Result.PageNumber.Should().Be(secondPn);
+            repository.GetMostRecentContractFeedEvent().Result.PageNumber.Should().Be(secondPn);
 
             await service.UpdateProviderAgreementStatuses();
 
             helper.MockFeedProcessorClient.Verify(m => m.GetAuthorizedHttpClient(), Times.Exactly(called));
             repository.GetMostRecentPageNumber().Result.Should().Be(12);
-            repository.GetMostRecentContract().Result.PageNumber.Should().Be(0);
+            repository.GetMostRecentContractFeedEvent().Result.PageNumber.Should().Be(0);
         }
 
         [Test(Description = "")]
@@ -156,15 +156,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitT
             var expectedLatestId = "985509f9-6da6-48d2-b0e1-90ad8337def9";
 
             repository.GetMostRecentPageNumber().Result.Should().Be(12);
-            repository.GetMostRecentContract().Result.PageNumber.Should().Be(0);
-            repository.GetMostRecentContract().Result.Id.ToString().Should().NotBe(expectedLatestId);
+            repository.GetMostRecentContractFeedEvent().Result.PageNumber.Should().Be(0);
+            repository.GetMostRecentContractFeedEvent().Result.Id.ToString().Should().NotBe(expectedLatestId);
 
             await service.UpdateProviderAgreementStatuses();
 
             helper.MockFeedProcessorClient.Verify(m => m.GetAuthorizedHttpClient(), Times.Exactly(2));
             repository.GetMostRecentPageNumber().Result.Should().Be(12);
-            repository.GetMostRecentContract().Result.PageNumber.Should().Be(0);
-            repository.GetMostRecentContract().Result.Id.ToString().Should().Be(expectedLatestId);
+            repository.GetMostRecentContractFeedEvent().Result.PageNumber.Should().Be(0);
+            repository.GetMostRecentContractFeedEvent().Result.Id.ToString().Should().Be(expectedLatestId);
         }
     }
 }

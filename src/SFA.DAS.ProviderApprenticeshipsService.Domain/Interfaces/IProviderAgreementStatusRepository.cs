@@ -6,7 +6,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
     {
         Task AddContractEvent(ContractFeedEvent contractFeedEvent);
 
-        Task<ContractFeedEvent> GetMostRecentContract();
+        Task<ContractFeedEvent> GetMostRecentContractFeedEvent();
 
         Task<int> GetMostRecentPageNumber();
     }

@@ -45,7 +45,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             return contractFeedEvents;
         }
 
-        public async Task<ContractFeedEvent> GetMostRecentContract()
+        public async Task<ContractFeedEvent> GetMostRecentContractFeedEvent()
         {
             var contact = await WithConnection<ContractFeedEvent>(async connection =>
             {

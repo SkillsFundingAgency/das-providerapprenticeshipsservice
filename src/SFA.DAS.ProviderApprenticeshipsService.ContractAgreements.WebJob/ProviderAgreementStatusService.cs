@@ -27,7 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
 
         public async Task UpdateProviderAgreementStatuses()
         {
-            var lastContact = await _repository.GetMostRecentContract();
+            var lastContact = await _repository.GetMostRecentContractFeedEvent();
             var mostRecentPageNumber = await _repository.GetMostRecentPageNumber();
 
             // if last contact have a page number there might be more records on that page we have not read yet.

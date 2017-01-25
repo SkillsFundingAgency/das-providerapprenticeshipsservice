@@ -19,9 +19,4 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Contr
             return true;
         }
     }
-
-    public interface IContractFeedEventValidator
-    {
-        bool Validate(ContractFeedEvent contractFeedEvent);
-    }
 }

@@ -33,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitT
             return _data.Where(e => e.ProviderId == providerId);
         }
 
-        public async Task<ContractFeedEvent> GetMostRecentContract()
+        public async Task<ContractFeedEvent> GetMostRecentContractFeedEvent()
         {
             if (_data.Count == 0) return null;
 

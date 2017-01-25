@@ -136,6 +136,7 @@
     <Compile Include="Configuration\ContractFeedConfiguration.cs" />
     <Compile Include="ContractFeed\ContractFeedEventValidator.cs" />
     <Compile Include="ContractFeed\IContractDataProvider.cs" />
+    <Compile Include="ContractFeed\IContractFeedEventValidator.cs" />
     <Compile Include="ContractFeed\IContractFeedProcessorHttpClient.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
