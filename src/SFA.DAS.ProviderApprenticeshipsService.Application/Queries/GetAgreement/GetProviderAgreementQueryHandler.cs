@@ -28,13 +28,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreemen
         public async Task<GetProviderAgreementQueryResponse> Handle(GetProviderAgreementQueryRequest message)
         {
             if(!_configuration.CheckForContractAgreements)
-                return new GetProviderAgreementQueryResponse { HasAgreement = true };
+                return new GetProviderAgreementQueryResponse { HasAgreement = ProviderAgreementStatus.Agreed };
 
             var res = await _agreementStatusQueryRepository.GetContractEvents(message.ProviderId);
             var providerAgreementStatus = res.Any(m => m.Status.Equals("approved", StringComparison.CurrentCultureIgnoreCase))
                         ? ProviderAgreementStatus.Agreed : ProviderAgreementStatus.NotAgreed;
             
-            return new GetProviderAgreementQueryResponse { HasAgreement = providerAgreementStatus == ProviderAgreementStatus.Agreed };
+            return new GetProviderAgreementQueryResponse { HasAgreement = providerAgreementStatus };
         }
     }
 }

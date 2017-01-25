@@ -73,7 +73,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 Commitments = MapFrom(data.Commitments),
-                HasSignedAgreement = isSigned
+                HasSignedAgreement = isSigned == ProviderAgreementStatus.Agreed
             };
         }
 
@@ -85,12 +85,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderId = providerId,
                 HashedCommitmentId = hashedCommitmentId,
                 ReviewAgreementUrl = _configuration.ContractAgreementsUrl,
-                IsSignedAgreement = iss
+                IsSignedAgreement = iss == ProviderAgreementStatus.Agreed
             };
             return model;
         }
 
-        public async Task<bool> IsSignedAgreement(long providerId)
+        public async Task<ProviderAgreementStatus> IsSignedAgreement(long providerId)
         {
             var data = await _mediator.SendAsync(new GetProviderAgreementQueryRequest
                                                      {

@@ -1,7 +1,9 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement
+﻿using SFA.DAS.ProviderApprenticeshipsService.Domain;
+
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement
 {
     public class GetProviderAgreementQueryResponse
     {
-        public bool HasAgreement { get; set; }
+        public ProviderAgreementStatus HasAgreement { get; set; }
     }
 }
