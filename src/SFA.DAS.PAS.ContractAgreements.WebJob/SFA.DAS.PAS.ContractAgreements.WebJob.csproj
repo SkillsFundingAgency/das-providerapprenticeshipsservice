@@ -7,8 +7,8 @@
     <ProjectGuid>{7B2683C6-4A4A-41B3-9F2D-BA05B960681D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob</RootNamespace>
-    <AssemblyName>SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob</AssemblyName>
+    <RootNamespace>SFA.DAS.PAS.ContractAgreements.WebJob</RootNamespace>
+    <AssemblyName>SFA.DAS.PAS.ContractAgreements.WebJob</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

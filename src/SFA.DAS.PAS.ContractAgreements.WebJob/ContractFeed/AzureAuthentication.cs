@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed
+namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
     public class AzureAuthentication
     {

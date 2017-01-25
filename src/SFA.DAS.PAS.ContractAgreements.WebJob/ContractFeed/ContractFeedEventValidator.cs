@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed
+namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
     public class ContractFeedEventValidator : IContractFeedEventValidator
     {

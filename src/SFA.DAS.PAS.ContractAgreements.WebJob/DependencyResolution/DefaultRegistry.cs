@@ -6,8 +6,8 @@ using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed;
+using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
+using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -15,8 +15,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using StructureMap;
 using StructureMap.Graph;
 
-
-namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.DependencyResolution
+namespace SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution
 {
     public class DefaultRegistry : Registry
     {

@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 using Moq;
 
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed;
-using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitTests.MockClasses;
+using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
+using SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitTests
+namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
 {
     public class TestHelper
     {

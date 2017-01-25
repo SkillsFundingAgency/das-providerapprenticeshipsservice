@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Configuration
+namespace SFA.DAS.PAS.ContractAgreements.WebJob.Configuration
 {
     public class ContractFeedConfiguration : IConfiguration
     {

@@ -1,9 +1,9 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
 
-using ContractFeedConfiguration = SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Configuration.ContractFeedConfiguration;
+using ContractFeedConfiguration = SFA.DAS.PAS.ContractAgreements.WebJob.Configuration.ContractFeedConfiguration;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed
+namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
     public class ContractFeedProcessorHttpClient : IContractFeedProcessorHttpClient
     {

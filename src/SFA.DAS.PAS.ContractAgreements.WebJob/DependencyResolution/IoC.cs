@@ -1,9 +1,9 @@
-﻿using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.Configuration;
+﻿using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 using StructureMap;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.DependencyResolution
+namespace SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution
 {
     public static class IoC
     {

@@ -3,14 +3,15 @@ using System.Threading.Tasks;
 
 using FluentAssertions;
 
-using NUnit.Framework;
 using Moq;
 
+using NUnit.Framework;
+
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitTests.MockClasses;
+using SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.UnitTests
+namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
 {
     [TestFixture]
     public class FetchDocumentsFromFeed

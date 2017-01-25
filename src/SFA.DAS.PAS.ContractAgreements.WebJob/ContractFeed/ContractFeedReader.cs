@@ -8,7 +8,7 @@ using System.Xml;
 
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.ContractFeed
+namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
     public class ContractFeedReader
     {

@@ -2,9 +2,9 @@
 using System.Diagnostics;
 
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob.DependencyResolution;
+using SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.ContractAgreements.WebJob
+namespace SFA.DAS.PAS.ContractAgreements.WebJob
 {
     // To learn more about Microsoft Azure WebJobs SDK, please see http://go.microsoft.com/fwlink/?LinkID=320976
     class Program
