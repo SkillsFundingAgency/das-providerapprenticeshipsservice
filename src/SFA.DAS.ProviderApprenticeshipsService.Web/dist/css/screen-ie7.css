@@ -2618,7 +2618,7 @@ span.helpText {
   font-size: 16px;
 }
 
-.js-enabled .bingo-background {
+.js-enabled .clickable {
   cursor: pointer;
 }
 
