@@ -52,6 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<CohortsViewModel> GetCohorts(long providerId)
         {
+            _logger.Info($"Getting cohorts :{providerId}", providerId);
             var data = await _mediator.SendAsync(new GetCommitmentsQueryRequest
             {
                 ProviderId = providerId
@@ -76,6 +77,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var sentForReview = await GetAllNew(providerId, RequestStatus.SentForReview);
             var sentForApproval = await GetAllNew(providerId, RequestStatus.WithEmployerForApproval);
             var data = sentForReview.Concat(sentForApproval).ToList();
+            _logger.Info($"Provider getting all with employer ({data.Count}) :{providerId}", providerId);
 
             return new CommitmentListViewModel
             {
@@ -90,8 +92,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<CommitmentListViewModel> GetAllNewRequests(long providerId)
         {
-            var d = await GetAllNew(providerId, RequestStatus.NewRequest);
-            var data = d.ToList();
+            var data = (await GetAllNew(providerId, RequestStatus.NewRequest)).ToList();
+            _logger.Info($"Provider getting all new request ({data.Count}) :{providerId}", providerId);
+
             return new CommitmentListViewModel
             {
                 ProviderId = providerId,
@@ -105,8 +108,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<CommitmentListViewModel> GetAllReadyForReview(long providerId)
         {
-            var d = await GetAllNew(providerId, RequestStatus.ReadyForReview);
-            var data = d.ToList();
+            var data = (await GetAllNew(providerId, RequestStatus.ReadyForReview)).ToList();
+            _logger.Info($"Provider getting all ready for review ({data.Count}) :{providerId}", providerId);
             return new CommitmentListViewModel
             {
                 ProviderId = providerId,
@@ -120,8 +123,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<CommitmentListViewModel> GetAllReadyForApproval(long providerId)
         {
-            var d = await GetAllNew(providerId, RequestStatus.ReadyForApproval) ;
-            var data = d.ToList();
+            var data = (await GetAllNew(providerId, RequestStatus.ReadyForApproval)).ToList();
+            _logger.Info($"Provider getting all ready for approval ({data.Count}) :{providerId}", providerId);
+            
             return new CommitmentListViewModel
             {
                 ProviderId = providerId,

@@ -51,6 +51,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
             result.NewRequestsCount.Should().Be(1);
             result.ReadyForApprovalCount.Should().Be(2);
             result.WithEmployerCount.Should().Be(2);
+            result.ReadyForReviewCount.Should().Be(2);
         }
 
         private static GetCommitmentsQueryResponse TestData()
@@ -83,6 +84,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
                                                     { AgreementStatus = AgreementStatus.ProviderAgreed, ApprenticeshipCount = 6,
                                                       CanBeApproved = true, CommitmentStatus = CommitmentStatus.Active,
                                                       EditStatus = EditStatus.EmployerOnly, LastAction = LastAction.Approve
+                                                    },
+                                                 new CommitmentListItem // ReadyForReview
+                                                    { AgreementStatus = AgreementStatus.EmployerAgreed, ApprenticeshipCount = 5,
+                                                      CanBeApproved = false, CommitmentStatus = CommitmentStatus.Active,
+                                                      EditStatus = EditStatus.ProviderOnly, LastAction = LastAction.Amend
+                                                    },
+                                                 new CommitmentListItem // ReadyForReview
+                                                    { AgreementStatus = AgreementStatus.EmployerAgreed, ApprenticeshipCount = 5,
+                                                      CanBeApproved = false, CommitmentStatus = CommitmentStatus.Active,
+                                                      EditStatus = EditStatus.ProviderOnly, LastAction = LastAction.Amend
                                                     }
                                              }
                        };

@@ -50,8 +50,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
            {
                 HashedTaskId = _hashingService.HashValue(task.Id),
                 CreatedOn = task.CreatedOn,
-                Name = task.Name,
-                TaskStatus = task.TaskStatus.GetDescription()
+                Name = task.Name
            };
         }
 
