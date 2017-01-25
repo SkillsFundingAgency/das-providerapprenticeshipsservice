@@ -1,0 +1,1557 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title type="text">Contract Management Contract Notifications</title><id>uuid:5EEF2DF5-2EA1-477A-91E7-2BA2AECBE930</id><updated>2016-11-03T06:52:16Z</updated><author><name>Contract Management Service</name></author><link rel="next-archive" type="application/vnd.sfa.contract.v1+atom+xml" href="https://services-at.fct-sfa.com/api/contracts/notifications/12" /><link rel="self" type="application/vnd.sfa.contract.v1+atom+xml" href="https://services-at.fct-sfa.com/api/contracts/notifications" /><link rel="prev-archive" type="application/vnd.sfa.contract.v1+atom+xml" href="https://services-at.fct-sfa.com/api/contracts/notifications/10" /><archive xmlns="http://purl.org/syndication/history/1.0"></archive><entry><id>uuid:72c5f6ac-abf4-4309-a8a6-f14caf5843c2</id><title type="text">Contract ESIF-1796:2.0 was Published to Provider</title><summary type="text">{UKPRN: 90071796, contractNumber: ESIF-1796, version: 2}</summary><published>2016-11-03T06:46:04Z</published><updated>2016-11-03T06:46:04Z</updated><category term="Contract Published to Provider" label="A contract has been Published to Provider" /><content type="application/vnd.sfa.contract.v1+atom+xml"><contract schemaVersion="10.02" xmlns="urn:sfa:schemas:contract" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <contracts>
+    <contract>
+      <fundingType>
+        <fundingTypeCode>ESF</fundingTypeCode>
+        <fundingTypeName>European Social Fund 2014-20</fundingTypeName>
+      </fundingType>
+      <period>
+        <periodType>
+          <periodTypeCode>ESF</periodTypeCode>
+          <periodTypeName>EUROPEAN SOCIAL FUND</periodTypeName>
+        </periodType>
+        <period>1420</period>
+        <startDate>2014-08-01</startDate>
+        <endDate>2023-12-31</endDate>
+      </period>
+      <contractNumber>ESIF-1796</contractNumber>
+      <contractVersionNumber>2</contractVersionNumber>
+      <contractSubVersionNumber>0</contractSubVersionNumber>
+      <StatusLastUpdatedDate>2016-01-15</StatusLastUpdatedDate>
+      <LastModifiedDate>2016-11-03</LastModifiedDate>
+      <contractor>
+        <organisationIdentifier>ORG2221796</organisationIdentifier>
+        <ukprn>90071796</ukprn>
+        <legalName>AMEND SFS Ltd</legalName>
+        <organisationAddressIdentifier>0</organisationAddressIdentifier>
+      </contractor>
+      <hierarchyType>CONTRACT</hierarchyType>
+      <contractType>Contract for Services</contractType>
+      <startDate>2015-08-01</startDate>
+      <endDate>2016-07-31</endDate>
+      <contractStatus>
+        <status>Published To Provider</status>
+        <parentStatus>Draft</parentStatus>
+      </contractStatus>
+      <contractValue>1800.0000</contractValue>
+      <parentContractNumber>SFA-1796</parentContractNumber>
+      <parentContractVersionNumber>1</parentContractVersionNumber>
+      <amendmentType>Variation</amendmentType>
+    </contract>
+  </contracts>
+  <fundingType>
+    <fundingTypeCode>ESF</fundingTypeCode>
+    <fundingTypeName>European Social Fund 2014-20</fundingTypeName>
+  </fundingType>
+  <contractNumber>SFA-1796</contractNumber>
+  <contractVersionNumber>1</contractVersionNumber>
+  <contractSubVersionNumber>0</contractSubVersionNumber>
+  <contractor>
+    <organisationIdentifier>ORG2221796</organisationIdentifier>
+    <ukprn>90071796</ukprn>
+    <legalName>AMEND SFS Ltd</legalName>
+    <organisationAddressIdentifier>0</organisationAddressIdentifier>
+  </contractor>
+  <hierarchyType>MASTER CONTRACT</hierarchyType>
+  <contractType>Contract for Services</contractType>
+  <startDate>2015-08-01</startDate>
+  <endDate>2016-07-31</endDate>
+</contract></content></entry><entry><id>uuid:0dc08063-3002-4573-bc32-34a559ea698d</id><title type="text">Contract ESIF-1796:2.0 was Approved</title><summary type="text">{UKPRN: 90071796, contractNumber: ESIF-1796, version: 2}</summary><published>2016-11-03T06:46:20Z</published><updated>2016-11-03T06:46:20Z</updated><category term="Approved Contract" label="A contract has been approved" /><content type="application/vnd.sfa.contract.v1+atom+xml"><contract schemaVersion="10.02" xmlns="urn:sfa:schemas:contract" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <contracts>
+    <contract>
+      <fundingType>
+        <fundingTypeCode>ESF</fundingTypeCode>
+        <fundingTypeName>European Social Fund 2014-20</fundingTypeName>
+      </fundingType>
+      <period>
+        <periodType>
+          <periodTypeCode>ESF</periodTypeCode>
+          <periodTypeName>EUROPEAN SOCIAL FUND</periodTypeName>
+        </periodType>
+        <period>1420</period>
+        <startDate>2014-08-01</startDate>
+        <endDate>2023-12-31</endDate>
+      </period>
+      <contractNumber>ESIF-1796</contractNumber>
+      <contractVersionNumber>2</contractVersionNumber>
+      <contractSubVersionNumber>0</contractSubVersionNumber>
+      <ContractApprovalDate>2016-11-03</ContractApprovalDate>
+      <StatusLastUpdatedDate>2016-11-03</StatusLastUpdatedDate>
+      <LastModifiedDate>2016-11-03</LastModifiedDate>
+      <contractor>
+        <organisationIdentifier>ORG2221796</organisationIdentifier>
+        <ukprn>90071796</ukprn>
+        <legalName>AMEND SFS Ltd</legalName>
+        <organisationAddressIdentifier>0</organisationAddressIdentifier>
+      </contractor>
+      <hierarchyType>CONTRACT</hierarchyType>
+      <contractType>Contract for Services</contractType>
+      <startDate>2015-08-01</startDate>
+      <endDate>2016-07-31</endDate>
+      <contractStatus>
+        <status>Approved</status>
+        <parentStatus>Approved</parentStatus>
+      </contractStatus>
+      <contractValue>1800.0000</contractValue>
+      <parentContractNumber>SFA-1796</parentContractNumber>
+      <parentContractVersionNumber>1</parentContractVersionNumber>
+      <amendmentType>Variation</amendmentType>
+    </contract>
+  </contracts>
+  <fundingType>
+    <fundingTypeCode>ESF</fundingTypeCode>
+    <fundingTypeName>European Social Fund 2014-20</fundingTypeName>
+  </fundingType>
+  <contractNumber>SFA-1796</contractNumber>
+  <contractVersionNumber>1</contractVersionNumber>
+  <contractSubVersionNumber>0</contractSubVersionNumber>
+  <contractor>
+    <organisationIdentifier>ORG2221796</organisationIdentifier>
+    <ukprn>90071796</ukprn>
+    <legalName>AMEND SFS Ltd</legalName>
+    <organisationAddressIdentifier>0</organisationAddressIdentifier>
+  </contractor>
+  <hierarchyType>MASTER CONTRACT</hierarchyType>
+  <contractType>Contract for Services</contractType>
+  <startDate>2015-08-01</startDate>
+  <endDate>2016-07-31</endDate>
+</contract></content></entry><entry><id>uuid:d4e598d5-2360-4313-954e-0c6ece1ab6bf</id><title type="text">Contract MAIN-1891:1.0 was Published to Provider</title><summary type="text">{UKPRN: 90071891, contractNumber: MAIN-1891, version: 1}</summary><published>2016-11-03T06:47:27Z</published><updated>2016-11-03T06:47:27Z</updated><category term="Contract Published to Provider" label="A contract has been Published to Provider" /><content type="application/vnd.sfa.contract.v1+atom+xml"><contract schemaVersion="10.02" xmlns="urn:sfa:schemas:contract" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <contracts>
+    <contract>
+      <fundingType>
+        <fundingTypeCode>MAIN</fundingTypeCode>
+        <fundingTypeName>Mainstream</fundingTypeName>
+      </fundingType>
+      <period>
+        <periodType>
+          <periodTypeCode>AY</periodTypeCode>
+          <periodTypeName>ACADEMIC YEAR</periodTypeName>
+        </periodType>
+        <period>1516</period>
+        <startDate>2015-08-01</startDate>
+        <endDate>2016-07-31</endDate>
+      </period>
+      <contractAllocations>
+        <contractAllocation>
+          <period>
+            <periodType>
+              <periodTypeCode>AY</periodTypeCode>
+              <periodTypeName>ACADEMIC YEAR</periodTypeName>
+            </periodType>
+            <period>1516</period>
+            <startDate>2015-08-01</startDate>
+            <endDate>2016-07-31</endDate>
+          </period>
+          <fundingStream>
+            <fundingStreamCode>CL</fundingStreamCode>
+            <fundingStreamName>Community Learning</fundingStreamName>
+            <fundingTypeCode>MAIN</fundingTypeCode>
+            <fundingStreamShortCode xsi:nil="true"></fundingStreamShortCode>
+          </fundingStream>
+          <contractDeliverables>
+            <contractDeliverable>
+              <deliverable>
+                <fundingStreamCode>CL</fundingStreamCode>
+                <deliverableCode>1</deliverableCode>
+                <deliverableName>ST01 Learner Assessment and Plan</deliverableName>
+              </deliverable>
+              <contractDeliverablePeriods>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>8</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>53.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>9</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>44.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>10</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>34.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>11</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>26.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>12</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>744.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>1</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>12.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>2</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>14.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>3</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>47.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>4</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>739.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>6</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>36.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>7</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>22.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+              </contractDeliverablePeriods>
+              <deliverableDescription>ST01 Learner Assessment and Plan</deliverableDescription>
+              <unitCost>0.0000000000</unitCost>
+              <plannedVolume>0</plannedVolume>
+              <plannedValue>1771.0000000000</plannedValue>
+            </contractDeliverable>
+          </contractDeliverables>
+          <contractAllocationNumber>CL-1891</contractAllocationNumber>
+          <hierarchyType>CONTRACT ALLOCATION</hierarchyType>
+          <fundingStreamPeriodCode>CL1516</fundingStreamPeriodCode>
+          <startDate>2015-08-01</startDate>
+          <endDate>2016-07-31</endDate>
+          <maximumContractValue>1795.0000000000</maximumContractValue>
+        </contractAllocation>
+      </contractAllocations>
+      <contractNumber>MAIN-1891</contractNumber>
+      <contractVersionNumber>1</contractVersionNumber>
+      <contractSubVersionNumber>0</contractSubVersionNumber>
+      <StatusLastUpdatedDate>2016-11-03</StatusLastUpdatedDate>
+      <LastModifiedDate>2016-11-03</LastModifiedDate>
+      <contractor>
+        <organisationIdentifier>ORG2221891</organisationIdentifier>
+        <ukprn>90071891</ukprn>
+        <legalName>MANUAL WITHDRAWAL PROVIDER Ltd</legalName>
+        <organisationAddressIdentifier>0</organisationAddressIdentifier>
+      </contractor>
+      <hierarchyType>CONTRACT</hierarchyType>
+      <contractType>Contract for Services</contractType>
+      <startDate>2015-08-01</startDate>
+      <endDate>2016-07-31</endDate>
+      <contractStatus>
+        <status>Published To Provider</status>
+        <parentStatus>Draft</parentStatus>
+      </contractStatus>
+      <contractValue>1795.0000</contractValue>
+      <parentContractNumber>SFA-1891</parentContractNumber>
+      <parentContractVersionNumber>1</parentContractVersionNumber>
+    </contract>
+  </contracts>
+  <fundingType>
+    <fundingTypeCode>MAIN</fundingTypeCode>
+    <fundingTypeName>Mainstream</fundingTypeName>
+  </fundingType>
+  <contractNumber>SFA-1891</contractNumber>
+  <contractVersionNumber>1</contractVersionNumber>
+  <contractSubVersionNumber>0</contractSubVersionNumber>
+  <contractor>
+    <organisationIdentifier>ORG2221891</organisationIdentifier>
+    <ukprn>90071891</ukprn>
+    <legalName>MANUAL WITHDRAWAL PROVIDER Ltd</legalName>
+    <organisationAddressIdentifier>0</organisationAddressIdentifier>
+  </contractor>
+  <hierarchyType>MASTER CONTRACT</hierarchyType>
+  <contractType>Contract for Services</contractType>
+  <startDate>2015-08-01</startDate>
+  <endDate>2016-07-31</endDate>
+</contract></content></entry><entry><id>uuid:43078bbe-5d3c-4a50-8331-391f7954952f</id><title type="text">Contract MAIN-1891:1.0 was Withdrawn</title><summary type="text">{UKPRN: 90071891, contractNumber: MAIN-1891, version: 1}</summary><published>2016-11-03T06:47:39Z</published><updated>2016-11-03T06:47:39Z</updated><category term="Contract Withdrawn" label="A contract has been Withdrawn" /><content type="application/vnd.sfa.contract.v1+atom+xml"><contract schemaVersion="10.02" xmlns="urn:sfa:schemas:contract" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <contracts>
+    <contract>
+      <fundingType>
+        <fundingTypeCode>MAIN</fundingTypeCode>
+        <fundingTypeName>Mainstream</fundingTypeName>
+      </fundingType>
+      <period>
+        <periodType>
+          <periodTypeCode>AY</periodTypeCode>
+          <periodTypeName>ACADEMIC YEAR</periodTypeName>
+        </periodType>
+        <period>1516</period>
+        <startDate>2015-08-01</startDate>
+        <endDate>2016-07-31</endDate>
+      </period>
+      <contractAllocations>
+        <contractAllocation>
+          <period>
+            <periodType>
+              <periodTypeCode>AY</periodTypeCode>
+              <periodTypeName>ACADEMIC YEAR</periodTypeName>
+            </periodType>
+            <period>1516</period>
+            <startDate>2015-08-01</startDate>
+            <endDate>2016-07-31</endDate>
+          </period>
+          <fundingStream>
+            <fundingStreamCode>CL</fundingStreamCode>
+            <fundingStreamName>Community Learning</fundingStreamName>
+            <fundingTypeCode>MAIN</fundingTypeCode>
+            <fundingStreamShortCode xsi:nil="true"></fundingStreamShortCode>
+          </fundingStream>
+          <contractDeliverables>
+            <contractDeliverable>
+              <deliverable>
+                <fundingStreamCode>CL</fundingStreamCode>
+                <deliverableCode>1</deliverableCode>
+                <deliverableName>ST01 Learner Assessment and Plan</deliverableName>
+              </deliverable>
+              <contractDeliverablePeriods>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>8</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>53.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>9</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>44.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>10</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>34.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>11</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>26.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>12</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>744.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>1</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>12.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>2</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>14.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>3</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>47.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>4</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>739.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>6</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>36.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>7</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>22.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+              </contractDeliverablePeriods>
+              <deliverableDescription>ST01 Learner Assessment and Plan</deliverableDescription>
+              <unitCost>0.0000000000</unitCost>
+              <plannedVolume>0</plannedVolume>
+              <plannedValue>1771.0000000000</plannedValue>
+            </contractDeliverable>
+          </contractDeliverables>
+          <contractAllocationNumber>CL-1891</contractAllocationNumber>
+          <hierarchyType>CONTRACT ALLOCATION</hierarchyType>
+          <fundingStreamPeriodCode>CL1516</fundingStreamPeriodCode>
+          <startDate>2015-08-01</startDate>
+          <endDate>2016-07-31</endDate>
+          <maximumContractValue>1795.0000000000</maximumContractValue>
+        </contractAllocation>
+      </contractAllocations>
+      <contractNumber>MAIN-1891</contractNumber>
+      <contractVersionNumber>1</contractVersionNumber>
+      <contractSubVersionNumber>0</contractSubVersionNumber>
+      <StatusLastUpdatedDate>2016-01-15</StatusLastUpdatedDate>
+      <LastModifiedDate>2016-11-03</LastModifiedDate>
+      <contractor>
+        <organisationIdentifier>ORG2221891</organisationIdentifier>
+        <ukprn>90071891</ukprn>
+        <legalName>MANUAL WITHDRAWAL PROVIDER Ltd</legalName>
+        <organisationAddressIdentifier>0</organisationAddressIdentifier>
+      </contractor>
+      <hierarchyType>CONTRACT</hierarchyType>
+      <contractType>Contract for Services</contractType>
+      <startDate>2015-08-01</startDate>
+      <endDate>2016-07-31</endDate>
+      <contractStatus>
+        <status>Withdrawn By Provider</status>
+        <parentStatus>Withdrawn</parentStatus>
+      </contractStatus>
+      <contractValue>1795.0000</contractValue>
+      <parentContractNumber>SFA-1891</parentContractNumber>
+      <parentContractVersionNumber>1</parentContractVersionNumber>
+    </contract>
+  </contracts>
+  <fundingType>
+    <fundingTypeCode>MAIN</fundingTypeCode>
+    <fundingTypeName>Mainstream</fundingTypeName>
+  </fundingType>
+  <contractNumber>SFA-1891</contractNumber>
+  <contractVersionNumber>1</contractVersionNumber>
+  <contractSubVersionNumber>0</contractSubVersionNumber>
+  <contractor>
+    <organisationIdentifier>ORG2221891</organisationIdentifier>
+    <ukprn>90071891</ukprn>
+    <legalName>MANUAL WITHDRAWAL PROVIDER Ltd</legalName>
+    <organisationAddressIdentifier>0</organisationAddressIdentifier>
+  </contractor>
+  <hierarchyType>MASTER CONTRACT</hierarchyType>
+  <contractType>Contract for Services</contractType>
+  <startDate>2015-08-01</startDate>
+  <endDate>2016-07-31</endDate>
+</contract></content></entry><entry><id>uuid:bca7144e-83e7-4ef6-9999-27e3ce8b5c62</id><title type="text">Contract ESIF-1893:1.0 was Published to Provider</title><summary type="text">{UKPRN: 90071893, contractNumber: ESIF-1893, version: 1}</summary><published>2016-11-03T06:49:30Z</published><updated>2016-11-03T06:49:30Z</updated><category term="Contract Published to Provider" label="A contract has been Published to Provider" /><content type="application/vnd.sfa.contract.v1+atom+xml"><contract schemaVersion="10.02" xmlns="urn:sfa:schemas:contract" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <contracts>
+    <contract>
+      <fundingType>
+        <fundingTypeCode>ESF</fundingTypeCode>
+        <fundingTypeName>European Social Fund 2014-20</fundingTypeName>
+      </fundingType>
+      <period>
+        <periodType>
+          <periodTypeCode>ESF</periodTypeCode>
+          <periodTypeName>EUROPEAN SOCIAL FUND</periodTypeName>
+        </periodType>
+        <period>1420</period>
+        <startDate>2014-08-01</startDate>
+        <endDate>2023-12-31</endDate>
+      </period>
+      <contractNumber>ESIF-1893</contractNumber>
+      <contractVersionNumber>1</contractVersionNumber>
+      <contractSubVersionNumber>0</contractSubVersionNumber>
+      <StatusLastUpdatedDate>2016-11-03</StatusLastUpdatedDate>
+      <LastModifiedDate>2016-11-03</LastModifiedDate>
+      <contractor>
+        <organisationIdentifier>ORG2221893</organisationIdentifier>
+        <ukprn>90071893</ukprn>
+        <legalName>DIGITAL SIGN OFF Ltd</legalName>
+        <organisationAddressIdentifier>0</organisationAddressIdentifier>
+      </contractor>
+      <hierarchyType>CONTRACT</hierarchyType>
+      <contractType>Contract for Services</contractType>
+      <startDate>2015-08-01</startDate>
+      <endDate>2016-07-31</endDate>
+      <contractStatus>
+        <status>Published To Provider</status>
+        <parentStatus>Draft</parentStatus>
+      </contractStatus>
+      <contractValue>1795.0000</contractValue>
+      <parentContractNumber>SFA-1893</parentContractNumber>
+      <parentContractVersionNumber>1</parentContractVersionNumber>
+    </contract>
+  </contracts>
+  <fundingType>
+    <fundingTypeCode>ESF</fundingTypeCode>
+    <fundingTypeName>European Social Fund 2014-20</fundingTypeName>
+  </fundingType>
+  <contractNumber>SFA-1893</contractNumber>
+  <contractVersionNumber>1</contractVersionNumber>
+  <contractSubVersionNumber>0</contractSubVersionNumber>
+  <contractor>
+    <organisationIdentifier>ORG2221893</organisationIdentifier>
+    <ukprn>90071893</ukprn>
+    <legalName>DIGITAL SIGN OFF Ltd</legalName>
+    <organisationAddressIdentifier>0</organisationAddressIdentifier>
+  </contractor>
+  <hierarchyType>MASTER CONTRACT</hierarchyType>
+  <contractType>Contract for Services</contractType>
+  <startDate>2015-08-01</startDate>
+  <endDate>2016-07-31</endDate>
+</contract></content></entry><entry><id>uuid:5c7a12f7-d8d2-4180-b8ad-7281f61e2f63</id><title type="text">Contract ESIF-1893:1.0 was Withdrawn</title><summary type="text">{UKPRN: 90071893, contractNumber: ESIF-1893, version: 1}</summary><published>2016-11-03T06:49:39Z</published><updated>2016-11-03T06:49:39Z</updated><category term="Contract Withdrawn" label="A contract has been Withdrawn" /><content type="application/vnd.sfa.contract.v1+atom+xml"><contract schemaVersion="10.02" xmlns="urn:sfa:schemas:contract" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <contracts>
+    <contract>
+      <fundingType>
+        <fundingTypeCode>ESF</fundingTypeCode>
+        <fundingTypeName>European Social Fund 2014-20</fundingTypeName>
+      </fundingType>
+      <period>
+        <periodType>
+          <periodTypeCode>ESF</periodTypeCode>
+          <periodTypeName>EUROPEAN SOCIAL FUND</periodTypeName>
+        </periodType>
+        <period>1420</period>
+        <startDate>2014-08-01</startDate>
+        <endDate>2023-12-31</endDate>
+      </period>
+      <contractNumber>ESIF-1893</contractNumber>
+      <contractVersionNumber>1</contractVersionNumber>
+      <contractSubVersionNumber>0</contractSubVersionNumber>
+      <StatusLastUpdatedDate>2016-01-15</StatusLastUpdatedDate>
+      <LastModifiedDate>2016-11-03</LastModifiedDate>
+      <contractor>
+        <organisationIdentifier>ORG2221893</organisationIdentifier>
+        <ukprn>90071893</ukprn>
+        <legalName>DIGITAL SIGN OFF Ltd</legalName>
+        <organisationAddressIdentifier>0</organisationAddressIdentifier>
+      </contractor>
+      <hierarchyType>CONTRACT</hierarchyType>
+      <contractType>Contract for Services</contractType>
+      <startDate>2015-08-01</startDate>
+      <endDate>2016-07-31</endDate>
+      <contractStatus>
+        <status>Withdrawn By Agency</status>
+        <parentStatus>Withdrawn</parentStatus>
+      </contractStatus>
+      <contractValue>1795.0000</contractValue>
+      <parentContractNumber>SFA-1893</parentContractNumber>
+      <parentContractVersionNumber>1</parentContractVersionNumber>
+    </contract>
+  </contracts>
+  <fundingType>
+    <fundingTypeCode>ESF</fundingTypeCode>
+    <fundingTypeName>European Social Fund 2014-20</fundingTypeName>
+  </fundingType>
+  <contractNumber>SFA-1893</contractNumber>
+  <contractVersionNumber>1</contractVersionNumber>
+  <contractSubVersionNumber>0</contractSubVersionNumber>
+  <contractor>
+    <organisationIdentifier>ORG2221893</organisationIdentifier>
+    <ukprn>90071893</ukprn>
+    <legalName>DIGITAL SIGN OFF Ltd</legalName>
+    <organisationAddressIdentifier>0</organisationAddressIdentifier>
+  </contractor>
+  <hierarchyType>MASTER CONTRACT</hierarchyType>
+  <contractType>Contract for Services</contractType>
+  <startDate>2015-08-01</startDate>
+  <endDate>2016-07-31</endDate>
+</contract></content></entry><entry><id>uuid:2ec7588b-c2ea-4125-884e-0d5288efbdc0</id><title type="text">Contract MAIN-1892:1.0 was Approved</title><summary type="text">{UKPRN: 90071892, contractNumber: MAIN-1892, version: 1}</summary><published>2016-11-03T06:50:37Z</published><updated>2016-11-03T06:50:37Z</updated><category term="Approved Contract" label="A contract has been approved" /><content type="application/vnd.sfa.contract.v1+atom+xml"><contract schemaVersion="10.02" xmlns="urn:sfa:schemas:contract" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <contracts>
+    <contract>
+      <fundingType>
+        <fundingTypeCode>MAIN</fundingTypeCode>
+        <fundingTypeName>Mainstream</fundingTypeName>
+      </fundingType>
+      <period>
+        <periodType>
+          <periodTypeCode>AY</periodTypeCode>
+          <periodTypeName>ACADEMIC YEAR</periodTypeName>
+        </periodType>
+        <period>1516</period>
+        <startDate>2015-08-01</startDate>
+        <endDate>2016-07-31</endDate>
+      </period>
+      <contractAllocations>
+        <contractAllocation>
+          <period>
+            <periodType>
+              <periodTypeCode>AY</periodTypeCode>
+              <periodTypeName>ACADEMIC YEAR</periodTypeName>
+            </periodType>
+            <period>1516</period>
+            <startDate>2015-08-01</startDate>
+            <endDate>2016-07-31</endDate>
+          </period>
+          <fundingStream>
+            <fundingStreamCode>CL</fundingStreamCode>
+            <fundingStreamName>Community Learning</fundingStreamName>
+            <fundingTypeCode>MAIN</fundingTypeCode>
+            <fundingStreamShortCode xsi:nil="true"></fundingStreamShortCode>
+          </fundingStream>
+          <contractDeliverables>
+            <contractDeliverable>
+              <deliverable>
+                <fundingStreamCode>CL</fundingStreamCode>
+                <deliverableCode>1</deliverableCode>
+                <deliverableName>ST01 Learner Assessment and Plan</deliverableName>
+              </deliverable>
+              <contractDeliverablePeriods>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>8</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>53.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>9</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>44.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>10</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>34.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>11</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>26.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>12</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>744.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>1</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>12.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>2</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>14.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>3</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>47.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>4</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>739.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>6</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>36.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>7</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>22.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+              </contractDeliverablePeriods>
+              <deliverableDescription>ST01 Learner Assessment and Plan</deliverableDescription>
+              <unitCost>0.0000000000</unitCost>
+              <plannedVolume>0</plannedVolume>
+              <plannedValue>1771.0000000000</plannedValue>
+            </contractDeliverable>
+          </contractDeliverables>
+          <contractAllocationNumber>CL-1892</contractAllocationNumber>
+          <hierarchyType>CONTRACT ALLOCATION</hierarchyType>
+          <fundingStreamPeriodCode>CL1516</fundingStreamPeriodCode>
+          <startDate>2015-08-01</startDate>
+          <endDate>2016-07-31</endDate>
+          <maximumContractValue>1795.0000000000</maximumContractValue>
+        </contractAllocation>
+      </contractAllocations>
+      <contractNumber>MAIN-1892</contractNumber>
+      <contractVersionNumber>1</contractVersionNumber>
+      <contractSubVersionNumber>0</contractSubVersionNumber>
+      <ContractApprovalDate>2016-11-03</ContractApprovalDate>
+      <StatusLastUpdatedDate>2016-11-03</StatusLastUpdatedDate>
+      <LastModifiedDate>2016-11-03</LastModifiedDate>
+      <contractor>
+        <organisationIdentifier>ORG2221892</organisationIdentifier>
+        <ukprn>90071892</ukprn>
+        <legalName>MANUAL amend WITHDRAWAL PROVIDER Ltd</legalName>
+        <organisationAddressIdentifier>0</organisationAddressIdentifier>
+      </contractor>
+      <hierarchyType>CONTRACT</hierarchyType>
+      <contractType>Contract for Services</contractType>
+      <startDate>2015-08-01</startDate>
+      <endDate>2016-07-31</endDate>
+      <contractStatus>
+        <status>Approved</status>
+        <parentStatus>Approved</parentStatus>
+      </contractStatus>
+      <contractValue>1795.0000</contractValue>
+      <parentContractNumber>SFA-1892</parentContractNumber>
+      <parentContractVersionNumber>1</parentContractVersionNumber>
+    </contract>
+  </contracts>
+  <fundingType>
+    <fundingTypeCode>MAIN</fundingTypeCode>
+    <fundingTypeName>Mainstream</fundingTypeName>
+  </fundingType>
+  <contractNumber>SFA-1892</contractNumber>
+  <contractVersionNumber>1</contractVersionNumber>
+  <contractSubVersionNumber>0</contractSubVersionNumber>
+  <contractor>
+    <organisationIdentifier>ORG2221892</organisationIdentifier>
+    <ukprn>90071892</ukprn>
+    <legalName>MANUAL amend WITHDRAWAL PROVIDER Ltd</legalName>
+    <organisationAddressIdentifier>0</organisationAddressIdentifier>
+  </contractor>
+  <hierarchyType>MASTER CONTRACT</hierarchyType>
+  <contractType>Contract for Services</contractType>
+  <startDate>2015-08-01</startDate>
+  <endDate>2016-07-31</endDate>
+</contract></content></entry><entry><id>uuid:d9115bae-0064-4061-96b0-9a7787592457</id><title type="text">Contract MAIN-1892:2.0 was Published to Provider</title><summary type="text">{UKPRN: 90071892, contractNumber: MAIN-1892, version: 2}</summary><published>2016-11-03T06:50:55Z</published><updated>2016-11-03T06:50:55Z</updated><category term="Contract Published to Provider" label="A contract has been Published to Provider" /><content type="application/vnd.sfa.contract.v1+atom+xml"><contract schemaVersion="10.02" xmlns="urn:sfa:schemas:contract" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <contracts>
+    <contract>
+      <fundingType>
+        <fundingTypeCode>MAIN</fundingTypeCode>
+        <fundingTypeName>Mainstream</fundingTypeName>
+      </fundingType>
+      <period>
+        <periodType>
+          <periodTypeCode>AY</periodTypeCode>
+          <periodTypeName>ACADEMIC YEAR</periodTypeName>
+        </periodType>
+        <period>1516</period>
+        <startDate>2015-08-01</startDate>
+        <endDate>2016-07-31</endDate>
+      </period>
+      <contractAllocations>
+        <contractAllocation>
+          <period>
+            <periodType>
+              <periodTypeCode>AY</periodTypeCode>
+              <periodTypeName>ACADEMIC YEAR</periodTypeName>
+            </periodType>
+            <period>1516</period>
+            <startDate>2015-08-01</startDate>
+            <endDate>2016-07-31</endDate>
+          </period>
+          <fundingStream>
+            <fundingStreamCode>CL</fundingStreamCode>
+            <fundingStreamName>Community Learning</fundingStreamName>
+            <fundingTypeCode>MAIN</fundingTypeCode>
+            <fundingStreamShortCode xsi:nil="true"></fundingStreamShortCode>
+          </fundingStream>
+          <contractDeliverables>
+            <contractDeliverable>
+              <deliverable>
+                <fundingStreamCode>CL</fundingStreamCode>
+                <deliverableCode>1</deliverableCode>
+                <deliverableName>ST01 Learner Assessment and Plan</deliverableName>
+              </deliverable>
+              <contractDeliverablePeriods>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>8</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>53.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>9</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>44.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>10</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>34.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>11</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>26.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>12</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>744.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>1</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>12.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>2</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>14.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>3</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>47.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>4</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>739.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>6</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>36.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>7</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>22.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+              </contractDeliverablePeriods>
+              <deliverableDescription>ST01 Learner Assessment and Plan</deliverableDescription>
+              <unitCost>0.0000000000</unitCost>
+              <plannedVolume>0</plannedVolume>
+              <plannedValue>1771.0000000000</plannedValue>
+            </contractDeliverable>
+          </contractDeliverables>
+          <contractAllocationNumber>CL-1892</contractAllocationNumber>
+          <hierarchyType>CONTRACT ALLOCATION</hierarchyType>
+          <fundingStreamPeriodCode>CL1516</fundingStreamPeriodCode>
+          <startDate>2015-08-01</startDate>
+          <endDate>2016-07-31</endDate>
+          <maximumContractValue>1795.0000000000</maximumContractValue>
+          <reasonForAmendment>test</reasonForAmendment>
+        </contractAllocation>
+      </contractAllocations>
+      <contractNumber>MAIN-1892</contractNumber>
+      <contractVersionNumber>2</contractVersionNumber>
+      <contractSubVersionNumber>0</contractSubVersionNumber>
+      <StatusLastUpdatedDate>2016-11-03</StatusLastUpdatedDate>
+      <LastModifiedDate>2016-11-03</LastModifiedDate>
+      <contractor>
+        <organisationIdentifier>ORG2221892</organisationIdentifier>
+        <ukprn>90071892</ukprn>
+        <legalName>MANUAL amend WITHDRAWAL PROVIDER Ltd</legalName>
+        <organisationAddressIdentifier>0</organisationAddressIdentifier>
+      </contractor>
+      <hierarchyType>CONTRACT</hierarchyType>
+      <contractType>Contract for Services</contractType>
+      <startDate>2015-08-01</startDate>
+      <endDate>2016-07-31</endDate>
+      <contractStatus>
+        <status>Published To Provider</status>
+        <parentStatus>Draft</parentStatus>
+      </contractStatus>
+      <contractValue>1795.0000</contractValue>
+      <parentContractNumber>SFA-1892</parentContractNumber>
+      <parentContractVersionNumber>1</parentContractVersionNumber>
+      <amendmentType>Variation</amendmentType>
+    </contract>
+  </contracts>
+  <fundingType>
+    <fundingTypeCode>MAIN</fundingTypeCode>
+    <fundingTypeName>Mainstream</fundingTypeName>
+  </fundingType>
+  <contractNumber>SFA-1892</contractNumber>
+  <contractVersionNumber>1</contractVersionNumber>
+  <contractSubVersionNumber>0</contractSubVersionNumber>
+  <contractor>
+    <organisationIdentifier>ORG2221892</organisationIdentifier>
+    <ukprn>90071892</ukprn>
+    <legalName>MANUAL amend WITHDRAWAL PROVIDER Ltd</legalName>
+    <organisationAddressIdentifier>0</organisationAddressIdentifier>
+  </contractor>
+  <hierarchyType>MASTER CONTRACT</hierarchyType>
+  <contractType>Contract for Services</contractType>
+  <startDate>2015-08-01</startDate>
+  <endDate>2016-07-31</endDate>
+</contract></content></entry><entry><id>uuid:efb7a17a-9361-4772-8206-14a021241981</id><title type="text">Contract MAIN-1892:2.0 was Withdrawn</title><summary type="text">{UKPRN: 90071892, contractNumber: MAIN-1892, version: 2}</summary><published>2016-11-03T06:51:10Z</published><updated>2016-11-03T06:51:10Z</updated><category term="Contract Withdrawn" label="A contract has been Withdrawn" /><content type="application/vnd.sfa.contract.v1+atom+xml"><contract schemaVersion="10.02" xmlns="urn:sfa:schemas:contract" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <contracts>
+    <contract>
+      <fundingType>
+        <fundingTypeCode>MAIN</fundingTypeCode>
+        <fundingTypeName>Mainstream</fundingTypeName>
+      </fundingType>
+      <period>
+        <periodType>
+          <periodTypeCode>AY</periodTypeCode>
+          <periodTypeName>ACADEMIC YEAR</periodTypeName>
+        </periodType>
+        <period>1516</period>
+        <startDate>2015-08-01</startDate>
+        <endDate>2016-07-31</endDate>
+      </period>
+      <contractAllocations>
+        <contractAllocation>
+          <period>
+            <periodType>
+              <periodTypeCode>AY</periodTypeCode>
+              <periodTypeName>ACADEMIC YEAR</periodTypeName>
+            </periodType>
+            <period>1516</period>
+            <startDate>2015-08-01</startDate>
+            <endDate>2016-07-31</endDate>
+          </period>
+          <fundingStream>
+            <fundingStreamCode>CL</fundingStreamCode>
+            <fundingStreamName>Community Learning</fundingStreamName>
+            <fundingTypeCode>MAIN</fundingTypeCode>
+            <fundingStreamShortCode xsi:nil="true"></fundingStreamShortCode>
+          </fundingStream>
+          <contractDeliverables>
+            <contractDeliverable>
+              <deliverable>
+                <fundingStreamCode>CL</fundingStreamCode>
+                <deliverableCode>1</deliverableCode>
+                <deliverableName>ST01 Learner Assessment and Plan</deliverableName>
+              </deliverable>
+              <contractDeliverablePeriods>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>8</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>53.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>9</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>44.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>10</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>34.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>11</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>26.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>12</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>744.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>1</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>12.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>2</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>14.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>3</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>47.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>4</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>739.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>6</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>36.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>7</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0.0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>22.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+              </contractDeliverablePeriods>
+              <deliverableDescription>ST01 Learner Assessment and Plan</deliverableDescription>
+              <unitCost>0.0000000000</unitCost>
+              <plannedVolume>0</plannedVolume>
+              <plannedValue>1771.0000000000</plannedValue>
+            </contractDeliverable>
+          </contractDeliverables>
+          <contractAllocationNumber>CL-1892</contractAllocationNumber>
+          <hierarchyType>CONTRACT ALLOCATION</hierarchyType>
+          <fundingStreamPeriodCode>CL1516</fundingStreamPeriodCode>
+          <startDate>2015-08-01</startDate>
+          <endDate>2016-07-31</endDate>
+          <maximumContractValue>1795.0000000000</maximumContractValue>
+          <reasonForAmendment>test</reasonForAmendment>
+        </contractAllocation>
+      </contractAllocations>
+      <contractNumber>MAIN-1892</contractNumber>
+      <contractVersionNumber>2</contractVersionNumber>
+      <contractSubVersionNumber>0</contractSubVersionNumber>
+      <StatusLastUpdatedDate>2016-01-15</StatusLastUpdatedDate>
+      <LastModifiedDate>2016-11-03</LastModifiedDate>
+      <contractor>
+        <organisationIdentifier>ORG2221892</organisationIdentifier>
+        <ukprn>90071892</ukprn>
+        <legalName>MANUAL amend WITHDRAWAL PROVIDER Ltd</legalName>
+        <organisationAddressIdentifier>0</organisationAddressIdentifier>
+      </contractor>
+      <hierarchyType>CONTRACT</hierarchyType>
+      <contractType>Contract for Services</contractType>
+      <startDate>2015-08-01</startDate>
+      <endDate>2016-07-31</endDate>
+      <contractStatus>
+        <status>Withdrawn By Provider</status>
+        <parentStatus>Withdrawn</parentStatus>
+      </contractStatus>
+      <contractValue>1795.0000</contractValue>
+      <parentContractNumber>SFA-1892</parentContractNumber>
+      <parentContractVersionNumber>1</parentContractVersionNumber>
+      <amendmentType>Variation</amendmentType>
+    </contract>
+  </contracts>
+  <fundingType>
+    <fundingTypeCode>MAIN</fundingTypeCode>
+    <fundingTypeName>Mainstream</fundingTypeName>
+  </fundingType>
+  <contractNumber>SFA-1892</contractNumber>
+  <contractVersionNumber>1</contractVersionNumber>
+  <contractSubVersionNumber>0</contractSubVersionNumber>
+  <contractor>
+    <organisationIdentifier>ORG2221892</organisationIdentifier>
+    <ukprn>90071892</ukprn>
+    <legalName>MANUAL amend WITHDRAWAL PROVIDER Ltd</legalName>
+    <organisationAddressIdentifier>0</organisationAddressIdentifier>
+  </contractor>
+  <hierarchyType>MASTER CONTRACT</hierarchyType>
+  <contractType>Contract for Services</contractType>
+  <startDate>2015-08-01</startDate>
+  <endDate>2016-07-31</endDate>
+</contract></content></entry><entry><id>uuid:68f6fabb-77bc-4678-b048-1bcc80174dc9</id><title type="text">Contract MAIN-1896:1.0 was Approved</title><summary type="text">{UKPRN: 90071896, contractNumber: MAIN-1896, version: 1}</summary><published>2016-11-03T06:52:16Z</published><updated>2016-11-03T06:52:16Z</updated><category term="Approved Contract" label="A contract has been approved" /><content type="application/vnd.sfa.contract.v1+atom+xml"><contract schemaVersion="10.02" xmlns="urn:sfa:schemas:contract" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <contracts>
+    <contract>
+      <fundingType>
+        <fundingTypeCode>MAIN</fundingTypeCode>
+        <fundingTypeName>Mainstream</fundingTypeName>
+      </fundingType>
+      <period>
+        <periodType>
+          <periodTypeCode>AY</periodTypeCode>
+          <periodTypeName>ACADEMIC YEAR</periodTypeName>
+        </periodType>
+        <period>1516</period>
+        <startDate>2015-08-01</startDate>
+        <endDate>2016-07-31</endDate>
+      </period>
+      <contractAllocations>
+        <contractAllocation>
+          <period>
+            <periodType>
+              <periodTypeCode>AY</periodTypeCode>
+              <periodTypeName>ACADEMIC YEAR</periodTypeName>
+            </periodType>
+            <period>1516</period>
+            <startDate>2015-08-01</startDate>
+            <endDate>2016-07-31</endDate>
+          </period>
+          <fundingStream>
+            <fundingStreamCode>CL</fundingStreamCode>
+            <fundingStreamName>Community Learning</fundingStreamName>
+            <fundingTypeCode>MAIN</fundingTypeCode>
+            <fundingStreamShortCode xsi:nil="true"></fundingStreamShortCode>
+          </fundingStream>
+          <contractDeliverables>
+            <contractDeliverable>
+              <deliverable>
+                <fundingStreamCode>CL</fundingStreamCode>
+                <deliverableCode>1</deliverableCode>
+                <deliverableName>Community Learning</deliverableName>
+              </deliverable>
+              <contractDeliverablePeriods>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>8</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>53.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>9</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>44.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>10</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>34.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>11</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>26.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2015</year>
+                  <period>12</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>744.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>1</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>12.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>2</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>14.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>3</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>47.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>4</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>739.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>5</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>24.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>6</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>36.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+                <contractDeliverablePeriod>
+                  <year>2016</year>
+                  <period>7</period>
+                  <periodType>
+                    <periodTypeCode>CM</periodTypeCode>
+                    <periodTypeName>CALENDAR MONTH</periodTypeName>
+                  </periodType>
+                  <unitCost>0</unitCost>
+                  <plannedVolume>0</plannedVolume>
+                  <plannedValue>22.0000000000</plannedValue>
+                </contractDeliverablePeriod>
+              </contractDeliverablePeriods>
+              <deliverableDescription>Community Learning</deliverableDescription>
+              <unitCost>0.0000000000</unitCost>
+              <plannedVolume>0</plannedVolume>
+              <plannedValue>1795.0000000000</plannedValue>
+            </contractDeliverable>
+          </contractDeliverables>
+          <contractAllocationNumber>CL-1896</contractAllocationNumber>
+          <hierarchyType>CONTRACT ALLOCATION</hierarchyType>
+          <fundingStreamPeriodCode>CL1516</fundingStreamPeriodCode>
+          <startDate>2015-08-01</startDate>
+          <endDate>2016-07-31</endDate>
+          <maximumContractValue>1795.0000000000</maximumContractValue>
+        </contractAllocation>
+      </contractAllocations>
+      <contractNumber>MAIN-1896</contractNumber>
+      <contractVersionNumber>1</contractVersionNumber>
+      <contractSubVersionNumber>0</contractSubVersionNumber>
+      <ContractApprovalDate>2016-11-03</ContractApprovalDate>
+      <StatusLastUpdatedDate>2016-11-03</StatusLastUpdatedDate>
+      <LastModifiedDate>2016-11-03</LastModifiedDate>
+      <contractor>
+        <organisationIdentifier>ORG2221896</organisationIdentifier>
+        <ukprn>90071896</ukprn>
+        <legalName>Amend Withdrawn Contracts Ltd</legalName>
+        <organisationAddressIdentifier>0</organisationAddressIdentifier>
+      </contractor>
+      <hierarchyType>CONTRACT</hierarchyType>
+      <contractType>Contract for Services</contractType>
+      <startDate>2015-08-01</startDate>
+      <endDate>2016-07-31</endDate>
+      <contractStatus>
+        <status>Approved</status>
+        <parentStatus>Approved</parentStatus>
+      </contractStatus>
+      <contractValue>1795.0000</contractValue>
+      <parentContractNumber>SFA-1896</parentContractNumber>
+      <parentContractVersionNumber>1</parentContractVersionNumber>
+    </contract>
+  </contracts>
+  <fundingType>
+    <fundingTypeCode>MAIN</fundingTypeCode>
+    <fundingTypeName>Mainstream</fundingTypeName>
+  </fundingType>
+  <contractNumber>SFA-1896</contractNumber>
+  <contractVersionNumber>1</contractVersionNumber>
+  <contractSubVersionNumber>0</contractSubVersionNumber>
+  <contractor>
+    <organisationIdentifier>ORG2221896</organisationIdentifier>
+    <ukprn>90071896</ukprn>
+    <legalName>Amend Withdrawn Contracts Ltd</legalName>
+    <organisationAddressIdentifier>0</organisationAddressIdentifier>
+  </contractor>
+  <hierarchyType>MASTER CONTRACT</hierarchyType>
+  <contractType>Contract for Services</contractType>
+  <startDate>2015-08-01</startDate>
+  <endDate>2016-07-31</endDate>
+</contract></content></entry></feed>
