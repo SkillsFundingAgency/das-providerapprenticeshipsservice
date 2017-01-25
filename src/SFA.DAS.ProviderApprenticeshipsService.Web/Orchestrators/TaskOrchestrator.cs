@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Newtonsoft.Json;
@@ -9,10 +10,8 @@ using SFA.DAS.Tasks.Api.Types.Templates;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
-    using System.Linq;
 
     using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-    using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
     using SFA.DAS.Tasks.Api.Types;
 
     // TODO: LWA - Add logging if we're keeping these task views
@@ -34,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var response = await _mediator.SendAsync(new GetTasksQueryRequest
             {
-                ProviderId = providerId
+                Id = providerId
             });
 
             return new TaskListViewModel
@@ -59,7 +58,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var taskId = _hashingService.DecodeValue(hashedTaskId);
             var response = await _mediator.SendAsync(new GetTaskQueryRequest
             {
-                ProviderId = providerId,
+                Id = providerId,
                 TaskId = taskId
             });
 

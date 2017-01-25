@@ -18,7 +18,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTask
 
         public async Task<GetTaskQueryResponse> Handle(GetTaskQueryRequest message)
         {
-            var assignee = $"PROVIDER-{message.ProviderId}";
+            var assigneePrfix = message.IsProvider ? "PROVIDER" : "EMPLOYER";
+            var assignee = $"{assigneePrfix}-{message.Id}";
+
 
             var task = await _tasksApi.GetTask(assignee, message.TaskId);
 

@@ -33,6 +33,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IHashingService _hashingService;
         private readonly IProviderCommitmentsLogger _logger;
 
+        readonly Func<CommitmentListItem, Task<string>> _latestMessageToEmployerFunc;
+
+        readonly Func<CommitmentListItem, Task<string>> _latestMessageToProviderFunc;
+
         public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator, IHashingService hashingService, IProviderCommitmentsLogger logger)
         {
             if (mediator == null)
@@ -48,6 +52,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _statusCalculator = statusCalculator;
             _hashingService = hashingService;
             _logger = logger;
+
+            _latestMessageToEmployerFunc = async item => await GetLatestMessage(item.EmployerAccountId, item.Id, false);
+            _latestMessageToProviderFunc = async item => await GetLatestMessage(item.ProviderId, item.Id, true);
         }
 
         public async Task<CohortsViewModel> GetCohorts(long providerId)
@@ -74,15 +81,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<CommitmentListViewModel> GetAllWithEmployer(long providerId)
         {
-            var sentForReview = await GetAllNew(providerId, RequestStatus.SentForReview);
-            var sentForApproval = await GetAllNew(providerId, RequestStatus.WithEmployerForApproval);
+            var sentForReview = await GetAll(providerId, RequestStatus.SentForReview);
+            var sentForApproval = await GetAll(providerId, RequestStatus.WithEmployerForApproval);
             var data = sentForReview.Concat(sentForApproval).ToList();
             _logger.Info($"Provider getting all with employer ({data.Count}) :{providerId}", providerId);
 
             return new CommitmentListViewModel
             {
                 ProviderId = providerId,
-                Commitments = await MapFrom(data),
+                Commitments = await MapFrom(data, _latestMessageToEmployerFunc),
                 PageTitle = "Cohorts with employer",
                 PageId = "requests-with-employer",
                 PageHeading = "Cothorts with employer",
@@ -92,13 +99,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<CommitmentListViewModel> GetAllNewRequests(long providerId)
         {
-            var data = (await GetAllNew(providerId, RequestStatus.NewRequest)).ToList();
+            var data = (await GetAll(providerId, RequestStatus.NewRequest)).ToList();
             _logger.Info($"Provider getting all new request ({data.Count}) :{providerId}", providerId);
 
             return new CommitmentListViewModel
             {
                 ProviderId = providerId,
-                Commitments = await MapFrom(data),
+                Commitments = await MapFrom(data, _latestMessageToProviderFunc),
                 PageTitle = "New requests",
                 PageId = "requests-new",
                 PageHeading = "New requests",
@@ -108,12 +115,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<CommitmentListViewModel> GetAllReadyForReview(long providerId)
         {
-            var data = (await GetAllNew(providerId, RequestStatus.ReadyForReview)).ToList();
+            var data = (await GetAll(providerId, RequestStatus.ReadyForReview)).ToList();
             _logger.Info($"Provider getting all ready for review ({data.Count}) :{providerId}", providerId);
             return new CommitmentListViewModel
             {
                 ProviderId = providerId,
-                Commitments = await MapFrom(data),
+                Commitments = await MapFrom(data, _latestMessageToProviderFunc),
                 PageTitle = "Requests ready for review",
                 PageId = "requests-ready-for-review",
                 PageHeading = "Review cohorts",
@@ -123,13 +130,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<CommitmentListViewModel> GetAllReadyForApproval(long providerId)
         {
-            var data = (await GetAllNew(providerId, RequestStatus.ReadyForApproval)).ToList();
+            var data = (await GetAll(providerId, RequestStatus.ReadyForApproval)).ToList();
             _logger.Info($"Provider getting all ready for approval ({data.Count}) :{providerId}", providerId);
             
             return new CommitmentListViewModel
             {
                 ProviderId = providerId,
-                Commitments = await MapFrom(data),
+                Commitments = await MapFrom(data, _latestMessageToProviderFunc),
                 PageTitle = "Requests ready for approval",
                 PageId = "requests-ready-for-approval",
                 PageHeading =  "Approve cohorts",
@@ -137,7 +144,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<IEnumerable<CommitmentListItem>> GetAllNew(long providerId, RequestStatus requestStatus)
+        public async Task<IEnumerable<CommitmentListItem>> GetAll(long providerId, RequestStatus requestStatus)
         {
             _logger.Info($"Getting all commitments for provider:{providerId}", providerId);
 
@@ -162,7 +169,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
-            var message = await GetLatestMessage(providerId, commitmentId);
+            var message = await GetLatestMessage(providerId, commitmentId, true);
 
             var apprenticeships = MapFrom(data.Commitment.Apprenticeships);
 
@@ -342,12 +349,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return apprenticeViewModels;
         }
 
-        private async Task<string> GetLatestMessage(long providerId, long commitmentId)
+        private async Task<string> GetLatestMessage(long? id, long commitmentId, bool isProvider)
         {
-            var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest {ProviderId = providerId});
+            if (id == null) return string.Empty;
+            var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { Id = id.Value, IsProvider = isProvider });
 
             var taskForCommitment = allTasks?.Tasks
-                .Select(x => new {Task = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body), CreateDate = x.CreatedOn})
+                .Select(x => new { Task = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body), CreateDate = x.CreatedOn })
                 .Where(x => x.Task != null && x.Task.CommitmentId == commitmentId)
                 .OrderByDescending(x => x.CreateDate)
                 .FirstOrDefault();
@@ -356,20 +364,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             return message;
         }
+        
 
         // TODO: Move mappers into own class
-        private async Task<IEnumerable<CommitmentListItemViewModel>> MapFrom(List<CommitmentListItem> commitments)
+        private async Task<IEnumerable<CommitmentListItemViewModel>> MapFrom(List<CommitmentListItem> commitments, Func<CommitmentListItem, Task<string>> latestMessageFunc)
         {
-            var commitmentsList = commitments.Select(MapFrom).ToList();
+            var commitmentsList = commitments.Select(m => MapFrom(m, latestMessageFunc)).ToList();
 
             return await Task.WhenAll(commitmentsList);
         }
 
-        private async Task<CommitmentListItemViewModel> MapFrom(CommitmentListItem listItem)
+        private async Task<CommitmentListItemViewModel> MapFrom(CommitmentListItem listItem, Func<CommitmentListItem, Task<string>> latestMessageFunc)
         {
-            var message = listItem.ProviderId != null
-                              ? await GetLatestMessage(listItem.ProviderId.Value, listItem.Id)
-                              : string.Empty;
+            var message = await latestMessageFunc.Invoke(listItem);
             
             return new CommitmentListItemViewModel
             {
