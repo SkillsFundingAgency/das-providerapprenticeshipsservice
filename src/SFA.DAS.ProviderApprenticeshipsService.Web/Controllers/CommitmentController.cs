@@ -10,7 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("{providerId}/apprentices")]
-    public class CommitmentController : Controller
+    public class CommitmentController : BaseController
     {
         private const string LastCohortPageSessionKey = "lastCohortPageSessionKey";
 

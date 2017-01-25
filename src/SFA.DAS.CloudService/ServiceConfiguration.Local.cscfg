@@ -6,12 +6,13 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="EnvironmentName" value="LOCAL" />
       <Setting name="ConfigurationStorageConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="LoggingRedisConnectionString" value=""/>
-      <Setting name="LoggingRedisKey" value=""/>
+      <Setting name="LoggingRedisConnectionString" value="" />
+      <Setting name="LoggingRedisKey" value="" />
       <Setting name="RedisConnection" value="localhost" />
       <Setting name="IdamsRealm" value="https://citizenazuresfabisgov.onmicrosoft.com/SFA.DAS.ProviderApprenticeshipsService.Web" />
       <Setting name="IdamsADFSMetadata" value="https://adfs.preprod.skillsfunding.service.gov.uk/FederationMetadata/2007-06/FederationMetadata.xml" />
       <Setting name="InstrumentationKey" value="" />
+      <Setting name="RedisSessionProviderConnectionString" value="127.0.0.1" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="87A28DF77BBA73983918DF4288A132588AE820F4" thumbprintAlgorithm="sha1" />
