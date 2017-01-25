@@ -9,11 +9,18 @@
 
 <div class="grid-row">
     <div class="column-full">
-
-        <h1 class="heading-xlarge">Add an apprentice</h1>
+        @if (!Model.HasApprenticeships)
+        {
+            <h1 class="heading-xlarge">Add an apprentice</h1>
+        }
+        else
+        {
+            <h1 class="heading-xlarge">Review your cohort</h1>
+        }
     </div>
 </div>
 
+<!--
 <div class="grid-row">
     <div class="column-one-half employer-details">
         <p><span class="strong">Employer: </span>@Model.LegalEntityName</p>
@@ -26,7 +33,7 @@
         <p>@(string.IsNullOrWhiteSpace(Model.LatestMessage) ? "No note added" : Model.LatestMessage)</p>
     </div>
 </div>
-
+-->
 @functions {
     public string GetApprenticesCountText(IList<ApprenticeshipListItemViewModel> apprenticeships)
     {
@@ -57,17 +64,6 @@ else
         <span>@Html.Raw("&ndash;")</span>
 }
 }
-<div class="grid-row">
-    <div class="column-full bulk-upload-buttons">
-        <hr class="hr-top">
-
-        @{ var finishEditingText = Model.PendingChanges ? "Save and continue" : "Continue to approval"; }
-        <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
-        <a href="@Url.Action("UploadApprenticeships", "BulkUpload", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary upload-btn" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
-        <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
-        <hr class="hr-bottom">
-    </div>
-</div>
 
 <div class="grid-row">
     <div class="column-full">
@@ -80,11 +76,62 @@ else
     </div>
 </div>
 
+
+<!-- <div class="grid-row">
+        <div class="column-full">
+            <p class="heading-medium">Review your cohort @GetApprenticesCountText(Model.Apprenticeships)</p>
+        </div>
+    </div>
+-->
+
+<div class="grid-row" id="review-cohorts">
+    <div class="column-one-third all-apps">
+        <div class="">
+            <h2 class="bold-xlarge">10</h2>
+            <p class="heading-small">Apprentices</p>
+        </div>
+    </div>
+    <div class="column-one-third incomplete-apps">
+        <div class="">
+            <h2 class="bold-xlarge">4</h2>
+            <p class="heading-small">Incomplete records</p>
+        </div>
+    </div>
+    <div class="column-one-third total-cost">
+        <div class="">
+            <h2 class="bold-xlarge">&pound;13,816</h2>
+            <p class="heading-small">Total cost</p>
+        </div>
+    </div>
+</div>
+
+<div class="grid-row">
+    <div class="column-full employer-details">
+        <p><span class="strong">Employer: </span>@Model.LegalEntityName</p>
+    </div>
+</div>
+
+<div class="grid-row">
+    <div class="column-full bulk-upload-buttons">
+        <hr class="hr-top">
+
+        @{ var finishEditingText = Model.PendingChanges ? "Save and continue" : "Continue to approval"; }
+        <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
+        <a href="@Url.Action("UploadApprenticeships", "BulkUpload", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary upload-btn" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
+        <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
+        <hr class="hr-bottom">
+    </div>
+</div>
+
+
+
+
 @if (Model.Apprenticeships.Count > 0)
 {
     <div class="grid-row">
         <div class="column-full">
-            <p class="heading-medium">@GetApprenticesCountText(Model.Apprenticeships)</p>
+
+
             <table class="tableResponsive providerList">
                 <thead>
                     <tr>
@@ -126,7 +173,7 @@ else
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("Index", "Commitment")" aria-label="Back" class="back-link">Back</a>
+        <a href="@Url.Action("ReadyForReview")" aria-label="Back" class="back-link">Back</a>
     </div>
 }
 

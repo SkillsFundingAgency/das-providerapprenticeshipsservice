@@ -2667,6 +2667,7 @@ span.helpText {
 
 #review-cohorts {
   color: #fff;
+  margin: 30px 0;
 }
 
 #review-cohorts .all-apps {
@@ -2674,6 +2675,7 @@ span.helpText {
   padding: 20px;
   margin: 20px 0;
   margin: auto;
+  width: 31%;
 }
 
 #review-cohorts .incomplete-apps {
@@ -2681,6 +2683,8 @@ span.helpText {
   padding: 20px;
   margin-bottom: 20px;
   margin: auto;
+  margin-left: 3.3333%;
+  width: 31%;
 }
 
 #review-cohorts .total-cost {
@@ -2688,6 +2692,8 @@ span.helpText {
   padding: 20px;
   margin-bottom: 30px;
   margin: auto;
+  margin-left: 3.3333%;
+  width: 31%;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {

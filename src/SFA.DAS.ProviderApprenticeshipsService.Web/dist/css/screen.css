@@ -3017,6 +3017,7 @@ span.helpText {
 
 #review-cohorts {
   color: #fff;
+  margin: 30px 0;
 }
 
 #review-cohorts .all-apps {
@@ -3028,6 +3029,7 @@ span.helpText {
 @media (min-width: 641px) {
   #review-cohorts .all-apps {
     margin: auto;
+    width: 31%;
   }
 }
 
@@ -3040,6 +3042,8 @@ span.helpText {
 @media (min-width: 641px) {
   #review-cohorts .incomplete-apps {
     margin: auto;
+    margin-left: 3.3333%;
+    width: 31%;
   }
 }
 
@@ -3052,6 +3056,8 @@ span.helpText {
 @media (min-width: 641px) {
   #review-cohorts .total-cost {
     margin: auto;
+    margin-left: 3.3333%;
+    width: 31%;
   }
 }
 
