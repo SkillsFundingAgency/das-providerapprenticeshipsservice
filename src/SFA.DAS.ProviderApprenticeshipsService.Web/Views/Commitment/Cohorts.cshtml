@@ -9,12 +9,14 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-        <h1 class="heading-xlarge">Your cohorts</h1>
-
         @if (!Model.HasSignedTheAgreement)
         {
-            <p>Need to sign agreement.</p>
+            <p>Need to sign agreement.
+                <a href="@Model.SignAgreementUrl" target="_blank" >Please sign here</a>
+           </p>
         }
+
+        <h1 class="heading-xlarge">Your cohorts</h1>
 
         <div class="column-one-half bingo-background block-one @GetClickableClass(Model.NewRequestsCount)">
             <h2 class="bold-xxlarge">

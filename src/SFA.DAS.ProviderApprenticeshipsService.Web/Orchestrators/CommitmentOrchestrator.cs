@@ -82,7 +82,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ReadyForApprovalCount = commitmentStatus.Count(m => m == RequestStatus.ReadyForApproval),
                 ReadyForReviewCount = commitmentStatus.Count(m => m == RequestStatus.ReadyForReview),
                 WithEmployerCount = commitmentStatus.Count(m => m == RequestStatus.SentForReview || m == RequestStatus.WithEmployerForApproval),
-                HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
+                HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed,
+                SignAgreementUrl = _configuration.ContractAgreementsUrl
             };
 
             return model;
@@ -362,7 +363,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprovalState = GetApprovalState(data.Commitment),
                 HasApprenticeships = data.Commitment.Apprenticeships.Any(),
                 InvalidApprenticeshipCount = data.Commitment.Apprenticeships.Count(x => !x.CanBeApproved),
-                HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
+                HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed,
+                SignAgreementUrl = _configuration.ContractAgreementsUrl
             };
         }
 

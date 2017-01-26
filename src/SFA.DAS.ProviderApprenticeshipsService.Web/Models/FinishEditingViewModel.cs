@@ -25,6 +25,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool IsApproveAndSend => ApprovalState == ApprovalState.ApproveAndSend;
 
         public bool HasSignedTheAgreement { get; set; }
+
+        public string SignAgreementUrl { get; set; }
     }
 
     public enum ApprovalState
