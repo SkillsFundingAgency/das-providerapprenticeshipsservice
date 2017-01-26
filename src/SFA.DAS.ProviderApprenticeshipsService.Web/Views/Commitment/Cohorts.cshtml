@@ -1,0 +1,98 @@
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CohortsViewModel
+
+@{
+    ViewBag.Title = "Your cohorts";
+    ViewBag.PageId = "cohorts-landing-page";
+}
+
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+        <h1 class="heading-xlarge">Your cohorts</h1>
+
+
+        <div class="column-one-half bingo-background block-one @GetClickableClass(Model.NewRequestsCount)">
+            <h2 class="bold-xxlarge">
+                @if (Model.NewRequestsCount > 0)
+                {
+                    <a href="@Url.Action("NewRequests")" title="@Model.NewRequestsCount new from employer" aria-label="View all new requests from employer">
+                        @Model.NewRequestsCount
+                    </a>
+                }
+                else
+                {
+                    <span>0</span>
+                }
+            </h2>
+            <p class="heading-small">New from employer</p>
+        </div>
+
+        <div class="column-one-half bingo-background block-two @GetClickableClass(Model.ReadyForApprovalCount)">
+            <h2 class="bold-xxlarge">
+                @if (Model.ReadyForApprovalCount > 0)
+                {
+                    <a href="@Url.Action("ReadyForApproval")" title="@Model.ReadyForApprovalCount ready for approval" aria-label="View all new requests that are ready for approval">
+                        @Model.ReadyForApprovalCount
+                    </a>
+                }
+                else
+                {
+                    <span>0</span>
+                }
+            </h2>
+            <p class="heading-small">Ready for approval</p>
+        </div>
+
+
+        <div class="column-one-half bingo-background block-three @GetClickableClass(Model.ReadyForReviewCount)">
+            <h2 class="bold-xxlarge">
+                @if (Model.ReadyForReviewCount > 0)
+                {
+                    <a href="@Url.Action("ReadyForReview")" title=" @Model.ReadyForReviewCount ready for review" aria-label="View all new requests that are ready for review">
+                        @Model.ReadyForReviewCount
+                    </a>
+                }
+                else
+                {
+                    <span>0</span>
+                }
+            </h2>
+            <p class="heading-small">Ready for review</p>
+        </div>
+
+        <div class="column-one-half bingo-background block-four @GetClickableClass(Model.WithEmployerCount)">
+            <h2 class="bold-xxlarge">
+                @if (Model.WithEmployerCount > 0)
+                {
+                    <a href="@Url.Action("WithEmployer")" title="@Model.WithEmployerCount with employers" aria-label="View all new requests from that are with the employer">
+                        @Model.WithEmployerCount
+                    </a>
+                }
+                else
+                {
+                    <span>0</span>
+                }
+            </h2>
+            <p class="heading-small">With employers</p>
+        </div>
+
+    </div>
+
+    <div class="column-one-third"> </div>
+</div>
+
+@functions {
+    private string GetClickableClass(int requestsCount)
+    {
+        return requestsCount > 0 ? "clickable" : "";
+    }
+}
+
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Index", "Home")" aria-label="Back to Account home" class="back-link">Back</a>
+    </div>
+}

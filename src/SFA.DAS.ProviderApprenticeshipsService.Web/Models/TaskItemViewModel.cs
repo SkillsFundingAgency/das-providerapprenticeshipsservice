@@ -8,8 +8,6 @@
 
         public string Name { get; set; }
 
-        public object TaskStatus { get; set; }
-
         public string HashedTaskId { get; set; }
     }
 }

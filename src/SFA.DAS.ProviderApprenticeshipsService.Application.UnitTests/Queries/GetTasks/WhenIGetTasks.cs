@@ -29,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
 
             var request = new GetTasksQueryRequest
             {
-                ProviderId = 23L
+                Id = 23L
             };
 
             var response = await _handler.Handle(request);
