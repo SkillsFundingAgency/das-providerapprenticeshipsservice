@@ -62,7 +62,4 @@
   <ItemGroup>
     <Build Include="Tables\ContractFeedEvent.sql" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="SFA.DAS.ProviderAgreementStatus.Database.publish.xml" />
-  </ItemGroup>
 </Project>
