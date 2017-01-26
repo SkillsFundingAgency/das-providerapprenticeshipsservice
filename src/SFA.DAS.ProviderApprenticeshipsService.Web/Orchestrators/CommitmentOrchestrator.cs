@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Newtonsoft.Json;
-
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
@@ -37,9 +36,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IProviderCommitmentsLogger _logger;
 
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
+        readonly Func<CommitmentListItem, Task<string>> _latestMessageToEmployerFunc;
 
-        public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator, IHashingService hashingService, 
-                                      IProviderCommitmentsLogger logger, ProviderApprenticeshipsServiceConfiguration configuration)
+        readonly Func<CommitmentListItem, Task<string>> _latestMessageToProviderFunc;
+
+        public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator, 
+            IHashingService hashingService, IProviderCommitmentsLogger logger, ProviderApprenticeshipsServiceConfiguration configuration)
+
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -57,21 +60,98 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _hashingService = hashingService;
             _logger = logger;
             _configuration = configuration;
+
+            _latestMessageToEmployerFunc = async item => await GetLatestMessage(item.EmployerAccountId, item.Id, false);
+           _latestMessageToProviderFunc = async item => await GetLatestMessage(item.ProviderId, item.Id, true);
         }
 
-        public async Task<CommitmentListViewModel> GetAll(long providerId)
+        public async Task<CohortsViewModel> GetCohorts(long providerId)
         {
-            _logger.Info($"Getting all commitments for provider:{providerId}", providerId: providerId);
-
+            _logger.Info($"Getting cohorts :{providerId}", providerId);
             var data = await _mediator.SendAsync(new GetCommitmentsQueryRequest
             {
                 ProviderId = providerId
             });
+            var commitmentStatus =
+                data.Commitments.Select(m =>
+                    _statusCalculator.GetStatus(m.EditStatus, m.ApprenticeshipCount, m.LastAction, m.AgreementStatus)).ToList();
+
+            var model = new CohortsViewModel
+            {
+                NewRequestsCount = commitmentStatus.Count(m => m == RequestStatus.NewRequest),
+                ReadyForApprovalCount = commitmentStatus.Count(m => m == RequestStatus.ReadyForApproval),
+                ReadyForReviewCount = commitmentStatus.Count(m => m == RequestStatus.ReadyForReview),
+                WithEmployerCount = commitmentStatus.Count(m => m == RequestStatus.SentForReview || m == RequestStatus.WithEmployerForApproval)
+            };
+
+            return model;
+        }
+
+        public async Task<CommitmentListViewModel> GetAllWithEmployer(long providerId)
+        {
+            var sentForReview = await GetAll(providerId, RequestStatus.SentForReview);
+            var sentForApproval = await GetAll(providerId, RequestStatus.WithEmployerForApproval);
+            var data = sentForReview.Concat(sentForApproval).ToList();
+            _logger.Info($"Provider getting all with employer ({data.Count}) :{providerId}", providerId);
 
             return new CommitmentListViewModel
             {
                 ProviderId = providerId,
-                Commitments = MapFrom(data.Commitments),
+                Commitments = await MapFrom(data, _latestMessageToEmployerFunc),
+                PageTitle = "Cohorts with employer",
+                PageId = "requests-with-employer",
+                PageHeading = "Cothorts with employer",
+                PageHeading2 = $"You have {data.Count} with employer for review:",
+                HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
+            };
+        }
+
+        public async Task<CommitmentListViewModel> GetAllNewRequests(long providerId)
+        {
+            var data = (await GetAll(providerId, RequestStatus.NewRequest)).ToList();
+            _logger.Info($"Provider getting all new request ({data.Count}) :{providerId}", providerId);
+
+            return new CommitmentListViewModel
+            {
+                ProviderId = providerId,
+                Commitments = await MapFrom(data, _latestMessageToProviderFunc),
+                PageTitle = "New requests",
+                PageId = "requests-new",
+                PageHeading = "New requests",
+                PageHeading2 = $"You have {data.ToList().Count} new cohorts:",
+                HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
+            };
+        }
+
+        public async Task<CommitmentListViewModel> GetAllReadyForReview(long providerId)
+        {
+            var data = (await GetAll(providerId, RequestStatus.ReadyForReview)).ToList();
+            _logger.Info($"Provider getting all ready for review ({data.Count}) :{providerId}", providerId);
+            return new CommitmentListViewModel
+            {
+                ProviderId = providerId,
+                Commitments = await MapFrom(data, _latestMessageToProviderFunc),
+                PageTitle = "Requests ready for review",
+                PageId = "requests-ready-for-review",
+                PageHeading = "Review cohorts",
+                PageHeading2 = $"You have {data.Count} cohorts that is ready for review:",
+                HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
+            };
+        }
+
+        public async Task<CommitmentListViewModel> GetAllReadyForApproval(long providerId)
+        {
+            var data = (await GetAll(providerId, RequestStatus.ReadyForApproval)).ToList();
+            _logger.Info($"Provider getting all ready for approval ({data.Count}) :{providerId}", providerId);
+
+            return new CommitmentListViewModel
+            {
+                ProviderId = providerId,
+                Commitments = await MapFrom(data, _latestMessageToProviderFunc),
+                PageTitle = "Requests ready for approval",
+                PageId = "requests-ready-for-approval",
+                PageHeading = "Approve cohorts",
+                PageHeading2 = $"You have {data.Count} cohorts that need your approal:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
@@ -86,6 +166,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 IsSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
             return model;
+        }
+
+        public async Task<IEnumerable<CommitmentListItem>> GetAll(long providerId, RequestStatus requestStatus)
+        {
+            _logger.Info($"Getting all commitments for provider:{providerId}", providerId);
+
+            var data = await _mediator.SendAsync(new GetCommitmentsQueryRequest
+            {
+                ProviderId = providerId
+            });
+
+            return data.Commitments.Where(
+                m => _statusCalculator.GetStatus(m.EditStatus, m.ApprenticeshipCount, m.LastAction, m.AgreementStatus)
+                    == requestStatus);
         }
 
         public async Task<ProviderAgreementStatus> IsSignedAgreement(long providerId)
@@ -110,7 +204,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
-            var message = await GetLatestMessage(providerId, commitmentId);
+            var message = await GetLatestMessage(providerId, commitmentId, true);
 
             var apprenticeships = MapFrom(data.Commitment.Apprenticeships);
 
@@ -290,12 +384,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return apprenticeViewModels;
         }
 
-        private async Task<string> GetLatestMessage(long providerId, long commitmentId)
+        private async Task<string> GetLatestMessage(long? id, long commitmentId, bool isProvider)
         {
-            var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest {ProviderId = providerId});
+            if (id == null) return string.Empty;
+            var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { Id = id.Value, IsProvider = isProvider });
 
             var taskForCommitment = allTasks?.Tasks
-                .Select(x => new {Task = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body), CreateDate = x.CreatedOn})
+                .Select(x => new { Task = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body), CreateDate = x.CreatedOn })
                 .Where(x => x.Task != null && x.Task.CommitmentId == commitmentId)
                 .OrderByDescending(x => x.CreateDate)
                 .FirstOrDefault();
@@ -304,17 +399,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             return message;
         }
+        
 
         // TODO: Move mappers into own class
-        private List<CommitmentListItemViewModel> MapFrom(List<CommitmentListItem> commitments)
+        private async Task<IEnumerable<CommitmentListItemViewModel>> MapFrom(List<CommitmentListItem> commitments, Func<CommitmentListItem, Task<string>> latestMessageFunc)
         {
-            var commitmentsList = commitments.Select(x => MapFrom(x)).ToList();
+            var commitmentsList = commitments.Select(m => MapFrom(m, latestMessageFunc)).ToList();
 
-            return commitmentsList;
+            return await Task.WhenAll(commitmentsList);
         }
 
-        private CommitmentListItemViewModel MapFrom(CommitmentListItem listItem)
+        private async Task<CommitmentListItemViewModel> MapFrom(CommitmentListItem listItem, Func<CommitmentListItem, Task<string>> latestMessageFunc)
         {
+            var message = await latestMessageFunc.Invoke(listItem);
+            
             return new CommitmentListItemViewModel
             {
                 HashedCommitmentId = _hashingService.HashValue(listItem.Id),
@@ -322,7 +420,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
                 Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.ApprenticeshipCount, listItem.LastAction, listItem.AgreementStatus),
-                ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly
+                ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly,
+                LatestMessage = message
             };
         }
 
@@ -336,7 +435,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderName = listItem.ProviderName,
                 Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.LastAction, listItem.AgreementStatus),
                 ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly
-            };
+        };
         }
 
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)

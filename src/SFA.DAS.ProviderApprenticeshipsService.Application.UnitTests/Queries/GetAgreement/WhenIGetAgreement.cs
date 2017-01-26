@@ -24,8 +24,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         [SetUp]
         public void SetUp()
         {
+            var config = new ProviderApprenticeshipsServiceConfiguration { CheckForContractAgreements = true };
             _agreementRepository = new Mock<IAgreementStatusQueryRepository>();
-            _handler = new GetProviderAgreementQueryHandler(_agreementRepository.Object, Mock.Of<ProviderApprenticeshipsServiceConfiguration>());
+            _handler = new GetProviderAgreementQueryHandler(_agreementRepository.Object, config);
         }
 
         [Test]

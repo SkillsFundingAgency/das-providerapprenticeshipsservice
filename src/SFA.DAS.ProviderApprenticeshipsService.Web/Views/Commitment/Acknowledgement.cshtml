@@ -18,8 +18,7 @@
 </div>
 
 <div class="grid-row">
-    <div class="column-two-thirds">
-        @*<a href="#" aria-label="Back" class="link-back">Back</a>*@
+    <div class="column-full">
 
         <table class="instructions-sent">
             <tbody>
@@ -32,19 +31,10 @@
                     <td class="strong">@Model.EmployerName</td>
 
                 </tr>
-                @*<tr>
-                        <td>Sent from</td>
-                        <td  class="strong">Alice Jones</td>
-
-                    </tr>*@
                 <tr>
                     <td>On behalf of</td>
                     <td class="strong">@Model.ProviderName</td>
                 </tr>
-                @*<tr>
-                        <td>Date</td>
-                        <td  class="strong">Thursday 18 May 2017</td>
-                    </tr>*@
                 <tr>
                     <td>Instructions</td>
                     <td class="strong">@Model.Message</td>
@@ -56,10 +46,18 @@
         <h2 class="heading-medium">What happens next?</h2>
         <p id="changeMainCopy">The updated request will appear in the employer’s account for them to review.</p>
 
-        @*<a class="button" href="@Url.Action("Index","Home")" aria-label="Continue">Continue</a>*@
-    </div>
+        @if (!string.IsNullOrEmpty(Model.RedirectUrl))
+        {
+            <p>
+                <a href="@Model.RedirectUrl" aria-label="Go back to cohort list">Go back to view cohorts</a>
+            </p>
+        }
 
-        <div class="column-one-third">
+    </div>
+</div>
+
+<div class="grid-row">
+        <div class="column-full">
             <aside>
                 <div class="panel panel-filled">
                     <h2 class="heading-medium">Help us improve this section</h2>
