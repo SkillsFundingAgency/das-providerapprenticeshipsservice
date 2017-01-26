@@ -33,9 +33,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 {
                     var r = (await connection.QueryAsync<ContractFeedEvent>(
                         sql:
-                            "SELECT * FROM"
-                          + "FROM [SFA.DAS.ProviderAgreementStatus.Database].[dbo].[ContractFeedEvent] "
-                          + "WHERE [Id] = @id",
+                            "SELECT * FROM [SFA.DAS.ProviderAgreementStatus.Database].[dbo].[ContractFeedEvent] "
+                          + "WHERE [ProviderId] = @providerId",
                         param: parameters,
                         commandType: CommandType.Text,
                         transaction: trans));

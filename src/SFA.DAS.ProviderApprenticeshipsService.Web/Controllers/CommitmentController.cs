@@ -34,9 +34,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("AgreementNotSigned")]
-        public async Task<ActionResult> AgreementNotSigned(long providerId, string hashedCommitmentId)
+        public async Task<ActionResult> AgreementNotSigned(long providerId, string hashedCommitmentId, string redirectTo)
         {
             var model = await _commitmentOrchestrator.GetAgreementPage(providerId, hashedCommitmentId);
+            model.RequestListUrl = Url.Action(redirectTo, new { providerId });
             if (model.IsSignedAgreement) return RedirectToAction("Details", new { providerId, hashedCommitmentId });
 
             return View(model);

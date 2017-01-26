@@ -13,14 +13,19 @@
     <div class="column-two-thirds">
        
       
-        @if (Model.NotReadyForApproval)
+        @if (!Model.ReadyForApproval)
         {
             <p>
                 @Html.Raw(GetInvalidStateForApprovalMessage(Model.HasApprenticeships, Model.InvalidApprenticeshipCount))
             </p>
         }
-       
-            <form action="@Url.Action("FinishEditing")" method="POST">
+
+        @if (!Model.HasSignedTheAgreement)
+        {
+            <p>You need to sign the agreement before you can approve</p>
+        }
+
+        <form action="@Url.Action("FinishEditing")" method="POST">
                 @Html.AntiForgeryToken()
                
                 @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
@@ -31,19 +36,19 @@
                     <div>
                         @Html.ValidationMessageFor(m => m.SaveStatus, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SaveStatus) })
                     </div>
-                    @if (!Model.NotReadyForApproval)
+                    @if (Model.ReadyForApproval && Model.HasApprenticeships)
                     {
                         if (Model.IsApproveAndSend)
                         {
                             <label class="block-label" for="@RadioButtonId(SaveStatus.ApproveAndSend)">
-                                @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.ApproveAndSend, GetRadioButtonAttributes(SaveStatus.ApproveAndSend, Model.NotReadyForApproval))
+                                @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.ApproveAndSend, GetRadioButtonAttributes(SaveStatus.ApproveAndSend, !Model.ReadyForApproval))
                                 <span id="changeOne">Approve and send to employer for approval</span>
                             </label>
                         }
                         else
                         {
                             <label class="block-label" for="@RadioButtonId(SaveStatus.Approve)">
-                                @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.Approve, GetRadioButtonAttributes(SaveStatus.Approve, Model.NotReadyForApproval))
+                                @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.Approve, GetRadioButtonAttributes(SaveStatus.Approve, !Model.ReadyForApproval))
                                 <span id="changeOne">Approve</span>
                             </label>
                         }
@@ -68,7 +73,7 @@
 
                 @Html.HiddenFor(m => m.HasApprenticeships)
                 @Html.HiddenFor(m => m.InvalidApprenticeshipCount)
-                @Html.HiddenFor(m => m.NotReadyForApproval)
+                @Html.HiddenFor(m => m.ReadyForApproval)
             </form>
 
        

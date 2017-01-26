@@ -9,5 +9,7 @@
         public string ReviewAgreementUrl { get; set; }
 
         public bool IsSignedAgreement { get; set; }
+
+        public string RequestListUrl { get; set; }
     }
 }

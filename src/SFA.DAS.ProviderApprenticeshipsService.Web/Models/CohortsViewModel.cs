@@ -9,5 +9,7 @@
         public int ReadyForReviewCount { get; set; }
 
         public int WithEmployerCount { get; set; }
+
+        public bool HasSignedTheAgreement { get; set; }
     }
 }

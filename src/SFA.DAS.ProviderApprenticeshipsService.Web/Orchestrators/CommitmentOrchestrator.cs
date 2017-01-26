@@ -81,7 +81,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 NewRequestsCount = commitmentStatus.Count(m => m == RequestStatus.NewRequest),
                 ReadyForApprovalCount = commitmentStatus.Count(m => m == RequestStatus.ReadyForApproval),
                 ReadyForReviewCount = commitmentStatus.Count(m => m == RequestStatus.ReadyForReview),
-                WithEmployerCount = commitmentStatus.Count(m => m == RequestStatus.SentForReview || m == RequestStatus.WithEmployerForApproval)
+                WithEmployerCount = commitmentStatus.Count(m => m == RequestStatus.SentForReview || m == RequestStatus.WithEmployerForApproval),
+                HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
 
             return model;
@@ -310,6 +311,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             _logger.Info($"Submitting ({saveStatus}) Commitment for provider:{providerId} commitment:{commitmentId}", providerId: providerId, commitmentId: commitmentId);
 
+            if (saveStatus == SaveStatus.Approve || saveStatus == SaveStatus.ApproveAndSend)
+            {
+                var isSigned = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed;
+                if(!isSigned)
+                    throw new InvalidStateException("Cannot approve commitment when no agreement signed");
+            }
+
             if (saveStatus != SaveStatus.Save)
             {
                 var lastAction = saveStatus == SaveStatus.AmendAndSend ? LastAction.Amend : LastAction.Approve;
@@ -350,10 +358,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 HashedCommitmentId = hashedCommitmentId,
                 ProviderId = providerId,
-                NotReadyForApproval = !data.Commitment.CanBeApproved,
+                ReadyForApproval = data.Commitment.CanBeApproved,
                 ApprovalState = GetApprovalState(data.Commitment),
                 HasApprenticeships = data.Commitment.Apprenticeships.Any(),
-                InvalidApprenticeshipCount = data.Commitment.Apprenticeships.Count(x => !x.CanBeApproved)
+                InvalidApprenticeshipCount = data.Commitment.Apprenticeships.Count(x => !x.CanBeApproved),
+                HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
 
