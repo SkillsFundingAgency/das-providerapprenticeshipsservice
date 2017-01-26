@@ -22,7 +22,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 
         protected override void apply(Type pluginType, IConfiguredInstance instance)
         {
-
             var serviceConfigurationParamater = instance?.Constructor?.GetParameters().FirstOrDefault(x => x.ParameterType == typeof(T));
 
             if (serviceConfigurationParamater != null)
