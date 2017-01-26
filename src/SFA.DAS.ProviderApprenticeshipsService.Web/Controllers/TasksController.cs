@@ -6,7 +6,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [Authorize]
-    public class TasksController : Controller
+    public class TasksController : BaseController
     {
         private readonly TaskOrchestrator _taskOrchestrator;
 

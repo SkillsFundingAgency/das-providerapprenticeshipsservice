@@ -127,6 +127,13 @@
         </div>
         @RenderSection("breadcrumb", required: false)
         <div id="content">
+            @if (TempData.ContainsKey("InfoMessage"))
+            {
+                <div>
+                    @Html.Raw(TempData["InfoMessage"])
+                </div>
+            }
+            @*@Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)*@
             @RenderBody()
         </div>
     </main>

@@ -18,6 +18,7 @@
       <Setting name="IdamsRealm"/>
       <Setting name="IdamsADFSMetadata"/>
       <Setting name="InstrumentationKey" />
+      <Setting name="RedisSessionProviderConnectionString" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Httpsin" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-pp-pas-ilb"/>

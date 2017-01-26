@@ -6,6 +6,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     public class BaseController : Controller
     {
+        protected void SetInfoMessage(string message)
+        {
+            TempData["InfoMessage"] = message;
+        }
+        
         protected override void OnException(ExceptionContext filterContext)
         {
             if (filterContext.Exception is InvalidStateException)
