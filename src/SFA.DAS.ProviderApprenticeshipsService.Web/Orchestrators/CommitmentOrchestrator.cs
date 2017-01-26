@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Newtonsoft.Json;
-using NLog;
+
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
@@ -62,7 +62,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         public async Task<CommitmentListViewModel> GetAll(long providerId)
         {
             _logger.Info($"Getting all commitments for provider:{providerId}", providerId: providerId);
-            var isSigned = await IsSignedAgreement(providerId);
 
             var data = await _mediator.SendAsync(new GetCommitmentsQueryRequest
             {
@@ -73,29 +72,30 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 Commitments = MapFrom(data.Commitments),
-                HasSignedAgreement = isSigned == ProviderAgreementStatus.Agreed
+                HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
 
         public async Task<AgreementNotSignedViewModel> GetAgreementPage(long providerId, string hashedCommitmentId)
         {
-            var iss = await IsSignedAgreement(providerId);
             var model = new AgreementNotSignedViewModel
             {
                 ProviderId = providerId,
                 HashedCommitmentId = hashedCommitmentId,
                 ReviewAgreementUrl = _configuration.ContractAgreementsUrl,
-                IsSignedAgreement = iss == ProviderAgreementStatus.Agreed
+                IsSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
             return model;
         }
 
         public async Task<ProviderAgreementStatus> IsSignedAgreement(long providerId)
         {
-            var data = await _mediator.SendAsync(new GetProviderAgreementQueryRequest
-                                                     {
-                                                         ProviderId = providerId
-                                                     });
+            var data = await _mediator.SendAsync(
+                new GetProviderAgreementQueryRequest
+                {
+                    ProviderId = providerId
+                });
+
             return data.HasAgreement;
         }
 
