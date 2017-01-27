@@ -1,0 +1,56 @@
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ManageApprenticeshipsViewModel
+
+@{
+    ViewBag.Title = "Manage apprentices";
+    ViewBag.PageId = "manage-apprentices";
+}
+
+<div class="grid-row">
+    <div class="column-full">
+        <h1 class="heading-xlarge">Your apprentices</h1>
+    </div>
+    <div class="column-one-third"></div>
+    <div class="column-two-thirds">
+        @if (!Model.Apprenticeships.Any())
+            {
+            <div class="panel panel-border-wide alert-default">
+
+                <p>You don’t have any requests in progress.</p>
+
+            </div>
+        }
+        else
+        {
+            <table class="tableResponsive employerListing">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date of birth</th>
+                        <th>Status</th>
+                        <th></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var commitment in Model.Apprenticeships)
+                    {
+                        <tr>
+                            <td>
+                                @commitment.ApprenticeshipName &nbsp;
+                            </td>
+                            <td>
+                                @commitment.DateOfBirth.ToString() &nbsp;
+                            </td>
+                            <td>
+                                @commitment.AgreementStatus &nbsp;
+                            </td>
+                            <td>
+                                @*<a href="@Url.Action("Details", new { Model.ProviderId, commitment.HashedCommitmentId })" title="View  @commitment.LegalEntityName" aria-label="View  @commitment.LegalEntityName">View</a>*@
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

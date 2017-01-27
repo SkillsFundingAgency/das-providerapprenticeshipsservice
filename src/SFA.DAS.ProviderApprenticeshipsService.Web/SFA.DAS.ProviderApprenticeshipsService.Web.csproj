@@ -339,6 +339,7 @@
     <Compile Include="Controllers\CommitmentController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ManageApprenticesController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
@@ -366,6 +367,7 @@
     <Compile Include="Models\ExtendedApprenticeshipViewModel.cs" />
     <Compile Include="Models\FinishEditingViewModel.cs" />
     <Compile Include="Models\AccountHomeViewModel.cs" />
+    <Compile Include="Models\ManageApprenticesViewModel.cs" />
     <Compile Include="Models\RequestStatus.cs" />
     <Compile Include="Models\Types\DateTimeViewModel.cs" />
     <Compile Include="Models\Types\SaveOrSendStatus.cs" />
@@ -392,6 +394,7 @@
     <Compile Include="Models\BulkUpload\CsvRecord.cs" />
     <Compile Include="Orchestrators\ICommitmentStatusCalculator.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
+    <Compile Include="Orchestrators\ManageApprenticesOrchestrator.cs" />
     <Compile Include="Orchestrators\TaskOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestContext.cs" />
@@ -556,6 +559,7 @@
     <Content Include="Views\Commitment\Cohorts.cshtml" />
     <Content Include="Views\Commitment\RequestList.cshtml" />
     <Content Include="Views\Commitment\RequestApproved.cshtml" />
+    <Content Include="Views\ManageApprentices\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

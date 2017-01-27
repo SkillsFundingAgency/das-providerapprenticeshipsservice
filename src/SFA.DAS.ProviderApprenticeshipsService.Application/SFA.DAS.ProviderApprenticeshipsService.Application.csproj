@@ -120,6 +120,9 @@
     <Compile Include="Queries\GetTasks\GetTasksQueryHandler.cs" />
     <Compile Include="Queries\GetTasks\GetTasksQueryRequest.cs" />
     <Compile Include="Queries\GetTasks\GetTasksQueryResponse.cs" />
+    <Compile Include="Queries\GetAllApprentices\GetAllApprenticesHandler.cs" />
+    <Compile Include="Queries\GetAllApprentices\GetAllApprenticesRequest.cs" />
+    <Compile Include="Queries\GetAllApprentices\GetAllApprenticesResponse.cs" />
     <Compile Include="Queries\GetTask\GetTaskQueryHandler.cs" />
     <Compile Include="Queries\GetTask\GetTaskQueryRequest.cs" />
     <Compile Include="Queries\GetTask\GetTaskQueryResponse.cs" />
