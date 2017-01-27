@@ -18,6 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllAppre
                                                       {
                                                           new Apprenticeship
                                                               {
+                                                                  Id = 70022,
                                                                   AgreementStatus = AgreementStatus.BothAgreed, 
                                                                   FirstName = "Chris",
                                                                   LastName = "Froberg",

@@ -1,4 +1,5 @@
-﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ManageApprenticeshipsViewModel
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ManageApprenticeshipsViewModel
 
 @{
     ViewBag.Title = "Manage apprentices";
@@ -25,6 +26,7 @@
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>ULN</th>
                         <th>Date of birth</th>
                         <th>Status</th>
                         <th></th>
@@ -32,20 +34,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var commitment in Model.Apprenticeships)
+                    @foreach (var apprenticeships in Model.Apprenticeships)
                     {
                         <tr>
                             <td>
-                                @commitment.ApprenticeshipName &nbsp;
+                                @apprenticeships.FirstName @apprenticeships.LastName &nbsp;
                             </td>
                             <td>
-                                @commitment.DateOfBirth.ToString() &nbsp;
+                                @apprenticeships.Uln &nbsp;
                             </td>
                             <td>
-                                @commitment.AgreementStatus &nbsp;
+                                @if (apprenticeships.DateOfBirth != null)
+                                {
+                                    @apprenticeships.DateOfBirth.Value.ToGdsFormatWithoutDay()
+                                } &nbsp;
                             </td>
                             <td>
-                                @*<a href="@Url.Action("Details", new { Model.ProviderId, commitment.HashedCommitmentId })" title="View  @commitment.LegalEntityName" aria-label="View  @commitment.LegalEntityName">View</a>*@
+                                @apprenticeships.Status &nbsp;
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Details", new { Model.ProviderId,  apprenticeshipsId = apprenticeships.Id })"
+                                   title="View  @apprenticeships.FirstName @apprenticeships.LastName" 
+                                   aria-label="View @apprenticeships.FirstName @apprenticeships.LastName">View</a>
                             </td>
                         </tr>
                     }

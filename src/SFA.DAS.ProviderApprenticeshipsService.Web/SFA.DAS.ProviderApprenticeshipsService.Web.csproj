@@ -356,6 +356,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AcknowledgementViewModel.cs" />
+    <Compile Include="Models\ApprenticeshipDetailsViewModel.cs" />
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
     <Compile Include="Models\BulkUpload\BulkUploadResult.cs" />
@@ -560,6 +561,7 @@
     <Content Include="Views\Commitment\RequestList.cshtml" />
     <Content Include="Views\Commitment\RequestApproved.cshtml" />
     <Content Include="Views\ManageApprentices\Index.cshtml" />
+    <Content Include="Views\ManageApprentices\Details.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -24,5 +24,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var model = await _orchestrator.GetApprenticeships(providerId);
             return View(model);
         }
+
+        [HttpGet]
+        [Route("{apprenticeshipsid}/details")]
+        [OutputCache(CacheProfile = "NoCache")]
+        public async Task<ActionResult>  Details(long providerid, long apprenticeshipsid)
+        {
+            var model = await _orchestrator.GetApprenticeship(providerid, apprenticeshipsid);
+            return View(model);
+        }
     }
 }

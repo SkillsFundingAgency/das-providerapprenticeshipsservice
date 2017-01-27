@@ -1,0 +1,88 @@
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipDetailsViewModel
+
+@{
+    ViewBag.Title = "Apprentice detail";
+    ViewBag.PageId = "apprentices-detail";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">@Model.FirstName @Model.LastName</h1>
+
+        <div class="group">
+            <h3>Status</h3>
+            <hr/>
+            <label>Status</label>
+            <span>@Model.Status</span>
+            <hr/>
+        </div>
+
+        <div class="group">
+            <h3>Apprentice</h3>
+            <hr/>
+            <label>Apprentice name</label>
+            <span>@Model.FirstName @Model.LastName</span>
+            <hr />
+            <label>Date of birth</label>
+            <span>@Model.DateOfBirth</span>
+            <hr/>
+            <label>ULN</label>
+            <span>@Model.Uln</span>
+            <hr />
+        </div>
+
+        <div class="group">
+            <h3>Training</h3>
+            <hr/>
+            <label>Apprenticeship name</label>
+            <span>@Model.TrainingName</span>
+            <hr />
+            <label>Employer</label>
+            <span>Model.Employer (ToDo)</span>
+            <hr />
+            <label>Endopint assessor</label>
+            <span>Model.EndpointAssessorName (ToDo) </span>
+            <hr/>
+        </div>
+
+         
+        <div class="group">
+            <h3>Dates</h3>
+            <hr/>
+            <label>Start date</label>
+            <span>@Model.StartDate</span>
+            <hr/>
+            <label>End date</label>
+            <span>@Model.EndDate</span>
+            <hr/>
+            <label>Time lest (enhancement)</label>
+            <span>Model.TimeLeft</span>
+            <hr/>
+        </div>
+
+        <div class="group">
+            <h3>Payment</h3>
+            <hr />
+            <label>Cost</label>
+            <span>@Model.Cost</span>
+            <hr />
+            <label>Amount paid</label>
+            <span>Model.AmountPaied</span>
+            <hr />
+            <label>Status</label>
+            <span>Model.Balance</span>
+            <hr />
+        </div>
+
+    </div>
+    <div class="column-one-thirds">
+        
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Index", "ManageApprentices")" aria-label="Back to all apprentices" class="back-link">Back</a>
+    </div>
+}

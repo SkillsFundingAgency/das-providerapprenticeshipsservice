@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
-
-using SFA.DAS.Commitments.Api.Types;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
     public class ManageApprenticeshipsViewModel
     {
-        public List<Apprenticeship> Apprenticeships { get; set; }
+        // ToDo: use list view model
+        public IEnumerable<ApprenticeshipDetailsViewModel> Apprenticeships { get; set; } 
+
+        public long ProviderId { get; set; }
     }
 }
