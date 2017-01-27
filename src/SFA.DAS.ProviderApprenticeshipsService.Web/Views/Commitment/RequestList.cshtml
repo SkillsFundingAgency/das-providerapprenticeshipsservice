@@ -1,0 +1,75 @@
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CommitmentListViewModel
+
+    @{
+        ViewBag.Title = Model.PageTitle;
+        ViewBag.PageId = Model.PageId;
+    }
+
+<div class="grid-row">
+    <div class="column-full">
+
+
+        @if (TempData["FlashMessage"] != null)
+        {
+            <div class="panel panel-border-wide alert-default">
+                <p> @TempData["FlashMessage"]</p>
+            </div>
+        }
+
+            <h1 class="heading-xlarge">@Model.PageHeading</h1>
+
+            <p class="dynamic-heading">@Html.Raw(Model.PageHeading2)</p>
+
+            @if (!Model.Commitments.Any())
+            {
+                <div class="panel panel-border-wide alert-default">
+
+                    <p>You don’t have any requests in progress.</p>
+
+                </div>
+            }
+            else
+            {
+                <table class="tableResponsive employerListing">
+                    <thead>
+                        <tr>
+                            <th>Employer</th>
+                            <th>Cohort reference</th>
+                            <th>Last message</th>
+                            <th></th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var commitment in Model.Commitments)
+                        {
+                            <tr>
+                                <td>
+                                    @commitment.LegalEntityName &nbsp;
+                                </td>
+                                <td>
+                                    @commitment.Reference &nbsp;
+                                </td>
+                                <td>
+                                    @commitment.LatestMessage &nbsp;
+                                </td>
+                                <td>
+                                    @if (commitment.ShowViewLink)
+                                    {
+                                        <a href="@Url.Action("Details", new { Model.ProviderId, commitment.HashedCommitmentId })" title="View  @commitment.LegalEntityName" aria-label="View  @commitment.LegalEntityName">View</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Cohorts")" aria-label="Back to Account home" class="back-link">Back</a>
+    </div>
+}

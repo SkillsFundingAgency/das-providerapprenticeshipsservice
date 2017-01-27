@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
+﻿using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
     public sealed class AcknowledgementViewModel
     {
@@ -6,5 +8,7 @@
         public string EmployerName { get; internal set; }
         public string Message { get; set; }
         public string ProviderName { get; internal set; }
+
+        public string RedirectUrl { get; set; }
     }
 }

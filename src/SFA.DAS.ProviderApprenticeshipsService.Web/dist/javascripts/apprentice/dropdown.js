@@ -35,4 +35,6 @@
     $('#TrainingCode').on('select2:close', function () {
         $("#StartDate_Month").focus();
     });
+
+
 }());

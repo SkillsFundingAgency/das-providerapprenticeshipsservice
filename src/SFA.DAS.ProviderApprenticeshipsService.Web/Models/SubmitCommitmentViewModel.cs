@@ -1,6 +1,7 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
+﻿using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
-    using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
     public class SubmitCommitmentViewModel
     {
