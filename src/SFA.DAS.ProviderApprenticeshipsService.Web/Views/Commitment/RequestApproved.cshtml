@@ -9,7 +9,7 @@
     <div class="column-full">
         <div class="govuk-box-highlight">
             <h1 class="heading-xlarge" id="changeHeadline">
-                Request approved*
+                Cohort approved
             </h1>
         </div>
     </div>
@@ -36,15 +36,14 @@
             </tbody>
         </table>
 
-
         <h2 class="heading-medium">What happens next?</h2>
         <p id="changeMainCopy">
-            Lorem ipsum har inte bara överlevt fem århundraden, utan även övergången till elektronisk.*
+            Your cohort has been approved - your apprentices will appear in the Manage your apprentices area of your account.
         </p>
 
         @if (!string.IsNullOrEmpty(Model.RedirectUrl))
         {
-            <a href="@Url.Action("ReadyForApproval")" aria-label="Go back to cohort list">Go back to view cohorts ready for approval*</a>
+            <a href="@Url.Action("ReadyForApproval")" aria-label="Return to Approve cohorts">Return to Approve cohorts</a>
         }
         @Session["RequestStartStatus"]
 
