@@ -1,6 +1,6 @@
 ﻿{
   "$schema": "http://schemastore.org/schemas/json/webjob-publish-settings.json",
-  "webJobName": "SFADASPASContractAgreementsWebJob",
+  "webJobName": "ContractAgreements",
   "startTime": null,
   "endTime": null,
   "jobRecurrenceFrequency": null,
