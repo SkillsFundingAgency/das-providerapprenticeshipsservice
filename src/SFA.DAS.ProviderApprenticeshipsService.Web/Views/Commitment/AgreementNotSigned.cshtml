@@ -6,18 +6,20 @@
 }
 
 <div class="grid-row">
-    <div class="column-full">
-
+    <div class="column-two-thirds">
         <h1 class="heading-xlarge">Agreement not signed</h1>
-
-        <p>You must sign your apprenticeship training provider agreement with
-            the Skills Funding Agency before you can approve cohorts.
-        </p>
-
-        <a class="button" href="@Model.ReviewAgreementUrl" target="_blank" aria-label="Review your agreement">Review your agreement</a>
-
-        <a href="@Model.RequestListUrl">
-            Continue to cohort
-        </a>
+        <div class="notice">
+            <i class="icon icon-important">
+                <span class="visually-hidden">Warning</span>
+            </i>
+           
+                <strong class="bold-small">
+                    You must sign your apprenticeship training provider agreement with
+                    the Skills Funding Agency before you can approve cohorts.
+                </strong>
+        
+        </div>
+       <p><a class="button" href="@Model.ReviewAgreementUrl" target="_blank" aria-label="Review your agreement">Review your agreement</a>
+        <p><a href="@Model.RequestListUrl">Continue to cohort</a></p>
     </div>
 </div>

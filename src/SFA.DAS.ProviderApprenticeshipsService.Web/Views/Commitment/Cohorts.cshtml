@@ -11,9 +11,12 @@
 
         @if (!Model.HasSignedTheAgreement)
         {
-            <p>Need to sign agreement.
-                <a href="@Model.SignAgreementUrl" target="_blank" >Please sign here</a>
-           </p>
+            <div class="panel panel-border-wide alert-default">
+                <p>
+                    You must
+                    <a href="@Model.SignAgreementUrl" target="_blank">review and sign your apprenticeship training provider agreement</a> before you can approve this cohort.
+                </p>
+            </div>
         }
 
         <h1 class="heading-xlarge">Your cohorts</h1>
