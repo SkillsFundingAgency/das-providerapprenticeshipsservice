@@ -44,11 +44,10 @@
 //bulk upload styles
 
 #apprentice-details{
+    .record-deleted-panel{border-color:$turquoise;}
     .bulk-upload-buttons{      
         .upload-btn{
-              @include media(tablet) {
-                margin:auto;
-                }
+              @include media(tablet) {margin:auto;}
             margin-top:20px;
             margin-bottom:20px;
         }
@@ -229,6 +228,7 @@
     }
 
 }
+
 
 
 
