@@ -85,7 +85,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{hashedCommitmentId}/Details")]
+        [Route("{hashedCommitmentId}/Details", Name = "CohortDetails")]
         public async Task<ActionResult> Details(long providerId, string hashedCommitmentId)
         {
             var model = await _commitmentOrchestrator.GetCommitmentDetails(providerId, hashedCommitmentId);
@@ -127,6 +127,34 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
 
             return RedirectToAction("Details", new { apprenticeship.ProviderId, apprenticeship.HashedCommitmentId });
+        }
+
+        [HttpGet]
+        [Route("{hashedCommitmentId}/{hashedApprenticeshipId}/Delete")]
+        public ActionResult DeleteConfirmation(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            // TODO: LWA - Build viewmodel in orchestrator + validation authorisation
+            var viewModel = new DeleteConfirmationViewModel
+            {
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId,
+                HashedApprenticeshipId = hashedApprenticeshipId
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteConfirmation(DeleteConfirmationViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                View(viewModel);
+            }
+
+            await _commitmentOrchestrator.DeleteApprenticeship(viewModel);
+
+            return RedirectToRoute("CohortDetails", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
         }
 
         [HttpGet]

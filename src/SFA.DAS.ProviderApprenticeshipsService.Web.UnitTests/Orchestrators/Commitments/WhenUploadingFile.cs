@@ -21,7 +21,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
     [TestFixture]
     public sealed class WhenUploadingFile
@@ -107,7 +107,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
             commandArgument.Apprenticeships.ToList()[0].FirstName.Should().Be("Chris");
             commandArgument.Apprenticeships.ToList()[0].LastName.Should().Be("Froberg");
             commandArgument.Apprenticeships.ToList()[0].DateOfBirth.Should().Be(new DateTime(1998, 12, 8));
-            commandArgument.Apprenticeships.ToList()[0].TrainingType.Should().Be(Commitments.Api.Types.TrainingType.Standard);
+            commandArgument.Apprenticeships.ToList()[0].TrainingType.Should().Be(DAS.Commitments.Api.Types.TrainingType.Standard);
             commandArgument.Apprenticeships.ToList()[0].TrainingCode.Should().Be("2");
             commandArgument.Apprenticeships.ToList()[0].StartDate.Should().Be(new DateTime(2020, 8, 1));
             commandArgument.Apprenticeships.ToList()[0].EndDate.Should().Be(new DateTime(2025, 8, 1));

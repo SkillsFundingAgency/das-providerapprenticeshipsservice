@@ -25,6 +25,7 @@ using SFA.DAS.Tasks.Api.Types.Templates;
 using TrainingType = SFA.DAS.Commitments.Api.Types.TrainingType;
 
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -125,6 +126,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageHeading2 = $"You have <strong>{data.ToList().Count}</strong> new cohorts:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
+        }
+
+        public Task DeleteApprenticeship(DeleteConfirmationViewModel viewModel)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(viewModel.HashedApprenticeshipId);
+            _logger.Info($"Deleting appreticeship {apprenticeshipId}", providerId: viewModel.ProviderId, apprenticeshipId: apprenticeshipId);
+
+            return _mediator.SendAsync(new DeleteApprenticeshipCommand
+            {
+                ProviderId = viewModel.ProviderId,
+                ApprenticeshipId = apprenticeshipId
+            }); 
         }
 
         public async Task<CommitmentListViewModel> GetAllReadyForReview(long providerId)
