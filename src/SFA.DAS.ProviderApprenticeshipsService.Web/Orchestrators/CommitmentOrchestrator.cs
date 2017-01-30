@@ -149,17 +149,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public Task DeleteApprenticeship(DeleteConfirmationViewModel viewModel)
+        public async Task<string> DeleteApprenticeship(DeleteConfirmationViewModel viewModel)
         {
             var apprenticeshipId = _hashingService.DecodeValue(viewModel.HashedApprenticeshipId);
             _logger.Info($"Deleting appreticeship {apprenticeshipId}", providerId: viewModel.ProviderId, apprenticeshipId: apprenticeshipId);
 
-            return _mediator.SendAsync(new DeleteApprenticeshipCommand
+            var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                ProviderId = viewModel.ProviderId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            await _mediator.SendAsync(new DeleteApprenticeshipCommand
             {
                 ProviderId = viewModel.ProviderId,
                 ApprenticeshipId = apprenticeshipId
                 
-            }); 
+            });
+
+            return apprenticeship.Apprenticeship.ApprenticeshipName;
         }
 
         public async Task<CommitmentListViewModel> GetAllReadyForReview(long providerId)
