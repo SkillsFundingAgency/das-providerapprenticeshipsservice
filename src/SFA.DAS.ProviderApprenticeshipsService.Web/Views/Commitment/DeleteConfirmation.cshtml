@@ -18,7 +18,7 @@
             <h1 class="heading-xlarge">Confirm apprentice deletion</h1>
             <h2 class="heading-large">@Model.ApprenticeshipName</h2>
             
-            @if (string.IsNullOrWhiteSpace(Model.DateOfBirth))
+            @if (!string.IsNullOrWhiteSpace(Model.DateOfBirth))
             {
                 <p class="secondary-text heading-small">@Model.DateOfBirth</p>
             }
