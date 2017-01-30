@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipDetailsViewModel
 
 @{
@@ -59,24 +60,26 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Apprenticeship training course</td>
-                    <td>@Model.TrainingName</td>
-                   
-                </tr>
+            <tr>
+                <td>Apprenticeship training course</td>
+                <td>@Model.TrainingName</td>
+
+            </tr>
+            <!--
+                enhancement
                 <tr>
                     <td>Employer</td>
-                    <td>
-                        @Model.EmployerName
-                       
-                    </td>
-                   
+                    <td>@Model.EmployerName </td>
                 </tr>
+                -->
+
+            <!--
+            enhancement
                 <tr>
                     <td>End-point assessor</td>
                     <td>Pham Assessment Ltd</td>
-                   
                 </tr>
+            -->
 
             </tbody>
         </table>
@@ -126,7 +129,9 @@
             <tbody>
                 <tr>
                     <td>Total training cost</td>
-                    <td>@Model.Cost </td>
+                    <td>
+                        @FormatCost(Model.Cost)
+                    </td>
                     <td>&nbsp;</td>
                 </tr>
                <!-- improvisation <tr>
@@ -145,14 +150,26 @@
 
     </div>
     <div class="column-one-third">
+        <!--
+            enhancement
         <h2 class="heading-medium">Change history</h2>
         <p>There have been no changes.</p>
+        -->
     </div>
 </div>
-
 
 @section breadcrumb {
     <div class="breadcrumbs">
         <a href="@Url.Action("Index", "ManageApprentices")" aria-label="Back to all apprentices" class="back-link">Back</a>
     </div>
+}
+
+@functions {
+    public string FormatCost(decimal? cost)
+    {
+        if (!cost.HasValue)
+            return string.Empty;
+
+        return $"£{cost.Value:n0}";
+    }
 }
