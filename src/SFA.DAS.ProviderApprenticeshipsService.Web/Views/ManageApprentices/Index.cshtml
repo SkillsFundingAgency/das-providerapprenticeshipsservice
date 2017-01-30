@@ -33,17 +33,17 @@
                     {
                         <tr>
                             <td>
-                                @apprenticeships.FirstName @apprenticeships.LastName &nbsp;
+                                @apprenticeships.FirstName @apprenticeships.LastName 
                             </td>
                            
                             <td>
                                 @if (apprenticeships.DateOfBirth != null)
                                 {
-                                    @apprenticeships.DateOfBirth.Value.ToGdsFormatWithoutDay()
-                                } &nbsp;
+                                    @apprenticeships.DateOfBirth.Value.ToGdsFormat()
+                                } 
                             </td>
                             <td>
-                                @apprenticeships.Uln &nbsp;AD34343434
+                                @apprenticeships.Uln
                             </td>
                             <td>
                                 @apprenticeships.Status &nbsp;
