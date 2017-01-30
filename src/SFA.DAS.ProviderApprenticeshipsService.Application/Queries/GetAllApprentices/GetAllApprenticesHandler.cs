@@ -1,34 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using MediatR;
 
+using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentices
 {
     public class GetAllApprenticesHandler : IAsyncRequestHandler<GetAllApprenticesRequest, GetAllApprenticesResponse>
     {
-        public Task<GetAllApprenticesResponse> Handle(GetAllApprenticesRequest message)
+        private ICommitmentsApi _commitmentsApi;
+
+        public GetAllApprenticesHandler(ICommitmentsApi commitmentsApi)
         {
-            var model = new GetAllApprenticesResponse
-                            {
-                                Apprenticeships = new List<Apprenticeship>
-                                                      {
-                                                          new Apprenticeship
-                                                              {
-                                                                  Id = 70022,
-                                                                  AgreementStatus = AgreementStatus.BothAgreed, 
-                                                                  FirstName = "Chris",
-                                                                  LastName = "Froberg",
-                                                                  DateOfBirth = new DateTime(1998, 12, 08),
-                                                                  Cost = 5000
-                                                              }
-                                                      }
-                            };
-            return Task.FromResult(model);
-            // ToDo: Add method to commitments API // GetProviderApprenticeships(long providerId)
+            if (commitmentsApi == null)
+                throw new ArgumentNullException(nameof(commitmentsApi));
+            _commitmentsApi = commitmentsApi;
+        }
+                                                                                
+        public async Task<GetAllApprenticesResponse> Handle(GetAllApprenticesRequest message)
+        {
+            var apprenticeship = await _commitmentsApi.GetProviderApprenticeships(message.ProviderId);
+            return new GetAllApprenticesResponse
+                       {
+                           Apprenticeships =  apprenticeship
+                                    .Where(m => m.PaymentStatus != PaymentStatus.PendingApproval)
+                                    .ToList()
+                       };            
         }
     }
 }

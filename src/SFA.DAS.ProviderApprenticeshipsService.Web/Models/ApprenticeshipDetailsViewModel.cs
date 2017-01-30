@@ -23,5 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public decimal? Cost { get; set; }
 
         public string Status { get; set; }
+
+        public string EmployerName { get; set; }
     }
 }

@@ -42,6 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private async Task<ApprenticeshipDetailsViewModel> MapFrom(Apprenticeship apprenticeship)
         {
+            //_mediator.SendAsync(new GetAllApprenticesRequest())
             return new ApprenticeshipDetailsViewModel
             {
                 Id = apprenticeship.Id,
@@ -53,7 +54,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 EndDate = apprenticeship.EndDate,
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,
-                Status = MapPaymentStatus(apprenticeship.PaymentStatus)
+                Status = MapPaymentStatus(apprenticeship.PaymentStatus),
+                EmployerName = "ToDo, add emplyer name"
             };
         }
 
