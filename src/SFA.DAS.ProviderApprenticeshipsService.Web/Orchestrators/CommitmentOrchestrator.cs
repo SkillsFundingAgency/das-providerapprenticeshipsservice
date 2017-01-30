@@ -36,6 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IProviderCommitmentsLogger _logger;
 
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
+
         readonly Func<CommitmentListItem, Task<string>> _latestMessageToEmployerFunc;
 
         readonly Func<CommitmentListItem, Task<string>> _latestMessageToProviderFunc;
@@ -81,6 +82,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 NewRequestsCount = commitmentStatus.Count(m => m == RequestStatus.NewRequest),
                 ReadyForApprovalCount = commitmentStatus.Count(m => m == RequestStatus.ReadyForApproval),
                 ReadyForReviewCount = commitmentStatus.Count(m => m == RequestStatus.ReadyForReview),
+
                 WithEmployerCount = commitmentStatus.Count(m => m == RequestStatus.SentForReview || m == RequestStatus.WithEmployerForApproval),
                 HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed,
                 SignAgreementUrl = _configuration.ContractAgreementsUrl
@@ -100,10 +102,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 Commitments = await MapFrom(data, _latestMessageToEmployerFunc),
-                PageTitle = "Cohorts with employer",
-                PageId = "requests-with-employer",
-                PageHeading = "Cothorts with employer",
-                PageHeading2 = $"You have {data.Count} with employer for review:",
+                PageTitle = "Cohorts with employers",
+                PageId = "cohorts-with-employers",
+                PageHeading = "Cothorts with employers",
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohorts that are that are with employers:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
@@ -117,10 +119,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 Commitments = await MapFrom(data, _latestMessageToProviderFunc),
-                PageTitle = "New requests",
-                PageId = "requests-new",
-                PageHeading = "New requests",
-                PageHeading2 = $"You have {data.ToList().Count} new cohorts:",
+                PageTitle = "New cohorts",
+                PageId = "new-cohorts",
+                PageHeading = "New cohorts",
+                PageHeading2 = $"You have <strong>{data.ToList().Count}</strong> new cohorts:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
@@ -133,10 +135,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 Commitments = await MapFrom(data, _latestMessageToProviderFunc),
-                PageTitle = "Requests ready for review",
-                PageId = "requests-ready-for-review",
+                PageTitle = "Review cohorts",
+                PageId = "review-cohorts-list",
                 PageHeading = "Review cohorts",
-                PageHeading2 = $"You have {data.Count} cohorts that is ready for review:",
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohorts that are ready for review:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
@@ -145,15 +147,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var data = (await GetAll(providerId, RequestStatus.ReadyForApproval)).ToList();
             _logger.Info($"Provider getting all ready for approval ({data.Count}) :{providerId}", providerId);
-
+            
             return new CommitmentListViewModel
             {
                 ProviderId = providerId,
                 Commitments = await MapFrom(data, _latestMessageToProviderFunc),
-                PageTitle = "Requests ready for approval",
-                PageId = "requests-ready-for-approval",
+                PageTitle = "Approve cohorts",
+                PageId = "Approve cohorts",
                 PageHeading = "Approve cohorts",
-                PageHeading2 = $"You have {data.Count} cohorts that need your approal:",
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohorts that need your approval:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
@@ -183,6 +185,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 m => _statusCalculator.GetStatus(m.EditStatus, m.ApprenticeshipCount, m.LastAction, m.AgreementStatus)
                     == requestStatus);
         }
+
 
         public async Task<ProviderAgreementStatus> IsSignedAgreement(long providerId)
         {

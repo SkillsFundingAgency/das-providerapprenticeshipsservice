@@ -43,6 +43,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
+        [HttpGet]
         [Route("WithEmployer")]
         public async Task<ActionResult> WithEmployer(long providerId)
         {
@@ -51,13 +52,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return View("RequestList", model);
         }
 
-
         [HttpGet]
         [Route("NewRequests")]
         public async Task<ActionResult> NewRequests(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAllNewRequests(providerId);
-            Session[LastCohortPageSessionKey] = RequestStatus.NewRequest; // Can probably find out anyway. 
+            Session[LastCohortPageSessionKey] = RequestStatus.NewRequest;
             return View("RequestList", model);
         }
 
@@ -199,7 +199,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var commitment = await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId);
             var url = Url.Action("ReadyForApproval", new { ProviderId = providerId });
 
-            TempData["FlashMessage"] = $"Cohort has been approved by you and the employer.";
+            TempData["FlashMessage"] = "Cohort approved";
             var model = new AcknowledgementViewModel
                             {
                                 CommitmentReference = commitment.Reference,
@@ -251,20 +251,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var commitment = await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId);
             var url = string.Empty;
-            var requestStatus = GetRequestStatusFromSession();
-            switch (requestStatus)
+            switch (GetRequestStatusFromSession())
             {
                 case RequestStatus.ReadyForReview:
                     url = Url.Action("ReadyForReview", new { ProviderId = providerId });
-                    SetTempMessage(requestStatus, commitment.Status);
+                    SetTempMessage(commitment.Status);
                     break;
                 case RequestStatus.ReadyForApproval:
                     url = Url.Action("ReadyForApproval", new { ProviderId = providerId });
-                    SetTempMessage(requestStatus, commitment.Status);
+                    SetTempMessage(commitment.Status);
                     break;
                 case RequestStatus.NewRequest:
                     url = Url.Action("NewRequests", new { ProviderId = providerId } );
-                    SetTempMessage(requestStatus, commitment.Status);
+                    SetTempMessage(commitment.Status);
                     break;
             }
 
@@ -285,20 +284,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return status;
         }
 
-        private void SetTempMessage(RequestStatus oldRequestStatus, RequestStatus newRequestStatus)
+        private void SetTempMessage(RequestStatus newRequestStatus)
         {
-            if (oldRequestStatus == RequestStatus.NewRequest)
-            {
-                TempData["FlashMessage"] =
-                    $"Cohort has been sent to to employer for review.";
-            }
-            else
-            {
-                if (newRequestStatus == RequestStatus.SentForReview)
-                    TempData["FlashMessage"] = $"Cohort has been sent to to employer for review.";
-                if (newRequestStatus == RequestStatus.WithEmployerForApproval)
-                    TempData["FlashMessage"] = $"Cohort has been sent to to employer for approval.";
-            }
+            if (newRequestStatus == RequestStatus.SentForReview)
+                TempData["FlashMessage"] = "Your cohort is with your training provider for review";
+            if (newRequestStatus == RequestStatus.WithEmployerForApproval)
+                TempData["FlashMessage"] = "Your cohort is with your training provider for approval";
         }
 
         private void AddErrorsToModelState(InvalidRequestException ex)

@@ -18,7 +18,7 @@
 
             <h1 class="heading-xlarge">@Model.PageHeading</h1>
 
-            <p>@Model.PageHeading2</p>
+            <p class="dynamic-heading">@Html.Raw(Model.PageHeading2)</p>
 
             @if (!Model.Commitments.Any())
             {
