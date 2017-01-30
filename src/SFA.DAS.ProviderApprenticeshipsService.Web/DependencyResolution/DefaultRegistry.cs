@@ -16,9 +16,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Data.SqlTypes;
 using System.Reflection;
 using System.Web;
+using FluentValidation;
 using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Commitments.Api.Client;
@@ -49,6 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 scan => {
                     scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
+                    scan.ConnectImplementationsToTypesClosing(typeof(AbstractValidator<>)).OnAddedPluginTypes(t => t.Singleton());
                     scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
                     scan.ConnectImplementationsToTypesClosing(typeof(IAsyncRequestHandler<,>));
                     scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
