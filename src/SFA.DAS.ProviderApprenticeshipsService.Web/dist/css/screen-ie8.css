@@ -2516,6 +2516,10 @@ span.helpText {
   margin-top: 0.625em;
 }
 
+#apprentice-details .record-deleted-panel {
+  border-color: #28a197;
+}
+
 #apprentice-details .bulk-upload-buttons .upload-btn {
   margin: auto;
   margin-top: 20px;
