@@ -9,5 +9,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public long ProviderId { get; set; }
         public string HashedCommitmentId { get; set; }
         public string HashedApprenticeshipId { get; set; }
+        public bool? DeleteConfirmed { get; set; }
+        public string ApprenticeshipName { get; set; }
+        public string DateOfBirth { get; set; }
     }
 }

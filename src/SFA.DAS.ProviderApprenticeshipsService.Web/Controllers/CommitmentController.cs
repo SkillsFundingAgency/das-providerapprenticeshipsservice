@@ -133,13 +133,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedCommitmentId}/{hashedApprenticeshipId}/Delete")]
         public ActionResult DeleteConfirmation(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
-            // TODO: LWA - Build viewmodel in orchestrator + validation authorisation
-            var viewModel = new DeleteConfirmationViewModel
-            {
-                ProviderId = providerId,
-                HashedCommitmentId = hashedCommitmentId,
-                HashedApprenticeshipId = hashedApprenticeshipId
-            };
+            var viewModel = _commitmentOrchestrator.GetDeleteConfirmationModel(providerId, hashedCommitmentId, hashedApprenticeshipId);
 
             return View(viewModel);
         }
