@@ -9,25 +9,20 @@
 <div class="grid-row">
     <div class="column-full">
         <h1 class="heading-xlarge">Your apprentices</h1>
-    </div>
-    <div class="column-one-third"></div>
-    <div class="column-two-thirds">
         @if (!Model.Apprenticeships.Any())
             {
             <div class="panel panel-border-wide alert-default">
-
                 <p>You don’t have any requests in progress.</p>
-
             </div>
         }
         else
         {
-            <table class="tableResponsive employerListing">
+            <table class="tableResponsive provider-list-view">
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>ULN</th>
                         <th>Date of birth</th>
+                        <th>Unique learner number</th>
                         <th>Status</th>
                         <th></th>
 
@@ -40,9 +35,7 @@
                             <td>
                                 @apprenticeships.FirstName @apprenticeships.LastName &nbsp;
                             </td>
-                            <td>
-                                @apprenticeships.Uln &nbsp;
-                            </td>
+                           
                             <td>
                                 @if (apprenticeships.DateOfBirth != null)
                                 {
@@ -50,11 +43,14 @@
                                 } &nbsp;
                             </td>
                             <td>
+                                @apprenticeships.Uln &nbsp;AD34343434
+                            </td>
+                            <td>
                                 @apprenticeships.Status &nbsp;
                             </td>
                             <td>
                                 <a href="@Url.Action("Details", new { Model.ProviderId,  apprenticeshipsId = apprenticeships.Id })"
-                                   title="View  @apprenticeships.FirstName @apprenticeships.LastName" 
+                                   title="View  @apprenticeships.FirstName @apprenticeships.LastName"
                                    aria-label="View @apprenticeships.FirstName @apprenticeships.LastName">View</a>
                             </td>
                         </tr>

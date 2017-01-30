@@ -209,6 +209,19 @@
     }
 }
 
+//list of apprentices page
+
+#apprentices-detail{
+    .list-apprentice{
+        
+        .heading-medium{border-top:10px solid $govuk-blue; padding-top:20px;}
+
+
+
+
+
+    }
+}
 
 
 
@@ -246,8 +259,30 @@ only screen and (max-width: 480px) {
         } 
     }
 
-
-
+.provider-list-view { 
+        td:nth-of-type(1):before {
+        content: "Name";
+        font-weight: normal;
+        margin-top: 5px;
+        min-height: 30px;
+        }
+        td:nth-of-type(2):before {
+        content: "Date of birth";
+        font-weight: normal;
+        margin-top: 5px;
+        }
+        td:nth-of-type(3):before {
+        content: "ULN";
+        font-weight: normal;
+        margin-top: 5px;
+        word-wrap:break-word;
+        } 
+        td:nth-of-type(4):before {
+        content: "Status";
+        font-weight: normal;
+        margin-top: 5px;
+        } 
+    }
 }
 
 
