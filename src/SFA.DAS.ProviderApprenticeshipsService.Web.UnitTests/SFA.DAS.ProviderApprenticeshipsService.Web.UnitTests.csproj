@@ -81,6 +81,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Orchestrators\Commitments\WhenGettingDeleteApprenticeshipConfirmation.cs" />
     <Compile Include="Orchestrators\Commitments\WhenDeletingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGetCohorts.cs" />
     <Compile Include="Orchestrators\Commitments\WhenUploadingFile.cs" />

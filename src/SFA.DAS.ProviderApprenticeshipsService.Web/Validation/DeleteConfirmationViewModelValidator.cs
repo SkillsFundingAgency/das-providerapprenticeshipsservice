@@ -7,7 +7,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
     {
         public DeleteConfirmationViewModelValidator()
         {
-            // TODO: LWA - Add some validation
+            RuleFor(x => x.DeleteConfirmed).NotNull().WithMessage("Confirm deletion");
         }
     }
 }

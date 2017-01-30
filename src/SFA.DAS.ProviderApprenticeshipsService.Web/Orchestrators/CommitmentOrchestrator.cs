@@ -24,6 +24,7 @@ using TrainingType = SFA.DAS.Commitments.Api.Types.TrainingType;
 
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -114,6 +115,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
+        public async Task<DeleteConfirmationViewModel> GetDeleteConfirmationModel(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                ProviderId = providerId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            return new DeleteConfirmationViewModel
+            {
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId,
+                HashedApprenticeshipId = hashedApprenticeshipId,
+                ApprenticeshipName = apprenticeship.Apprenticeship.ApprenticeshipName,
+                DateOfBirth = apprenticeship.Apprenticeship.DateOfBirth.HasValue ? apprenticeship.Apprenticeship.DateOfBirth.Value.ToGdsFormat() : string.Empty
+            };
+        }
+
         public Task DeleteApprenticeship(DeleteConfirmationViewModel viewModel)
         {
             var apprenticeshipId = _hashingService.DecodeValue(viewModel.HashedApprenticeshipId);
@@ -123,6 +144,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = viewModel.ProviderId,
                 ApprenticeshipId = apprenticeshipId
+                
             }); 
         }
 
@@ -225,7 +247,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
             {
                 ProviderId = providerId,
-                AppenticeshipId = apprenticeshipId
+                ApprenticeshipId = apprenticeshipId
             });
 
             var apprenticeship = MapFrom(data.Apprenticeship);
