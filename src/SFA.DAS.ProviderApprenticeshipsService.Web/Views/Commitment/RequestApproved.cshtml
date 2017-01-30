@@ -1,0 +1,68 @@
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.AcknowledgementViewModel
+
+@{
+    ViewBag.Title = "Request approved";
+    ViewBag.PageId = "request-approved";
+}
+
+<div class="grid-row">
+    <div class="column-full">
+        <div class="govuk-box-highlight">
+            <h1 class="heading-xlarge" id="changeHeadline">
+                Cohort approved
+            </h1>
+        </div>
+    </div>
+</div>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+        <table class="instructions-sent">
+            <tbody>
+                <tr>
+                    <td>Cohort reference</td>
+                    <td class="strong">@Model.CommitmentReference</td>
+                </tr>
+                <tr>
+                    <td>Employer </td>
+                    <td class="strong">@Model.EmployerName</td>
+
+                </tr>
+                <tr>
+                    <td>Approved by</td>
+                    <td class="strong">@Model.ProviderName</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="heading-medium">What happens next?</h2>
+        <p id="changeMainCopy">
+            Your cohort has been approved - your apprentices will appear in the Manage your apprentices area of your account.
+        </p>
+
+        @if (!string.IsNullOrEmpty(Model.RedirectUrl))
+        {
+            <a href="@Url.Action("ReadyForApproval")" aria-label="Return to Approve cohorts">Return to Approve cohorts</a>
+        }
+        @Session["RequestStartStatus"]
+
+    </div>
+
+    <div class="column-one-third">
+        <aside>
+            <div class="panel panel-filled">
+                <h2 class="heading-medium">Help us improve this section</h2>
+                <p>Take a 3 minute survey about adding apprentices so that we can improve the service.</p>
+                <a href="https://www.surveymonkey.co.uk/r/viewlevy" target="_blank" class="button" title="Take the survey" aria-label="Take the survey">Take the survey</a>
+            </div>
+        </aside>
+    </div>
+
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Index", "Home")" aria-label="Back to Account home" class="back-link">Back to Account home</a>
+    </div>
+}

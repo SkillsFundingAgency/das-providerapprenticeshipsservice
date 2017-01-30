@@ -345,6 +345,7 @@
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Exceptions\InvalidStateExceptionFilter.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\IdentityExtensions.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
@@ -353,12 +354,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Models\AcknowledgementViewModel.cs" />
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
     <Compile Include="Models\BulkUpload\BulkUploadResult.cs" />
     <Compile Include="Models\BulkUpload\UploadError.cs" />
+    <Compile Include="Models\CohortsViewModel.cs" />
     <Compile Include="Models\CommitmentListItemViewModel.cs" />
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentDetailsViewModel.cs" />
@@ -457,6 +458,7 @@
     <Content Include="dist\css\images\govuk-crest.png" />
     <Content Include="dist\css\images\open-government-licence.png" />
     <Content Include="dist\css\images\open-government-licence_2x.png" />
+    <Content Include="dist\css\images\pagination-arrow-sprite.png" />
     <Content Include="dist\css\screen-ie6.css" />
     <Content Include="dist\css\screen-ie7.css" />
     <Content Include="dist\css\screen-ie8.css" />
@@ -476,6 +478,7 @@
     <Content Include="dist\images\icon-pointer-indexed.png" />
     <Content Include="dist\images\icon-pointer.png" />
     <Content Include="dist\images\opengraph-image.png" />
+    <Content Include="dist\css\images\option-select-toggle-sprite.png" />
     <Content Include="dist\images\separator-2x.png" />
     <Content Include="dist\images\separator.png" />
     <Content Include="dist\javascripts\app.js" />
@@ -531,7 +534,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
-    <Content Include="Views\Commitment\Index.cshtml" />
     <Content Include="Views\Commitment\Details.cshtml" />
     <Content Include="Views\Commitment\Edit.cshtml" />
     <Content Include="Views\Commitment\Create.cshtml" />
@@ -553,6 +555,9 @@
     <Content Include="Views\BulkUpload\UploadApprenticeships.cshtml" />
     <Content Include="Views\BulkUpload\UploadApprenticeshipsUnsuccessful.cshtml" />
     <Content Include="Views\Error\_InvalidState.cshtml" />
+    <Content Include="Views\Commitment\Cohorts.cshtml" />
+    <Content Include="Views\Commitment\RequestList.cshtml" />
+    <Content Include="Views\Commitment\RequestApproved.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

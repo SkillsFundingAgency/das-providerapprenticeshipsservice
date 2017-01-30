@@ -126,3 +126,142 @@
         font-size:16px;
     }
 }
+
+//cohors summary block styles
+.js-enabled{
+    .clickable{cursor:pointer;}
+}
+
+#cohorts-landing-page{
+  .bingo-background{
+            background:#D53880;
+            color:#fff; 
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            
+              @include media(tablet) {
+                    min-height:160px;
+                    width:48%;
+                    padding: 0 15px;
+              }
+              h2{margin-top:20px;
+                 a{
+                     text-decoration:none;
+                     color:#fff;
+                 }
+              }
+              .heading-small{margin-bottom:20px;}
+        }
+ 
+  .block-one, .block-two{
+       @include media(tablet) {
+            margin-bottom:30px;
+            }
+  }
+
+  .block-one,.block-three{
+       @include media(tablet) {
+      margin-right:2%;
+      }
+  }
+  .block-two, .block-four{
+     @include media(tablet) {
+      margin-left:2%;
+      }
+  }
+}
+
+
+//review cohorts page styles
+
+#review-cohorts{
+    color:#fff;
+    .all-apps{
+        background:#2e3391;
+        padding:20px;
+        margin:20px 0;
+         @include media(tablet) {
+            margin:auto;
+            }
+    }
+    .incomplete-apps{
+        background:#8e2a8d;
+        padding:20px;
+        margin-bottom:20px;
+        @include media(tablet) {
+            margin:auto;
+            }
+    }
+    .total-cost{
+        background:#d03a84;
+        padding:20px;
+        margin-bottom:30px;
+        @include media(tablet) {
+            margin:auto;
+            }
+    }
+
+}
+
+.dynamic-heading{
+    strong{
+        font-weight:bold;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+    
+//all mobile media query breakpoints
+//==================================
+@media only screen and (max-device-width: 640px),
+only screen and (max-device-width: 667px),
+only screen and (max-width: 480px) {
+    
+//Progress list mobile view styles 
+.employerListing { 
+        td:nth-of-type(1):before {
+        content: "Employer";
+        font-weight: normal;
+        margin-top: 5px;
+        min-height: 30px;
+        }
+        td:nth-of-type(2):before {
+        content: "Cohort reference";
+        font-weight: normal;
+        margin-top: 5px;
+        }
+        td:nth-of-type(3):before {
+        content: "Last message";
+        font-weight: normal;
+        margin-top: 5px;
+        } 
+    }
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

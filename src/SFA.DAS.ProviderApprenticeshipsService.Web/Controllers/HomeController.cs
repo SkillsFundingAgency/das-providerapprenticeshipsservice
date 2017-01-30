@@ -8,6 +8,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("~/", Name = "home")]
         public ActionResult Index()
         {
+            // HACK: There is currently an issue with login and the session provider.
+            // This is a work-around to enable login to function.
+            Session["TODO"] = "";
+
             if (User.Identity.IsAuthenticated) return RedirectToRoute("account-home");
 
             return View();

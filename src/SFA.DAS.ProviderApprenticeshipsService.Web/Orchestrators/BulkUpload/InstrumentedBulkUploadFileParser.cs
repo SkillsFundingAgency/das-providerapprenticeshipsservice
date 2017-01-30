@@ -29,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
             var result = _parser.CreateViewModels(attachment);
 
-            _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to create {result.Data.Count()} viewmodels");
+            _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to create {result.Data?.Count()} viewmodels");
 
             return result;
         }

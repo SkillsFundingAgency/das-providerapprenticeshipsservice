@@ -4,6 +4,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTasks
 {
     public class GetTasksQueryRequest : IAsyncRequest<GetTasksQueryResponse>
     {
-        public long ProviderId { get; set; }
+        public long Id { get; set; }
+
+        public bool IsProvider { get; set; }
     }
 }
