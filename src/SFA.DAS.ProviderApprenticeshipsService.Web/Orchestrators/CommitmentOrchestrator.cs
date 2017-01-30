@@ -138,7 +138,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         public async Task<string> DeleteApprenticeship(DeleteConfirmationViewModel viewModel)
         {
             var apprenticeshipId = _hashingService.DecodeValue(viewModel.HashedApprenticeshipId);
-            _logger.Info($"Deleting appreticeship {apprenticeshipId}", providerId: viewModel.ProviderId, apprenticeshipId: apprenticeshipId);
+            _logger.Info($"Deleting apprenticeship {apprenticeshipId}", providerId: viewModel.ProviderId, apprenticeshipId: apprenticeshipId);
 
             var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
             {
