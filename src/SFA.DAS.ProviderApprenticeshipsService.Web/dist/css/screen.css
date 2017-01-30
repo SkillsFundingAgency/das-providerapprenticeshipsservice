@@ -3059,12 +3059,28 @@ span.helpText {
   font-weight: bold;
 }
 
-#agreement-not-signed .notice {
-  margin: 60px 0;
+#edit-apprentice .delete-button {
+  background-color: #b10e1e;
+  float: right;
+  margin: 15px 0;
 }
 
-#agreement-not-signed .notice .icon-important {
-  background-image: url("/dist/images/icon-important.png");
+@media (min-width: 641px) {
+  #edit-apprentice .delete-button {
+    margin: auto;
+  }
+}
+
+#confirm-delete .heading-large {
+  margin-bottom: 0;
+}
+
+#confirm-delete .heading-small {
+  margin-top: 0;
+}
+
+#confirm-delete .secondary-text {
+  color: #6f777b;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
