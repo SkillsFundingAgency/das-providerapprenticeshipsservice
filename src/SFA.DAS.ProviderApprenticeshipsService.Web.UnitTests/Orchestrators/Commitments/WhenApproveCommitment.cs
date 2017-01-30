@@ -8,7 +8,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
     [TestFixture]
     public class WhenApproveCommitment
@@ -16,7 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators
         [TestCase(SaveStatus.ApproveAndSend, LastAction.Approve, true)]
         [TestCase(SaveStatus.AmendAndSend, LastAction.Amend, true)]
         [TestCase(SaveStatus.Approve, LastAction.Approve, false)]
-        public async Task  CheckStatusUpdate(SaveStatus input, LastAction expectedLastAction, bool expectedCreateTaskBool)
+        public async Task CheckStatusUpdate(SaveStatus input, LastAction expectedLastAction, bool expectedCreateTaskBool)
         {
             var mockMediator = new Mock<IMediator>();
             var mockHashingService = new Mock<IHashingService>();
