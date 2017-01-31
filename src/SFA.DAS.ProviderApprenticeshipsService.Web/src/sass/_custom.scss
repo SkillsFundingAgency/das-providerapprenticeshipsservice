@@ -44,7 +44,7 @@
 //bulk upload styles
 
 #apprentice-details{
-    .record-deleted-panel{border-color:$turquoise;}
+    .flash-alert{border-color:$turquoise;}
     .bulk-upload-buttons{      
         .upload-btn{
               @include media(tablet) {margin:auto;}
