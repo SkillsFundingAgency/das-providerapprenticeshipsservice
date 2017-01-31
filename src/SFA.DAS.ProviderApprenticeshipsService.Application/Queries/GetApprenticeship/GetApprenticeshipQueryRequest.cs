@@ -6,6 +6,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenti
     {
         public long ProviderId { get; set; }
 
-        public long AppenticeshipId { get; set; }
+        public long ApprenticeshipId { get; set; }
     }
 }

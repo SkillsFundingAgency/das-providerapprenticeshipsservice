@@ -25,6 +25,8 @@ using SFA.DAS.Tasks.Api.Types.Templates;
 using TrainingType = SFA.DAS.Commitments.Api.Types.TrainingType;
 
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -125,6 +127,47 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageHeading2 = $"You have <strong>{data.ToList().Count}</strong> new cohorts:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
+        }
+
+        public async Task<DeleteConfirmationViewModel> GetDeleteConfirmationModel(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                ProviderId = providerId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            return new DeleteConfirmationViewModel
+            {
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId,
+                HashedApprenticeshipId = hashedApprenticeshipId,
+                ApprenticeshipName = apprenticeship.Apprenticeship.ApprenticeshipName,
+                DateOfBirth = apprenticeship.Apprenticeship.DateOfBirth.HasValue ? apprenticeship.Apprenticeship.DateOfBirth.Value.ToGdsFormat() : string.Empty
+            };
+        }
+
+        public async Task<string> DeleteApprenticeship(DeleteConfirmationViewModel viewModel)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(viewModel.HashedApprenticeshipId);
+            _logger.Info($"Deleting apprenticeship {apprenticeshipId}", providerId: viewModel.ProviderId, apprenticeshipId: apprenticeshipId);
+
+            var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                ProviderId = viewModel.ProviderId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            await _mediator.SendAsync(new DeleteApprenticeshipCommand
+            {
+                ProviderId = viewModel.ProviderId,
+                ApprenticeshipId = apprenticeshipId
+                
+            });
+
+            return apprenticeship.Apprenticeship.ApprenticeshipName;
         }
 
         public async Task<CommitmentListViewModel> GetAllReadyForReview(long providerId)
@@ -274,7 +317,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
             {
                 ProviderId = providerId,
-                AppenticeshipId = apprenticeshipId
+                ApprenticeshipId = apprenticeshipId
             });
 
             var apprenticeship = MapFrom(data.Apprenticeship);

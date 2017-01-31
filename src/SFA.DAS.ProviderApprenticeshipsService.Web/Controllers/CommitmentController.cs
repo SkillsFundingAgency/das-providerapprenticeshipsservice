@@ -86,7 +86,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{hashedCommitmentId}/Details")]
+        [Route("{hashedCommitmentId}/Details", Name = "CohortDetails")]
         public async Task<ActionResult> Details(long providerId, string hashedCommitmentId)
         {
             var model = await _commitmentOrchestrator.GetCommitmentDetails(providerId, hashedCommitmentId);
@@ -96,7 +96,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
-        [Route("{hashedCommitmentId}/Edit/{hashedApprenticeshipId}")]
+        [Route("{hashedCommitmentId}/Edit/{hashedApprenticeshipId}", Name = "EditApprenticeship")]
         public async Task<ActionResult> Edit(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
             var model = await _commitmentOrchestrator.GetApprenticeship(providerId, hashedCommitmentId, hashedApprenticeshipId);
@@ -129,6 +129,41 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
 
             return RedirectToAction("Details", new { apprenticeship.ProviderId, apprenticeship.HashedCommitmentId });
+        }
+
+        [Route("{hashedCommitmentId}/{hashedApprenticeshipId}/Delete")]
+        [OutputCache(CacheProfile = "NoCache")]
+        public async Task<ActionResult> DeleteConfirmation(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            var viewModel = await _commitmentOrchestrator.GetDeleteConfirmationModel(providerId, hashedCommitmentId, hashedApprenticeshipId);
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("{hashedCommitmentId}/{hashedApprenticeshipId}/Delete")]
+        public async Task<ActionResult> DeleteConfirmation(DeleteConfirmationViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            if (!viewModel.DeleteConfirmed.Value)
+            {
+                return RedirectToRoute("EditApprenticeship", new
+                {
+                    providerId = viewModel.ProviderId,
+                    hashedCommitmentId = viewModel.HashedCommitmentId,
+                    hashedApprenticeshipId = viewModel.HashedApprenticeshipId
+                });
+            }
+
+            var deletedApprenticeshipName = await _commitmentOrchestrator.DeleteApprenticeship(viewModel);
+            SetInfoMessage($"Apprentice record for {deletedApprenticeshipName} deleted");
+
+            return RedirectToRoute("CohortDetails", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
         }
 
         [HttpGet]

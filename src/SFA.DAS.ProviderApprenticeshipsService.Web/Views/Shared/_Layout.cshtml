@@ -129,7 +129,7 @@
         <div id="content">
             @if (TempData.ContainsKey("InfoMessage"))
             {
-                <div>
+                <div class="panel panel-border-wide alert-default flash-alert">
                     @Html.Raw(TempData["InfoMessage"])
                 </div>
             }
