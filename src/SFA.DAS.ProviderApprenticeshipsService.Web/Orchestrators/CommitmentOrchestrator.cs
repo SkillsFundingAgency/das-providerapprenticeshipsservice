@@ -199,6 +199,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
+            
             return MapFrom(data.Commitment);
         }
 
@@ -268,6 +269,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
 
             _logger.Info($"Updated apprenticeship for provider:{apprenticeshipViewModel.ProviderId} commitment:{apprenticeship.CommitmentId}", providerId: apprenticeship.ProviderId, commitmentId: apprenticeship.CommitmentId);
+        }
+
+        public async Task<bool> GetCohortsForCurrentStatus(long providerId, RequestStatus requestStatusFromSession)
+        {
+            var data = (await GetAll(providerId, requestStatusFromSession)).ToList();
+            return data.Any();
         }
 
         public async Task SubmitCommitment(long providerId, string hashedCommitmentId, SaveStatus saveStatus, string message)
@@ -400,7 +407,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderName = listItem.ProviderName,
                 Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.LastAction, listItem.AgreementStatus),
                 ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly
-        };
+            };
         }
 
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
