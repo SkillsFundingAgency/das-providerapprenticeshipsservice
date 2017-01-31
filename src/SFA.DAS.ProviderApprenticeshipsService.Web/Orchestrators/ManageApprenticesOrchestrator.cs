@@ -7,6 +7,7 @@ using MediatR;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentices;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
@@ -14,17 +15,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
     public sealed class ManageApprenticesOrchestrator
     {
         private readonly IMediator _mediator;
+        private readonly IProviderCommitmentsLogger _logger;
+        private readonly IHashingService _hashingService;
 
-        public ManageApprenticesOrchestrator(IMediator mediator)
+        public ManageApprenticesOrchestrator(IMediator mediator, IHashingService hashingService, IProviderCommitmentsLogger logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
+            if (hashingService == null)
+                throw new ArgumentNullException(nameof(hashingService));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
 
             _mediator = mediator;
+            _hashingService = hashingService;
+            _logger = logger;
         }
 
         public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(long providerId)
         {
+            _logger.Info($"Getting On-programme apprenticeships for provider: {providerId}", providerId: providerId);
+
             var data = await _mediator.SendAsync(new GetAllApprenticesRequest { ProviderId = providerId });
             var apprenticeships = 
                 data.Apprenticeships
@@ -39,8 +50,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<ApprenticeshipDetailsViewModel> GetApprenticeship(long providerId, long apprenticeshipId)
+        public async Task<ApprenticeshipDetailsViewModel> GetApprenticeship(long providerId, string hashedApprenticeshipId)
         {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Info($"Getting On-programme apprenticeships Provider: {providerId}, ApprenticeshipId: {apprenticeshipId}", providerId: providerId, apprenticeshipId: apprenticeshipId);
+
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { ProviderId = providerId, ApprenticeshipId = apprenticeshipId });
 
             return MapFrom(data.Apprenticeship);
@@ -50,7 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             return new ApprenticeshipDetailsViewModel
             {
-                Id = apprenticeship.Id,
+                HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
                 FirstName = apprenticeship.FirstName,
                 LastName  = apprenticeship.LastName,
                 DateOfBirth = apprenticeship.DateOfBirth,

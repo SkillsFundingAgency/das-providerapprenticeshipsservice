@@ -49,7 +49,7 @@
                                 @apprenticeships.Status &nbsp;
                             </td>
                             <td>
-                                <a href="@Url.Action("Details", new { Model.ProviderId,  apprenticeshipsId = apprenticeships.Id })"
+                                <a href="@Url.Action("Details", new { Model.ProviderId, hashedApprenticeshipId = apprenticeships.HashedApprenticeshipId })"
                                    title="View  @apprenticeships.FirstName @apprenticeships.LastName"
                                    aria-label="View @apprenticeships.FirstName @apprenticeships.LastName">View</a>
                             </td>

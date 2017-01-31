@@ -30,11 +30,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{apprenticeshipsid}/details")]
+        [Route("{hashedApprenticeshipId}/details")]
         [OutputCache(CacheProfile = "NoCache")]
-        public async Task<ActionResult> Details(long providerid, long apprenticeshipsid)
+        public async Task<ActionResult> Details(long providerid, string hashedApprenticeshipId)
         {
-            var model = await _orchestrator.GetApprenticeship(providerid, apprenticeshipsid);
+            var model = await _orchestrator.GetApprenticeship(providerid, hashedApprenticeshipId);
             return View(model);
         }
     }
