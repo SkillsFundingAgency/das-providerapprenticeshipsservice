@@ -20,7 +20,7 @@
                     <h2 class="heading-medium">
                         <a href="@Url.Action("Cohorts", "Commitment", new {providerId = Model.ProviderId})">Apprentices</a>
                     </h2>
-                    <p>View, update and agree <a href="@Url.Action("Index", "Commitment", new {providerId = Model.ProviderId})">employer requests</a>, or <a href="#">update existing apprentice details</a>.
+                    <p>View, update and agree <a href="@Url.Action("Cohorts", "Commitment", new {providerId = Model.ProviderId})">employer requests</a>, or <a href="@Url.Action("Index", "ManageApprentices", new { providerId = Model.ProviderId })">update existing apprentice details</a>.
                     </p>
                     <hr />
                 </div>

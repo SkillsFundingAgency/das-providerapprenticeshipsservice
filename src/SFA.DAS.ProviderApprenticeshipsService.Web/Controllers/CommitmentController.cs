@@ -20,6 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             if (commitmentOrchestrator == null)
                 throw new ArgumentNullException(nameof(commitmentOrchestrator));
+
             _commitmentOrchestrator = commitmentOrchestrator;
         }
 

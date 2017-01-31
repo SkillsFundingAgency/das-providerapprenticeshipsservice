@@ -1,0 +1,70 @@
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ManageApprenticeshipsViewModel
+
+@{
+    ViewBag.Title = "Manage apprentices";
+    ViewBag.PageId = "manage-apprentices";
+}
+
+<div class="grid-row">
+    <div class="column-full">
+        <h1 class="heading-xlarge">Your apprentices</h1>
+        @if (!Model.Apprenticeships.Any())
+            {
+            <div class="panel panel-border-wide alert-default">
+                <p>You don’t have any requests in progress.</p>
+            </div>
+        }
+        else
+        {
+            <table class="tableResponsive provider-list-view">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date of birth</th>
+                        <th>Unique learner number</th>
+                        <th>Status</th>
+                        <th></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var apprenticeships in Model.Apprenticeships)
+                    {
+                        <tr>
+                            <td>
+                                @apprenticeships.FirstName @apprenticeships.LastName 
+                            </td>
+                           
+                            <td>
+                                @if (apprenticeships.DateOfBirth != null)
+                                {
+                                    @apprenticeships.DateOfBirth.Value.ToGdsFormat()
+                                } 
+                            </td>
+                            <td>
+                                @apprenticeships.Uln
+                            </td>
+                            <td>
+                                @apprenticeships.Status &nbsp;
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Details", new { Model.ProviderId,  apprenticeshipsId = apprenticeships.Id })"
+                                   title="View  @apprenticeships.FirstName @apprenticeships.LastName"
+                                   aria-label="View @apprenticeships.FirstName @apprenticeships.LastName">View</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Index", "Account")" aria-label="Back to account home" class="back-link">Back</a>
+    </div>
+}
