@@ -44,7 +44,9 @@
 //bulk upload styles
 
 #apprentice-details{
-    .flash-alert{border-color:$turquoise;}
+    .flash-alert{
+        border-color:$turquoise;
+    }
     .bulk-upload-buttons{      
         .upload-btn{
               @include media(tablet) {margin:auto;}
