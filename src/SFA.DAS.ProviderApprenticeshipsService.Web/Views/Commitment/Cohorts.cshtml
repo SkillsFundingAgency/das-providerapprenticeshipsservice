@@ -9,16 +9,34 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-        <h1 class="heading-xlarge">Your cohorts</h1>
+        @if (!Model.HasSignedTheAgreement)
+        {
+            <div class="panel panel-border-wide alert-default">
+                <p>
+                    You must
+                    <a href="@Model.SignAgreementUrl" target="_blank">review and sign your apprenticeship training provider agreement</a> before you can approve cohorts.
+                </p>
+            </div>
+        }
 
+        <h1 class="heading-xlarge">Your cohorts</h1>
 
         <div class="column-one-half bingo-background block-one @GetClickableClass(Model.NewRequestsCount)">
             <h2 class="bold-xxlarge">
                 @if (Model.NewRequestsCount > 0)
                 {
-                    <a href="@Url.Action("NewRequests")" title="@Model.NewRequestsCount new from employer" aria-label="View all new requests from employer">
-                        @Model.NewRequestsCount
-                    </a>
+                    if (Model.HasSignedTheAgreement)
+                     {
+                         <a href="@Url.Action("NewRequests")" title="@Model.NewRequestsCount new from employer" aria-label="View all new requests from employer">
+                             @Model.NewRequestsCount
+                         </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("AgreementNotSigned", new { redirectTo = "NewRequests" } )" title="@Model.NewRequestsCount new from employer" aria-label="View all new requests from employer">
+                            @Model.NewRequestsCount
+                        </a>
+                    }
                 }
                 else
                 {
@@ -32,9 +50,18 @@
             <h2 class="bold-xxlarge">
                 @if (Model.ReadyForApprovalCount > 0)
                 {
-                    <a href="@Url.Action("ReadyForApproval")" title="@Model.ReadyForApprovalCount ready for approval" aria-label="View all new requests that are ready for approval">
-                        @Model.ReadyForApprovalCount
-                    </a>
+                     if (Model.HasSignedTheAgreement)
+                     {
+                        <a href="@Url.Action("ReadyForApproval")" title="@Model.ReadyForApprovalCount ready for approval" aria-label="View all new requests that are ready for approval">
+                            @Model.ReadyForApprovalCount
+                        </a>
+                     }
+                     else
+                     {
+                        <a href="@Url.Action("AgreementNotSigned", new { redirectTo = "ReadyForApproval" } )" title="@Model.ReadyForApprovalCount ready for approval" aria-label="View all new requests that are ready for approval">
+                            @Model.ReadyForApprovalCount
+                        </a>
+                     }
                 }
                 else
                 {
@@ -49,9 +76,18 @@
             <h2 class="bold-xxlarge">
                 @if (Model.ReadyForReviewCount > 0)
                 {
-                    <a href="@Url.Action("ReadyForReview")" title=" @Model.ReadyForReviewCount ready for review" aria-label="View all new requests that are ready for review">
-                        @Model.ReadyForReviewCount
-                    </a>
+                    if (Model.HasSignedTheAgreement)
+                    {
+                        <a href="@Url.Action("ReadyForReview")" title="@Model.ReadyForReviewCount ready for review" aria-label="View all new requests that are ready for review">
+                            @Model.ReadyForReviewCount
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("AgreementNotSigned", new { redirectTo = "ReadyForReview" } )" title="@Model.ReadyForReviewCount ready for review" aria-label="View all new requests that are ready for review">
+                            @Model.ReadyForReviewCount
+                        </a>
+                    }
                 }
                 else
                 {

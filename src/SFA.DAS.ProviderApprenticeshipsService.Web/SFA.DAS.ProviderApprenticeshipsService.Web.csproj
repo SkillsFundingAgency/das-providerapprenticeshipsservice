@@ -18,7 +18,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort>44309</IISExpressSSLPort>
+    <IISExpressSSLPort>44388</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -357,6 +357,7 @@
     </Compile>
     <Compile Include="Models\AcknowledgementViewModel.cs" />
     <Compile Include="Models\ApprenticeshipDetailsViewModel.cs" />
+    <Compile Include="Models\AgreementNotSignedViewModel.cs" />
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
     <Compile Include="Models\BulkUpload\BulkUploadResult.cs" />
@@ -365,6 +366,7 @@
     <Compile Include="Models\CommitmentListItemViewModel.cs" />
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentDetailsViewModel.cs" />
+    <Compile Include="Models\DeleteConfirmationViewModel.cs" />
     <Compile Include="Models\ExtendedApprenticeshipViewModel.cs" />
     <Compile Include="Models\FinishEditingViewModel.cs" />
     <Compile Include="Models\AccountHomeViewModel.cs" />
@@ -405,6 +407,7 @@
     <Compile Include="Validation\ApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelApproveValidator.cs" />
     <Compile Include="Validation\CsvRecordValidator.cs" />
+    <Compile Include="Validation\DeleteConfirmationViewModelValidator.cs" />
     <Compile Include="Validation\FinishEditingViewModelValidator.cs" />
     <Compile Include="Validation\Text\ApprenticeshipFileValidationText.cs" />
     <Compile Include="Validation\Text\ApprenticeshipValidationText.cs" />
@@ -557,11 +560,13 @@
     <Content Include="Views\Account\NoAccount.cshtml" />
     <Content Include="Views\BulkUpload\UploadApprenticeships.cshtml" />
     <Content Include="Views\BulkUpload\UploadApprenticeshipsUnsuccessful.cshtml" />
+    <Content Include="Views\Commitment\AgreementNotSigned.cshtml" />
     <Content Include="Views\Commitment\Cohorts.cshtml" />
     <Content Include="Views\Commitment\RequestList.cshtml" />
     <Content Include="Views\Commitment\RequestApproved.cshtml" />
     <Content Include="Views\ManageApprentices\Index.cshtml" />
     <Content Include="Views\ManageApprentices\Details.cshtml" />
+    <Content Include="Views\Commitment\DeleteConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

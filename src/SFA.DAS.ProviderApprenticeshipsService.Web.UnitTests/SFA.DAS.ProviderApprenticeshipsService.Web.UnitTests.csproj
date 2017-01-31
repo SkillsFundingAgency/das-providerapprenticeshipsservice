@@ -81,8 +81,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Orchestrators\WhenGetCohorts.cs" />
-    <Compile Include="Orchestrators\WhenUploadingFile.cs" />
+    <Compile Include="Orchestrators\Commitments\WhenGettingDeleteApprenticeshipConfirmation.cs" />
+    <Compile Include="Orchestrators\Commitments\WhenDeletingApprenticeship.cs" />
+    <Compile Include="Orchestrators\Commitments\WhenGetCohorts.cs" />
+    <Compile Include="Orchestrators\Commitments\WhenUploadingFile.cs" />
     <Compile Include="Validation\WhenValidatingApprenticeshipBulkUploadViewModel.cs" />
     <Compile Include="WhenValidatingCsvRecord.cs" />
     <Compile Include="Orchestrators\BulkUpload\WhenCreatingRecordsBulkUpload.cs" />
@@ -90,9 +92,9 @@
     <Compile Include="Orchestrators\BulkUpload\WhenValidatingBulkUploadFileAttributes.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
     <Compile Include="Validation\WhenValidatingApprenticeshipViewModelForApproval.cs" />
-    <Compile Include="Orchestrators\WhenApproveCommitment.cs" />
-    <Compile Include="Orchestrators\WhenGettingCommitmentViewModel.cs" />
-    <Compile Include="Orchestrators\WhenFinishEditing.cs" />
+    <Compile Include="Orchestrators\Commitments\WhenApproveCommitment.cs" />
+    <Compile Include="Orchestrators\Commitments\WhenGettingCommitmentViewModel.cs" />
+    <Compile Include="Orchestrators\Commitments\WhenFinishEditing.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithEmployer.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithBoth.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithProvider.cs" />

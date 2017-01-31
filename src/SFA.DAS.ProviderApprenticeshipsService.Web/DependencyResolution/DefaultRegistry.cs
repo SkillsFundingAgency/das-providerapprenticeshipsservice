@@ -16,9 +16,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Data.SqlTypes;
 using System.Reflection;
 using System.Web;
+using FluentValidation;
 using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Commitments.Api.Client;
@@ -27,9 +27,11 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Caching;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
@@ -49,6 +51,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 scan => {
                     scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
+                    scan.ConnectImplementationsToTypesClosing(typeof(AbstractValidator<>)).OnAddedPluginTypes(t => t.Singleton());
                     scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
                     scan.ConnectImplementationsToTypesClosing(typeof(IAsyncRequestHandler<,>));
                     scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
@@ -60,7 +63,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<ICommitmentsApi>().Use<CommitmentsApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<ITasksApi>().Use<TasksApi>().Ctor<ITasksApiClientConfiguration>().Is(config.TasksApi);
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
+            For<IConfiguration>().Use(config);
             For<ICache>().Use<InMemoryCache>(); //RedisCache
+            For<IAgreementStatusQueryRepository>().Use<ProviderAgreementStatusRepository>();
 
             RegisterMediator();
             ConfigureLogging();

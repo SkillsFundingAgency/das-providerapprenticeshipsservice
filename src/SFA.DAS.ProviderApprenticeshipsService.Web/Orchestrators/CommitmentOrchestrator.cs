@@ -8,6 +8,7 @@ using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateApprenticeship;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
@@ -16,6 +17,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTasks;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -23,6 +25,8 @@ using SFA.DAS.Tasks.Api.Types.Templates;
 using TrainingType = SFA.DAS.Commitments.Api.Types.TrainingType;
 
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -33,11 +37,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IHashingService _hashingService;
         private readonly IProviderCommitmentsLogger _logger;
 
+        private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
+
         readonly Func<CommitmentListItem, Task<string>> _latestMessageToEmployerFunc;
 
         readonly Func<CommitmentListItem, Task<string>> _latestMessageToProviderFunc;
 
-        public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator, IHashingService hashingService, IProviderCommitmentsLogger logger)
+        public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator, 
+            IHashingService hashingService, IProviderCommitmentsLogger logger, ProviderApprenticeshipsServiceConfiguration configuration)
+
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -47,14 +55,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 throw new ArgumentNullException(nameof(hashingService));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
+            if (configuration == null)
+                throw new ArgumentNullException(nameof(configuration));
 
             _mediator = mediator;
             _statusCalculator = statusCalculator;
             _hashingService = hashingService;
             _logger = logger;
+            _configuration = configuration;
 
             _latestMessageToEmployerFunc = async item => await GetLatestMessage(item.EmployerAccountId, item.Id, false);
-            _latestMessageToProviderFunc = async item => await GetLatestMessage(item.ProviderId, item.Id, true);
+           _latestMessageToProviderFunc = async item => await GetLatestMessage(item.ProviderId, item.Id, true);
         }
 
         public async Task<CohortsViewModel> GetCohorts(long providerId)
@@ -73,7 +84,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 NewRequestsCount = commitmentStatus.Count(m => m == RequestStatus.NewRequest),
                 ReadyForApprovalCount = commitmentStatus.Count(m => m == RequestStatus.ReadyForApproval),
                 ReadyForReviewCount = commitmentStatus.Count(m => m == RequestStatus.ReadyForReview),
-                WithEmployerCount = commitmentStatus.Count(m => m == RequestStatus.SentForReview || m == RequestStatus.WithEmployerForApproval)
+
+                WithEmployerCount = commitmentStatus.Count(m => m == RequestStatus.SentForReview || m == RequestStatus.WithEmployerForApproval),
+                HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed,
+                SignAgreementUrl = _configuration.ContractAgreementsUrl
             };
 
             return model;
@@ -93,7 +107,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageTitle = "Cohorts with employers",
                 PageId = "cohorts-with-employers",
                 PageHeading = "Cothorts with employers",
-                PageHeading2 = $"You have <strong>{data.Count}</strong> cohorts that are that are with employers:"
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohorts that are that are with employers:",
+                HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
 
@@ -109,8 +124,50 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageTitle = "New cohorts",
                 PageId = "new-cohorts",
                 PageHeading = "New cohorts",
-                PageHeading2 = $"You have <strong>{data.ToList().Count}</strong> new cohorts:"
+                PageHeading2 = $"You have <strong>{data.ToList().Count}</strong> new cohorts:",
+                HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
+        }
+
+        public async Task<DeleteConfirmationViewModel> GetDeleteConfirmationModel(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                ProviderId = providerId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            return new DeleteConfirmationViewModel
+            {
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId,
+                HashedApprenticeshipId = hashedApprenticeshipId,
+                ApprenticeshipName = apprenticeship.Apprenticeship.ApprenticeshipName,
+                DateOfBirth = apprenticeship.Apprenticeship.DateOfBirth.HasValue ? apprenticeship.Apprenticeship.DateOfBirth.Value.ToGdsFormat() : string.Empty
+            };
+        }
+
+        public async Task<string> DeleteApprenticeship(DeleteConfirmationViewModel viewModel)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(viewModel.HashedApprenticeshipId);
+            _logger.Info($"Deleting apprenticeship {apprenticeshipId}", providerId: viewModel.ProviderId, apprenticeshipId: apprenticeshipId);
+
+            var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                ProviderId = viewModel.ProviderId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            await _mediator.SendAsync(new DeleteApprenticeshipCommand
+            {
+                ProviderId = viewModel.ProviderId,
+                ApprenticeshipId = apprenticeshipId
+                
+            });
+
+            return apprenticeship.Apprenticeship.ApprenticeshipName;
         }
 
         public async Task<CommitmentListViewModel> GetAllReadyForReview(long providerId)
@@ -124,7 +181,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageTitle = "Review cohorts",
                 PageId = "review-cohorts-list",
                 PageHeading = "Review cohorts",
-                PageHeading2 = $"You have <strong>{data.Count}</strong> cohorts that are ready for review:"
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohorts that are ready for review:",
+                HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
 
@@ -139,9 +197,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Commitments = await MapFrom(data, _latestMessageToProviderFunc),
                 PageTitle = "Approve cohorts",
                 PageId = "Approve cohorts",
-                PageHeading =  "Approve cohorts",
-                PageHeading2 =  $"You have <strong>{data.Count}</strong> cohorts that need your approval:"
+                PageHeading = "Approve cohorts",
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohorts that need your approval:",
+                HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
+        }
+
+        public async Task<AgreementNotSignedViewModel> GetAgreementPage(long providerId, string hashedCommitmentId)
+        {
+            var model = new AgreementNotSignedViewModel
+            {
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId,
+                ReviewAgreementUrl = _configuration.ContractAgreementsUrl,
+                IsSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
+            };
+            return model;
         }
 
         public async Task<IEnumerable<CommitmentListItem>> GetAll(long providerId, RequestStatus requestStatus)
@@ -156,6 +227,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return data.Commitments.Where(
                 m => _statusCalculator.GetStatus(m.EditStatus, m.ApprenticeshipCount, m.LastAction, m.AgreementStatus)
                     == requestStatus);
+        }
+
+
+        public async Task<ProviderAgreementStatus> IsSignedAgreement(long providerId)
+        {
+            var data = await _mediator.SendAsync(
+                new GetProviderAgreementQueryRequest
+                {
+                    ProviderId = providerId
+                });
+
+            return data.HasAgreement;
         }
 
         public async Task<CommitmentDetailsViewModel> GetCommitmentDetails(long providerId, string hashedCommitmentId)
@@ -212,7 +295,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
             {
                 ProviderId = providerId,
-                AppenticeshipId = apprenticeshipId
+                ApprenticeshipId = apprenticeshipId
             });
 
             var apprenticeship = MapFrom(data.Apprenticeship);
@@ -275,6 +358,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             _logger.Info($"Submitting ({saveStatus}) Commitment for provider:{providerId} commitment:{commitmentId}", providerId: providerId, commitmentId: commitmentId);
 
+            if (saveStatus == SaveStatus.Approve || saveStatus == SaveStatus.ApproveAndSend)
+            {
+                var isSigned = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed;
+                if(!isSigned)
+                    throw new InvalidStateException("Cannot approve commitment when no agreement signed");
+            }
+
             if (saveStatus != SaveStatus.Save)
             {
                 var lastAction = saveStatus == SaveStatus.AmendAndSend ? LastAction.Amend : LastAction.Approve;
@@ -315,10 +405,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 HashedCommitmentId = hashedCommitmentId,
                 ProviderId = providerId,
-                NotReadyForApproval = !data.Commitment.CanBeApproved,
+                ReadyForApproval = data.Commitment.CanBeApproved,
                 ApprovalState = GetApprovalState(data.Commitment),
                 HasApprenticeships = data.Commitment.Apprenticeships.Any(),
-                InvalidApprenticeshipCount = data.Commitment.Apprenticeships.Count(x => !x.CanBeApproved)
+                InvalidApprenticeshipCount = data.Commitment.Apprenticeships.Count(x => !x.CanBeApproved),
+                HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed,
+                SignAgreementUrl = _configuration.ContractAgreementsUrl
             };
         }
 

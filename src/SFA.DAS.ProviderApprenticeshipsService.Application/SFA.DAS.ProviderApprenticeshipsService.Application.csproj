@@ -88,6 +88,9 @@
     <Compile Include="Commands\CreateApprenticeship\CreateApprenticeshipCommand.cs" />
     <Compile Include="Commands\CreateApprenticeship\CreateApprenticeshipCommandHandler.cs" />
     <Compile Include="Commands\CreateApprenticeship\CreateApprenticeshipCommandValidator.cs" />
+    <Compile Include="Commands\DeleteApprenticeship\DeleteApprenticeshipCommand.cs" />
+    <Compile Include="Commands\DeleteApprenticeship\DeleteApprenticeshipCommandHandler.cs" />
+    <Compile Include="Commands\DeleteApprenticeship\DeleteApprenticeshipCommandValidator.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommand.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandHandler.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandValidator.cs" />
