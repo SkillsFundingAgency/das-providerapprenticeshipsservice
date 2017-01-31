@@ -7,6 +7,8 @@ using Dapper;
 
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
+
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
@@ -22,7 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
         public async Task<IEnumerable<ContractFeedEvent>> GetContractEvents(long providerId)
         {
-            var contractFeedEvents = await WithConnection<IEnumerable<ContractFeedEvent>>(async connection =>
+            var contractFeedEvents = await WithConnection(async connection =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@providerId", providerId, DbType.Int64);
@@ -31,9 +33,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 {
                     var r = (await connection.QueryAsync<ContractFeedEvent>(
                         sql:
-                            "SELECT * FROM"
-                          + "FROM [SFA.DAS.ProviderAgreementStatus.Database].[dbo].[ContractFeedEvent] "
-                          + "WHERE [Id] = @id",
+                            "SELECT * FROM [dbo].[ContractFeedEvent] "
+                          + "WHERE [ProviderId] = @providerId",
                         param: parameters,
                         commandType: CommandType.Text,
                         transaction: trans));
@@ -47,14 +48,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
         public async Task<ContractFeedEvent> GetMostRecentContractFeedEvent()
         {
-            var contact = await WithConnection<ContractFeedEvent>(async connection =>
+            var contact = await WithConnection(async connection =>
             {
                 using (var trans = connection.BeginTransaction())
                 {
                     var r = (await connection.QueryAsync<ContractFeedEvent>(
                         sql:
                             "SELECT TOP 1 [Id], [PageNumber] "
-                          + "FROM [SFA.DAS.ProviderAgreementStatus.Database].[dbo].[ContractFeedEvent] "
+                          + "FROM [dbo].[ContractFeedEvent] "
                           + "ORDER BY [Updated] desc",
                         commandType: CommandType.Text,
                         transaction: trans)).SingleOrDefault();
@@ -77,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                     var r = (await connection.QueryAsync<int>(
                         sql:
                             "SELECT TOP 1 [PageNumber] "
-                          + "FROM [SFA.DAS.ProviderAgreementStatus.Database].[dbo].[ContractFeedEvent] "
+                          + "FROM [dbo].[ContractFeedEvent] "
                           + "ORDER BY [PageNumber] desc",
                         commandType: CommandType.Text,
                         transaction: trans)).SingleOrDefault();

@@ -29,6 +29,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution
                 });
 
             var config = GetConfiguration("SFA.DAS.ContractAgreements");
+            For<IConfiguration>().Use(config);
             For<ContractFeedConfiguration>().Use(config);
             For<IContractFeedProcessorHttpClient>().Use<ContractFeedProcessorHttpClient>();
             For<IContractDataProvider>().Use<ContractFeedProcessor>();

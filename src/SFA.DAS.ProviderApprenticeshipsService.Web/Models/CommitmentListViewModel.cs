@@ -5,7 +5,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
     public sealed class CommitmentListViewModel
     {
         public long ProviderId { get; set; }
+
         public IEnumerable<CommitmentListItemViewModel> Commitments { get; set; }
+
+        public bool HasSignedAgreement { get; set; }
 
         // Page properties
 
@@ -16,7 +19,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string PageHeading { get; set; }
 
         public string PageHeading2 { get; set; }
-
-        public bool ShowStatus { get; set; }
     }
 }
