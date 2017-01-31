@@ -25,7 +25,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(long providerId)
         {
             var data = await _mediator.SendAsync(new GetAllApprenticesRequest { ProviderId = providerId });
-            var apprenticeships = data.Apprenticeships.Select(MapFrom).ToList();
+            var apprenticeships = 
+                data.Apprenticeships
+                .OrderBy(m => m.ApprenticeshipName)
+                .Select(MapFrom)
+                .ToList();
 
             return new ManageApprenticeshipsViewModel
                         {
