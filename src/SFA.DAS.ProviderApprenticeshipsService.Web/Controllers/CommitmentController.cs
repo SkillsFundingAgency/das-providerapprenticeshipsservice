@@ -38,7 +38,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var model = await _commitmentOrchestrator.GetAgreementPage(providerId, hashedCommitmentId);
             model.RequestListUrl = Url.Action(redirectTo, new { providerId });
-            if (model.IsSignedAgreement) return RedirectToAction("Details", new { providerId, hashedCommitmentId });
+
+            if (model.IsSignedAgreement)
+                return RedirectToAction("Details", new { providerId, hashedCommitmentId });
 
             return View(model);
         }
@@ -58,6 +60,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var model = await _commitmentOrchestrator.GetAllNewRequests(providerId);
             Session[LastCohortPageSessionKey] = RequestStatus.NewRequest;
+
             return View("RequestList", model);
         }
 
@@ -67,6 +70,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var model = await _commitmentOrchestrator.GetAllReadyForReview(providerId);
             Session[LastCohortPageSessionKey] = RequestStatus.ReadyForReview;
+
             return View("RequestList", model);
         }
 
@@ -76,6 +80,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var model = await _commitmentOrchestrator.GetAllReadyForApproval(providerId);
             Session[LastCohortPageSessionKey] = RequestStatus.ReadyForApproval;
+
             return View("RequestList", model);
         }
 
