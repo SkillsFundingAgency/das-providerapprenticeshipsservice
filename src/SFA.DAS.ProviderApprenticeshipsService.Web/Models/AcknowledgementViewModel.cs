@@ -10,5 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string ProviderName { get; internal set; }
 
         public string RedirectUrl { get; set; }
+
+        public string RedirectLinkText { get; set; }
     }
 }

@@ -238,16 +238,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Approved(long providerId, string hashedCommitmentId)
         {
             var commitment = await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId);
-            var url = Url.Action("ReadyForApproval", new { ProviderId = providerId });
+            var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(providerId, RequestStatus.ReadyForApproval);
+            string url;
+            var linkText = "Return to Approve cohorts";
+            if (currentStatusCohortAny)
+            {
+                url = Url.Action("ReadyForApproval", new { ProviderId = providerId });
+                TempData["FlashMessage"] = "Cohort approved";
+            }
+            else
+            {
+                url = Url.Action("Cohorts", "Commitment", new { ProviderId = providerId });
+                linkText = "Return to Your cohorts";
+            }
 
-            TempData["FlashMessage"] = "Cohort approved";
+
             var model = new AcknowledgementViewModel
                             {
                                 CommitmentReference = commitment.Reference,
                                 EmployerName = commitment.LegalEntityName,
                                 ProviderName = commitment.ProviderName,
                                 Message = string.Empty,
-                                RedirectUrl = url
+                                RedirectUrl = url,
+                                RedirectLinkText = linkText
                             };
 
             return View("RequestApproved", model);
@@ -291,21 +304,33 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Acknowledgement(long providerId, string hashedCommitmentId, string message)
         {
             var commitment = await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId);
+            var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(providerId, GetRequestStatusFromSession());
             var url = string.Empty;
-            switch (GetRequestStatusFromSession())
+            var linkText = "Go back to view cohorts";
+
+            // ToDo: Simplify when we remove flash messages
+            if (!currentStatusCohortAny)
             {
-                case RequestStatus.ReadyForReview:
-                    url = Url.Action("ReadyForReview", new { ProviderId = providerId });
-                    SetTempMessage(commitment.Status);
-                    break;
-                case RequestStatus.ReadyForApproval:
-                    url = Url.Action("ReadyForApproval", new { ProviderId = providerId });
-                    SetTempMessage(commitment.Status);
-                    break;
-                case RequestStatus.NewRequest:
-                    url = Url.Action("NewRequests", new { ProviderId = providerId } );
-                    SetTempMessage(commitment.Status);
-                    break;
+                url = Url.Action("Cohorts", "Commitment", new { ProviderId = providerId });
+                linkText = "Return to Your cohorts";
+            }
+            else
+            {    
+                switch (GetRequestStatusFromSession())
+                {
+                    case RequestStatus.ReadyForReview:
+                        url = Url.Action("ReadyForReview", new { ProviderId = providerId });
+                        SetTempMessage(commitment.Status);
+                        break;
+                    case RequestStatus.ReadyForApproval:
+                        url = Url.Action("ReadyForApproval", new { ProviderId = providerId });
+                        SetTempMessage(commitment.Status);
+                        break;
+                    case RequestStatus.NewRequest:
+                        url = Url.Action("NewRequests", new { ProviderId = providerId } );
+                        SetTempMessage(commitment.Status);
+                        break;
+                }
             }
 
             return View(new AcknowledgementViewModel
@@ -314,7 +339,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 EmployerName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
                 Message = message,
-                RedirectUrl = url
+                RedirectUrl = url,
+                RedirectLinkText = linkText
             });
         }
 
