@@ -1,0 +1,88 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+using MediatR;
+
+using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentices;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
+{
+    public sealed class ManageApprenticesOrchestrator
+    {
+        private readonly IMediator _mediator;
+
+        public ManageApprenticesOrchestrator(IMediator mediator)
+        {
+            if (mediator == null)
+                throw new ArgumentNullException(nameof(mediator));
+
+            _mediator = mediator;
+        }
+
+        public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(long providerId)
+        {
+            var data = await _mediator.SendAsync(new GetAllApprenticesRequest { ProviderId = providerId });
+            var apprenticeships = 
+                data.Apprenticeships
+                .OrderBy(m => m.ApprenticeshipName)
+                .Select(MapFrom)
+                .ToList();
+
+            return new ManageApprenticeshipsViewModel
+            {
+                ProviderId = providerId,
+                Apprenticeships = apprenticeships
+            };
+        }
+
+        public async Task<ApprenticeshipDetailsViewModel> GetApprenticeship(long providerId, long apprenticeshipId)
+        {
+            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { ProviderId = providerId, ApprenticeshipId = apprenticeshipId });
+
+            return MapFrom(data.Apprenticeship);
+        }
+
+        private ApprenticeshipDetailsViewModel MapFrom(Apprenticeship apprenticeship)
+        {
+            return new ApprenticeshipDetailsViewModel
+            {
+                Id = apprenticeship.Id,
+                FirstName = apprenticeship.FirstName,
+                LastName  = apprenticeship.LastName,
+                DateOfBirth = apprenticeship.DateOfBirth,
+                Uln = apprenticeship.ULN,
+                StartDate = apprenticeship.StartDate,
+                EndDate = apprenticeship.EndDate,
+                TrainingName = apprenticeship.TrainingName,
+                Cost = apprenticeship.Cost,
+                Status = MapPaymentStatus(apprenticeship.PaymentStatus),
+                EmployerName = string.Empty
+            };
+        }
+
+        private string MapPaymentStatus(PaymentStatus paymentStatus)
+        {
+            switch (paymentStatus)
+            {
+                case PaymentStatus.PendingApproval:
+                    return "Approval needed";
+                case PaymentStatus.Active:
+                    return "On programme";
+                case PaymentStatus.Paused:
+                    return "Paused";
+                case PaymentStatus.Withdrawn:
+                    return "Stopped";
+                case PaymentStatus.Completed:
+                    return "Completed";
+                case PaymentStatus.Deleted:
+                    return "Deleted";
+                default:
+                    return string.Empty;
+            }
+        }
+    }
+}
