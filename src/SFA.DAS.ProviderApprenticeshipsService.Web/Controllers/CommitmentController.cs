@@ -89,7 +89,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Details(long providerId, string hashedCommitmentId)
         {
             var model = await _commitmentOrchestrator.GetCommitmentDetails(providerId, hashedCommitmentId);
+            var backUrl = Url.Action("Cohorts", new { providerId });
 
+            switch (GetRequestStatusFromSession())
+            {
+                case RequestStatus.WithEmployerForApproval:
+                case RequestStatus.SentForReview:
+                    backUrl = Url.Action("WithEmployer", new { providerId });
+                    break;
+                case RequestStatus.NewRequest:
+                    backUrl = Url.Action("NewRequests", new { providerId });
+                    break;
+                case RequestStatus.ReadyForReview:
+                    backUrl = Url.Action("ReadyForReview", new { providerId });
+                    break;
+                case RequestStatus.ReadyForApproval:
+                    backUrl = Url.Action("ReadyForApproval", new { providerId });
+                    break;
+                default:
+                    backUrl = Url.Action("Cohorts", new { providerId });
+                    break;
+            }
+            model.BackLinkUrl = backUrl;
             return View(model);
         }
 
@@ -151,12 +172,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (!viewModel.DeleteConfirmed.Value)
             {
-                return RedirectToRoute("EditApprenticeship", new
-                {
-                    providerId = viewModel.ProviderId,
-                    hashedCommitmentId = viewModel.HashedCommitmentId,
-                    hashedApprenticeshipId = viewModel.HashedApprenticeshipId
-                });
+                return RedirectToRoute("EditApprenticeship", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId, hashedApprenticeshipId = viewModel.HashedApprenticeshipId });
             }
 
             var deletedApprenticeshipName = await _commitmentOrchestrator.DeleteApprenticeship(viewModel);
@@ -220,17 +236,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (viewModel.SaveStatus.IsSend())
             {
-                return RedirectToAction("Submit", 
-                    new { viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus });
+                return RedirectToAction("Submit", new { viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus });
             }
 
-            if(viewModel.SaveStatus == SaveStatus.Approve)
+            if (viewModel.SaveStatus == SaveStatus.Approve)
             {
                 await _commitmentOrchestrator.SubmitCommitment(viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty);
                 return RedirectToAction("Approved", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
             }
 
-            return RedirectToAction("Cohorts", new {providerId = viewModel.ProviderId});
+            return RedirectToAction("Cohorts", new { providerId = viewModel.ProviderId });
         }
 
         [HttpGet]
@@ -252,19 +267,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 linkText = "Return to Your cohorts";
             }
 
-
-            var model = new AcknowledgementViewModel
-                            {
-                                CommitmentReference = commitment.Reference,
-                                EmployerName = commitment.LegalEntityName,
-                                ProviderName = commitment.ProviderName,
-                                Message = string.Empty,
-                                RedirectUrl = url,
-                                RedirectLinkText = linkText
-                            };
+            var model = new AcknowledgementViewModel { CommitmentReference = commitment.Reference, EmployerName = commitment.LegalEntityName, ProviderName = commitment.ProviderName, Message = string.Empty, RedirectUrl = url, RedirectLinkText = linkText };
 
             return View("RequestApproved", model);
-
         }
 
         [HttpGet]
@@ -273,13 +278,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var commitment = await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId);
 
-            var model = new SubmitCommitmentViewModel
-            {
-                ProviderId = providerId,
-                HashedCommitmentId = hashedCommitmentId,
-                EmployerName = commitment.LegalEntityName,
-                SaveStatus = saveStatus
-            };
+            var model = new SubmitCommitmentViewModel { ProviderId = providerId, HashedCommitmentId = hashedCommitmentId, EmployerName = commitment.LegalEntityName, SaveStatus = saveStatus };
 
             return View(model);
         }
@@ -291,12 +290,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             await _commitmentOrchestrator.SubmitCommitment(model.ProviderId, model.HashedCommitmentId, model.SaveStatus, model.Message);
 
-            return RedirectToAction("Acknowledgement", new
-            {
-                providerId = model.ProviderId,
-                hashedCommitmentId = model.HashedCommitmentId,
-                message = model.Message
-            });
+            return RedirectToAction("Acknowledgement", new { providerId = model.ProviderId, hashedCommitmentId = model.HashedCommitmentId, message = model.Message });
         }
 
         [HttpGet]
@@ -315,7 +309,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 linkText = "Return to Your cohorts";
             }
             else
-            {    
+            {
                 switch (GetRequestStatusFromSession())
                 {
                     case RequestStatus.ReadyForReview:
@@ -327,26 +321,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                         SetTempMessage(commitment.Status);
                         break;
                     case RequestStatus.NewRequest:
-                        url = Url.Action("NewRequests", new { ProviderId = providerId } );
+                        url = Url.Action("NewRequests", new { ProviderId = providerId });
                         SetTempMessage(commitment.Status);
                         break;
                 }
             }
 
-            return View(new AcknowledgementViewModel
-            {
-                CommitmentReference = commitment.Reference,
-                EmployerName = commitment.LegalEntityName,
-                ProviderName = commitment.ProviderName,
-                Message = message,
-                RedirectUrl = url,
-                RedirectLinkText = linkText
-            });
+            return View(new AcknowledgementViewModel { CommitmentReference = commitment.Reference, EmployerName = commitment.LegalEntityName, ProviderName = commitment.ProviderName, Message = message, RedirectUrl = url, RedirectLinkText = linkText });
         }
 
         private RequestStatus GetRequestStatusFromSession()
         {
-
             var status = (RequestStatus?)Session[LastCohortPageSessionKey] ?? RequestStatus.None;
             return status;
         }

@@ -43,6 +43,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         readonly Func<CommitmentListItem, Task<string>> _latestMessageToProviderFunc;
 
+        private readonly Func<int, string> _addSSurfix = i => i > 1 ? "s" : "";
+
         public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator, 
             IHashingService hashingService, IProviderCommitmentsLogger logger, ProviderApprenticeshipsServiceConfiguration configuration)
 
@@ -107,7 +109,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageTitle = "Cohorts with employers",
                 PageId = "cohorts-with-employers",
                 PageHeading = "Cothorts with employers",
-                PageHeading2 = $"You have <strong>{data.Count}</strong> cohorts that are that are with employers:",
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSurfix(data.ToList().Count)} that are that are with employers:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
@@ -124,7 +126,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageTitle = "New cohorts",
                 PageId = "new-cohorts",
                 PageHeading = "New cohorts",
-                PageHeading2 = $"You have <strong>{data.ToList().Count}</strong> new cohorts:",
+                PageHeading2 = $"You have <strong>{data.ToList().Count}</strong> new cohort{_addSSurfix(data.ToList().Count)}:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
@@ -181,7 +183,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageTitle = "Review cohorts",
                 PageId = "review-cohorts-list",
                 PageHeading = "Review cohorts",
-                PageHeading2 = $"You have <strong>{data.Count}</strong> cohorts that are ready for review:",
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSurfix(data.ToList().Count)} that are ready for review:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
@@ -198,7 +200,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageTitle = "Approve cohorts",
                 PageId = "Approve cohorts",
                 PageHeading = "Approve cohorts",
-                PageHeading2 = $"You have <strong>{data.Count}</strong> cohorts that need your approval:",
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSurfix(data.ToList().Count)} that need your approval:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
