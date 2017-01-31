@@ -38,9 +38,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                         };
         }
 
-        public async Task<ApprenticeshipDetailsViewModel> GetApprenticeship(long providerId, long appenticeshipId)
+        public async Task<ApprenticeshipDetailsViewModel> GetApprenticeship(long providerId, long apprenticeshipId)
         {
-            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { ProviderId = providerId, AppenticeshipId = appenticeshipId });
+            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { ProviderId = providerId, ApprenticeshipId = apprenticeshipId });
             return await MapFrom(data.Apprenticeship);
         }
 
