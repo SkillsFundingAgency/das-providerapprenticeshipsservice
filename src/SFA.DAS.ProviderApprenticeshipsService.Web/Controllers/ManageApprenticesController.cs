@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
@@ -13,6 +14,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         public ManageApprenticesController(ManageApprenticesOrchestrator orchestrator)
         {
+            if (orchestrator == null)
+                throw new ArgumentNullException(nameof(orchestrator));
+
             _orchestrator = orchestrator;
         }
 
@@ -28,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpGet]
         [Route("{apprenticeshipsid}/details")]
         [OutputCache(CacheProfile = "NoCache")]
-        public async Task<ActionResult>  Details(long providerid, long apprenticeshipsid)
+        public async Task<ActionResult> Details(long providerid, long apprenticeshipsid)
         {
             var model = await _orchestrator.GetApprenticeship(providerid, apprenticeshipsid);
             return View(model);

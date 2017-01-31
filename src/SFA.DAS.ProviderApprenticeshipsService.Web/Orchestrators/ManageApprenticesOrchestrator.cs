@@ -9,16 +9,17 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentic
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 
-using StructureMap.Diagnostics;
-
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
-    public class ManageApprenticesOrchestrator
+    public sealed class ManageApprenticesOrchestrator
     {
         private readonly IMediator _mediator;
 
         public ManageApprenticesOrchestrator(IMediator mediator)
         {
+            if (mediator == null)
+                throw new ArgumentNullException(nameof(mediator));
+
             _mediator = mediator;
         }
 
@@ -32,19 +33,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 .ToList();
 
             return new ManageApprenticeshipsViewModel
-                        {
-                            ProviderId = providerId,
-                            Apprenticeships = await Task.WhenAll(apprenticeships)
-                        };
+            {
+                ProviderId = providerId,
+                Apprenticeships = apprenticeships
+            };
         }
 
         public async Task<ApprenticeshipDetailsViewModel> GetApprenticeship(long providerId, long apprenticeshipId)
         {
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { ProviderId = providerId, ApprenticeshipId = apprenticeshipId });
-            return await MapFrom(data.Apprenticeship);
+
+            return MapFrom(data.Apprenticeship);
         }
 
-        private async Task<ApprenticeshipDetailsViewModel> MapFrom(Apprenticeship apprenticeship)
+        private ApprenticeshipDetailsViewModel MapFrom(Apprenticeship apprenticeship)
         {
             return new ApprenticeshipDetailsViewModel
             {

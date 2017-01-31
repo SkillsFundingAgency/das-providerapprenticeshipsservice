@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,7 +9,7 @@ using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentices
 {
-    public class GetAllApprenticesHandler : IAsyncRequestHandler<GetAllApprenticesRequest, GetAllApprenticesResponse>
+    public sealed class GetAllApprenticesHandler : IAsyncRequestHandler<GetAllApprenticesRequest, GetAllApprenticesResponse>
     {
         private ICommitmentsApi _commitmentsApi;
 
@@ -18,18 +17,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllAppre
         {
             if (commitmentsApi == null)
                 throw new ArgumentNullException(nameof(commitmentsApi));
+
             _commitmentsApi = commitmentsApi;
         }
                                                                                 
         public async Task<GetAllApprenticesResponse> Handle(GetAllApprenticesRequest message)
         {
             var apprenticeship = await _commitmentsApi.GetProviderApprenticeships(message.ProviderId);
+
             return new GetAllApprenticesResponse
-                       {
-                           Apprenticeships =  apprenticeship
+            {
+                Apprenticeships = apprenticeship
                                     .Where(m => m.PaymentStatus != PaymentStatus.PendingApproval)
                                     .ToList()
-                       };            
+            };            
         }
     }
 }
