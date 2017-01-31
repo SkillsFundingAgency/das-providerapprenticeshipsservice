@@ -33,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 {
                     var r = (await connection.QueryAsync<ContractFeedEvent>(
                         sql:
-                            "SELECT * FROM [SFA.DAS.ProviderAgreementStatus.Database].[dbo].[ContractFeedEvent] "
+                            "SELECT * FROM [dbo].[ContractFeedEvent] "
                           + "WHERE [ProviderId] = @providerId",
                         param: parameters,
                         commandType: CommandType.Text,
@@ -55,7 +55,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                     var r = (await connection.QueryAsync<ContractFeedEvent>(
                         sql:
                             "SELECT TOP 1 [Id], [PageNumber] "
-                          + "FROM [SFA.DAS.ProviderAgreementStatus.Database].[dbo].[ContractFeedEvent] "
+                          + "FROM [dbo].[ContractFeedEvent] "
                           + "ORDER BY [Updated] desc",
                         commandType: CommandType.Text,
                         transaction: trans)).SingleOrDefault();
@@ -78,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                     var r = (await connection.QueryAsync<int>(
                         sql:
                             "SELECT TOP 1 [PageNumber] "
-                          + "FROM [SFA.DAS.ProviderAgreementStatus.Database].[dbo].[ContractFeedEvent] "
+                          + "FROM [dbo].[ContractFeedEvent] "
                           + "ORDER BY [PageNumber] desc",
                         commandType: CommandType.Text,
                         transaction: trans)).SingleOrDefault();
