@@ -12,67 +12,77 @@
     <div class="column-two-thirds">
        
       
-        @if (Model.NotReadyForApproval)
+        @if (!Model.ReadyForApproval)
         {
             <p>
                 @Html.Raw(GetInvalidStateForApprovalMessage(Model.HasApprenticeships, Model.InvalidApprenticeshipCount))
             </p>
         }
-       
-            <form action="@Url.Action("FinishEditing")" method="POST">
-                @Html.AntiForgeryToken()
-               
-                @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
-                <h1 class="heading-xlarge">Choose an option</h1>
-              
-                <legend class="visuallyhidden">Things to do next</legend>
-                <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.SaveStatus, "error")">
-                    <div>
-                        @Html.ValidationMessageFor(m => m.SaveStatus, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SaveStatus) })
+
+        @if (!Model.HasSignedTheAgreement)
+        {
+                <div class="panel panel-border-wide alert-default">
+                    <p>
+                        You must 
+                        <a href="@Model.SignAgreementUrl" target="_blank">review and sign your apprenticeship training provider agreement</a> before you can approve this cohort.
+                    </p>
+                </div>
+                }
+
+                <form action="@Url.Action("FinishEditing")" method="POST">
+                    @Html.AntiForgeryToken()
+
+                    @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+                    <h1 class="heading-xlarge">Choose an option</h1>
+
+                    <legend class="visuallyhidden">Things to do next</legend>
+                    <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.SaveStatus, "error")">
+                        <div>
+                            @Html.ValidationMessageFor(m => m.SaveStatus, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SaveStatus) })
+                        </div>
+                        @if (Model.ReadyForApproval && Model.HasSignedTheAgreement)
+                        {
+                            if (Model.IsApproveAndSend)
+                            {
+                                <label class="block-label" for="@RadioButtonId(SaveStatus.ApproveAndSend)">
+                                    @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.ApproveAndSend, GetRadioButtonAttributes(SaveStatus.ApproveAndSend, !Model.ReadyForApproval))
+                                    <span id="changeOne">Approve and send to employer for approval</span>
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="block-label" for="@RadioButtonId(SaveStatus.Approve)">
+                                    @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.Approve, GetRadioButtonAttributes(SaveStatus.Approve, !Model.ReadyForApproval))
+                                    <span id="changeOne">Approve</span>
+                                </label>
+                            }
+                        }
+
+                        <label class="block-label" for="@RadioButtonId(SaveStatus.AmendAndSend)">
+                            @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.AmendAndSend, GetRadioButtonAttributes(SaveStatus.AmendAndSend, false))
+                            <span id="changeTwo">Send to employer to review or add details</span>
+                        </label>
+
+                        <label class="block-label" for="@RadioButtonId(SaveStatus.Save)">
+                            @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.Save, GetRadioButtonAttributes(SaveStatus.Save, false))
+                            <span id="changeThree">Save but don’t send to employer</span>
+                        </label>
                     </div>
-                    @if (!Model.NotReadyForApproval)
-                    {
-                        if (Model.IsApproveAndSend)
-                        {
-                            <label class="block-label" for="@RadioButtonId(SaveStatus.ApproveAndSend)">
-                                @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.ApproveAndSend, GetRadioButtonAttributes(SaveStatus.ApproveAndSend, Model.NotReadyForApproval))
-                                <span id="changeOne">Approve and send to employer for approval</span>
-                            </label>
-                        }
-                        else
-                        {
-                            <label class="block-label" for="@RadioButtonId(SaveStatus.Approve)">
-                                @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.Approve, GetRadioButtonAttributes(SaveStatus.Approve, Model.NotReadyForApproval))
-                                <span id="changeOne">Approve</span>
-                            </label>
-                        }
-                    }
 
-                    <label class="block-label" for="@RadioButtonId(SaveStatus.AmendAndSend)">
-                        @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.AmendAndSend, GetRadioButtonAttributes(SaveStatus.AmendAndSend, false))
-                        <span id="changeTwo">Send to employer to review or add details</span>
-                    </label>
+                    <div>
+                        <input type="submit" class="button" id="paymentPlan" value="Continue" />
+                    </div>
+                    @Html.HiddenFor(m => m.ProviderId)
+                    @Html.HiddenFor(m => m.HashedCommitmentId)
 
-                    <label class="block-label" for="@RadioButtonId(SaveStatus.Save)">
-                        @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.Save, GetRadioButtonAttributes(SaveStatus.Save, false))
-                        <span id="changeThree">Save but don’t send to employer</span>
-                    </label>
-                </div>
+                    @Html.HiddenFor(m => m.HasApprenticeships)
+                    @Html.HiddenFor(m => m.InvalidApprenticeshipCount)
+                    @Html.HiddenFor(m => m.ReadyForApproval)
+                </form>
 
-                <div>
-                    <input type="submit" class="button" id="paymentPlan" value="Continue" />
-                </div>
-                @Html.HiddenFor(m => m.ProviderId)
-                @Html.HiddenFor(m => m.HashedCommitmentId)
 
-                @Html.HiddenFor(m => m.HasApprenticeships)
-                @Html.HiddenFor(m => m.InvalidApprenticeshipCount)
-                @Html.HiddenFor(m => m.NotReadyForApproval)
-            </form>
 
-       
-       
-    </div>
+            </div>
 
     <div class="column-one-third">
 
