@@ -15,6 +15,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string Hashstring { get; set; }
         // Size of file in kilobytes
         public int MaxBulkUploadFileSize { get; set; }
+
+        public bool CheckForContractAgreements { get; set; }
+
+        public string ContractAgreementsUrl { get; set; }
     }
 
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration

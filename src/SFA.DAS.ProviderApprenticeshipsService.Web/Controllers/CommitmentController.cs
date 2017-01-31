@@ -34,6 +34,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
+        [Route("AgreementNotSigned")]
+        public async Task<ActionResult> AgreementNotSigned(long providerId, string hashedCommitmentId, string redirectTo)
+        {
+            var model = await _commitmentOrchestrator.GetAgreementPage(providerId, hashedCommitmentId);
+            model.RequestListUrl = Url.Action(redirectTo, new { providerId });
+
+            if (model.IsSignedAgreement)
+                return RedirectToAction("Details", new { providerId, hashedCommitmentId });
+
+            return View(model);
+        }
+
+        [HttpGet]
         [Route("WithEmployer")]
         public async Task<ActionResult> WithEmployer(long providerId)
         {
@@ -42,13 +55,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return View("RequestList", model);
         }
 
-
         [HttpGet]
         [Route("NewRequests")]
         public async Task<ActionResult> NewRequests(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAllNewRequests(providerId);
-            Session[LastCohortPageSessionKey] = RequestStatus.NewRequest; // Can probably find out anyway. 
+            Session[LastCohortPageSessionKey] = RequestStatus.NewRequest;
+
             return View("RequestList", model);
         }
 
@@ -58,6 +71,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var model = await _commitmentOrchestrator.GetAllReadyForReview(providerId);
             Session[LastCohortPageSessionKey] = RequestStatus.ReadyForReview;
+
             return View("RequestList", model);
         }
 
@@ -67,6 +81,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var model = await _commitmentOrchestrator.GetAllReadyForApproval(providerId);
             Session[LastCohortPageSessionKey] = RequestStatus.ReadyForApproval;
+
             return View("RequestList", model);
         }
 

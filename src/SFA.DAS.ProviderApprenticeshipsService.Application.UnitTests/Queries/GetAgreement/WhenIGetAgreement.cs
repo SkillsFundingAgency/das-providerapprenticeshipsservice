@@ -10,7 +10,8 @@ using NUnit.Framework;
 
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.GetAgreement
 {
@@ -23,8 +24,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         [SetUp]
         public void SetUp()
         {
+            var config = new ProviderApprenticeshipsServiceConfiguration { CheckForContractAgreements = true };
             _agreementRepository = new Mock<IAgreementStatusQueryRepository>();
-            _handler = new GetProviderAgreementQueryHandler(_agreementRepository.Object);
+            _handler = new GetProviderAgreementQueryHandler(_agreementRepository.Object, config);
         }
 
         [Test]
