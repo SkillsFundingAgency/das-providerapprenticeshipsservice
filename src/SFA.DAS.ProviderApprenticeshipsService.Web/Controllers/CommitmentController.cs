@@ -6,8 +6,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
-using StructureMap;
-
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [Authorize]
@@ -42,7 +40,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             return View("RequestList", model);
         }
-
 
         [HttpGet]
         [Route("NewRequests")]
