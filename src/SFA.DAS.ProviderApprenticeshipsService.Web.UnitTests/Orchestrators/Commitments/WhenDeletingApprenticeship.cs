@@ -31,7 +31,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _orchestrator = new CommitmentOrchestrator(
                 _mockMediator.Object, 
                 Mock.Of<ICommitmentStatusCalculator>(), 
-                mockHashingService.Object, 
+                mockHashingService.Object,
                 Mock.Of<IProviderCommitmentsLogger>(),
                 Mock.Of<ProviderApprenticeshipsServiceConfiguration>());
         }
