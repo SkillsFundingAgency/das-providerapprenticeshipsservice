@@ -219,6 +219,7 @@
         
         .heading-medium{border-top:10px solid $govuk-blue; padding-top:20px;}
   }
+}
 
 #agreement-not-signed{
     .notice{
@@ -260,9 +261,7 @@
 //==================================
 @media only screen and (max-device-width: 640px),
 only screen and (max-device-width: 667px),
-only screen and (max-width: 480px) {
-    
-//Progress list mobile view styles 
+only screen and (max-width: 480px) {    
 .employerListing { 
         td:nth-of-type(1):before {
         content: "Employer";
@@ -281,7 +280,6 @@ only screen and (max-width: 480px) {
         margin-top: 5px;
         } 
     }
-
 .provider-list-view { 
         td:nth-of-type(1):before {
         content: "Name";
@@ -305,9 +303,8 @@ only screen and (max-width: 480px) {
         font-weight: normal;
         margin-top: 5px;
         } 
-    }
 }
-
+}
 
 
 
