@@ -169,6 +169,12 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="App.Debug.config">
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Include="App.Release.config">
+      <DependentUpon>App.config</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\das-at-pas-as - Web Deploy.pubxml" />
     <None Include="Properties\webjob-publish-settings.json" />
