@@ -108,7 +108,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Commitments = await MapFrom(data, _latestMessageToEmployerFunc),
                 PageTitle = "Cohorts with employers",
                 PageId = "cohorts-with-employers",
-                PageHeading = "Cothorts with employers",
+                PageHeading = "Cohorts with employers",
                 PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSurfix(data.ToList().Count)} that are that are with employers:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
