@@ -340,9 +340,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         private void SetTempMessage(RequestStatus newRequestStatus)
         {
             if (newRequestStatus == RequestStatus.SentForReview)
-                TempData["FlashMessage"] = "Your cohort is with your training provider for review";
+                TempData["FlashMessage"] = "Your cohort is with your employer for review";
             if (newRequestStatus == RequestStatus.WithEmployerForApproval)
-                TempData["FlashMessage"] = "Your cohort is with your training provider for approval";
+                TempData["FlashMessage"] = "Your cohort is with your employer for approval";
         }
 
         private void AddErrorsToModelState(InvalidRequestException ex)
