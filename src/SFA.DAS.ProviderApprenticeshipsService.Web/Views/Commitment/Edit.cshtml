@@ -15,7 +15,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-        <form method="POST" action="@Url.Action("Edit")">
+        <form method="POST" action="@Url.Action("Edit")" novalidate="novalidate">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
 
