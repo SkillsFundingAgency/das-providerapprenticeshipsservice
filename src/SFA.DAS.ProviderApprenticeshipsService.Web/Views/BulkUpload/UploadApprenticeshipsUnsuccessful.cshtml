@@ -17,11 +17,11 @@
 <div class="grid">
     <div class="column-full">
         <h1 class="heading-xlarge">Upload stopped</h1>
-        <p class="dynamic-heading">There are/is -->TODO-- <strong>@Model.ErrorCount</strong> @PluraliseString(Model.ErrorCount, "error") across <strong>100</strong> records that you need to fix.</p>
+        <p class="dynamic-heading">There are/is -->TODO-- <strong>@Model.ErrorCount</strong> @PluraliseString(Model.ErrorCount, "error") across <strong>10</strong> records that you need to fix.</p>
 
         <h2 class="heading-medium">TODO-- (Records with errors) (Record with error) or (Record with errors)</h2>
 
-        <table id="bulk-upload-errors">
+        <table id="bulk-upload-errors" class="tableResponsive">
             <thead>
                 <tr>
                     <th scope="col">Row</th>
@@ -55,6 +55,9 @@
             </tbody>
         </table>
 
+        <p><a class="button" href="#wherever" aria-label="Back to bulk upload">Back to bulk upload</a></p>
+        
+        <p><a href="#wherever" aria-label="Cancel">Cancel</a></p>
 
     </div>
 </div>
