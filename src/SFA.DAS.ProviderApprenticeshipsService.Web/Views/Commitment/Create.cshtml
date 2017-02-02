@@ -13,7 +13,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-        <form method="POST" action="@Url.Action("Create")">
+        <form method="POST" action="@Url.Action("Create")" novalidate="novalidate">
 
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             @Html.AntiForgeryToken()
