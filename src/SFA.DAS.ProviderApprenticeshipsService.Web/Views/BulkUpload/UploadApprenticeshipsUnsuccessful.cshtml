@@ -15,58 +15,96 @@
 
 }
 <div class="grid">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Review and fix upload errors</h1>
-        <p>Your upload contained the following @Model.ErrorCount @PluraliseString(Model.ErrorCount,"error"). Please review the issues and try again.</p>
+    <div class="column-full">
+        <h1 class="heading-xlarge">Upload stopped</h1>
+        <p class="dynamic-heading">There are/is -->TODO-- <strong>@Model.ErrorCount</strong> @PluraliseString(Model.ErrorCount, "error") across <strong>100</strong> records that you need to fix.</p>
+
+        <h2 class="heading-medium">TODO-- (Records with errors) (Record with error) or (Record with errors)</h2>
+
+        <table id="bulk-upload-errors">
+            <thead>
+                <tr>
+                    <th scope="col">Row</th>
+                    <th scope="col">Unique learner number</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Date of birth</th>
+                    <th scope="col">Error/s-->TODO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>9876543219</td>
+                    <td>Tom Hanks</td>
+                    <td>10/10/2000</td>
+                    <td>
+                        <p>The <strong>programme type</strong> you've added isn't valid</p>
+                        <p>The <strong>framework code </strong> must not be more than 3 characters in length</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>----</td>
+                    <td>Richard Gear</td>
+                    <td>10/10/1997</td>
+                    <td>
+                        <p>The <strong>programme type</strong> you've added isn't valid</p>
+                        <p>The <strong>framework code </strong> must not be more than 3 characters in length</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
     </div>
 </div>
 
-@if (Model.ErrorCount > 0)
-{
-    <div class="grid error-grid">
-        <div class="column-two-thirds">
-            <div class="panel panel-border-wide alert-default">
-                <p>@Model.ErrorCount @PluraliseString(Model.ErrorCount, "error") found</p>
+@*@if (Model.ErrorCount > 0)
+    {
+        <div class="grid error-grid">
+            <div class="column-two-thirds">
+                <div class="panel panel-border-wide alert-default">
+                    <p>@Model.ErrorCount @PluraliseString(Model.ErrorCount, "error") found</p>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
 
-@if (Model.WarningsCount > 0)
-{
-    <div class="grid warning-grid">
-        <div class="column-two-thirds">
-            <div class="panel panel-border-wide alert-default">
-                <p>@Model.WarningsCount @PluraliseString(Model.WarningsCount, "warning") found</p>
+    @if (Model.WarningsCount > 0)
+    {
+        <div class="grid warning-grid">
+            <div class="column-two-thirds">
+                <div class="panel panel-border-wide alert-default">
+                    <p>@Model.WarningsCount @PluraliseString(Model.WarningsCount, "warning") found</p>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
 
-<div class="grid">
-    <div class="column-two-thirds">
-        <hr />
-        <details>
-            <summary><span class="summary">Help with uploading files</span></summary>
-            <div class="panel panel-border-narrow">
-                <p>
-                    You must use a csv file to upload details.  Some management information systems can create the file for you.  Alternatively, you can download and <a href="sampleCSVfile.csv" title="download apprentice upload template">use the apprentice upload template</a>.
-                </p>
-            </div>
-        </details>
+    <div class="grid">
+        <div class="column-two-thirds">
+            <hr />
+            <details>
+                <summary><span class="summary">Help with uploading files</span></summary>
+                <div class="panel panel-border-narrow">
+                    <p>
+                        You must use a csv file to upload details.  Some management information systems can create the file for you.  Alternatively, you can download and <a href="sampleCSVfile.csv" title="download apprentice upload template">use the apprentice upload template</a>.
+                    </p>
+                </div>
+            </details>
 
-        <form method="POST" action="@Url.Action("UploadApprenticeships")" enctype="multipart/form-data">
-            <label class="form-label hidden" for="files-upload">Upload file</label>
-            <input id="files-upload" accept=".csv" type="file" name="Attachment">
+            <form method="POST" action="@Url.Action("UploadApprenticeships")" enctype="multipart/form-data">
+                <label class="form-label hidden" for="files-upload">Upload file</label>
+                <input id="files-upload" accept=".csv" type="file" name="Attachment">
 
-            @Html.HiddenFor(m => m.ProviderId)
-            @Html.HiddenFor(m => m.HashedCommitmentId)
+                @Html.HiddenFor(m => m.ProviderId)
+                @Html.HiddenFor(m => m.HashedCommitmentId)
 
-            <input class="button upload-file-btn" type="submit" value="Upload a new file">
-         
-        </form>
-    </div>
-</div>
+                <input class="button upload-file-btn" type="submit" value="Upload a new file">
+
+            </form>
+        </div>
+    </div>*@
 
 @section breadcrumb {
     <div class="breadcrumbs">

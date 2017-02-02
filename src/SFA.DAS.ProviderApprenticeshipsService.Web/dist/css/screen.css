@@ -3059,7 +3059,7 @@ span.helpText {
   }
 }
 
-.dynamic-heading strong {
+.dynamic-heading strong, #bulk-upload-errors strong {
   font-weight: bold;
 }
 
