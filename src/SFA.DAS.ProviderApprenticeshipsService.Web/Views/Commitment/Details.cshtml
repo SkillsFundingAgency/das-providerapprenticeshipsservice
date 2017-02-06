@@ -14,121 +14,216 @@
     </div>
 </div>
 
-<div class="grid-row">
-    <div class="column-one-half employer-details">
-        <p><span class="strong">Employer: </span>@Model.LegalEntityName</p>
-        <p><span class="strong">Cohort reference: </span>@Model.Reference</p>
-        <p><span class="strong">Status: </span>@Model.Status.GetDescription()</p>
-    </div>
 
-    <div class="column-one-half employer-details">
-        <p class="strong">Instructions:</p>
-        <p>@(string.IsNullOrWhiteSpace(Model.LatestMessage) ? "No note added" : Model.LatestMessage)</p>
+<style>
+    .bingo-background {
+        margin-right: 15px;
+        padding: 10px;
+        color: White;
+        min-height: 160px;
+        width: 30%;
+    }
+
+    .bingo-background.block-one {
+        background-color: #2E3391;
+    }
+
+    .bingo-background.block-two {
+        background-color: #8E2A8D;
+    }
+
+    .bingo-background.block-three {
+        background-color: #D03A84;
+    }
+
+    .bingo-group {
+        margin-bottom: 1em;
+    }
+
+    .missing {
+        font-weight: bold;
+    }
+
+    .group-header {
+        margin-bottom: 1em;
+        margin-top: 1.8em;
+    }
+
+    .group-header .heading-medium { margin: 0; }
+</style>
+
+<div class="grid-row">
+    <div class="column-full bingo-group">
+
+        <div class="column-one-third bingo-background block-one">
+            <h2 class="bold-xxlarge">
+                <span>@Model.Apprenticeships.Count</span>
+            </h2>
+            <p class="heading-small">@PluraliseApprentice(Model.Apprenticeships.Count)</p>
+        </div>
+
+        <div class="column-one-third bingo-background block-two ">
+            <h2 class="bold-xxlarge">
+                <span>@Model.Apprenticeships.Count(x => !x.CanBeApprove)</span>
+            </h2>
+            <p class="heading-small">@PluraliseIncompleteRecords(Model.Apprenticeships.Count(x => !x.CanBeApprove))</p>
+        </div>
+
+        <div class="column-one-third bingo-background block-three">
+            <h2 class="bold-xlarge">
+                <span>@Model.Apprenticeships.Sum(x => x.Cost ?? 0).ToString("C0")</span>
+            </h2>
+            <p class="heading-small">Total cost</p>
+        </div>
+
     </div>
 </div>
 
-@functions {
-    public string GetApprenticesCountText(IList<ApprenticeshipListItemViewModel> apprenticeships)
-    {
-        if (apprenticeships.Count == 1)
-            return "1 Apprentice";
+    <div class="grid-row">
+        <div class="column-one-half employer-details">
+            <p><span class="strong">Employer: </span>@Model.LegalEntityName</p>
+            <p><span class="strong">Cohort reference: </span>@Model.Reference</p>
+            <p><span class="strong">Status: </span>@Model.Status.GetDescription()</p>
+        </div>
 
-        return $"{apprenticeships.Count} Apprentices";
+        <div class="column-one-half employer-details">
+            <p class="strong">Instructions:</p>
+            <p>@(string.IsNullOrWhiteSpace(Model.LatestMessage) ? "No note added" : Model.LatestMessage)</p>
+        </div>
+    </div>
+
+    @functions {
+        public string GetApprenticesCountText(IList<ApprenticeshipListItemViewModel> apprenticeships)
+        {
+            if (apprenticeships.Count == 1)
+                return "1 Apprentice";
+
+            return $"{apprenticeships.Count} Apprentices";
+        }
+
+        public string FormatCost(decimal? cost)
+        {
+            if (!cost.HasValue)
+                return string.Empty;
+
+            return $"£{cost.Value:n0}";
+        }
+
+        public string PluraliseApprentice(int count)
+        {
+            return count == 1 ? "Apprentice" : "Apprentices";
+        }
+
+        public string PluraliseIncompleteRecords(int count)
+        {
+            return count == 1 ? "Incomplete record" : "Incomplete records";
+        }
+
     }
 
-    public string FormatCost(decimal? cost)
+    @helper GetValueOrDefault(string property)
     {
-        if (!cost.HasValue)
-            return string.Empty;
-
-        return $"£{cost.Value:n0}";
-    }
-
-}
-
-@helper GetValueOrDefault(string property)
-{
 if (!string.IsNullOrEmpty(property))
 {
         <span>@property &nbsp;</span>
 }
 else
 {
-        <span>@Html.Raw("&ndash;")</span>
+        <span class="missing">@Html.Raw("&ndash;")</span>
 }
 }
-<div class="grid-row">
-    <div class="column-full bulk-upload-buttons">
-        <hr class="hr-top">
-
-        @{ var finishEditingText = Model.PendingChanges ? "Save and continue" : "Continue to approval"; }
-        <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
-        <a href="@Url.Action("UploadApprenticeships", "BulkUpload", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary upload-btn" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
-        <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
-        <hr class="hr-bottom">
-    </div>
-</div>
-
-<div class="grid-row">
-    <div class="column-full">
-        @if (!Model.HasApprenticeships)
-        {
-            <div class="panel panel-border-wide alert-default">
-                <p>You haven't added any apprentices yet. Use the options on this page to add apprentices.</p>
-            </div>
-        }
-    </div>
-</div>
-
-@if (Model.Apprenticeships.Count > 0)
-{
     <div class="grid-row">
-        <div class="column-full">
-            <p class="heading-medium">@GetApprenticesCountText(Model.Apprenticeships)</p>
-            <table class="tableResponsive providerList">
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">ULN</th>
-                        <th scope="col">Training course</th>
-                        <th scope="col">Training dates</th>
-                        <th scope="col" colspan="2">Cost</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Apprenticeships)
-                {
-                        <tr>
-                            <td>@GetValueOrDefault(item.ApprenticeshipName)</td>
-                            <td>@GetValueOrDefault(item.ULN)</td>
-                            <td>@GetValueOrDefault(item.TrainingName)</td>
-                            <td>
-                                @if (item.StartDate != null && item.EndDate != null)
-                                {
-                                    <span>
-                                        @item.StartDate.Value.ToGdsFormatWithoutDay() to @item.EndDate.Value.ToGdsFormatWithoutDay() &nbsp;
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span>&ndash;</span>
-                                }
-                            </td>
-                            <td>@GetValueOrDefault(FormatCost(item.Cost))</td>
-                            <td><a href="@Url.Action("Edit", new { Model.HashedCommitmentId, item.HashedApprenticeshipId })" title="Edit @item.ApprenticeshipName" aria-label="Edit @item.ApprenticeshipName">Edit details</a></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+        <div class="column-full bulk-upload-buttons">
+            <hr class="hr-top">
+
+            @{ var finishEditingText = Model.PendingChanges ? "Save and continue" : "Continue to approval"; }
+            <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
+            <a href="@Url.Action("UploadApprenticeships", "BulkUpload", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary upload-btn" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
+            <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
+            <hr class="hr-bottom">
         </div>
     </div>
-}
 
-@section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="@Model.BackLinkUrl" aria-label="Back" class="back-link">Back</a>
+    <div class="grid-row">
+        <div class="column-full">
+            @if (!Model.HasApprenticeships)
+            {
+                <div class="panel panel-border-wide alert-default">
+                    <p>You haven't added any apprentices yet. Use the options on this page to add apprentices.</p>
+                </div>
+            }
+        </div>
     </div>
-}
+
+    @if (Model.Apprenticeships.Count > 0)
+    {
+        <div class="grid-row">
+            <div class="column-full">
+
+
+                @foreach (var trainingGroup in Model.Apprenticeships.OrderBy(g => g.TrainingName).GroupBy(g => g.TrainingCode))
+                {
+                    var groupName = String.IsNullOrEmpty(trainingGroup.Key) ? "No training course" : @trainingGroup.First().TrainingName;
+                    var groupTitle = String.Format($"{trainingGroup.Count()} - {groupName}");
+                    var trainingCode = String.IsNullOrEmpty(trainingGroup.Key) ? String.Empty : @trainingGroup.First().TrainingCode;
+
+                    <div class="group-header">
+
+                        <p class="heading-medium">@groupTitle</p>
+                        @if (!String.IsNullOrEmpty(trainingCode))
+                        {
+                            <p>Training code: @trainingCode</p>
+                        }
+                        
+                    </div>
+
+                        <table class="tableResponsive providerList">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">ULN</th>
+                                    <th scope="col">Training course</th>
+                                    <th scope="col">Training dates</th>
+                                    <th scope="col" colspan="2">Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in trainingGroup.OrderBy(a => a.CanBeApprove))
+                                {
+                                    <tr>
+                                        <td>@GetValueOrDefault(item.ApprenticeshipName)</td>
+                                        <td>@GetValueOrDefault(item.ULN)</td>
+                                        <td>@GetValueOrDefault(item.TrainingName)</td>
+                                        <td>
+                                            @if (item.StartDate != null && item.EndDate != null)
+                                            {
+                                                <span>
+                                                    @item.StartDate.Value.ToGdsFormatWithoutDay() to @item.EndDate.Value.ToGdsFormatWithoutDay() &nbsp;
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="missing">&ndash;</span>
+                                            }
+                                        </td>
+                                        <td>@GetValueOrDefault(FormatCost(item.Cost))</td>
+                                        <td><a href="@Url.Action("Edit", new {Model.HashedCommitmentId, item.HashedApprenticeshipId})" title="Edit @item.ApprenticeshipName" aria-label="Edit @item.ApprenticeshipName">Edit details</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        }
+
+                    </div>
+        </div>
+    }
+
+    @section breadcrumb {
+        <div class="breadcrumbs">
+            <a href="@Model.BackLinkUrl" aria-label="Back" class="back-link">Back</a>
+        </div>
+    }
 
 
 
