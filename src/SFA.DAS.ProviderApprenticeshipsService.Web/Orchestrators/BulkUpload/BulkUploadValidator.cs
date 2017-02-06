@@ -19,9 +19,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
     {
         private readonly ILog _logger;
         private readonly ProviderApprenticeshipsServiceConfiguration _config;
-        private readonly ApprenticeshipBulkUploadValidator _viewModelValidator = new ApprenticeshipBulkUploadValidator();
-        private readonly ApprenticeshipViewModelApproveValidator _approvalValidator = new ApprenticeshipViewModelApproveValidator();
-        private readonly CsvRecordValidator _csvRecordValidator = new CsvRecordValidator();
+        private readonly ApprenticeshipBulkUploadValidator _viewModelValidator = new ApprenticeshipBulkUploadValidator(new ApprenticeshipValidationText(true));
+        private readonly ApprenticeshipViewModelApproveValidator _approvalValidator = new ApprenticeshipViewModelApproveValidator(new ApprenticeshipValidationText(true));
+        private readonly CsvRecordValidator _csvRecordValidator = new CsvRecordValidator(new ApprenticeshipValidationText(true));
 
         public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, ILog logger)
         {
@@ -66,17 +66,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
                         // Validate view model for approval
                         var validationResult = _viewModelValidator.Validate(viewModel);
-                        validationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i)));
+                        validationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i, record)));
 
                         var approvalValidationResult = _approvalValidator.Validate(viewModel);
-                        approvalValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i)));
+                        approvalValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i, record)));
 
                         // Validate csv record
                         var csvValidationResult = _csvRecordValidator.Validate(record.CsvRecord);
-                        csvValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i)));
+                        csvValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i, record)));
 
                         if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode) && trainingProgrammes.All(m => m.Id != viewModel.TrainingCode))
-                            errors.Add(new UploadError("Not a valid training code", "StdCode_04", i));
+                            errors.Add(new UploadError("Not a valid <strong>Training code</strong>", "StdCode_04", i, record));
                     });
 
             return errors;

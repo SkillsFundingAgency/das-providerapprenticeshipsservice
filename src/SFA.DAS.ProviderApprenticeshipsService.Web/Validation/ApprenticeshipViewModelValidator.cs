@@ -7,7 +7,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
     public sealed class ApprenticeshipViewModelValidator : ApprenticeshipBaseValidator
     {
-        public ApprenticeshipViewModelValidator()
+        public ApprenticeshipViewModelValidator() : base(new ApprenticeshipValidationText())
         {
             var now = DateTime.Now;
             var yesterday = DateTime.Now.AddDays(-1);

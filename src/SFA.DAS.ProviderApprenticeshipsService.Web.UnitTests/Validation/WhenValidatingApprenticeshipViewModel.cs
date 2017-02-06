@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 
 using FluentAssertions;
 using NUnit.Framework;
@@ -193,7 +193,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
         //        .Validate(_validModel);
 
         //    result.Errors.Count.Should().Be(1);
-        //    result.Errors[0].ErrorMessage.ShouldAllBeEquivalentTo("Enter a valid national insurance number");
+            result.Errors[0].ErrorMessage.Should().Be("Enter a valid National insurance number");
         //}
 
         //[TestCase("SE1234567A", Description = "Too many numbers")]
@@ -206,7 +206,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
         //        .Validate(_validModel);
 
         //    result.Errors.Count.Should().Be(1);
-        //    result.Errors[0].ErrorMessage.ShouldAllBeEquivalentTo("The National Insurance number must be entered and must not be more than 9 characters in length");
+            result.Errors[0].ErrorMessage.Should().Be("The National Insurance number must be entered and must not be more than 9 characters in length");
         //}
 
         //[TestCase("SE123456 ")]
@@ -258,7 +258,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             var result = _validator
                 .Validate(_validModel);
             result.Errors.Count.Should().Be(1);
-            result.Errors[0].ErrorMessage.Should().Be("The reference must be 20 characters or fewer");
+            result.Errors[0].ErrorMessage.Should().Be("The Reference must be 20 characters or fewer");
             result.Errors[0].ErrorCode.Should().Be("ProviderRef_01");
         }
           

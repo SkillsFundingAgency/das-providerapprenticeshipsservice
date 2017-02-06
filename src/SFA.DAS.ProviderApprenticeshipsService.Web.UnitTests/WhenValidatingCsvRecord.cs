@@ -4,12 +4,13 @@ using NUnit.Framework;
 
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
 {
     public class WhenValidatingCsvRecord
     {
-        private readonly CsvRecordValidator _validator = new CsvRecordValidator();
+        private readonly CsvRecordValidator _validator = new CsvRecordValidator(new ApprenticeshipValidationText());
         private CsvRecord _validModel;
 
         [SetUp]

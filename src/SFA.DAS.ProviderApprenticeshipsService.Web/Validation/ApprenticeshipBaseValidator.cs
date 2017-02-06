@@ -11,28 +11,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
     public class ApprenticeshipBaseValidator : AbstractValidator<ApprenticeshipViewModel>
     {
-        public ApprenticeshipBaseValidator()
+        public ApprenticeshipBaseValidator(ApprenticeshipValidationText validationText)
         {
-            var text = new ApprenticeshipValidationText();
             Func<string, int, bool> lengthLessThan = (str, lenth) => (str?.Length ?? 0) <= lenth;
 
             RuleFor(x => x.ULN)
-                .Matches("^$|^[1-9]{1}[0-9]{9}$").WithMessage(text.Uln01.Text).WithErrorCode(text.Uln01.ErrorCode)
-                .Must(m => m != "9999999999").WithMessage(text.Uln02.Text).WithErrorCode(text.Uln02.ErrorCode);
+                .Matches("^$|^[1-9]{1}[0-9]{9}$").WithMessage(validationText.Uln01.Text).WithErrorCode(validationText.Uln01.ErrorCode)
+                .Must(m => m != "9999999999").WithMessage(validationText.Uln02.Text).WithErrorCode(validationText.Uln02.ErrorCode);
             // ToDo: text.UlnPassChecksum
             // ToDo text.UlnAlreadyInUse
 
             RuleFor(r => r.DateOfBirth)
-                .Must(ValidateDateOfBirth).Unless(m => m.DateOfBirth == null).WithMessage(text.DateOfBirth01.Text).WithErrorCode(text.DateOfBirth01.ErrorCode);
+                .Must(ValidateDateOfBirth).Unless(m => m.DateOfBirth == null).WithMessage(validationText.DateOfBirth01.Text).WithErrorCode(validationText.DateOfBirth01.ErrorCode);
             // ToDo: Date of birth -> DateOfBirth_02 - DateOfBirth_06
 
             //RuleFor(x => x.NINumber)
             //    .Matches(@"^[abceghj-prstw-z][abceghj-nprstw-z]\d{6}[abcd\s]$", RegexOptions.IgnoreCase)
             //        .Unless(m => m.NINumber == null || m.NINumber.Length > 9).WithMessage(text.NINumber03.Text).WithErrorCode(text.NINumber03.ErrorCode)
-            //    .Must(m => lengthLessThan(m, 9)).WithMessage(text.NINumber02.Text).WithErrorCode(text.NINumber02.ErrorCode);
+            //    .Must(m => lengthLessThan(m, 9)).WithMessage(validationText.NINumber02.Text).WithErrorCode(validationText.NINumber02.ErrorCode);
 
             RuleFor(x => x.ProviderRef)
-                .Must(m => lengthLessThan(m, 20)).WithMessage(text.ProviderRef01.Text).WithErrorCode(text.ProviderRef01.ErrorCode);
+                .Must(m => lengthLessThan(m, 20)).WithMessage(validationText.ProviderRef01.Text).WithErrorCode(validationText.ProviderRef01.ErrorCode);
         }
 
         protected bool BeGreaterThenStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel date)
