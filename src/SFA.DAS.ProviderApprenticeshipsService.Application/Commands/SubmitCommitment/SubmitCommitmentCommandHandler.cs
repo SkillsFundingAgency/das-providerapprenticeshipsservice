@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using Newtonsoft.Json;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Notifications.Api.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.Tasks.Api.Client;
 using SFA.DAS.Tasks.Api.Types.Templates;
 
@@ -14,23 +17,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
     {
         private readonly ICommitmentsApi _commitmentsApi;
         private readonly ITasksApi _tasksApi;
-        private readonly SubmitCommitmentCommandValidator _validator;
+        private readonly AbstractValidator<SubmitCommitmentCommand> _validator;
+        private readonly IMediator _mediator;
 
-        public SubmitCommitmentCommandHandler(ICommitmentsApi commitmentsApi, ITasksApi tasksApi)
+        public SubmitCommitmentCommandHandler(ICommitmentsApi commitmentsApi, ITasksApi tasksApi, AbstractValidator<SubmitCommitmentCommand> validator, IMediator mediator)
         {
             if (commitmentsApi == null)
                 throw new ArgumentNullException(nameof(commitmentsApi));
             if (tasksApi == null)
                 throw new ArgumentNullException(nameof(tasksApi));
+            if (validator == null)
+                throw new ArgumentNullException(nameof(validator));
+            if (mediator == null)
+                throw new ArgumentNullException(nameof(mediator));
 
             _commitmentsApi = commitmentsApi;
             _tasksApi = tasksApi;
-            _validator = new SubmitCommitmentCommandValidator();
+            _validator = validator;
+            _mediator = mediator;
         }
 
         protected override async Task HandleCore(SubmitCommitmentCommand message)
         {
-             var validationResult = _validator.Validate(message);
+            var validationResult = _validator.Validate(message);
 
             if (!validationResult.IsValid)
                 throw new InvalidRequestException(validationResult.Errors);
@@ -40,10 +49,36 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
             if (commitment.ProviderId != message.ProviderId)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commitment does not belong to this Provider" } });
 
-            await _commitmentsApi.PatchProviderCommitment(message.ProviderId, message.CommitmentId, message.LastAction);
+            // TODO: When get to Notification story for provider pass through user details.
+            var submission = new CommitmentSubmission { Action = message.LastAction, LastUpdatedByInfo = new LastUpdateInfo { Name = "Dummy User", EmailAddress = "Dummy@Dummy.com" } };
+
+            await _commitmentsApi.PatchProviderCommitment(message.ProviderId, message.CommitmentId, submission);
 
             if (message.CreateTask)
                 await CreateTask(message, commitment);
+
+            var notificationCommand = BuildNotificationCommand(commitment);
+
+            await _mediator.SendAsync(notificationCommand);
+        }
+
+        private static SendNotificationCommand BuildNotificationCommand(Commitment commitment)
+        {
+            return new SendNotificationCommand
+            {
+                Email = new Email
+                {
+                    RecipientsAddress = commitment.EmployerLastUpdateInfo.EmailAddress,
+                    ReplyToAddress = "noreply@sfa.gov.uk",
+                    Subject = "<Test Employer Notification>", // Replaced by Notify Service
+                    SystemId = "x",
+                    TemplateId = "c761c7e7-6979-47f9-b92a-428d89db0432",
+                    Tokens = new Dictionary<string, string>
+                    {
+                        //{ "account_name", caller.AccountName }
+                    }
+                }
+            };
         }
 
         private async Task CreateTask(SubmitCommitmentCommand message, Commitment commitment)

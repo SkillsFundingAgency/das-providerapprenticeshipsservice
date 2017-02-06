@@ -1,4 +1,6 @@
-﻿using SFA.DAS.Commitments.Api.Client.Configuration;
+﻿using System;
+using SFA.DAS.Commitments.Api.Client.Configuration;
+using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.Tasks.Api.Client.Configuration;
 
@@ -12,6 +14,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public CommitmentsApiClientConfiguration CommitmentsApi { get; set; }
         public TasksApiClientConfiguration TasksApi { get; set; }
         public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }
+        public NotificationsApiClientConfiguration NotificationApi { get; set; }
         public string Hashstring { get; set; }
         // Size of file in kilobytes
         public int MaxBulkUploadFileSize { get; set; }
@@ -36,5 +39,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
     public class ApprenticeshipInfoServiceConfiguration : IApprenticeshipInfoServiceConfiguration
     {
         public string BaseUrl { get; set; }
+    }
+
+    public class NotificationsApiClientConfiguration : INotificationsApiClientConfiguration
+    {
+        public string BaseUrl { get; set; }
+        public string ClientToken { get; set; }
     }
 }
