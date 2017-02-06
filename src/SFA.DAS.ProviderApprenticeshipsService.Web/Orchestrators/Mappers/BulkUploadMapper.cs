@@ -1,17 +1,30 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+
+using MediatR;
 
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
     public class BulkUploadMapper
     {
+        private readonly IMediator _mediator;
+
+        public BulkUploadMapper(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         public Apprenticeship MapFrom(long commitmentId, ApprenticeshipViewModel viewModel, IList<ITrainingProgramme> trainingProgrammes)
         {
             var apprenticeship = new Apprenticeship
@@ -51,6 +64,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             return result;
         }
 
+        public async Task<IList<Apprenticeship>> MapFrom(long commitmentId, IEnumerable<ApprenticeshipUploadModel> data)
+        {
+            var trainingProgrammes = await GetTrainingProgrammes();
+
+            return data.Select(x => MapFrom(commitmentId, x.ApprenticeshipViewModel, trainingProgrammes)).ToList();
+        }
+
         private UploadRowErrorViewModel MapError(IGrouping<int?, UploadError> arg)
         {
             var firstRecord = arg.FirstOrDefault();
@@ -68,6 +88,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             }
 
             return null;
+        }
+
+        //TODO: These are duplicated in Commitment Orchestrator - needs to be shared
+        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
+        {
+            var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
+            var frameworksTask = _mediator.SendAsync(new GetFrameworksQueryRequest());
+
+            await Task.WhenAll(standardsTask, frameworksTask);
+
+            return
+                standardsTask.Result.Standards.Cast<ITrainingProgramme>()
+                    .Union(frameworksTask.Result.Frameworks)
+                    .OrderBy(m => m.Title)
+                    .ToList();
         }
     }
 }

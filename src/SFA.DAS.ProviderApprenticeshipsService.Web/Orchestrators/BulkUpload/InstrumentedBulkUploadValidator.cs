@@ -30,6 +30,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _validator = validator;
         }
 
+        public IEnumerable<UploadError> ValidateFile(IEnumerable<ApprenticeshipUploadModel> records, string cohortReference)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            var result = _validator.ValidateFile(records, cohortReference);
+
+            _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to validate file for {records.Count()} items");
+
+            return result;
+        }
+
         public IEnumerable<UploadError> ValidateFileAttributes(HttpPostedFileBase attachment)
         {
             var stopwatch = Stopwatch.StartNew();

@@ -45,7 +45,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             return errors;
         }
 
-        public IEnumerable<UploadError> ValidateFields(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes, string cohortReference)
+        public IEnumerable<UploadError> ValidateFile(
+            IEnumerable<ApprenticeshipUploadModel> records,
+            string cohortReference)
         {
             var errors = new ConcurrentBag<UploadError>();
 
@@ -58,6 +60,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != cohortReference))
                 errors.Add(new UploadError("The Cohort Reference does not match the current cohort", "CohortRef_04"));
 
+            return errors;
+        }
+
+        public IEnumerable<UploadError> ValidateFields(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes, string cohortReference)
+        {
+            var errors = new ConcurrentBag<UploadError>();
+            var apprenticeshipUploadModels = records as ApprenticeshipUploadModel[] ?? records.ToArray();
+            
             Parallel.ForEach(apprenticeshipUploadModels,
                 (record, state, index) =>
                     {

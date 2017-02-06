@@ -38,9 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void NoRecords()
         {
-            var errors = _sut.ValidateFields(
-                new ApprenticeshipUploadModel[0], 
-                TrainingProgrammes(), "ABBA123").ToList();
+            var errors = _sut.ValidateFile(new ApprenticeshipUploadModel[0], "ABBA123").ToList();
             errors.Count.Should().Be(1);
             errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("File contains no records");
         }
@@ -74,8 +72,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             first.CsvRecord.CohortRef = "Abba123";
             second.CsvRecord.CohortRef = "Other reference";
 
-            var errors = _sut.ValidateFields(new List<ApprenticeshipUploadModel> { first, second } , TrainingProgrammes(), "ABBA123").ToList();
-            errors.Count.Should().Be(6);
+            var errors = _sut.ValidateFile(new List<ApprenticeshipUploadModel> { first, second }, "ABBA123").ToList();
+            errors.Count.Should().Be(2);
             var messages = errors.Select(m => m.ToString()).ToList();
             messages.Should().Contain("The Cohort Reference must be the same for all learners in the file");
             messages.Should().Contain("The Cohort Reference does not match the current cohort");
@@ -90,8 +88,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             first.CsvRecord.CohortRef = "Other ref";
             second.CsvRecord.CohortRef = "Other ref";
 
-            var errors = _sut.ValidateFields(new List<ApprenticeshipUploadModel> { first, second }, TrainingProgrammes(), "ABBA123").ToList();
-            errors.Count.Should().Be(5);
+            var errors = _sut.ValidateFile(new List<ApprenticeshipUploadModel> { first, second }, "ABBA123").ToList();
+            //errors.Count.Should().Be(5);
             var messages = errors.Select(m => m.ToString()).ToList();
             messages.Should().NotContain("The Cohort Reference must be the same for all learners in the file");
             messages.Should().Contain("The Cohort Reference does not match the current cohort");

@@ -57,7 +57,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var uploadValidator = new BulkUploadValidator(new ProviderApprenticeshipsServiceConfiguration { MaxBulkUploadFileSize = 512 }, Mock.Of<ILog>());
             var uploadFileParser = new BulkUploadFileParser(Mock.Of<ILog>());
             var bulkUploader = new BulkUploader(_mockMediator.Object, uploadValidator, uploadFileParser, Mock.Of<IProviderCommitmentsLogger>());
-            var bulkUploadMapper = new BulkUploadMapper();
+            var bulkUploadMapper = new BulkUploadMapper(_mockMediator.Object);
 
             _sut = new BulkUploadOrchestrator(_mockMediator.Object, bulkUploader, mockHashingService.Object, bulkUploadMapper, Mock.Of<IProviderCommitmentsLogger>());
         }
@@ -78,7 +78,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123" };
             var stopwatch = Stopwatch.StartNew();
-            var result = await _sut.UploadFileAsync(model);
+            var r1 = _sut.GetFile(model);
+            var result = await _sut.UploadFileAsync(r1, "ABBA12", 1208);
             stopwatch.Stop(); Console.WriteLine($"Time TOTAL: {stopwatch.Elapsed.Seconds}");
             result.Errors.Count().Should().Be(120 * 1000);
             stopwatch.Elapsed.Seconds.Should().BeLessThan(7);   
@@ -98,7 +99,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 .Callback((object x) => commandArgument = x as BulkUploadApprenticeshipsCommand);
 
             var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111 };
-            var result = await _sut.UploadFileAsync(model);
+            var file = _sut.GetFile(model);
+            await _sut.UploadFileAsync(file, "ABBA12", model.ProviderId);
 
             _mockMediator.Verify(x => x.SendAsync(It.IsAny<BulkUploadApprenticeshipsCommand>()), Times.Once);
 

@@ -36,7 +36,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _logger = logger;
         }
 
-        public async Task<BulkUploadResult> Validate(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
+        public async Task<BulkUploadResult> Validate(BulkUploadResult uploadResult, string hashedCommitmentId, long providerId)
+        {
+            if (uploadResult.Errors.Any())
+                return uploadResult;
+
+            var trainingProgrammes = GetTrainingProgrammes();
+            var validationErrors = 
+                _bulkUploadValidator.ValidateFields(uploadResult.Data, await trainingProgrammes, hashedCommitmentId).ToList();
+
+            if (validationErrors.Any())
+            {
+                _logger.Warn($"Failed validation bulk upload records with {validationErrors.Count} errors", providerId);
+                return new BulkUploadResult { Errors = validationErrors };
+            }
+
+            return new BulkUploadResult { Errors = new List<UploadError>(), Data = uploadResult .Data};
+        }
+
+        public BulkUploadResult ValidateFile(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
         {
             if (uploadApprenticeshipsViewModel.Attachment == null)
                 return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("No file chosen") } };
@@ -47,7 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             {
                 foreach (var error in fileValidationErrors)
                     _logger.Warn($"  -->  {error.Message}");
-                _logger.Warn($"Failed validation bulk upload file with {fileValidationErrors.Count} errors", providerId: uploadApprenticeshipsViewModel.ProviderId); // ToDo: Log what errors?
+                _logger.Warn($"Failed validation bulk upload file with {fileValidationErrors.Count} errors", uploadApprenticeshipsViewModel.ProviderId);
 
                 return new BulkUploadResult { Errors = fileValidationErrors };
             }
@@ -57,17 +75,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             if (uploadResult.Errors.Any())
                 return uploadResult;
 
-            var trainingProgrammes = GetTrainingProgrammes();
-            var validationErrors = 
-                _bulkUploadValidator.ValidateFields(uploadResult.Data, await trainingProgrammes, uploadApprenticeshipsViewModel.HashedCommitmentId).ToList();
+            var errors = _bulkUploadValidator.ValidateFile(uploadResult.Data, uploadApprenticeshipsViewModel.HashedCommitmentId).ToList();
 
-            if (validationErrors.Any())
-            {
-                _logger.Warn($"Failed validation bulk upload records with {validationErrors.Count} errors", providerId: uploadApprenticeshipsViewModel.ProviderId); // ToDo: Log what errors?
-                return new BulkUploadResult { Errors = validationErrors };
-            }
-
-            return new BulkUploadResult { Errors = new List<UploadError>(), Data = uploadResult .Data};
+            return new BulkUploadResult { Errors = errors, Data = uploadResult.Data };
         }
 
         //TODO: These are duplicated in Commitment Orchestrator - needs to be shared

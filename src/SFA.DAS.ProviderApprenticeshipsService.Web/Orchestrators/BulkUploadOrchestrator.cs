@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Commitments.Api.Types;
+
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
@@ -52,38 +49,39 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _logger = logger;
         }
 
-        public async Task<BulkUploadResult> UploadFileAsync(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
+        public BulkUploadResult GetFile(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
         {
             var commitmentId = _hashingService.DecodeValue(uploadApprenticeshipsViewModel.HashedCommitmentId);
 
-            _logger.Info($"Uploading file of apprentices. Filename:{uploadApprenticeshipsViewModel?.Attachment?.FileName}", providerId: uploadApprenticeshipsViewModel.ProviderId, commitmentId: commitmentId);
+            _logger.Info($"Get file. Filename:{uploadApprenticeshipsViewModel?.Attachment?.FileName}", uploadApprenticeshipsViewModel.ProviderId, commitmentId);
+
+            var result = _bulkUploader.ValidateFile(uploadApprenticeshipsViewModel);
+
+            return result;
+        }
+
+        public async Task<BulkUploadResult> UploadFileAsync(BulkUploadResult results, string hashedCommitmentId, long providerId)
+        {
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            _logger.Info("Uploading file of apprentices.", providerId, commitmentId);
             
-            var result = await _bulkUploader.Validate(uploadApprenticeshipsViewModel);
+            var result = await _bulkUploader.Validate(results, hashedCommitmentId, providerId);
 
             var errorCount = result.Errors.Count();
-
             if (errorCount > 0)
             {
-                _logger.Info($"{errorCount} Upload errors for Filename:{uploadApprenticeshipsViewModel?.Attachment?.FileName}", providerId: uploadApprenticeshipsViewModel.ProviderId, commitmentId: commitmentId);
-
+                _logger.Info($"{errorCount} Upload errors for", providerId, commitmentId);
                 return result;
             }
 
             await _mediator.SendAsync(new BulkUploadApprenticeshipsCommand
             {
-                ProviderId = uploadApprenticeshipsViewModel.ProviderId,
+                ProviderId = providerId,
                 CommitmentId = commitmentId,
-                Apprenticeships = await MapFrom(commitmentId, result.Data)
+                Apprenticeships = await _mapper.MapFrom(commitmentId, result.Data)
             });
 
             return new BulkUploadResult { Errors = new List<UploadError>() };
-        }
-
-        private async Task<IList<Apprenticeship>> MapFrom(long commitmentId, IEnumerable<ApprenticeshipUploadModel> data)
-        {
-            var trainingProgrammes = await GetTrainingProgrammes();
-
-            return data.Select(x => _mapper.MapFrom(commitmentId, x.ApprenticeshipViewModel, trainingProgrammes)).ToList();
         }
 
         public async Task<UploadApprenticeshipsViewModel> GetUploadModel(long providerid, string hashedcommitmentid)
@@ -119,21 +117,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Errors = result,
                 FileErrors = fileErrors
             };
-        }
-
-        //TODO: These are duplicated in Commitment Orchestrator - needs to be shared
-        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
-        {
-            var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
-            var frameworksTask = _mediator.SendAsync(new GetFrameworksQueryRequest());
-
-            await Task.WhenAll(standardsTask, frameworksTask);
-
-            return
-                standardsTask.Result.Standards.Cast<ITrainingProgramme>()
-                    .Union(frameworksTask.Result.Frameworks)
-                    .OrderBy(m => m.Title)
-                    .ToList();
         }
     }
 }

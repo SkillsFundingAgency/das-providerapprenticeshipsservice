@@ -37,11 +37,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> UploadApprenticeships(UploadApprenticeshipsViewModel model)
         {
             if (!ModelState.IsValid)
+                return View(model);
+
+            var fileValidationResult = _bulkUploadOrchestrator.GetFile(model);
+            if (fileValidationResult.Errors.Any())
             {
+                var error = fileValidationResult.Errors.FirstOrDefault();
+                ModelState.AddModelError("Attachment", error?.Message);
                 return View(model);
             }
 
-            var result = await _bulkUploadOrchestrator.UploadFileAsync(model);
+            var result = await _bulkUploadOrchestrator.UploadFileAsync(fileValidationResult, model.HashedCommitmentId, model.ProviderId);
             if (!result.Errors.Any())
             {
                 // ToDo: Flash message, or other feedback to customer
