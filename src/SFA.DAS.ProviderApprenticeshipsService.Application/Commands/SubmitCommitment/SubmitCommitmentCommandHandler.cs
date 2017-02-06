@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
@@ -8,6 +9,7 @@ using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.Tasks.Api.Client;
 using SFA.DAS.Tasks.Api.Types.Templates;
 
@@ -19,8 +21,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
         private readonly ITasksApi _tasksApi;
         private readonly AbstractValidator<SubmitCommitmentCommand> _validator;
         private readonly IMediator _mediator;
+        private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
 
-        public SubmitCommitmentCommandHandler(ICommitmentsApi commitmentsApi, ITasksApi tasksApi, AbstractValidator<SubmitCommitmentCommand> validator, IMediator mediator)
+        public SubmitCommitmentCommandHandler(ICommitmentsApi commitmentsApi, ITasksApi tasksApi, AbstractValidator<SubmitCommitmentCommand> validator, IMediator mediator, ProviderApprenticeshipsServiceConfiguration configuration)
         {
             if (commitmentsApi == null)
                 throw new ArgumentNullException(nameof(commitmentsApi));
@@ -30,11 +33,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                 throw new ArgumentNullException(nameof(validator));
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
+            if (configuration == null)
+                throw new ArgumentNullException(nameof(configuration));
 
             _commitmentsApi = commitmentsApi;
             _tasksApi = tasksApi;
             _validator = validator;
             _mediator = mediator;
+            _configuration = configuration;
         }
 
         protected override async Task HandleCore(SubmitCommitmentCommand message)
@@ -62,7 +68,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
             await _mediator.SendAsync(notificationCommand);
         }
 
-        private static SendNotificationCommand BuildNotificationCommand(Commitment commitment)
+        private SendNotificationCommand BuildNotificationCommand(Commitment commitment)
         {
             return new SendNotificationCommand
             {
@@ -72,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "<Test Employer Notification>", // Replaced by Notify Service
                     SystemId = "x",
-                    TemplateId = "c761c7e7-6979-47f9-b92a-428d89db0432",
+                    TemplateId = _configuration.EmailTemplates.Single(c => c.TemplateType.Equals(EmailTemplateType.CommitmentNotification)).Key,
                     Tokens = new Dictionary<string, string>
                     {
                         //{ "account_name", caller.AccountName }

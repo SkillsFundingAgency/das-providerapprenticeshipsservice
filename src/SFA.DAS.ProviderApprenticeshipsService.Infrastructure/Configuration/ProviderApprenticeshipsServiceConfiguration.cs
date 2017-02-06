@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -16,12 +17,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }
         public NotificationsApiClientConfiguration NotificationApi { get; set; }
         public string Hashstring { get; set; }
-        // Size of file in kilobytes
-        public int MaxBulkUploadFileSize { get; set; }
-
+        public int MaxBulkUploadFileSize { get; set; } // Size of file in kilobytes
         public bool CheckForContractAgreements { get; set; }
-
         public string ContractAgreementsUrl { get; set; }
+        public List<EmailTemplateConfigurationItem> EmailTemplates { get; set; }
     }
 
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
