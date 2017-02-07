@@ -26,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     [TestFixture]
     public sealed class WhenUploadingFile
     {
-        private const string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,NINumber,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TrainingPrice,EPAPrice,EPAOrgId,EmpRef,ProviderRef,ULN";
+        private const string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TrainingPrice,EPAPrice,EPAOrgId,EmpRef,ProviderRef,ULN";
         private BulkUploadOrchestrator _sut;
         private Mock<HttpPostedFileBase> _file;
         private Mock<IMediator> _mockMediator;
@@ -67,7 +67,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var testData = new List<string>();
             for (int i = 0; i < upper; i++)
             {
-                testData.Add("\n\rABBA123,Chris,Froberg,1998-12-08,SE1233211C,,,,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559");
+                testData.Add("\n\rABBA123,Chris,Froberg,1998-12-08,,,,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559");
             }
             var str = HeaderLine + string.Join("", testData);
 
@@ -78,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var stopwatch = Stopwatch.StartNew();
             var result = await _sut.UploadFileAsync(model);
             stopwatch.Stop(); Console.WriteLine($"Time TOTAL: {stopwatch.Elapsed.Seconds}");
-            result.Errors.Count().Should().Be(160 * 1000);
+            result.Errors.Count().Should().Be(120 * 1000);
             stopwatch.Elapsed.Seconds.Should().BeLessThan(7);   
         }
 

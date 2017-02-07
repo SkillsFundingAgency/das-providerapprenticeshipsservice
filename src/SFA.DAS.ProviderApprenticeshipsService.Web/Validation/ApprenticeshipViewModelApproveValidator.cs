@@ -27,8 +27,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
             RuleFor(r => r.TrainingCode).NotEmpty().WithMessage("Training code cannot be empty");
 
-            RuleFor(r => r.NINumber)
-                .Must(m => !string.IsNullOrEmpty(m)).WithMessage("National insurance number must not be null").WithErrorCode("NINumber_01");
+            //RuleFor(r => r.NINumber)
+            //    .Must(m => !string.IsNullOrEmpty(m)).WithMessage("National insurance number must not be null").WithErrorCode("NINumber_01");
 
             RuleFor(r => r.DateOfBirth)
                 .Must(m => m?.DateTime != null).WithMessage(text.DateOfBirth01.Text).WithErrorCode(text.DateOfBirth01.ErrorCode);

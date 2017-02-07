@@ -26,10 +26,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Must(ValidateDateOfBirth).Unless(m => m.DateOfBirth == null).WithMessage(text.DateOfBirth01.Text).WithErrorCode(text.DateOfBirth01.ErrorCode);
             // ToDo: Date of birth -> DateOfBirth_02 - DateOfBirth_06
 
-            RuleFor(x => x.NINumber)
-                .Matches(@"^[abceghj-prstw-z][abceghj-nprstw-z]\d{6}[abcd\s]$", RegexOptions.IgnoreCase)
-                    .Unless(m => m.NINumber == null || m.NINumber.Length > 9).WithMessage(text.NINumber03.Text).WithErrorCode(text.NINumber03.ErrorCode)
-                .Must(m => lengthLessThan(m, 9)).WithMessage(text.NINumber02.Text).WithErrorCode(text.NINumber02.ErrorCode);
+            //RuleFor(x => x.NINumber)
+            //    .Matches(@"^[abceghj-prstw-z][abceghj-nprstw-z]\d{6}[abcd\s]$", RegexOptions.IgnoreCase)
+            //        .Unless(m => m.NINumber == null || m.NINumber.Length > 9).WithMessage(text.NINumber03.Text).WithErrorCode(text.NINumber03.ErrorCode)
+            //    .Must(m => lengthLessThan(m, 9)).WithMessage(text.NINumber02.Text).WithErrorCode(text.NINumber02.ErrorCode);
 
             RuleFor(x => x.ProviderRef)
                 .Must(m => lengthLessThan(m, 20)).WithMessage(text.ProviderRef01.Text).WithErrorCode(text.ProviderRef01.ErrorCode);
