@@ -13,6 +13,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return View("_Error400");
         }
 
+        public ViewResult Forbidden()
+        {
+            Response.StatusCode = 403;
+
+            return View("_Error403");
+        }
+
         public ViewResult NotFound()
         {
             Response.StatusCode = 404;
