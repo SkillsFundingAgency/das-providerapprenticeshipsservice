@@ -8,9 +8,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
     public sealed class ApprenticeshipBulkUploadValidator : ApprenticeshipBaseValidator
     {
-        private readonly ApprenticeshipValidationText _validationText;
+        private readonly IApprenticeshipValidationErrorText _validationText;
 
-        public ApprenticeshipBulkUploadValidator(ApprenticeshipValidationText validationText) : base(validationText)
+        public ApprenticeshipBulkUploadValidator(IApprenticeshipValidationErrorText validationText) : base(validationText)
         {
             _validationText = validationText;
             var now = DateTime.Now;
@@ -32,8 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Must(m => lengthLessThan(m, 6)).WithMessage(_validationText.TrainingPrice02.Text).WithErrorCode(_validationText.TrainingPrice02.ErrorCode);
 
             RuleFor(r => r.StartDate)
-                .Must(base.ValidateDateWithoutDay).Unless(m => m.StartDate == null).WithMessage(_validationText.LearnStartDate02.Text).WithErrorCode(_validationText.LearnStartDate02.ErrorCode)
-                .Must(m => CheckIfNotNull(m?.DateTime, m?.DateTime > now)).WithMessage("Learner start date must be in the future"); // ToDo: Delete?
+                .Must(base.ValidateDateWithoutDay).Unless(m => m.StartDate == null).WithMessage(_validationText.LearnStartDate02.Text).WithErrorCode(_validationText.LearnStartDate02.ErrorCode);
 
             RuleFor(r => r.EndDate)
                 .Must(ValidateDateWithoutDay).Unless(m => m.EndDate == null).WithMessage(_validationText.LearnPlanEndDate02.Text).WithErrorCode(_validationText.LearnPlanEndDate02.ErrorCode)

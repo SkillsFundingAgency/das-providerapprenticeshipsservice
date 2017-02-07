@@ -306,7 +306,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             apprenticeship.ProviderId = providerId;
 
-            var warningValidator = new ApprenticeshipViewModelApproveValidator(new ApprenticeshipValidationText(false));
+            var warningValidator = new ApprenticeshipViewModelApproveValidator(new WebApprenticeshipValidationText());
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,

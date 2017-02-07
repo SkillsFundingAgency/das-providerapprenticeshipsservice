@@ -41,9 +41,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             if (uploadResult.Errors.Any())
                 return uploadResult;
 
-            var trainingProgrammes = GetTrainingProgrammes();
-            var validationErrors = 
-                _bulkUploadValidator.ValidateRecords(uploadResult.Data, await trainingProgrammes).ToList();
+            var trainingProgrammes = await GetTrainingProgrammes();
+            var validationErrors = _bulkUploadValidator.ValidateRecords(uploadResult.Data, trainingProgrammes).ToList();
 
             if (validationErrors.Any())
             {

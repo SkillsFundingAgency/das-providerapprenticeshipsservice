@@ -7,9 +7,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
     public class ApprenticeshipViewModelApproveValidator : AbstractValidator<ApprenticeshipViewModel>
     {
-        public ApprenticeshipViewModelApproveValidator(ApprenticeshipValidationText textValidation)
+        public ApprenticeshipViewModelApproveValidator(IApprenticeshipValidationErrorText textValidation)
         {
-
             RuleFor(r => r.ULN)
                 .NotEmpty().WithMessage(textValidation.Uln01.Text).WithErrorCode(textValidation.Uln01.ErrorCode);
 
@@ -28,7 +27,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
             //RuleFor(r => r.NINumber)
             //    .Must(m => !string.IsNullOrEmpty(m)).WithMessage("National insurance number must not be null").WithErrorCode("NINumber_01");
-
         }
     }
 }

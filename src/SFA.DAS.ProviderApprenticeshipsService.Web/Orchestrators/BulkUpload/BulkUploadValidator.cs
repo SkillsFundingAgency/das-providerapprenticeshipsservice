@@ -19,9 +19,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
     {
         private readonly ILog _logger;
         private readonly ProviderApprenticeshipsServiceConfiguration _config;
-        private readonly ApprenticeshipBulkUploadValidator _viewModelValidator = new ApprenticeshipBulkUploadValidator(new ApprenticeshipValidationText(true));
-        private readonly ApprenticeshipViewModelApproveValidator _approvalValidator = new ApprenticeshipViewModelApproveValidator(new ApprenticeshipValidationText(true));
-        private readonly CsvRecordValidator _csvRecordValidator = new CsvRecordValidator(new ApprenticeshipValidationText(true));
+        private readonly ApprenticeshipBulkUploadValidator _viewModelValidator = new ApprenticeshipBulkUploadValidator(new BulkUploadApprenticeshipValidationText());
+        private readonly ApprenticeshipViewModelApproveValidator _approvalValidator = new ApprenticeshipViewModelApproveValidator(new BulkUploadApprenticeshipValidationText());
+        private readonly CsvRecordValidator _csvRecordValidator = new CsvRecordValidator(new BulkUploadApprenticeshipValidationText());
 
         public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, ILog logger)
         {

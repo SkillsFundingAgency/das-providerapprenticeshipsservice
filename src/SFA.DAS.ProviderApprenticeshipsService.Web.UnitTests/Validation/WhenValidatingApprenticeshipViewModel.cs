@@ -5,13 +5,14 @@ using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
 {
     [TestFixture]
     public class WhenValidatingApprenticeshipViewModel
     {
-        private readonly ApprenticeshipViewModelValidator _validator = new ApprenticeshipViewModelValidator();
+        private readonly ApprenticeshipViewModelValidator _validator = new ApprenticeshipViewModelValidator(new WebApprenticeshipValidationText());
         private ApprenticeshipViewModel _validModel;
 
         [SetUp]
@@ -330,12 +331,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
 
         #region StartDate
 
-        [TestCase(31, 2, 2121, "The Learning start end date is not valid")]
-        [TestCase(5, null, 2121, "The Learning start end date is not valid")]
-        [TestCase(5, 9, null, "The Learning start end date is not valid")]
-        [TestCase(5, 9, -1, "The Learning start end date is not valid")]
-        [TestCase(0, 0, 0, "The Learning start end date is not valid")]
-        [TestCase(1, 18, 2121, "The Learning start end date is not valid")]
+        [TestCase(31, 2, 2121, "The Learning start date is not valid")]
+        [TestCase(5, null, 2121, "The Learning start date is not valid")]
+        [TestCase(5, 9, null, "The Learning start date is not valid")]
+        [TestCase(5, 9, -1, "The Learning start date is not valid")]
+        [TestCase(0, 0, 0, "The Learning start date is not valid")]
+        [TestCase(1, 18, 2121, "The Learning start date is not valid")]
         //[TestCase(5, 9, 1998, "Learner start date must be in the future")]
         public void ShouldFailValidationForStartDate(int? day, int? month, int? year, string expected)
         {

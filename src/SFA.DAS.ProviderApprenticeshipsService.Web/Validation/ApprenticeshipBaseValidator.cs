@@ -11,7 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
     public class ApprenticeshipBaseValidator : AbstractValidator<ApprenticeshipViewModel>
     {
-        public ApprenticeshipBaseValidator(ApprenticeshipValidationText validationText)
+        public ApprenticeshipBaseValidator(IApprenticeshipValidationErrorText validationText)
         {
             Func<string, int, bool> lengthLessThan = (str, lenth) => (str?.Length ?? 0) <= lenth;
 
