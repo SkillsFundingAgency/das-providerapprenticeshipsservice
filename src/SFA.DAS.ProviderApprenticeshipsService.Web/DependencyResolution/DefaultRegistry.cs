@@ -26,6 +26,8 @@ using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -62,6 +64,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             For<ICommitmentsApi>().Use<CommitmentsApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<ITasksApi>().Use<TasksApi>().Ctor<ITasksApiClientConfiguration>().Is(config.TasksApi);
+            For<INotificationsApi>().Use<NotificationsApi>().Ctor<INotificationsApiClientConfiguration>().Is(config.NotificationApi);
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
             For<IConfiguration>().Use(config);
             For<ICache>().Use<InMemoryCache>(); //RedisCache

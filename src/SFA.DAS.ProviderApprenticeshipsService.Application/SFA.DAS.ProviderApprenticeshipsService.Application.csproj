@@ -43,6 +43,10 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.3.7\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.Apprenticeships.Api.Client, Version=0.9.123.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Client.0.9.123\lib\SFA.DAS.Apprenticeships.Api.Client.dll</HintPath>
       <Private>True</Private>
@@ -51,12 +55,24 @@
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.9.123\lib\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.19.0.21414, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.19.0.21414\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.20.0.21715, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.20.0.21715\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.19.0.21414, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.19.0.21414\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.20.0.21715, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.20.0.21715\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.17615, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.17615\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Notifications.Api.Client, Version=1.1.0.12760, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Notifications.Api.Types, Version=1.1.0.12760, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
@@ -91,6 +107,9 @@
     <Compile Include="Commands\DeleteApprenticeship\DeleteApprenticeshipCommand.cs" />
     <Compile Include="Commands\DeleteApprenticeship\DeleteApprenticeshipCommandHandler.cs" />
     <Compile Include="Commands\DeleteApprenticeship\DeleteApprenticeshipCommandValidator.cs" />
+    <Compile Include="Commands\SendNotification\SendNotificationCommand.cs" />
+    <Compile Include="Commands\SendNotification\SendNotificationCommandHandler.cs" />
+    <Compile Include="Commands\SendNotification\SendNotificationCommandValidator.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommand.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandHandler.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandValidator.cs" />
