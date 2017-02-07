@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
-
-using WebGrease.Css.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 {
@@ -20,9 +15,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
     {
         private readonly ILog _logger;
         private readonly IBulkUploadValidator _validator;
-        private readonly ApprenticeshipBulkUploadValidator _viewModelValidator = new ApprenticeshipBulkUploadValidator();
-        private readonly ApprenticeshipViewModelApproveValidator _approvalValidator = new ApprenticeshipViewModelApproveValidator();
-        private readonly CsvRecordValidator _csvRecordValidator = new CsvRecordValidator();
+        private readonly ApprenticeshipBulkUploadValidator _viewModelValidator = new ApprenticeshipBulkUploadValidator(new BulkUploadApprenticeshipValidationText());
+        private readonly ApprenticeshipViewModelApproveValidator _approvalValidator = new ApprenticeshipViewModelApproveValidator(new BulkUploadApprenticeshipValidationText());
+        private readonly CsvRecordValidator _csvRecordValidator = new CsvRecordValidator(new BulkUploadApprenticeshipValidationText());
 
         public InstrumentedBulkUploadValidator(ILog logger, IBulkUploadValidator validator)
         {
@@ -35,22 +30,33 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _validator = validator;
         }
 
-        public IEnumerable<UploadError> ValidateFileAttributes(HttpPostedFileBase attachment)
+        public IEnumerable<UploadError> ValidateCohortReference(IEnumerable<ApprenticeshipUploadModel> records, string cohortReference)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var result = _validator.ValidateFileAttributes(attachment);
+            var result = _validator.ValidateCohortReference(records, cohortReference);
+
+            _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to validate file for {records.Count()} items");
+
+            return result;
+        }
+
+        public IEnumerable<UploadError> ValidateFileSize(HttpPostedFileBase attachment)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            var result = _validator.ValidateFileSize(attachment);
 
             _logger.Debug($"Took {stopwatch.ElapsedMilliseconds} milliseconds to validate file attributes");
 
             return result;
         }
 
-        public IEnumerable<UploadError> ValidateFields(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes, string cohortReference)
+        public IEnumerable<UploadError> ValidateRecords(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var result = _validator.ValidateFields(records, trainingProgrammes, cohortReference);
+            var result = _validator.ValidateRecords(records, trainingProgrammes);
 
             _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to validate fields for {records.Count()} items");
 

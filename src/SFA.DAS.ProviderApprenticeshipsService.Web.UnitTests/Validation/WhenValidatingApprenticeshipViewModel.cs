@@ -1,17 +1,18 @@
-﻿﻿using System;
+﻿using System;
 
 using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
 {
     [TestFixture]
     public class WhenValidatingApprenticeshipViewModel
     {
-        private readonly ApprenticeshipViewModelValidator _validator = new ApprenticeshipViewModelValidator();
+        private readonly ApprenticeshipViewModelValidator _validator = new ApprenticeshipViewModelValidator(new WebApprenticeshipValidationText());
         private ApprenticeshipViewModel _validModel;
 
         [SetUp]
@@ -32,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
         [TestCase("123456789")]
         [TestCase(" ")]
         [TestCase("9999999999")]
-        public void ULNThatIsNotNumericOr10DigitsInLengthIsIvalid(string uln)
+        public void ULNThatIsNotNumericOr10DigitsInLengthIsInvalid(string uln)
         {
             var viewModel = new ApprenticeshipViewModel { ULN = uln, Cost = string.Empty};
 
@@ -43,9 +44,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
 
         
         [Test]
-        public void ULN9999999999IsNotVal()
+        public void ULN9999999999IsNotValid()
         {
-        var viewModel = new ApprenticeshipViewModel { ULN = "9999999999", Cost = string.Empty };
+            var viewModel = new ApprenticeshipViewModel { ULN = "9999999999", Cost = string.Empty };
 
             var result = _validator.Validate(viewModel);
 
@@ -193,7 +194,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
         //        .Validate(_validModel);
 
         //    result.Errors.Count.Should().Be(1);
-        //    result.Errors[0].ErrorMessage.ShouldAllBeEquivalentTo("Enter a valid national insurance number");
+            result.Errors[0].ErrorMessage.Should().Be("Enter a valid National insurance number");
         //}
 
         //[TestCase("SE1234567A", Description = "Too many numbers")]
@@ -206,7 +207,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
         //        .Validate(_validModel);
 
         //    result.Errors.Count.Should().Be(1);
-        //    result.Errors[0].ErrorMessage.ShouldAllBeEquivalentTo("The National Insurance number must be entered and must not be more than 9 characters in length");
+            result.Errors[0].ErrorMessage.Should().Be("The National Insurance number must be entered and must not be more than 9 characters in length");
         //}
 
         //[TestCase("SE123456 ")]
@@ -258,7 +259,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
             var result = _validator
                 .Validate(_validModel);
             result.Errors.Count.Should().Be(1);
-            result.Errors[0].ErrorMessage.Should().Be("The reference must be 20 characters or fewer");
+            result.Errors[0].ErrorMessage.Should().Be("The Reference must be 20 characters or fewer");
             result.Errors[0].ErrorCode.Should().Be("ProviderRef_01");
         }
           
@@ -330,12 +331,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
 
         #region StartDate
 
-        [TestCase(31, 2, 2121, "The Learning start end date is not valid")]
-        [TestCase(5, null, 2121, "The Learning start end date is not valid")]
-        [TestCase(5, 9, null, "The Learning start end date is not valid")]
-        [TestCase(5, 9, -1, "The Learning start end date is not valid")]
-        [TestCase(0, 0, 0, "The Learning start end date is not valid")]
-        [TestCase(1, 18, 2121, "The Learning start end date is not valid")]
+        [TestCase(31, 2, 2121, "The Learning start date is not valid")]
+        [TestCase(5, null, 2121, "The Learning start date is not valid")]
+        [TestCase(5, 9, null, "The Learning start date is not valid")]
+        [TestCase(5, 9, -1, "The Learning start date is not valid")]
+        [TestCase(0, 0, 0, "The Learning start date is not valid")]
+        [TestCase(1, 18, 2121, "The Learning start date is not valid")]
         //[TestCase(5, 9, 1998, "Learner start date must be in the future")]
         public void ShouldFailValidationForStartDate(int? day, int? month, int? year, string expected)
         {

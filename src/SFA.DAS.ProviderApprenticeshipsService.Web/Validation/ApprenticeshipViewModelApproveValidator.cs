@@ -1,38 +1,32 @@
 ﻿using FluentValidation;
 
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
     public class ApprenticeshipViewModelApproveValidator : AbstractValidator<ApprenticeshipViewModel>
     {
-        public ApprenticeshipViewModelApproveValidator()
+        public ApprenticeshipViewModelApproveValidator(IApprenticeshipValidationErrorText textValidation)
         {
-            var text = new Text.ApprenticeshipValidationText();
-
             RuleFor(r => r.ULN)
-                .NotEmpty().WithMessage(text.Uln01.Text).WithErrorCode(text.Uln01.ErrorCode);
-                ;
+                .NotEmpty().WithMessage(textValidation.Uln01.Text).WithErrorCode(textValidation.Uln01.ErrorCode);
 
-            RuleFor(r => r.Cost).NotEmpty().WithMessage("Enter the total agreed training cost");
+            RuleFor(r => r.Cost).NotEmpty().WithMessage(textValidation.TrainingPrice01.Text).WithErrorCode(textValidation.TrainingPrice01.ErrorCode);
 
             RuleFor(r => r.DateOfBirth)
                 .Must(m => m?.DateTime != null)
-                    .WithMessage(text.DateOfBirth01.Text).WithErrorCode(text.DateOfBirth01.ErrorCode);
+                    .WithMessage(textValidation.DateOfBirth01.Text).WithErrorCode(textValidation.DateOfBirth01.ErrorCode);
 
             RuleFor(r => r.StartDate)
-                .Must(m => m?.DateTime != null).WithMessage(text.LearnStartDate01.Text).WithErrorCode(text.LearnStartDate01.ErrorCode);
+                .Must(m => m?.DateTime != null).WithMessage(textValidation.LearnStartDate01.Text).WithErrorCode(textValidation.LearnStartDate01.ErrorCode);
             RuleFor(r => r.EndDate)
-                .Must(m => m?.DateTime != null).WithMessage(text.LearnPlanEndDate01.Text).WithErrorCode(text.LearnPlanEndDate01.ErrorCode);
+                .Must(m => m?.DateTime != null).WithMessage(textValidation.LearnPlanEndDate01.Text).WithErrorCode(textValidation.LearnPlanEndDate01.ErrorCode);
 
-            RuleFor(r => r.TrainingCode).NotEmpty().WithMessage("Training code cannot be empty");
+            RuleFor(r => r.TrainingCode).NotEmpty().WithMessage(textValidation.TrainingCode01.Text).WithErrorCode(textValidation.TrainingCode01.ErrorCode);
 
             //RuleFor(r => r.NINumber)
             //    .Must(m => !string.IsNullOrEmpty(m)).WithMessage("National insurance number must not be null").WithErrorCode("NINumber_01");
-
-            RuleFor(r => r.DateOfBirth)
-                .Must(m => m?.DateTime != null).WithMessage(text.DateOfBirth01.Text).WithErrorCode(text.DateOfBirth01.ErrorCode);
-
         }
     }
 }

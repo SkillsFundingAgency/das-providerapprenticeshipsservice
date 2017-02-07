@@ -351,6 +351,7 @@
     <Compile Include="Extensions\IdentityExtensions.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="GlimpseSecurityPolicy.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -360,6 +361,7 @@
     <Compile Include="Models\AgreementNotSignedViewModel.cs" />
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
+    <Compile Include="Models\BulkUpload\BulkUploadResultViewModel.cs" />
     <Compile Include="Models\BulkUpload\BulkUploadResult.cs" />
     <Compile Include="Models\BulkUpload\UploadError.cs" />
     <Compile Include="Models\CohortsViewModel.cs" />
@@ -382,7 +384,9 @@
     <Compile Include="Models\TaskListViewModel.cs" />
     <Compile Include="Models\TaskViewModel.cs" />
     <Compile Include="Models\UploadApprenticeshipsViewModel.cs" />
+    <Compile Include="Models\UploadRowErrorViewModel.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
+    <Compile Include="Orchestrators\Mappers\BulkUploadMapper.cs" />
     <Compile Include="Orchestrators\BulkUpload\InstrumentedBulkUploadValidator.cs" />
     <Compile Include="Orchestrators\BulkUpload\InstrumentedBulkUploadFileParser.cs" />
     <Compile Include="Orchestrators\BulkUpload\BulkUploadFileParser.cs" />
@@ -410,7 +414,9 @@
     <Compile Include="Validation\DeleteConfirmationViewModelValidator.cs" />
     <Compile Include="Validation\FinishEditingViewModelValidator.cs" />
     <Compile Include="Validation\Text\ApprenticeshipFileValidationText.cs" />
-    <Compile Include="Validation\Text\ApprenticeshipValidationText.cs" />
+    <Compile Include="Validation\Text\BulkUploadApprenticeshipValidationText.cs" />
+    <Compile Include="Validation\Text\WebApprenticeshipValidationText.cs" />
+    <Compile Include="Validation\Text\IApprenticeshipValidationErrorText.cs" />
     <Compile Include="Validation\Text\ValidationMessage.cs" />
   </ItemGroup>
   <ItemGroup>

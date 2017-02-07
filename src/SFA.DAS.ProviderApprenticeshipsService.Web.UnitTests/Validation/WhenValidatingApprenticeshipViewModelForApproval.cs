@@ -4,14 +4,14 @@ using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
 {
     [TestFixture]
     public class WhenValidatingApprenticeshipViewModelForApproval
     {
-
-        private readonly ApprenticeshipViewModelApproveValidator _validator = new ApprenticeshipViewModelApproveValidator();
+        private readonly ApprenticeshipViewModelApproveValidator _validator = new ApprenticeshipViewModelApproveValidator(new WebApprenticeshipValidationText());
         private ApprenticeshipViewModel _validModel;
 
         [SetUp]

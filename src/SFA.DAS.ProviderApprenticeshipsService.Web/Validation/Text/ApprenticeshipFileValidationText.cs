@@ -10,6 +10,6 @@
 
         public static string NoRecords => "File contains no records";
 
-        public static string MaxFileSizeMessage(int maxFileSize) => $"File size cannot be larger then {maxFileSize}";
+        public static string MaxFileSizeMessage(int maxFileSize) => $"File size cannot be larger then {maxFileSize / 1024} kb";
     }
 }

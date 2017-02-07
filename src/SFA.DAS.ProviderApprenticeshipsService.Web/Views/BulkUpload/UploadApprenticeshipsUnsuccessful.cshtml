@@ -13,58 +13,77 @@
         return errorCount > 1 ? $"{str}s" : str;
     }
 
+    string PluraliseStringIsAre(int errorCount)
+    {
+        return errorCount > 1 ? "are" : "is";
+    }
+
 }
 <div class="grid">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Review and fix upload errors</h1>
-        <p>Your upload contained the following @Model.ErrorCount @PluraliseString(Model.ErrorCount,"error"). Please review the issues and try again.</p>
-    </div>
-</div>
+    <div class="column-full">
+        <h1 class="heading-xlarge">Upload stopped</h1>
+        <p class="dynamic-heading">There @PluraliseStringIsAre(Model.ErrorCount) <strong>@Model.ErrorCount</strong> @PluraliseString(Model.ErrorCount, "error") across <strong>@Model.RowCount</strong> records that you need to fix.</p>
 
-@if (Model.ErrorCount > 0)
-{
-    <div class="grid error-grid">
-        <div class="column-two-thirds">
-            <div class="panel panel-border-wide alert-default">
-                <p>@Model.ErrorCount @PluraliseString(Model.ErrorCount, "error") found</p>
-            </div>
-        </div>
-    </div>
-}
+        <h2 class="heading-medium">
+            @PluraliseString(Model.RowCount, "Record") with @PluraliseString(Model.ErrorCount, "error") 
+        </h2>
 
-@if (Model.WarningsCount > 0)
-{
-    <div class="grid warning-grid">
-        <div class="column-two-thirds">
-            <div class="panel panel-border-wide alert-default">
-                <p>@Model.WarningsCount @PluraliseString(Model.WarningsCount, "warning") found</p>
-            </div>
-        </div>
-    </div>
-}
+        @*@if (Model.FileErrors.Any())
+        {
+           <!-- If we need to display errors for the file -->
+                foreach (var error in Model.FileErrors)
+                 {
+                     <p>
+                         @error.Message
+                     </p>
+                 }
+        }*@
 
-<div class="grid">
-    <div class="column-two-thirds">
-        <hr />
-        <details>
-            <summary><span class="summary">Help with uploading files</span></summary>
-            <div class="panel panel-border-narrow">
-                <p>
-                    You must use a csv file to upload details.  Some management information systems can create the file for you.  Alternatively, you can download and <a href="sampleCSVfile.csv" title="download apprentice upload template">use the apprentice upload template</a>.
-                </p>
-            </div>
-        </details>
+        <table id="bulk-upload-errors" class="tableResponsive">
+            <thead>
+            <tr>
+                <th scope="col">Row</th>
+                <th scope="col">Unique learner number</th>
+                <th scope="col">Name</th>
+                <th scope="col">Date of birth</th>
+                <th scope="col">@PluraliseString(Model.ErrorCount, "Error")</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var error in Model.Errors)
+            {
+                <tr>
+                    <td>@error.RowNumber</td>
+                    <td>
+                        @Html.Raw(error.Uln)
+                    </td>
+                    <td>
+                        @Html.Raw(error.Name)
+                    </td>
+                    <td>
+                        @Html.Raw(error.DateOfBirth)
+                    </td>
+                    <td class="error-details">
+                        @foreach (var message in error.Messages)
+                        {
+                            <p>
+                                @Html.Raw(message)
+                            </p>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
 
-        <form method="POST" action="@Url.Action("UploadApprenticeships")" enctype="multipart/form-data">
-            <label class="form-label hidden" for="files-upload">Upload file</label>
-            <input id="files-upload" accept=".csv" type="file" name="Attachment">
+        <p>
+            <a class="button" href="@Url.Action("UploadApprenticeships", "BulkUpload", new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Back to bulk upload">
+                Back to bulk upload
+            </a>
+        </p>
+        
+        <p><a href="@Url.Action("Details", "Commitment", new { Model.ProviderId, Model.HashedCommitmentId } )" aria-label="Cancel">Cancel</a></p>
 
-            @Html.HiddenFor(m => m.ProviderId)
-            @Html.HiddenFor(m => m.HashedCommitmentId)
-
-            <input class="button upload-file-btn" type="submit" value="Upload a new file">
-         
-        </form>
     </div>
 </div>
 

@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Web;
+
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
@@ -17,5 +20,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public int ErrorCount { get; set; }
 
         public int WarningsCount { get; set; }
+
+        public IEnumerable<UploadRowErrorViewModel> Errors { get; set; }
+
+        public int RowCount { get; set; }
+
+        public IEnumerable<UploadError> FileErrors { get; set; }
     }
 }
