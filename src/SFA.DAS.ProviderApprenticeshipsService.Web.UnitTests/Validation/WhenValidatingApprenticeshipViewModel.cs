@@ -194,7 +194,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
         //        .Validate(_validModel);
 
         //    result.Errors.Count.Should().Be(1);
-            result.Errors[0].ErrorMessage.Should().Be("Enter a valid National insurance number");
+        //    result.Errors[0].ErrorMessage.Should().Be("Enter a valid National insurance number");
         //}
 
         //[TestCase("SE1234567A", Description = "Too many numbers")]
@@ -207,7 +207,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
         //        .Validate(_validModel);
 
         //    result.Errors.Count.Should().Be(1);
-            result.Errors[0].ErrorMessage.Should().Be("The National Insurance number must be entered and must not be more than 9 characters in length");
+        //    result.Errors[0].ErrorMessage.Should().Be("The National Insurance number must be entered and must not be more than 9 characters in length");
         //}
 
         //[TestCase("SE123456 ")]

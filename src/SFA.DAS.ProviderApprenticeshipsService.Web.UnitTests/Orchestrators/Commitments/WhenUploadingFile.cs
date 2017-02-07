@@ -80,7 +80,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var stopwatch = Stopwatch.StartNew();
             var r1 = await _sut.UploadFile(model);
             stopwatch.Stop(); Console.WriteLine($"Time TOTAL: {stopwatch.Elapsed.Seconds}");
-            r1.RowLevelErrors.Count().Should().Be(160 * 1000);
+            r1.RowLevelErrors.Count().Should().Be(120 * 1000);
             stopwatch.Elapsed.Seconds.Should().BeLessThan(7);   
         }
 
