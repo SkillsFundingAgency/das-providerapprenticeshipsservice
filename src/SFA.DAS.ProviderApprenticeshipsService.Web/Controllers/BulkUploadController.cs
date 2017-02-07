@@ -73,13 +73,4 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return View(model);
         }
     }
-
-    public class BulkUploadResultViewModel
-    {
-        public bool HasFileLevelErrors { get; set; }
-        public IEnumerable<UploadError> FileLevelErrors { get; set; }
-
-        public bool HasRowLevelErrors { get; set; }
-        public IEnumerable<UploadError> RowLevelErrors { get; set; }
-    }
 }

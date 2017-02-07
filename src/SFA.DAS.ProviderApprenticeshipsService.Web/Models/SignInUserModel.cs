@@ -7,7 +7,6 @@
         public string LastName { get; set; }
         public string Email { get; set; }
         public string UserSelected { get; set; }
-
         public long ProviderId { get; set; }
     }
 }

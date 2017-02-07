@@ -36,13 +36,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _logger = logger;
         }
 
-        public async Task<BulkUploadResult> ValidateFileRows(BulkUploadResult uploadResult, long providerId)
+        public async Task<BulkUploadResult> ValidateFileRows(IEnumerable<ApprenticeshipUploadModel> rows, long providerId)
         {
-            if (uploadResult.Errors.Any())
-                return uploadResult;
-
             var trainingProgrammes = await GetTrainingProgrammes();
-            var validationErrors = _bulkUploadValidator.ValidateRecords(uploadResult.Data, trainingProgrammes).ToList();
+            var validationErrors = _bulkUploadValidator.ValidateRecords(rows, trainingProgrammes).ToList();
 
             if (validationErrors.Any())
             {
@@ -50,7 +47,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 return new BulkUploadResult { Errors = validationErrors };
             }
 
-            return new BulkUploadResult { Errors = new List<UploadError>(), Data = uploadResult .Data};
+            return new BulkUploadResult { Errors = new List<UploadError>(), Data = rows };
         }
 
         public BulkUploadResult ValidateFileStructure(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel, string filename, long commitmentId)

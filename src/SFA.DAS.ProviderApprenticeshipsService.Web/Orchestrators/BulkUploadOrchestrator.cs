@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
@@ -67,7 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             _logger.Info("Uploading file of apprentices.", providerId, commitmentId);
 
-            var rowValidationResult = await _bulkUploader.ValidateFileRows(fileValidationResult, providerId);
+            var rowValidationResult = await _bulkUploader.ValidateFileRows(fileValidationResult.Data, providerId);
 
             var errorCount = rowValidationResult.Errors.Count();
             if (errorCount > 0)
