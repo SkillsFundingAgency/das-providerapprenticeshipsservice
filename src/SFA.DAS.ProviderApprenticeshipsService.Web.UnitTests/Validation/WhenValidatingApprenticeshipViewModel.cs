@@ -32,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
         [TestCase("123456789")]
         [TestCase(" ")]
         [TestCase("9999999999")]
-        public void ULNThatIsNotNumericOr10DigitsInLengthIsIvalid(string uln)
+        public void ULNThatIsNotNumericOr10DigitsInLengthIsInvalid(string uln)
         {
             var viewModel = new ApprenticeshipViewModel { ULN = uln, Cost = string.Empty};
 
@@ -43,9 +43,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
 
         
         [Test]
-        public void ULN9999999999IsNotVal()
+        public void ULN9999999999IsNotValid()
         {
-        var viewModel = new ApprenticeshipViewModel { ULN = "9999999999", Cost = string.Empty };
+            var viewModel = new ApprenticeshipViewModel { ULN = "9999999999", Cost = string.Empty };
 
             var result = _validator.Validate(viewModel);
 

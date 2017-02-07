@@ -36,14 +36,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _logger = logger;
         }
 
-        public async Task<BulkUploadResult> Validate(BulkUploadResult uploadResult, string hashedCommitmentId, long providerId)
+        public async Task<BulkUploadResult> ValidateFileRows(BulkUploadResult uploadResult, long providerId)
         {
             if (uploadResult.Errors.Any())
                 return uploadResult;
 
             var trainingProgrammes = GetTrainingProgrammes();
             var validationErrors = 
-                _bulkUploadValidator.ValidateFields(uploadResult.Data, await trainingProgrammes, hashedCommitmentId).ToList();
+                _bulkUploadValidator.ValidateRecords(uploadResult.Data, await trainingProgrammes).ToList();
 
             if (validationErrors.Any())
             {
@@ -54,28 +54,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             return new BulkUploadResult { Errors = new List<UploadError>(), Data = uploadResult .Data};
         }
 
-        public BulkUploadResult ValidateFile(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
+        public BulkUploadResult ValidateFileStructure(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel, string filename, long commitmentId)
         {
             if (uploadApprenticeshipsViewModel.Attachment == null)
                 return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("No file chosen") } };
 
-            var fileValidationErrors = _bulkUploadValidator.ValidateFileAttributes(uploadApprenticeshipsViewModel.Attachment).ToList();
+            var fileAttributeErrors = _bulkUploadValidator.ValidateFileSize(uploadApprenticeshipsViewModel.Attachment).ToList();
 
-            if (fileValidationErrors.Any())
+            if (fileAttributeErrors.Any())
             {
-                foreach (var error in fileValidationErrors)
-                    _logger.Warn($"  -->  {error.Message}");
-                _logger.Warn($"Failed validation bulk upload file with {fileValidationErrors.Count} errors", uploadApprenticeshipsViewModel.ProviderId);
+                foreach (var error in fileAttributeErrors)
+                    _logger.Warn($"File Structure Error  -->  {error.Message}", providerId: uploadApprenticeshipsViewModel.ProviderId, commitmentId: commitmentId);
 
-                return new BulkUploadResult { Errors = fileValidationErrors };
+                _logger.Info($"Failed validation bulk upload file with {fileAttributeErrors.Count} errors", uploadApprenticeshipsViewModel.ProviderId, commitmentId: commitmentId);
+
+                return new BulkUploadResult { Errors = fileAttributeErrors };
             }
 
             BulkUploadResult uploadResult = _fileParser.CreateViewModels(uploadApprenticeshipsViewModel.Attachment);
 
-            if (uploadResult.Errors.Any())
+            if (uploadResult.HasErrors)
                 return uploadResult;
 
-            var errors = _bulkUploadValidator.ValidateFile(uploadResult.Data, uploadApprenticeshipsViewModel.HashedCommitmentId).ToList();
+            var errors = _bulkUploadValidator.ValidateCohortReference(uploadResult.Data, uploadApprenticeshipsViewModel.HashedCommitmentId).ToList();
 
             return new BulkUploadResult { Errors = errors, Data = uploadResult.Data };
         }

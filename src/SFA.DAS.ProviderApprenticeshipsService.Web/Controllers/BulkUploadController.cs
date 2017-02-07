@@ -39,25 +39,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var fileValidationResult = _bulkUploadOrchestrator.GetFile(model);
-            if (fileValidationResult.Errors.Any())
+            var result = await _bulkUploadOrchestrator.UploadFile(model);
+
+            if (result.HasFileLevelErrors)
             {
-                var error = fileValidationResult.Errors.FirstOrDefault();
+                var error = result.FileLevelErrors.FirstOrDefault();
                 ModelState.AddModelError("Attachment", error?.Message);
                 return View(model);
             }
 
-            var result = await _bulkUploadOrchestrator.UploadFileAsync(fileValidationResult, model.HashedCommitmentId, model.ProviderId);
-            if (!result.Errors.Any())
+            if (result.HasRowLevelErrors)
             {
-                // ToDo: Flash message, or other feedback to customer
-                return RedirectToAction("Details", "Commitment", 
-                    new { model.ProviderId, model.HashedCommitmentId });
+                TempData[uploadErrorsTempDataKey] = result.RowLevelErrors;
+                return RedirectToAction("UploadApprenticeshipsUnsuccessful", new { model.ProviderId, model.HashedCommitmentId });
             }
-
-            TempData[uploadErrorsTempDataKey] = result.Errors;
-            return RedirectToAction("UploadApprenticeshipsUnsuccessful", 
-                new { model.ProviderId, model.HashedCommitmentId});
+                
+            // ToDo: Flash message, or other feedback to customer
+            return RedirectToAction("Details", "Commitment", new { model.ProviderId, model.HashedCommitmentId });
         }
 
 
@@ -74,5 +72,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             return View(model);
         }
+    }
+
+    public class BulkUploadResultViewModel
+    {
+        public bool HasFileLevelErrors { get; set; }
+        public IEnumerable<UploadError> FileLevelErrors { get; set; }
+
+        public bool HasRowLevelErrors { get; set; }
+        public IEnumerable<UploadError> RowLevelErrors { get; set; }
     }
 }

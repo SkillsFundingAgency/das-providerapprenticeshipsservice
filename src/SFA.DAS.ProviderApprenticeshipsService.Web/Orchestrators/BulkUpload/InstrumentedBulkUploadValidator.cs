@@ -30,33 +30,33 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _validator = validator;
         }
 
-        public IEnumerable<UploadError> ValidateFile(IEnumerable<ApprenticeshipUploadModel> records, string cohortReference)
+        public IEnumerable<UploadError> ValidateCohortReference(IEnumerable<ApprenticeshipUploadModel> records, string cohortReference)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var result = _validator.ValidateFile(records, cohortReference);
+            var result = _validator.ValidateCohortReference(records, cohortReference);
 
             _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to validate file for {records.Count()} items");
 
             return result;
         }
 
-        public IEnumerable<UploadError> ValidateFileAttributes(HttpPostedFileBase attachment)
+        public IEnumerable<UploadError> ValidateFileSize(HttpPostedFileBase attachment)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var result = _validator.ValidateFileAttributes(attachment);
+            var result = _validator.ValidateFileSize(attachment);
 
             _logger.Debug($"Took {stopwatch.ElapsedMilliseconds} milliseconds to validate file attributes");
 
             return result;
         }
 
-        public IEnumerable<UploadError> ValidateFields(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes, string cohortReference)
+        public IEnumerable<UploadError> ValidateRecords(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var result = _validator.ValidateFields(records, trainingProgrammes, cohortReference);
+            var result = _validator.ValidateRecords(records, trainingProgrammes);
 
             _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to validate fields for {records.Count()} items");
 

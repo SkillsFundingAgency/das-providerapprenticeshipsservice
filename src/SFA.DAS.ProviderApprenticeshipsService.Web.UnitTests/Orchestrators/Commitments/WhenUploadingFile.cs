@@ -76,12 +76,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var textStream = new MemoryStream(Encoding.UTF8.GetBytes(str));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
-            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123" };
+            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 1234L };
             var stopwatch = Stopwatch.StartNew();
-            var r1 = _sut.GetFile(model);
-            var result = await _sut.UploadFileAsync(r1, "ABBA12", 1208);
+            var r1 = await _sut.UploadFile(model);
             stopwatch.Stop(); Console.WriteLine($"Time TOTAL: {stopwatch.Elapsed.Seconds}");
-            result.Errors.Count().Should().Be(120 * 1000);
+            r1.RowLevelErrors.Count().Should().Be(160 * 1000);
             stopwatch.Elapsed.Seconds.Should().BeLessThan(7);   
         }
 
@@ -99,8 +98,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 .Callback((object x) => commandArgument = x as BulkUploadApprenticeshipsCommand);
 
             var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111 };
-            var file = _sut.GetFile(model);
-            await _sut.UploadFileAsync(file, "ABBA12", model.ProviderId);
+            var file = await _sut.UploadFile(model);
 
             _mockMediator.Verify(x => x.SendAsync(It.IsAny<BulkUploadApprenticeshipsCommand>()), Times.Once);
 

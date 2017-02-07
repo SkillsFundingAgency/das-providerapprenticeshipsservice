@@ -34,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _config = config;
         }
 
-        public IEnumerable<UploadError> ValidateFileAttributes(HttpPostedFileBase attachment)
+        public IEnumerable<UploadError> ValidateFileSize(HttpPostedFileBase attachment)
         {
             var errors = new List<UploadError>();
             var maxFileSize = _config.MaxBulkUploadFileSize * 1024; // Bytes
@@ -45,11 +45,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             return errors;
         }
 
-        public IEnumerable<UploadError> ValidateFile(
+        public IEnumerable<UploadError> ValidateCohortReference(
             IEnumerable<ApprenticeshipUploadModel> records,
             string cohortReference)
         {
-            var errors = new ConcurrentBag<UploadError>();
+            var errors = new List<UploadError>();
 
             var apprenticeshipUploadModels = records as ApprenticeshipUploadModel[] ?? records.ToArray();
             if (!apprenticeshipUploadModels.Any()) return new[] { new UploadError(ApprenticeshipFileValidationText.NoRecords) };
@@ -63,7 +63,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             return errors;
         }
 
-        public IEnumerable<UploadError> ValidateFields(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes, string cohortReference)
+        public IEnumerable<UploadError> ValidateRecords(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes)
         {
             var errors = new ConcurrentBag<UploadError>();
             var apprenticeshipUploadModels = records as ApprenticeshipUploadModel[] ?? records.ToArray();

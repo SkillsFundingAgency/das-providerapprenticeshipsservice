@@ -11,7 +11,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
     [TestFixture]
     public class WhenValidatingApprenticeshipViewModelForApproval
     {
-
         private readonly ApprenticeshipViewModelApproveValidator _validator = new ApprenticeshipViewModelApproveValidator(new ApprenticeshipValidationText());
         private ApprenticeshipViewModel _validModel;
 
