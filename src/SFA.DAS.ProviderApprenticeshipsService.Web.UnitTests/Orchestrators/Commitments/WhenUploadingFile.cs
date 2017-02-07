@@ -85,7 +85,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task ShouldCallMediatorPassingInMappedApprenticeships()
         {
-            var dataLine = "\n\rABBA123,Chris,Froberg,1998-12-08,SE123321C,,,25,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559";
+            var dataLine = "\n\rABBA123,Chris,Froberg,1998-12-08,,,25,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559";
             var fileContents = HeaderLine + dataLine;
             var textStream = new MemoryStream(Encoding.UTF8.GetBytes(fileContents));
             _file.Setup(m => m.InputStream).Returns(textStream);
