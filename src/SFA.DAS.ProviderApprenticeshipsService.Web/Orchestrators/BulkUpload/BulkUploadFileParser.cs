@@ -80,7 +80,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 LastName = record.FamilyName,
                 DateOfBirth = new DateTimeViewModel(dateOfBirth),
                 ULN = record.ULN.ToString(),
-                NINumber = record.NINumber,
+                //NINumber = record.NINumber,
                 Cost = record.TrainingPrice.ToString(),
                 ProviderRef = record.ProviderRef,
                 StartDate = new DateTimeViewModel(learnerStartDate),

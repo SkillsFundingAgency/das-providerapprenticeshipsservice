@@ -177,48 +177,48 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation
                 .Errors.Count.Should().Be(0);
         }
 
-        [TestCase("DE123456A", Description = "First char not allowed")]
-        [TestCase("FE123456A", Description = "First char not allowed")]
-        [TestCase("SO123456A", Description = "Second char not allowed")]
-        [TestCase("SQ123456A", Description = "Second char not allowed")]
+        //[TestCase("DE123456A", Description = "First char not allowed")]
+        //[TestCase("FE123456A", Description = "First char not allowed")]
+        //[TestCase("SO123456A", Description = "Second char not allowed")]
+        //[TestCase("SQ123456A", Description = "Second char not allowed")]
 
-        [TestCase("SE12345A", Description = "Not enough numbers")]
-        [TestCase("SE123456E", Description = "Last char not allowed")]
-        [TestCase("SE123456", Description = "Not enought chars")]
-        public void NationalInsurnceNumberShouldFail(string nino)
-        {
-            _validModel.NINumber = nino;
+        //[TestCase("SE12345A", Description = "Not enough numbers")]
+        //[TestCase("SE123456E", Description = "Last char not allowed")]
+        //[TestCase("SE123456", Description = "Not enought chars")]
+        //public void NationalInsurnceNumberShouldFail(string nino)
+        //{
+        //    _validModel.NINumber = nino;
 
-            var result = _validator
-                .Validate(_validModel);
+        //    var result = _validator
+        //        .Validate(_validModel);
 
-            result.Errors.Count.Should().Be(1);
-            result.Errors[0].ErrorMessage.ShouldAllBeEquivalentTo("Enter a valid national insurance number");
-        }
+        //    result.Errors.Count.Should().Be(1);
+        //    result.Errors[0].ErrorMessage.ShouldAllBeEquivalentTo("Enter a valid national insurance number");
+        //}
 
-        [TestCase("SE1234567A", Description = "Too many numbers")]
-        [TestCase("SE123456  ", Description = "Too many chars")]
-        public void NationalInsurnceNumberShouldFailTooManyChars(string nino)
-        {
-            _validModel.NINumber = nino;
+        //[TestCase("SE1234567A", Description = "Too many numbers")]
+        //[TestCase("SE123456  ", Description = "Too many chars")]
+        //public void NationalInsurnceNumberShouldFailTooManyChars(string nino)
+        //{
+        //    _validModel.NINumber = nino;
 
-            var result = _validator
-                .Validate(_validModel);
+        //    var result = _validator
+        //        .Validate(_validModel);
 
-            result.Errors.Count.Should().Be(1);
-            result.Errors[0].ErrorMessage.ShouldAllBeEquivalentTo("The National Insurance number must be entered and must not be more than 9 characters in length");
-        }
+        //    result.Errors.Count.Should().Be(1);
+        //    result.Errors[0].ErrorMessage.ShouldAllBeEquivalentTo("The National Insurance number must be entered and must not be more than 9 characters in length");
+        //}
 
-        [TestCase("SE123456 ")]
-        [TestCase("SE123456A")]
-        public void NationalInsurnceNumberShouldValidate(string nino)
-        {
-            _validModel.NINumber = nino;
+        //[TestCase("SE123456 ")]
+        //[TestCase("SE123456A")]
+        //public void NationalInsurnceNumberShouldValidate(string nino)
+        //{
+        //    _validModel.NINumber = nino;
 
-            var result = _validator
-                .Validate(_validModel);
-            result.Errors.Count.Should().Be(0);
-        }
+        //    var result = _validator
+        //        .Validate(_validModel);
+        //    result.Errors.Count.Should().Be(0);
+        //}
 
         [Test]
         public void EmployerRef()

@@ -12,7 +12,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
 
         public string DateOfBirth { get; set; }
 
-        public string NINumber { get; set; }
+        //public string NINumber { get; set; }
 
         public int? FworkCode { get; set; }
 
