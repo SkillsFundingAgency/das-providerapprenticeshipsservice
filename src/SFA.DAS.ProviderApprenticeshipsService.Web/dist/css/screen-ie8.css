@@ -2526,6 +2526,14 @@ span.helpText {
   margin-bottom: 20px;
 }
 
+#apprentice-details .group-title {
+  margin-bottom: 0;
+}
+
+#apprentice-details .finishEditingBtn {
+  float: none;
+}
+
 #finish-editing .error-summary {
   margin-bottom: 60px;
   margin-top: 0;
@@ -2673,6 +2681,37 @@ span.helpText {
 
 #confirm-delete .secondary-text {
   color: #6f777b;
+}
+
+#review-cohorts {
+  color: #fff;
+  margin: 30px 0;
+}
+
+#review-cohorts .all-apps {
+  background: #2e3391;
+  padding: 20px;
+  margin: 20px 0;
+  margin: auto;
+  width: 31%;
+}
+
+#review-cohorts .incomplete-apps {
+  background: #8e2a8d;
+  padding: 20px;
+  margin-bottom: 20px;
+  margin: auto;
+  margin-left: 3.3333%;
+  width: 31%;
+}
+
+#review-cohorts .total-cost {
+  background: #d03a84;
+  padding: 20px;
+  margin-bottom: 30px;
+  margin: auto;
+  margin-left: 3.3333%;
+  width: 31%;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {

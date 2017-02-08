@@ -37,41 +37,7 @@
     </div>
 </div>
 
-
-
-
-
-
-
-
-@*<div class="grid-row">
-    <div class="column-full bingo-group">
-
-        <div class="column-one-third bingo-background block-one">
-            <h2 class="bold-xxlarge">
-                <span>@Model.Apprenticeships.Count</span>
-            </h2>
-            <p class="heading-small">@PluraliseApprentice(Model.Apprenticeships.Count)</p>
-        </div>
-
-        <div class="column-one-third bingo-background block-two ">
-            <h2 class="bold-xxlarge">
-                <span>@Model.Apprenticeships.Count(x => !x.CanBeApprove)</span>
-            </h2>
-            <p class="heading-small">@PluraliseIncompleteRecords(Model.Apprenticeships.Count(x => !x.CanBeApprove))</p>
-        </div>
-
-        <div class="column-one-third bingo-background block-three">
-            <h2 class="bold-xlarge">
-                <span>@Model.Apprenticeships.Sum(x => x.Cost ?? 0).ToString("C0")</span>
-            </h2>
-            <p class="heading-small">Total cost</p>
-        </div>
-
-    </div>
-</div>*@
-
-    <div class="grid-row">
+<div class="grid-row">
         <div class="column-one-half employer-details">
             <p><span class="strong">Employer: </span>@Model.LegalEntityName</p>
             <p><span class="strong">Cohort reference: </span>@Model.Reference</p>
@@ -79,7 +45,7 @@
         </div>
 
         <div class="column-one-half employer-details">
-            <p class="strong">Instructions:</p>
+            <p class="strong">Note:</p>
             <p>@(string.IsNullOrWhiteSpace(Model.LatestMessage) ? "No note added" : Model.LatestMessage)</p>
         </div>
     </div>
@@ -124,15 +90,16 @@ else
         <span class="missing">@Html.Raw("&ndash;")</span>
 }
 }
-    <div class="grid-row">
+<div class="grid-row">
         <div class="column-full bulk-upload-buttons">
             <hr class="hr-top">
 
             @{ var finishEditingText = Model.PendingChanges ? "Save and continue" : "Continue to approval"; }
-            <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
-            <a href="@Url.Action("UploadApprenticeships", "BulkUpload", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary upload-btn" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
             <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
-            <hr class="hr-bottom">
+            <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary" aria-label="Add an apprentice">Add more apprentices</a>
+            <a href="@Url.Action("UploadApprenticeships", "BulkUpload", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary upload-btn" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
+            
+            @*<hr class="hr-bottom">*@
         </div>
     </div>
 
@@ -161,7 +128,7 @@ else
 
                     <div class="group-header">
 
-                        <p class="heading-medium">@groupTitle</p>
+                        <h3 class="heading-medium group-title">@groupTitle</h3>
                         @if (!String.IsNullOrEmpty(trainingCode))
                         {
                             <p>Training code: @trainingCode</p>

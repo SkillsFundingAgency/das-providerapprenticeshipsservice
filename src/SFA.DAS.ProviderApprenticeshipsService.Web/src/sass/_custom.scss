@@ -56,7 +56,12 @@
             margin-bottom:20px;
         }
     }
-  
+  .group-title{
+      margin-bottom:0;
+  }
+  .finishEditingBtn{
+      float:none;
+  }
 }
 
 #finish-editing {
@@ -219,6 +224,7 @@
         
         .heading-medium{border-top:10px solid $govuk-blue; padding-top:20px;}
   }
+}
 
 #agreement-not-signed{
     .notice{
@@ -288,6 +294,7 @@
     }
 
 }
+
 
 
 
