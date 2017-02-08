@@ -49,7 +49,7 @@
         @if (!string.IsNullOrEmpty(Model.RedirectUrl))
         {
             <p>
-                <a href="@Model.RedirectUrl" aria-label="Go back to cohort list">Go back to view cohorts</a>
+                <a href="@Model.RedirectUrl" aria-label="Go back to cohort list">@Model.RedirectLinkText</a>
             </p>
         }
 

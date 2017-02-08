@@ -13,6 +13,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -21,9 +22,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly BulkUploader _bulkUploader;
         private readonly IHashingService _hashingService;
+
+        private readonly BulkUploadMapper _mapper;
+
         private readonly IProviderCommitmentsLogger _logger;
 
-        public BulkUploadOrchestrator(IMediator mediator, BulkUploader bulkUploader, IHashingService hashingService, IProviderCommitmentsLogger logger) : base (mediator)
+        public BulkUploadOrchestrator(
+            IMediator mediator,
+            BulkUploader bulkUploader, 
+            IHashingService hashingService,
+            BulkUploadMapper mapper,
+            IProviderCommitmentsLogger logger) : base(mediator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -31,65 +40,56 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 throw new ArgumentNullException(nameof(bulkUploader));
             if (hashingService == null)
                 throw new ArgumentNullException(nameof(hashingService));
+            if (mapper == null)
+                throw new ArgumentNullException(nameof(mapper));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
             _mediator = mediator;
             _bulkUploader = bulkUploader;
             _hashingService = hashingService;
+            _mapper = mapper;
             _logger = logger;
         }
 
-        public async Task<BulkUploadResult> UploadFileAsync(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
+        public async Task<BulkUploadResultViewModel> UploadFile(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
         {
             var commitmentId = _hashingService.DecodeValue(uploadApprenticeshipsViewModel.HashedCommitmentId);
+            var providerId = uploadApprenticeshipsViewModel.ProviderId;
+            var fileName = uploadApprenticeshipsViewModel?.Attachment?.FileName ?? "<unknown>";
 
-            await AssertCommitmentStatus(commitmentId, uploadApprenticeshipsViewModel.ProviderId);
+			await AssertCommitmentStatus(commitmentId, uploadApprenticeshipsViewModel.ProviderId);
+            _logger.Info($"Uploading File - Filename:{fileName}", uploadApprenticeshipsViewModel.ProviderId, commitmentId);
 
-            _logger.Info($"Uploading file of apprentices. Filename:{uploadApprenticeshipsViewModel?.Attachment?.FileName}", providerId: uploadApprenticeshipsViewModel.ProviderId, commitmentId: commitmentId);
-            
-            var result = await _bulkUploader.Validate(uploadApprenticeshipsViewModel);
+            var fileValidationResult = _bulkUploader.ValidateFileStructure(uploadApprenticeshipsViewModel, fileName, commitmentId);
 
-            var errorCount = result.Errors.Count();
+            if (fileValidationResult.Errors.Any())
+            {
+                return new BulkUploadResultViewModel { HasFileLevelErrors = true, FileLevelErrors = fileValidationResult.Errors };
+            }
 
+            _logger.Info("Uploading file of apprentices.", providerId, commitmentId);
+
+            var rowValidationResult = await _bulkUploader.ValidateFileRows(fileValidationResult.Data, providerId);
+
+            var errorCount = rowValidationResult.Errors.Count();
             if (errorCount > 0)
             {
-                _logger.Info($"{errorCount} Upload errors for Filename:{uploadApprenticeshipsViewModel?.Attachment?.FileName}", providerId: uploadApprenticeshipsViewModel.ProviderId, commitmentId: commitmentId);
-
-                return result;
+                _logger.Info($"{errorCount} Upload errors for", providerId, commitmentId);
+                return new BulkUploadResultViewModel { HasRowLevelErrors = true, RowLevelErrors = rowValidationResult.Errors };
             }
 
             await _mediator.SendAsync(new BulkUploadApprenticeshipsCommand
             {
-                ProviderId = uploadApprenticeshipsViewModel.ProviderId,
+                ProviderId = providerId,
                 CommitmentId = commitmentId,
-                Apprenticeships = await MapFrom(commitmentId, result.Data)
+                Apprenticeships = await _mapper.MapFrom(commitmentId, rowValidationResult.Data)
             });
 
-            return new BulkUploadResult { Errors = new List<UploadError>() };
+            return new BulkUploadResultViewModel();
         }
-
-        public async Task<UploadApprenticeshipsViewModel> GetUploadModel(long providerid, string hashedcommitmentid)
-        {
-            var commitmentId = _hashingService.DecodeValue(hashedcommitmentid);
-            await AssertCommitmentStatus(commitmentId, providerid);
-            var result = await _mediator.SendAsync(new GetCommitmentQueryRequest
-            {
-                ProviderId = providerid,
-                CommitmentId = commitmentId
-            });
-
-            var model = new UploadApprenticeshipsViewModel
-            {
-                ProviderId = providerid,
-                HashedCommitmentId = hashedcommitmentid,
-                ApprenticeshipCount = result.Commitment.Apprenticeships.Count
-            };
-
-            return model;
-        }
-
-        private async Task<IList<Apprenticeship>> MapFrom(long commitmentId, IEnumerable<ApprenticeshipUploadModel> data)
+		
+		private async Task<IList<Apprenticeship>> MapFrom(long commitmentId, IEnumerable<ApprenticeshipUploadModel> data)
         {
             var trainingProgrammes = await GetTrainingProgrammes();
 
@@ -136,6 +136,41 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     .Union(frameworksTask.Result.Frameworks)
                     .OrderBy(m => m.Title)
                     .ToList();
+        }
+
+        public async Task<UploadApprenticeshipsViewModel> GetUploadModel(long providerid, string hashedcommitmentid)
+        {
+            var commitmentId = _hashingService.DecodeValue(hashedcommitmentid);
+            var result = await _mediator.SendAsync(new GetCommitmentQueryRequest
+                                              {
+                                                  ProviderId = providerid,
+                                                  CommitmentId = commitmentId
+                                              });
+
+            var model = new UploadApprenticeshipsViewModel
+            {
+                ProviderId = providerid,
+                HashedCommitmentId = hashedcommitmentid,
+                ApprenticeshipCount = result.Commitment.Apprenticeships.Count
+            };
+
+            return model;
+        }
+
+        public UploadApprenticeshipsViewModel GetUnsuccessfulUpload(List<UploadError> errors, long providerId, string hashedCommitmentId)
+        {
+            var result = _mapper.MapErrors(errors);
+            var fileErrors = errors.Where(m => m.IsGeneralError);
+
+            return new UploadApprenticeshipsViewModel
+            {
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId,
+                ErrorCount = errors.Count,
+                RowCount = result.Count,
+                Errors = result,
+                FileErrors = fileErrors
+            };
         }
     }
 }

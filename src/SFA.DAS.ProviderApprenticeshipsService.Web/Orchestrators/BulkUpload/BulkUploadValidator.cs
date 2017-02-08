@@ -19,9 +19,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
     {
         private readonly ILog _logger;
         private readonly ProviderApprenticeshipsServiceConfiguration _config;
-        private readonly ApprenticeshipBulkUploadValidator _viewModelValidator = new ApprenticeshipBulkUploadValidator();
-        private readonly ApprenticeshipViewModelApproveValidator _approvalValidator = new ApprenticeshipViewModelApproveValidator();
-        private readonly CsvRecordValidator _csvRecordValidator = new CsvRecordValidator();
+        private readonly ApprenticeshipBulkUploadValidator _viewModelValidator = new ApprenticeshipBulkUploadValidator(new BulkUploadApprenticeshipValidationText());
+        private readonly ApprenticeshipViewModelApproveValidator _approvalValidator = new ApprenticeshipViewModelApproveValidator(new BulkUploadApprenticeshipValidationText());
+        private readonly CsvRecordValidator _csvRecordValidator = new CsvRecordValidator(new BulkUploadApprenticeshipValidationText());
 
         public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, ILog logger)
         {
@@ -34,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _config = config;
         }
 
-        public IEnumerable<UploadError> ValidateFileAttributes(HttpPostedFileBase attachment)
+        public IEnumerable<UploadError> ValidateFileSize(HttpPostedFileBase attachment)
         {
             var errors = new List<UploadError>();
             var maxFileSize = _config.MaxBulkUploadFileSize * 1024; // Bytes
@@ -45,9 +45,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             return errors;
         }
 
-        public IEnumerable<UploadError> ValidateFields(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes, string cohortReference)
+        public IEnumerable<UploadError> ValidateCohortReference(
+            IEnumerable<ApprenticeshipUploadModel> records,
+            string cohortReference)
         {
-            var errors = new ConcurrentBag<UploadError>();
+            var errors = new List<UploadError>();
 
             var apprenticeshipUploadModels = records as ApprenticeshipUploadModel[] ?? records.ToArray();
             if (!apprenticeshipUploadModels.Any()) return new[] { new UploadError(ApprenticeshipFileValidationText.NoRecords) };
@@ -58,6 +60,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != cohortReference))
                 errors.Add(new UploadError("The Cohort Reference does not match the current cohort", "CohortRef_04"));
 
+            return errors;
+        }
+
+        public IEnumerable<UploadError> ValidateRecords(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes)
+        {
+            var errors = new ConcurrentBag<UploadError>();
+            var apprenticeshipUploadModels = records as ApprenticeshipUploadModel[] ?? records.ToArray();
+            
             Parallel.ForEach(apprenticeshipUploadModels,
                 (record, state, index) =>
                     {
@@ -66,17 +76,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
                         // Validate view model for approval
                         var validationResult = _viewModelValidator.Validate(viewModel);
-                        validationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i)));
+                        validationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i, record)));
 
                         var approvalValidationResult = _approvalValidator.Validate(viewModel);
-                        approvalValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i)));
+                        approvalValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i, record)));
 
                         // Validate csv record
                         var csvValidationResult = _csvRecordValidator.Validate(record.CsvRecord);
-                        csvValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i)));
+                        csvValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i, record)));
 
                         if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode) && trainingProgrammes.All(m => m.Id != viewModel.TrainingCode))
-                            errors.Add(new UploadError("Not a valid training code", "StdCode_04", i));
+                            errors.Add(new UploadError("Not a valid <strong>Training code</strong>", "StdCode_04", i, record));
                     });
 
             return errors;

@@ -10,8 +10,10 @@ using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
@@ -20,13 +22,14 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
     [TestFixture]
     public sealed class WhenUploadingFile
     {
-        private const string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,NINumber,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TrainingPrice,EPAPrice,EPAOrgId,EmpRef,ProviderRef,ULN";
+        private const string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TrainingPrice,EPAPrice,EPAOrgId,EmpRef,ProviderRef,ULN";
         private BulkUploadOrchestrator _sut;
         private Mock<HttpPostedFileBase> _file;
         private Mock<IMediator> _mockMediator;
@@ -56,36 +59,47 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var uploadValidator = new BulkUploadValidator(new ProviderApprenticeshipsServiceConfiguration { MaxBulkUploadFileSize = 512 }, Mock.Of<ILog>());
             var uploadFileParser = new BulkUploadFileParser(Mock.Of<ILog>());
             var bulkUploader = new BulkUploader(_mockMediator.Object, uploadValidator, uploadFileParser, Mock.Of<IProviderCommitmentsLogger>());
+            var bulkUploadMapper = new BulkUploadMapper(_mockMediator.Object);
 
-            _sut = new BulkUploadOrchestrator(_mockMediator.Object, bulkUploader, mockHashingService.Object, Mock.Of<IProviderCommitmentsLogger>());
+            _sut = new BulkUploadOrchestrator(_mockMediator.Object, bulkUploader, mockHashingService.Object, bulkUploadMapper, Mock.Of<IProviderCommitmentsLogger>());
         }
 
         [Test]
         public async Task TestPerformance()
         {
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+                .Returns(Task.FromResult(new GetCommitmentQueryResponse
+                {
+                    Commitment = new Commitment
+                    {
+                        AgreementStatus = AgreementStatus.NotAgreed,
+                        EditStatus = EditStatus.ProviderOnly
+                    }
+                }));
+
             var upper = 40 * 1000;
             var testData = new List<string>();
             for (int i = 0; i < upper; i++)
             {
-                testData.Add("\n\rABBA123,Chris,Froberg,1998-12-08,SE1233211C,,,,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559");
+                testData.Add("\n\rABBA123,Chris,Froberg,1998-12-08,,,,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559");
             }
             var str = HeaderLine + string.Join("", testData);
 
             var textStream = new MemoryStream(Encoding.UTF8.GetBytes(str));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
-            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123" };
+            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 1234L };
             var stopwatch = Stopwatch.StartNew();
-            var result = await _sut.UploadFileAsync(model);
+            var r1 = await _sut.UploadFile(model);
             stopwatch.Stop(); Console.WriteLine($"Time TOTAL: {stopwatch.Elapsed.Seconds}");
-            result.Errors.Count().Should().Be(160 * 1000);
+            r1.RowLevelErrors.Count().Should().Be(120 * 1000);
             stopwatch.Elapsed.Seconds.Should().BeLessThan(7);   
         }
 
         [Test]
         public async Task ShouldCallMediatorPassingInMappedApprenticeships()
         {
-            var dataLine = "\n\rABBA123,Chris,Froberg,1998-12-08,SE123321C,,,25,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559";
+            var dataLine = "\n\rABBA123,Chris,Froberg,1998-12-08,,,25,2,2020-08-01,2025-08-01,1500,,,Employer ref,Provider ref,1113335559";
             var fileContents = HeaderLine + dataLine;
             var textStream = new MemoryStream(Encoding.UTF8.GetBytes(fileContents));
             _file.Setup(m => m.InputStream).Returns(textStream);
@@ -95,8 +109,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 .ReturnsAsync(new Unit())
                 .Callback((object x) => commandArgument = x as BulkUploadApprenticeshipsCommand);
 
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+                .Returns(Task.FromResult(new GetCommitmentQueryResponse
+                {
+                    Commitment = new Commitment
+                    {
+                        AgreementStatus = AgreementStatus.NotAgreed,
+                        EditStatus = EditStatus.ProviderOnly
+                    }
+                }));
+
             var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111 };
-            var result = await _sut.UploadFileAsync(model);
+            var file = await _sut.UploadFile(model);
 
             _mockMediator.Verify(x => x.SendAsync(It.IsAny<BulkUploadApprenticeshipsCommand>()), Times.Once);
 

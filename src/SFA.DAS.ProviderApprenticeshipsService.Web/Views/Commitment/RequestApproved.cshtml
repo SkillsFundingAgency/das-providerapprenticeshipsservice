@@ -43,9 +43,8 @@
 
         @if (!string.IsNullOrEmpty(Model.RedirectUrl))
         {
-            <a href="@Url.Action("ReadyForApproval")" aria-label="Return to Approve cohorts">Return to Approve cohorts</a>
+            <a href="@Model.RedirectUrl" aria-label="@Model.RedirectLinkText">@Model.RedirectLinkText</a>
         }
-        @Session["RequestStartStatus"]
 
     </div>
 

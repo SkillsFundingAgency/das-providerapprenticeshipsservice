@@ -36,7 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void FileValidationNoErrors()
         {
-            var errors = _sut.ValidateFileAttributes(_file.Object);
+            var errors = _sut.ValidateFileSize(_file.Object);
 
             errors.Count().Should().Be(0);
         }

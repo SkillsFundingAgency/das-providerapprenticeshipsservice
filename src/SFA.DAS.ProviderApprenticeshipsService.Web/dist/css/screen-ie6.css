@@ -2694,8 +2694,13 @@ span.helpText {
   margin: auto;
 }
 
-.dynamic-heading strong {
+.dynamic-heading strong, #bulk-upload-errors strong {
   font-weight: bold;
+}
+
+#apprentices-detail .list-apprentice .heading-medium {
+  border-top: 10px solid #005ea5;
+  padding-top: 20px;
 }
 
 #agreement-not-signed .notice {
@@ -2725,6 +2730,10 @@ span.helpText {
   color: #6f777b;
 }
 
+.error-details p {
+  margin-bottom: 0;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   .employerListing td:nth-of-type(1):before {
     content: "Employer";
@@ -2739,6 +2748,55 @@ span.helpText {
   }
   .employerListing td:nth-of-type(3):before {
     content: "Last message";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  .provider-list-view td:nth-of-type(1):before {
+    content: "Name";
+    font-weight: normal;
+    margin-top: 5px;
+    min-height: 30px;
+  }
+  .provider-list-view td:nth-of-type(2):before {
+    content: "Date of birth";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  .provider-list-view td:nth-of-type(3):before {
+    content: "ULN";
+    font-weight: normal;
+    margin-top: 5px;
+    word-wrap: break-word;
+  }
+  .provider-list-view td:nth-of-type(4):before {
+    content: "Status";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  #bulk-upload-errors td:nth-of-type(1):before {
+    content: "Row";
+    font-weight: normal;
+    margin-top: 5px;
+    min-height: 30px;
+  }
+  #bulk-upload-errors td:nth-of-type(2):before {
+    content: "ULN";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  #bulk-upload-errors td:nth-of-type(3):before {
+    content: "Name";
+    font-weight: normal;
+    margin-top: 5px;
+    word-wrap: break-word;
+  }
+  #bulk-upload-errors td:nth-of-type(4):before {
+    content: "Date of Birth";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  #bulk-upload-errors td:nth-of-type(5):before {
+    content: "Error(s)";
     font-weight: normal;
     margin-top: 5px;
   }

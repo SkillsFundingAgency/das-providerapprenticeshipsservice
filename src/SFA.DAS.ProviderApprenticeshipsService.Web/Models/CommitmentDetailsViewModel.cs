@@ -14,5 +14,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string LatestMessage { get; set; }
         public bool PendingChanges { get; set; }
 
+        public string BackLinkUrl { get; set; }
     }
 }
