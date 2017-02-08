@@ -384,6 +384,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                         new SubmitCommitmentCommand
                         {
                             ProviderId = providerId,
+                            HashedCommitmentId = hashedCommitmentId,
                             CommitmentId = commitmentId,
                             Message = message,
                             LastAction = lastAction,

@@ -63,12 +63,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
             if (message.CreateTask)
                 await CreateTask(message, commitment);
 
-            var notificationCommand = BuildNotificationCommand(commitment);
+            var notificationCommand = BuildNotificationCommand(commitment, message.LastAction, message.HashedCommitmentId);
 
             await _mediator.SendAsync(notificationCommand);
         }
 
-        private SendNotificationCommand BuildNotificationCommand(Commitment commitment)
+        private SendNotificationCommand BuildNotificationCommand(Commitment commitment, LastAction action, string hashedCommitmentId)
         {
             return new SendNotificationCommand
             {
@@ -77,11 +77,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                     RecipientsAddress = commitment.EmployerLastUpdateInfo.EmailAddress,
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "<Test Employer Notification>", // Replaced by Notify Service
-                    SystemId = "x",
+                    SystemId = "x", // Don't need to populate
                     TemplateId = _configuration.EmailTemplates.Single(c => c.TemplateType.Equals(EmailTemplateType.CommitmentNotification)).Key,
                     Tokens = new Dictionary<string, string>
                     {
-                        //{ "account_name", caller.AccountName }
+                        { "type", action == LastAction.Approve ? "approval" : "review" },
+                        { "cohort_reference", hashedCommitmentId },
                     }
                 }
             };

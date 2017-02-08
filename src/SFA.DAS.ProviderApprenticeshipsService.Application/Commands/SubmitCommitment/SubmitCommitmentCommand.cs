@@ -8,6 +8,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
     {
         public long ProviderId { get; set; }
 
+        public string HashedCommitmentId { get; set; }
+
         public long CommitmentId { get; set; }
 
         public string Message { get; set; }
