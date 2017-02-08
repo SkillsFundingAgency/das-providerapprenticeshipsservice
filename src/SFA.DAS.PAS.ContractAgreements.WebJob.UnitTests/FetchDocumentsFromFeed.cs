@@ -10,6 +10,7 @@ using NUnit.Framework;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
 {
@@ -29,8 +30,12 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
             var service = helper.SetUpProviderAgreementStatusService(repository);
 
             await service.UpdateProviderAgreementStatuses();
+            helper.MockFeedProcessorClient.Verify(m => m.GetAuthorizedHttpClient(), Times.Exactly(6));
+            await service.UpdateProviderAgreementStatuses();
+            helper.MockFeedProcessorClient.Verify(m => m.GetAuthorizedHttpClient(), Times.Exactly(12));
+            await service.UpdateProviderAgreementStatuses();
 
-            helper.MockFeedProcessorClient.Verify(m => m.GetAuthorizedHttpClient(), Times.Exactly(13));
+            helper.MockFeedProcessorClient.Verify(m => m.GetAuthorizedHttpClient(), Times.Exactly(15));
 
             var bookmark = repository.GetMostRecentContractFeedEvent().Result;
 

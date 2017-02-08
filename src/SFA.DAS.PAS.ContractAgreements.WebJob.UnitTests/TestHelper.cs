@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Moq;
 
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
 using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses;
 
@@ -34,7 +35,8 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
             MockFeedProcessorClient = GetMockFeedProcessorClient();
 
             var reader = new ContractFeedReader(MockFeedProcessorClient.Object, Mock.Of<ILog>());
-            var dataProvider = new ContractFeedProcessor(reader, new MockContractFeedEventValidator(), Mock.Of<ILog>());
+            var configuration = new ContractFeedConfiguration { ReadMaxPages = 6 };
+            var dataProvider = new ContractFeedProcessor(reader, new MockContractFeedEventValidator(), configuration, Mock.Of<ILog>());
 
             var service = new ProviderAgreementStatusService(dataProvider, repository, Mock.Of<ILog>());
 

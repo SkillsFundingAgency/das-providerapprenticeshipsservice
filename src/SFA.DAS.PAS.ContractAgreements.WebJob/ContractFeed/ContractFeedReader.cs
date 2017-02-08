@@ -26,7 +26,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 
         private const string VendorAtomMediaType = "application/vnd.sfa.contract.v1+atom+xml";
 
-        public void Read(int pageNumber, Action<int, string> pageWriter)
+        public void Read(int pageNumber, Func<int, string, bool> pageWriter)
         {
             var url = $"{_httpClient.BaseAddress}{MostRecentPageUrl}/{pageNumber}";
             var response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, url);
@@ -45,7 +45,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             }
 
             SyndicationLink link;
-
+            bool takeMore = true;
             do
             {
                 link = feed?.Links.FirstOrDefault(li => li.RelationshipType == "next-archive");
@@ -54,9 +54,9 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
                 {
                     response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, link.Uri.ToString());
                     feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
-                    pageWriter(ExtractPageNumberFromFeedItem(feed), response.Content);
+                    takeMore = pageWriter(ExtractPageNumberFromFeedItem(feed), response.Content);
                 }
-            } while (link != null);
+            } while (link != null && takeMore);
         }
 
         private static int ExtractPageNumberFromFeedItem(SyndicationFeed feed)

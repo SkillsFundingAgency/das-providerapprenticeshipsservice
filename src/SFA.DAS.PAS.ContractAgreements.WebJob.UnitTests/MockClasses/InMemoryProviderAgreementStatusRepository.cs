@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses
@@ -46,6 +47,11 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses
                 .Where(m => m.PageNumber > 0)
                 .OrderByDescending(e => e.Updated).First().PageNumber;
             return Task.FromResult(pn);
+        }
+
+        public Task SaveLastRun(EventRun lastRun)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -7,7 +7,7 @@ using Dapper;
 
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
-
+using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
@@ -90,6 +90,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             if (pageNumber.Equals(0))
                 _logger.Info("No provider agreements found.");
             return pageNumber;
+        }
+
+        public Task SaveLastRun(EventRun lastRun)
+        {
+            throw new System.NotImplementedException();
         }
 
         public async Task AddContractEvent(ContractFeedEvent contractFeedEvent)

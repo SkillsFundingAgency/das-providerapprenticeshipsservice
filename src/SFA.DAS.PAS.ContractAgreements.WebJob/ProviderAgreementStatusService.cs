@@ -36,16 +36,21 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
 
             _logger.Info($"Bookmark: {lastContact?.Id}, Latest page: {mostRecentPageNumber}");
 
-            _dataProvider.ReadEvents(mostRecentPageNumber, lastContact?.Id ?? Guid.Empty, (eventPageNumber, events) =>
-            {
-                var contractFeedEvents = events.ToList();
-
-                foreach (var contractFeedEvent in contractFeedEvents)
+            var lastRun = _dataProvider.ReadEvents(mostRecentPageNumber, lastContact?.Id ?? Guid.Empty, (eventPageNumber, events) =>
                 {
-                    contractFeedEvent.PageNumber = eventPageNumber;
-                    _repository.AddContractEvent(contractFeedEvent);
-                }
-            });
+                    var contractFeedEvents = events.ToList();
+
+                    foreach (var contractFeedEvent in contractFeedEvents)
+                    {
+                        contractFeedEvent.PageNumber = eventPageNumber;
+                        _repository.AddContractEvent(contractFeedEvent);
+                    }
+                });
+
+            _repository.SaveLastRun(lastRun);
+            // write  readStatistics  to database
+            // [] DB queries
+            // []
         }
     }
 
