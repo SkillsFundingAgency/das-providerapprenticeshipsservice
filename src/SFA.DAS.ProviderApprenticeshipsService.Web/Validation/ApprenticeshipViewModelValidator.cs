@@ -7,6 +7,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
     public sealed class ApprenticeshipViewModelValidator : ApprenticeshipBaseValidator
     {
+        public ApprenticeshipViewModelValidator() : this(new WebApprenticeshipValidationText())
+        { } // The default is used by the MVC model binding
+
         public ApprenticeshipViewModelValidator(WebApprenticeshipValidationText validationText) : base(validationText)
         {
             var now = DateTime.Now;
