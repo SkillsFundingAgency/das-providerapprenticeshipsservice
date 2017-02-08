@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+
+using WebGrease.Css.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -90,7 +94,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Details(long providerId, string hashedCommitmentId)
         {
             var model = await _commitmentOrchestrator.GetCommitmentDetails(providerId, hashedCommitmentId);
-            var backUrl = Url.Action("Cohorts", new { providerId });
+            string backUrl;
 
             switch (GetRequestStatusFromSession())
             {

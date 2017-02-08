@@ -7,7 +7,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 {
     public interface IBulkUploadValidator
     {
-        IEnumerable<UploadError> ValidateFields(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes, string cohortReference);
-        IEnumerable<UploadError> ValidateFileAttributes(HttpPostedFileBase attachment);
+        IEnumerable<UploadError> ValidateRecords(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes);
+
+        IEnumerable<UploadError> ValidateCohortReference( IEnumerable<ApprenticeshipUploadModel> records, string cohortReference);
+
+        IEnumerable<UploadError> ValidateFileSize(HttpPostedFileBase attachment);
     }
 }

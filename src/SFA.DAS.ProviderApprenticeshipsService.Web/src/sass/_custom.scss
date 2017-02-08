@@ -210,7 +210,7 @@
 
 }
 
-.dynamic-heading{
+.dynamic-heading, #bulk-upload-errors{
     strong{
         font-weight:bold;
     }
@@ -224,6 +224,7 @@
         .heading-medium{border-top:10px solid $govuk-blue; padding-top:20px;}
   }
 }
+
 #agreement-not-signed{
     .notice{
         margin:60px 0;
@@ -251,7 +252,11 @@
 
 }
 
-
+.error-details {
+    p{
+        margin-bottom:0;
+    }
+}
 
 
 
@@ -264,9 +269,7 @@
 //==================================
 @media only screen and (max-device-width: 640px),
 only screen and (max-device-width: 667px),
-only screen and (max-width: 480px) {
-    
-//Progress list mobile view styles 
+only screen and (max-width: 480px) {    
 .employerListing { 
         td:nth-of-type(1):before {
         content: "Employer";
@@ -285,7 +288,6 @@ only screen and (max-width: 480px) {
         margin-top: 5px;
         } 
     }
-
 .provider-list-view { 
         td:nth-of-type(1):before {
         content: "Name";
@@ -311,8 +313,46 @@ only screen and (max-width: 480px) {
         } 
 }
 
-}
 
+
+#bulk-upload-errors{
+    
+     td:nth-of-type(1):before {
+        content: "Row";
+        font-weight: normal;
+        margin-top: 5px;
+        min-height: 30px;
+        }
+        td:nth-of-type(2):before {
+        content: "ULN";
+        font-weight: normal;
+        margin-top: 5px;
+        }
+        td:nth-of-type(3):before {
+        content: "Name";
+        font-weight: normal;
+        margin-top: 5px;
+        word-wrap:break-word;
+        } 
+        td:nth-of-type(4):before {
+        content: "Date of Birth";
+        font-weight: normal;
+        margin-top: 5px;
+        } 
+        td:nth-of-type(5):before {
+        content: "Error(s)";
+        font-weight: normal;
+        margin-top: 5px;
+        } 
+    }
+
+
+
+
+
+
+
+}
 
 
 

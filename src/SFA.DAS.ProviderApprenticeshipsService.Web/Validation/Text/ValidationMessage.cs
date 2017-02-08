@@ -2,6 +2,7 @@
 {
     public struct ValidationMessage
     {
+
         public ValidationMessage(string text, string errorCode)
         {
             ErrorCode = errorCode;
