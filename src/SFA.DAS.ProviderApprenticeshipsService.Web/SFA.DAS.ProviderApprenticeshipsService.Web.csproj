@@ -583,6 +583,7 @@
     <Content Include="Views\ManageApprentices\Index.cshtml" />
     <Content Include="Views\ManageApprentices\Details.cshtml" />
     <Content Include="Views\Commitment\DeleteConfirmation.cshtml" />
+    <Content Include="Views\Error\_Error403.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
