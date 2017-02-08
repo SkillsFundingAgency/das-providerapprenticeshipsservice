@@ -37,9 +37,11 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
         public EventRun ReadEvents(int lastPageNumber, Guid lastBookmarkedItemId, Action<int, IEnumerable<ContractFeedEvent>> saveRecordsAction)
         {
             _logger.Info($"Reading {_configuration.ReadMaxPages} pages");
-            var newLatestPageNumber = lastPageNumber;
+            var newLastReadPageNumber = lastPageNumber;
             var contractCount = 0;
-            _reader.Read(lastPageNumber, (pageNumber, pageContent) =>
+            var pagesRead = 0;
+
+            _reader.Read(lastPageNumber, (pageNumber, pageContent, isLastPage) =>
             {
                 var doc = XDocument.Parse(pageContent);
 
@@ -55,13 +57,20 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 
                 _logger.Info($"Adding: {newContractDataPage.Count} from page: {pageNumber}");
                 saveRecordsAction(pageNumber, newContractDataPage);
-                newLatestPageNumber = pageNumber;
-                contractCount += newContractDataPage.Count;
 
+                newLastReadPageNumber = isLastPage ? pageNumber -1 : pageNumber;
+
+                contractCount += newContractDataPage.Count;
+                pagesRead += 1;
                 return lastPageNumber + (_configuration.ReadMaxPages-1) > pageNumber;
             });
 
-            return new EventRun { NewLatestPageNumber = newLatestPageNumber, ContractCount = contractCount };
+            return new EventRun
+                       {
+                           NewLastReadPageNumber = newLastReadPageNumber,
+                           ContractCount = contractCount,
+                           PagesRead = pagesRead
+                       };
         }
 
         private ContractFeedEvent ExtractContractFeedEvent(XContainer element)

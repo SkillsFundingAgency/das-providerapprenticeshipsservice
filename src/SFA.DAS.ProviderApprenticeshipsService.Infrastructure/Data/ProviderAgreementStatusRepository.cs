@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -78,7 +79,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                     var r = (await connection.QueryAsync<int>(
                         sql:
                             "SELECT TOP 1 [PageNumber] "
-                          + "FROM [dbo].[ContractFeedEvent] "
+                          + "FROM [dbo].[ContractFeedEventRun] "
                           + "ORDER BY [PageNumber] desc",
                         commandType: CommandType.Text,
                         transaction: trans)).SingleOrDefault();
@@ -90,11 +91,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             if (pageNumber.Equals(0))
                 _logger.Info("No provider agreements found.");
             return pageNumber;
-        }
-
-        public Task SaveLastRun(EventRun lastRun)
-        {
-            throw new System.NotImplementedException();
         }
 
         public async Task AddContractEvent(ContractFeedEvent contractFeedEvent)
@@ -126,6 +122,33 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 return 1L;
             }
             );
+        }
+
+        public async Task SaveLastRun(EventRun lastRun)
+        {
+            await WithConnection(async connection =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@entriesSaved", lastRun.ContractCount, DbType.Int32);
+                parameters.Add("@executionTimeMs", lastRun.ExecutionTimeMs, DbType.Int64);
+                parameters.Add("@pageNumber", lastRun.NewLastReadPageNumber, DbType.Int32);
+                parameters.Add("@pagesRead", lastRun.PagesRead, DbType.Int32);
+                parameters.Add("@updated", DateTime.Now, DbType.DateTime);
+
+                using (var trans = connection.BeginTransaction())
+                {
+                    await connection.ExecuteAsync(
+                        sql:
+                            "INSERT INTO [dbo].[ContractFeedEventRun]" +
+                            "(EntriesSaved, ExecutionTimeMs, PageNumber, PagesRead, Updated)" +
+                            "VALUES(@entriesSaved, @executionTimeMs, @pageNumber, @pagesRead, @updated); ",
+                        param: parameters,
+                        commandType: CommandType.Text,
+                        transaction: trans);
+                    trans.Commit();
+                }
+                return 1L;
+            });
         }
     }
 }

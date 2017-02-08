@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,16 +28,16 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
 
         public async Task UpdateProviderAgreementStatuses()
         {
-            var lastContact = await _repository.GetMostRecentContractFeedEvent();
-            var mostRecentPageNumber = await _repository.GetMostRecentPageNumber();
+            var time = new Stopwatch();
+            time.Start();
 
-            // if last contact have a page number there might be more records on that page we have not read yet.
-            if (lastContact?.PageNumber > 0) mostRecentPageNumber = lastContact.PageNumber;
-            else ++mostRecentPageNumber;
+            var lastContract = await _repository.GetMostRecentContractFeedEvent();
+            var mostRecentPageNumber = await _repository.GetMostRecentPageNumber() +1;
+            if (lastContract == null) mostRecentPageNumber = 1;
 
-            _logger.Info($"Bookmark: {lastContact?.Id}, Latest page: {mostRecentPageNumber}");
+            _logger.Info($"Bookmark: {lastContract?.Id}, Latest page read: {mostRecentPageNumber}");
 
-            var lastRun = _dataProvider.ReadEvents(mostRecentPageNumber, lastContact?.Id ?? Guid.Empty, (eventPageNumber, events) =>
+            var lastRun = _dataProvider.ReadEvents(mostRecentPageNumber, lastContract?.Id ?? Guid.Empty, (eventPageNumber, events) =>
                 {
                     var contractFeedEvents = events.ToList();
 
@@ -47,10 +48,9 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
                     }
                 });
 
-            _repository.SaveLastRun(lastRun);
-            // write  readStatistics  to database
-            // [] DB queries
-            // []
+            time.Stop();
+            lastRun.ExecutionTimeMs = time.ElapsedMilliseconds;
+            await _repository.SaveLastRun(lastRun);
         }
     }
 
