@@ -6,13 +6,13 @@ using System.Web;
 
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
-using SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     public abstract class BaseController : Controller
     {
         private readonly IProviderCommitmentsLogger _logger;
+
         protected BaseController()
         {
             _logger = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<IProviderCommitmentsLogger>();
@@ -25,24 +25,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var providerIdKey = "providerId";
-            if (filterContext.ActionParameters.ContainsKey(providerIdKey))
+            const string ProviderIdKey = "providerId";
+
+            if (filterContext.ActionParameters.ContainsKey(ProviderIdKey))
             {    
-                var pid = filterContext.ActionParameters[providerIdKey];
-                if ($"{pid}" == string.Empty)
-                    ThrowException(new HttpException((int)HttpStatusCode.BadRequest, "Missing provider id"));
+                var providerIdFromAction = filterContext.ActionParameters[ProviderIdKey];
+                if ($"{providerIdFromAction}" == string.Empty)
+                {
+                    _logger.Info($"HttpError 400, Provider: {providerIdFromAction}, Resources");
+                    throw new HttpException((int)HttpStatusCode.BadRequest, "Missing provider id");
+                }
 
                 var claimUkprn = GetClaimValue("http://schemas.portal.com/ukprn");
 
-                if ($"{pid}" != claimUkprn)
-                    ThrowException(new HttpException((int)HttpStatusCode.Forbidden, "Your account does not have sufficient privileges"));
+                if ($"{providerIdFromAction}" != claimUkprn)
+                { 
+                    _logger.Info($"HttpError 403, User ukprn: {providerIdFromAction}, Resources ukprn: {claimUkprn}");
+                    throw new HttpException((int)HttpStatusCode.Forbidden, "Your account does not have sufficient privileges");
+                }
             }
-        }
-
-        private void ThrowException(HttpException httpException)
-        {
-            _logger.Info($"Error: {httpException.GetType()}, HttpErrorCode: {httpException.GetHttpCode()}, Message: {httpException.Message}");
-            throw httpException;
         }
 
         private string GetClaimValue(string claimKey)
