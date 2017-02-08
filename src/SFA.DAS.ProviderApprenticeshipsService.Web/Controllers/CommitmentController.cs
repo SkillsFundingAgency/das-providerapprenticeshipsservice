@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -262,17 +263,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedCommitmentId}/Submit")]
         public async Task<ActionResult> Submit(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
         {
-            var commitment = await _commitmentOrchestrator.GetCommitmentCheckState(providerId, hashedCommitmentId);
-
-            var model = new SubmitCommitmentViewModel
+            try
             {
-                ProviderId = providerId,
-                HashedCommitmentId = hashedCommitmentId,
-                EmployerName = commitment.LegalEntityName,
-                SaveStatus = saveStatus
-            };
+                var commitment = await _commitmentOrchestrator.GetCommitmentCheckState(providerId, hashedCommitmentId);
 
-            return View(model);
+                var model = new SubmitCommitmentViewModel
+                {
+                    ProviderId = providerId,
+                    HashedCommitmentId = hashedCommitmentId,
+                    EmployerName = commitment.LegalEntityName,
+                    SaveStatus = saveStatus
+                };
+
+                return View(model);
+            }
+            catch (InvalidStateException)
+            {
+                return RedirectToAction("Cohorts", new { providerId });
+            }
         }
 
         [HttpPost]
