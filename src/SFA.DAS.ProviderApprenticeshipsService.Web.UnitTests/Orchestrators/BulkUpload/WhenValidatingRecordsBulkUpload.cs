@@ -29,40 +29,38 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         }
 
         [Test]
-        public void EverythingIsValidating()
+        public void EverythingIsValid()
         {
-            var errors = _sut.ValidateFields(GetTestData(), TrainingProgrammes(), "ABBA123");
+            var errors = _sut.ValidateRecords(GetTestData(), TrainingProgrammes());
             errors.Count().Should().Be(0);
         }
 
         [Test]
         public void NoRecords()
         {
-            var errors = _sut.ValidateFields(
-                new ApprenticeshipUploadModel[0], 
-                TrainingProgrammes(), "ABBA123").ToList();
+            var errors = _sut.ValidateCohortReference(new ApprenticeshipUploadModel[0], "ABBA123").ToList();
             errors.Count.Should().Be(1);
             errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("File contains no records");
         }
 
         [Test]
-        public void MissingTraingCode()
+        public void MissingTrainingCode()
         {
-            var errors = _sut.ValidateFields(GetTestData(), new List<ITrainingProgramme>(), "ABBA123").ToList();
+            var errors = _sut.ValidateRecords(GetTestData(), new List<ITrainingProgramme>()).ToList();
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("Row:1 - Not a valid training code");
+            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("Row:1 - Not a valid <strong>Training code</strong>");
         }
 
         [Test]
         public void FailingValidationOnName()
         {
-            var errors = _sut.ValidateFields(GetFailingTestData(), TrainingProgrammes(), "ABBA123").ToList();
+            var errors = _sut.ValidateRecords(GetFailingTestData(), TrainingProgrammes()).ToList();
             errors.Count.Should().Be(4);
             var messages = errors.Select(m => m.ToString()).ToList();
-            messages.Should().Contain("Row:1 - You must enter given names that are no longer than 100 characters");
-            messages.Should().Contain("Row:1 - You must enter a family name that's no longer than 100 characters");
-            messages.Should().Contain("Row:2 - You must enter given names that are no longer than 100 characters");
-            messages.Should().Contain("Row:2 - You must enter a family name that's no longer than 100 characters");
+            messages.Should().Contain("Row:1 - You must enter <strong>Given names</strong> that are no longer than 100 characters");
+            messages.Should().Contain("Row:1 - You must enter a <strong>Family name</strong> that's no longer than 100 characters");
+            messages.Should().Contain("Row:2 - You must enter <strong>Given names</strong> that are no longer than 100 characters");
+            messages.Should().Contain("Row:2 - You must enter a <strong>Family name</strong> that's no longer than 100 characters");
         }
 
         [Test]
@@ -74,8 +72,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             first.CsvRecord.CohortRef = "Abba123";
             second.CsvRecord.CohortRef = "Other reference";
 
-            var errors = _sut.ValidateFields(new List<ApprenticeshipUploadModel> { first, second } , TrainingProgrammes(), "ABBA123").ToList();
-            errors.Count.Should().Be(6);
+            var errors = _sut.ValidateCohortReference(new List<ApprenticeshipUploadModel> { first, second }, "ABBA123").ToList();
+            errors.Count.Should().Be(2);
             var messages = errors.Select(m => m.ToString()).ToList();
             messages.Should().Contain("The Cohort Reference must be the same for all learners in the file");
             messages.Should().Contain("The Cohort Reference does not match the current cohort");
@@ -90,8 +88,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             first.CsvRecord.CohortRef = "Other ref";
             second.CsvRecord.CohortRef = "Other ref";
 
-            var errors = _sut.ValidateFields(new List<ApprenticeshipUploadModel> { first, second }, TrainingProgrammes(), "ABBA123").ToList();
-            errors.Count.Should().Be(5);
+            var errors = _sut.ValidateCohortReference(new List<ApprenticeshipUploadModel> { first, second }, "ABBA123").ToList();
+
             var messages = errors.Select(m => m.ToString()).ToList();
             messages.Should().NotContain("The Cohort Reference must be the same for all learners in the file");
             messages.Should().Contain("The Cohort Reference does not match the current cohort");
@@ -115,7 +113,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                 new ApprenticeshipViewModel
                 {
                     FirstName = "Bob", LastName = "The cat", DateOfBirth = new DateTimeViewModel(8, 12, 1998), TrainingCode = "2", ULN = "1234567890", ProgType = 25,
-                    StartDate = new DateTimeViewModel(null, 8, 2120), EndDate = new DateTimeViewModel(null, 12, 2125), Cost = "15000", NINumber = "SE345678A", EmployerRef = "Abba123"
+                    StartDate = new DateTimeViewModel(null, 8, 2120), EndDate = new DateTimeViewModel(null, 12, 2125), Cost = "15000", EmployerRef = "Abba123"
                 }
             };
             var records = new List<CsvRecord>
@@ -134,12 +132,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                 new ApprenticeshipViewModel
                 {
                     FirstName = " ", LastName = new string('*', 101), DateOfBirth = new DateTimeViewModel(8, 12, 1998), TrainingCode = "2", ULN = "1234567890", ProgType = 25,
-                    StartDate = new DateTimeViewModel(null, 8, 2120), EndDate = new DateTimeViewModel(null, 12, 2125), Cost = "15000", NINumber = "SE345678A", EmployerRef = "Ab123"
+                    StartDate = new DateTimeViewModel(null, 8, 2120), EndDate = new DateTimeViewModel(null, 12, 2125), Cost = "15000", EmployerRef = "Ab123"
                 },
                 new ApprenticeshipViewModel
                 {
                     FirstName = new string('*', 101), LastName = "", DateOfBirth = new DateTimeViewModel(8, 12, 1998), TrainingCode = "2", ULN = "1234567890", ProgType = 25,
-                    StartDate = new DateTimeViewModel(null, 8, 2120), EndDate = new DateTimeViewModel(null, 12, 2125), Cost = "15000", NINumber = "SE345678A", EmployerRef = "Abba123"
+                    StartDate = new DateTimeViewModel(null, 8, 2120), EndDate = new DateTimeViewModel(null, 12, 2125), Cost = "15000", EmployerRef = "Abba123"
                 }
             };
 

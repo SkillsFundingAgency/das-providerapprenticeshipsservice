@@ -2907,6 +2907,11 @@ span.helpText {
   border-color: #28a197;
 }
 
+#apprentice-details .flash-alert .icon-green-tick {
+  background: url(../../dist/images/icon-green-tick.png) no-repeat 0 0;
+  padding-left: 50px;
+}
+
 #apprentice-details .bulk-upload-buttons .upload-btn {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -3065,7 +3070,7 @@ span.helpText {
   }
 }
 
-.dynamic-heading strong {
+.dynamic-heading strong, #bulk-upload-errors strong {
   font-weight: bold;
 }
 
@@ -3104,6 +3109,10 @@ span.helpText {
 
 #confirm-delete .secondary-text {
   color: #6f777b;
+}
+
+.error-details p {
+  margin-bottom: 0;
 }
 
 #review-cohorts {
@@ -3188,6 +3197,33 @@ span.helpText {
   }
   .provider-list-view td:nth-of-type(4):before {
     content: "Status";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  #bulk-upload-errors td:nth-of-type(1):before {
+    content: "Row";
+    font-weight: normal;
+    margin-top: 5px;
+    min-height: 30px;
+  }
+  #bulk-upload-errors td:nth-of-type(2):before {
+    content: "ULN";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  #bulk-upload-errors td:nth-of-type(3):before {
+    content: "Name";
+    font-weight: normal;
+    margin-top: 5px;
+    word-wrap: break-word;
+  }
+  #bulk-upload-errors td:nth-of-type(4):before {
+    content: "Date of Birth";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  #bulk-upload-errors td:nth-of-type(5):before {
+    content: "Error(s)";
     font-weight: normal;
     margin-top: 5px;
   }

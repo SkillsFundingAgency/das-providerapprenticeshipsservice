@@ -27,6 +27,7 @@ using TrainingType = SFA.DAS.Commitments.Api.Types.TrainingType;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -305,7 +306,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             apprenticeship.ProviderId = providerId;
 
-            var warningValidator = new ApprenticeshipViewModelApproveValidator();
+            var warningValidator = new ApprenticeshipViewModelApproveValidator(new WebApprenticeshipValidationText());
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
