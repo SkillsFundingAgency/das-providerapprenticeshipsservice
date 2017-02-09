@@ -373,6 +373,7 @@
     <Compile Include="Models\BulkUpload\BulkUploadResult.cs" />
     <Compile Include="Models\BulkUpload\UploadError.cs" />
     <Compile Include="Models\CohortsViewModel.cs" />
+    <Compile Include="Models\CommitmentDeleteViewModel.cs" />
     <Compile Include="Models\CommitmentListItemViewModel.cs" />
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentDetailsViewModel.cs" />
@@ -395,7 +396,6 @@
     <Compile Include="Models\UploadRowErrorViewModel.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
     <Compile Include="Orchestrators\Mappers\BulkUploadMapper.cs" />
-
     <Compile Include="Orchestrators\BaseCommitmentOrchestrator.cs" />
     <Compile Include="Orchestrators\BulkUpload\InstrumentedBulkUploadValidator.cs" />
     <Compile Include="Orchestrators\BulkUpload\InstrumentedBulkUploadFileParser.cs" />
@@ -421,6 +421,7 @@
     <Compile Include="Validation\ApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelApproveValidator.cs" />
     <Compile Include="Validation\CsvRecordValidator.cs" />
+    <Compile Include="Validation\DeleteCohortConfirmationViewModelValidator.cs" />
     <Compile Include="Validation\DeleteConfirmationViewModelValidator.cs" />
     <Compile Include="Validation\FinishEditingViewModelValidator.cs" />
     <Compile Include="Validation\Text\ApprenticeshipFileValidationText.cs" />
@@ -588,6 +589,7 @@
     <Content Include="Views\ManageApprentices\Details.cshtml" />
     <Content Include="Views\Commitment\DeleteConfirmation.cshtml" />
     <Content Include="Views\Error\_Error403.cshtml" />
+    <Content Include="Views\Commitment\DeleteCohort.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

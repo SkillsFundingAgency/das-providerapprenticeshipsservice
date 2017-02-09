@@ -124,6 +124,8 @@ else
     </div>
 }
 
+<a class="button delete-button" href="@Url.Action("DeleteCohort", new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Cancel">Delete</a>
+
 @section breadcrumb {
     <div class="breadcrumbs">
         <a href="@Model.BackLinkUrl" aria-label="Back" class="back-link">Back</a>

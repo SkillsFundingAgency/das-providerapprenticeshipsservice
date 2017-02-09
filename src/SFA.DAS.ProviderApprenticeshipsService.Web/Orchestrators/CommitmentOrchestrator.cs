@@ -29,6 +29,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenti
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
+using WebGrease.Css.Extensions;
+
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public class CommitmentOrchestrator : BaseCommitmentOrchestrator
@@ -273,6 +275,32 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Apprenticeships = apprenticeships,
                 LatestMessage = message,
                 PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed
+            };
+        }
+
+        public async Task<DeleteCommitmentViewModel> GetDeleteCommitmentModel(long providerId, string hashedCommitmentId)
+        {
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
+            var programSummary = data.Commitment.Apprenticeships
+                .GroupBy(m => m.TrainingName)
+                .Select(m => $"{m.Count()} {m.Key}")
+                .ToList();
+
+            return new DeleteCommitmentViewModel
+            {
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId,
+                Employer = data.Commitment.LegalEntityName,
+                CohortReference = hashedCommitmentId,
+                NumberOfApprentaceships  = data.Commitment.Apprenticeships.Count,
+                ApprentaceshipTrainingPrograms = programSummary
             };
         }
 
