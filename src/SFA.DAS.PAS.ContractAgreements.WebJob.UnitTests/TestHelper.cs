@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Moq;
 
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
 using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses;
 
@@ -18,13 +19,10 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
     {
         public Mock<IContractFeedProcessorHttpClient> MockFeedProcessorClient;
 
-        private readonly string _latestFileName;
-
         private readonly string _urlToApi;
 
-        public TestHelper(string latestFileName, string urlToApi)
+        public TestHelper(string urlToApi)
         {
-            _latestFileName = latestFileName;
             _urlToApi = urlToApi;
         }
 
@@ -34,7 +32,8 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
             MockFeedProcessorClient = GetMockFeedProcessorClient();
 
             var reader = new ContractFeedReader(MockFeedProcessorClient.Object, Mock.Of<ILog>());
-            var dataProvider = new ContractFeedProcessor(reader, new MockContractFeedEventValidator(), Mock.Of<ILog>());
+            var configuration = new ContractFeedConfiguration { ReadMaxPages = 6 };
+            var dataProvider = new ContractFeedProcessor(reader, new MockContractFeedEventValidator(), configuration, Mock.Of<ILog>());
 
             var service = new ProviderAgreementStatusService(dataProvider, repository, Mock.Of<ILog>());
 
@@ -61,7 +60,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
 
         private HttpResponseMessage CreateTestData(int fileNo)
         {
-            var fileName = fileNo < 1 ? _latestFileName : $"{fileNo:D3}";
+            var fileName = fileNo < 1 ? "latest" : $"{fileNo:D3}";
             var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var fileContent = File.ReadAllText(dir + $"\\TestData\\{fileName}.xml");
             return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(fileContent) };
@@ -76,15 +75,15 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
                 _FakeResponses.Add(uri, responseMessage);
             }
 
-            protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
+            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
             {
                 if (_FakeResponses.ContainsKey(request.RequestUri))
                 {
-                    return _FakeResponses[request.RequestUri];
+                    return Task.FromResult(_FakeResponses[request.RequestUri]);
                 }
                 else
                 {
-                    return new HttpResponseMessage(HttpStatusCode.NotFound) { RequestMessage = request };
+                    return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotFound) { RequestMessage = request });
                 }
 
             }

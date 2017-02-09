@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 
+using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
+
 namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
     public interface IProviderAgreementStatusRepository
@@ -9,5 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
         Task<ContractFeedEvent> GetMostRecentContractFeedEvent();
 
         Task<int> GetMostRecentPageNumber();
+
+        Task SaveLastRun(EventRun lastRun);
     }
 }

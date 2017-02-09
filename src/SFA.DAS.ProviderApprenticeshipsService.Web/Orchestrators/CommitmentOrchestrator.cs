@@ -500,6 +500,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 HashedApprenticeshipId = _hashingService.HashValue(x.Id),
                 ApprenticeshipName = x.ApprenticeshipName,
                 ULN = x.ULN,
+                TrainingCode = x.TrainingCode,
                 TrainingName = x.TrainingName,
                 StartDate = x.StartDate,
                 EndDate = x.EndDate,

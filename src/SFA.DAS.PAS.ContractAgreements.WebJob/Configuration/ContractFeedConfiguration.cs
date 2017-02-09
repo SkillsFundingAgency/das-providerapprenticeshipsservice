@@ -16,6 +16,8 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.Configuration
 
         public string BaseAddress { get; set; }
 
+        public int ReadMaxPages { get; set; }
+
         // Needed?
         public string DatabaseConnectionString { get; set; }
 
