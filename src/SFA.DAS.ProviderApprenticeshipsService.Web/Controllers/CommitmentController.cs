@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -38,6 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("AgreementNotSigned")]
         public async Task<ActionResult> AgreementNotSigned(long providerId, string hashedCommitmentId, string redirectTo)
         {
@@ -120,6 +122,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/Edit/{hashedApprenticeshipId}", Name = "EditApprenticeship")]
         public async Task<ActionResult> Edit(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
@@ -155,7 +158,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return RedirectToAction("Details", new { apprenticeship.ProviderId, apprenticeship.HashedCommitmentId });
         }
 
-        [HttpGet]
         [Route("{hashedCommitmentId}/{hashedApprenticeshipId}/Delete")]
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> DeleteConfirmation(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
@@ -187,6 +189,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/AddApprentice")]
         public async Task<ActionResult> Create(long providerId, string hashedCommitmentId)
         {
@@ -221,8 +224,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{hashedCommitmentId}/Finished")]
         [OutputCache(CacheProfile = "NoCache")]
+        [Route("{hashedCommitmentId}/Finished")]
         public async Task<ActionResult> FinishEditing(long providerId, string hashedCommitmentId)
         {
             var viewModel = await _commitmentOrchestrator.GetFinishEditing(providerId, hashedCommitmentId);
@@ -232,6 +235,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("{hashedCommitmentId}/Finished")]
+        // [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> FinishEditing(FinishEditingViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -278,14 +282,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/Submit")]
         public async Task<ActionResult> Submit(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
         {
-            var commitment = await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId);
+            try
+            {
+                var commitment = await _commitmentOrchestrator.GetCommitmentCheckState(providerId, hashedCommitmentId);
 
-            var model = new SubmitCommitmentViewModel { ProviderId = providerId, HashedCommitmentId = hashedCommitmentId, EmployerName = commitment.LegalEntityName, SaveStatus = saveStatus };
+                var model = new SubmitCommitmentViewModel
+                {
+                    ProviderId = providerId,
+                    HashedCommitmentId = hashedCommitmentId,
+                    EmployerName = commitment.LegalEntityName,
+                    SaveStatus = saveStatus
+                };
 
-            return View(model);
+                return View(model);
+            }
+            catch (InvalidStateException)
+            {
+                return RedirectToAction("Cohorts", new { providerId });
+            }
         }
 
         [HttpPost]

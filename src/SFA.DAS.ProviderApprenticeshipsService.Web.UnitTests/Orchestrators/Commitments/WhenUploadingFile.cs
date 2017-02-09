@@ -10,8 +10,10 @@ using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
@@ -65,6 +67,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task TestPerformance()
         {
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+                .Returns(Task.FromResult(new GetCommitmentQueryResponse
+                {
+                    Commitment = new Commitment
+                    {
+                        AgreementStatus = AgreementStatus.NotAgreed,
+                        EditStatus = EditStatus.ProviderOnly
+                    }
+                }));
+
             var upper = 40 * 1000;
             var testData = new List<string>();
             for (int i = 0; i < upper; i++)
@@ -96,6 +108,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mockMediator.Setup(x => x.SendAsync(It.IsAny<BulkUploadApprenticeshipsCommand>()))
                 .ReturnsAsync(new Unit())
                 .Callback((object x) => commandArgument = x as BulkUploadApprenticeshipsCommand);
+
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+                .Returns(Task.FromResult(new GetCommitmentQueryResponse
+                {
+                    Commitment = new Commitment
+                    {
+                        AgreementStatus = AgreementStatus.NotAgreed,
+                        EditStatus = EditStatus.ProviderOnly
+                    }
+                }));
 
             var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111 };
             var file = await _sut.UploadFile(model);

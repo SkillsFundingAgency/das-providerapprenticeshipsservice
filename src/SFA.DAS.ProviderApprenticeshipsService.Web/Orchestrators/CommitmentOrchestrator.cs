@@ -31,7 +31,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
-    public class CommitmentOrchestrator
+    public class CommitmentOrchestrator : BaseCommitmentOrchestrator
     {
         private readonly IMediator _mediator;
         private readonly ICommitmentStatusCalculator _statusCalculator;
@@ -48,7 +48,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator, 
             IHashingService hashingService, IProviderCommitmentsLogger logger, ProviderApprenticeshipsServiceConfiguration configuration)
-
+            : base (mediator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -255,6 +255,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
+            AssertCommitmentStatus(data.Commitment, EditStatus.ProviderOnly);
+            AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
+
             var message = await GetLatestMessage(providerId, commitmentId, true);
 
             var apprenticeships = MapFrom(data.Commitment.Apprenticeships);
@@ -273,11 +276,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
+        public async Task<CommitmentListItemViewModel> GetCommitmentCheckState(long providerId, string hashedCommitmentId)
+        {
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            _logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}", providerId, commitmentId);
+
+            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
+            AssertCommitmentStatus(data.Commitment, EditStatus.ProviderOnly);
+            AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
+
+            return MapFrom(data.Commitment);
+        }
+
         public async Task<CommitmentListItemViewModel> GetCommitment(long providerId, string hashedCommitmentId)
         {
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
 
-            _logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}", providerId: providerId, commitmentId: commitmentId);
+            _logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}", providerId, commitmentId);
 
             var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
             {
@@ -293,6 +314,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            await AssertCommitmentStatus(commitmentId, providerId);
 
             _logger.Info($"Getting apprenticeship:{apprenticeshipId} for provider:{providerId}", providerId: providerId, commitmentId: commitmentId, apprenticeshipId: apprenticeshipId);
 
@@ -326,6 +348,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 HashedCommitmentId = hashedCommitmentId
             };
 
+            await AssertCommitmentStatus(commitmentId, providerId);
+
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
@@ -336,6 +360,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeshipViewModel)
         {
             var apprenticeship = await MapFrom(apprenticeshipViewModel);
+            await AssertCommitmentStatus(apprenticeship.CommitmentId, apprenticeship.ProviderId);
+
             await _mediator.SendAsync(new CreateApprenticeshipCommand
             {
                 ProviderId = apprenticeshipViewModel.ProviderId,
@@ -348,6 +374,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         public async Task UpdateApprenticeship(ApprenticeshipViewModel apprenticeshipViewModel)
         {
             var apprenticeship = await MapFrom(apprenticeshipViewModel);
+            await AssertCommitmentStatus(apprenticeship.CommitmentId, apprenticeship.ProviderId);
+
             await _mediator.SendAsync(new UpdateApprenticeshipCommand
             {
                 ProviderId = apprenticeshipViewModel.ProviderId,
@@ -366,6 +394,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         public async Task SubmitCommitment(long providerId, string hashedCommitmentId, SaveStatus saveStatus, string message)
         {
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            await AssertCommitmentStatus(commitmentId, providerId);
+
             _logger.Info($"Submitting ({saveStatus}) Commitment for provider:{providerId} commitment:{commitmentId}", providerId: providerId, commitmentId: commitmentId);
 
             if (saveStatus == SaveStatus.Approve || saveStatus == SaveStatus.ApproveAndSend)
@@ -545,6 +575,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 Id = hashedApprenticeshipId,
                 CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
+                ProviderId = viewModel.ProviderId,
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
                 DateOfBirth = viewModel.DateOfBirth.DateTime,
@@ -585,24 +616,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     .Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>())
                     .OrderBy(m => m.Title)
                     .ToList();
-        }
-
-        private static void AssertCommitmentStatus(Commitment commitment, params AgreementStatus[] allowedAgreementStatuses)
-        {
-            if (commitment == null)
-                throw new InvalidStateException("Null commitment");
-
-            if (!allowedAgreementStatuses.Contains(commitment.AgreementStatus))
-                throw new InvalidStateException($"Invalid commitment state (agreement status is {commitment.AgreementStatus}, expected {string.Join(",", allowedAgreementStatuses)})");
-        }
-
-        private static void AssertCommitmentStatus(Commitment commitment, params EditStatus[] allowedEditStatuses)
-        {
-            if (commitment == null)
-                throw new InvalidStateException("Null commitment");
-
-            if (!allowedEditStatuses.Contains(commitment.EditStatus))
-                throw new InvalidStateException($"Invalid commitment state (edit status is {commitment.EditStatus}, expected {string.Join(",", allowedEditStatuses)})");
         }
     }
 }

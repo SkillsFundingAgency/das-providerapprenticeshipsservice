@@ -5,6 +5,13 @@
     ViewBag.PageId = "account-home";
 }
 
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <p style="border: 5px solid pink; text-align: center; padding: 20px; margin-top: 20px;">
+        @Model.Message
+    </p>
+}
+
 <div class="grid-row">
     <div class="column-full home-page">
         <h1 class="heading-xlarge">@Model.ProviderName</h1>
