@@ -4,7 +4,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
 {
     public class SubmitCommitmentCommandValidator : AbstractValidator<SubmitCommitmentCommand>
     {
-
+        // TODO: Need to validate the Command!!!
 
     }
 }
