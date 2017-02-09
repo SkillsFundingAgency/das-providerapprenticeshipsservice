@@ -17,22 +17,23 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
         private const string UrlToApi = "https://services-at.fct-sfa.com";
 
         [Test]
-        public async Task FetchAllDocument()
+        public async Task FetchAllDocuments()
         {
+            // Feed is set to have 13 pages
+            // Config is set to read 6 pages at a time
             var helper = new TestHelper("latest", UrlToApi);
             var repository = new InMemoryProviderAgreementStatusRepository(Mock.Of<ILog>());
             var service = helper.SetUpProviderAgreementStatusService(repository);
 
-            repository.LastPageRead.Should().Be(0);
             await service.UpdateProviderAgreementStatuses();
             helper.MockFeedProcessorClient.Verify(m => m.GetAuthorizedHttpClient(), Times.Exactly(6)); // reading 6 pages
             repository.LastPageRead.Should().Be(6);
-            repository.Data.Count.Should().Be(60); // Eash page has 10 contract * 6 pages
+            repository.Data.Count.Should().Be(60); // Each page has 10 contract * 6 pages
 
             await service.UpdateProviderAgreementStatuses();
             helper.MockFeedProcessorClient.Verify(m => m.GetAuthorizedHttpClient(), Times.Exactly(12)); // reading 6 more pages
             repository.LastPageRead.Should().Be(12);
-            repository.Data.Count.Should().Be(120); // -||-
+            repository.Data.Count.Should().Be(120);
 
             await service.UpdateProviderAgreementStatuses();
             helper.MockFeedProcessorClient.Verify(m => m.GetAuthorizedHttpClient(), Times.Exactly(14)); // reading latest + 1 (with 404 if no new pages), and the latest

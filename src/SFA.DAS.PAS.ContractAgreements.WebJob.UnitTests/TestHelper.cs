@@ -20,7 +20,6 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
         public Mock<IContractFeedProcessorHttpClient> MockFeedProcessorClient;
 
         private readonly string _latestFileName;
-
         private readonly string _urlToApi;
 
         public TestHelper(string latestFileName, string urlToApi)
@@ -78,15 +77,15 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
                 _FakeResponses.Add(uri, responseMessage);
             }
 
-            protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
+            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
             {
                 if (_FakeResponses.ContainsKey(request.RequestUri))
                 {
-                    return _FakeResponses[request.RequestUri];
+                    return Task.FromResult(_FakeResponses[request.RequestUri]);
                 }
                 else
                 {
-                    return new HttpResponseMessage(HttpStatusCode.NotFound) { RequestMessage = request };
+                    return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotFound) { RequestMessage = request });
                 }
 
             }

@@ -8,7 +8,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses
 {
-    public class InMemoryProviderAgreementStatusRepository : IProviderAgreementStatusRepository
+    public sealed class InMemoryProviderAgreementStatusRepository : IProviderAgreementStatusRepository
     {
         private readonly ILog _logger;
 
@@ -28,16 +28,16 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses
             return Task.FromResult(0);
         }
 
-        public async Task<IEnumerable<ContractFeedEvent>> GetContractEvents(long providerId)
+        public Task<IEnumerable<ContractFeedEvent>> GetContractEvents(long providerId)
         {
-            return Data.Where(e => e.ProviderId == providerId);
+            return Task.FromResult(Data.Where(e => e.ProviderId == providerId));
         }
 
-        public async Task<ContractFeedEvent> GetMostRecentContractFeedEvent()
+        public Task<ContractFeedEvent> GetMostRecentContractFeedEvent()
         {
-            if (Data.Count == 0) return null;
+            if (Data.Count == 0) return Task.FromResult((ContractFeedEvent)null);
 
-            return Data.OrderByDescending(e => e.Updated).First();
+            return Task.FromResult(Data.OrderByDescending(e => e.Updated).First());
         }
 
         public Task<int> GetMostRecentPageNumber()
