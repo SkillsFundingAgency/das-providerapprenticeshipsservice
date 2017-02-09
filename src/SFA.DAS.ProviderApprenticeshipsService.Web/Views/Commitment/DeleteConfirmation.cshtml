@@ -13,6 +13,8 @@
        
         <form action="@Url.Action("DeleteConfirmation")" method="POST">
             @Html.AntiForgeryToken()
+            @Html.HiddenFor(m=> m.ApprenticeshipName)
+            @Html.HiddenFor(m=> m.DateOfBirth)
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
             <h1 class="heading-xlarge">Confirm apprentice deletion</h1>
