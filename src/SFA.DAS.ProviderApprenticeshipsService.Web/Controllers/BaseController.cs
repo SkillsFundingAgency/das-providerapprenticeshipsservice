@@ -3,9 +3,9 @@ using System.Security.Claims;
 using System.Web.Mvc;
 using System.Net;
 using System.Web;
-
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -22,8 +22,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             TempData["InfoMessage"] = message;
         }
-
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            if (filterContext.Exception is InvalidStateException)
+            {
+                filterContext.ExceptionHandled = true;
+                filterContext.Result = RedirectToAction("InvalidState", "Error");
+            }
+        }
+		protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             const string ProviderIdKey = "providerId";
 

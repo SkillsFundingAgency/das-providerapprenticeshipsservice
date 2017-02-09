@@ -21,6 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var commitment = new Commitment
             {
                 AgreementStatus = AgreementStatus.EmployerAgreed,
+                EditStatus  = EditStatus.ProviderOnly,
                 Apprenticeships = new List<Apprenticeship>
                 {
                     new Apprenticeship (),
@@ -41,7 +42,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             var commitment = new Commitment
             {
-                AgreementStatus = AgreementStatus.BothAgreed,
+                AgreementStatus = AgreementStatus.ProviderAgreed,
+                EditStatus = EditStatus.ProviderOnly,
                 Apprenticeships = new List<Apprenticeship>
                 {
                     new Apprenticeship (),

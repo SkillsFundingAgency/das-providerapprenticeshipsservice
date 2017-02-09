@@ -395,6 +395,8 @@
     <Compile Include="Models\UploadRowErrorViewModel.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
     <Compile Include="Orchestrators\Mappers\BulkUploadMapper.cs" />
+
+    <Compile Include="Orchestrators\BaseCommitmentOrchestrator.cs" />
     <Compile Include="Orchestrators\BulkUpload\InstrumentedBulkUploadValidator.cs" />
     <Compile Include="Orchestrators\BulkUpload\InstrumentedBulkUploadFileParser.cs" />
     <Compile Include="Orchestrators\BulkUpload\BulkUploadFileParser.cs" />
@@ -577,6 +579,7 @@
     <Content Include="Views\Account\NoAccount.cshtml" />
     <Content Include="Views\BulkUpload\UploadApprenticeships.cshtml" />
     <Content Include="Views\BulkUpload\UploadApprenticeshipsUnsuccessful.cshtml" />
+    <Content Include="Views\Error\_InvalidState.cshtml" />
     <Content Include="Views\Commitment\AgreementNotSigned.cshtml" />
     <Content Include="Views\Commitment\Cohorts.cshtml" />
     <Content Include="Views\Commitment\RequestList.cshtml" />
