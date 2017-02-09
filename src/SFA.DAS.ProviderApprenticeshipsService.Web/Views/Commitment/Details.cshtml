@@ -123,7 +123,7 @@ else
                 @foreach (var trainingGroup in Model.Apprenticeships.OrderBy(g => g.TrainingName).GroupBy(g => g.TrainingCode))
                 {
                     var groupName = String.IsNullOrEmpty(trainingGroup.Key) ? "No training course" : @trainingGroup.First().TrainingName;
-                    var groupTitle = String.Format($"{trainingGroup.Count()} - {groupName}");
+                    var groupTitle = String.Format($"{trainingGroup.Count()} x {groupName}");
                     var trainingCode = String.IsNullOrEmpty(trainingGroup.Key) ? String.Empty : @trainingGroup.First().TrainingCode;
 
                     <div class="group-header">
