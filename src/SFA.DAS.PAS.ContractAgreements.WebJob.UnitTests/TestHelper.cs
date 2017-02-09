@@ -19,12 +19,10 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
     {
         public Mock<IContractFeedProcessorHttpClient> MockFeedProcessorClient;
 
-        private readonly string _latestFileName;
         private readonly string _urlToApi;
 
-        public TestHelper(string latestFileName, string urlToApi)
+        public TestHelper(string urlToApi)
         {
-            _latestFileName = latestFileName;
             _urlToApi = urlToApi;
         }
 
@@ -62,7 +60,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
 
         private HttpResponseMessage CreateTestData(int fileNo)
         {
-            var fileName = fileNo < 1 ? _latestFileName : $"{fileNo:D3}";
+            var fileName = fileNo < 1 ? "latest" : $"{fileNo:D3}";
             var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var fileContent = File.ReadAllText(dir + $"\\TestData\\{fileName}.xml");
             return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(fileContent) };

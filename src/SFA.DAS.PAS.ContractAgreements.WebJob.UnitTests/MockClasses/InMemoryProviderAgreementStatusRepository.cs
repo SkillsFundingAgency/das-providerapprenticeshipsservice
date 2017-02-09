@@ -13,7 +13,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses
         private readonly ILog _logger;
 
         public readonly List<ContractFeedEvent> Data;
-        public int LastPageRead;
+        public int LastFullPageRead;
 
         public InMemoryProviderAgreementStatusRepository(ILog logger)
         {
@@ -42,12 +42,12 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses
 
         public Task<int> GetMostRecentPageNumber()
         {
-            return Task.FromResult(LastPageRead);
+            return Task.FromResult(LastFullPageRead);
         }
 
         public Task SaveLastRun(EventRun lastRun)
         {
-            LastPageRead = lastRun.NewLastReadPageNumber;
+            LastFullPageRead = lastRun.NewLastReadPageNumber;
             return Task.Delay(1);
         }
     }
