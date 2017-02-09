@@ -141,6 +141,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         public async Task<UploadApprenticeshipsViewModel> GetUploadModel(long providerid, string hashedcommitmentid)
         {
             var commitmentId = _hashingService.DecodeValue(hashedcommitmentid);
+            await AssertCommitmentStatus(commitmentId, providerid);
             var result = await _mediator.SendAsync(new GetCommitmentQueryRequest
                                               {
                                                   ProviderId = providerid,
@@ -157,8 +158,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return model;
         }
 
-        public UploadApprenticeshipsViewModel GetUnsuccessfulUpload(List<UploadError> errors, long providerId, string hashedCommitmentId)
+        public async Task<UploadApprenticeshipsViewModel> GetUnsuccessfulUpload(List<UploadError> errors, long providerId, string hashedCommitmentId)
         {
+
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            await AssertCommitmentStatus(commitmentId, providerId);
             var result = _mapper.MapErrors(errors);
             var fileErrors = errors.Where(m => m.IsGeneralError);
 
