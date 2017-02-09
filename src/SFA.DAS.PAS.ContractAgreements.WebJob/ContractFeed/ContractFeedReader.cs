@@ -26,26 +26,29 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 
         private const string VendorAtomMediaType = "application/vnd.sfa.contract.v1+atom+xml";
 
-        public void Read(int pageNumber, Action<int, string> pageWriter)
+        public void Read(int pageNumber, Func<int, string, bool, bool> pageWriter)
         {
             var url = $"{_httpClient.BaseAddress}{MostRecentPageUrl}/{pageNumber}";
             var response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, url);
             SyndicationFeed feed;
+            bool isLastPage;
             if (response.StatusCode != HttpStatusCode.NotFound)
             {
                 feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
-                pageWriter(ExtractPageNumberFromFeedItem(feed), response.Content);
+                isLastPage = feed?.Links.All(li => li.RelationshipType != "next-archive") ?? false;
+                pageWriter(ExtractPageNumberFromFeedItem(feed), response.Content, isLastPage);
             }
             else
             {
                 var urlLatest = $"{_httpClient.BaseAddress}{MostRecentPageUrl}";
                 var responseLatest = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, urlLatest);
                 feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(responseLatest.Content)));
-                pageWriter(ExtractPageNumberFromFeedItem(feed), responseLatest.Content);
+                isLastPage = feed?.Links.All(li => li.RelationshipType != "next-archive") ?? false;
+                pageWriter(ExtractPageNumberFromFeedItem(feed), responseLatest.Content, isLastPage);
             }
 
             SyndicationLink link;
-
+            bool takeMore = true;
             do
             {
                 link = feed?.Links.FirstOrDefault(li => li.RelationshipType == "next-archive");
@@ -54,22 +57,19 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
                 {
                     response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, link.Uri.ToString());
                     feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
-                    pageWriter(ExtractPageNumberFromFeedItem(feed), response.Content);
+                    isLastPage = feed?.Links.All(li => li.RelationshipType != "next-archive") ?? false;
+                    takeMore = pageWriter(ExtractPageNumberFromFeedItem(feed), response.Content, isLastPage);
                 }
-            } while (link != null);
+            } while (link != null && takeMore);
         }
 
         private static int ExtractPageNumberFromFeedItem(SyndicationFeed feed)
         {
             int pageNumber;
 
-            if (feed.Links.All(li => li.RelationshipType != "next-archive"))
+            if (feed.Links.All(li => li.RelationshipType != "prev-archive"))
             {
-                pageNumber = 0;
-            }
-            else if (feed.Links.All(li => li.RelationshipType != "prev-archive"))
-            {
-                pageNumber = 1;
+                pageNumber = 1; // First page
             }
             else
             {
