@@ -45,7 +45,7 @@
 
 //bulk upload styles
 
-#apprentice-details{
+#apprentice-details,#approve-cohorts{
     .flash-alert{
         border-color:$turquoise;
          .icon-green-tick{
@@ -237,7 +237,7 @@
     }
 }
 
-#edit-apprentice{
+#edit-apprentice, #apprentice-details{
     .delete-button{
         background-color:$error-colour;
         float:right;

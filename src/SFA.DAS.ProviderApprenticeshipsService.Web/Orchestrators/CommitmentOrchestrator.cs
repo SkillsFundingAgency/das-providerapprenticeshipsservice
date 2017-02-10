@@ -201,7 +201,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderId = providerId,
                 Commitments = await MapFrom(data, _latestMessageToProviderFunc),
                 PageTitle = "Approve cohorts",
-                PageId = "Approve cohorts",
+                PageId = "approve-cohorts",
                 PageHeading = "Approve cohorts",
                 PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSurfix(data.ToList().Count)} that need your approval:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
