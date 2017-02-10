@@ -97,24 +97,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
-        private string GetReturnToListUrl(long providerId)
-        {
-            switch (GetRequestStatusFromSession())
-            {
-                case RequestStatus.WithEmployerForApproval:
-                case RequestStatus.SentForReview:
-                    return Url.Action("WithEmployer", new { providerId });
-                case RequestStatus.NewRequest:
-                    return Url.Action("NewRequests", new { providerId });
-                case RequestStatus.ReadyForReview:
-                   return Url.Action("ReadyForReview", new { providerId });
-                case RequestStatus.ReadyForApproval:
-                   return Url.Action("ReadyForApproval", new { providerId });
-                default:
-                   return Url.Action("Cohorts", new { providerId });
-            }
-        }
-
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/details/delete")]
         public async Task<ActionResult> DeleteCohort(long providerId, string hashedCommitmentId)
@@ -142,6 +124,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
 
             // ToDo: Delete
+            _commitmentOrchestrator.DeleteCommitment(viewModel);
+
             SetInfoMessage("Cohort deleted");
 
             var currentStatusCohortAny = 
@@ -384,6 +368,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
 
             return View(new AcknowledgementViewModel { CommitmentReference = commitment.Reference, EmployerName = commitment.LegalEntityName, ProviderName = commitment.ProviderName, Message = message, RedirectUrl = url, RedirectLinkText = linkText });
+        }
+
+        private string GetReturnToListUrl(long providerId)
+        {
+            switch (GetRequestStatusFromSession())
+            {
+                case RequestStatus.WithEmployerForApproval:
+                case RequestStatus.SentForReview:
+                    return Url.Action("WithEmployer", new { providerId });
+                case RequestStatus.NewRequest:
+                    return Url.Action("NewRequests", new { providerId });
+                case RequestStatus.ReadyForReview:
+                    return Url.Action("ReadyForReview", new { providerId });
+                case RequestStatus.ReadyForApproval:
+                    return Url.Action("ReadyForApproval", new { providerId });
+                default:
+                    return Url.Action("Cohorts", new { providerId });
+            }
         }
 
         private RequestStatus GetRequestStatusFromSession()

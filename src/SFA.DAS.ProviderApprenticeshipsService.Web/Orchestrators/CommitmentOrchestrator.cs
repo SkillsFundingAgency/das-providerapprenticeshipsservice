@@ -154,6 +154,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
+        public async Task DeleteCommitment(DeleteCommitmentViewModel viewModel)
+        {
+            var commitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId);
+            _logger.Info($"Deleting commitment {viewModel.CohortReference}", viewModel.ProviderId, commitmentId);
+
+            await _mediator.SendAsync(new DeleteApprenticeshipCommand
+            {
+                ProviderId = viewModel.ProviderId,
+                ApprenticeshipId = commitmentId
+            });
+        }
+
         public async Task<string> DeleteApprenticeship(DeleteConfirmationViewModel viewModel)
         {
             var apprenticeshipId = _hashingService.DecodeValue(viewModel.HashedApprenticeshipId);
@@ -288,9 +300,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
+            Func<string, string> textOrDefault = txt => !string.IsNullOrEmpty(txt) ? txt : "without training course details";
             var programSummary = data.Commitment.Apprenticeships
                 .GroupBy(m => m.TrainingName)
-                .Select(m => $"{m.Count()} {m.Key}")
+                .Select(m => $"{m.Count()} {textOrDefault(m.Key)}")
                 .ToList();
 
             return new DeleteCommitmentViewModel
