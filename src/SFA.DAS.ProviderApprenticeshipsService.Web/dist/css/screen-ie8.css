@@ -2514,6 +2514,10 @@ span.helpText {
   margin-top: 0.625em;
 }
 
+#apprentice-details .alert-default {
+  margin-top: 25px;
+}
+
 #apprentice-details .flash-alert {
   border-color: #28a197;
 }
@@ -2686,10 +2690,6 @@ span.helpText {
   color: #6f777b;
 }
 
-.error-details p {
-  margin-bottom: 0;
-}
-
 #review-cohorts {
   color: #fff;
   margin: 30px 0;
@@ -2719,6 +2719,10 @@ span.helpText {
   margin: auto;
   margin-left: 3.3333%;
   width: 31%;
+}
+
+.error-details p {
+  margin-bottom: 0;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
