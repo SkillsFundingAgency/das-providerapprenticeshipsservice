@@ -79,7 +79,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                         sql:
                             "SELECT TOP 1 [PageNumber] "
                           + "FROM [dbo].[ContractFeedEventRun] "
-                          + "ORDER BY [PageNumber] desc",
+                          + "ORDER BY [Updated] desc",
                         commandType: CommandType.Text,
                         transaction: trans)).SingleOrDefault();
                     trans.Commit();
