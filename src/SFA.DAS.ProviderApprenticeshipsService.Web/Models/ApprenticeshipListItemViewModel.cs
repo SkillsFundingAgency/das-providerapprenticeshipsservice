@@ -10,6 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public decimal? Cost { get; internal set; }
         public DateTime? EndDate { get; internal set; }
         public DateTime? StartDate { get; internal set; }
+        public string TrainingCode { get; internal set; }
         public string TrainingName { get; internal set; }
         public string ULN { get; internal set; }
         public bool CanBeApprove { get; internal set; }

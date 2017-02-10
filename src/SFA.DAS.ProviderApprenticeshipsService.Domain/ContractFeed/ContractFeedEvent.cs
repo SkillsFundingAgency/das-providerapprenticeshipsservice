@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Domain
+namespace SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed
 {
     public class ContractFeedEvent
     {

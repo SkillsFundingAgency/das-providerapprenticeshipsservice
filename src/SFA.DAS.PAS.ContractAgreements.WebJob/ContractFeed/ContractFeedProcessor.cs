@@ -4,7 +4,8 @@ using System.Linq;
 using System.Xml.Linq;
 
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
+using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
@@ -17,21 +18,30 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 
         private readonly IContractFeedEventValidator _validator;
 
+        private readonly ContractFeedConfiguration _configuration;
+
         private readonly ILog _logger;
 
         public ContractFeedProcessor(
             ContractFeedReader reader, 
-            IContractFeedEventValidator validator, 
+            IContractFeedEventValidator validator,
+            ContractFeedConfiguration configuration,
             ILog logger)
         {
             _reader = reader;
             _validator = validator;
+            _configuration = configuration;
             _logger = logger;
         }
 
-        public void ReadEvents(int lastPageNumber, Guid lastBookmarkedItemId, Action<int, IEnumerable<ContractFeedEvent>> saveRecordsAction)
+        public EventRun ReadEvents(int lastPageNumber, Guid lastBookmarkedItemId, Action<int, IEnumerable<ContractFeedEvent>> saveRecordsAction)
         {
-            _reader.Read(lastPageNumber, (pageNumber, pageContent) =>
+            _logger.Info($"Reading {_configuration.ReadMaxPages} pages");
+            var newLastReadPageNumber = lastPageNumber;
+            var contractCount = 0;
+            var pagesRead = 0;
+
+            _reader.Read(lastPageNumber, (pageNumber, pageContent, isLastPage) =>
             {
                 var doc = XDocument.Parse(pageContent);
 
@@ -47,7 +57,20 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 
                 _logger.Info($"Adding: {newContractDataPage.Count} from page: {pageNumber}");
                 saveRecordsAction(pageNumber, newContractDataPage);
+
+                newLastReadPageNumber = isLastPage ? pageNumber -1 : pageNumber;
+
+                contractCount += newContractDataPage.Count;
+                pagesRead += 1;
+                return lastPageNumber + (_configuration.ReadMaxPages-1) > pageNumber;
             });
+
+            return new EventRun
+                       {
+                           NewLastReadPageNumber = newLastReadPageNumber,
+                           ContractCount = contractCount,
+                           PagesRead = pagesRead
+                       };
         }
 
         private ContractFeedEvent ExtractContractFeedEvent(XContainer element)

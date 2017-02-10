@@ -45,7 +45,7 @@
 
 //bulk upload styles
 
-#apprentice-details{
+#apprentice-details,#approve-cohorts{
     .flash-alert{
         border-color:$turquoise;
          .icon-green-tick{
@@ -60,7 +60,12 @@
             margin-bottom:20px;
         }
     }
-  
+  .group-title{
+      margin-bottom:0;
+  }
+  .finishEditingBtn{
+      float:none;
+  }
 }
 
 #finish-editing {
@@ -232,7 +237,7 @@
     }
 }
 
-#edit-apprentice{
+#edit-apprentice, #apprentice-details{
     .delete-button{
         background-color:$error-colour;
         float:right;
@@ -248,6 +253,48 @@
     .heading-small{margin-top:0;}
     .secondary-text{
         color:$grey-1;
+    }
+
+}
+
+//review cohorts page styles
+
+#review-cohorts{
+    color:#fff;
+    margin:30px 0;
+    .all-apps{
+        background:#2e3391;
+        padding:20px;
+        margin:20px 0;
+       
+        
+         @include media(tablet) {
+            margin:auto;
+            width:31%;
+            
+            }
+    }
+    .incomplete-apps{
+        background:#8e2a8d;
+        padding:20px;
+        margin-bottom:20px;
+        
+        @include media(tablet) {
+            margin:auto;            
+            margin-left:3.3333%;
+            width:31%;
+            }
+    }
+    .total-cost{
+        background:#d03a84;
+        padding:20px;
+        margin-bottom:30px;
+       
+        @include media(tablet) {
+            margin:auto;
+            margin-left:3.3333%;
+             width:31%;
+            }
     }
 
 }
