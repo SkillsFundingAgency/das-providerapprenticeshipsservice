@@ -256,8 +256,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (viewModel.SaveStatus == SaveStatus.Save)
             {
-                //todo: create a lastupdate info object against this commitment
-                //so that it is no longer "new"
                 await _commitmentOrchestrator.SubmitCommitment(viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty);
             }
 
