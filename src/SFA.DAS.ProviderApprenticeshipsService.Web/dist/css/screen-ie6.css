@@ -2569,16 +2569,8 @@ span.helpText {
   margin-top: 0.625em;
 }
 
-#apprentice-details .alert-default {
+#apprentice-details .alert-default, #approve-cohorts .alert-default {
   margin-top: 25px;
-}
-#apprentice-details .flash-alert, #approve-cohorts .flash-alert{
-  border-color: #28a197;
-}
-
-#apprentice-details .flash-alert .icon-green-tick, #approve-cohorts .flash-alert .icon-green-tick {
-  background: url(../../dist/images/icon-green-tick.png) no-repeat 0 0;
-  padding-left: 50px;
 }
 
 #apprentice-details .bulk-upload-buttons .upload-btn, #approve-cohorts .bulk-upload-buttons .upload-btn {
@@ -2593,6 +2585,15 @@ span.helpText {
 
 #apprentice-details .finishEditingBtn, #approve-cohorts .finishEditingBtn {
   float: none;
+}
+
+#content .flash-alert {
+  border-color: #28a197;
+}
+
+#content .flash-alert .icon-green-tick {
+  background: url(../../dist/images/icon-green-tick.png) no-repeat 0 0;
+  padding-left: 50px;
 }
 
 #finish-editing .error-summary {
