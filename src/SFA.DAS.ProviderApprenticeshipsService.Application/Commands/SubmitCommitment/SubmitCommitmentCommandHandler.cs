@@ -63,9 +63,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
             if (message.CreateTask)
                 await CreateTask(message, commitment);
 
-            var notificationCommand = BuildNotificationCommand(commitment, message.LastAction, message.HashedCommitmentId);
+            if (message.LastAction != LastAction.None)
+            {
+                var notificationCommand = BuildNotificationCommand(commitment, message.LastAction,
+                    message.HashedCommitmentId);
 
-            await _mediator.SendAsync(notificationCommand);
+                await _mediator.SendAsync(notificationCommand);
+            }
         }
 
         private SendNotificationCommand BuildNotificationCommand(Commitment commitment, LastAction action, string hashedCommitmentId)

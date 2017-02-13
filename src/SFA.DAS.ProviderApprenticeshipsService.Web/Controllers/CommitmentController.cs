@@ -271,6 +271,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return RedirectToAction("Approved", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
             }
 
+            if (viewModel.SaveStatus == SaveStatus.Save)
+            {
+                await _commitmentOrchestrator.SubmitCommitment(viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty);
+            }
+
             return RedirectToAction("Cohorts", new { providerId = viewModel.ProviderId });
         }
 
