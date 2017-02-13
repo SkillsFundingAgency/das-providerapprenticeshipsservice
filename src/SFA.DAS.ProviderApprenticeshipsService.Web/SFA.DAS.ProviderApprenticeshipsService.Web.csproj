@@ -384,6 +384,8 @@
     <Compile Include="Models\ManageApprenticesViewModel.cs" />
     <Compile Include="Models\RequestStatus.cs" />
     <Compile Include="Models\Types\DateTimeViewModel.cs" />
+    <Compile Include="Models\Types\FlashMessageSeverityLevel.cs" />
+    <Compile Include="Models\Types\FlashMessageViewModel.cs" />
     <Compile Include="Models\Types\SaveOrSendStatus.cs" />
     <Compile Include="Models\SignInUserModel.cs" />
     <Compile Include="Models\SignInUserViewModel.cs" />
@@ -590,6 +592,7 @@
     <Content Include="Views\Commitment\DeleteConfirmation.cshtml" />
     <Content Include="Views\Error\_Error403.cshtml" />
     <Content Include="Views\Commitment\DeleteCohort.cshtml" />
+    <Content Include="Views\Shared\_ModalMessage.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

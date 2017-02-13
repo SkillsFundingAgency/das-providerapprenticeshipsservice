@@ -127,14 +127,7 @@
         </div>
         @RenderSection("breadcrumb", required: false)
         <div id="content">
-            @if (TempData.ContainsKey("InfoMessage"))
-            {
-                <div class="panel panel-border-wide alert-default flash-alert">
-                    <i class="icon-green-tick"></i>
-                    @Html.Raw(TempData["InfoMessage"])
-                </div>
-            }
-            @*@Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)*@
+            @Html.Partial(@"_ModalMessage")
             @RenderBody()
         </div>
     </main>

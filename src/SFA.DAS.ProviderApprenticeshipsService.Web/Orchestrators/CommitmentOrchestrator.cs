@@ -26,6 +26,7 @@ using TrainingType = SFA.DAS.Commitments.Api.Types.TrainingType;
 
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
@@ -154,15 +155,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task DeleteCommitment(DeleteCommitmentViewModel viewModel)
+        public async Task DeleteCommitment(long providerId, string hashedCommitmentId)
         {
-            var commitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId);
-            _logger.Info($"Deleting commitment {viewModel.CohortReference}", viewModel.ProviderId, commitmentId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            _logger.Info($"Deleting commitment {hashedCommitmentId}", providerId, commitmentId);
 
-            await _mediator.SendAsync(new DeleteApprenticeshipCommand
+            await _mediator.SendAsync(new DeleteCommitmentCommand
             {
-                ProviderId = viewModel.ProviderId,
-                ApprenticeshipId = commitmentId
+                ProviderId = providerId,
+                CommitmentId = commitmentId
             });
         }
 

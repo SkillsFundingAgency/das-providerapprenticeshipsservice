@@ -113,7 +113,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(viewModel);
+                var model = await _commitmentOrchestrator.GetDeleteCommitmentModel(viewModel.ProviderId, viewModel.HashedCommitmentId);
+                return View(model);
             }
 
             if (viewModel.DeleteConfirmed == null || !viewModel.DeleteConfirmed.Value)
@@ -123,10 +124,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                     new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
             }
 
-            // ToDo: Delete
-            _commitmentOrchestrator.DeleteCommitment(viewModel);
+            await _commitmentOrchestrator.DeleteCommitment(viewModel.ProviderId, viewModel.HashedCommitmentId);
 
-            SetInfoMessage("Cohort deleted");
+            SetInfoMessage("Cohort deleted", FlashMessageSeverityLevel.Okay);
 
             var currentStatusCohortAny = 
                 await _commitmentOrchestrator.GetCohortsForCurrentStatus(viewModel.ProviderId, GetRequestStatusFromSession());
@@ -200,7 +200,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
 
             var deletedApprenticeshipName = await _commitmentOrchestrator.DeleteApprenticeship(viewModel);
-            SetInfoMessage($"Apprentice record for {deletedApprenticeshipName} deleted");
+            SetInfoMessage($"Apprentice record for {deletedApprenticeshipName} deleted", FlashMessageSeverityLevel.Okay);
 
             return RedirectToRoute("CohortDetails", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
         }
@@ -420,3 +420,4 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
     }
 }
+

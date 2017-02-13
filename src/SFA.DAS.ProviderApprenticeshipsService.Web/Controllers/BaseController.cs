@@ -3,9 +3,13 @@ using System.Security.Claims;
 using System.Web.Mvc;
 using System.Net;
 using System.Web;
+
+using Newtonsoft.Json;
+
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -18,9 +22,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             _logger = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<IProviderCommitmentsLogger>();
         }
 
-        protected void SetInfoMessage(string message)
+        protected void SetInfoMessage(string messageText, FlashMessageSeverityLevel level)
         {
-            TempData["InfoMessage"] = message;
+            var message = new FlashMessageViewModel
+            {
+                Message = messageText,
+                Severity = level
+            };
+
+            var flashMessage = JsonConvert.SerializeObject(message);
+            TempData["InfoMessage"] = flashMessage;
         }
         protected override void OnException(ExceptionContext filterContext)
         {

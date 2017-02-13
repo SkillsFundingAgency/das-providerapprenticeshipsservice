@@ -1,0 +1,21 @@
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
+@model dynamic
+
+@{ var model = FlashMessageViewModel.GetViewModel((string)TempData["InfoMessage"]); }
+
+
+@if (model.Severity == FlashMessageSeverityLevel.Info)
+{
+    <div class="panel panel-border-wide alert-default flash-alert">
+        @Html.Raw(model.Message)
+    </div>
+}
+
+
+@if (model.Severity == FlashMessageSeverityLevel.Okay)
+{
+    <div class="panel panel-border-wide alert-default flash-alert">
+        <i class="icon-green-tick"></i>
+        @Html.Raw(model.Message)
+    </div>
+}
