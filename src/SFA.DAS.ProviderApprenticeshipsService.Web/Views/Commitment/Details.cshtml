@@ -9,7 +9,6 @@
 
 <div class="grid-row">
     <div class="column-full">
-
         <h1 class="heading-xlarge">Review your cohort</h1>
     </div>
 </div>
@@ -96,7 +95,7 @@ else
 
             @{ var finishEditingText = Model.PendingChanges ? "Save and continue" : "Continue to approval"; }
             <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
-            <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary" aria-label="Add an apprentice">Add more apprentices</a>
+            <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
             <a href="@Url.Action("UploadApprenticeships", "BulkUpload", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary upload-btn" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
             
             @*<hr class="hr-bottom">*@
@@ -166,7 +165,7 @@ else
                                             }
                                         </td>
                                         <td>@GetValueOrDefault(FormatCost(item.Cost))</td>
-                                        <td><a href="@Url.Action("Edit", new {Model.HashedCommitmentId, item.HashedApprenticeshipId})" title="Edit @item.ApprenticeshipName" aria-label="Edit @item.ApprenticeshipName">Edit details</a></td>
+                                        <td><a href="@Url.Action("Edit", new {Model.HashedCommitmentId, item.HashedApprenticeshipId})" title="Edit @item.ApprenticeshipName" aria-label="Edit @item.ApprenticeshipName">Edit </a></td>
                                     </tr>
                                 }
                             </tbody>
@@ -177,6 +176,8 @@ else
                     </div>
         </div>
     }
+
+<a class="button delete-button" href="@Url.Action("DeleteCohort", new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Delete">Delete cohort</a>
 
     @section breadcrumb {
         <div class="breadcrumbs">

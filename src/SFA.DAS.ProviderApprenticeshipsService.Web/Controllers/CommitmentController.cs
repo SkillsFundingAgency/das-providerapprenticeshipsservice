@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application;
@@ -8,8 +6,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
-
-using WebGrease.Css.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -96,30 +92,51 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Details(long providerId, string hashedCommitmentId)
         {
             var model = await _commitmentOrchestrator.GetCommitmentDetails(providerId, hashedCommitmentId);
-            string backUrl;
 
-            switch (GetRequestStatusFromSession())
-            {
-                case RequestStatus.WithEmployerForApproval:
-                case RequestStatus.SentForReview:
-                    backUrl = Url.Action("WithEmployer", new { providerId });
-                    break;
-                case RequestStatus.NewRequest:
-                    backUrl = Url.Action("NewRequests", new { providerId });
-                    break;
-                case RequestStatus.ReadyForReview:
-                    backUrl = Url.Action("ReadyForReview", new { providerId });
-                    break;
-                case RequestStatus.ReadyForApproval:
-                    backUrl = Url.Action("ReadyForApproval", new { providerId });
-                    break;
-                default:
-                    backUrl = Url.Action("Cohorts", new { providerId });
-                    break;
-            }
-            model.BackLinkUrl = backUrl;
+            model.BackLinkUrl = GetReturnToListUrl(providerId);
             return View(model);
         }
+
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("{hashedCommitmentId}/details/delete")]
+        public async Task<ActionResult> DeleteCohort(long providerId, string hashedCommitmentId)
+        {
+            var model = await _commitmentOrchestrator.GetDeleteCommitmentModel(providerId, hashedCommitmentId);
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("{hashedCommitmentId}/details/delete")]
+        public async Task<ActionResult> DeleteCohort(DeleteCommitmentViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                var model = await _commitmentOrchestrator.GetDeleteCommitmentModel(viewModel.ProviderId, viewModel.HashedCommitmentId);
+                return View(model);
+            }
+
+            if (viewModel.DeleteConfirmed == null || !viewModel.DeleteConfirmed.Value)
+            {   
+                return RedirectToAction(
+                    "Details",
+                    new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
+            }
+
+            await _commitmentOrchestrator.DeleteCommitment(viewModel.ProviderId, viewModel.HashedCommitmentId);
+
+            SetInfoMessage("Cohort deleted", FlashMessageSeverityLevel.Okay);
+
+            var currentStatusCohortAny = 
+                await _commitmentOrchestrator.GetCohortsForCurrentStatus(viewModel.ProviderId, GetRequestStatusFromSession());
+
+            if (!currentStatusCohortAny)
+                return RedirectToAction("Cohorts", new { providerId = viewModel.ProviderId });
+
+            return Redirect(GetReturnToListUrl(viewModel.ProviderId));
+        }
+
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
@@ -177,13 +194,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return View(viewModel);
             }
 
-            if (!viewModel.DeleteConfirmed.Value)
+            if (viewModel.DeleteConfirmed != null && !viewModel.DeleteConfirmed.Value)
             {
                 return RedirectToRoute("EditApprenticeship", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId, hashedApprenticeshipId = viewModel.HashedApprenticeshipId });
             }
 
             var deletedApprenticeshipName = await _commitmentOrchestrator.DeleteApprenticeship(viewModel);
-            SetInfoMessage($"Apprentice record for {deletedApprenticeshipName} deleted");
+            SetInfoMessage($"Apprentice record for {deletedApprenticeshipName} deleted", FlashMessageSeverityLevel.Okay);
 
             return RedirectToRoute("CohortDetails", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
         }
@@ -353,6 +370,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return View(new AcknowledgementViewModel { CommitmentReference = commitment.Reference, EmployerName = commitment.LegalEntityName, ProviderName = commitment.ProviderName, Message = message, RedirectUrl = url, RedirectLinkText = linkText });
         }
 
+        private string GetReturnToListUrl(long providerId)
+        {
+            switch (GetRequestStatusFromSession())
+            {
+                case RequestStatus.WithEmployerForApproval:
+                case RequestStatus.SentForReview:
+                    return Url.Action("WithEmployer", new { providerId });
+                case RequestStatus.NewRequest:
+                    return Url.Action("NewRequests", new { providerId });
+                case RequestStatus.ReadyForReview:
+                    return Url.Action("ReadyForReview", new { providerId });
+                case RequestStatus.ReadyForApproval:
+                    return Url.Action("ReadyForApproval", new { providerId });
+                default:
+                    return Url.Action("Cohorts", new { providerId });
+            }
+        }
+
         private RequestStatus GetRequestStatusFromSession()
         {
             var status = (RequestStatus?)Session[LastCohortPageSessionKey] ?? RequestStatus.None;
@@ -385,3 +420,4 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
     }
 }
+

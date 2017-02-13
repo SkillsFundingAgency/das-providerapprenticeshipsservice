@@ -26,8 +26,11 @@ using TrainingType = SFA.DAS.Commitments.Api.Types.TrainingType;
 
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
+
+using WebGrease.Css.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -152,6 +155,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
+        public async Task DeleteCommitment(long providerId, string hashedCommitmentId)
+        {
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            _logger.Info($"Deleting commitment {hashedCommitmentId}", providerId, commitmentId);
+
+            await _mediator.SendAsync(new DeleteCommitmentCommand
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+        }
+
         public async Task<string> DeleteApprenticeship(DeleteConfirmationViewModel viewModel)
         {
             var apprenticeshipId = _hashingService.DecodeValue(viewModel.HashedApprenticeshipId);
@@ -199,7 +214,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderId = providerId,
                 Commitments = await MapFrom(data, _latestMessageToProviderFunc),
                 PageTitle = "Approve cohorts",
-                PageId = "Approve cohorts",
+                PageId = "approve-cohorts",
                 PageHeading = "Approve cohorts",
                 PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSurfix(data.ToList().Count)} that need your approval:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
@@ -273,6 +288,34 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Apprenticeships = apprenticeships,
                 LatestMessage = message,
                 PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed
+            };
+        }
+
+        public async Task<DeleteCommitmentViewModel> GetDeleteCommitmentModel(long providerId, string hashedCommitmentId)
+        {
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
+            Func<string, string> textOrDefault = txt => !string.IsNullOrEmpty(txt) ? txt : "without training course details";
+
+            var programmeSummary = data.Commitment.Apprenticeships
+                .GroupBy(m => m.TrainingName)
+                .Select(m => $"{m.Count()} {textOrDefault(m.Key)}")
+                .ToList();
+
+            return new DeleteCommitmentViewModel
+            {
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId,
+                LegalEntityName = data.Commitment.LegalEntityName,
+                CohortReference = hashedCommitmentId,
+                NumberOfApprenticeships  = data.Commitment.Apprenticeships.Count,
+                ApprenticeshipTrainingProgrammes = programmeSummary
             };
         }
 

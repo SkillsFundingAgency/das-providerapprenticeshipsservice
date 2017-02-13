@@ -2514,31 +2514,31 @@ span.helpText {
   margin-top: 0.625em;
 }
 
-#apprentice-details .alert-default {
+#apprentice-details .alert-default, #approve-cohorts .alert-default {
   margin-top: 25px;
 }
 
-#apprentice-details .flash-alert {
-  border-color: #28a197;
-}
-
-#apprentice-details .flash-alert .icon-green-tick {
-  background: url(../../dist/images/icon-green-tick.png) no-repeat 0 0;
-  padding-left: 50px;
-}
-
-#apprentice-details .bulk-upload-buttons .upload-btn {
+#apprentice-details .bulk-upload-buttons .upload-btn, #approve-cohorts .bulk-upload-buttons .upload-btn {
   margin: auto;
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
-#apprentice-details .group-title {
+#apprentice-details .group-title, #approve-cohorts .group-title {
   margin-bottom: 0;
 }
 
-#apprentice-details .finishEditingBtn {
+#apprentice-details .finishEditingBtn, #approve-cohorts .finishEditingBtn {
   float: none;
+}
+
+#content .flash-alert {
+  border-color: #28a197;
+}
+
+#content .flash-alert .icon-green-tick {
+  background: url(../../dist/images/icon-green-tick.png) no-repeat 0 0;
+  padding-left: 50px;
 }
 
 #finish-editing .error-summary {
@@ -2671,7 +2671,7 @@ span.helpText {
   background-image: url("/dist/images/icon-important.png");
 }
 
-#edit-apprentice .delete-button {
+#edit-apprentice .delete-button, #apprentice-details .delete-button {
   background-color: #b10e1e;
   float: right;
   margin: 15px 0;
