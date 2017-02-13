@@ -302,7 +302,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
 
             Func<string, string> textOrDefault = txt => !string.IsNullOrEmpty(txt) ? txt : "without training course details";
-            var programSummary = data.Commitment.Apprenticeships
+
+            var programmeSummary = data.Commitment.Apprenticeships
                 .GroupBy(m => m.TrainingName)
                 .Select(m => $"{m.Count()} {textOrDefault(m.Key)}")
                 .ToList();
@@ -311,10 +312,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 HashedCommitmentId = hashedCommitmentId,
-                Employer = data.Commitment.LegalEntityName,
+                LegalEntityName = data.Commitment.LegalEntityName,
                 CohortReference = hashedCommitmentId,
-                NumberOfApprentaceships  = data.Commitment.Apprenticeships.Count,
-                ApprentaceshipTrainingPrograms = programSummary
+                NumberOfApprenticeships  = data.Commitment.Apprenticeships.Count,
+                ApprenticeshipTrainingProgrammes = programmeSummary
             };
         }
 
