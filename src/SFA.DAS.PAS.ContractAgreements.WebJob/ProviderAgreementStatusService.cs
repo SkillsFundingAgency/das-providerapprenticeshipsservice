@@ -32,12 +32,17 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
             time.Start();
 
             var lastContract = await _repository.GetMostRecentContractFeedEvent();
-            var mostRecentPageNumber = await _repository.GetMostRecentPageNumber() +1;
-            if (lastContract == null) mostRecentPageNumber = 1;
+            var lastFullPageNumberRead = await _repository.GetMostRecentPageNumber();
+            var nextPageNumberToRead = lastFullPageNumberRead + 1;
 
-            _logger.Info($"Bookmark: {lastContract?.Id}, Latest page read: {mostRecentPageNumber}");
+            if (lastContract == null && nextPageNumberToRead > 1)
+            {
+                _logger.Warn($"The database doesn't currently contain any valid contracts from the feed after {lastFullPageNumberRead} pages have been read.");
+            }
 
-            var lastRun = _dataProvider.ReadEvents(mostRecentPageNumber, lastContract?.Id ?? Guid.Empty, (eventPageNumber, events) =>
+            _logger.Info($"Bookmark: {lastContract?.Id}, Latest page read: {lastFullPageNumberRead}");
+
+            var lastRun = _dataProvider.ReadEvents(nextPageNumberToRead, lastContract?.Id ?? Guid.Empty, (eventPageNumber, events) =>
                 {
                     var contractFeedEvents = events.ToList();
 
@@ -47,6 +52,11 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
                         _repository.AddContractEvent(contractFeedEvent);
                     }
                 });
+
+            if (lastRun.ContractCount > 0)
+            {
+                _logger.Info($"Inserted {lastRun.ContractCount} contracts into the database. LastPageRead: {lastRun.NewLastReadPageNumber}");
+            }
 
             time.Stop();
             lastRun.ExecutionTimeMs = time.ElapsedMilliseconds;

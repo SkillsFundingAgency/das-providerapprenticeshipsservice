@@ -2903,6 +2903,10 @@ span.helpText {
   margin-top: 0.625em;
 }
 
+#apprentice-details .alert-default {
+  margin-top: 25px;
+}
+
 #apprentice-details .flash-alert, #approve-cohorts .flash-alert {
   border-color: #28a197;
 }
