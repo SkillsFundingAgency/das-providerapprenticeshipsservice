@@ -61,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
 
         [Route("{hashedCommitmentId}/UploadApprenticeships/Unsuccessful")]
-        public ActionResult UploadApprenticeshipsUnsuccessful(long providerId, string hashedCommitmentId)
+        public async Task<ActionResult> UploadApprenticeshipsUnsuccessful(long providerId, string hashedCommitmentId)
         {
             var errors = ((IEnumerable<UploadError>)TempData[uploadErrorsTempDataKey])?.ToList()
                 ?? new List<UploadError>();
@@ -69,7 +69,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (!errors.Any())
                 return RedirectToAction("UploadApprenticeships", new { providerId, hashedCommitmentId });
 
-            var model = _bulkUploadOrchestrator.GetUnsuccessfulUpload(errors, providerId, hashedCommitmentId);
+            var model = await _bulkUploadOrchestrator.GetUnsuccessfulUpload(errors, providerId, hashedCommitmentId);
 
             return View(model);
         }
