@@ -20,6 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [TestCase(SaveStatus.ApproveAndSend, LastAction.Approve, true)]
         [TestCase(SaveStatus.AmendAndSend, LastAction.Amend, true)]
         [TestCase(SaveStatus.Approve, LastAction.Approve, false)]
+        [TestCase(SaveStatus.Save, LastAction.None, false)]
         public async Task CheckStatusUpdate(SaveStatus input, LastAction expectedLastAction, bool expectedCreateTaskBool)
         {
             var mockMediator = new Mock<IMediator>();
@@ -48,31 +49,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     p.Message == string.Empty &&
                     p.LastAction == expectedLastAction &&
                     p.CreateTask == expectedCreateTaskBool )));
-        }
-
-        [Test]
-        public async Task SubmitCommitemtWithSaveShouldDoNothing()
-        {
-            var mockMediator = new Mock<IMediator>();
-
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), 
-                            Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), 
-                            Mock.Of<ProviderApprenticeshipsServiceConfiguration>());
-
-            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
-                .Returns(Task.FromResult(new GetCommitmentQueryResponse
-                {
-                    Commitment = new Commitment
-                    {
-                        AgreementStatus = AgreementStatus.NotAgreed,
-                        EditStatus = EditStatus.ProviderOnly
-                    }
-                }));
-
-            await _sut.SubmitCommitment(1L, "ABBA12", SaveStatus.Save, "");
-
-            mockMediator.Verify(m => m
-                .SendAsync(It.IsAny<SubmitCommitmentCommand>()), Times.Never);
         }
     }
 }

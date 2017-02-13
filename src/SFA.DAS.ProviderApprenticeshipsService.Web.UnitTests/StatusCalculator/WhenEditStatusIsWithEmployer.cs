@@ -16,9 +16,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.StatusCalculator
         [TestCase(RequestStatus.WithEmployerForApproval, LastAction.Approve, AgreementStatus.ProviderAgreed, TestName = "Approved and sent to employer")]
         public void WhenThereAreApprentices(RequestStatus expectedResult, LastAction lastAction, AgreementStatus overallAgreementStatus)
         {
-            var status = _calculator.GetStatus(EditStatus.EmployerOnly, 2, lastAction, overallAgreementStatus);
+            var lastUpdateInfo = new LastUpdateInfo
+            {
+                EmailAddress = "test@testcorp",
+                Name = "Test"
+            };
+
+            var status = _calculator.GetStatus(EditStatus.EmployerOnly, 2, lastAction, overallAgreementStatus, lastUpdateInfo);
 
             status.Should().Be(expectedResult);
+        }
+
+
+        [TestCase(LastAction.None, AgreementStatus.NotAgreed)]
+        [TestCase(LastAction.Amend, AgreementStatus.NotAgreed)]
+        [TestCase(LastAction.Approve, AgreementStatus.ProviderAgreed)]
+        public void WhenTheEmployerHasNeverModifiedTheCommitmentItIsClassedAsNew(LastAction lastAction, AgreementStatus overallAgreementStatus)
+        {
+            //Act
+            var status = _calculator.GetStatus(EditStatus.ProviderOnly, 2, lastAction, overallAgreementStatus, null);
+
+            //Assert
+            Assert.AreEqual(RequestStatus.NewRequest, status);
         }
     }
 }

@@ -80,7 +80,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
             var commitmentStatus =
                 data.Commitments.Select(m =>
-                    _statusCalculator.GetStatus(m.EditStatus, m.ApprenticeshipCount, m.LastAction, m.AgreementStatus)).ToList();
+                    _statusCalculator.GetStatus(m.EditStatus, m.ApprenticeshipCount, m.LastAction, m.AgreementStatus, m.ProviderLastUpdateInfo)).ToList();
 
             var model = new CohortsViewModel
             {
@@ -228,7 +228,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
 
             return data.Commitments.Where(
-                m => _statusCalculator.GetStatus(m.EditStatus, m.ApprenticeshipCount, m.LastAction, m.AgreementStatus)
+                m => _statusCalculator.GetStatus(m.EditStatus, m.ApprenticeshipCount, m.LastAction, m.AgreementStatus, m.ProviderLastUpdateInfo)
                     == requestStatus);
         }
 
@@ -268,7 +268,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 HashedCommitmentId = hashedCommitmentId,
                 LegalEntityName = data.Commitment.LegalEntityName,
                 Reference = data.Commitment.Reference,
-                Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus),
+                Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus, data.Commitment.ProviderLastUpdateInfo),
                 HasApprenticeships = apprenticeships.Count > 0,
                 Apprenticeships = apprenticeships,
                 LatestMessage = message,
@@ -405,26 +405,37 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     throw new InvalidStateException("Cannot approve commitment when no agreement signed");
             }
 
-            if (saveStatus != SaveStatus.Save)
+            LastAction lastAction;
+            switch(saveStatus)
             {
-                var lastAction = saveStatus == SaveStatus.AmendAndSend ? LastAction.Amend : LastAction.Approve;
+                case SaveStatus.AmendAndSend:
+                    lastAction = LastAction.Amend;
+                    break;
+                case SaveStatus.Approve:
+                    lastAction = LastAction.Approve;
+                    break;
+                case SaveStatus.ApproveAndSend:
+                    lastAction = LastAction.Approve;
+                    break;
+                case SaveStatus.Save:
+                    lastAction = LastAction.None;
+                    break;
+                default:
+                    lastAction = LastAction.None;
+                    break;
+            }
 
-                await
-                    _mediator.SendAsync(
-                        new SubmitCommitmentCommand
-                        {
-                            ProviderId = providerId,
-                            HashedCommitmentId = hashedCommitmentId,
-                            CommitmentId = commitmentId,
-                            Message = message,
-                            LastAction = lastAction,
-                            CreateTask = saveStatus != SaveStatus.Approve
-                        });
-            }
-            else
-            {
-                _logger.Warn($"Commitment submited with illegal state, Save Status: {saveStatus}");
-            }
+            await
+                _mediator.SendAsync(
+                    new SubmitCommitmentCommand
+                    {
+                        ProviderId = providerId,
+                        HashedCommitmentId = hashedCommitmentId,
+                        CommitmentId = commitmentId,
+                        Message = message,
+                        LastAction = lastAction,
+                        CreateTask = (saveStatus == SaveStatus.ApproveAndSend || saveStatus == SaveStatus.AmendAndSend)
+                    });
         }
 
         public async Task<FinishEditingViewModel> GetFinishEditing(long providerId, string hashedCommitmentId)
@@ -518,7 +529,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Reference = listItem.Reference,
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
-                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.ApprenticeshipCount, listItem.LastAction, listItem.AgreementStatus),
+                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.ApprenticeshipCount, listItem.LastAction, listItem.AgreementStatus, listItem.ProviderLastUpdateInfo),
                 ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly,
                 LatestMessage = message
             };
@@ -532,7 +543,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Reference = listItem.Reference,
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
-                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.LastAction, listItem.AgreementStatus),
+                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.LastAction, listItem.AgreementStatus, listItem.ProviderLastUpdateInfo),
                 ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly
             };
         }

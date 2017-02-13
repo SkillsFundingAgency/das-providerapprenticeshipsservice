@@ -14,7 +14,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.StatusCalculator
         [TestCase(RequestStatus.Approved, LastAction.Approve, TestName = "Approved by both parties")]
         public void WhenThereAreNoApprentices(RequestStatus expectedResult, LastAction lastAction)
         {
-            var status = _calculator.GetStatus(EditStatus.Both, 2, lastAction, AgreementStatus.BothAgreed);
+            var lastUpdateInfo = new LastUpdateInfo();
+
+            var status = _calculator.GetStatus(EditStatus.Both, 2, lastAction, AgreementStatus.BothAgreed, lastUpdateInfo);
 
             status.Should().Be(expectedResult);
         }

@@ -5,12 +5,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public sealed class CommitmentStatusCalculator : ICommitmentStatusCalculator
     {
-        public RequestStatus GetStatus(EditStatus editStatus, int apprenticeshipCount, LastAction lastAction, AgreementStatus overallAgreementStatus)
+        public RequestStatus GetStatus(EditStatus editStatus, int apprenticeshipCount, LastAction lastAction, AgreementStatus overallAgreementStatus, LastUpdateInfo lastUpdateInfo)
         {
             bool hasApprenticeships = apprenticeshipCount > 0;
 
             if (editStatus == EditStatus.Both)
                 return RequestStatus.Approved;
+
+            if (string.IsNullOrWhiteSpace(lastUpdateInfo?.Name))
+            {
+                return RequestStatus.NewRequest;
+            }
 
             if (editStatus == EditStatus.ProviderOnly)
             {
@@ -27,8 +32,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private static RequestStatus GetProviderOnlyStatus(LastAction lastAction, bool hasApprenticeships, AgreementStatus overallAgreementStatus)
         {
-            if (!hasApprenticeships || lastAction == LastAction.None)
-                return RequestStatus.NewRequest;
+            if (lastAction == LastAction.None)
+            {
+                return RequestStatus.ReadyForReview;
+            }
+
+            //if (!hasApprenticeships)
+            //    return RequestStatus.NewRequest;
 
             if (lastAction == LastAction.Amend)
                 return RequestStatus.ReadyForReview;
@@ -46,7 +56,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private RequestStatus GetEmployerOnlyStatus(LastAction lastAction, bool hasApprenticeships)
         {
-            if (!hasApprenticeships || lastAction == LastAction.None)
+            if (lastAction == LastAction.None)
                 return RequestStatus.None;
 
             if(lastAction == LastAction.Amend)
