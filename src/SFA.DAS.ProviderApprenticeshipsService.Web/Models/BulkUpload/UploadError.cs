@@ -1,8 +1,10 @@
+using System;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
 {
+    [Serializable]
     public class UploadError
     {
         public UploadError(string message)
