@@ -308,24 +308,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedCommitmentId}/Submit")]
         public async Task<ActionResult> Submit(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
         {
-            try
-            {
-                var commitment = await _commitmentOrchestrator.GetCommitmentCheckState(providerId, hashedCommitmentId);
+            var commitment = await _commitmentOrchestrator.GetCommitmentCheckState(providerId, hashedCommitmentId);
 
-                var model = new SubmitCommitmentViewModel
-                {
-                    ProviderId = providerId,
-                    HashedCommitmentId = hashedCommitmentId,
-                    EmployerName = commitment.LegalEntityName,
-                    SaveStatus = saveStatus
-                };
-
-                return View(model);
-            }
-            catch (InvalidStateException)
+            var model = new SubmitCommitmentViewModel
             {
-                return RedirectToAction("Cohorts", new { providerId });
-            }
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId,
+                EmployerName = commitment.LegalEntityName,
+                SaveStatus = saveStatus
+            };
+
+            return View(model);
         }
 
         [HttpPost]
