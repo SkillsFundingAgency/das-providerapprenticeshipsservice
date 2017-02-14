@@ -4,6 +4,7 @@ using System.Threading;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
 {
+    [Serializable]
     public  class DateTimeViewModel
     {
         private const int NinetyYearsInTheFuture = 90;
