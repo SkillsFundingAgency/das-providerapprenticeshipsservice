@@ -252,7 +252,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("{hashedCommitmentId}/Finished")]
-        // [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> FinishEditing(FinishEditingViewModel viewModel)
         {
             if (!ModelState.IsValid)
