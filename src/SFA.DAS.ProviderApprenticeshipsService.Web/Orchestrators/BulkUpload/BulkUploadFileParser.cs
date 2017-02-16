@@ -64,9 +64,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
         private ApprenticeshipUploadModel MapTo(CsvRecord record)
         {
-            var dateOfBirth = GetValidDate(record.DateOfBirth);
-            var learnerStartDate = GetValidDate(record.LearnStartDate);
-            var learnerEndDate = GetValidDate(record.LearnPlanEndDate);
+            var dateOfBirth = GetValidDate(record.DateOfBirth, "yyyy-MM-dd");
+            var learnerStartDate = GetValidDate(record.LearnStartDate, "yyyy-MM");
+            var learnerEndDate = GetValidDate(record.LearnPlanEndDate, "yyyy-MM");
 
             var trainingCode = record.ProgType == 25
                                    ? record.StdCode.ToString()
@@ -76,12 +76,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             {
                 AgreementStatus = AgreementStatus.NotAgreed,
                 PaymentStatus = PaymentStatus.Active,
+                ULN = record.ULN.ToString(),
                 FirstName = record.GivenNames,
                 LastName = record.FamilyName,
                 DateOfBirth = new DateTimeViewModel(dateOfBirth),
-                ULN = record.ULN.ToString(),
                 //NINumber = record.NINumber,
-                Cost = record.TrainingPrice.ToString(),
+                Cost = record.TotalPrice.ToString(),
                 ProviderRef = record.ProviderRef,
                 StartDate = new DateTimeViewModel(learnerStartDate),
                 EndDate = new DateTimeViewModel(learnerEndDate),
@@ -95,10 +95,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             };
         }
 
-        private DateTime? GetValidDate(string date)
+        private DateTime? GetValidDate(string date, string format)
         {
             DateTime outDateTime;
-            if (DateTime.TryParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out outDateTime))
+            if (DateTime.TryParseExact(date, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out outDateTime))
                 return outDateTime;
             return null;
         }
