@@ -51,10 +51,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Matches(@"^\d{4}-\d{2}-\d{2}$").WithMessage(validationText.DateOfBirth02.Text).WithErrorCode(validationText.DateOfBirth02.ErrorCode);
 
             RuleFor(r => r.LearnStartDate)
-                .Matches(@"^\d{4}-\d{2}-\d{2}$").WithMessage(validationText.LearnStartDate02.Text).WithErrorCode(validationText.LearnStartDate02.ErrorCode);
+                .Matches(@"^\d{4}-\d{2}$").WithMessage(validationText.LearnStartDate02.Text).WithErrorCode(validationText.LearnStartDate02.ErrorCode);
 
             RuleFor(r => r.LearnPlanEndDate)
-                .Matches(@"^\d{4}-\d{2}-\d{2}$").WithMessage(validationText.LearnPlanEndDate02.Text).WithErrorCode(validationText.LearnPlanEndDate02.ErrorCode);
+                .Matches(@"^\d{4}-\d{2}$").WithMessage(validationText.LearnPlanEndDate02.Text).WithErrorCode(validationText.LearnPlanEndDate02.ErrorCode);
         }
     }
 }

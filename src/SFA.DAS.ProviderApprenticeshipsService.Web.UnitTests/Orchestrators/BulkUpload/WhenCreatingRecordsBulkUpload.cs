@@ -15,15 +15,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
     public class WhenCreatingRecordsBulkUpload
     {
         const string TestData =
-@"CohortRef,GivenNames,FamilyName,DateOfBirth,NINumber,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TrainingPrice,EPAPrice,EPAOrgId,EmpRef,ProviderRef,ULN
- Abba123,Chris,Froberg,1998-12-08,SE123321C,,,25,2,2120-08-01,2125-08-01,1500,,,Employer ref,Provider ref,1113335559
- Abba123,Chris1,Froberg1,1998-12-08,SE123321C,,,25,3,2120-08-01,2125-08-01,1500,,,Employer ref,Provider ref,1113335559
- ABBA123,Chris2,Froberg2,1998-12-08,SE123321C,,,25,3,2120-08-01,2125-08-01,1500,,,Employer ref,Provider ref,1113335559
- ABBA123,Chris3,Froberg3,1998-12-08,SE123321C,,,25,2,2120-08-01,2125-08-01,1500,,,Employer ref,Provider ref,1113335559
- ,,,,,,,,,,,,,,,,
- ABBA123,Chris3,Froberg3,1998-12-08,SE123321E,,,25,2,2120-08-01,2125-08-01,1500,,,Employer ref,Provider ref,1113335559
- ABBA123,Chris2,StartEndDateError,1998-12-08,SE123321C,,,25,2,2120-08-01,2119-08-01,1500,,,Employer ref,Provider ref,1113335559
- ABBA123,Chris3,Froberg3WrongDateFormat,1998-12-08,SE123321C,,,25,2,2120-08-01,2125-08-01,1500,,,Employer ref,Provider ref,1113335559";
+@"CohortRef,ULN,FamilyName,GivenNames,DateOfBirth,NINumber,ProgType,FworkCode,PwayCode,StdCode,LearnStartDate,LearnPlanEndDate,TotalPrice,EPAOrgId,EmpRef,ProviderRef
+ Abba123,1113335559,Froberg,Chris,1998-12-08,SE123321C,25,,,2,2120-08,2125-08,1500,,Employer ref,Provider ref
+ Abba123,1113335559,Froberg1,Chris1,1998-12-08,SE123321C,25,,,3,2120-08,2125-08,1500,,Employer ref,Provider ref
+ ABBA123,1113335559,Froberg2,Chris2,1998-12-08,SE123321C,25,,,3,2120-08,2125-08,1500,,Employer ref,Provider ref
+ ABBA123,1113335559,Froberg3,Chris3,1998-12-08,SE123321C,25,,,2,2120-08,2125-08,1500,,Employer ref,Provider ref
+ ,,,,,,,,,,,,,,,
+ ABBA123,1113335559,Chris3,Froberg3,1998-12-08,SE123321E,25,,,2,2120-08,2125-08,1500,,Employer ref,Provider ref
+ ABBA123,1113335559,Chris2,StartEndDateError,1998-12-08,SE123321C,25,,,2,2120-08,2119-08,1500,,Employer ref,Provider ref
+ ABBA123,1113335559,Chris3,Froberg3WrongDateFormat,1998-12-08,SE123321C,25,,,2,2120-08,2125-08,1500,,Employer ref,Provider ref";
 
         private Mock<HttpPostedFileBase> _file;
         private IBulkUploadFileParser _sut;
