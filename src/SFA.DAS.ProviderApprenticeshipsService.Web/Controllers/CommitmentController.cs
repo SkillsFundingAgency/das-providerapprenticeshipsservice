@@ -49,7 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("WithEmployer")]
+        [Route("cohorts/employer")]
         public async Task<ActionResult> WithEmployer(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAllWithEmployer(providerId);
@@ -58,7 +58,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("NewRequests")]
+        [Route("cohorts/new")]
         public async Task<ActionResult> NewRequests(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAllNewRequests(providerId);
@@ -68,7 +68,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("ReadyForReview")]
+        [Route("cohorts/review")]
         public async Task<ActionResult> ReadyForReview(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAllReadyForReview(providerId);
@@ -78,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("ReadyForApproval")]
+        [Route("cohorts/approve")]
         public async Task<ActionResult> ReadyForApproval(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAllReadyForApproval(providerId);
