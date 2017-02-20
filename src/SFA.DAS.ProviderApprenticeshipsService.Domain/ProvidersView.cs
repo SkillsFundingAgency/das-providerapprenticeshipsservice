@@ -6,6 +6,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain
     public class ProvidersView
     {
         public DateTime CreatedDate { get; set; }
-        public List<Provider> Providers { get; set; }
+        public Provider Provider { get; set; }
     }
 }

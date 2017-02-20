@@ -33,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
                 var providers = await _mediator.SendAsync(new GetProviderQueryRequest { UKPRN = providerId });
 
-                var provider = providers.ProvidersView.Providers.First();
+                var provider = providers.ProvidersView.Provider;
 
                 return new AccountHomeViewModel {AccountStatus = AccountStatus.Active, ProviderName = provider.ProviderName, ProviderId = providerId};
             }
