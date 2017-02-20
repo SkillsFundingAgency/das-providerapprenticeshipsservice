@@ -7,36 +7,38 @@
     ViewBag.PageId = "apprentice-details";
 }
 
-<div class="grid-row">
-    <div class="column-full">
-        <h1 class="heading-xlarge">Review your cohort</h1>
-    </div>
-</div>
+<div id="cohort-details">
 
-
-
-<div class="grid-row" id="review-cohorts">
-    <div class="column-one-third all-apps">
-        <div>
-            <h2 class="bold-xlarge">@Model.Apprenticeships.Count</h2>
-            <p class="heading-small">@PluraliseApprentice(Model.Apprenticeships.Count)</p>
+    <div class="grid-row">
+        <div class="column-full">
+            <h1 class="heading-xlarge">Review your cohort</h1>
         </div>
     </div>
-    <div class="column-one-third incomplete-apps">
-        <div>
-            <h2 class="bold-xlarge">@Model.Apprenticeships.Count(x => !x.CanBeApprove)</h2>
-            <p class="heading-small">@PluraliseIncompleteRecords(Model.Apprenticeships.Count(x => !x.CanBeApprove))</p>
-        </div>
-    </div>
-    <div class="column-one-third total-cost">
-        <div>
-            <h2 class="bold-xlarge">&pound;@Model.Apprenticeships.Sum(x => x.Cost ?? 0).ToString("N0")</h2>
-            <p class="heading-small">Total cost</p>
-        </div>
-    </div>
-</div>
 
-<div class="grid-row">
+
+
+    <div class="grid-row" id="review-cohorts">
+        <div class="column-one-third all-apps">
+            <div>
+                <h2 class="bold-xlarge">@Model.Apprenticeships.Count</h2>
+                <p class="heading-small">@PluraliseApprentice(Model.Apprenticeships.Count)</p>
+            </div>
+        </div>
+        <div class="column-one-third incomplete-apps">
+            <div>
+                <h2 class="bold-xlarge">@Model.Apprenticeships.Count(x => !x.CanBeApprove)</h2>
+                <p class="heading-small">@PluraliseIncompleteRecords(Model.Apprenticeships.Count(x => !x.CanBeApprove))</p>
+            </div>
+        </div>
+        <div class="column-one-third total-cost">
+            <div>
+                <h2 class="bold-xlarge">&pound;@Model.Apprenticeships.Sum(x => x.Cost ?? 0).ToString("N0")</h2>
+                <p class="heading-small">Total cost</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-row">
         <div class="column-one-half employer-details">
             <p><span class="strong">Employer: </span>@Model.LegalEntityName</p>
             <p><span class="strong">Cohort reference: </span>@Model.Reference</p>
@@ -89,7 +91,7 @@ else
         <span class="missing">@Html.Raw("&ndash;")</span>
 }
 }
-<div class="grid-row">
+    <div class="grid-row">
         <div class="column-full bulk-upload-buttons">
             <hr class="hr-top">
 
@@ -97,7 +99,7 @@ else
             <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
             <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
             <a href="@Url.Action("UploadApprenticeships", "BulkUpload", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary upload-btn" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
-            
+
             @*<hr class="hr-bottom">*@
         </div>
     </div>
@@ -117,13 +119,14 @@ else
     {
         <div class="grid-row">
             <div class="column-full">
-
-
+                
                 @foreach (var trainingGroup in Model.Apprenticeships.OrderBy(g => g.TrainingName).GroupBy(g => g.TrainingCode))
                 {
                     var groupName = String.IsNullOrEmpty(trainingGroup.Key) ? "No training course" : @trainingGroup.First().TrainingName;
                     var groupTitle = String.Format($"{trainingGroup.Count()} x {groupName}");
                     var trainingCode = String.IsNullOrEmpty(trainingGroup.Key) ? String.Empty : @trainingGroup.First().TrainingCode;
+                    var course = Model.TrainingProgrammes.First(x => x.Id == trainingCode);
+                    var numberOverFundingLimit = trainingGroup.Count(x => x.Cost > course.MaxFunding);
 
                     <div class="group-header">
 
@@ -132,58 +135,82 @@ else
                         {
                             <p>Training code: @trainingCode</p>
                         }
-                        
-                    </div>
 
-                        <table class="tableResponsive providerList">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">ULN</th>
-                                    <th scope="col">Training course</th>
-                                    <th scope="col">Training dates</th>
-                                    <th scope="col" colspan="2">Cost</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in trainingGroup.OrderBy(a => a.CanBeApprove))
-                                {
-                                    <tr>
-                                        <td>@GetValueOrDefault(item.ApprenticeshipName)</td>
-                                        <td>@GetValueOrDefault(item.ULN)</td>
-                                        <td>@GetValueOrDefault(item.TrainingName)</td>
-                                        <td>
-                                            @if (item.StartDate != null && item.EndDate != null)
-                                            {
-                                                <span>
-                                                    @item.StartDate.Value.ToGdsFormatWithoutDay() to @item.EndDate.Value.ToGdsFormatWithoutDay() &nbsp;
-                                                </span>
-                                            }
-                                            else
-                                            {
-                                                <span class="missing">&ndash;</span>
-                                            }
-                                        </td>
-                                        <td>@GetValueOrDefault(FormatCost(item.Cost))</td>
-                                        <td><a href="@Url.Action("Edit", new {Model.HashedCommitmentId, item.HashedApprenticeshipId})" title="Edit @item.ApprenticeshipName" aria-label="Edit @item.ApprenticeshipName">Edit </a></td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-
+                        @if (numberOverFundingLimit > 0)
+                        {
+                            <div class="funding-cap-breach-header">
+                                <a name="group_@trainingGroup.Key"></a>
+                                <h3>
+                                    @($"{numberOverFundingLimit} {course.Title} {PluraliseApprentice(numberOverFundingLimit).ToLower()} above funding band maximum")
+                                </h3>
+                                The costs are above the £@course.MaxFunding.ToString("N0") <a target="_new" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">maximum value of the funding band</a> for this apprenticeship. You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.
+                            </div>
                         }
 
                     </div>
+
+                    <table class="tableResponsive providerList">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">ULN</th>
+                                <th scope="col">Training course</th>
+                                <th scope="col">Training dates</th>
+                                <th scope="col" colspan="2">Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in trainingGroup.OrderBy(a => a.CanBeApprove))
+                            {
+                                <tr>
+                                    <td>@GetValueOrDefault(item.ApprenticeshipName)</td>
+                                    <td>@GetValueOrDefault(item.ULN)</td>
+                                    <td>@GetValueOrDefault(item.TrainingName)</td>
+                                    <td>
+                                        @if (item.StartDate != null && item.EndDate != null)
+                                        {
+                                            <span>
+                                                @item.StartDate.Value.ToGdsFormatWithoutDay() to @item.EndDate.Value.ToGdsFormatWithoutDay() &nbsp;
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="missing">&ndash;</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.Cost.HasValue && item.Cost > course.MaxFunding)
+                                        {
+                                            <span class="funding-cap-breach-cell">
+                                                <a class="funding-cap-breach-link" href="#group_@trainingGroup.Key">@FormatCost(item.Cost)</a>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @GetValueOrDefault(FormatCost(item.Cost))
+                                        }
+                                    </td>
+                                    <td><a href="@Url.Action("Edit", new {Model.HashedCommitmentId, item.HashedApprenticeshipId})" title="Edit @item.ApprenticeshipName" aria-label="Edit @item.ApprenticeshipName">Edit </a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                }
+
+            </div>
         </div>
     }
 
-<a class="button delete-button" href="@Url.Action("DeleteCohort", new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Delete">Delete cohort</a>
+    <a class="button delete-button" href="@Url.Action("DeleteCohort", new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Delete">Delete cohort</a>
 
     @section breadcrumb {
         <div class="breadcrumbs">
             <a href="@Model.BackLinkUrl" aria-label="Back" class="back-link">Back</a>
         </div>
     }
+
+</div>
 
 
 

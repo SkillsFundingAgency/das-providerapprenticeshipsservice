@@ -287,7 +287,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 HasApprenticeships = apprenticeships.Count > 0,
                 Apprenticeships = apprenticeships,
                 LatestMessage = message,
-                PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed
+                PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed,
+                TrainingProgrammes = await GetTrainingProgrammes()
             };
         }
 

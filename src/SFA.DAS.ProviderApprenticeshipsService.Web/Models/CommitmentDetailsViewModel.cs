@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
@@ -15,5 +16,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool PendingChanges { get; set; }
 
         public string BackLinkUrl { get; set; }
+        public IList<ITrainingProgramme> TrainingProgrammes { get; set; }
     }
 }
