@@ -49,7 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("WithEmployer")]
+        [Route("cohorts/employer")]
         public async Task<ActionResult> WithEmployer(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAllWithEmployer(providerId);
@@ -58,7 +58,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("NewRequests")]
+        [Route("cohorts/new")]
         public async Task<ActionResult> NewRequests(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAllNewRequests(providerId);
@@ -68,7 +68,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("ReadyForReview")]
+        [Route("cohorts/review")]
         public async Task<ActionResult> ReadyForReview(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAllReadyForReview(providerId);
@@ -78,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("ReadyForApproval")]
+        [Route("cohorts/approve")]
         public async Task<ActionResult> ReadyForApproval(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAllReadyForApproval(providerId);
@@ -307,24 +307,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedCommitmentId}/Submit")]
         public async Task<ActionResult> Submit(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
         {
-            try
-            {
-                var commitment = await _commitmentOrchestrator.GetCommitmentCheckState(providerId, hashedCommitmentId);
+            var commitment = await _commitmentOrchestrator.GetCommitmentCheckState(providerId, hashedCommitmentId);
 
-                var model = new SubmitCommitmentViewModel
-                {
-                    ProviderId = providerId,
-                    HashedCommitmentId = hashedCommitmentId,
-                    EmployerName = commitment.LegalEntityName,
-                    SaveStatus = saveStatus
-                };
-
-                return View(model);
-            }
-            catch (InvalidStateException)
+            var model = new SubmitCommitmentViewModel
             {
-                return RedirectToAction("Cohorts", new { providerId });
-            }
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId,
+                EmployerName = commitment.LegalEntityName,
+                SaveStatus = saveStatus
+            };
+
+            return View(model);
         }
 
         [HttpPost]

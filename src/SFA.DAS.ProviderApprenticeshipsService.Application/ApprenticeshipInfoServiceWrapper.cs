@@ -57,11 +57,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
             return await _cache.GetCustomValueAsync<FrameworksView>(FrameworksKey);
         }
 
-        public ProvidersView GetProvider(int ukPrn)
+        public ProvidersView GetProvider(long ukPrn)
         {
-            var api = new ProviderApiClient(_configuration.BaseUrl);
-
-            return MapFrom(api.Get(ukPrn));
+            var api = new Providers.Api.Client.ProviderApiClient(_configuration.BaseUrl);
+            var providers = api.Get(ukPrn);           
+            return MapFrom(providers);
         }
 
         private static FrameworksView MapFrom(List<FrameworkSummary> frameworks)
@@ -88,19 +88,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
             };
         }
 
-        private static ProvidersView MapFrom(IEnumerable<SFA.DAS.Apprenticeships.Api.Types.Provider> providers)
+        private static ProvidersView MapFrom(Apprenticeships.Api.Types.Providers.Provider provider)
         {
             return new ProvidersView
             {
                 CreatedDate = DateTime.UtcNow,
-                Providers = providers.Select(x => new Provider
+                Provider = new Provider()
                 {
-                    Ukprn = x.Ukprn,
-                    ProviderName = x.ProviderName,
-                    Email = x.Email,
-                    Phone = x.Phone,
-                    NationalProvider = x.NationalProvider
-                }).ToList()
+                    Ukprn = provider.Ukprn,
+                    ProviderName = provider.ProviderName,
+                    Email = provider.Email,
+                    Phone = provider.Phone,
+                    NationalProvider = provider.NationalProvider
+                }
             };
         }
 
