@@ -193,7 +193,7 @@ else
                                         @if (course!=null && apprenticeship.Cost.HasValue && apprenticeship.Cost > course.MaxFunding)
                                         {
                                              <td class="funding-cap-alert">
-                                                <a href="#max-funding-group-@trainingGroup.Key" aria-label="Cost is above the maximum funding band" aria-describedby="#group_@trainingGroup.Key" title="Cost is above the maximum funding band">@FormatCost(apprenticeship.Cost)</a>
+                                                <a href="#max-funding-group-@trainingGroup.Key" aria-label="Cost is above the maximum funding band" aria-describedby="max-funding-group-@trainingGroup.Key" title="Cost is above the maximum funding band">@FormatCost(apprenticeship.Cost)</a>
                                             </td>
                                         }
                                         else
