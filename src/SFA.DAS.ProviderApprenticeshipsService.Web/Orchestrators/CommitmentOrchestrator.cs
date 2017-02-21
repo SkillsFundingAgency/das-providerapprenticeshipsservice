@@ -526,6 +526,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 HashedApprenticeshipId = _hashingService.HashValue(x.Id),
                 ApprenticeshipName = x.ApprenticeshipName,
+                ApprenticeDateOfBirth = x.DateOfBirth,
                 ULN = x.ULN,
                 TrainingCode = x.TrainingCode,
                 TrainingName = x.TrainingName,
