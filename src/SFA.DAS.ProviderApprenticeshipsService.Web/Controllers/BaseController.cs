@@ -64,7 +64,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
         }
 
-        private string GetClaimValue(string claimKey)
+        protected string GetClaimValue(string claimKey)
         {
             var claimIdentity = ((ClaimsIdentity)HttpContext.User.Identity).Claims.FirstOrDefault(claim => claim.Type == claimKey);
             return claimIdentity != null ? claimIdentity.Value : string.Empty;

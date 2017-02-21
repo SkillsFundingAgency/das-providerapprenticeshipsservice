@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using System.Runtime.CompilerServices;
+
+using MediatR;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment
 {
@@ -17,5 +19,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
         public bool CreateTask { get; set; }
 
         public LastAction LastAction { get; set; }
+
+        public string UserDisplayName { get; set; }
+
+        public string UserEmailAddress { get; set; }
     }
 }

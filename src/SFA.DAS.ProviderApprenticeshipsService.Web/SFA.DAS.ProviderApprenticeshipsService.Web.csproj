@@ -397,7 +397,6 @@
     <Compile Include="Models\Types\FlashMessageViewModel.cs" />
     <Compile Include="Models\Types\SaveOrSendStatus.cs" />
     <Compile Include="Models\SignInUserModel.cs" />
-    <Compile Include="Models\SignInUserViewModel.cs" />
     <Compile Include="Models\SubmitCommitmentViewModel.cs" />
     <Compile Include="Models\SystemDetails.cs" />
     <Compile Include="Models\TaskItemViewModel.cs" />

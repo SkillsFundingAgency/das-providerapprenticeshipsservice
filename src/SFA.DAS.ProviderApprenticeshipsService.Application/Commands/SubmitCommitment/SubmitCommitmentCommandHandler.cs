@@ -56,7 +56,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commitment does not belong to this Provider" } });
 
             // TODO: When get to Notification story for provider pass through user details.
-            var submission = new CommitmentSubmission { Action = message.LastAction, LastUpdatedByInfo = new LastUpdateInfo { Name = "Dummy User", EmailAddress = "Dummy@Dummy.com" } };
+            var submission = new CommitmentSubmission { Action = message.LastAction, LastUpdatedByInfo = 
+                new LastUpdateInfo
+                    {
+                        Name = message?.UserDisplayName ?? "",
+                        EmailAddress = message?.UserEmailAddress ?? ""
+                    }
+                };
 
             await _commitmentsApi.PatchProviderCommitment(message.ProviderId, message.CommitmentId, submission);
 
