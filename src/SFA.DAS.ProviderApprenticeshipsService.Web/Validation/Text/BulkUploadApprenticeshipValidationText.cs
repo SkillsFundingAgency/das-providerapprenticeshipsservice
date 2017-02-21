@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
+﻿using System;
+
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
 {
     public class BulkUploadApprenticeshipValidationText : IApprenticeshipValidationErrorText
     {
@@ -21,11 +23,11 @@
             new ValidationMessage("The <strong>Unique Learner number</strong> is already in use on another record for this Learning Start Date", "ULN_04");
 
         public ValidationMessage FamilyName01 =>
-            new ValidationMessage("The <strong>Family name</strong> must be entered", "FamilyName_01");
+            new ValidationMessage("You must enter a <strong>Family name</strong> that's no longer than 100 characters", "FamilyName_01");
         public ValidationMessage FamilyName02 =>
             new ValidationMessage("You must enter a <strong>Family name</strong> that's no longer than 100 characters", "FamilyName_02");
         public ValidationMessage GivenNames01 =>
-            new ValidationMessage("The <strong>Given names</strong> must be entered", "GivenNames_01");
+            new ValidationMessage("You must enter <strong>Given names</strong> that are no longer than 100 characters", "GivenNames_01");
         public ValidationMessage GivenNames02 =>
             new ValidationMessage("You must enter <strong>Given names</strong> that are no longer than 100 characters", "GivenNames_02");
 
@@ -51,6 +53,8 @@
             new ValidationMessage("The <strong>Learning start date</strong> must be entered", "LearnStartDate_01");
         public ValidationMessage LearnStartDate02 =>
             new ValidationMessage("The <strong>Learning start date</strong> must be entered and be in the format yyyy-mm-dd", "LearnStartDate_02");
+        public ValidationMessage LearnStartDate03 =>
+            new ValidationMessage("The <strong>start date</strong> must not be earlier than 1 May 2017", "LearnStartDate_03");
 
         public ValidationMessage LearnPlanEndDate01 =>
             new ValidationMessage("The <strong>Learning planned end date</strong> must be entered", "LearnPlanEndDate_01");
@@ -65,11 +69,6 @@
             new ValidationMessage("The <strong>Training price</strong> must be entered", "TrainingPrice_01");
         public ValidationMessage TrainingPrice02 =>
             new ValidationMessage("The <strong>Training price</strong> must be entered and must not be more than 6 characters in length", "TrainingPrice_02");
-
-        public ValidationMessage EPAOrgID01 =>
-            new ValidationMessage("The <strong>End point assessment</strong> id must not be more than 7 characters in length", "EPAOrgID_01");
-        public ValidationMessage EPAOrgID02 =>
-            new ValidationMessage("The <strong>End point assessment</strong> id must not be more than 7 characters in length", "EPAOrgID_02");
 
         public ValidationMessage ProviderRef01 =>
             new ValidationMessage("The <strong>Reference</strong> must be 20 characters or fewer", "ProviderRef_01");
@@ -120,5 +119,9 @@
 
         public ValidationMessage TrainingCode01 =>
             new ValidationMessage("<strong>Training code</strong> cannot be empty", "DefaultErrorCode");
+
+        public ValidationMessage EPAOrgID01 { get { throw new NotImplementedException(); } }
+
+        public ValidationMessage EPAOrgID02 { get { throw new NotImplementedException(); } }
     }
 }

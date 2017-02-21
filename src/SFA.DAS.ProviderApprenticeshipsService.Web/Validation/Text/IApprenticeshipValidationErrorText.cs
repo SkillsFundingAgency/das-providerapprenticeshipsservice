@@ -25,6 +25,7 @@
         ValidationMessage LearnPlanEndDate06 { get; }
         ValidationMessage LearnStartDate01 { get; }
         ValidationMessage LearnStartDate02 { get; }
+        ValidationMessage LearnStartDate03 { get; }
         ValidationMessage NINumber01 { get; }
         ValidationMessage NINumber02 { get; }
         ValidationMessage NINumber03 { get; }

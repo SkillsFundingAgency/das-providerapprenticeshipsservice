@@ -13,6 +13,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
     {
         public CsvRecordValidator(BulkUploadApprenticeshipValidationText validationText)
         {
+            // Only validating the fields that are in csv that dont have a 1-1 mapping in the domain model
             Func<int?, IEnumerable<int>, bool> inList = (v, l) => !v.HasValue || l.Contains(v.Value);
 
             RuleFor(r => r.CohortRef)
@@ -46,15 +47,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             RuleFor(r => r.StdCode)
                 .Must(m => !m.HasValue || m.Value == 0).When(m => inList(m.ProgType, new[] { 2, 3, 20, 21, 22, 23 }))
                     .WithMessage(validationText.StdCode03.Text).WithErrorCode(validationText.StdCode03.ErrorCode);
-
-            RuleFor(r => r.DateOfBirth)
-                .Matches(@"^\d{4}-\d{2}-\d{2}$").WithMessage(validationText.DateOfBirth02.Text).WithErrorCode(validationText.DateOfBirth02.ErrorCode);
-
-            RuleFor(r => r.LearnStartDate)
-                .Matches(@"^\d{4}-\d{2}$").WithMessage(validationText.LearnStartDate02.Text).WithErrorCode(validationText.LearnStartDate02.ErrorCode);
-
-            RuleFor(r => r.LearnPlanEndDate)
-                .Matches(@"^\d{4}-\d{2}$").WithMessage(validationText.LearnPlanEndDate02.Text).WithErrorCode(validationText.LearnPlanEndDate02.ErrorCode);
         }
     }
 }
