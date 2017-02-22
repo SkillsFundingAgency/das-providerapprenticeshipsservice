@@ -146,8 +146,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var model = await _commitmentOrchestrator.GetApprenticeship(providerId, hashedCommitmentId, hashedApprenticeshipId);
             ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
 
-            ViewBag.ApprovalWarningState = model.WarningValidation;
-
             return View(model.Apprenticeship);
         }
 

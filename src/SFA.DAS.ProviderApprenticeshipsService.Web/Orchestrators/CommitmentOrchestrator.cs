@@ -383,12 +383,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             apprenticeship.ProviderId = providerId;
 
-            var warningValidator = new ApprenticeshipViewModelApproveValidator(new WebApprenticeshipValidationText());
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes(),
-                WarningValidation = warningValidator.Validate(apprenticeship)
+                ApprenticeshipProgrammes = await GetTrainingProgrammes()
             };
         }
 

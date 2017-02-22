@@ -23,7 +23,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
         // TODO: LWA - Can these be injected in?
         private readonly ApprenticeshipBulkUploadValidator _viewModelValidator = new ApprenticeshipBulkUploadValidator(new BulkUploadApprenticeshipValidationText(), new CurrentDateTime());
-        private readonly ApprenticeshipViewModelApproveValidator _approvalValidator = new ApprenticeshipViewModelApproveValidator(new BulkUploadApprenticeshipValidationText());
         private readonly CsvRecordValidator _csvRecordValidator = new CsvRecordValidator(new BulkUploadApprenticeshipValidationText());
 
         public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, ILog logger)
@@ -81,13 +80,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                         var validationResult = _viewModelValidator.Validate(viewModel);
                         validationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i, record)));
 
-                        var approvalValidationResult = _approvalValidator.Validate(viewModel);
-                        approvalValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i, record)));
-
                         // Validate csv record
                         var csvValidationResult = _csvRecordValidator.Validate(record.CsvRecord);
                         csvValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i, record)));
 
+                        // TODO: LWA - Should we move this into the validator?
                         if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode) && trainingProgrammes.All(m => m.Id != viewModel.TrainingCode))
                             errors.Add(new UploadError("Not a valid <strong>Training code</strong>", "StdCode_04", i, record));
                     });

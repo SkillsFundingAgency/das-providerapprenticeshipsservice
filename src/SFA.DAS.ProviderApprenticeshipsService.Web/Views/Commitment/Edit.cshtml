@@ -21,30 +21,13 @@
 
             @Html.AntiForgeryToken()
 
-            @{ var validation = Html.ViewData["ApprovalWarningState"] as FluentValidation.Results.ValidationResult; }
-
             <h1 class="heading-xlarge">Edit an apprentice</h1>
             
             <div class="panel panel-border-wide">
                 
-
-             
-                @if (validation != null && !validation.IsValid)
-                {
-                    <p>
-                        You can only receive payments for this apprentice once all the fields have been completed - either by yourself or the employer.
-
-                    </p>
-                }
-    
-                else
-                {
-                    <p>
-                        You can only receive payments for this apprentice once all the fields have been completed - either by yourself or the employer.
-
-                    </p>
-                }
-
+                <p>
+                    You can only receive payments for this apprentice once all the fields have been completed - either by yourself or the employer.
+                </p>
                
             </div>
             <hr/>
