@@ -24,6 +24,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
             ValidateUln();
 
+            ValidateTraining();
+
             ValidateDateOfBirth();
             
             ValidateStartDate();
@@ -59,6 +61,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .NotNull().WithMessage(_validationText.Uln01.Text).WithErrorCode(_validationText.Uln01.ErrorCode)
                 .Matches("^[1-9]{1}[0-9]{9}$").WithMessage(_validationText.Uln01.Text).WithErrorCode(_validationText.Uln01.ErrorCode)
                 .Must(m => m != "9999999999").WithMessage(_validationText.Uln02.Text).WithErrorCode(_validationText.Uln02.ErrorCode);
+        }
+
+        protected virtual void ValidateTraining()
+        {
+            RuleFor(x => x.TrainingCode)
+                .NotEmpty().WithMessage(_validationText.TrainingCode01.Text).WithErrorCode(_validationText.TrainingCode01.ErrorCode); ;
         }
 
         protected virtual void ValidateDateOfBirth()

@@ -20,6 +20,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             });
         }
 
+        protected override void ValidateTraining()
+        {
+            When(x => !string.IsNullOrEmpty(x.TrainingCode), () =>
+            {
+                base.ValidateTraining();
+            });
+        }
+
         protected override void ValidateDateOfBirth()
         {
             When(x => HasAnyValuesSet(x.DateOfBirth), () => 
