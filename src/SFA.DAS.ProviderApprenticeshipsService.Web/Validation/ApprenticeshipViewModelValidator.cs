@@ -1,14 +1,16 @@
-﻿using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
     public sealed class ApprenticeshipViewModelValidator : ApprenticeshipCoreValidator
     {
-        public ApprenticeshipViewModelValidator() : this(new WebApprenticeshipValidationText())
+        public ApprenticeshipViewModelValidator() : this(new WebApprenticeshipValidationText(), new CurrentDateTime())
         { } // The default is used by the MVC model binding
 
-        public ApprenticeshipViewModelValidator(WebApprenticeshipValidationText validationText) : base(validationText)
+        public ApprenticeshipViewModelValidator(WebApprenticeshipValidationText validationText, ICurrentDateTime currentDateTime) : base(validationText, currentDateTime)
         {
         }
 

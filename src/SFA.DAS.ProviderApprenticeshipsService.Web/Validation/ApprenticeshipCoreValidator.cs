@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using FluentValidation;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
@@ -13,10 +14,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         protected static readonly Func<DateTime?, bool, bool> CheckIfNotNull = (dt, b) => dt == null || b;
         protected static readonly Func<string, int, bool> HaveNumberOfDigitsFewerThan = (str, length) => { return (str?.Count(char.IsDigit) ?? 0) < length; };
         private readonly IApprenticeshipValidationErrorText _validationText;
+        private readonly ICurrentDateTime _currentDateTime;
 
-        public ApprenticeshipCoreValidator(IApprenticeshipValidationErrorText validationText)
+        public ApprenticeshipCoreValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime)
         {
             _validationText = validationText;
+            _currentDateTime = currentDateTime;
 
             ValidateFirstName();
 
@@ -74,7 +77,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             RuleFor(r => r.DateOfBirth)
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .NotNull().WithMessage(_validationText.DateOfBirth01.Text).WithErrorCode(_validationText.DateOfBirth01.ErrorCode)
-                .Must(ValidateDateOfBirth).WithMessage(_validationText.DateOfBirth01.Text).WithErrorCode(_validationText.DateOfBirth01.ErrorCode);
+                .Must(ValidateDateOfBirth).WithMessage(_validationText.DateOfBirth01.Text).WithErrorCode(_validationText.DateOfBirth01.ErrorCode)
+                .Must((apprenticship, dob) =>
+                {
+                    return WillApprenticeBeAtLeast15AtStartOfTraining(apprenticship, dob);
+                }).WithMessage(_validationText.DateOfBirth03.Text).WithErrorCode(_validationText.DateOfBirth03.ErrorCode);
         }
 
         protected virtual void ValidateStartDate()
@@ -111,6 +118,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             RuleFor(x => x.ProviderRef)
                 .Must(m => LengthLessThanFunc(m, 20))
                     .When(x => !string.IsNullOrEmpty(x.ProviderRef)).WithMessage(_validationText.ProviderRef01.Text).WithErrorCode(_validationText.ProviderRef01.ErrorCode);
+        }
+
+        private bool WillApprenticeBeAtLeast15AtStartOfTraining(ApprenticeshipViewModel model, DateTimeViewModel dob)
+        {
+            DateTime? startDate = model?.StartDate?.DateTime;
+            DateTime? dobDate = dob?.DateTime;
+
+            if (startDate == null || dob == null) return true; // Don't fail validation if both fields not set
+
+            int age = startDate.Value.Year - dobDate.Value.Year;
+            if (startDate < dobDate.Value.AddYears(age)) age--;
+
+            return age >= 15;
         }
 
         private bool BeGreaterThenStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel date)

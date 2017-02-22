@@ -157,6 +157,7 @@
     <Compile Include="Data\ProviderAgreementStatusRepository.cs" />
     <Compile Include="Logging\ProviderCommitmentsLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CurrentDateTime.cs" />
     <Compile Include="Services\HashingService.cs" />
   </ItemGroup>
   <ItemGroup>

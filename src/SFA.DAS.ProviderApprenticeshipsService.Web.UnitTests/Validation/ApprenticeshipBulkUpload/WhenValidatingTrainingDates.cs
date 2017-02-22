@@ -102,19 +102,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             result.IsValid.Should().BeTrue();
         }
 
-        // TODO: LWA - Implement when have control over current date
-        //[Test]
-        //public void ShouldFailValidationForPlanedEndDateWithCurrentDate()
-        //{
-        //    var date = DateTime.Now;
-        //    ValidModel.StartDate = new DateTimeViewModel(DateTime.Now.AddDays(-30));
-        //    ValidModel.EndDate = new DateTimeViewModel(date.Day, date.Month, date.Year);
+        [Test]
+        public void ShouldFailValidationForPlanedEndDateWithCurrentDate()
+        {
+            MockCurrentDateTime.SetupGet(x => x.Now).Returns(new DateTime(2017, 7, 15));
+            ValidModel.StartDate = new DateTimeViewModel(new DateTime(2017, 7, 20));
+            ValidModel.EndDate = new DateTimeViewModel(new DateTime(2017, 7, 18));
 
-        //    var result = Validator.Validate(ValidModel);
+            var result = Validator.Validate(ValidModel);
 
-        //    result.IsValid.Should().BeFalse();
-        //    result.Errors[0].ErrorMessage.Should().Be("The <strong>Learning planned end date</strong> must be entered and be in the format yyyy-mm-dd");
-        //}
+            result.IsValid.Should().BeFalse();
+            result.Errors[0].ErrorMessage.Should().Be("The <strong>Learning planned end date</strong> must not be on or before the Learning start date");
+        }
 
         [Test]
 

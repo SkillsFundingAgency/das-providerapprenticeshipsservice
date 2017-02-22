@@ -38,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
             new ValidationMessage("The Date of birth must be entered and be in the format yyyy-mm-dd", "DateOfBirth_02");
 
         public ValidationMessage DateOfBirth03 =>
-            new ValidationMessage("The date of birth must be in the past", "DateOfBirth_03"); // This rule will be replaced with check on current teaching year. See spec https://skillsfundingagency.atlassian.net/wiki/download/attachments/74711981/Bulk%20Upload%20Validation%20Rules.xlsx?api=v2
+            new ValidationMessage("The apprentice must be at least 15 years old at the start of the programme", "DateOfBirth_03");
 
         public ValidationMessage NINumber01 =>
             new ValidationMessage("National insurance number cannot be empty", "NINumber_01");

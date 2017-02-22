@@ -1,5 +1,8 @@
 ﻿using System;
+using Moq;
 using NUnit.Framework;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
@@ -9,12 +12,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
 {
     public abstract class ApprenticeshipBulkUploadValidationTestBase
     {
-        protected readonly ApprenticeshipBulkUploadValidator Validator = new ApprenticeshipBulkUploadValidator(new BulkUploadApprenticeshipValidationText());
+        protected ApprenticeshipBulkUploadValidator Validator = new ApprenticeshipBulkUploadValidator(new BulkUploadApprenticeshipValidationText(), new CurrentDateTime());
         protected ApprenticeshipViewModel ValidModel;
+        protected Mock<ICurrentDateTime> MockCurrentDateTime;
 
         [SetUp]
         public void BaseSetup()
         {
+            MockCurrentDateTime = new Mock<ICurrentDateTime>();
+            Validator = new ApprenticeshipBulkUploadValidator(new BulkUploadApprenticeshipValidationText(), MockCurrentDateTime.Object);
+
             ValidModel = new ApprenticeshipViewModel
             {
                 ULN = "1001234567",
