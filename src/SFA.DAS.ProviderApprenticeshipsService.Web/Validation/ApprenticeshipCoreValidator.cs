@@ -100,7 +100,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .NotNull().WithMessage(_validationText.LearnPlanEndDate02.Text).WithErrorCode(_validationText.LearnPlanEndDate02.ErrorCode)
                 .Must(ValidateDateWithoutDay).WithMessage(_validationText.LearnPlanEndDate02.Text).WithErrorCode(_validationText.LearnPlanEndDate02.ErrorCode)
                 .Must(BeGreaterThenStartDate).WithMessage(_validationText.LearnPlanEndDate03.Text).WithErrorCode(_validationText.LearnPlanEndDate03.ErrorCode)
-                .Must(m => m.DateTime > DateTime.UtcNow).WithMessage(_validationText.LearnPlanEndDate06.Text).WithErrorCode(_validationText.LearnPlanEndDate06.ErrorCode);
+                .Must(m => m.DateTime > _currentDateTime.Now).WithMessage(_validationText.LearnPlanEndDate06.Text).WithErrorCode(_validationText.LearnPlanEndDate06.ErrorCode);
         }
 
         protected virtual void ValidateCost()

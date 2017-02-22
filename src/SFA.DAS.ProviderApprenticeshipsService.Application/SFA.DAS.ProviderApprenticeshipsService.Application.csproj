@@ -155,7 +155,6 @@
     <Compile Include="Queries\GetTask\GetTaskQueryHandler.cs" />
     <Compile Include="Queries\GetTask\GetTaskQueryRequest.cs" />
     <Compile Include="Queries\GetTask\GetTaskQueryResponse.cs" />
-    <Compile Include="TaskFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
