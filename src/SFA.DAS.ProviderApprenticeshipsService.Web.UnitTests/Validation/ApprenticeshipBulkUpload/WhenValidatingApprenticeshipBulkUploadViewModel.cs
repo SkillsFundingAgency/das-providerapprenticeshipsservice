@@ -19,7 +19,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [SetUp]
         public void Setup()
         {
-            _validModel = new ApprenticeshipViewModel { ULN = "1001234567", FirstName = "TestFirstName", LastName = "TestLastName", DateOfBirth = new DateTimeViewModel(DateTime.Now.AddYears(-16)) };
+            _validModel = new ApprenticeshipViewModel
+            {
+                ULN = "1001234567",
+                FirstName = "TestFirstName",
+                LastName = "TestLastName",
+                DateOfBirth = new DateTimeViewModel(DateTime.Now.AddYears(-16)),
+                StartDate = new DateTimeViewModel(new DateTime(2017, 06, 20)),
+                EndDate = new DateTimeViewModel(new DateTime(2018, 05, 15)),
+                Cost = "1234"
+            };
         }
 
         [Test]
