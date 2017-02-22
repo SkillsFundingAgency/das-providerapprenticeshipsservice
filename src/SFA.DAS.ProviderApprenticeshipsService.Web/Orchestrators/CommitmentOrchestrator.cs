@@ -287,7 +287,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 HasApprenticeships = apprenticeships.Count > 0,
                 Apprenticeships = apprenticeships,
                 LatestMessage = message,
-                PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed
+                PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed,
+                TrainingProgrammes = await GetTrainingProgrammes()
             };
         }
 
@@ -525,6 +526,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 HashedApprenticeshipId = _hashingService.HashValue(x.Id),
                 ApprenticeshipName = x.ApprenticeshipName,
+                ApprenticeDateOfBirth = x.DateOfBirth,
                 ULN = x.ULN,
                 TrainingCode = x.TrainingCode,
                 TrainingName = x.TrainingName,
