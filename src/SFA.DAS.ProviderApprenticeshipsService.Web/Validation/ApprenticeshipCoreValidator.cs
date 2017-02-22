@@ -30,7 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             ValidateTraining();
 
             ValidateDateOfBirth();
-            
+
             ValidateStartDate();
 
             ValidateEndDate();
@@ -44,7 +44,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         {
             RuleFor(x => x.FirstName)
                 .Cascade(CascadeMode.StopOnFirstFailure)
-                .NotNull().WithMessage(_validationText.GivenNames01.Text).WithErrorCode(_validationText.GivenNames01.ErrorCode)
                 .NotEmpty().WithMessage(_validationText.GivenNames01.Text).WithErrorCode(_validationText.GivenNames01.ErrorCode)
                 .Must(m => LengthLessThanFunc(m, 101)).WithMessage(_validationText.GivenNames02.Text).WithErrorCode(_validationText.GivenNames02.ErrorCode);
         }
@@ -53,7 +52,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         {
             RuleFor(x => x.LastName)
                 .Cascade(CascadeMode.StopOnFirstFailure)
-                .NotNull().WithMessage(_validationText.FamilyName01.Text).WithErrorCode(_validationText.FamilyName01.ErrorCode)
                 .NotEmpty().WithMessage(_validationText.FamilyName01.Text).WithErrorCode(_validationText.FamilyName01.ErrorCode)
                 .Must(m => LengthLessThanFunc(m, 101)).WithMessage(_validationText.FamilyName02.Text).WithErrorCode(_validationText.FamilyName02.ErrorCode); ;
         }

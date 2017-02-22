@@ -65,8 +65,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
         private ApprenticeshipUploadModel MapTo(CsvRecord record)
         {
             var dateOfBirth = GetValidDate(record.DateOfBirth, "yyyy-MM-dd");
-            var learnerStartDate = GetValidDate(record.LearnStartDate, "yyyy-MM");
-            var learnerEndDate = GetValidDate(record.LearnPlanEndDate, "yyyy-MM");
+            var learnerStartDate = GetValidDate(record.StartDate, "yyyy-MM");
+            var learnerEndDate = GetValidDate(record.EndDate, "yyyy-MM");
 
             var trainingCode = record.ProgType == 25
                                    ? record.StdCode.ToString()
