@@ -427,7 +427,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestContext.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Validation\ApprenticeshipBaseValidator.cs" />
+    <Compile Include="Validation\ApprenticeshipCoreValidator.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUploadValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelApproveValidator.cs" />

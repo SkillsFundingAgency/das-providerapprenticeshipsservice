@@ -1,11 +1,22 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.ApprenticeshipCreateOrEdit
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.ApprenticeshipBulkUpload
 {
     [TestFixture]
-    public class WhenValidatingCost : ApprenticeshipValidationTestBase
+    public class WhenValidatingCost : ApprenticeshipBulkUploadValidationTestBase
     {
+        [TestCase("")]
+        [TestCase(null)]
+        public void CostMustNotBeEmpty(string cost)
+        {
+            ValidModel.Cost = cost;
+
+            var result = Validator.Validate(ValidModel);
+
+            result.IsValid.Should().BeFalse();
+        }
+
         [TestCase("1000")]
         [TestCase("1234")]
         [TestCase("123")]

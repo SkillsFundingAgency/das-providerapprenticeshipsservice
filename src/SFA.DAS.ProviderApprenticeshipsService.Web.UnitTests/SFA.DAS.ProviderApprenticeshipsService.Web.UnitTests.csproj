@@ -85,9 +85,16 @@
     <Compile Include="Orchestrators\Commitments\WhenDeletingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGetCohorts.cs" />
     <Compile Include="Orchestrators\Commitments\WhenUploadingFile.cs" />
+    <Compile Include="Validation\ApprenticeshipBulkUpload\ApprenticeshipBulkUploadValidationTestBase.cs" />
+    <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingCost.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingDateOfBirth.cs" />
-    <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingApprenticeshipBulkUploadViewModel.cs" />
-    <Compile Include="Validation\ApprenticeshipCreateOrEdit\ApprenticeshipValidadationTestBase.cs" />
+    <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingFirstName.cs" />
+    <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingLastName.cs" />
+    <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingProviderReference.cs" />
+    <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingTrainingCode.cs" />
+    <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingTrainingDates.cs" />
+    <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingUln.cs" />
+    <Compile Include="Validation\ApprenticeshipCreateOrEdit\ApprenticeshipValidationTestBase.cs" />
     <Compile Include="Validation\ApprenticeshipCreateOrEdit\WhenValidatingFirstName.cs" />
     <Compile Include="Validation\ApprenticeshipCreateOrEdit\WhenValidatingDateOfBirth.cs" />
     <Compile Include="Validation\ApprenticeshipCreateOrEdit\WhenValidatingTrainingCode.cs" />
@@ -100,7 +107,6 @@
     <Compile Include="Orchestrators\BulkUpload\WhenValidatingRecordsBulkUpload.cs" />
     <Compile Include="Orchestrators\BulkUpload\WhenValidatingBulkUploadFileAttributes.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
-    <Compile Include="Validation\ApprenticeshipApproval\WhenValidatingApprenticeshipViewModelForApproval.cs" />
     <Compile Include="Orchestrators\Commitments\WhenApproveCommitment.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingCommitmentViewModel.cs" />
     <Compile Include="Orchestrators\Commitments\WhenFinishEditing.cs" />

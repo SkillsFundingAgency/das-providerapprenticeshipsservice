@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.ApprenticeshipCreateOrEdit
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.ApprenticeshipBulkUpload
 {
     [TestFixture]
-    public class WhenValidatingLastName : ApprenticeshipValidationTestBase
+    public class WhenValidatingLastName : ApprenticeshipBulkUploadValidationTestBase
     { 
         [Test]
         public void TestLastNameNotNull()
@@ -14,7 +14,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             var result = Validator.Validate(ValidModel);
 
             result.Errors.Count.Should().Be(1);
-            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("Last name must be entered");
+            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("You must enter a <strong>Family name</strong> that's no longer than 100 characters");
         }
 
         [Test]
@@ -25,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             var result = Validator.Validate(ValidModel);
             result.Errors.Count.Should().Be(1);
 
-            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("Last name must be entered");
+            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("You must enter a <strong>Family name</strong> that's no longer than 100 characters");
         }
 
         [TestCase(99, 0)]
@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
 
             if (expectedErrorCount > 0)
             {
-                result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("You must enter a last name that's no longer than 100 characters");
+                result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("You must enter a <strong>Family name</strong> that's no longer than 100 characters");
             }
         }
     }

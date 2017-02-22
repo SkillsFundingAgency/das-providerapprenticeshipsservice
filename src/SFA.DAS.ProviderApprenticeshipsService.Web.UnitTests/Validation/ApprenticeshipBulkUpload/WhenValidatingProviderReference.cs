@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.ApprenticeshipCreateOrEdit
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.ApprenticeshipBulkUpload
 {
     [TestFixture]
-    public class WhenValidatingProviderReference : ApprenticeshipValidationTestBase
+    public class WhenValidatingProviderReference : ApprenticeshipBulkUploadValidationTestBase
     {
         [TestCase("")]
         [TestCase(null)]
@@ -25,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             var result = Validator.Validate(ValidModel);
 
             result.Errors.Count.Should().Be(1);
-            result.Errors[0].ErrorMessage.Should().Be("The Reference must be 20 characters or fewer");
+            result.Errors[0].ErrorMessage.Should().Be("The <strong>Reference</strong> must be 20 characters or fewer");
             result.Errors[0].ErrorCode.Should().Be("ProviderRef_01");
         }
 

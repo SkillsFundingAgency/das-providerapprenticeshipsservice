@@ -7,14 +7,14 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
-    public class ApprenticeshipBaseValidator : AbstractValidator<ApprenticeshipViewModel>
+    public class ApprenticeshipCoreValidator : AbstractValidator<ApprenticeshipViewModel>
     {
         protected static readonly Func<string, int, bool> LengthLessThanFunc = (str, length) => (str?.Length ?? length) < length;
         protected static readonly Func<DateTime?, bool, bool> CheckIfNotNull = (dt, b) => dt == null || b;
         protected static readonly Func<string, int, bool> HaveNumberOfDigitsFewerThan = (str, length) => { return (str?.Count(char.IsDigit) ?? 0) < length; };
         private readonly IApprenticeshipValidationErrorText _validationText;
 
-        public ApprenticeshipBaseValidator(IApprenticeshipValidationErrorText validationText)
+        public ApprenticeshipCoreValidator(IApprenticeshipValidationErrorText validationText)
         {
             _validationText = validationText;
 
@@ -25,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             ValidateUln();
 
             ValidateDateOfBirth();
-
+            
             ValidateStartDate();
 
             ValidateEndDate();
@@ -64,6 +64,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         protected virtual void ValidateDateOfBirth()
         {
             RuleFor(r => r.DateOfBirth)
+                .Cascade(CascadeMode.StopOnFirstFailure)
+                .NotNull().WithMessage(_validationText.DateOfBirth01.Text).WithErrorCode(_validationText.DateOfBirth01.ErrorCode)
                 .Must(ValidateDateOfBirth).WithMessage(_validationText.DateOfBirth01.Text).WithErrorCode(_validationText.DateOfBirth01.ErrorCode);
         }
 
@@ -71,6 +73,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         {
             RuleFor(x => x.StartDate)
                 .Cascade(CascadeMode.StopOnFirstFailure)
+                .NotNull().WithMessage(_validationText.LearnStartDate01.Text).WithErrorCode(_validationText.LearnStartDate01.ErrorCode)
                 .Must(ValidateDateWithoutDay).WithMessage(_validationText.LearnStartDate01.Text).WithErrorCode(_validationText.LearnStartDate01.ErrorCode)
                 .Must(NotBeBeforeMay2017).WithMessage(_validationText.LearnStartDate03.Text).WithErrorCode(_validationText.LearnStartDate03.ErrorCode);
         }
@@ -79,6 +82,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         {
             RuleFor(x => x.EndDate)
                 .Cascade(CascadeMode.StopOnFirstFailure)
+                .NotNull().WithMessage(_validationText.LearnPlanEndDate02.Text).WithErrorCode(_validationText.LearnPlanEndDate02.ErrorCode)
                 .Must(ValidateDateWithoutDay).WithMessage(_validationText.LearnPlanEndDate02.Text).WithErrorCode(_validationText.LearnPlanEndDate02.ErrorCode)
                 .Must(BeGreaterThenStartDate).WithMessage(_validationText.LearnPlanEndDate03.Text).WithErrorCode(_validationText.LearnPlanEndDate03.ErrorCode)
                 .Must(m => m.DateTime > DateTime.UtcNow).WithMessage(_validationText.LearnPlanEndDate06.Text).WithErrorCode(_validationText.LearnPlanEndDate06.ErrorCode);
@@ -110,14 +114,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
         private bool ValidateDateWithoutDay(DateTimeViewModel date)
         {
-            if (date.DateTime == null)
-            {
-                if (!date.Month.HasValue && !date.Year.HasValue) return true;
-
-                return false;
-            }
-
-            return true;
+            return date.DateTime != null;
         }
 
         private bool NotBeBeforeMay2017(DateTimeViewModel date)

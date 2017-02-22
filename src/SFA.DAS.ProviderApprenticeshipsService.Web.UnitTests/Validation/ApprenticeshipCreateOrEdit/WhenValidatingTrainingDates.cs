@@ -1,31 +1,19 @@
 ﻿using System;
 using FluentAssertions;
 using NUnit.Framework;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.ApprenticeshipCreateOrEdit
 {
     [TestFixture]
-    public class WhenValidatingTrainingDates
+    public class WhenValidatingTrainingDates : ApprenticeshipValidationTestBase
     {
-        private readonly ApprenticeshipViewModelValidator _validator = new ApprenticeshipViewModelValidator(new WebApprenticeshipValidationText());
-        private ApprenticeshipViewModel _validModel;
-
-        [SetUp]
-        public void Setup()
-        {
-            _validModel = new ApprenticeshipViewModel { ULN = "1001234567", FirstName = "TestFirstName", LastName = "TestLastName" };
-        }
-
         [Test]
         public void ShouldIfStartDateBeforeMay2017()
         {
-            _validModel.StartDate = new DateTimeViewModel(30, 4, 2017);
+            ValidModel.StartDate = new DateTimeViewModel(30, 4, 2017);
 
-            var result = _validator.Validate(_validModel);
+            var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeFalse();
             result.Errors[0].ErrorMessage.Should().Be("The start date must not be earlier than 1 May 2017");
@@ -41,9 +29,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         public void ShouldFailValidationForStartDate(int? day, int? month, int? year, string expected)
         {
 
-            _validModel.StartDate = new DateTimeViewModel(day, month, year);
+            ValidModel.StartDate = new DateTimeViewModel(day, month, year);
 
-            var result = _validator.Validate(_validModel);
+            var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeFalse();
             result.Errors[0].ErrorMessage.Should().Be(expected);
@@ -55,9 +43,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase(null, 9, 2067)]
         public void ShouldNotFailValidationForStartDate(int? day, int? month, int? year)
         {
-            _validModel.StartDate = new DateTimeViewModel(day, month, year);
+            ValidModel.StartDate = new DateTimeViewModel(day, month, year);
 
-            var result = _validator.Validate(_validModel);
+            var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeTrue();
         }
@@ -72,9 +60,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         public void ShouldFailValidationForPlanedEndDate(int? day, int? month, int? year, string expected)
         {
 
-            _validModel.EndDate = new DateTimeViewModel(day, month, year);
+            ValidModel.EndDate = new DateTimeViewModel(day, month, year);
 
-            var result = _validator.Validate(_validModel);
+            var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeFalse();
             result.Errors[0].ErrorMessage.Should().Be(expected);
@@ -86,9 +74,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase(null, 9, 2067)]
         public void ShouldNotFailValidationForPlannedEndDate(int? day, int? month, int? year)
         {
-            _validModel.EndDate = new DateTimeViewModel(day, month, year);
+            ValidModel.EndDate = new DateTimeViewModel(day, month, year);
 
-            var result = _validator.Validate(_validModel);
+            var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeTrue();
         }
@@ -97,9 +85,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         public void ShouldFailValidationForPlanedEndDate()
         {
             var date = DateTime.Now;
-            _validModel.EndDate = new DateTimeViewModel(date.Day, date.Month, date.Year);
+            ValidModel.EndDate = new DateTimeViewModel(date.Day, date.Month, date.Year);
 
-            var result = _validator.Validate(_validModel);
+            var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeFalse();
             result.Errors[0].ErrorMessage.Should().Be("The Learning planned end date must not be in the past");
@@ -109,10 +97,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
 
         public void ShouldFailIfStartDateIsAfterEndDate()
         {
-            _validModel.StartDate = new DateTimeViewModel(DateTime.Parse("2121-05-10"));
-            _validModel.EndDate = new DateTimeViewModel(DateTime.Parse("2120-05-10"));
+            ValidModel.StartDate = new DateTimeViewModel(DateTime.Parse("2121-05-10"));
+            ValidModel.EndDate = new DateTimeViewModel(DateTime.Parse("2120-05-10"));
 
-            var result = _validator.Validate(_validModel);
+            var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeFalse();
             result.Errors[0].ErrorMessage.Should().Be("The Learning planned end date must not be on or before the Learning start date");
@@ -121,10 +109,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void ShouldNotFailIfStartDateIsNull()
         {
-            _validModel.StartDate = null;
-            _validModel.EndDate = new DateTimeViewModel(DateTime.Parse("2120-05-10"));
+            ValidModel.StartDate = null;
+            ValidModel.EndDate = new DateTimeViewModel(DateTime.Parse("2120-05-10"));
 
-            var result = _validator.Validate(_validModel);
+            var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeTrue();
         }
@@ -132,10 +120,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void ShouldNotFailIfEndDateIsNull()
         {
-            _validModel.StartDate = new DateTimeViewModel(DateTime.Parse("2121-05-10"));
-            _validModel.EndDate = null;
+            ValidModel.StartDate = new DateTimeViewModel(DateTime.Parse("2121-05-10"));
+            ValidModel.EndDate = null;
 
-            var result = _validator.Validate(_validModel);
+            var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeTrue();
         }

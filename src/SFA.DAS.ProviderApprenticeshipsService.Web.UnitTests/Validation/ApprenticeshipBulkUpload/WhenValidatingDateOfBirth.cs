@@ -1,41 +1,58 @@
-using System;
-using FluentAssertions;
-
+﻿using FluentAssertions;
 using NUnit.Framework;
-
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.ApprenticeshipBulkUpload
 {
     [TestFixture]
-    public class WhenValidatingDateOfBirth
+    public class WhenValidatingDateOfBirth : ApprenticeshipBulkUploadValidationTestBase
     {
-        private readonly ApprenticeshipBulkUploadValidator _validator = new ApprenticeshipBulkUploadValidator(new BulkUploadApprenticeshipValidationText());
-        private ApprenticeshipViewModel _validModel;
-
-        [SetUp]
-        public void Setup()
+        [Test]
+        public void ShouldFailIfNullObjectReference()
         {
-            _validModel = new ApprenticeshipViewModel
-            {
-                ULN = "1001234567",
-                FirstName = "TestFirstName",
-                LastName = "TestLastName",
-                StartDate = new DateTimeViewModel(new DateTime(2017, 06, 20)),
-                EndDate = new DateTimeViewModel(new DateTime(2018, 05, 15)),
-                Cost = "1234"
-            };
+            ValidModel.DateOfBirth = null;
+
+            var result = Validator.Validate(ValidModel);
+
+            result.IsValid.Should().BeFalse();
         }
 
         [Test]
-        public void ShouldBeInvalidIfDateValueIsNull()
+        public void ShouldFailIfHasNoValuesSet()
         {
-            var result = _validator.Validate(_validModel);
+            ValidModel.DateOfBirth = new DateTimeViewModel(null, null, null); ;
 
-            result.Errors.Count.Should().Be(1);
+            var result = Validator.Validate(ValidModel);
+
+            result.IsValid.Should().BeFalse();
+        }
+
+        [TestCase(31, 2, 13, "The <strong>Date of birth</strong> must be entered")]
+        [TestCase(5, null, 1998, "The <strong>Date of birth</strong> must be entered")]
+        [TestCase(5, 9, null, "The <strong>Date of birth</strong> must be entered")]
+        [TestCase(null, 9, 1998, "The <strong>Date of birth</strong> must be entered")]
+        [TestCase(5, 9, -1, "The <strong>Date of birth</strong> must be entered")]
+        [TestCase(0, 0, 0, "The <strong>Date of birth</strong> must be entered")]
+        [TestCase(1, 18, 1998, "The <strong>Date of birth</strong> must be entered")]
+        public void ShouldFailValidationOnDateOfBirth(int? day, int? month, int? year, string expected)
+        {
+            ValidModel.DateOfBirth = new DateTimeViewModel(day, month, year);
+
+            var result = Validator.Validate(ValidModel);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors[0].ErrorMessage.Should().Be(expected);
+        }
+
+        [TestCase(5, 9, 1998)]
+        [TestCase(1, 1, 1900)]
+        public void ShouldNotFailValidationOnDateOfBirth(int? day, int? month, int? year)
+        {
+            ValidModel.DateOfBirth = new DateTimeViewModel(day, month, year);
+
+            var result = Validator.Validate(ValidModel);
+
+            result.IsValid.Should().BeTrue();
         }
     }
 }

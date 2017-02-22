@@ -1,11 +1,22 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.ApprenticeshipCreateOrEdit
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.ApprenticeshipBulkUpload
 {
     [TestFixture]
-    public class WhenValidatingUln : ApprenticeshipValidationTestBase
+    public class WhenValidatingUln : ApprenticeshipBulkUploadValidationTestBase
     {
+        [TestCase("")]
+        [TestCase(null)]
+        public void ULNMustNotBeEmpty(string uln)
+        {
+            ValidModel.ULN = uln;
+
+            var result = Validator.Validate(ValidModel);
+
+            result.IsValid.Should().BeFalse();
+        }
+
         [TestCase("abc123")]
         [TestCase("123456789")]
         [TestCase(" ")]
