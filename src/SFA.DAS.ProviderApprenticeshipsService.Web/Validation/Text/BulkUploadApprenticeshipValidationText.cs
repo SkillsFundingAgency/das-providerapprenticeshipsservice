@@ -5,31 +5,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
     public class BulkUploadApprenticeshipValidationText : IApprenticeshipValidationErrorText
     {
         public ValidationMessage CohortRef01 =>
-            new ValidationMessage("The <strong>Cohort reference</strong> must be entered", "CohortRef_01");
+            new ValidationMessage("You must enter a <strong>cohort reference</strong> number", "CohortRef_01");
         public ValidationMessage CohortRef02 =>
-            new ValidationMessage("The <strong>Cohort Reference</strong> must be entered and must not be more than 20 characters in length", "CohortRef_02");
+            new ValidationMessage("You must enter a <strong>cohort reference</strong> number of up to 20 characters", "CohortRef_02");
         public ValidationMessage CohortRef03 =>
-            new ValidationMessage("The <strong>Cohort Reference</strong> must be the same for all learners in the file", "CohortRef_03");
+            new ValidationMessage("The cohort reference must be the same for all apprentices in your upload file", "CohortRef_03");
         public ValidationMessage CohortRef04 =>
-            new ValidationMessage("The <strong>Cohort reference</strong> must match one of the current cohorts", "CohortRef_04");
+            new ValidationMessage("The cohort reference does not match your current cohort", "CohortRef_04");
 
         public ValidationMessage Uln01 =>
-            new ValidationMessage("You must enter a number that's 10 digits", "ULN_01");
+            new ValidationMessage("You must enter a <strong>cohort reference</strong> number of up to 10 characters", "ULN_01");
         public ValidationMessage Uln02 =>
             new ValidationMessage("The <strong>Unique Learner number</strong> of 9999999999 is not valid", "ULN_02");
-        public ValidationMessage Uln03PassChecksum =>
-            new ValidationMessage("The <strong>Unique Learner number</strong> is not in the correct format", "ULN_03");
-        public ValidationMessage Uln04AlreadyInUse =>
-            new ValidationMessage("The <strong>Unique Learner number</strong> is already in use on another record for this Learning Start Date", "ULN_04");
 
         public ValidationMessage FamilyName01 =>
-            new ValidationMessage("You must enter a <strong>Family name</strong> that's no longer than 100 characters", "FamilyName_01");
+            new ValidationMessage("You must enter the apprentice's <strong>last name</strong> - you can add up to 100 characters", "FamilyName_01");
         public ValidationMessage FamilyName02 =>
-            new ValidationMessage("You must enter a <strong>Family name</strong> that's no longer than 100 characters", "FamilyName_02");
+            new ValidationMessage("You must enter the apprentice's <strong>last name</strong> - you can add up to 100 characters", "FamilyName_02");
         public ValidationMessage GivenNames01 =>
-            new ValidationMessage("You must enter <strong>Given names</strong> that are no longer than 100 characters", "GivenNames_01");
+            new ValidationMessage("You must enter the apprentice's <strong>first name</strong> - you can add up to 100 characters", "GivenNames_01");
         public ValidationMessage GivenNames02 =>
-            new ValidationMessage("You must enter <strong>Given names</strong> that are no longer than 100 characters", "GivenNames_02");
+            new ValidationMessage("You must enter the apprentice's <strong>first name</strong> - you can add up to 100 characters", "GivenNames_02");
 
         public ValidationMessage DateOfBirth01 =>
             new ValidationMessage("The <strong>Date of birth</strong> must be entered", "DateOfBirth_01");

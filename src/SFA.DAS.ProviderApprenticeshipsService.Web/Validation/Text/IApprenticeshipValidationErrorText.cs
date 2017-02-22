@@ -46,7 +46,5 @@
         ValidationMessage TrainingPrice03 { get; }
         ValidationMessage Uln01 { get; }
         ValidationMessage Uln02 { get; }
-        ValidationMessage Uln03PassChecksum { get; }
-        ValidationMessage Uln04AlreadyInUse { get; }
     }
 }

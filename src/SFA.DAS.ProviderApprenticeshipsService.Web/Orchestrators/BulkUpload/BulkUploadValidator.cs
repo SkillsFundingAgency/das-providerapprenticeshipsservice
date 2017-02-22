@@ -22,8 +22,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
         private readonly ProviderApprenticeshipsServiceConfiguration _config;
 
         // TODO: LWA - Can these be injected in?
-        private readonly ApprenticeshipBulkUploadValidator _viewModelValidator = new ApprenticeshipBulkUploadValidator(new BulkUploadApprenticeshipValidationText(), new CurrentDateTime());
-        private readonly CsvRecordValidator _csvRecordValidator = new CsvRecordValidator(new BulkUploadApprenticeshipValidationText());
+        private readonly BulkUploadApprenticeshipValidationText _validationText;
+        private readonly ApprenticeshipBulkUploadValidator _viewModelValidator;
+        private readonly CsvRecordValidator _csvRecordValidator;
 
         public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, ILog logger)
         {
@@ -31,6 +32,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 throw new ArgumentNullException(nameof(logger));
             if (config == null)
                 throw new ArgumentNullException(nameof(config));
+
+            _validationText = new BulkUploadApprenticeshipValidationText();
+            _viewModelValidator = new ApprenticeshipBulkUploadValidator(_validationText, new CurrentDateTime());
+            _csvRecordValidator = new CsvRecordValidator(_validationText);
 
             _logger = logger;
             _config = config;
@@ -57,10 +62,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             if (!apprenticeshipUploadModels.Any()) return new[] { new UploadError(ApprenticeshipFileValidationText.NoRecords) };
 
             if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != apprenticeshipUploadModels.First().CsvRecord.CohortRef))
-                errors.Add(new UploadError("The Cohort Reference must be the same for all learners in the file", "CohortRef_03"));
+                errors.Add(new UploadError(_validationText.CohortRef03.Text, _validationText.CohortRef03.ErrorCode));
 
             if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != cohortReference))
-                errors.Add(new UploadError("The Cohort Reference does not match the current cohort", "CohortRef_04"));
+                errors.Add(new UploadError(_validationText.CohortRef04.Text, _validationText.CohortRef04.ErrorCode));
 
             return errors;
         }

@@ -29,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     [TestFixture]
     public sealed class WhenUploadingFile
     {
-        private const string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TotalPrice,EPAOrgId,EmpRef,ProviderRef,ULN";
+        private const string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,FworkCode,PwayCode,ProgType,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,EmpRef,ProviderRef,ULN";
         private BulkUploadOrchestrator _sut;
         private Mock<HttpPostedFileBase> _file;
         private Mock<IMediator> _mockMediator;

@@ -4,23 +4,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
 {
     public class WebApprenticeshipValidationText : IApprenticeshipValidationErrorText
     {
-        public ValidationMessage CohortRef01 =>
-            new ValidationMessage("The Cohort reference must be entered", "CohortRef_01");
-        public ValidationMessage CohortRef02 =>
-            new ValidationMessage("The Cohort Reference must be entered and must not be more than 20 characters in length", "CohortRef_02");
-        public ValidationMessage CohortRef03 =>
-            new ValidationMessage("The Cohort Reference must be the same for all learners in the file", "CohortRef_03");
-        public ValidationMessage CohortRef04 =>
-            new ValidationMessage("The Cohort reference must match one of the current cohorts", "CohortRef_04");
+        public ValidationMessage CohortRef01 { get { throw new NotImplementedException(); } }
+        public ValidationMessage CohortRef02 { get { throw new NotImplementedException(); } }
+        public ValidationMessage CohortRef03 { get { throw new NotImplementedException(); } }
+        public ValidationMessage CohortRef04 { get { throw new NotImplementedException(); } }
 
         public ValidationMessage Uln01 =>
             new ValidationMessage("You must enter a number that's 10 digits", "ULN_01");
         public ValidationMessage Uln02 =>
             new ValidationMessage("The Unique Learner number of 9999999999 is not valid", "ULN_02");
-        public ValidationMessage Uln03PassChecksum =>
-            new ValidationMessage("The Unique Learner number is not in the correct format", "ULN_03");
-        public ValidationMessage Uln04AlreadyInUse =>
-            new ValidationMessage("The Unique Learner number is already in use on another record for this Learning Start Date", "ULN_04");
 
         public ValidationMessage FamilyName01 =>
             new ValidationMessage("Last name must be entered", "FamilyName_01");

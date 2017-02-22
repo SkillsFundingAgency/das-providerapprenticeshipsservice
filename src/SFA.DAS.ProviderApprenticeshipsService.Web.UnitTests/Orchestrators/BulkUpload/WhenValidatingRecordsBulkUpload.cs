@@ -57,10 +57,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var errors = _sut.ValidateRecords(GetFailingTestData(), TrainingProgrammes()).ToList();
             errors.Count.Should().Be(4);
             var messages = errors.Select(m => m.ToString()).ToList();
-            messages.Should().Contain("Row:1 - You must enter <strong>Given names</strong> that are no longer than 100 characters");
-            messages.Should().Contain("Row:1 - You must enter a <strong>Family name</strong> that's no longer than 100 characters");
-            messages.Should().Contain("Row:2 - You must enter <strong>Given names</strong> that are no longer than 100 characters");
-            messages.Should().Contain("Row:2 - You must enter a <strong>Family name</strong> that's no longer than 100 characters");
+            messages.Should().Contain("Row:1 - You must enter the apprentice's <strong>first name</strong> - you can add up to 100 characters");
+            messages.Should().Contain("Row:1 - You must enter the apprentice's <strong>last name</strong> - you can add up to 100 characters");
+            messages.Should().Contain("Row:2 - You must enter the apprentice's <strong>first name</strong> - you can add up to 100 characters");
+            messages.Should().Contain("Row:2 - You must enter the apprentice's <strong>last name</strong> - you can add up to 100 characters");
         }
 
         [Test]
@@ -75,8 +75,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var errors = _sut.ValidateCohortReference(new List<ApprenticeshipUploadModel> { first, second }, "ABBA123").ToList();
             errors.Count.Should().Be(2);
             var messages = errors.Select(m => m.ToString()).ToList();
-            messages.Should().Contain("The Cohort Reference must be the same for all learners in the file");
-            messages.Should().Contain("The Cohort Reference does not match the current cohort");
+            messages.Should().Contain("The cohort reference must be the same for all apprentices in your upload file");
+            messages.Should().Contain("The cohort reference does not match your current cohort");
         }
 
         [Test]
@@ -91,8 +91,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var errors = _sut.ValidateCohortReference(new List<ApprenticeshipUploadModel> { first, second }, "ABBA123").ToList();
 
             var messages = errors.Select(m => m.ToString()).ToList();
-            messages.Should().NotContain("The Cohort Reference must be the same for all learners in the file");
-            messages.Should().Contain("The Cohort Reference does not match the current cohort");
+            messages.Should().NotContain("The cohort reference must be the same for all apprentices in your upload file");
+            messages.Should().Contain("The cohort reference does not match your current cohort");
         }
 
         private List<ITrainingProgramme> TrainingProgrammes()

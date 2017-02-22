@@ -14,7 +14,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             var result = Validator.Validate(ValidModel);
 
             result.Errors.Count.Should().Be(1);
-            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("You must enter a <strong>Family name</strong> that's no longer than 100 characters");
+            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("You must enter the apprentice's <strong>last name</strong> - you can add up to 100 characters");
         }
 
         [Test]
@@ -25,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             var result = Validator.Validate(ValidModel);
             result.Errors.Count.Should().Be(1);
 
-            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("You must enter a <strong>Family name</strong> that's no longer than 100 characters");
+            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("You must enter the apprentice's <strong>last name</strong> - you can add up to 100 characters");
         }
 
         [TestCase(99, 0)]
@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
 
             if (expectedErrorCount > 0)
             {
-                result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("You must enter a <strong>Family name</strong> that's no longer than 100 characters");
+                result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("You must enter the apprentice's <strong>last name</strong> - you can add up to 100 characters");
             }
         }
     }
