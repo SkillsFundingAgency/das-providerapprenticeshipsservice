@@ -63,7 +63,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             RuleFor(x => x.Cost)
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .Matches("^$|^([1-9]{1}([0-9]{1,2})?)+(,[0-9]{3})*$|^[1-9]{1}[0-9]*$").When(m => HaveNumberOfDigitsFewerThan(m.Cost, 7)).WithMessage(_validationText.TrainingPrice01.Text).WithErrorCode(_validationText.TrainingPrice01.ErrorCode)
-                .Must(m => HaveNumberOfDigitsFewerThan(m, 7)).WithMessage(_validationText.TrainingPrice02.Text).WithErrorCode(_validationText.TrainingPrice02.ErrorCode);
+                .Must(m => HaveNumberOfDigitsFewerThan(m, 7)).WithMessage(_validationText.TrainingPrice02.Text).WithErrorCode(_validationText.TrainingPrice02.ErrorCode)
+                .Must(m => (m == null ? default(decimal?) : decimal.Parse(m)) <= 100000).When(m => m.Cost?.Length > 0).WithMessage(_validationText.TrainingPrice03.Text).WithErrorCode(_validationText.TrainingPrice03.ErrorCode);
         }
 
         protected virtual void ValidateStartDate()

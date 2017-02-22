@@ -24,9 +24,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Must(m => m?.DateTime != null).WithMessage(textValidation.LearnPlanEndDate01.Text).WithErrorCode(textValidation.LearnPlanEndDate01.ErrorCode);
 
             RuleFor(r => r.TrainingCode).NotEmpty().WithMessage(textValidation.TrainingCode01.Text).WithErrorCode(textValidation.TrainingCode01.ErrorCode);
-
-            //RuleFor(r => r.NINumber)
-            //    .Must(m => !string.IsNullOrEmpty(m)).WithMessage("National insurance number must not be null").WithErrorCode("NINumber_01");
         }
     }
 }

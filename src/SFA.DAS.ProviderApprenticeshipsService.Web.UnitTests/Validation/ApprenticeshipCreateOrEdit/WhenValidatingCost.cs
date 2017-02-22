@@ -72,7 +72,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             result.IsValid.Should().BeFalse();
         }
 
-        [TestCase("123,567")]
+        [TestCase("100,000")]
         public void CostMustContain6DigitsOrLessIgnoringCommas(string value)
         {
             _validModel.Cost = value;
@@ -93,10 +93,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
 
         [TestCase(",111")]
         [TestCase("1,22")]
-        [TestCase("1,22,222")]
+        [TestCase("122,22")]
+        [TestCase("12222,")]
         public void CostThatContainsBadlyFormatedCommaSeparatorsIsInvalid(string cost)
         {
             _validModel.Cost = cost;
+
+            var result = _validator.Validate(_validModel);
+
+            result.IsValid.Should().BeFalse();
+        }
+
+        [Test]
+        public void CostCannotBeOver100000()
+        {
+            _validModel.Cost = "100001";
 
             var result = _validator.Validate(_validModel);
 
