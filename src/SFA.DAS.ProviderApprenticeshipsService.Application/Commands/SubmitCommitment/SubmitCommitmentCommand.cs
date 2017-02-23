@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-using MediatR;
+﻿using MediatR;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment
 {
