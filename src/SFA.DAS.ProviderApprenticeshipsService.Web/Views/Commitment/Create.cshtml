@@ -163,6 +163,15 @@
                     <span class="form-hint">Add a reference, such as employee number or location - this can help identify this apprentice if you have more than one with the same name.</span>
                     @Html.ValidationMessageFor(m => m.ProviderRef, null, new { id = "error-message-" + Html.IdFor(m => m.ProviderRef) })
                     @Html.TextBoxFor(m => m.ProviderRef, new { @class = "form-control form-control-3-4" })
+                   
+                </div>
+               
+                <div class="form-group">
+                    <hr />
+                    <div class="grey-background">
+                        <p class="form-label-bold">End-point assessments</p>
+                        <p>For apprenticeship standards, we'll contact employers to ask them to add details of their chosen <a href="https://www.gov.uk/government/publications/using-the-register-of-apprentice-assessment-organisations" target="_blank" title="Opens in a new window">end-point assessment organisation</a>. We’ll do this before the final gateway stage of the apprenticeship.</p>
+                    </div>
                 </div>
 
                 @Html.HiddenFor(m => m.HashedCommitmentId)
