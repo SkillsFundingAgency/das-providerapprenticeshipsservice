@@ -28,10 +28,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
             new ValidationMessage("You must enter the apprentice's <strong>first name</strong> - you can add up to 100 characters", "GivenNames_02");
 
         public ValidationMessage DateOfBirth01 =>
-            new ValidationMessage("The <strong>Date of birth</strong> must be entered", "DateOfBirth_01");
+            new ValidationMessage("You must enter the apprentice's <strong>date of birth</strong>, for example 2001-04-23", "DateOfBirth_01");
 
         public ValidationMessage DateOfBirth02 =>
-            new ValidationMessage("The <strong>Date of birth</strong> must be entered and be in the format yyyy-mm-dd", "DateOfBirth_02");
+            new ValidationMessage("You must enter the apprentice's <strong>date of birth</strong>, for example 2001-04-23", "DateOfBirth_02");
 
         public ValidationMessage DateOfBirth03 =>
             new ValidationMessage("The apprentice must be at least 15 years old at the start of the programme", "DateOfBirth_03");
@@ -46,74 +46,74 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
             new ValidationMessage("Enter a valid <strong>National insurance number</strong>", "NINumber_03");
 
         public ValidationMessage LearnStartDate01 =>
-            new ValidationMessage("The <strong>Learning start date</strong> must be entered", "LearnStartDate_01");
+            new ValidationMessage("You must enter the <strong>planned training start date</strong>, for example 2017-09", "LearnStartDate_01");
         public ValidationMessage LearnStartDate02 =>
-            new ValidationMessage("The <strong>Learning start date</strong> must be entered and be in the format yyyy-mm-dd", "LearnStartDate_02");
+            new ValidationMessage("You must enter the <strong>planned training start date</strong>, for example 2017-09", "LearnStartDate_02");
         public ValidationMessage LearnStartDate03 =>
             new ValidationMessage("The <strong>start date</strong> must not be earlier than 1 May 2017", "LearnStartDate_03");
 
         public ValidationMessage LearnPlanEndDate01 =>
-            new ValidationMessage("The <strong>Learning planned end date</strong> must be entered", "LearnPlanEndDate_01");
+            new ValidationMessage("You must enter the <strong>planned training finish date</strong>, for example 2019-02", "LearnPlanEndDate_01");
         public ValidationMessage LearnPlanEndDate02 =>
-            new ValidationMessage("The <strong>Learning planned end date</strong> must be entered and be in the format yyyy-mm-dd", "LearnPlanEndDate_02");
+            new ValidationMessage("You must enter the <strong>planned training finish date</strong>, for example 2019-02", "LearnPlanEndDate_02");
         public ValidationMessage LearnPlanEndDate03 =>
-            new ValidationMessage("The <strong>Learning planned end date</strong> must not be on or before the Learning start date", "LearnPlanEndDate_03");
+            new ValidationMessage("You must not enter a <strong>planned training finish date</strong> that's earlier than the <strong>planned training start date</strong>", "LearnPlanEndDate_03");
         public ValidationMessage LearnPlanEndDate06 =>
-            new ValidationMessage("The <strong>Learning planned end date</strong> must not be in the past", "LearnPlanEndDate_06");
+            new ValidationMessage("You must not enter a <strong>planned training finish date</strong> that's earlier than today's date", "LearnPlanEndDate_06");
 
         public ValidationMessage TrainingPrice01 =>
-            new ValidationMessage("The <strong>Training price</strong> must be entered", "TrainingPrice_01");
+            new ValidationMessage("You must enter the <strong>total cost</strong> of training", "TrainingPrice_01");
         public ValidationMessage TrainingPrice02 =>
-            new ValidationMessage("The <strong>Training price</strong> must be entered and must not be more than 6 characters in length", "TrainingPrice_02");
+            new ValidationMessage("You must enter a <strong>total cost</strong> of training of £100,000 or less, for example 100000 ", "TrainingPrice_02");
         public ValidationMessage TrainingPrice03 =>
             new ValidationMessage("The <strong>Training price</strong> must not be more than £100,000", "TrainingPrice_03");
 
         public ValidationMessage ProviderRef01 =>
-            new ValidationMessage("The <strong>Reference</strong> must be 20 characters or fewer", "ProviderRef_01");
+            new ValidationMessage("You must enter a valid <strong>Provider reference code</strong> - you can add up to 20 characters", "ProviderRef_01");
 
         // training type validation messages
 
         public ValidationMessage ProgType01 =>
-              new ValidationMessage("The <strong>Programme type</strong> must be entered and must not be more than 2 characters in length", "ProgType_01");
+              new ValidationMessage("You must enter a <strong>Programme type</strong> - you can add up to 2 characters", "ProgType_01");
 
         public ValidationMessage ProgType02 =>
-              new ValidationMessage("The <strong>Programme type</strong> is not a valid value", "ProgType_02");
+              new ValidationMessage("The <strong>Programme type</strong> you've added isn't valid", "ProgType_02");
 
         public ValidationMessage FworkCode01 =>
-              new ValidationMessage("The <strong>Framework code</strong> must not be more than 3 characters in length", "FworkCode_01");
+              new ValidationMessage("You must enter a <strong>Framework code</strong> - you can add up to 3 characters", "FworkCode_01");
 
         public ValidationMessage FworkCode02MustFworkCode =>
-              new ValidationMessage("The <strong>Framework code</strong> must be entered where the Programme Type is a framework", "FworkCode_02");
+              new ValidationMessage("You must enter a <strong>Framework code</strong> - you can add up to 3 characters", "FworkCode_02");
 
         public ValidationMessage FworkCode03MustNotFworkCode =>
-              new ValidationMessage("The <strong>Framework code</strong> must not be entered where the Programme Type is a standard", "FworkCode_03");
+              new ValidationMessage("You must enter a <strong>Framework code</strong> - you can add up to 3 characters", "FworkCode_03");
 
         public ValidationMessage FworkCode04 =>
-              new ValidationMessage("The <strong>Framework code</strong> is not a valid value", "FworkCode_04");
+              new ValidationMessage("The <strong>Framework code</strong> you've added isn't valid", "FworkCode_04");
 
         public ValidationMessage PwayCode01 =>
-              new ValidationMessage("The <strong>Pathway code</strong> must not be more than 3 characters in length", "PwayCode_01");
+              new ValidationMessage("You must enter a <strong>Pathway code</strong> - you can add up to 3 characters", "PwayCode_01");
 
         public ValidationMessage PwayCode02 =>
-              new ValidationMessage("The <strong>Pathway code</strong> must be entered where the Programme Type is a framework", "PwayCode_02");
+              new ValidationMessage("You must enter a <strong>Pathway code</strong> - you can add up to 3 characters", "PwayCode_02");
 
         public ValidationMessage PwayCode03 =>
-              new ValidationMessage("The <strong>Pathway code</strong> must not be entered where the Programme Type is a standard", "PwayCode_03");
+              new ValidationMessage("You must enter a <strong>Pathway code</strong> - you can add up to 3 characters", "PwayCode_03");
 
         public ValidationMessage PwayCode04 =>
-              new ValidationMessage("The <strong>Pathway code</strong> is not a valid value", "PwayCode_04");
+              new ValidationMessage("The <strong>Pathway code</strong> you've added isn't valid", "PwayCode_04");
 
         public ValidationMessage StdCode01 =>
-              new ValidationMessage("The <strong>Standard code</strong> must not be more than 5 characters in length", "StdCode_01");
+              new ValidationMessage("You must enter a <strong>Standard code</strong> - you can add up to 5 characters", "StdCode_01");
 
         public ValidationMessage StdCode02 =>
-              new ValidationMessage("The <strong>Standard code</strong> must be entered where the Programme Type is a standard", "StdCode_02");
+              new ValidationMessage("You must enter a <strong>Standard code</strong> - you can add up to 5 characters", "StdCode_02");
 
         public ValidationMessage StdCode03 =>
-              new ValidationMessage("The <strong>Standard code</strong> must not be entered where the Programme Type is a framework", "StdCode_03");
+              new ValidationMessage("You've added a <strong>Standard code</strong>, but chosen a <strong>Programme Type</strong> of 'Framework'", "StdCode_03");
 
         public ValidationMessage StdCode04 =>
-              new ValidationMessage("The <strong>Standard code</strong> is not a valid value", "StdCode_04");
+              new ValidationMessage("The <strong>Standard code</strong> you've added isn't valid", "StdCode_04");
 
         public ValidationMessage TrainingCode01 =>
             new ValidationMessage("<strong>Training code</strong> cannot be empty", "DefaultErrorCode");

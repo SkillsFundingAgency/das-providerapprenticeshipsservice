@@ -28,15 +28,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             result.IsValid.Should().BeFalse();
         }
 
-        [TestCase(31, 2, 13, "The <strong>Date of birth</strong> must be entered")]
-        [TestCase(5, null, 1998, "The <strong>Date of birth</strong> must be entered")]
-        [TestCase(5, 9, null, "The <strong>Date of birth</strong> must be entered")]
-        [TestCase(null, 9, 1998, "The <strong>Date of birth</strong> must be entered")]
-        [TestCase(5, 9, -1, "The <strong>Date of birth</strong> must be entered")]
-        [TestCase(0, 0, 0, "The <strong>Date of birth</strong> must be entered")]
-        [TestCase(1, 18, 1998, "The <strong>Date of birth</strong> must be entered")]
-        public void ShouldFailValidationOnDateOfBirth(int? day, int? month, int? year, string expected)
+        [TestCase(31, 2, 13)]
+        [TestCase(5, null, 1998)]
+        [TestCase(5, 9, null)]
+        [TestCase(null, 9, 1998)]
+        [TestCase(5, 9, -1)]
+        [TestCase(0, 0, 0)]
+        [TestCase(1, 18, 1998)]
+        public void ShouldFailValidationOnDateOfBirth(int? day, int? month, int? year)
         {
+            var expected = "You must enter the apprentice's <strong>date of birth</strong>, for example 2001-04-23";
             ValidModel.DateOfBirth = new DateTimeViewModel(day, month, year);
 
             var result = Validator.Validate(ValidModel);
