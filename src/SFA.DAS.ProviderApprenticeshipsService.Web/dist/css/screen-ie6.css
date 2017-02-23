@@ -2780,11 +2780,13 @@ span.helpText {
   margin-bottom: 0;
 }
 
-.grey-background {
+.grey-background,
+.funding-cap-notification {
   background: #dee0e2;
   padding: 20px 20px 10px;
 }
 
+.grey-background .heading-medium,
 .funding-cap-notification .heading-medium {
   margin-top: 10px;
 }
@@ -2806,7 +2808,7 @@ span.helpText {
   text-decoration: none;
   color: #0b0c0c;
 }
-  
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
