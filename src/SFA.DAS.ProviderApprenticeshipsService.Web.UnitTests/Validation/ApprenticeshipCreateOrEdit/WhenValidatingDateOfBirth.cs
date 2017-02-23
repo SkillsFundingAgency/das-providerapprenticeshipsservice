@@ -8,15 +8,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
     [TestFixture]
     public class WhenValidatingDateOfBirth : ApprenticeshipValidationTestBase
     {
-        [TestCase(31, 2, 13, "The Date of birth must be entered")]
-        [TestCase(5, null, 1998, "The Date of birth must be entered")]
-        [TestCase(5, 9, null, "The Date of birth must be entered")]
-        [TestCase(null, 9, 1998, "The Date of birth must be entered")]
-        [TestCase(5, 9, -1, "The Date of birth must be entered")]
-        [TestCase(0, 0, 0, "The Date of birth must be entered")]
-        [TestCase(1, 18, 1998, "The Date of birth must be entered")]
-        public void ShouldFailValidationOnDateOfBirth(int? day, int? month, int? year, string expected)
+        [TestCase(31, 2, 13)]
+        [TestCase(5, null, 1998)]
+        [TestCase(5, 9, null)]
+        [TestCase(null, 9, 1998)]
+        [TestCase(5, 9, -1)]
+        [TestCase(0, 0, 0)]
+        [TestCase(1, 18, 1998)]
+        public void ShouldFailValidationOnDateOfBirth(int? day, int? month, int? year)
         {
+            var expected = "The Date of birth is not valid";
             ValidModel.DateOfBirth = new DateTimeViewModel(day, month, year);
 
             var result = Validator.Validate(ValidModel);

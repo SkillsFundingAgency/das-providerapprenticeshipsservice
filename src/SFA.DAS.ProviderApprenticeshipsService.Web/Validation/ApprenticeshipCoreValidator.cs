@@ -114,7 +114,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         private void ValidateProviderReference()
         {
             RuleFor(x => x.ProviderRef)
-                .Must(m => LengthLessThanFunc(m, 20))
+                .Must(m => LengthLessThanFunc(m, 21))
                     .When(x => !string.IsNullOrEmpty(x.ProviderRef)).WithMessage(_validationText.ProviderRef01.Text).WithErrorCode(_validationText.ProviderRef01.ErrorCode);
         }
 
