@@ -62,10 +62,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             if (!apprenticeshipUploadModels.Any()) return new[] { new UploadError(ApprenticeshipFileValidationText.NoRecords) };
 
             if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != apprenticeshipUploadModels.First().CsvRecord.CohortRef))
-                errors.Add(new UploadError(_validationText.CohortRef03.Text, _validationText.CohortRef03.ErrorCode));
+                errors.Add(new UploadError(_validationText.CohortRef01.Text, _validationText.CohortRef01.ErrorCode));
 
             if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != cohortReference))
-                errors.Add(new UploadError(_validationText.CohortRef04.Text, _validationText.CohortRef04.ErrorCode));
+                errors.Add(new UploadError(_validationText.CohortRef02.Text, _validationText.CohortRef02.ErrorCode));
 
             return errors;
         }
@@ -91,7 +91,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
                         // TODO: LWA - Should we move this into the validator?
                         if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode) && trainingProgrammes.All(m => m.Id != viewModel.TrainingCode))
-                            errors.Add(new UploadError("Not a valid <strong>Training code</strong>", "StdCode_04", i, record));
+                            errors.Add(new UploadError("Not a valid <strong>Training code</strong>", "Training_01", i, record));
                     });
 
             return errors;

@@ -79,7 +79,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Must((apprenticship, dob) =>
                 {
                     return WillApprenticeBeAtLeast15AtStartOfTraining(apprenticship, dob);
-                }).WithMessage(_validationText.DateOfBirth03.Text).WithErrorCode(_validationText.DateOfBirth03.ErrorCode);
+                }).WithMessage(_validationText.DateOfBirth02.Text).WithErrorCode(_validationText.DateOfBirth02.ErrorCode);
         }
 
         protected virtual void ValidateStartDate()
@@ -88,17 +88,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .NotNull().WithMessage(_validationText.LearnStartDate01.Text).WithErrorCode(_validationText.LearnStartDate01.ErrorCode)
                 .Must(ValidateDateWithoutDay).WithMessage(_validationText.LearnStartDate01.Text).WithErrorCode(_validationText.LearnStartDate01.ErrorCode)
-                .Must(NotBeBeforeMay2017).WithMessage(_validationText.LearnStartDate03.Text).WithErrorCode(_validationText.LearnStartDate03.ErrorCode);
+                .Must(NotBeBeforeMay2017).WithMessage(_validationText.LearnStartDate02.Text).WithErrorCode(_validationText.LearnStartDate02.ErrorCode);
         }
 
         protected virtual void ValidateEndDate()
         {
             RuleFor(x => x.EndDate)
                 .Cascade(CascadeMode.StopOnFirstFailure)
-                .NotNull().WithMessage(_validationText.LearnPlanEndDate02.Text).WithErrorCode(_validationText.LearnPlanEndDate02.ErrorCode)
-                .Must(ValidateDateWithoutDay).WithMessage(_validationText.LearnPlanEndDate02.Text).WithErrorCode(_validationText.LearnPlanEndDate02.ErrorCode)
-                .Must(BeGreaterThenStartDate).WithMessage(_validationText.LearnPlanEndDate03.Text).WithErrorCode(_validationText.LearnPlanEndDate03.ErrorCode)
-                .Must(m => m.DateTime > _currentDateTime.Now).WithMessage(_validationText.LearnPlanEndDate06.Text).WithErrorCode(_validationText.LearnPlanEndDate06.ErrorCode);
+                .NotNull().WithMessage(_validationText.LearnPlanEndDate01.Text).WithErrorCode(_validationText.LearnPlanEndDate01.ErrorCode)
+                .Must(ValidateDateWithoutDay).WithMessage(_validationText.LearnPlanEndDate01.Text).WithErrorCode(_validationText.LearnPlanEndDate01.ErrorCode)
+                .Must(BeGreaterThenStartDate).WithMessage(_validationText.LearnPlanEndDate02.Text).WithErrorCode(_validationText.LearnPlanEndDate02.ErrorCode)
+                .Must(m => m.DateTime > _currentDateTime.Now).WithMessage(_validationText.LearnPlanEndDate03.Text).WithErrorCode(_validationText.LearnPlanEndDate03.ErrorCode);
         }
 
         protected virtual void ValidateCost()
@@ -107,8 +107,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .NotEmpty().WithMessage(_validationText.TrainingPrice01.Text).WithErrorCode(_validationText.TrainingPrice01.ErrorCode)
                 .Matches("^([1-9]{1}([0-9]{1,2})?)+(,[0-9]{3})*$|^[1-9]{1}[0-9]*$").WithMessage(_validationText.TrainingPrice01.Text).WithErrorCode(_validationText.TrainingPrice01.ErrorCode)
-                .Must(m => HaveNumberOfDigitsFewerThan(m, 7)).WithMessage(_validationText.TrainingPrice02.Text).WithErrorCode(_validationText.TrainingPrice02.ErrorCode)
-                .Must(m => decimal.Parse(m) <= 100000).WithMessage(_validationText.TrainingPrice03.Text).WithErrorCode(_validationText.TrainingPrice03.ErrorCode);
+                .Must(m => decimal.Parse(m) <= 100000).WithMessage(_validationText.TrainingPrice02.Text).WithErrorCode(_validationText.TrainingPrice02.ErrorCode);
         }
 
         private void ValidateProviderReference()
