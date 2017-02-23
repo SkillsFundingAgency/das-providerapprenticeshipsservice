@@ -13,7 +13,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
 
             var result = Validator.Validate(ValidModel);
 
-            result.IsValid.Should().BeFalse();
+            result.IsValid.Should().BeTrue(); // Validation on training is done in CsvValidator
         }
 
         [Test]

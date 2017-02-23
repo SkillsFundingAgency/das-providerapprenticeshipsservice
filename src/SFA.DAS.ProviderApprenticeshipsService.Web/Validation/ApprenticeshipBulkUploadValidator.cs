@@ -8,5 +8,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         public ApprenticeshipBulkUploadValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime) : base(validationText, currentDateTime)
         {
         }
+
+        protected override void ValidateTraining()
+        {
+            // Don't need to validate as this is done at the csv level.
+            // base.ValidateTraining();
+        }
     }
 }
