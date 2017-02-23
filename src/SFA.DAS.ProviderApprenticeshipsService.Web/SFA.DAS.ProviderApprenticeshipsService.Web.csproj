@@ -376,6 +376,7 @@
     <Compile Include="Models\AcknowledgementViewModel.cs" />
     <Compile Include="Models\ApprenticeshipDetailsViewModel.cs" />
     <Compile Include="Models\AgreementNotSignedViewModel.cs" />
+    <Compile Include="Models\ApprenticeshipListItemGroupViewModel.cs" />
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
     <Compile Include="Models\BulkUpload\BulkUploadResultViewModel.cs" />

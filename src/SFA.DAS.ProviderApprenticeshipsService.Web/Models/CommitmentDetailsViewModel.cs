@@ -12,10 +12,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public RequestStatus Status { get; set; }
         public bool HasApprenticeships { get; set; }
         public IList<ApprenticeshipListItemViewModel> Apprenticeships { get; set; }
+        public IList<ApprenticeshipListItemGroupViewModel> ApprenticeshipGroups { get; set; }
         public string LatestMessage { get; set; }
         public bool PendingChanges { get; set; }
 
         public string BackLinkUrl { get; set; }
-        public IList<ITrainingProgramme> TrainingProgrammes { get; set; }
     }
 }
