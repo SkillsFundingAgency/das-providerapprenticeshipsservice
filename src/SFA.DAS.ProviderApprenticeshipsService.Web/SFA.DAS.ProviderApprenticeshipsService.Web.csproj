@@ -346,6 +346,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\SystemWebCookieManager.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
@@ -375,6 +376,7 @@
     <Compile Include="Models\AcknowledgementViewModel.cs" />
     <Compile Include="Models\ApprenticeshipDetailsViewModel.cs" />
     <Compile Include="Models\AgreementNotSignedViewModel.cs" />
+    <Compile Include="Models\ApprenticeshipListItemGroupViewModel.cs" />
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
     <Compile Include="Models\BulkUpload\BulkUploadResultViewModel.cs" />
@@ -396,7 +398,6 @@
     <Compile Include="Models\Types\FlashMessageViewModel.cs" />
     <Compile Include="Models\Types\SaveOrSendStatus.cs" />
     <Compile Include="Models\SignInUserModel.cs" />
-    <Compile Include="Models\SignInUserViewModel.cs" />
     <Compile Include="Models\SubmitCommitmentViewModel.cs" />
     <Compile Include="Models\SystemDetails.cs" />
     <Compile Include="Models\TaskItemViewModel.cs" />

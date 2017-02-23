@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Castle.Components.DictionaryAdapter;
 using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
+using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
@@ -71,6 +76,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var mockMediator = new Mock<IMediator>();
             mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
                 .Returns(Task.Factory.StartNew(() => respons));
+
+            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetStandardsQueryRequest>()))
+                .ReturnsAsync(() => new GetStandardsQueryResponse
+                {
+                    Standards = new List<Standard>()
+                });
+
+            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetFrameworksQueryRequest>()))
+                .ReturnsAsync(() => new GetFrameworksQueryResponse
+                {
+                    Frameworks = new List<Framework>()
+                });
 
             return mockMediator;
         }

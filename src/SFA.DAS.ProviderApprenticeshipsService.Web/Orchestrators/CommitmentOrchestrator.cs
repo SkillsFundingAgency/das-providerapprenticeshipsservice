@@ -276,6 +276,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var message = await GetLatestMessage(providerId, commitmentId, true);
 
             var apprenticeships = MapFrom(data.Commitment.Apprenticeships);
+            var trainingProgrammes = await GetTrainingProgrammes();
+
+            var apprenticeshipGroups = new List<ApprenticeshipListItemGroupViewModel>();
+            foreach (var group in apprenticeships.OrderBy(x => x.TrainingName).GroupBy(x => x.TrainingCode))
+            {
+                apprenticeshipGroups.Add(new ApprenticeshipListItemGroupViewModel
+                {
+                    Apprenticeships = group.OrderBy(x => x.CanBeApprove).ToList(),
+                    TrainingProgramme = trainingProgrammes.FirstOrDefault(x => x.Id == group.Key)
+                });
+            }
 
             return new CommitmentDetailsViewModel
             {
@@ -287,7 +298,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 HasApprenticeships = apprenticeships.Count > 0,
                 Apprenticeships = apprenticeships,
                 LatestMessage = message,
-                PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed
+                PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed,
+                ApprenticeshipGroups = apprenticeshipGroups
             };
         }
 
@@ -434,7 +446,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return data.Any();
         }
 
-        public async Task SubmitCommitment(long providerId, string hashedCommitmentId, SaveStatus saveStatus, string message)
+        public async Task SubmitCommitment(long providerId, string hashedCommitmentId, SaveStatus saveStatus, string message, SignInUserModel currentUser)
         {
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             await AssertCommitmentStatus(commitmentId, providerId);
@@ -477,7 +489,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                         CommitmentId = commitmentId,
                         Message = message,
                         LastAction = lastAction,
-                        CreateTask = (saveStatus == SaveStatus.ApproveAndSend || saveStatus == SaveStatus.AmendAndSend)
+                        CreateTask = (saveStatus == SaveStatus.ApproveAndSend || saveStatus == SaveStatus.AmendAndSend),
+                        UserDisplayName = currentUser.DisplayName,
+                        UserEmailAddress = currentUser.Email
                     });
         }
 
@@ -525,6 +539,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 HashedApprenticeshipId = _hashingService.HashValue(x.Id),
                 ApprenticeshipName = x.ApprenticeshipName,
+                ApprenticeDateOfBirth = x.DateOfBirth,
                 ULN = x.ULN,
                 TrainingCode = x.TrainingCode,
                 TrainingName = x.TrainingName,

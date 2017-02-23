@@ -83,7 +83,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
                         From = x.TypicalLength.From,
                         To = x.TypicalLength.To,
                         Unit = x.TypicalLength.Unit
-                    }
+                    },
+                    MaxFunding = x.MaxFunding
                 }).ToList()
             };
         }
@@ -119,7 +120,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
                         From = x.TypicalLength.From,
                         To = x.TypicalLength.To,
                         Unit = x.TypicalLength.Unit
-                    }
+                    },
+                    MaxFunding = x.MaxFunding
                 }).ToList()
             };
         }
