@@ -20,6 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand = new DeleteCommitmentCommand
             {
+                UserId = "user123",
                 ProviderId = 111L,
                 CommitmentId = 123L
             };

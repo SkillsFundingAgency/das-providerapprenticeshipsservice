@@ -28,6 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand = new DeleteCommitmentCommand()
             {
+                UserId = "user123",
                 ProviderId = 111L,
                 CommitmentId = 123L
             };
@@ -66,6 +67,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             var m = act.ShouldThrow<ValidationException>().Which.Message;
             m.Should().NotContain("Provider Id");
             m.Should().Contain("Commitment Id");
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("  ")]
+        public void ShouldThrowExceptionIfUserIdIsEmpty(string userId)
+        {
+            _validCommand.UserId = userId;
+
+            Func<Task> act = async () => await _handler.Handle(_validCommand);
+
+            act.ShouldThrow<ValidationException>().Which.Message.Contains("User Id");
         }
     }
 }

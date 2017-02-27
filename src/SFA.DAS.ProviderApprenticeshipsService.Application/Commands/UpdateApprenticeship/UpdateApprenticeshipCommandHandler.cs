@@ -29,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateAppr
 
             var request = new ApprenticeshipRequest
             {
-                UserId = "", // TODO: LWA - Pass in userId in message
+                UserId = message.UserId,
                 Apprenticeship = message.Apprenticeship
             };
 

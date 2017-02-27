@@ -47,7 +47,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
                 .ReturnsAsync(new GetApprenticeshipQueryResponse { Apprenticeship = new Apprenticeship() });
 
-            await _orchestrator.DeleteApprenticeship(new Web.Models.DeleteConfirmationViewModel
+            await _orchestrator.DeleteApprenticeship("user123", new Web.Models.DeleteConfirmationViewModel
             {
                 ProviderId = 123L,
                 HashedCommitmentId = "ABBA99",

@@ -16,10 +16,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     public abstract class BaseController : Controller
     {
         private readonly IProviderCommitmentsLogger _logger;
+        protected string CurrentUserId;
 
         protected BaseController()
         {
             _logger = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<IProviderCommitmentsLogger>();
+            CurrentUserId = GetClaimValue(ClaimTypes.Upn);
         }
 
         protected void SetInfoMessage(string messageText, FlashMessageSeverityLevel level)

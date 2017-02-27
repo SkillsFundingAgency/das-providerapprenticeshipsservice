@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -124,7 +123,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                     new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
             }
 
-            await _commitmentOrchestrator.DeleteCommitment(viewModel.ProviderId, viewModel.HashedCommitmentId);
+            await _commitmentOrchestrator.DeleteCommitment(CurrentUserId, viewModel.ProviderId, viewModel.HashedCommitmentId);
 
             SetInfoMessage("Cohort deleted", FlashMessageSeverityLevel.Okay);
 
@@ -163,7 +162,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                     return await RedisplayApprenticeshipView(apprenticeship);
                 }
 
-                await _commitmentOrchestrator.UpdateApprenticeship(apprenticeship);
+                await _commitmentOrchestrator.UpdateApprenticeship(CurrentUserId, apprenticeship);
             }
             catch (InvalidRequestException ex)
             {
@@ -199,7 +198,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return RedirectToRoute("EditApprenticeship", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId, hashedApprenticeshipId = viewModel.HashedApprenticeshipId });
             }
 
-            var deletedApprenticeshipName = await _commitmentOrchestrator.DeleteApprenticeship(viewModel);
+            var deletedApprenticeshipName = await _commitmentOrchestrator.DeleteApprenticeship(CurrentUserId, viewModel);
             SetInfoMessage($"Apprentice record for {deletedApprenticeshipName} deleted", FlashMessageSeverityLevel.Okay);
 
             return RedirectToRoute("CohortDetails", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
@@ -228,7 +227,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                     return await RedisplayApprenticeshipView(apprenticeship);
                 }
 
-                await _commitmentOrchestrator.CreateApprenticeship(apprenticeship);
+                await _commitmentOrchestrator.CreateApprenticeship(CurrentUserId, apprenticeship);
             }
             catch (InvalidRequestException ex)
             {

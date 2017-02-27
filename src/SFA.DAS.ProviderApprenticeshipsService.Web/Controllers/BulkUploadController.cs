@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -40,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var result = await _bulkUploadOrchestrator.UploadFile(model);
+            var result = await _bulkUploadOrchestrator.UploadFile(CurrentUserId, model);
 
             if (result.HasFileLevelErrors)
             {

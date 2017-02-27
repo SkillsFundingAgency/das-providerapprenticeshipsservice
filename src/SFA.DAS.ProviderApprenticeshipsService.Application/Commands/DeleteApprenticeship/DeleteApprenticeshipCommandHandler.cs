@@ -26,8 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteAppr
         {
             _validator.ValidateAndThrow(message);
 
-            // TODO: LWA - Need to pass in UserID
-            return _commitmentsApi.DeleteProviderApprenticeship(message.ProviderId, message.ApprenticeshipId, string.Empty);
+            return _commitmentsApi.DeleteProviderApprenticeship(message.ProviderId, message.ApprenticeshipId, message.UserId);
         }
     }
 }

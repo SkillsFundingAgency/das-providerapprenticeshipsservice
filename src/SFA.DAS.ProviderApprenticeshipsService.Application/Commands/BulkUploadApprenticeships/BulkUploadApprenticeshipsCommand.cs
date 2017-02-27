@@ -6,6 +6,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUpload
 {
     public sealed class BulkUploadApprenticeshipsCommand : IAsyncRequest
     {
+        public string UserId { get; set; }
         public long ProviderId { get; set; }
         public long CommitmentId { get; set; }
         public IList<Apprenticeship> Apprenticeships { get; set; }

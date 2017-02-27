@@ -29,8 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteComm
         {
             _validator.ValidateAndThrow(message);
 
-            // TODO: LWA - need to pass in UserId
-            return _commitmentsApi.DeleteProviderCommitment(message.ProviderId, message.CommitmentId, string.Empty);
+            return _commitmentsApi.DeleteProviderCommitment(message.ProviderId, message.CommitmentId, message.UserId);
         }
     }
 }

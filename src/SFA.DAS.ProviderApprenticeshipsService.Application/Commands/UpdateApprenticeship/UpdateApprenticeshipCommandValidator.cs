@@ -6,6 +6,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateAppr
     {
         public UpdateApprenticeshipCommandValidator()
         {
+            RuleFor(x => x.UserId).NotEmpty();
             RuleFor(x => x.ProviderId).GreaterThan(0);
             RuleFor(x => x.Apprenticeship.Id).GreaterThan(0);
             RuleFor(x => x.Apprenticeship.CommitmentId).GreaterThan(0);

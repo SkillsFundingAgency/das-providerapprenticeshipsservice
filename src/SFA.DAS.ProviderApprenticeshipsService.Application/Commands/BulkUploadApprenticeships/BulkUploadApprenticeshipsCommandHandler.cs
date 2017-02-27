@@ -27,7 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUpload
 
             var request = new BulkApprenticeshipRequest
             {
-                UserId = "", // TODO: LWA - Need to pass in UserId
+                UserId = message.UserId,
                 Apprenticeships = message.Apprenticeships
             };
 
