@@ -33,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             await _handler.Handle(_validCommand);
 
-            _mockCommitmentsApi.Verify(x => x.DeleteProviderCommitment(It.Is<long>(a => a == _validCommand.ProviderId), It.Is<long>(a => a ==_validCommand.CommitmentId)));
+            _mockCommitmentsApi.Verify(x => x.DeleteProviderCommitment(It.Is<long>(a => a == _validCommand.ProviderId), It.Is<long>(a => a ==_validCommand.CommitmentId), It.IsAny<string>()));
         }
     }
 }

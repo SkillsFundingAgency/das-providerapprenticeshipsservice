@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships
 {
@@ -24,7 +25,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUpload
             if (!validationResult.IsValid)
                 throw new InvalidRequestException(validationResult.Errors);
 
-            await _commitmentsApi.BulkUploadApprenticeships(message.ProviderId, message.CommitmentId, message.Apprenticeships);
+            var request = new BulkApprenticeshipRequest
+            {
+                UserId = "", // TODO: LWA - Need to pass in UserId
+                Apprenticeships = message.Apprenticeships
+            };
+
+            await _commitmentsApi.BulkUploadApprenticeships(message.ProviderId, message.CommitmentId, request);
         }
     }
 }

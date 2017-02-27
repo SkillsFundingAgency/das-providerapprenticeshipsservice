@@ -40,7 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             await _handler.Handle(_exampleValidCommand);
 
-            _mockCommitmentsApi.Verify(x => x.BulkUploadApprenticeships(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<IList<Apprenticeship>>()));
+            _mockCommitmentsApi.Verify(x => x.BulkUploadApprenticeships(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<BulkApprenticeshipRequest>()));
         }
 
         [Test]

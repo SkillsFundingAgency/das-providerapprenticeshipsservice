@@ -31,7 +31,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             await _handler.Handle(_validCommand);
 
-            _mockCommitmentsApi.Verify(x => x.DeleteProviderApprenticeship(It.Is<long>(a => a == _validCommand.ProviderId), It.Is<long>(a => a ==_validCommand.ApprenticeshipId)));
+            // TODO: LWA - Update to filter by userId from command.
+            _mockCommitmentsApi.Verify(x => x.DeleteProviderApprenticeship(It.Is<long>(a => a == _validCommand.ProviderId), It.Is<long>(a => a ==_validCommand.ApprenticeshipId), It.IsAny<string>()));
         }
     }
 }
