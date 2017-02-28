@@ -6,6 +6,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteAppr
     {
         public DeleteApprenticeshipCommandValidator()
         {
+            RuleFor(x => x.UserId).NotEmpty();
             RuleFor(x => x.ProviderId).GreaterThan(0);
             RuleFor(x => x.ApprenticeshipId).GreaterThan(0);
         }

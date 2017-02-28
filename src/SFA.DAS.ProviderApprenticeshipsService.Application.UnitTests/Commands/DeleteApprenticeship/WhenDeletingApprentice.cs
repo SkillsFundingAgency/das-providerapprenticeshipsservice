@@ -18,6 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand = new DeleteApprenticeshipCommand
             {
+                UserId = "user123",
                 ProviderId = 111L,
                 ApprenticeshipId = 123L
             };
@@ -31,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             await _handler.Handle(_validCommand);
 
-            _mockCommitmentsApi.Verify(x => x.DeleteProviderApprenticeship(It.Is<long>(a => a == _validCommand.ProviderId), It.Is<long>(a => a ==_validCommand.ApprenticeshipId)));
+            _mockCommitmentsApi.Verify(x => x.DeleteProviderApprenticeship(It.Is<long>(a => a == _validCommand.ProviderId), It.Is<long>(a => a ==_validCommand.ApprenticeshipId), It.Is<string>(a => a == _validCommand.UserId)));
         }
     }
 }

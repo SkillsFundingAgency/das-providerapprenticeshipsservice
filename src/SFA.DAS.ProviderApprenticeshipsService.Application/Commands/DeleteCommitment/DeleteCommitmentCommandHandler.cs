@@ -29,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteComm
         {
             _validator.ValidateAndThrow(message);
 
-            return _commitmentsApi.DeleteProviderCommitment(message.ProviderId, message.CommitmentId);
+            return _commitmentsApi.DeleteProviderCommitment(message.ProviderId, message.CommitmentId, message.UserId);
         }
     }
 }

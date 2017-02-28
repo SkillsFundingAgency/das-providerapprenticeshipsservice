@@ -55,7 +55,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
             if (commitment.ProviderId != message.ProviderId)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commitment does not belong to this Provider" } });
 
-            // TODO: When get to Notification story for provider pass through user details.
             var submission = new CommitmentSubmission { Action = message.LastAction, LastUpdatedByInfo = 
                 new LastUpdateInfo
                     {

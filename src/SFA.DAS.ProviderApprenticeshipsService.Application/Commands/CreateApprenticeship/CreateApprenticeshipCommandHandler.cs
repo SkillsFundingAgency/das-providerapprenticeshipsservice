@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeship
 {
@@ -25,7 +26,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateAppr
             if (!validationResult.IsValid)
                 throw new InvalidRequestException(validationResult.Errors);
 
-            await _commitmentsApi.CreateProviderApprenticeship(message.ProviderId, message.Apprenticeship.CommitmentId, message.Apprenticeship);
+            var request = new ApprenticeshipRequest
+            {
+                UserId = message.UserId,
+                Apprenticeship = message.Apprenticeship
+            };
+
+            await _commitmentsApi.CreateProviderApprenticeship(message.ProviderId, message.Apprenticeship.CommitmentId, request);
         }
     }
 }

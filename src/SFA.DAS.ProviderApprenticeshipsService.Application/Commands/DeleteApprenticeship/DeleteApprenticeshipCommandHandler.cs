@@ -26,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteAppr
         {
             _validator.ValidateAndThrow(message);
 
-            return _commitmentsApi.DeleteProviderApprenticeship(message.ProviderId, message.ApprenticeshipId);
+            return _commitmentsApi.DeleteProviderApprenticeship(message.ProviderId, message.ApprenticeshipId, message.UserId);
         }
     }
 }
