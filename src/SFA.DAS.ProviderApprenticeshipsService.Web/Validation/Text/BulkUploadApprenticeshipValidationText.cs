@@ -46,7 +46,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
             new ValidationMessage("The <strong>total cost</strong> must be £100,000 or less", "TrainingPrice_02");
 
         public ValidationMessage ProviderRef01 =>
-            new ValidationMessage("You must enter a valid <strong>Provider reference code</strong> - you can add up to 20 characters", "ProviderRef_01");
+            new ValidationMessage("The <strong>Provider reference</strong> must be 20 characters or fewer", "ProviderRef_01");
 
         // training type validation messages
 
