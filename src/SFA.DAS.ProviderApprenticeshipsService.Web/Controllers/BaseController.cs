@@ -16,12 +16,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     public abstract class BaseController : Controller
     {
         private readonly IProviderCommitmentsLogger _logger;
-        protected string CurrentUserId;
+        protected string CurrentUserId = null;
 
         protected BaseController()
         {
             _logger = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<IProviderCommitmentsLogger>();
-            CurrentUserId = GetClaimValue(ClaimTypes.Upn);
         }
 
         protected void SetInfoMessage(string messageText, FlashMessageSeverityLevel level)
@@ -46,6 +45,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             const string ProviderIdKey = "providerId";
+
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                CurrentUserId = GetClaimValue(ClaimTypes.Upn);
+            }
 
             if (filterContext.ActionParameters.ContainsKey(ProviderIdKey))
             {    
