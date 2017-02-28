@@ -88,10 +88,42 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [Route("/{hashedCommitmentId}/verification")]
+        public async Task<ActionResult> Verification(long providerId, string hashedCommitmentId)
+        {
+            var model = await _commitmentOrchestrator.GetVerification(providerId, hashedCommitmentId);
+            return View(model);
+        }
+
+        [HttpGet]
+        [Route("/{hashedCommitmentId}/verification-step-2")]
+        public async Task<ActionResult> VerificationStep2(long providerId, string hashedCommitmentId)
+        {
+            var model = await _commitmentOrchestrator.GetVerification(providerId, hashedCommitmentId);
+            return View(model);
+        }
+
+        //[HttpPost]
+        //[Route("{hashedCommitmentId}/verification")]
+        //public async Task<ActionResult> Verification(VerificationViewModel viewModel)
+        //{
+        //    //var model = await _commitmentOrchestrator.GetAllWithEmployer(providerId);
+
+        //    //return View("RequestList", model);
+        //    return View(viewModel);
+        //}
+
+
+        [HttpGet]
         [Route("{hashedCommitmentId}/Details", Name = "CohortDetails")]
         public async Task<ActionResult> Details(long providerId, string hashedCommitmentId)
         {
             var model = await _commitmentOrchestrator.GetCommitmentDetails(providerId, hashedCommitmentId);
+
+            if (!model.RelationshipVerified)
+            {
+                return RedirectToAction("Verification", new {providerId, hashedCommitmentId});
+            }
 
             model.BackLinkUrl = GetReturnToListUrl(providerId);
             return View(model);

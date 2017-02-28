@@ -7,6 +7,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
     {
         public long ProviderId { get; set; }
         public string HashedCommitmentId { get; set; }
+        public string LegalEntityId { get; set; }
         public string LegalEntityName { get; set; }
         public string Reference { get; set; }
         public RequestStatus Status { get; set; }
@@ -17,5 +18,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool PendingChanges { get; set; }
 
         public string BackLinkUrl { get; set; }
+        public bool RelationshipVerified { get; set; }
     }
 }

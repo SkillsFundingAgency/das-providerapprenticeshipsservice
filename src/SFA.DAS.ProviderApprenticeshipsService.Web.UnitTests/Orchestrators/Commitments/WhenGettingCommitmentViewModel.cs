@@ -8,6 +8,7 @@ using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetRelationshipByCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -88,6 +89,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 {
                     Frameworks = new List<Framework>()
                 });
+
+            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetRelationshipByCommitmentQueryRequest>()))
+                .ReturnsAsync(() => new GetRelationshipByCommitmentQueryResponse());
 
             return mockMediator;
         }

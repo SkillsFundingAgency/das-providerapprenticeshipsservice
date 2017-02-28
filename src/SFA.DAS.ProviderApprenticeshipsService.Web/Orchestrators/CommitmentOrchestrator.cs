@@ -27,6 +27,7 @@ using TrainingType = SFA.DAS.Commitments.Api.Types.TrainingType;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteCommitment;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetRelationshipByCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
@@ -221,6 +222,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
+        public async Task<VerificationViewModel> GetVerification(long providerId, string hashedCommitmentId)
+        {
+            var result = new VerificationViewModel
+            {
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId
+            };
+
+            return result;
+        }
+
         public async Task<AgreementNotSignedViewModel> GetAgreementPage(long providerId, string hashedCommitmentId)
         {
             var model = new AgreementNotSignedViewModel
@@ -273,6 +285,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             AssertCommitmentStatus(data.Commitment, EditStatus.ProviderOnly);
             AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
+            var relationshipRequest = await _mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
             var message = await GetLatestMessage(providerId, commitmentId, true);
 
             var apprenticeships = MapFrom(data.Commitment.Apprenticeships);
@@ -292,6 +310,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 HashedCommitmentId = hashedCommitmentId,
+                LegalEntityId = data.Commitment.LegalEntityId,
                 LegalEntityName = data.Commitment.LegalEntityName,
                 Reference = data.Commitment.Reference,
                 Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus, data.Commitment.ProviderLastUpdateInfo),
@@ -299,7 +318,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Apprenticeships = apprenticeships,
                 LatestMessage = message,
                 PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed,
-                ApprenticeshipGroups = apprenticeshipGroups
+                ApprenticeshipGroups = apprenticeshipGroups,
+                RelationshipVerified = relationshipRequest.Relationship.Verified
             };
         }
 
