@@ -226,10 +226,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<VerificationViewModel> GetVerification(long providerId, string hashedCommitmentId)
         {
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            var relationshipRequest = await _mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
             var result = new VerificationViewModel
             {
                 ProviderId = providerId,
-                HashedCommitmentId = hashedCommitmentId
+                HashedCommitmentId = hashedCommitmentId,
+                LegalEntityName = relationshipRequest.Relationship.LegalEntityName
             };
 
             return result;
@@ -321,7 +330,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 LatestMessage = message,
                 PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed,
                 ApprenticeshipGroups = apprenticeshipGroups,
-                RelationshipVerified = relationshipRequest.Relationship.Verified
+                RelationshipVerified = relationshipRequest.Relationship.Verified.HasValue
             };
         }
 

@@ -87,7 +87,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("/{hashedCommitmentId}/verification")]
+        [Route("{hashedCommitmentId}/verification")]
         public async Task<ActionResult> Verification(long providerId, string hashedCommitmentId)
         {
             var model = await _commitmentOrchestrator.GetVerification(providerId, hashedCommitmentId);
@@ -95,7 +95,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("/{hashedCommitmentId}/verification-step-2")]
+        [Route("{hashedCommitmentId}/verification-step-2")]
         public async Task<ActionResult> VerificationStep2(long providerId, string hashedCommitmentId)
         {
             var model = await _commitmentOrchestrator.GetVerification(providerId, hashedCommitmentId);
