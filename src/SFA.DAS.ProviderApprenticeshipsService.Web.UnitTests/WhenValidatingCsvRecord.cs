@@ -53,11 +53,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             result.IsValid.Should().BeTrue();
         }
 
-        [TestCase(22, 1000, 10, null, "You must enter a <strong>Framework code</strong> - you can add up to 3 characters", "FworkCode_01")]
+        [TestCase(22, 1000, 10, null, "The <strong>Framework code</strong> must be 3 characters or fewer", "FworkCode_01")]
         [TestCase(23, null, 10, null, "You must enter a <strong>Framework code</strong> - you can add up to 3 characters", "FworkCode_02")]
         [TestCase(23, -1, 10, null, "You must enter a <strong>Framework code</strong> - you can add up to 3 characters", "FworkCode_02")]
         [TestCase(3, null, null, null, "You must enter a <strong>Framework code</strong> - you can add up to 3 characters", "FworkCode_02")]
-        [TestCase(25, 8, 10, 20, "You must enter a <strong>Framework code</strong> - you can add up to 3 characters", "FworkCode_03")]
+        [TestCase(25, 8, 10, 20, "You must not enter a <strong>Framework code</strong> when you've entered a Standard programme type", "FworkCode_03")]
         public void FrameworkCodeValidationFail(int? progType, int? frameworkCode, int? pathwayCode, int? standardCode, string message, string errorCode)
         {
             _validModel.ProgType = progType;
@@ -71,9 +71,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             result.Errors[0].ErrorCode.Should().Be(errorCode);
         }
 
-        [TestCase(22, 10, 1000, null, "You must enter a <strong>Pathway code</strong> - you can add up to 3 characters", "PwayCode_01")]
-        [TestCase(23, 10, null, null, "You must enter a <strong>Pathway code</strong> - you can add up to 3 characters", "PwayCode_02")]
-        [TestCase(23, 10, -1, null, "You must enter a <strong>Pathway code</strong> - you can add up to 3 characters", "PwayCode_02")]
+        [TestCase(22, 10, 1000, null, "The <strong>Pathway code</strong> must be 3 characters or fewer", "PwayCode_01")]
+        [TestCase(23, 10, null, null, "You must enter a <strong>Pathway code</strong> = you can add up to 3 characters", "PwayCode_02")]
+        [TestCase(23, 10, -1, null, "You must enter a <strong>Pathway code</strong> = you can add up to 3 characters", "PwayCode_02")]
         public void PathwayCodeValidationFail(int? progType, int? frameworkCode, int? pathwayCode, int? standardCode, string message, string errorCode)
         {
             _validModel.ProgType = progType;
@@ -98,17 +98,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             var result = _validator.Validate(_validModel);
             result.IsValid.Should().BeFalse();
             result.Errors.Count.Should().Be(2);
-            result.Errors[0].ErrorMessage.Should().Be("You must enter a <strong>Framework code</strong> - you can add up to 3 characters");
+            result.Errors[0].ErrorMessage.Should().Be("You must not enter a <strong>Framework code</strong> when you've entered a Standard programme type");
             result.Errors[0].ErrorCode.Should().Be("FworkCode_03");
 
-            result.Errors[1].ErrorMessage.Should().Be("You must enter a <strong>Pathway code</strong> - you can add up to 3 characters");
+            result.Errors[1].ErrorMessage.Should().Be("You must not enter a <strong>Pathway code</strong> when you've entered a Standard programme type");
             result.Errors[1].ErrorCode.Should().Be("PwayCode_03");
         }
 
-        [TestCase(25, null, null, 100000, "You must enter a <strong>Standard code</strong> - you can add up to 5 characters", "StdCode_01")]
+        [TestCase(25, null, null, 100000, "The <strong>Standard code</strong> must be 5 characters or fewer", "StdCode_01")]
         [TestCase(25, null, null, -1, "You must enter a <strong>Standard code</strong> - you can add up to 5 characters", "StdCode_02")]
         [TestCase(25, null, null, null, "You must enter a <strong>Standard code</strong> - you can add up to 5 characters", "StdCode_02")]
-        [TestCase(23, 42, 18, 42, "You've added a <strong>Standard code</strong>, but chosen a <strong>Programme Type</strong> of 'Framework'", "StdCode_03")]
+        [TestCase(23, 42, 18, 42, "You must not enter a <strong>Standard code</strong> when you've entered a Framework programme type", "StdCode_03")]
         public void StandardCodeValidationFail(int? progType, int? frameworkCode, int? pathwayCode, int? standardCode, string message, string errorCode)
         {
             _validModel.ProgType = progType;

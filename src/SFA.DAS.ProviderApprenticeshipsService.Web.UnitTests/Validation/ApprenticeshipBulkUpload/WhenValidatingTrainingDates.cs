@@ -37,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeFalse();
-            result.Errors[0].ErrorMessage.Should().Be("The <strong>start date</strong> must not be earlier than 1 May 2017");
+            result.Errors[0].ErrorMessage.Should().Be("The <strong>start date</strong> must not be earlier than May 2017");
         }
 
         [TestCase(null, null, null)]
@@ -49,7 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase(1, 18, 2121)]
         public void ShouldFailValidationForStartDate(int? day, int? month, int? year)
         {
-            var expected = "You must enter the <strong>planned training start date</strong>, for example 2017-09";
+            var expected = "You must enter the <strong>start date</strong>, for example 2017-09";
             ValidModel.StartDate = new DateTimeViewModel(day, month, year);
 
             var result = Validator.Validate(ValidModel);
@@ -71,14 +71,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             result.IsValid.Should().BeTrue();
         }
 
-        [TestCase(null, null, null, "You must enter the <strong>planned training finish date</strong>, for example 2019-02")]
-        [TestCase(31, 2, 2121, "You must enter the <strong>planned training finish date</strong>, for example 2019-02")]
-        [TestCase(5, null, 2121, "You must enter the <strong>planned training finish date</strong>, for example 2019-02")]
-        [TestCase(5, 9, null, "You must enter the <strong>planned training finish date</strong>, for example 2019-02")]
-        [TestCase(5, 9, -1, "You must enter the <strong>planned training finish date</strong>, for example 2019-02")]
-        [TestCase(0, 0, 0, "You must enter the <strong>planned training finish date</strong>, for example 2019-02")]
-        [TestCase(1, 18, 2121, "You must enter the <strong>planned training finish date</strong>, for example 2019-02")]
-        [TestCase(5, 9, 1998, "You must not enter a <strong>planned training finish date</strong> that's earlier than the <strong>planned training start date</strong>")]
+        [TestCase(null, null, null, "You must enter the <strong>end date</strong>, for example 2019-02")]
+        [TestCase(31, 2, 2121, "You must enter the <strong>end date</strong>, for example 2019-02")]
+        [TestCase(5, null, 2121, "You must enter the <strong>end date</strong>, for example 2019-02")]
+        [TestCase(5, 9, null, "You must enter the <strong>end date</strong>, for example 2019-02")]
+        [TestCase(5, 9, -1, "You must enter the <strong>end date</strong>, for example 2019-02")]
+        [TestCase(0, 0, 0, "You must enter the <strong>end date</strong>, for example 2019-02")]
+        [TestCase(1, 18, 2121, "You must enter the <strong>end date</strong>, for example 2019-02")]
+        [TestCase(5, 9, 1998, "You must not enter an <strong>end date</strong> that's earlier than the start date")]
         public void ShouldFailValidationForPlannedEndDate(int? day, int? month, int? year, string expected)
         {
 
@@ -112,7 +112,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeFalse();
-            result.Errors[0].ErrorMessage.Should().Be("You must not enter a <strong>planned training finish date</strong> that's earlier than the <strong>planned training start date</strong>");
+            result.Errors[0].ErrorMessage.Should().Be("You must not enter an <strong>end date</strong> that's earlier than the start date");
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeFalse();
-            result.Errors[0].ErrorMessage.Should().Be("You must not enter a <strong>planned training finish date</strong> that's earlier than the <strong>planned training start date</strong>");
+            result.Errors[0].ErrorMessage.Should().Be("You must not enter an <strong>end date</strong> that's earlier than the start date");
         }
 
         [Test]

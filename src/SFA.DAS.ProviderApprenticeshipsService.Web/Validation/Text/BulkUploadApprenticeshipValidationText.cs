@@ -15,13 +15,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
             new ValidationMessage("The <strong>unique learner number</strong> of 9999999999 isn't valid", "ULN_02");
 
         public ValidationMessage FamilyName01 =>
-            new ValidationMessage("<strong>Last name*</strong> must be entered ", "FamilyName_01");
+            new ValidationMessage("<strong>Last name</strong> must be entered", "FamilyName_01");
         public ValidationMessage FamilyName02 =>
             new ValidationMessage("You must enter a <strong>last name</strong> that's no longer than 100 characters", "FamilyName_02");
         public ValidationMessage GivenNames01 =>
             new ValidationMessage("<strong>First name</strong> must be entered", "GivenNames_01");
         public ValidationMessage GivenNames02 =>
-            new ValidationMessage("You must enter a <strong>first name</strong> that's no longer than 100 characters ", "GivenNames_02");
+            new ValidationMessage("You must enter a <strong>first name</strong> that's no longer than 100 characters", "GivenNames_02");
 
         public ValidationMessage DateOfBirth01 =>
             new ValidationMessage("You must enter the apprentice's <strong>date of birth</strong>, for example 2001-04-23", "DateOfBirth_01");
@@ -29,16 +29,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
             new ValidationMessage("The apprentice's <strong>date of birth</strong> must show that they're at least 15 years old at the start of their training", "DateOfBirth_02");
 
         public ValidationMessage LearnStartDate01 =>
-            new ValidationMessage("You must enter the <strong>start date</strong>, for example 2017-09-16", "LearnStartDate_01");
+            new ValidationMessage("You must enter the <strong>start date</strong>, for example 2017-09", "LearnStartDate_01");
         public ValidationMessage LearnStartDate02 =>
-            new ValidationMessage("The <strong>start date</strong> must not be earlier than 1 May 2017", "LearnStartDate_02");
+            new ValidationMessage("The <strong>start date</strong> must not be earlier than May 2017", "LearnStartDate_02");
 
         public ValidationMessage LearnPlanEndDate01 =>
-            new ValidationMessage("You must enter the <strong>finish date</strong>, for example 2019-02-23", "LearnPlanEndDate_01");
+            new ValidationMessage("You must enter the <strong>end date</strong>, for example 2019-02", "LearnPlanEndDate_01");
         public ValidationMessage LearnPlanEndDate02 =>
-            new ValidationMessage("You must not enter a <strong>finish date</strong> that's earlier than the planned training start date", "LearnPlanEndDate_02");
+            new ValidationMessage("You must not enter an <strong>end date</strong> that's earlier than the start date", "LearnPlanEndDate_02");
         public ValidationMessage LearnPlanEndDate03 =>
-            new ValidationMessage("You must not enter a <strong>finish date</strong> that's earlier than today's date", "LearnPlanEndDate_03");
+            new ValidationMessage("You must not enter an <strong>end date</strong> that's earlier than today's date", "LearnPlanEndDate_03");
 
         public ValidationMessage TrainingPrice01 =>
             new ValidationMessage("You must enter the <strong>total cost of training</strong>", "TrainingPrice_01");
@@ -65,7 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
         public ValidationMessage PwayCode01 =>
               new ValidationMessage("The <strong>Pathway code</strong> must be 3 characters or fewer", "PwayCode_01");
         public ValidationMessage PwayCode02 =>
-              new ValidationMessage("The <strong>Pathway code</strong> must be 3 characters or fewer", "PwayCode_02");
+              new ValidationMessage("You must enter a <strong>Pathway code</strong> = you can add up to 3 characters", "PwayCode_02");
         public ValidationMessage PwayCode03 =>
               new ValidationMessage("You must not enter a <strong>Pathway code</strong> when you've entered a Standard programme type", "PwayCode_03");
 
