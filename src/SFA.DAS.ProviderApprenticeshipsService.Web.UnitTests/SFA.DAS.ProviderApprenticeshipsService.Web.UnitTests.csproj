@@ -86,6 +86,8 @@
     <Compile Include="Orchestrators\Commitments\WhenGetCohorts.cs" />
     <Compile Include="Orchestrators\Commitments\WhenUploadingFile.cs" />
     <Compile Include="Validation\WhenValidatingApprenticeshipBulkUploadViewModel.cs" />
+    <Compile Include="Validation\WhenValidatingVerificationOfRelationshipViewModel.cs" />
+    <Compile Include="Validation\WhenValidatingVerificationOfEmployerViewModel.cs" />
     <Compile Include="WhenValidatingCsvRecord.cs" />
     <Compile Include="Orchestrators\BulkUpload\WhenCreatingRecordsBulkUpload.cs" />
     <Compile Include="Orchestrators\BulkUpload\WhenValidatingRecordsBulkUpload.cs" />

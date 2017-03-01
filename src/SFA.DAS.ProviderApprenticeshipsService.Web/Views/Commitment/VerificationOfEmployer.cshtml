@@ -1,0 +1,71 @@
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.VerificationOfEmployerViewModel
+@{
+    ViewBag.Title = "Confirm Employer";
+}
+
+<h1 class="heading-xlarge">Confirm Employer</h1>
+
+@Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+
+<p>You've received a new cohort request from @Model.LegalEntityName:</p>
+
+<div id="company-info">
+    <strong>Name: </strong> @Model.LegalEntityName
+    <br /><br />
+</div>
+
+<form action="@Url.Action("VerificationOfEmployer")" method="POST">
+    @Html.AntiForgeryToken()
+    
+    @Html.HiddenFor(m=> m.ProviderId)
+    @Html.HiddenFor(m => m.HashedCommitmentId)
+    @Html.HiddenFor(m => m.LegalEntityName)
+
+    <div class="form-group">
+        
+        <span id="confirm-organisation" class="heading-medium">Is this the organisation you're providing apprenticeship training to?</span>
+        <br /><br />
+        
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div>
+                @Html.ValidationMessageFor(m => m.ConfirmProvisionOfTrainingForOrganisation, "Please select an option", new { id = "error-message-" + Html.IdFor(m => m.ConfirmProvisionOfTrainingForOrganisation) })
+            </div>
+        }
+
+        <fieldset aria-describedby="confirm-organisation">
+
+            <label class="block-label" for="@RadioButtonId(true)">
+                @Html.RadioButtonFor(m => m.ConfirmProvisionOfTrainingForOrganisation, true, new { id = RadioButtonId(true) })
+                <span id="confirmYes">Yes, we’re providing apprenticeship training to @Model.LegalEntityName</span>
+            </label>
+
+            <label class="block-label" for="@RadioButtonId(false)">
+                @Html.RadioButtonFor(m => m.ConfirmProvisionOfTrainingForOrganisation, false, new { id = RadioButtonId(false) })
+                <span id="confirmNo">No, we’re not providing apprenticeship training to @Model.LegalEntityName</span>
+            </label>
+
+        </fieldset>
+
+    </div>
+    
+    <div>
+        <input type="submit" class="button" id="continue" value="Continue" />
+    </div>
+
+</form>
+<br/>
+
+<div class="panel">
+    If you need a contract for services (formal agreement) between you and the employer, @Model.LegalEntityName must be the employer named on the contract.
+</div>
+
+@functions
+{
+
+    public string RadioButtonId(bool optionValue)
+    {
+        return $"{Html.IdFor(m => m.ConfirmProvisionOfTrainingForOrganisation)}-{optionValue}";
+    }
+
+}

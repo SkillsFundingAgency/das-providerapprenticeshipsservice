@@ -27,6 +27,7 @@ using TrainingType = SFA.DAS.Commitments.Api.Types.TrainingType;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteCommitment;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateRelationship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetRelationshipByCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
@@ -224,7 +225,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<VerificationViewModel> GetVerification(long providerId, string hashedCommitmentId)
+        public async Task<VerificationOfEmployerViewModel> GetVerificationOfEmployer(long providerId, string hashedCommitmentId)
         {
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
 
@@ -234,7 +235,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
-            var result = new VerificationViewModel
+            var result = new VerificationOfEmployerViewModel
             {
                 ProviderId = providerId,
                 HashedCommitmentId = hashedCommitmentId,
@@ -242,6 +243,47 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
 
             return result;
+        }
+
+        public async Task<VerificationOfRelationshipViewModel> GetVerificationOfRelationship(long providerId, string hashedCommitmentId)
+        {
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            var relationshipRequest = await _mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
+            var result = new VerificationOfRelationshipViewModel
+            {
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId,
+                LegalEntityName = relationshipRequest.Relationship.LegalEntityName
+            };
+
+            return result;
+        }
+
+        public async Task VerifyRelationship(long providerId, string hashedCommitmentId, bool verified, string userId)
+        {
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            var relationshipRequest = await _mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
+            var relationship = relationshipRequest.Relationship;
+            relationship.Verified = verified;
+
+            await _mediator.SendAsync(new UpdateRelationshipCommand
+            {
+                ProviderId = providerId,
+                Relationship = relationship,
+                UserId = userId
+            });
         }
 
         public async Task<AgreementNotSignedViewModel> GetAgreementPage(long providerId, string hashedCommitmentId)

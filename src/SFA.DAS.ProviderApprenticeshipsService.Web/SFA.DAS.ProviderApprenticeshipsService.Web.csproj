@@ -405,7 +405,8 @@
     <Compile Include="Models\TaskViewModel.cs" />
     <Compile Include="Models\UploadApprenticeshipsViewModel.cs" />
     <Compile Include="Models\UploadRowErrorViewModel.cs" />
-    <Compile Include="Models\VerificationViewModel.cs" />
+    <Compile Include="Models\VerificationOfRelationshipViewModel.cs" />
+    <Compile Include="Models\VerificationOfEmployerViewModel.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
     <Compile Include="Orchestrators\Mappers\BulkUploadMapper.cs" />
     <Compile Include="Orchestrators\BaseCommitmentOrchestrator.cs" />
@@ -441,6 +442,8 @@
     <Compile Include="Validation\Text\WebApprenticeshipValidationText.cs" />
     <Compile Include="Validation\Text\IApprenticeshipValidationErrorText.cs" />
     <Compile Include="Validation\Text\ValidationMessage.cs" />
+    <Compile Include="Validation\VerificationOfEmployerViewModelValidator.cs" />
+    <Compile Include="Validation\VerificationOfRelationshipViewModelValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\images\apple-touch-icon-120x120.png" />
@@ -603,8 +606,9 @@
     <Content Include="Views\Error\_Error403.cshtml" />
     <Content Include="Views\Commitment\DeleteCohort.cshtml" />
     <Content Include="Views\Shared\_ModalMessage.cshtml" />
-    <Content Include="Views\Commitment\Verification.cshtml" />
-    <Content Include="Views\Commitment\VerificationStep2.cshtml" />
+    <Content Include="Views\Commitment\VerificationOfEmployer.cshtml" />
+    <Content Include="Views\Commitment\VerificationOfRelationship.cshtml" />
+    <Content Include="Views\Commitment\VerificationStopped.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

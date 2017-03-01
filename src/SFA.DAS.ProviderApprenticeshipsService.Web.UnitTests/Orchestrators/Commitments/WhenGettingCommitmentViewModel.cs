@@ -91,7 +91,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 });
 
             mockMediator.Setup(m => m.SendAsync(It.IsAny<GetRelationshipByCommitmentQueryRequest>()))
-                .ReturnsAsync(() => new GetRelationshipByCommitmentQueryResponse());
+                .ReturnsAsync(() => new GetRelationshipByCommitmentQueryResponse
+                {
+                    Relationship = new Relationship
+                    {
+                        Verified = true
+                    }
+                });
 
             return mockMediator;
         }
