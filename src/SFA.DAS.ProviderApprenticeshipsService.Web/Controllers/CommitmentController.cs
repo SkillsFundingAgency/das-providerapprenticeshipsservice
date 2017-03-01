@@ -130,6 +130,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
 
         [HttpPost]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/verification-relationship")]
         public async Task<ActionResult> VerificationOfRelationship(VerificationOfRelationshipViewModel viewModel)
         {
