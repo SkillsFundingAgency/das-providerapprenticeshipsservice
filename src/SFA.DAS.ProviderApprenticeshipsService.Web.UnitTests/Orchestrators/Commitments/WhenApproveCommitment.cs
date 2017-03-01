@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 }));
 
             var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), mockHashingService.Object, Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>());
-            await _sut.SubmitCommitment(1L, "ABBA99", input, string.Empty, new SignInUserModel());
+            await _sut.SubmitCommitment("UserId", 1L, "ABBA99", input, string.Empty, new SignInUserModel());
 
             mockMediator.Verify(m => m
                 .SendAsync(It.Is<SubmitCommitmentCommand>(

@@ -450,7 +450,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return data.Any();
         }
 
-        public async Task SubmitCommitment(long providerId, string hashedCommitmentId, SaveStatus saveStatus, string message, SignInUserModel currentUser)
+        public async Task SubmitCommitment(string currentUserId, long providerId, string hashedCommitmentId, SaveStatus saveStatus, string message, SignInUserModel currentUser)
         {
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             await AssertCommitmentStatus(commitmentId, providerId);
@@ -495,7 +495,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                         LastAction = lastAction,
                         CreateTask = (saveStatus == SaveStatus.ApproveAndSend || saveStatus == SaveStatus.AmendAndSend),
                         UserDisplayName = currentUser.DisplayName,
-                        UserEmailAddress = currentUser.Email
+                        UserEmailAddress = currentUser.Email,
+                        UserId = currentUserId
                     });
         }
 
