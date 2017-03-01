@@ -235,6 +235,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
+            if (relationshipRequest.Relationship.Verified.HasValue)
+            {
+                throw new InvalidStateException("Relationship already verified");
+            }
+
             var result = new VerificationOfEmployerViewModel
             {
                 ProviderId = providerId,
@@ -255,6 +260,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
+            if (relationshipRequest.Relationship.Verified.HasValue)
+            {
+                throw new InvalidStateException("Relationship already verified");
+            }
+
             var result = new VerificationOfRelationshipViewModel
             {
                 ProviderId = providerId,
@@ -274,6 +284,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderId = providerId,
                 CommitmentId = commitmentId
             });
+
+            if (relationshipRequest.Relationship.Verified.HasValue)
+            {
+                throw new InvalidStateException("Relationship already verified");
+            }
 
             var relationship = relationshipRequest.Relationship;
             relationship.Verified = verified;
