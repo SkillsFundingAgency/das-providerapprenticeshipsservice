@@ -25,12 +25,22 @@
         <div class="grid-row">
                 <div class="column-one-half">
                     <h2 class="heading-medium">
-                        <a href="@Url.Action("Cohorts", "Commitment", new {providerId = Model.ProviderId})">Apprentices</a>
+                        <a href="@Url.Action("Cohorts", "Commitment", new {providerId = Model.ProviderId})">Manage cohorts</a>
                     </h2>
-                    <p>View, update and agree <a href="@Url.Action("Cohorts", "Commitment", new {providerId = Model.ProviderId})">employer requests</a>, or <a href="@Url.Action("Index", "ManageApprentices", new { providerId = Model.ProviderId })">update existing apprentice details</a>.
+                    <p>View and respond to employer training requests.
                     </p>
                     <hr />
                 </div>
+
+            <div class="column-one-half">
+                <h2 class="heading-medium">
+                    <a href="@Url.Action("Index", "ManageApprentices", new {providerId = Model.ProviderId})">Manage approved apprentices</a>
+                </h2>
+                <p>
+                    View and update existing apprentice records.
+                </p>
+                <hr />
+            </div>
           </div>
     </div>
 </div>
