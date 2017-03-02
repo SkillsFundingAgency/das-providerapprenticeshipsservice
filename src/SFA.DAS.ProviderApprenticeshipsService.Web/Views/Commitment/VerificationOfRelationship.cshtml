@@ -1,4 +1,5 @@
-﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.VerificationOfRelationshipViewModel
+﻿@using SFA.DAS.Commitments.Api.Types
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.VerificationOfRelationshipViewModel
 @{
     ViewBag.Title = "Confirm Relationship";
 }
@@ -8,7 +9,17 @@
 @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
 <div id="company-info">
-    <strong>Name: </strong> @Model.LegalEntityName
+    <strong>Name: </strong> @Model.LegalEntityName <br />
+    <strong>Address: </strong> @Model.LegalEntityAddress <br />
+
+    @if (Model.LegalEntityOrganisationType == OrganisationType.Charities)
+    {
+        <strong>Registered charity number: </strong> @Model.LegalEntityId <br />
+    }
+    else if (Model.LegalEntityOrganisationType == OrganisationType.CompaniesHouse)
+    {
+        <strong>Companies House number: </strong> @Model.LegalEntityId <br />
+    }
     <br /><br />
 </div>
 
@@ -19,6 +30,8 @@
     @Html.HiddenFor(m => m.ProviderId)
     @Html.HiddenFor(m => m.HashedCommitmentId)
     @Html.HiddenFor(m => m.LegalEntityName)
+    @Html.HiddenFor(m => m.LegalEntityAddress)
+    @Html.HiddenFor(m => m.LegalEntityOrganisationType)
 
     <div class="form-group">
 

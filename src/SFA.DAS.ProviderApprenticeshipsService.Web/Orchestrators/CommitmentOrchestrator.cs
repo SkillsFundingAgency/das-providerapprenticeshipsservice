@@ -244,7 +244,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 HashedCommitmentId = hashedCommitmentId,
-                LegalEntityName = relationshipRequest.Relationship.LegalEntityName
+                LegalEntityId = relationshipRequest.Relationship.LegalEntityId,
+                LegalEntityName = relationshipRequest.Relationship.LegalEntityName,
+                LegalEntityAddress = relationshipRequest.Relationship.LegalEntityAddress,
+                LegalEntityOrganisationType = relationshipRequest.Relationship.LegalEntityOrganisationType
             };
 
             return result;
@@ -269,7 +272,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 HashedCommitmentId = hashedCommitmentId,
-                LegalEntityName = relationshipRequest.Relationship.LegalEntityName
+                LegalEntityId = relationshipRequest.Relationship.LegalEntityId,
+                LegalEntityName = relationshipRequest.Relationship.LegalEntityName,
+                LegalEntityAddress = relationshipRequest.Relationship.LegalEntityAddress,
+                LegalEntityOrganisationType = relationshipRequest.Relationship.LegalEntityOrganisationType
             };
 
             return result;
