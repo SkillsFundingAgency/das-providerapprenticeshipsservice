@@ -15,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
     public class WhenCreatingRecordsBulkUpload
     {
         const string TestData =
-@"CohortRef,ULN,FamilyName,GivenNames,DateOfBirth,NINumber,ProgType,FworkCode,PwayCode,StdCode,LearnStartDate,LearnPlanEndDate,TotalPrice,EPAOrgId,EmpRef,ProviderRef
+@"CohortRef,ULN,FamilyName,GivenNames,DateOfBirth,NINumber,ProgType,FworkCode,PwayCode,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,EmpRef,ProviderRef
  Abba123,1113335559,Froberg,Chris,1998-12-08,SE123321C,25,,,2,2120-08,2125-08,1500,,Employer ref,Provider ref
  Abba123,1113335559,Froberg1,Chris1,1998-12-08,SE123321C,25,,,3,2120-08,2125-08,1500,,Employer ref,Provider ref
  ABBA123,1113335559,Froberg2,Chris2,1998-12-08,SE123321C,25,,,3,2120-08,2125-08,1500,,Employer ref,Provider ref

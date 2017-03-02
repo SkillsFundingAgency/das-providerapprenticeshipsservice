@@ -20,9 +20,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
 
         public int? StdCode { get; set; }
 
-        public string LearnStartDate { get; set; }
+        public string StartDate { get; set; }
 
-        public string LearnPlanEndDate { get; set; }
+        public string EndDate { get; set; }
 
         public int? TotalPrice { get; set; }
 

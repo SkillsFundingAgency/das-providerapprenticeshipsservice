@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
@@ -15,8 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
     {
         private readonly ILog _logger;
         private readonly IBulkUploadValidator _validator;
-        private readonly ApprenticeshipBulkUploadValidator _viewModelValidator = new ApprenticeshipBulkUploadValidator(new BulkUploadApprenticeshipValidationText());
-        private readonly ApprenticeshipViewModelApproveValidator _approvalValidator = new ApprenticeshipViewModelApproveValidator(new BulkUploadApprenticeshipValidationText());
+        private readonly ApprenticeshipBulkUploadValidator _viewModelValidator = new ApprenticeshipBulkUploadValidator(new BulkUploadApprenticeshipValidationText(), new CurrentDateTime());
         private readonly CsvRecordValidator _csvRecordValidator = new CsvRecordValidator(new BulkUploadApprenticeshipValidationText());
 
         public InstrumentedBulkUploadValidator(ILog logger, IBulkUploadValidator validator)

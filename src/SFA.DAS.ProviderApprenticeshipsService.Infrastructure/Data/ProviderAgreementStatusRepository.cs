@@ -16,10 +16,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
     public class ProviderAgreementStatusRepository : DbBaseRepository, IProviderAgreementStatusRepository, IAgreementStatusQueryRepository
     {
         private readonly ILog _logger;
+        private readonly ICurrentDateTime _currentDateTime;
 
-        public ProviderAgreementStatusRepository(IConfiguration config, ILog logger) : base(config.DatabaseConnectionString)
+        public ProviderAgreementStatusRepository(IConfiguration config, ILog logger, ICurrentDateTime currentDateTime) : base(config.DatabaseConnectionString)
         {
             _logger = logger;
+            _currentDateTime = currentDateTime;
         }
 
         public async Task<IEnumerable<ContractFeedEvent>> GetContractEvents(long providerId)

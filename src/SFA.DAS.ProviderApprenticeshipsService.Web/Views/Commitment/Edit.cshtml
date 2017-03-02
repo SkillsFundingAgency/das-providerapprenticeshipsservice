@@ -21,55 +21,29 @@
 
             @Html.AntiForgeryToken()
 
-            @{ var validation = Html.ViewData["ApprovalWarningState"] as FluentValidation.Results.ValidationResult; }
-
             <h1 class="heading-xlarge">Edit an apprentice</h1>
             
             <div class="panel panel-border-wide">
                 
-
-             
-                @if (validation != null && !validation.IsValid)
-                {
-                    <p>
-                        You can only receive payments for this apprentice once all the fields have been completed - either by yourself or the employer.
-
-                    </p>
-                }
-    
-                else
-                {
-                    <p>
-                        You can only receive payments for this apprentice once all the fields have been completed - either by yourself or the employer.
-
-                    </p>
-                }
-
+                <p>
+                    You can only receive payments for this apprentice once all the fields have been completed - either by yourself or the employer.
+                </p>
                
             </div>
             <hr/>
-            <div class="form-group 
-                    @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
                 
                 @Html.LabelFor(m => m.FirstName, "First name", new { @class = "form-label form-label-bold" })
                 @Html.ValidationMessageFor(m => m.FirstName, null, new { id = "error-message-" + Html.IdFor(m => m.FirstName) })
                 @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-control-3-4" })
             </div>
-            <div class="form-group 
-                    @Html.AddClassIfPropertyInError(x => x.LastName, "error")">
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.LastName, "error")">
                 @Html.LabelFor(m => m.LastName, "Last name", new { @class = "form-label form-label-bold" })
                 @Html.ValidationMessageFor(m => m.LastName, null, new { id = "error-message-" + Html.IdFor(m => m.LastName) })
                 @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
             </div>
 
-            @*<div class="form-group @Html.AddClassIfPropertyInError(x => x.NINumber, "error")">
-                <hr/>
-                @Html.LabelFor(m => m.NINumber, "National insurance number", new { @class = "form-label form-label-bold" })
-                @Html.ValidationMessageFor(m => m.NINumber, null, new { id = "error-message-" + Html.IdFor(m => m.NINumber) })
-                @Html.TextBoxFor(m => m.NINumber, new { @class = "form-control form-control-3-4" })
-            </div>*@
-
-        <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.DateOfBirth, "error") ">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.DateOfBirth, "error") ">
                 <hr />
                 <span class="form-label-bold">Date of birth</span>
                 <span class="form-hint">For example, 08 12 2001</span>
