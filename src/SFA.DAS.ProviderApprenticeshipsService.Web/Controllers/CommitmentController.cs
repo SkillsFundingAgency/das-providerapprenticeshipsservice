@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -124,7 +123,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                     new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
             }
 
-            await _commitmentOrchestrator.DeleteCommitment(viewModel.ProviderId, viewModel.HashedCommitmentId);
+            await _commitmentOrchestrator.DeleteCommitment(CurrentUserId, viewModel.ProviderId, viewModel.HashedCommitmentId);
 
             SetInfoMessage("Cohort deleted", FlashMessageSeverityLevel.Okay);
 
@@ -161,7 +160,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                     return await RedisplayApprenticeshipView(apprenticeship);
                 }
 
-                await _commitmentOrchestrator.UpdateApprenticeship(apprenticeship);
+                await _commitmentOrchestrator.UpdateApprenticeship(CurrentUserId, apprenticeship);
             }
             catch (InvalidRequestException ex)
             {
@@ -197,7 +196,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return RedirectToRoute("EditApprenticeship", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId, hashedApprenticeshipId = viewModel.HashedApprenticeshipId });
             }
 
-            var deletedApprenticeshipName = await _commitmentOrchestrator.DeleteApprenticeship(viewModel);
+            var deletedApprenticeshipName = await _commitmentOrchestrator.DeleteApprenticeship(CurrentUserId, viewModel);
             SetInfoMessage($"Apprentice record for {deletedApprenticeshipName} deleted", FlashMessageSeverityLevel.Okay);
 
             return RedirectToRoute("CohortDetails", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
@@ -226,7 +225,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                     return await RedisplayApprenticeshipView(apprenticeship);
                 }
 
-                await _commitmentOrchestrator.CreateApprenticeship(apprenticeship);
+                await _commitmentOrchestrator.CreateApprenticeship(CurrentUserId, apprenticeship);
             }
             catch (InvalidRequestException ex)
             {
@@ -264,13 +263,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (viewModel.SaveStatus == SaveStatus.Approve)
             {
-                await _commitmentOrchestrator.SubmitCommitment(viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty, GetSingedInUser());
+                await _commitmentOrchestrator.SubmitCommitment(CurrentUserId, viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty, GetSingedInUser());
                 return RedirectToAction("Approved", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
             }
 
             if (viewModel.SaveStatus == SaveStatus.Save)
             {
-                await _commitmentOrchestrator.SubmitCommitment(viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty, GetSingedInUser());
+                await _commitmentOrchestrator.SubmitCommitment(CurrentUserId, viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty, GetSingedInUser());
             }
 
             return RedirectToAction("Cohorts", new { providerId = viewModel.ProviderId });
@@ -323,7 +322,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedCommitmentId}/Submit")]
         public async Task<ActionResult> Submit(SubmitCommitmentViewModel model)
         {
-            await _commitmentOrchestrator.SubmitCommitment(model.ProviderId, model.HashedCommitmentId, model.SaveStatus, model.Message, GetSingedInUser());
+            await _commitmentOrchestrator.SubmitCommitment(CurrentUserId, model.ProviderId, model.HashedCommitmentId, model.SaveStatus, model.Message, GetSingedInUser());
 
             return RedirectToAction("Acknowledgement", new { providerId = model.ProviderId, hashedCommitmentId = model.HashedCommitmentId, message = model.Message });
         }

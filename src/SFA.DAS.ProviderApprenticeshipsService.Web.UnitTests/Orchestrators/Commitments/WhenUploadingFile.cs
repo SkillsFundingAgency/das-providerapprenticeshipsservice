@@ -90,7 +90,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 1234L };
             var stopwatch = Stopwatch.StartNew();
-            var r1 = await _sut.UploadFile(model);
+            var r1 = await _sut.UploadFile("user123", model);
             stopwatch.Stop(); Console.WriteLine($"Time TOTAL: {stopwatch.Elapsed.Seconds}");
             r1.RowLevelErrors.Count().Should().Be(80 * 1000);
             stopwatch.Elapsed.Seconds.Should().BeLessThan(7);   
@@ -120,7 +120,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 }));
 
             var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111 };
-            var file = await _sut.UploadFile(model);
+            var file = await _sut.UploadFile("user123", model);
 
             _mockMediator.Verify(x => x.SendAsync(It.IsAny<BulkUploadApprenticeshipsCommand>()), Times.Once);
 

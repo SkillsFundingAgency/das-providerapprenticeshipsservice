@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateApprenticeship
 {
@@ -26,7 +27,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateAppr
             if (!validationResult.IsValid)
                 throw new InvalidRequestException(validationResult.Errors);
 
-            await _commitmentsApi.UpdateProviderApprenticeship(message.ProviderId, message.Apprenticeship.CommitmentId, message.Apprenticeship.Id, message.Apprenticeship);
+            var request = new ApprenticeshipRequest
+            {
+                UserId = message.UserId,
+                Apprenticeship = message.Apprenticeship
+            };
+
+            await _commitmentsApi.UpdateProviderApprenticeship(message.ProviderId, message.Apprenticeship.CommitmentId, message.Apprenticeship.Id, request);
         }
     }
 }

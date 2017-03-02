@@ -23,6 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             _mockCommitmentsApi = new Mock<ICommitmentsApi>();
             _exampleValidCommand = new BulkUploadApprenticeshipsCommand
             {
+                UserId = "user123",
                 ProviderId = 123L,
                 CommitmentId = 333L,
                 Apprenticeships = new List<Apprenticeship>
@@ -40,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             await _handler.Handle(_exampleValidCommand);
 
-            _mockCommitmentsApi.Verify(x => x.BulkUploadApprenticeships(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<IList<Apprenticeship>>()));
+            _mockCommitmentsApi.Verify(x => x.BulkUploadApprenticeships(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<BulkApprenticeshipRequest>()));
         }
 
         [Test]

@@ -155,19 +155,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task DeleteCommitment(long providerId, string hashedCommitmentId)
+        public async Task DeleteCommitment(string userId, long providerId, string hashedCommitmentId)
         {
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             _logger.Info($"Deleting commitment {hashedCommitmentId}", providerId, commitmentId);
 
             await _mediator.SendAsync(new DeleteCommitmentCommand
             {
+                UserId = userId,
                 ProviderId = providerId,
                 CommitmentId = commitmentId
             });
         }
 
-        public async Task<string> DeleteApprenticeship(DeleteConfirmationViewModel viewModel)
+        public async Task<string> DeleteApprenticeship(string userId, DeleteConfirmationViewModel viewModel)
         {
             var apprenticeshipId = _hashingService.DecodeValue(viewModel.HashedApprenticeshipId);
             _logger.Info($"Deleting apprenticeship {apprenticeshipId}", providerId: viewModel.ProviderId, apprenticeshipId: apprenticeshipId);
@@ -180,6 +181,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             await _mediator.SendAsync(new DeleteApprenticeshipCommand
             {
+                UserId = userId,
                 ProviderId = viewModel.ProviderId,
                 ApprenticeshipId = apprenticeshipId
                 
@@ -410,13 +412,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeshipViewModel)
+        public async Task CreateApprenticeship(string userId, ApprenticeshipViewModel apprenticeshipViewModel)
         {
             var apprenticeship = await MapFrom(apprenticeshipViewModel);
             await AssertCommitmentStatus(apprenticeship.CommitmentId, apprenticeship.ProviderId);
 
             await _mediator.SendAsync(new CreateApprenticeshipCommand
             {
+                UserId = userId,
                 ProviderId = apprenticeshipViewModel.ProviderId,
                 Apprenticeship = apprenticeship
             });
@@ -424,13 +427,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _logger.Info($"Created apprenticeship for provider:{apprenticeshipViewModel.ProviderId} commitment:{apprenticeship.CommitmentId}", providerId: apprenticeship.ProviderId, commitmentId: apprenticeship.CommitmentId);
         }
 
-        public async Task UpdateApprenticeship(ApprenticeshipViewModel apprenticeshipViewModel)
+        public async Task UpdateApprenticeship(string userId, ApprenticeshipViewModel apprenticeshipViewModel)
         {
             var apprenticeship = await MapFrom(apprenticeshipViewModel);
             await AssertCommitmentStatus(apprenticeship.CommitmentId, apprenticeship.ProviderId);
 
             await _mediator.SendAsync(new UpdateApprenticeshipCommand
             {
+                UserId = userId,
                 ProviderId = apprenticeshipViewModel.ProviderId,
                 Apprenticeship = apprenticeship
             });
@@ -444,7 +448,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return data.Any();
         }
 
-        public async Task SubmitCommitment(long providerId, string hashedCommitmentId, SaveStatus saveStatus, string message, SignInUserModel currentUser)
+        public async Task SubmitCommitment(string currentUserId, long providerId, string hashedCommitmentId, SaveStatus saveStatus, string message, SignInUserModel currentUser)
         {
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             await AssertCommitmentStatus(commitmentId, providerId);
@@ -489,7 +493,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                         LastAction = lastAction,
                         CreateTask = (saveStatus == SaveStatus.ApproveAndSend || saveStatus == SaveStatus.AmendAndSend),
                         UserDisplayName = currentUser.DisplayName,
-                        UserEmailAddress = currentUser.Email
+                        UserEmailAddress = currentUser.Email,
+                        UserId = currentUserId
                     });
         }
 

@@ -21,5 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
         public string UserDisplayName { get; set; }
 
         public string UserEmailAddress { get; set; }
+
+        public string UserId { get; set; }
     }
 }

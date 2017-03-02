@@ -6,6 +6,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUpload
     {
         public BulkUploadApprenticeshipsCommandValidator()
         {
+            RuleFor(x => x.UserId).NotEmpty();
             RuleFor(x => x.ProviderId).GreaterThan(0);
             RuleFor(x => x.CommitmentId).GreaterThan(0);
             RuleFor(x => x.Apprenticeships).NotEmpty();

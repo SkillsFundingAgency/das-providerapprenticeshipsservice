@@ -23,6 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
 
             _exampleValidCommand = new BulkUploadApprenticeshipsCommand
             {
+                UserId = "user1234",
                 ProviderId = 111L,
                 CommitmentId = 123L,
                 Apprenticeships = exampleValidApprenticeships
@@ -73,6 +74,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         public void ThenAnEmptyListOfApprenticesIsInvalid()
         {
             _exampleValidCommand.Apprenticeships = new List<Apprenticeship>(0);
+
+            var result = _validator.Validate(_exampleValidCommand);
+
+            result.IsValid.Should().BeFalse();
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("    ")]
+        public void ThenAnEmptyUserIdIsInvalid(string userId)
+        {
+            _exampleValidCommand.UserId = userId;
 
             var result = _validator.Validate(_exampleValidCommand);
 

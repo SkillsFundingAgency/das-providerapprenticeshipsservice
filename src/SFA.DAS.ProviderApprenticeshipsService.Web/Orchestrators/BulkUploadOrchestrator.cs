@@ -52,7 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _logger = logger;
         }
 
-        public async Task<BulkUploadResultViewModel> UploadFile(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
+        public async Task<BulkUploadResultViewModel> UploadFile(string userId, UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
         {
             var commitmentId = _hashingService.DecodeValue(uploadApprenticeshipsViewModel.HashedCommitmentId);
             var providerId = uploadApprenticeshipsViewModel.ProviderId;
@@ -81,6 +81,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             await _mediator.SendAsync(new BulkUploadApprenticeshipsCommand
             {
+                UserId = userId,
                 ProviderId = providerId,
                 CommitmentId = commitmentId,
                 Apprenticeships = await _mapper.MapFrom(commitmentId, rowValidationResult.Data)

@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.DeleteApprenticeship
@@ -18,6 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand = new DeleteApprenticeshipCommand
             {
+                UserId = "user123",
                 ProviderId = 111L,
                 ApprenticeshipId = 123L
             };
@@ -31,7 +33,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             await _handler.Handle(_validCommand);
 
-            _mockCommitmentsApi.Verify(x => x.DeleteProviderApprenticeship(It.Is<long>(a => a == _validCommand.ProviderId), It.Is<long>(a => a ==_validCommand.ApprenticeshipId)));
+            _mockCommitmentsApi.Verify(x => x.DeleteProviderApprenticeship(
+                It.Is<long>(a => a == _validCommand.ProviderId), It.Is<long>(a => a ==_validCommand.ApprenticeshipId), It.Is<DeleteRequest>(a => a.UserId == _validCommand.UserId)));
         }
     }
 }

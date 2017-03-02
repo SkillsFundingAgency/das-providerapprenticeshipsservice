@@ -46,5 +46,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
 
             act.ShouldThrow<ValidationException>().Which.Message.Contains("Provider Id");
         }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("   ")]
+        public void ShouldThrowExceptionIfUserIdIsEmpty(string userId)
+        {
+            _validCommand.UserId = userId;
+
+            Func<Task> act = async () => await _handler.Handle(_validCommand);
+
+            act.ShouldThrow<ValidationException>().Which.Message.Contains("User Id");
+        }
     }
 }
