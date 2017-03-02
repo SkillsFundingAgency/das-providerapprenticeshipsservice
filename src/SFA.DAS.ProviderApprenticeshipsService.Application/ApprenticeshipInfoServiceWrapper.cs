@@ -18,15 +18,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
 
         private readonly ICache _cache;
         private readonly IApprenticeshipInfoServiceConfiguration _configuration;
+        private readonly ICurrentDateTime _currentDateTime;
 
-        public ApprenticeshipInfoServiceWrapper(ICache cache, IApprenticeshipInfoServiceConfiguration configuration)
+        public ApprenticeshipInfoServiceWrapper(ICache cache, IApprenticeshipInfoServiceConfiguration configuration, ICurrentDateTime currentDateTime)
         {
             if (cache == null)
                 throw new ArgumentNullException(nameof(cache));
             if (configuration == null)
                 throw new ArgumentNullException(nameof(configuration));
+            if (currentDateTime == null)
+                throw new ArgumentNullException(nameof(currentDateTime));
+
             _cache = cache;
             _configuration = configuration;
+            _currentDateTime = currentDateTime;
         }
 
         public async Task<StandardsView> GetStandardsAsync(bool refreshCache = false)
@@ -64,11 +69,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
             return MapFrom(providers);
         }
 
-        private static FrameworksView MapFrom(List<FrameworkSummary> frameworks)
+        private FrameworksView MapFrom(List<FrameworkSummary> frameworks)
         {
             return new FrameworksView
             {
-                CreatedDate = DateTime.UtcNow,
+                CreatedDate = _currentDateTime.Now,
                 Frameworks = frameworks.Select(x => new Framework
                 {
                     Id = x.Id,
@@ -89,11 +94,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
             };
         }
 
-        private static ProvidersView MapFrom(Apprenticeships.Api.Types.Providers.Provider provider)
+        private ProvidersView MapFrom(Apprenticeships.Api.Types.Providers.Provider provider)
         {
             return new ProvidersView
             {
-                CreatedDate = DateTime.UtcNow,
+                CreatedDate = _currentDateTime.Now,
                 Provider = new Provider()
                 {
                     Ukprn = provider.Ukprn,
@@ -105,11 +110,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
             };
         }
 
-        private static StandardsView MapFrom(List<StandardSummary> standards)
+        private StandardsView MapFrom(List<StandardSummary> standards)
         {
             return new StandardsView
             {
-                CreationDate = DateTime.UtcNow,
+                CreationDate = _currentDateTime.Now,
                 Standards = standards.Select(x => new Domain.Standard
                 {
                     Id = x.Id,

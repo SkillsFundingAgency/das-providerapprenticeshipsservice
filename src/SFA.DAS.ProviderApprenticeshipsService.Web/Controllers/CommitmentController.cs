@@ -209,8 +209,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var model = await _commitmentOrchestrator.GetApprenticeship(providerId, hashedCommitmentId, hashedApprenticeshipId);
             ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
 
-            ViewBag.ApprovalWarningState = model.WarningValidation;
-
             return View(model.Apprenticeship);
         }
 
@@ -329,13 +327,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (viewModel.SaveStatus == SaveStatus.Approve)
             {
-                await _commitmentOrchestrator.SubmitCommitment(viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty, GetSingedInUser());
+                await _commitmentOrchestrator.SubmitCommitment(CurrentUserId, viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty, GetSingedInUser());
                 return RedirectToAction("Approved", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
             }
 
             if (viewModel.SaveStatus == SaveStatus.Save)
             {
-                await _commitmentOrchestrator.SubmitCommitment(viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty, GetSingedInUser());
+                await _commitmentOrchestrator.SubmitCommitment(CurrentUserId, viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty, GetSingedInUser());
             }
 
             return RedirectToAction("Cohorts", new { providerId = viewModel.ProviderId });
@@ -388,7 +386,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedCommitmentId}/Submit")]
         public async Task<ActionResult> Submit(SubmitCommitmentViewModel model)
         {
-            await _commitmentOrchestrator.SubmitCommitment(model.ProviderId, model.HashedCommitmentId, model.SaveStatus, model.Message, GetSingedInUser());
+            await _commitmentOrchestrator.SubmitCommitment(CurrentUserId, model.ProviderId, model.HashedCommitmentId, model.SaveStatus, model.Message, GetSingedInUser());
 
             return RedirectToAction("Acknowledgement", new { providerId = model.ProviderId, hashedCommitmentId = model.HashedCommitmentId, message = model.Message });
         }

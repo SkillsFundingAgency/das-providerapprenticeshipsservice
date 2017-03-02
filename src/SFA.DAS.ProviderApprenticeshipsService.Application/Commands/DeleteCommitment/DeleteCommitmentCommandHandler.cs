@@ -5,6 +5,7 @@ using FluentValidation;
 using MediatR;
 
 using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteCommitment
 {
@@ -29,7 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteComm
         {
             _validator.ValidateAndThrow(message);
 
-            return _commitmentsApi.DeleteProviderCommitment(message.ProviderId, message.CommitmentId, message.UserId);
+            return _commitmentsApi.DeleteProviderCommitment(message.ProviderId, message.CommitmentId, new DeleteRequest { UserId = message.UserId });
         }
     }
 }

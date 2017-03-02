@@ -46,6 +46,7 @@
     <Compile Include="Interfaces\IApprenticeshipInfoServiceConfiguration.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\ICache.cs" />
+    <Compile Include="Interfaces\ICurrentDateTime.cs" />
     <Compile Include="Interfaces\IProviderAgreementStatusRepository.cs" />
     <Compile Include="Interfaces\IProviderCommitmentsLogger.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />

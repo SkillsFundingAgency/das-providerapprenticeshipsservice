@@ -1,46 +1,84 @@
-﻿using System;
-using System.Linq;
-using FluentValidation;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
-    public sealed class ApprenticeshipViewModelValidator : ApprenticeshipBaseValidator
+    public sealed class ApprenticeshipViewModelValidator : ApprenticeshipCoreValidator
     {
-        public ApprenticeshipViewModelValidator() : this(new WebApprenticeshipValidationText())
+        public ApprenticeshipViewModelValidator() : this(new WebApprenticeshipValidationText(), new CurrentDateTime())
         { } // The default is used by the MVC model binding
 
-        public ApprenticeshipViewModelValidator(WebApprenticeshipValidationText validationText) : base(validationText)
+        public ApprenticeshipViewModelValidator(WebApprenticeshipValidationText validationText, ICurrentDateTime currentDateTime) : base(validationText, currentDateTime)
         {
-            var now = DateTime.Now;
-            var yesterday = DateTime.Now.AddDays(-1);
-            var text = new WebApprenticeshipValidationText();
-            Func<string, int, bool> lengthLessThan = (str, length) => (str?.Length ?? 0) <= length;
-            Func<string, int, bool> haveNumberOfDigitsFewerThan = (str, length) => { return (str?.Count(char.IsDigit) ?? 0) < length; };
-            Func<DateTime?, bool, bool> _checkIfNotNull = (dt, b) => dt == null || b;
+        }
 
-            RuleFor(x => x.FirstName)
-                .NotEmpty().WithMessage(validationText.GivenNames01.Text).WithErrorCode(validationText.GivenNames01.ErrorCode)
-                .Must(m => lengthLessThan(m, 100)).WithMessage(validationText.GivenNames02.Text).WithErrorCode(validationText.GivenNames02.ErrorCode);
+        protected override void ValidateUln()
+        {
+            When(x => !string.IsNullOrEmpty(x.ULN), () =>
+            {
+                base.ValidateUln();
+            });
+        }
 
-            RuleFor(x => x.LastName)
-                .NotEmpty().WithMessage(validationText.FamilyName01.Text).WithErrorCode(validationText.FamilyName01.ErrorCode)
-                .Must(m => lengthLessThan(m, 100)).WithMessage(validationText.FamilyName02.Text).WithErrorCode(validationText.FamilyName02.ErrorCode);
+        protected override void ValidateTraining()
+        {
+            When(x => !string.IsNullOrEmpty(x.TrainingCode), () =>
+            {
+                base.ValidateTraining();
+            });
+        }
 
-            RuleFor(x => x.Cost)
-                .Matches("^$|^([1-9]{1}([0-9]{1,2})?)+(,[0-9]{3})*$|^[1-9]{1}[0-9]*$").When(m => haveNumberOfDigitsFewerThan(m.Cost, 7)).WithMessage(validationText.TrainingPrice01.Text).WithErrorCode(validationText.TrainingPrice01.ErrorCode)
-                .Must(m => haveNumberOfDigitsFewerThan(m, 7)).WithMessage(validationText.TrainingPrice02.Text).WithErrorCode(validationText.TrainingPrice02.ErrorCode);
+        protected override void ValidateDateOfBirth()
+        {
+            When(x => HasAnyValuesSet(x.DateOfBirth), () => 
+            {
+                base.ValidateDateOfBirth();
+            });
+        }
 
-            RuleFor(r => r.StartDate)
-                .Must(ValidateDateWithoutDay).Unless(m => m.StartDate == null).WithMessage(validationText.LearnStartDate01.Text).WithErrorCode(validationText.LearnStartDate01.ErrorCode);
+        protected override void ValidateStartDate()
+        {
+            When(x => HasYearOrMonthValueSet(x.StartDate), () =>
+            {
+                base.ValidateStartDate();
+            });
+            
+        }
 
-            RuleFor(r => r.EndDate)
-                            .Must(ValidateDateWithoutDay).Unless(m => m.EndDate == null).WithMessage(validationText.LearnPlanEndDate01.Text).WithErrorCode(validationText.LearnPlanEndDate01.ErrorCode)
-                            .Must(BeGreaterThenStartDate).WithMessage(text.LearnPlanEndDate03.Text)
-                            .Must(m => CheckIfNotNull(m?.DateTime, m?.DateTime > now)).WithMessage(text.LearnPlanEndDate06.Text);
+        protected override void ValidateEndDate()
+        {
+            When(x => HasYearOrMonthValueSet(x.EndDate), () =>
+            {
+                base.ValidateEndDate();
+            });
+        }
 
-            RuleFor(r => r.DateOfBirth)
-                .Must(m => _checkIfNotNull(m?.DateTime, m?.DateTime < yesterday)).WithMessage(validationText.DateOfBirth03.Text).WithErrorCode(validationText.DateOfBirth03.ErrorCode);
+        protected override void ValidateCost()
+        {
+            When(x => !string.IsNullOrEmpty(x.Cost), () => 
+            {
+                base.ValidateCost();
+            });
+        }
+
+        private bool HasYearOrMonthValueSet(DateTimeViewModel date)
+        {
+            if (date == null) return false;
+
+            if (date.Day.HasValue || date.Month.HasValue || date.Year.HasValue) return true;
+
+            return false;
+        }
+
+        private bool HasAnyValuesSet(DateTimeViewModel dateOfBirth)
+        {
+            if (dateOfBirth == null) return false;
+
+            if (dateOfBirth.Day.HasValue || dateOfBirth.Month.HasValue || dateOfBirth.Year.HasValue) return true;
+
+            return false;
         }
     }
 }

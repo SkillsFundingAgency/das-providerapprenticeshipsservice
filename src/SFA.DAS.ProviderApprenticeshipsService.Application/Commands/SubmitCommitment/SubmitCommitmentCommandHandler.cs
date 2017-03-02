@@ -60,7 +60,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                     {
                         Name = message?.UserDisplayName ?? "",
                         EmailAddress = message?.UserEmailAddress ?? ""
-                    }
+                    },
+                    UserId = message.UserId
                 };
 
             await _commitmentsApi.PatchProviderCommitment(message.ProviderId, message.CommitmentId, submission);

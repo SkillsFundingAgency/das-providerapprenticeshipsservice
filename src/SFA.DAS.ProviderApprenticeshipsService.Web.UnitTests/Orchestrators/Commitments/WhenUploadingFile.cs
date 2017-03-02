@@ -29,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     [TestFixture]
     public sealed class WhenUploadingFile
     {
-        private const string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,FworkCode,PwayCode,ProgType,StdCode,LearnStartDate,LearnPlanEndDate,TotalPrice,EPAOrgId,EmpRef,ProviderRef,ULN";
+        private const string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,FworkCode,PwayCode,ProgType,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,EmpRef,ProviderRef,ULN";
         private BulkUploadOrchestrator _sut;
         private Mock<HttpPostedFileBase> _file;
         private Mock<IMediator> _mockMediator;
@@ -92,7 +92,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var stopwatch = Stopwatch.StartNew();
             var r1 = await _sut.UploadFile("user123", model);
             stopwatch.Stop(); Console.WriteLine($"Time TOTAL: {stopwatch.Elapsed.Seconds}");
-            r1.RowLevelErrors.Count().Should().Be(120 * 1000);
+            r1.RowLevelErrors.Count().Should().Be(80 * 1000);
             stopwatch.Elapsed.Seconds.Should().BeLessThan(7);   
         }
 
