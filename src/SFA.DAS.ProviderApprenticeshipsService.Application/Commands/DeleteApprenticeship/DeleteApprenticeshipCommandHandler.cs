@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship
 {
@@ -26,7 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteAppr
         {
             _validator.ValidateAndThrow(message);
 
-            return _commitmentsApi.DeleteProviderApprenticeship(message.ProviderId, message.ApprenticeshipId, message.UserId);
+            return _commitmentsApi.DeleteProviderApprenticeship(message.ProviderId, message.ApprenticeshipId, new DeleteRequest { UserId = message.UserId });
         }
     }
 }
