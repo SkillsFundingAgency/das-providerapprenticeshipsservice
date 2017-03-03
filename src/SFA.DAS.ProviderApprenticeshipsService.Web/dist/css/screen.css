@@ -3194,6 +3194,27 @@ span.helpText {
   color: #0b0c0c;
 }
 
+#company-info strong {
+  font-weight: bold;
+}
+
+#expand-collapse {
+  margin-bottom: 20px;
+}
+
+#expand-collapse .panel p {
+  font-size: inherit;
+}
+
+#expand-collapse ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+#confirm-employer #continue {
+  margin: 30px 0;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;

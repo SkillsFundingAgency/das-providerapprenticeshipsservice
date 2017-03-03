@@ -1,0 +1,90 @@
+﻿@using SFA.DAS.Commitments.Api.Types
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.VerificationOfRelationshipViewModel
+@{
+    ViewBag.Title = "Confirm Relationship";
+}
+
+<h1 class="heading-xlarge">Confirm your relationship with the employer</h1>
+
+@Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+
+<div id="company-info">
+    <strong>Name: </strong> @Model.LegalEntityName <br />
+    <strong>Address: </strong> @Model.LegalEntityAddress <br />
+
+    @if (Model.LegalEntityOrganisationType == OrganisationType.Charities)
+    {
+        <strong>Registered charity number: </strong> @Model.LegalEntityId <br />
+    }
+    else if (Model.LegalEntityOrganisationType == OrganisationType.CompaniesHouse)
+    {
+        <strong>Companies House number: </strong> @Model.LegalEntityId <br />
+    }
+   
+</div>
+
+
+<form action="@Url.Action("VerificationOfRelationship")" method="POST">
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(m => m.ProviderId)
+    @Html.HiddenFor(m => m.HashedCommitmentId)
+    @Html.HiddenFor(m => m.LegalEntityName)
+    @Html.HiddenFor(m => m.LegalEntityAddress)
+    @Html.HiddenFor(m => m.LegalEntityOrganisationType)
+
+    <div class="form-group">
+
+        <h2 id="confirm-organisation" class="heading-medium">Is this organisation your own organisation or a connected company?</h2>
+       
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div>
+                @Html.ValidationMessageFor(m => m.OrganisationIsSameOrConnected, "Please select an option", new { id = "error-message-" + Html.IdFor(m => m.OrganisationIsSameOrConnected) })
+            </div>
+        }
+
+        <fieldset aria-describedby="confirm-organisation">
+
+            <label class="block-label" for="@RadioButtonId(true)">
+                @Html.RadioButtonFor(m => m.OrganisationIsSameOrConnected, true, new { id = RadioButtonId(true) })
+                <span id="confirmYes">Yes, @Model.LegalEntityName is my organisation or a connected company</span>
+            </label>
+
+            <label class="block-label" for="@RadioButtonId(false)">
+                @Html.RadioButtonFor(m => m.OrganisationIsSameOrConnected, false, new { id = RadioButtonId(false) })
+                <span id="confirmNo">No, @Model.LegalEntityName is a separate organisation</span>
+            </label>
+
+        </fieldset>
+
+    </div>
+    
+    <details id="expand-collapse">
+        <summary id="connected-company"><span class="summary">What is a connected company?</span></summary>
+        <div class="panel panel-border-narrow" aria-describedby="#connected-company">
+            <p>Your organisation is a connected company if:</p>
+            <ul>
+                <li>it has control of another company, in this case @Model.LegalEntityName</li>
+                <li>both your organisation and @Model.LegalEntityName are controlled by the same people, such as a board of directors</li>
+            </ul>
+        </div>
+    </details>
+
+    <input type="submit" class="button" id="continue" value="Continue" /> 
+
+</form>
+<br />
+
+
+
+@functions
+{
+
+    public string RadioButtonId(bool optionValue)
+    {
+        return $"{Html.IdFor(m => m.OrganisationIsSameOrConnected)}-{optionValue}";
+    }
+
+}

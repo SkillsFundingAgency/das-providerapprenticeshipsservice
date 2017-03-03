@@ -102,6 +102,8 @@
     <Compile Include="Validation\ApprenticeshipCreateOrEdit\WhenValidatingCost.cs" />
     <Compile Include="Validation\ApprenticeshipCreateOrEdit\WhenValidatingProviderReference.cs" />
     <Compile Include="Validation\ApprenticeshipCreateOrEdit\WhenValidatingLastName.cs" />
+    <Compile Include="Validation\WhenValidatingVerificationOfRelationshipViewModel.cs" />
+    <Compile Include="Validation\WhenValidatingVerificationOfEmployerViewModel.cs" />
     <Compile Include="WhenValidatingCsvRecord.cs" />
     <Compile Include="Orchestrators\BulkUpload\WhenCreatingRecordsBulkUpload.cs" />
     <Compile Include="Orchestrators\BulkUpload\WhenValidatingRecordsBulkUpload.cs" />
