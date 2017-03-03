@@ -227,80 +227,58 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<VerificationOfEmployerViewModel> GetVerificationOfEmployer(long providerId, string hashedCommitmentId)
         {
-            //var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
 
-            //var relationshipRequest = await _mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
-            //{
-            //    ProviderId = providerId,
-            //    CommitmentId = commitmentId
-            //});
-
-            //if (relationshipRequest.Relationship.Verified.HasValue)
-            //{
-            //    throw new InvalidStateException("Relationship already verified");
-            //}
-
-            //var result = new VerificationOfEmployerViewModel
-            //{
-            //    ProviderId = providerId,
-            //    HashedCommitmentId = hashedCommitmentId,
-            //    LegalEntityId = relationshipRequest.Relationship.LegalEntityId,
-            //    LegalEntityName = relationshipRequest.Relationship.LegalEntityName,
-            //    LegalEntityAddress = relationshipRequest.Relationship.LegalEntityAddress,
-            //    LegalEntityOrganisationType = relationshipRequest.Relationship.LegalEntityOrganisationType
-            //};
-
-            //return result;
-
-            return new VerificationOfEmployerViewModel
+            var relationshipRequest = await _mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
             {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
 
-                ProviderId = 1,
-                HashedCommitmentId = "XX",
-                LegalEntityId = "12345",
-                LegalEntityName = "Test Corp",
-                LegalEntityAddress = "Somewhere st, Somewhere town, Kerala",
-                LegalEntityOrganisationType = OrganisationType.Charities
+            if (relationshipRequest.Relationship.Verified.HasValue)
+            {
+                throw new InvalidStateException("Relationship already verified");
+            }
+
+            var result = new VerificationOfEmployerViewModel
+            {
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId,
+                LegalEntityId = relationshipRequest.Relationship.LegalEntityId,
+                LegalEntityName = relationshipRequest.Relationship.LegalEntityName,
+                LegalEntityAddress = relationshipRequest.Relationship.LegalEntityAddress,
+                LegalEntityOrganisationType = relationshipRequest.Relationship.LegalEntityOrganisationType
             };
+
+            return result;
         }
 
         public async Task<VerificationOfRelationshipViewModel> GetVerificationOfRelationship(long providerId, string hashedCommitmentId)
         {
-            //var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
 
-            //var relationshipRequest = await _mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
-            //{
-            //    ProviderId = providerId,
-            //    CommitmentId = commitmentId
-            //});
-
-            //if (relationshipRequest.Relationship.Verified.HasValue)
-            //{
-            //    throw new InvalidStateException("Relationship already verified");
-            //}
-
-            //var result = new VerificationOfRelationshipViewModel
-            //{
-            //    ProviderId = providerId,
-            //    HashedCommitmentId = hashedCommitmentId,
-            //    LegalEntityId = relationshipRequest.Relationship.LegalEntityId,
-            //    LegalEntityName = relationshipRequest.Relationship.LegalEntityName,
-            //    LegalEntityAddress = relationshipRequest.Relationship.LegalEntityAddress,
-            //    LegalEntityOrganisationType = relationshipRequest.Relationship.LegalEntityOrganisationType
-            //};
-
-            //return result;
-
-              return new VerificationOfRelationshipViewModel
+            var relationshipRequest = await _mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
             {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
 
-                ProviderId = 1,
-                HashedCommitmentId = "XX",
-                LegalEntityId = "12345",
-                LegalEntityName = "Test Corp",
-                LegalEntityAddress = "Somewhere st, Somewhere town, Kerala",
-                LegalEntityOrganisationType = OrganisationType.Charities
+            if (relationshipRequest.Relationship.Verified.HasValue)
+            {
+                throw new InvalidStateException("Relationship already verified");
+            }
+
+            var result = new VerificationOfRelationshipViewModel
+            {
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId,
+                LegalEntityId = relationshipRequest.Relationship.LegalEntityId,
+                LegalEntityName = relationshipRequest.Relationship.LegalEntityName,
+                LegalEntityAddress = relationshipRequest.Relationship.LegalEntityAddress,
+                LegalEntityOrganisationType = relationshipRequest.Relationship.LegalEntityOrganisationType
             };
+
+            return result;
         }
 
         public async Task VerifyRelationship(long providerId, string hashedCommitmentId, bool verified, string userId)
