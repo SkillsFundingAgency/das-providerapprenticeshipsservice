@@ -20,7 +20,7 @@
     {
         <strong>Companies House number: </strong> @Model.LegalEntityId <br />
     }
-    <br /><br />
+   
 </div>
 
 
@@ -35,8 +35,8 @@
 
     <div class="form-group">
 
-        <span id="confirm-organisation" class="heading-medium">Is this organisation your own organisation or a connected company?</span>
-        <br /><br />
+        <h2 id="confirm-organisation" class="heading-medium">Is this organisation your own organisation or a connected company?</h2>
+       
 
         @if (!ViewData.ModelState.IsValid)
         {
@@ -61,20 +61,18 @@
 
     </div>
     
-    <div class="panel">
-        What is a connected company?
-        <br/><br/>
-        Your organisation is a connected company if:
-        <br/><br/>
-        <ul>
-            <li>it has control of another company, in this case @Model.LegalEntityName</li>
-            <li>both your organisation and @Model.LegalEntityName are controlled by the same people, such as a board of directors</li>
-        </ul>
-    </div>
+    <details id="expand-collapse">
+        <summary id="connected-company"><span class="summary">What is a connected company?</span></summary>
+        <div class="panel panel-border-narrow" aria-describedby="#connected-company">
+            <p>Your organisation is a connected company if:</p>
+            <ul>
+                <li>it has control of another company, in this case @Model.LegalEntityName</li>
+                <li>both your organisation and @Model.LegalEntityName are controlled by the same people, such as a board of directors</li>
+            </ul>
+        </div>
+    </details>
 
-    <div>
-        <input type="submit" class="button" id="continue" value="Continue" />
-    </div>
+    <input type="submit" class="button" id="continue" value="Continue" /> 
 
 </form>
 <br />
