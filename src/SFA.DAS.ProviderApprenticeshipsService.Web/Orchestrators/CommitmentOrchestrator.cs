@@ -605,7 +605,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
                 Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.LastAction, listItem.AgreementStatus, listItem.ProviderLastUpdateInfo),
-                ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly
+                ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly,
+                EmployerAccountId = listItem.EmployerAccountId
             };
         }
 
@@ -689,6 +690,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     .Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>())
                     .OrderBy(m => m.Title)
                     .ToList();
+        }
+
+        public async Task<AcknowledgementViewModel> GetAcknowledgementViewModel(long providerId, string hashedCommitmentId)
+        {
+            var commitment = await GetCommitment(providerId, hashedCommitmentId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            var message = await GetLatestMessage(commitment.EmployerAccountId, commitmentId, false);
+
+            var result = new AcknowledgementViewModel
+            {
+                CommitmentReference = commitment.Reference,
+                EmployerName = commitment.LegalEntityName,
+                ProviderName = commitment.ProviderName,
+                Message = message,
+                RedirectUrl = string.Empty,
+                RedirectLinkText = string.Empty,
+            };
+
+            return result;
         }
     }
 }
