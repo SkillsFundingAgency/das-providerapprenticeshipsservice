@@ -10,5 +10,6 @@
         public string ProviderName { get; set; }
 
         public string LatestMessage { get; set; }
+        public long EmployerAccountId { get; set; }
     }
 }
