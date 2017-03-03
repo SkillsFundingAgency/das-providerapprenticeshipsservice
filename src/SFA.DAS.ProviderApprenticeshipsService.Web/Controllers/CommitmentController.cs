@@ -270,6 +270,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (viewModel.SaveStatus == SaveStatus.Save)
             {
                 await _commitmentOrchestrator.SubmitCommitment(CurrentUserId, viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty, GetSingedInUser());
+                TempData["FlashMessage"] = "Details saved but not sent";
+                var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(viewModel.ProviderId, RequestStatus.ReadyForApproval);
+                if (currentStatusCohortAny)
+                    return Redirect(GetReturnToListUrl(viewModel.ProviderId));
             }
 
             return RedirectToAction("Cohorts", new { providerId = viewModel.ProviderId });
@@ -286,7 +290,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (currentStatusCohortAny)
             {
                 url = Url.Action("ReadyForApproval", new { ProviderId = providerId });
-                TempData["FlashMessage"] = "Cohort approved";
             }
             else
             {
@@ -333,32 +336,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var commitment = await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId);
             var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(providerId, GetRequestStatusFromSession());
-            var url = string.Empty;
+            var url = GetReturnToListUrl(providerId);
             var linkText = "Go back to view cohorts";
-
-            // ToDo: Simplify when we remove flash messages
             if (!currentStatusCohortAny)
             {
-                url = Url.Action("Cohorts", "Commitment", new { ProviderId = providerId });
                 linkText = "Return to Your cohorts";
-            }
-            else
-            {
-                switch (GetRequestStatusFromSession())
-                {
-                    case RequestStatus.ReadyForReview:
-                        url = Url.Action("ReadyForReview", new { ProviderId = providerId });
-                        SetTempMessage(commitment.Status);
-                        break;
-                    case RequestStatus.ReadyForApproval:
-                        url = Url.Action("ReadyForApproval", new { ProviderId = providerId });
-                        SetTempMessage(commitment.Status);
-                        break;
-                    case RequestStatus.NewRequest:
-                        url = Url.Action("NewRequests", new { ProviderId = providerId });
-                        SetTempMessage(commitment.Status);
-                        break;
-                }
+                url = Url.Action("Cohorts", new { providerId });
             }
 
             return View(new AcknowledgementViewModel { CommitmentReference = commitment.Reference, EmployerName = commitment.LegalEntityName, ProviderName = commitment.ProviderName, Message = message, RedirectUrl = url, RedirectLinkText = linkText });
@@ -386,14 +369,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var status = (RequestStatus?)Session[LastCohortPageSessionKey] ?? RequestStatus.None;
             return status;
-        }
-
-        private void SetTempMessage(RequestStatus newRequestStatus)
-        {
-            if (newRequestStatus == RequestStatus.SentForReview)
-                TempData["FlashMessage"] = "Your cohort is with your employer for review";
-            if (newRequestStatus == RequestStatus.WithEmployerForApproval)
-                TempData["FlashMessage"] = "Your cohort is with your employer for approval";
         }
 
         private void AddErrorsToModelState(InvalidRequestException ex)
