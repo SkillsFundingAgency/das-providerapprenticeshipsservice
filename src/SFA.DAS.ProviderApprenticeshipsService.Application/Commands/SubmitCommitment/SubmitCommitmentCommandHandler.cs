@@ -69,7 +69,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
             if (message.CreateTask)
                 await CreateTask(message, commitment);
 
-            if (message.LastAction != LastAction.None)
+            if (_configuration.EnableEmailNotifications && message.LastAction != LastAction.None)
             {
                 var notificationCommand = BuildNotificationCommand(commitment, message.LastAction,
                     message.HashedCommitmentId);
@@ -88,7 +88,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "<Test Employer Notification>", // Replaced by Notify Service
                     SystemId = "x", // Don't need to populate
-                    TemplateId = _configuration.EmailTemplates.Single(c => c.TemplateType.Equals(EmailTemplateType.CommitmentNotification)).Key,
+                    TemplateId = "EmployerCommitmentNotification",
                     Tokens = new Dictionary<string, string>
                     {
                         { "type", action == LastAction.Approve ? "approval" : "review" },
