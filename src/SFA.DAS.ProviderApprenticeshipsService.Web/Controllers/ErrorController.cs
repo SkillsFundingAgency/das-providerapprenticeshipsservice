@@ -5,7 +5,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     using System;
 
-    public class ErrorController : BaseController
+    public class ErrorController : Controller
     {
         public ViewResult BadRequest()
         {

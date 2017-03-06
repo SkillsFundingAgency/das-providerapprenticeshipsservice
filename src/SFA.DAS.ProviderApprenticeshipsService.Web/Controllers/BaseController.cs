@@ -3,9 +3,7 @@ using System.Security.Claims;
 using System.Web.Mvc;
 using System.Net;
 using System.Web;
-
 using Newtonsoft.Json;
-
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
@@ -17,6 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     {
         private readonly IProviderCommitmentsLogger _logger;
         protected string CurrentUserId = null;
+        private const string RequiredUserRole = "DAA";
 
         protected BaseController()
         {
@@ -49,6 +48,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (HttpContext.User.Identity.IsAuthenticated)
             {
                 CurrentUserId = GetClaimValue(ClaimTypes.Upn);
+
+                if (!HasClaimValue("http://schemas.portal.com/service", RequiredUserRole))
+                {
+                    _logger.Info($"HttpError 403, User does not have {RequiredUserRole} claim");
+                    throw new HttpException((int)HttpStatusCode.Forbidden, $"Missing {RequiredUserRole} claim");
+                }
             }
 
             if (filterContext.ActionParameters.ContainsKey(ProviderIdKey))
@@ -74,6 +79,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var claimIdentity = ((ClaimsIdentity)HttpContext.User.Identity).Claims.FirstOrDefault(claim => claim.Type == claimKey);
             return claimIdentity != null ? claimIdentity.Value : string.Empty;
+        }
+
+        protected bool HasClaimValue(string claimType, string value)
+        {
+            return
+                ((ClaimsIdentity) HttpContext.User.Identity).Claims.Any(
+                    x => x.Type == claimType && x.Value == value);
         }
     }
 }
