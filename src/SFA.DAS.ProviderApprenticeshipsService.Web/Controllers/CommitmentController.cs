@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -9,6 +11,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [Authorize]
+    [ProviderUkPrnCheck]
     [RoutePrefix("{providerId}/apprentices")]
     public class CommitmentController : BaseController
     {
@@ -460,8 +463,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             return new SignInUserModel
             {
-                DisplayName = GetClaimValue("http://schemas.portal.com/displayname"),
-                Email = GetClaimValue("http://schemas.portal.com/mail")
+                DisplayName = HttpContext.GetClaimValue("http://schemas.portal.com/displayname"),
+                Email = HttpContext.GetClaimValue("http://schemas.portal.com/mail")
             };
         }
     }
