@@ -17,18 +17,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
                 return;
             }
 
-            var providerIdFromAction = filterContext.ActionParameters[ProviderIdKey];
-            if ($"{providerIdFromAction}" == string.Empty)
+            if (filterContext.ActionParameters.ContainsKey(ProviderIdKey))
             {
-                throw new HttpException((int) HttpStatusCode.BadRequest, "Missing provider id");
-            }
+                var providerIdFromAction = filterContext.ActionParameters[ProviderIdKey];
+                if ($"{providerIdFromAction}" == string.Empty)
+                {
+                    throw new HttpException((int) HttpStatusCode.BadRequest, "Missing provider id");
+                }
 
-            var claimUkprn = filterContext.HttpContext.GetClaimValue("http://schemas.portal.com/ukprn");
+                var claimUkprn = filterContext.HttpContext.GetClaimValue("http://schemas.portal.com/ukprn");
 
-            if ($"{providerIdFromAction}" != claimUkprn)
-            {
-                throw new HttpException((int) HttpStatusCode.Forbidden,
-                    $"User ukprn: {providerIdFromAction}, Resources ukprn: {claimUkprn}");
+                if ($"{providerIdFromAction}" != claimUkprn)
+                {
+                    throw new HttpException((int) HttpStatusCode.Forbidden,
+                        $"User ukprn: {providerIdFromAction}, Resources ukprn: {claimUkprn}");
+                }
             }
         }
 
