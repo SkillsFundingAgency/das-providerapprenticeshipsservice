@@ -96,7 +96,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("{hashedCommitmentId}/verification")]
-        public async Task<ActionResult> VerificationOfEmployer(VerificationOfEmployerViewModel viewModel)
+        [ValidateAntiForgeryToken]
+        public ActionResult VerificationOfEmployer(VerificationOfEmployerViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -115,7 +116,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/verification-stopped")]
-        public async Task<ActionResult> VerificationStopped(long providerId, string hashedCommitmentId)
+        public ActionResult VerificationStopped(long providerId, string hashedCommitmentId)
         {
             return View();
         }
@@ -132,6 +133,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/verification-relationship")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> VerificationOfRelationship(VerificationOfRelationshipViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -313,6 +315,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("{hashedCommitmentId}/Finished")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> FinishEditing(FinishEditingViewModel viewModel)
         {
             if (!ModelState.IsValid)
