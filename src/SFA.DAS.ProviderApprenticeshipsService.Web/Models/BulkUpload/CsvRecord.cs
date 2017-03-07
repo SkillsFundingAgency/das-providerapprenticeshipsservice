@@ -4,7 +4,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
     {
         public string CohortRef { get; set; }
 
-        public long? ULN { get; set; }
+        public string ULN { get; set; }
 
         public string FamilyName { get; set; }
 
