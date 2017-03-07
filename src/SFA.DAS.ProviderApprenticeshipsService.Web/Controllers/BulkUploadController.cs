@@ -36,6 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("{hashedCommitmentId}/UploadApprenticeships")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> UploadApprenticeships(UploadApprenticeshipsViewModel model)
         {
             if (!ModelState.IsValid)
