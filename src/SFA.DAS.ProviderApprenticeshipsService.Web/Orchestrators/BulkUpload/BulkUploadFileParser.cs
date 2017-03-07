@@ -76,11 +76,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             {
                 AgreementStatus = AgreementStatus.NotAgreed,
                 PaymentStatus = PaymentStatus.Active,
-                ULN = record.ULN.ToString(),
+                ULN = record.ULN,
                 FirstName = record.GivenNames,
                 LastName = record.FamilyName,
                 DateOfBirth = new DateTimeViewModel(dateOfBirth),
-                //NINumber = record.NINumber,
                 Cost = record.TotalPrice.ToString(),
                 ProviderRef = record.ProviderRef,
                 StartDate = new DateTimeViewModel(learnerStartDate),
