@@ -118,7 +118,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             };
             var records = new List<CsvRecord>
                               {
-                                  new CsvRecord { ProgType = 23, FworkCode = 18, PwayCode = 26, CohortRef = "ABBA123" }
+                                  new CsvRecord { ProgType = "23", FworkCode = "18", PwayCode = "26", CohortRef = "ABBA123" }
                               };
             return apprenticeships.Zip(
                 records,
@@ -143,8 +143,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
 
             var records = new List<CsvRecord>
             {
-                new CsvRecord { ProgType = 25, StdCode = 2, CohortRef = "ABBA123" },
-                new CsvRecord { ProgType = 25, StdCode = 2, CohortRef = "ABBA123" }
+                new CsvRecord { ProgType = "25", StdCode = "2", CohortRef = "ABBA123" },
+                new CsvRecord { ProgType = "25", StdCode = "2", CohortRef = "ABBA123" }
             };
 
             return apprenticeships.Zip(

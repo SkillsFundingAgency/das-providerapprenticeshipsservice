@@ -8,5 +8,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
         {
             return Regex.Replace(source, "<.*?>", string.Empty);
         }
+
+        public static int? TryParse(this string input)
+        {
+            int val;
+            if(int.TryParse(input, out val))
+            {
+                return val;
+            }
+
+            return null;
+        }
     }
 }
