@@ -334,6 +334,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Attributes\DasRoleCheckActionFilter.cs" />
+    <Compile Include="Attributes\DasRoleCheckAttribute.cs" />
+    <Compile Include="Attributes\DasRoleCheckExemptAttribute.cs" />
+    <Compile Include="Attributes\ProviderUkPrnCheckActionFilter.cs" />
+    <Compile Include="Attributes\ProviderUkPrnCheckAttribute.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BulkUploadController.cs" />
@@ -349,6 +354,7 @@
     <Compile Include="Exceptions\InvalidStateExceptionFilter.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\HttpContextBaseExtensions.cs" />
     <Compile Include="Extensions\IdentityExtensions.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />

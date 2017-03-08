@@ -1,8 +1,9 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
+    [DasRoleCheckExempt]
     public class HomeController : BaseController
     {
         [Route("~/", Name = "home")]

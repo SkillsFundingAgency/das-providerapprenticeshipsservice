@@ -1,10 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.WsFederation;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
@@ -20,6 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             _accountOrchestrator = accountOrchestrator;
         }
 
+        [DasRoleCheckExempt]
         [Route("~/signin", Name = "signin")]
         public void SignIn()
         {
@@ -30,6 +31,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
         }
 
+        [DasRoleCheckExempt]
         [Route("~/signout", Name = "signout")]
         public void SignOut()
         {
@@ -42,6 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 WsFederationAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
         }
 
+        [DasRoleCheckExempt]
         public ActionResult SignOutCallback()
         {
             if (Request.IsAuthenticated)
