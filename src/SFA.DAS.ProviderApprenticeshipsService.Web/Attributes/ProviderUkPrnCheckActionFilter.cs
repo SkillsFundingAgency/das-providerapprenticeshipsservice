@@ -12,7 +12,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (!filterContext.ActionDescriptor.ControllerDescriptor.GetCustomAttributes(typeof(ProviderUkPrnCheckAttribute), true).Any())
+            if (!filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(ProviderUkPrnCheckAttribute), true)
+                && !filterContext.ActionDescriptor.IsDefined(typeof(ProviderUkPrnCheckAttribute), true))
             {
                 return;
             }

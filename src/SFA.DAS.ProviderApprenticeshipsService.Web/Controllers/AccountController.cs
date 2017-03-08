@@ -11,7 +11,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
-    [DasRoleCheckExempt]
     public class AccountController : BaseController
     {
         private readonly AccountOrchestrator _accountOrchestrator;
@@ -21,6 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             _accountOrchestrator = accountOrchestrator;
         }
 
+        [DasRoleCheckExempt]
         [Route("~/signin", Name = "signin")]
         public void SignIn()
         {
@@ -31,6 +31,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
         }
 
+        [DasRoleCheckExempt]
         [Route("~/signout", Name = "signout")]
         public void SignOut()
         {
@@ -43,6 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 WsFederationAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
         }
 
+        [DasRoleCheckExempt]
         public ActionResult SignOutCallback()
         {
             if (Request.IsAuthenticated)

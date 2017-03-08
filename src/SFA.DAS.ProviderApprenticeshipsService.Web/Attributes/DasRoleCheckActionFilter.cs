@@ -12,12 +12,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (!filterContext.ActionDescriptor.ControllerDescriptor.GetCustomAttributes(typeof(DasRoleCheckAttribute), true).Any())
+            if (!filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(DasRoleCheckAttribute), true)
+                && !filterContext.ActionDescriptor.IsDefined(typeof(DasRoleCheckAttribute), true))
             {
                 return;
             }
 
-            if (filterContext.ActionDescriptor.ControllerDescriptor.GetCustomAttributes(typeof(DasRoleCheckExemptAttribute), true).Any())
+            if (filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(DasRoleCheckExemptAttribute), true)
+                ||filterContext.ActionDescriptor.IsDefined(typeof(DasRoleCheckExemptAttribute), true))
             {
                 return;
             }
