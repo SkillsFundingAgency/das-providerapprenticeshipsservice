@@ -5,40 +5,35 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public sealed class CommitmentStatusCalculator : ICommitmentStatusCalculator
     {
-        public RequestStatus GetStatus(EditStatus editStatus, int apprenticeshipCount, LastAction lastAction, AgreementStatus overallAgreementStatus, LastUpdateInfo lastUpdateInfo)
+        public RequestStatus GetStatus(EditStatus editStatus, int apprenticeshipCount, LastAction lastAction, AgreementStatus overallAgreementStatus, LastUpdateInfo providerLastUpdateInfo)
         {
-            bool hasApprenticeships = apprenticeshipCount > 0;
-
             if (editStatus == EditStatus.Both)
                 return RequestStatus.Approved;
 
-            if (string.IsNullOrWhiteSpace(lastUpdateInfo?.Name))
+            if (string.IsNullOrWhiteSpace(providerLastUpdateInfo?.Name))
             {
                 return RequestStatus.NewRequest;
             }
 
             if (editStatus == EditStatus.ProviderOnly)
             {
-                return GetProviderOnlyStatus(lastAction, hasApprenticeships, overallAgreementStatus);
+                return GetProviderOnlyStatus(lastAction, overallAgreementStatus);
             }
 
             if (editStatus == EditStatus.EmployerOnly)
             {
-                return GetEmployerOnlyStatus(lastAction, hasApprenticeships);
+                return GetEmployerOnlyStatus(lastAction);
             }
 
             return RequestStatus.None;
         }
 
-        private static RequestStatus GetProviderOnlyStatus(LastAction lastAction, bool hasApprenticeships, AgreementStatus overallAgreementStatus)
+        private static RequestStatus GetProviderOnlyStatus(LastAction lastAction, AgreementStatus overallAgreementStatus)
         {
             if (lastAction == LastAction.None)
             {
                 return RequestStatus.ReadyForReview;
             }
-
-            //if (!hasApprenticeships)
-            //    return RequestStatus.NewRequest;
 
             if (lastAction == LastAction.Amend)
                 return RequestStatus.ReadyForReview;
@@ -54,7 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return RequestStatus.None;
         }
 
-        private RequestStatus GetEmployerOnlyStatus(LastAction lastAction, bool hasApprenticeships)
+        private RequestStatus GetEmployerOnlyStatus(LastAction lastAction)
         {
             if (lastAction == LastAction.None)
                 return RequestStatus.None;
