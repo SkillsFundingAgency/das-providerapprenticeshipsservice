@@ -1,10 +1,19 @@
 ﻿using FluentValidation;
+using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment
 {
-    public class SubmitCommitmentCommandValidator : AbstractValidator<SubmitCommitmentCommand>
+    public sealed class SubmitCommitmentCommandValidator : AbstractValidator<SubmitCommitmentCommand>
     {
-        // TODO: Need to validate the Command!!!
-
+        public SubmitCommitmentCommandValidator()
+        {
+            RuleFor(x => x.ProviderId).GreaterThan(0);
+            RuleFor(x => x.HashedCommitmentId).NotEmpty();
+            RuleFor(x => x.CommitmentId).GreaterThan(0);
+            RuleFor(x => x.LastAction).NotEqual(LastAction.None);
+            RuleFor(x => x.UserDisplayName).NotEmpty();
+            RuleFor(x => x.UserEmailAddress).NotEmpty();
+            RuleFor(x => x.UserId).NotEmpty();
+        }
     }
 }

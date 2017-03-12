@@ -110,6 +110,7 @@
     <Compile Include="Commands\DeleteApprenticeship\WhenValidatingCommand.cs" />
     <Compile Include="Commands\DeleteCommitment\WhenValidatingCommand.cs" />
     <Compile Include="Commands\SendNotification\WhenValidatingCommand.cs" />
+    <Compile Include="Commands\SubmitCommitment\WhenValidatingCommand.cs" />
     <Compile Include="Commands\UpdateRelationship\WhenUpdatingARelationship.cs" />
     <Compile Include="Commands\UpdateRelationship\WhenValidatingCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
