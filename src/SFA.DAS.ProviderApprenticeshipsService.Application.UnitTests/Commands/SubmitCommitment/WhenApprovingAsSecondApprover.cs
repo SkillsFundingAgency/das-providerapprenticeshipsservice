@@ -8,13 +8,12 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotificati
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.Tasks.Api.Client;
-using System;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.SubmitCommitment
 {
     [TestFixture]
-    public sealed class WhenApprovingAsFirstApprover
+    public sealed class WhenApprovingAsSecondApprover
     {
         private SubmitCommitmentCommand _validCommand;
         private Mock<ICommitmentsApi> _mockCommitmentsApi;
@@ -43,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 .ReturnsAsync(new Commitment
                 {
                     ProviderId = _validCommand.ProviderId,
-                    AgreementStatus = AgreementStatus.NotAgreed,
+                    AgreementStatus = AgreementStatus.EmployerAgreed,
                     Reference = "ABC123",
                     EmployerLastUpdateInfo = new LastUpdateInfo
                     {
@@ -70,7 +69,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             _mockMediator.Verify(x => x.SendAsync(It.IsAny<SendNotificationCommand>()), Times.Once);
 
             arg.Email.RecipientsAddress.Should().Be("EmployerTestEmail");
-            arg.Email.TemplateId.Should().Be("EmployerCommitmentNotification");
+            arg.Email.TemplateId.Should().Be("EmployerCohortApproved");
             arg.Email.Tokens["type"].Should().Be("approval");
             arg.Email.Tokens["cohort_reference"].Should().Be("ABC123");
         }

@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentValidation;
 using MediatR;
 using Moq;
 using NUnit.Framework;
