@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.SubmitCommitment
 {
     [TestFixture]
-    public sealed class WhenValidatingDeletingCommitmentCommand
+    public sealed class WhenValidatingCommand
     {
         private SubmitCommitmentCommand _validCommand;
         private Mock<ICommitmentsApi> _mockCommitmentsApi;
