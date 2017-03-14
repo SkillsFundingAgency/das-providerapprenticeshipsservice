@@ -1,23 +1,11 @@
 ﻿using System.Collections.Generic;
 
+using SFA.DAS.Commitments.Api.Types.Validation;
+
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships
 {
     public class GetOverlappingApprenticeshipsQueryResponse
     {
-        public IEnumerable<OverlapApprenticeship> Overlaps { get; set; }
+        public IEnumerable<OverlappingApprenticeship> Overlaps { get; set; }
     }
-
-    public class OverlapApprenticeship
-    {
-        public long EmployerAccountId { get; set; }
-
-        public long ProviderId { get; set; }
-
-        public string ProviderName { get; set; }
-
-        public string LegalEntityName { get; set; }
-
-        public string ValidationFailReason { get; set; }
-    }
-
 }

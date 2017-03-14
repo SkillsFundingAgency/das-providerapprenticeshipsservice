@@ -9,6 +9,7 @@ using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateApprenticeship;
@@ -791,17 +792,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 switch (item.ValidationFailReason)
                 {
-                    case "StartDate":
+                    case ValidationFailReason.OverlappingStartDate:
                         dict.Add(StartDateKey, StartText);
                         break;
-                    case "EndDate":
+                    case ValidationFailReason.OverlappingEndDate:
                         dict.Add(EndDateKey, EndText);
                         break;
-                    case "BothDatesEmbrace":
+                    case ValidationFailReason.DateEmbrace:
                         dict.Add(StartDateKey, StartText);
                         dict.Add(EndDateKey, EndText);
                         break;
-                    case "BothDatesWithine":
+                    case ValidationFailReason.DateWithin:
                         dict.Add(StartDateKey, StartText);
                         dict.Add(EndDateKey, EndText);
                         break;
