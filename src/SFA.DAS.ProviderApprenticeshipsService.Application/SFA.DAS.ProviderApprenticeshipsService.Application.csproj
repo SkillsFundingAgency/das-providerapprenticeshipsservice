@@ -143,6 +143,9 @@
     <Compile Include="Queries\GetFrameworks\GetFrameworksQueryHandler.cs" />
     <Compile Include="Queries\GetFrameworks\GetFrameworksQueryRequest.cs" />
     <Compile Include="Queries\GetFrameworks\GetFrameworksQueryResponse.cs" />
+    <Compile Include="Queries\GetOverlappingApprenticeships\GetOverlappingApprenticeshipsQueryHandler.cs" />
+    <Compile Include="Queries\GetOverlappingApprenticeships\GetOverlappingApprenticeshipsQueryRequest.cs" />
+    <Compile Include="Queries\GetOverlappingApprenticeships\GetOverlappingApprenticeshipsQueryResponse.cs" />
     <Compile Include="Queries\GetProvider\GetProviderQueryHandler.cs" />
     <Compile Include="Queries\GetProvider\GetProviderQueryRequest.cs" />
     <Compile Include="Queries\GetProvider\GetProviderQueryResponse.cs" />
