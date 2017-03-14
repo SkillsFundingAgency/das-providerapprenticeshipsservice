@@ -9,6 +9,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateRelationship;
 
@@ -19,7 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     {
         private UpdateRelationshipCommandHandler _handler;
         private Mock<UpdateRelationshipCommandValidator> _validator;
-        private Mock<ICommitmentsApi> _commitmentsApi;
+        private Mock<IRelationshipApi> _relationshipApi;
 
 
         [SetUp]
@@ -29,12 +30,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             _validator.Setup(x => x.Validate(It.IsAny<UpdateRelationshipCommand>()))
                 .Returns(new ValidationResult());
 
-            _commitmentsApi = new Mock<ICommitmentsApi>();
-            _commitmentsApi.Setup(x =>
+            _relationshipApi = new Mock<IRelationshipApi>();
+            _relationshipApi.Setup(x =>
                     x.PatchRelationship(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>(),
                         It.IsAny<RelationshipRequest>())).Returns(Task.FromResult(new Unit()));
 
-            _handler = new UpdateRelationshipCommandHandler(_commitmentsApi.Object, _validator.Object);
+            _handler = new UpdateRelationshipCommandHandler(_relationshipApi.Object, _validator.Object);
         }
 
 
@@ -48,7 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             await _handler.Handle(command);
 
             //Assert
-            _commitmentsApi.Verify(x => x.PatchRelationship(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>(),
+            _relationshipApi.Verify(x => x.PatchRelationship(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>(),
                 It.IsAny<RelationshipRequest>()), Times.Once);
         }
 
@@ -70,7 +71,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             );
 
             //Assert
-            _commitmentsApi.Verify(x => x.PatchRelationship(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>(),
+            _relationshipApi.Verify(x => x.PatchRelationship(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>(),
                 It.IsAny<RelationshipRequest>()), Times.Never);
         }
 

@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Commitments.Api.Client;
+
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment
 {
     public class GetCommitmentQueryHandler : IAsyncRequestHandler<GetCommitmentQueryRequest, GetCommitmentQueryResponse>
     {
-        private readonly ICommitmentsApi _commitmentsApi;
+        private readonly IProviderCommitmentsApi _commitmentsApi;
 
-        public GetCommitmentQueryHandler(ICommitmentsApi commitmentsApi)
+        public GetCommitmentQueryHandler(IProviderCommitmentsApi commitmentsApi)
         {
             if (commitmentsApi == null)
                 throw new ArgumentNullException(nameof(commitmentsApi));

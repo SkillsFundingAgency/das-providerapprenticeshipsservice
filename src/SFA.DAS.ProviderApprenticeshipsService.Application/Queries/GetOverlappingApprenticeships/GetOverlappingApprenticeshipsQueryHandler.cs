@@ -5,20 +5,20 @@ using System.Threading.Tasks;
 
 using MediatR;
 
-using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships
 {
     public class GetOverlappingApprenticeshipsQueryHandler :
         IAsyncRequestHandler<GetOverlappingApprenticeshipsQueryRequest, GetOverlappingApprenticeshipsQueryResponse>
     {
-        private readonly ICommitmentsApi _commitmentsApi;
+        private readonly IProviderCommitmentsApi _providerCommitmentsApi;
 
-        public GetOverlappingApprenticeshipsQueryHandler(ICommitmentsApi commitmentsApi)
+        public GetOverlappingApprenticeshipsQueryHandler(IProviderCommitmentsApi commitmentsApi)
         {
             if(commitmentsApi == null)
                 throw new ArgumentException(nameof(commitmentsApi));
-            _commitmentsApi = commitmentsApi;
+            _providerCommitmentsApi = commitmentsApi;
         }
 
         public async Task<GetOverlappingApprenticeshipsQueryResponse> Handle(GetOverlappingApprenticeshipsQueryRequest request)

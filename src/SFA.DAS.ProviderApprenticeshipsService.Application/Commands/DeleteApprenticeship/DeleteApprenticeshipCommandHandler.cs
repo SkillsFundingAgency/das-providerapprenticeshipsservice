@@ -2,17 +2,18 @@
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
-using SFA.DAS.Commitments.Api.Client;
+
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship
 {
     public sealed class DeleteApprenticeshipCommandHandler : AsyncRequestHandler<DeleteApprenticeshipCommand>
     {
-        private readonly ICommitmentsApi _commitmentsApi;
+        private readonly IProviderCommitmentsApi _commitmentsApi;
         private readonly AbstractValidator<DeleteApprenticeshipCommand> _validator;
 
-        public DeleteApprenticeshipCommandHandler(AbstractValidator<DeleteApprenticeshipCommand> validator, ICommitmentsApi commitmentsApi)
+        public DeleteApprenticeshipCommandHandler(AbstractValidator<DeleteApprenticeshipCommand> validator, IProviderCommitmentsApi commitmentsApi)
         {
             if (validator == null)
                 throw new ArgumentNullException(nameof(validator));

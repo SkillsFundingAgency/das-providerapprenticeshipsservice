@@ -23,6 +23,7 @@ using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Configuration;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.NLog.Logger;
@@ -62,7 +63,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             var config = GetConfiguration();
 
-            For<ICommitmentsApi>().Use<CommitmentsApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
+            For<IProviderCommitmentsApi>().Use<ProviderCommitmentsApi>()
+                .Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
+
+            For<IRelationshipApi>().Use<RelationshipApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
+
             For<ITasksApi>().Use<TasksApi>().Ctor<ITasksApiClientConfiguration>().Is(config.TasksApi);
             For<INotificationsApi>().Use<NotificationsApi>().Ctor<INotificationsApiClientConfiguration>().Is(config.NotificationApi);
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);

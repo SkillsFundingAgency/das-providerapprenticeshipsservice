@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships
 {
     public sealed class BulkUploadApprenticeshipsCommandHandler : AsyncRequestHandler<BulkUploadApprenticeshipsCommand>
     {
-        private ICommitmentsApi _commitmentsApi;
+        private IProviderCommitmentsApi _providerCommitmentsApi;
 
-        public BulkUploadApprenticeshipsCommandHandler(ICommitmentsApi commitmentsApi)
+        public BulkUploadApprenticeshipsCommandHandler(IProviderCommitmentsApi providerCommitmentsApi)
         {
-            if (commitmentsApi == null)
-                throw new ArgumentNullException(nameof(commitmentsApi));
+            if (providerCommitmentsApi  == null)
+                throw new ArgumentNullException(nameof(providerCommitmentsApi));
 
-            _commitmentsApi = commitmentsApi;
+            _providerCommitmentsApi  = providerCommitmentsApi;
         }
 
         protected async override Task HandleCore(BulkUploadApprenticeshipsCommand message)
@@ -31,7 +31,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUpload
                 Apprenticeships = message.Apprenticeships
             };
 
-            await _commitmentsApi.BulkUploadApprenticeships(message.ProviderId, message.CommitmentId, request);
+            await _providerCommitmentsApi.BulkUploadApprenticeships(message.ProviderId, message.CommitmentId, request);
         }
     }
 }

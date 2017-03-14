@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeship
 {

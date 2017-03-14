@@ -4,16 +4,16 @@ using System.Threading.Tasks;
 
 using MediatR;
 
-using SFA.DAS.Commitments.Api.Client;
-using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentices
 {
     public sealed class GetAllApprenticesHandler : IAsyncRequestHandler<GetAllApprenticesRequest, GetAllApprenticesResponse>
     {
-        private ICommitmentsApi _commitmentsApi;
+        private readonly IProviderCommitmentsApi _commitmentsApi;
 
-        public GetAllApprenticesHandler(ICommitmentsApi commitmentsApi)
+        public GetAllApprenticesHandler(IProviderCommitmentsApi commitmentsApi)
         {
             if (commitmentsApi == null)
                 throw new ArgumentNullException(nameof(commitmentsApi));

@@ -1,5 +1,6 @@
 ﻿using MediatR;
-using SFA.DAS.Commitments.Api.Types;
+
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateApprenticeship
 {
@@ -7,6 +8,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateAppr
     {
         public string UserId { get; set; }
         public long ProviderId { get; set; }
-        public Apprenticeship Apprenticeship { get; set; }
+        public  Apprenticeship Apprenticeship { get; set; }
     }
 }

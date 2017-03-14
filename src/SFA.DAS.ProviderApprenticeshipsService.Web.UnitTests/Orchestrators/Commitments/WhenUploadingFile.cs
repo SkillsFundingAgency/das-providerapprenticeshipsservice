@@ -11,6 +11,8 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
@@ -131,7 +133,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             commandArgument.Apprenticeships.ToList()[0].FirstName.Should().Be("Chris");
             commandArgument.Apprenticeships.ToList()[0].LastName.Should().Be("Froberg");
             commandArgument.Apprenticeships.ToList()[0].DateOfBirth.Should().Be(new DateTime(1998, 12, 8));
-            commandArgument.Apprenticeships.ToList()[0].TrainingType.Should().Be(DAS.Commitments.Api.Types.TrainingType.Standard);
+            commandArgument.Apprenticeships.ToList()[0].TrainingType.Should().Be(DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType.Standard);
             commandArgument.Apprenticeships.ToList()[0].TrainingCode.Should().Be("2");
             commandArgument.Apprenticeships.ToList()[0].StartDate.Should().Be(new DateTime(2020, 8, 1));
             commandArgument.Apprenticeships.ToList()[0].EndDate.Should().Be(new DateTime(2025, 8, 1));

@@ -2,13 +2,15 @@
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Client;
-using SFA.DAS.Commitments.Api.Types;
+
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.Tasks.Api.Client;
 using System;
 using System.Threading.Tasks;
+
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.SubmitCommitment
 {
@@ -16,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     public sealed class WhenValidatingCommand
     {
         private SubmitCommitmentCommand _validCommand;
-        private Mock<ICommitmentsApi> _mockCommitmentsApi;
+        private Mock<IProviderCommitmentsApi> _mockCommitmentsApi;
         private Mock<IMediator> _mockMediator;
         private Mock<ITasksApi> _mockTasksApi;
         private SubmitCommitmentCommandHandler _handler;
@@ -37,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 UserId = "user123",
             };
 
-            _mockCommitmentsApi = new Mock<ICommitmentsApi>();
+            _mockCommitmentsApi = new Mock<IProviderCommitmentsApi>();
             _mockTasksApi = new Mock<ITasksApi>();
             _mockMediator = new Mock<IMediator>();
             _handler = new SubmitCommitmentCommandHandler(_mockCommitmentsApi.Object, _mockTasksApi.Object, new SubmitCommitmentCommandValidator(), _mockMediator.Object, new ProviderApprenticeshipsServiceConfiguration());
