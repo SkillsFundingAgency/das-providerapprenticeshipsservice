@@ -373,7 +373,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var message = await GetLatestMessage(providerId, commitmentId, true);
 
-            var apprenticeships = MapFrom(data.Commitment.Apprenticeships);
+
+            var overlapping = await _mediator.SendAsync(
+                new GetOverlappingApprenticeshipsQueryRequest
+                {
+                    Apprenticeship = data.Commitment.Apprenticeships
+                });
+
+            var apprenticeships = MapFrom(data.Commitment.Apprenticeships, overlapping);
             var trainingProgrammes = await GetTrainingProgrammes();
 
             var apprenticeshipGroups = new List<ApprenticeshipListItemGroupViewModel>();
@@ -641,21 +648,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return approvalState;
         }
 
-        private IList<ApprenticeshipListItemViewModel> MapFrom(IEnumerable<Apprenticeship> apprenticeships)
+        private IList<ApprenticeshipListItemViewModel> MapFrom(IEnumerable<Apprenticeship> apprenticeships, GetOverlappingApprenticeshipsQueryResponse overlapps)
         {
-            var apprenticeViewModels = apprenticeships.Select(x => new ApprenticeshipListItemViewModel
-            {
-                HashedApprenticeshipId = _hashingService.HashValue(x.Id),
-                ApprenticeshipName = x.ApprenticeshipName,
-                ApprenticeDateOfBirth = x.DateOfBirth,
-                ULN = x.ULN,
-                TrainingCode = x.TrainingCode,
-                TrainingName = x.TrainingName,
-                StartDate = x.StartDate,
-                EndDate = x.EndDate,
-                Cost = x.Cost,
-                CanBeApprove = x.CanBeApproved
-            }).ToList();
+            var apprenticeViewModels = apprenticeships
+                .Select(x => new ApprenticeshipListItemViewModel
+                {
+                    HashedApprenticeshipId = _hashingService.HashValue(x.Id),
+                    ApprenticeshipName = x.ApprenticeshipName,
+                    ApprenticeDateOfBirth = x.DateOfBirth,
+                    ULN = x.ULN,
+                    TrainingCode = x.TrainingCode,
+                    TrainingName = x.TrainingName,
+                    StartDate = x.StartDate,
+                    EndDate = x.EndDate,
+                    Cost = x.Cost,
+                    CanBeApprove = x.CanBeApproved,
+                    OverlappingApprenticeships = overlapps.Overlaps.Where(m => m.Apprenticeship.ULN == x.ULN)
+                }).ToList();
 
             return apprenticeViewModels;
         }

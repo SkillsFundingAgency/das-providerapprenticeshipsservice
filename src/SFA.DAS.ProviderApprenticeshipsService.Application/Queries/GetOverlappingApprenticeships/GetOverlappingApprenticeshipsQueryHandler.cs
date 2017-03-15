@@ -72,8 +72,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlapp
 
             return new GetOverlappingApprenticeshipsQueryResponse
             {
-                Overlaps =
-                                   Enumerable.Empty<OverlappingApprenticeship>()
+                Overlaps = Enumerable.Empty<OverlappingApprenticeship>()
             };
         }
 
@@ -90,7 +89,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlapp
                                            ProviderId = 665544,
                                            ProviderName = "Provider name!",
                                            ValidationFailReason = ValidationFailReason.OverlappingStartDate,
-                                           Apprenticeship = new Apprenticeship { ULN = "111999001" }
+                                           Apprenticeship = new Apprenticeship { ULN = "1112223335" }
                                        },
                                    new OverlappingApprenticeship
                                        {
@@ -98,7 +97,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlapp
                                            LegalEntityName = "Legal entity name 2",
                                            ProviderId = 665544,
                                            ProviderName = "Provider name! 2",
-                                           ValidationFailReason = ValidationFailReason.OverlappingEndDate
+                                           ValidationFailReason = ValidationFailReason.OverlappingEndDate,
+                                           Apprenticeship = new Apprenticeship { ULN = "1112223337" }
                                        }
                                }
             };

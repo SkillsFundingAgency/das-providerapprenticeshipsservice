@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application;
@@ -162,6 +163,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return RedirectToAction("VerificationOfEmployer", new {providerId, hashedCommitmentId});
             }
 
+            var groupes = model.ApprenticeshipGroups.Where(m => m.ShowOverlapError);
+            foreach (var groupe in groupes)
+            {
+                ModelState.AddModelError($"{groupe.GroupId}", $"{groupe.TrainingProgramme?.Title ?? ""} apprentices training dates");
+            }
             model.BackLinkUrl = GetReturnToListUrl(providerId);
             return View(model);
         }
