@@ -26,8 +26,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlapp
 
         public async Task<GetOverlappingApprenticeshipsQueryResponse> Handle(GetOverlappingApprenticeshipsQueryRequest request)
         {
-            return OverlapStartDate();
-
             var apprenticeships = request.Apprenticeship.Where(m =>
                                                                m.StartDate != null &&
                                                                m.EndDate != null &&

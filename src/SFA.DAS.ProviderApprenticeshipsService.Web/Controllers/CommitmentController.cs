@@ -166,7 +166,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var groupes = model.ApprenticeshipGroups.Where(m => m.ShowOverlapError);
             foreach (var groupe in groupes)
             {
-                ModelState.AddModelError($"{groupe.GroupId}", $"{groupe.TrainingProgramme?.Title ?? ""} apprentices training dates");
+                var errorMessage = groupe.TrainingProgramme?.Title != null 
+                    ? $"{groupe.TrainingProgramme?.Title ?? ""} apprentices training dates"
+                    : "Apprentices training dates";
+
+                ModelState.AddModelError($"{groupe.GroupId}", errorMessage);
             }
             model.BackLinkUrl = GetReturnToListUrl(providerId);
             return View(model);

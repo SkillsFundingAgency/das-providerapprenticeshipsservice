@@ -32,6 +32,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
             }
         }
 
+        public int OverlapErrorCount
+        {
+            get
+            {
+                return Apprenticeships.SelectMany(m => m.OverlappingApprenticeships).Count();
+            }
+        }
+
         public bool ShowOverlapError {
             get
             {

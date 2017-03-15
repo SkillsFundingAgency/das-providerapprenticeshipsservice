@@ -134,15 +134,18 @@
                             <p>Training code: @group.TrainingProgramme.Id</p>
                         }
 
-                        @*@if (group.ShowOverlapError)
+                        @if (group.ShowOverlapError)
                         {
                             <div class="overlap-notification grey-background" id="error-message-@group.GroupId">
                                 <p class="heading-medium">
-                                    HEADING
+                                    @group.OverlapErrorCount @PluraliseApprentice(group.OverlapErrorCount).ToLower() with overlapping training dates
                                 </p>
-                                <p>The costs are above the RAJESH NEED TO FIX THIS this apprenticeship.You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.</p>
+                                <p>
+                                    These apprentices already have records with overlapping training dates in the apprenticeship service.
+                                    Please check the details are correct. If you're unsure, contact the employer in the first instance.
+                                </p>
                             </div>
-                            <i class="bubble-arrow overlap-arrow"></i>
+                            <i class="overlap-arrow"></i>
                         }
                         else if (group.ShowFundingLimitWarning)
                         {
@@ -154,14 +157,7 @@
                                 </p>
                             </div>
                             <i class="bubble-arrow"></i>
-                        }*@
-                        <div class="overlap-notification grey-background" id="error-message-@group.GroupId">
-                            <p class="heading-medium">
-                                HEADING
-                            </p>
-                            <p>The costs are above the RAJESH NEED TO FIX THIS this apprenticeship.You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.</p>
-                        </div>
-                        <i class="overlap-arrow"></i>
+                        }
                     </div>
 
                     <table class="tableResponsive providerList">
@@ -192,40 +188,33 @@
                                             <span class="missing">&ndash;</span>
                                         }
                                     </td>
-                                    <td>
+
                                         @if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
                                         {
-                                            @*if (apprenticeship.OverlappingApprenticeships.Any())
-                                             {
-                                                 <span class="overlap-alert">
-                                                     <a href="#error-message-@group.GroupId"
-                                                        aria-label="The unique learner number already exists for these training dates"
-                                                        aria-describedby="max-funding-group-@group.GroupId"
-                                                        title="The unique learner number already exists for these training dates">
-                                                    @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay() &nbsp;
+                                            if (apprenticeship.OverlappingApprenticeships.Any())
+                                            {
+                                                <td class="overlap-alert">
+                                                    <a href="#error-message-@group.GroupId"
+                                                       aria-label="The unique learner number already exists for these training dates"
+                                                       aria-describedby="max-funding-group-@group.GroupId"
+                                                       title="The unique learner number already exists for these training dates">
+                                                        @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay() &nbsp;
                                                     </a>
-                                                 </span>
+                                                </td>
                                             }
                                             else
                                             {
-                                                <span>
+                                                <td>
                                                     @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay() &nbsp;
-                                                </span>
-                                            }*@
-                                            <span class="overlap-alert">
-                                                <a href="#error-message-@group.GroupId"
-                                                   aria-label="The unique learner number already exists for these training dates"
-                                                   aria-describedby="max-funding-group-@group.GroupId"
-                                                   title="The unique learner number already exists for these training dates">
-                                                    @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay() &nbsp;
-                                                </a>
-                                            </span>
+                                                </td>
+                                            }
                                         }
                                         else
                                         {
-                                            <span class="missing">&ndash;</span>
+                                            <td>
+                                                <span class="missing">&ndash;</span>
+                                            </td>
                                         }
-                                    </td>
                                         @if (group.TrainingProgramme != null && apprenticeship.Cost.HasValue && apprenticeship.Cost > group.TrainingProgramme.MaxFunding && !apprenticeship.OverlappingApprenticeships.Any())
                                         {
                                              <td class="funding-cap-alert">
