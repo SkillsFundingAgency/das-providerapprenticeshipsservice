@@ -324,6 +324,15 @@
     float: right;
     margin-right: 75px;
     }
+.overlap-arrow{    
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-top: 25px solid $panel-colour;
+    content: "";
+    float: right;
+    margin-right:150px;
+    @include media(tablet) {margin-right: 290px;} 
+    }
 .funding-cap-alert{
     border-bottom:5px solid $secondary-text-colour;
           a{
@@ -365,6 +374,24 @@ body {
   right: 0;
   }
 }
+
+#apprentice-details{
+    .overlap-notification{
+        border-left:10px solid $red;
+    }
+}
+
+.overlap-alert{
+      border-bottom: 5px solid $red;
+    a{
+        text-decoration:none;
+        color:$text-colour;
+    }
+}
+
+
+
+
     
 //all mobile media query breakpoints
 //==================================
@@ -386,7 +413,7 @@ only screen and (max-width: 480px) {
     }
 }  
 
-.bubble-arrow {display:none;}    
+.bubble-arrow, .overlap-arrow {display:none;}    
     
     
     

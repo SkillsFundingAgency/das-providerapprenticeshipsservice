@@ -26,6 +26,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlapp
 
         public async Task<GetOverlappingApprenticeshipsQueryResponse> Handle(GetOverlappingApprenticeshipsQueryRequest request)
         {
+            return OverlapStartDate();
+
             var apprenticeships = request.Apprenticeship.Where(m =>
                                                                m.StartDate != null &&
                                                                m.EndDate != null &&
@@ -39,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlapp
                                    Enumerable.Empty<OverlappingApprenticeship>()
                            };
             }
-
+            
             if (apprenticeships.FirstOrDefault().ULN == "1112223331")
             {
                 return OverlapStartDate();
@@ -82,6 +84,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlapp
             {
                 Overlaps = new List<OverlappingApprenticeship>
                                {
+                     new OverlappingApprenticeship
+                                       {
+                                           EmployerAccountId = 123456,
+                                           LegalEntityName = "Legal entity name",
+                                           ProviderId = 665544,
+                                           ProviderName = "Provider name!",
+                                           ValidationFailReason = ValidationFailReason.OverlappingStartDate,
+                                           Apprenticeship = new Apprenticeship { ULN = "1112223331" }
+                                       },
                                    new OverlappingApprenticeship
                                        {
                                            EmployerAccountId = 123456,

@@ -2800,6 +2800,16 @@ span.helpText {
   margin-right: 75px;
 }
 
+.overlap-arrow {
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-top: 25px solid #dee0e2;
+  content: "";
+  float: right;
+  margin-right: 150px;
+  margin-right: 290px;
+}
+
 .funding-cap-alert {
   border-bottom: 5px solid #6f777b;
 }
@@ -2838,6 +2848,19 @@ body input::-webkit-contacts-auto-fill-button {
   right: 0;
 }
 
+#apprentice-details .overlap-notification {
+  border-left: 10px solid #b10e1e;
+}
+
+.overlap-alert {
+  border-bottom: 5px solid #b10e1e;
+}
+
+.overlap-alert a {
+  text-decoration: none;
+  color: #0b0c0c;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
@@ -2850,7 +2873,7 @@ body input::-webkit-contacts-auto-fill-button {
     text-decoration: none;
     color: #0b0c0c;
   }
-  .bubble-arrow {
+  .bubble-arrow, .overlap-arrow {
     display: none;
   }
   .employerListing td:nth-of-type(1):before {
