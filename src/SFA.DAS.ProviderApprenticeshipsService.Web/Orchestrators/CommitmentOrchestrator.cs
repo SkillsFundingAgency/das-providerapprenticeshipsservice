@@ -9,6 +9,7 @@ using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.Commitments.Api.Types.Validation;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
@@ -648,7 +649,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return approvalState;
         }
 
-        private IList<ApprenticeshipListItemViewModel> MapFrom(IEnumerable<Apprenticeship> apprenticeships, GetOverlappingApprenticeshipsQueryResponse overlapps)
+        private IList<ApprenticeshipListItemViewModel> MapFrom(IEnumerable<Apprenticeship> apprenticeships, GetOverlappingApprenticeshipsQueryResponse overlaps)
         {
             var apprenticeViewModels = apprenticeships
                 .Select(x => new ApprenticeshipListItemViewModel
@@ -663,7 +664,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     EndDate = x.EndDate,
                     Cost = x.Cost,
                     CanBeApprove = x.CanBeApproved,
-                    OverlappingApprenticeships = overlapps.Overlaps.Where(m => m.Apprenticeship.ULN == x.ULN)
+                    OverlappingApprenticeships = 
+                        overlaps?.GetOverlappingApprenticeships(x.ULN)
                 }).ToList();
 
             return apprenticeViewModels;
@@ -797,7 +799,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             const string EndDateKey = "EndDateOverlap";
 
 
-            foreach (var item in overlappingErrors.Overlaps)
+            foreach (var item in overlappingErrors.GetFirstOverlappingApprenticeships())
             {
                 switch (item.ValidationFailReason)
                 {

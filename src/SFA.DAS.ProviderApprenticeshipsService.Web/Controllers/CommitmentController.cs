@@ -237,7 +237,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             try
             {
-                //AddErrorsToModelState(await _commitmentOrchestrator.ValidateApprenticeship(apprenticeship));
+                AddErrorsToModelState(await _commitmentOrchestrator.ValidateApprenticeship(apprenticeship));
                 if (!ModelState.IsValid)
                 {
                     return await RedisplayApprenticeshipView(apprenticeship);
@@ -303,7 +303,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             try
             {
-                //AddErrorsToModelState(await _commitmentOrchestrator.ValidateApprenticeship(apprenticeship));
+                AddErrorsToModelState(await _commitmentOrchestrator.ValidateApprenticeship(apprenticeship));
                 if (!ModelState.IsValid)
                 {
                     return await RedisplayApprenticeshipView(apprenticeship);
