@@ -805,18 +805,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 switch (item.ValidationFailReason)
                 {
                     case ValidationFailReason.OverlappingStartDate:
-                        dict.Add(StartDateKey, StartText);
+                        dict.AddIfNotExists(StartDateKey, StartText);
                         break;
                     case ValidationFailReason.OverlappingEndDate:
-                        dict.Add(EndDateKey, EndText);
+                        dict.AddIfNotExists(EndDateKey, EndText);
                         break;
                     case ValidationFailReason.DateEmbrace:
-                        dict.Add(StartDateKey, StartText);
-                        dict.Add(EndDateKey, EndText);
+                        dict.AddIfNotExists(StartDateKey, StartText);
+                        dict.AddIfNotExists(EndDateKey, EndText);
                         break;
                     case ValidationFailReason.DateWithin:
-                        dict.Add(StartDateKey, StartText);
-                        dict.Add(EndDateKey, EndText);
+                        dict.AddIfNotExists(StartDateKey, StartText);
+                        dict.AddIfNotExists(EndDateKey, EndText);
                         break;
                 }
             }
