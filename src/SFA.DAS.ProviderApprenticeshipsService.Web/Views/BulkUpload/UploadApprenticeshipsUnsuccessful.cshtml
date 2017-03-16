@@ -54,15 +54,9 @@
             {
                 <tr>
                     <td>@error.RowNumber</td>
-                    <td>
-                        @Html.Raw(error.Uln)
-                    </td>
-                    <td>
-                        @Html.Raw(error.Name)
-                    </td>
-                    <td>
-                        @Html.Raw(error.DateOfBirth)
-                    </td>
+                    <td>@error.Uln</td>
+                    <td>@error.Name</td>
+                    <td>@error.DateOfBirth</td>
                     <td class="error-details">
                         @foreach (var message in error.Messages)
                         {

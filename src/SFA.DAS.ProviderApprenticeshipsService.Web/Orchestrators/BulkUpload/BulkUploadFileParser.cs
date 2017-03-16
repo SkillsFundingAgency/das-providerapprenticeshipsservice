@@ -7,6 +7,7 @@ using System.Web;
 using CsvHelper;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -68,24 +69,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             var learnerStartDate = GetValidDate(record.StartDate, "yyyy-MM");
             var learnerEndDate = GetValidDate(record.EndDate, "yyyy-MM");
 
-            var trainingCode = record.ProgType == 25
-                                   ? record.StdCode.ToString()
+            var trainingCode = record.ProgType == "25"
+                                   ? record.StdCode
                                    : $"{record.FworkCode}-{record.ProgType}-{record.PwayCode}";
 
             var apprenticeshipViewModel = new ApprenticeshipViewModel
             {
                 AgreementStatus = AgreementStatus.NotAgreed,
                 PaymentStatus = PaymentStatus.Active,
-                ULN = record.ULN.ToString(),
+                ULN = record.ULN,
                 FirstName = record.GivenNames,
                 LastName = record.FamilyName,
                 DateOfBirth = new DateTimeViewModel(dateOfBirth),
-                //NINumber = record.NINumber,
-                Cost = record.TotalPrice.ToString(),
+                Cost = record.TotalPrice,
                 ProviderRef = record.ProviderRef,
                 StartDate = new DateTimeViewModel(learnerStartDate),
                 EndDate = new DateTimeViewModel(learnerEndDate),
-                ProgType = record.ProgType,
+                ProgType = record.ProgType.TryParse(),
                 TrainingCode = trainingCode
             };
             return new ApprenticeshipUploadModel

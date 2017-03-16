@@ -1,10 +1,11 @@
-﻿using System.Net;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     using System;
 
+    [DasRoleCheckExempt]
     public class ErrorController : Controller
     {
         public ViewResult BadRequest()

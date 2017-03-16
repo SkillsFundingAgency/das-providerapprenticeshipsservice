@@ -4,7 +4,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
     {
         public string CohortRef { get; set; }
 
-        public long? ULN { get; set; }
+        public string ULN { get; set; }
 
         public string FamilyName { get; set; }
 
@@ -12,19 +12,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
 
         public string DateOfBirth { get; set; }
 
-        public int? ProgType { get; set; }
+        public string ProgType { get; set; }
 
-        public int? FworkCode { get; set; }
+        public string FworkCode { get; set; }
 
-        public int? PwayCode { get; set; }
+        public string PwayCode { get; set; }
 
-        public int? StdCode { get; set; }
+        public string StdCode { get; set; }
 
         public string StartDate { get; set; }
 
         public string EndDate { get; set; }
 
-        public int? TotalPrice { get; set; }
+        public string TotalPrice { get; set; }
 
         public string EPAOrgID { get; set; }  // ToDO: Validate Startwith EPA...
 

@@ -63,6 +63,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private ApprenticeshipDetailsViewModel MapFrom(Apprenticeship apprenticeship)
         {
+            // ToDo: Move out mapping and add test for status
+            // ToDo: new stroy in sprint 8
+            var statusText =
+                apprenticeship.StartDate.HasValue
+                && apprenticeship.StartDate.Value > new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1)
+                        ? "Waiting to start"
+                        : MapPaymentStatus(apprenticeship.PaymentStatus);
+
             return new ApprenticeshipDetailsViewModel
             {
                 HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
@@ -74,7 +82,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 EndDate = apprenticeship.EndDate,
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,
-                Status = MapPaymentStatus(apprenticeship.PaymentStatus),
+                Status = statusText,
                 EmployerName = string.Empty
             };
         }

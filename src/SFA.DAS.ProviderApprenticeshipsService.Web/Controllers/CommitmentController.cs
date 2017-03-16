@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -9,6 +11,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [Authorize]
+    [ProviderUkPrnCheck]
     [RoutePrefix("{providerId}/apprentices")]
     public class CommitmentController : BaseController
     {
@@ -96,7 +99,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("{hashedCommitmentId}/verification")]
-        public async Task<ActionResult> VerificationOfEmployer(VerificationOfEmployerViewModel viewModel)
+        [ValidateAntiForgeryToken]
+        public ActionResult VerificationOfEmployer(VerificationOfEmployerViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -115,7 +119,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/verification-stopped")]
-        public async Task<ActionResult> VerificationStopped(long providerId, string hashedCommitmentId)
+        public ActionResult VerificationStopped(long providerId, string hashedCommitmentId)
         {
             return View();
         }
@@ -132,6 +136,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/verification-relationship")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> VerificationOfRelationship(VerificationOfRelationshipViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -313,6 +318,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("{hashedCommitmentId}/Finished")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> FinishEditing(FinishEditingViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -333,9 +339,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (viewModel.SaveStatus == SaveStatus.Save)
             {
-                await _commitmentOrchestrator.SubmitCommitment(CurrentUserId, viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty, GetSingedInUser());
                 TempData["FlashMessage"] = "Details saved but not sent";
-                var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(viewModel.ProviderId, RequestStatus.ReadyForApproval);
+                var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(viewModel.ProviderId, GetRequestStatusFromSession());
                 if (currentStatusCohortAny)
                     return Redirect(GetReturnToListUrl(viewModel.ProviderId));
             }
@@ -460,8 +465,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             return new SignInUserModel
             {
-                DisplayName = GetClaimValue("http://schemas.portal.com/displayname"),
-                Email = GetClaimValue("http://schemas.portal.com/mail")
+                DisplayName = HttpContext.GetClaimValue("http://schemas.portal.com/displayname"),
+                Email = HttpContext.GetClaimValue("http://schemas.portal.com/mail")
             };
         }
     }

@@ -75,8 +75,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var errors = _sut.ValidateCohortReference(new List<ApprenticeshipUploadModel> { first, second }, "ABBA123").ToList();
             errors.Count.Should().Be(2);
             var messages = errors.Select(m => m.ToString()).ToList();
-            messages.Should().Contain("The <strong>cohort reference</strong> must be the same for all apprentices in your upload file");
-            messages.Should().Contain("The <strong>cohort reference</strong> does not match your current cohort");
+            messages.Should().Contain("The cohort reference must be the same for all apprentices in your upload file");
+            messages.Should().Contain("The cohort reference does not match your current cohort");
         }
 
         [Test]
@@ -91,8 +91,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var errors = _sut.ValidateCohortReference(new List<ApprenticeshipUploadModel> { first, second }, "ABBA123").ToList();
 
             var messages = errors.Select(m => m.ToString()).ToList();
-            messages.Should().NotContain("The <strong>cohort reference</strong> must be the same for all apprentices in your upload file");
-            messages.Should().Contain("The <strong>cohort reference</strong> does not match your current cohort");
+            messages.Should().NotContain("The cohort reference must be the same for all apprentices in your upload file");
+            messages.Should().Contain("The cohort reference does not match your current cohort");
         }
 
         private List<ITrainingProgramme> TrainingProgrammes()
@@ -118,7 +118,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             };
             var records = new List<CsvRecord>
                               {
-                                  new CsvRecord { ProgType = 23, FworkCode = 18, PwayCode = 26, CohortRef = "ABBA123" }
+                                  new CsvRecord { ProgType = "23", FworkCode = "18", PwayCode = "26", CohortRef = "ABBA123" }
                               };
             return apprenticeships.Zip(
                 records,
@@ -143,8 +143,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
 
             var records = new List<CsvRecord>
             {
-                new CsvRecord { ProgType = 25, StdCode = 2, CohortRef = "ABBA123" },
-                new CsvRecord { ProgType = 25, StdCode = 2, CohortRef = "ABBA123" }
+                new CsvRecord { ProgType = "25", StdCode = "2", CohortRef = "ABBA123" },
+                new CsvRecord { ProgType = "25", StdCode = "2", CohortRef = "ABBA123" }
             };
 
             return apprenticeships.Zip(

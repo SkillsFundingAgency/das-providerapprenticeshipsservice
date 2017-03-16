@@ -20,6 +20,7 @@
         </details>
 
         <form method="POST" action="@Url.Action("UploadApprenticeships")" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
             <label class="form-label hidden" for="files-upload">Upload file</label>
             @Html.ValidationMessageFor(m => m.Attachment, null, new { id = "error-message-" + Html.IdFor(m => m.Attachment) })
             <input id="files-upload" accept=".csv" type="file" name="@Html.NameFor(m => m.Attachment)">

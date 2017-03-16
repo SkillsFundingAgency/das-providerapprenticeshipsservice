@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
+using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
+    [ProviderUkPrnCheck]
     [RoutePrefix("{providerId}/apprentices")]
     public class BulkUploadController : BaseController
     {
@@ -36,6 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("{hashedCommitmentId}/UploadApprenticeships")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> UploadApprenticeships(UploadApprenticeshipsViewModel model)
         {
             if (!ModelState.IsValid)

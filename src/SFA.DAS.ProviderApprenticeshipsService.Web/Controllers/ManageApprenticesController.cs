@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
+using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [Authorize]
+    [ProviderUkPrnCheck]
     [RoutePrefix("{providerId}/apprentices/manage")]
     public class ManageApprenticesController : BaseController
     {
