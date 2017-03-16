@@ -627,6 +627,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             AssertCommitmentStatus(data.Commitment, EditStatus.ProviderOnly);
             AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
+            var overlaps = await _mediator.SendAsync(new GetOverlappingApprenticeshipsQueryRequest
+                                                         {
+                                                             Apprenticeship = data.Commitment.Apprenticeships
+                                                         });
+
             return new FinishEditingViewModel
             {
                 HashedCommitmentId = hashedCommitmentId,
@@ -636,7 +641,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 HasApprenticeships = data.Commitment.Apprenticeships.Any(),
                 InvalidApprenticeshipCount = data.Commitment.Apprenticeships.Count(x => !x.CanBeApproved),
                 HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed,
-                SignAgreementUrl = _configuration.ContractAgreementsUrl
+                SignAgreementUrl = _configuration.ContractAgreementsUrl,
+                HasOverlappingErrors = overlaps.Overlaps.Any()
             };
         }
 
