@@ -407,7 +407,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 LatestMessage = message,
                 PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed,
                 ApprenticeshipGroups = apprenticeshipGroups,
-                RelationshipVerified = relationshipRequest.Relationship.Verified.HasValue
+                RelationshipVerified = relationshipRequest.Relationship.Verified.HasValue,
+                HasOverlappingErrors = apprenticeshipGroups.Any(m => m.OverlapErrorCount > 0)
             };
         }
 
