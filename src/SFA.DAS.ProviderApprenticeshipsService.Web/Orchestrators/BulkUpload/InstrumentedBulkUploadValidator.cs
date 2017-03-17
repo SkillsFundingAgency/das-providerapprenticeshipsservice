@@ -62,5 +62,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
             return result;
         }
+
+        public IEnumerable<UploadError> ValidateUlnUniqueness(IEnumerable<ApprenticeshipUploadModel> records)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            var result = _validator.ValidateUlnUniqueness(records);
+
+            _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to validate ULN uniqueness for {records.Count()} items");
+
+            return result;
+        }
     }
 }
