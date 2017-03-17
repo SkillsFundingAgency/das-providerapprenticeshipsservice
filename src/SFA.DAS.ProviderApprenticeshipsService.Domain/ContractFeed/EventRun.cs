@@ -1,14 +1,11 @@
 namespace SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed
 {
+    // TODO: LWA - This can be deleted??
     public class EventRun
     {
-        public int NewLastReadPageNumber { get; set; }
-
-        public long ExecutionTimeMs { get; set; }
+        public string LastPageReadUri { get; set; }
 
         public int ContractCount { get; set; }
-
-        public int PagesRead { get; set; }
 
     }
 }

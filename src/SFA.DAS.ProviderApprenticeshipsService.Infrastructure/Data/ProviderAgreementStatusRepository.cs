@@ -48,108 +48,182 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             return contractFeedEvents;
         }
 
-        public async Task<ContractFeedEvent> GetMostRecentContractFeedEvent()
+        //public async Task<ContractFeedEvent> GetMostRecentContractFeedEvent()
+        //{
+        //    var contact = await WithConnection(async connection =>
+        //    {
+        //        using (var trans = connection.BeginTransaction())
+        //        {
+        //            var r = (await connection.QueryAsync<ContractFeedEvent>(
+        //                sql:
+        //                    "SELECT TOP 1 [Id], [PageNumber] "
+        //                  + "FROM [dbo].[ContractFeedEvent] "
+        //                  + "ORDER BY [Updated] desc",
+        //                commandType: CommandType.Text,
+        //                transaction: trans)).SingleOrDefault();
+        //            trans.Commit();
+        //            return r;
+        //        }
+        //    });
+
+        //    if (contact == null)
+        //        _logger.Info("No provider agreements found.");
+        //    return contact;
+        //}
+
+        public async Task<Guid?> GetLatestBookmark()
         {
-            var contact = await WithConnection(async connection =>
+            var latestBookmark = await WithConnection(async connection =>
             {
-                using (var trans = connection.BeginTransaction())
-                {
-                    var r = (await connection.QueryAsync<ContractFeedEvent>(
-                        sql:
-                            "SELECT TOP 1 [Id], [PageNumber] "
-                          + "FROM [dbo].[ContractFeedEvent] "
-                          + "ORDER BY [Updated] desc",
-                        commandType: CommandType.Text,
-                        transaction: trans)).SingleOrDefault();
-                    trans.Commit();
-                    return r;
-                }
+                // TODO: LWA Is this the best way to do this??
+                Guid? bookmark = await GetLatestBookmark(connection, null);
+
+                return bookmark;
             });
 
-            if (contact == null)
-                _logger.Info("No provider agreements found.");
-            return contact;
+            if (latestBookmark == null)
+                _logger.Info("Latest Bookmark not found.");
+
+            return latestBookmark;
         }
 
-        public async Task<int> GetMostRecentPageNumber()
+        private static async Task<Guid?> GetLatestBookmark(IDbConnection connection, IDbTransaction tran)
         {
-            var pageNumber = await WithConnection<int>(async connection =>
+            return (await connection.QueryAsync<Guid?>(
+                                    sql:
+                                        "SELECT [LatestBookmark] "
+                                      + "FROM [dbo].[ContractFeedEventRun]",
+                                    commandType: CommandType.Text, transaction: tran)).SingleOrDefault();
+        }
+
+        //public async Task AddContractEvent(ContractFeedEvent contractFeedEvent)
+        //{
+        //    await WithConnection(async connection =>
+        //    {
+        //        var parameters = new DynamicParameters();
+        //        parameters.Add("@id", contractFeedEvent.Id, DbType.Guid);
+        //        parameters.Add("@providerId", contractFeedEvent.ProviderId, DbType.Int64);
+        //        parameters.Add("@hierarchyType", contractFeedEvent.HierarchyType, DbType.String);
+        //        parameters.Add("@fundingTypeCode", contractFeedEvent.FundingTypeCode, DbType.String);
+        //        parameters.Add("@status", contractFeedEvent.Status, DbType.String);
+        //        parameters.Add("@parentStatus", contractFeedEvent.ParentStatus, DbType.String);
+        //        parameters.Add("@updatedInFeed", contractFeedEvent.Updated, DbType.DateTime);
+        //        parameters.Add("@pageNumber", contractFeedEvent.PageNumber, DbType.Int32);
+        //        parameters.Add("@createdDate", DateTime.UtcNow, DbType.DateTime);
+
+        //        using (var trans = connection.BeginTransaction())
+        //        {
+        //            await connection.ExecuteAsync(
+        //                sql:
+        //                    "INSERT INTO [dbo].[ContractFeedEvent]" +
+        //                    "(Id, ProviderId, HierarchyType, FundingTypeCode, Status, ParentStatus, UpdatedInFeed, PageNumber, CreatedDate)" +
+        //                    "VALUES(@id, @providerId, @hierarchyType, @fundingTypeCode, @status, @parentStatus, @updatedInFeed, @pageNumber, @createdDate); ",
+        //                param: parameters,
+        //                commandType: CommandType.Text,
+        //                transaction: trans);
+        //            trans.Commit();
+        //        }
+        //        return 1L;
+        //    }
+        //    );
+        //}
+
+        public async Task AddContractEventsForPage(int eventPageNumber, List<ContractFeedEvent> contractFeedEvents)
+        {
+            await WithTransaction(async (conn, tran) =>
             {
-                using (var trans = connection.BeginTransaction())
+                foreach (var contract in contractFeedEvents)
                 {
-                    var r = (await connection.QueryAsync<int>(
-                        sql:
-                            "SELECT TOP 1 [PageNumber] "
-                          + "FROM [dbo].[ContractFeedEventRun] "
-                          + "ORDER BY [Updated] desc",
-                        commandType: CommandType.Text,
-                        transaction: trans)).SingleOrDefault();
-                    trans.Commit();
-                    return r;
+                    await InsertContract(conn, tran, contract);
                 }
+
+                var newLatestBookmark = contractFeedEvents[contractFeedEvents.Count - 1].Id;
+
+                await UpdateLatestBookmark(conn, tran, newLatestBookmark);
+
+                tran.Commit();
             });
-
-            if (pageNumber.Equals(0))
-                _logger.Info("No provider agreements found.");
-            return pageNumber;
         }
 
-        public async Task AddContractEvent(ContractFeedEvent contractFeedEvent)
+        private static async Task UpdateLatestBookmark(IDbConnection conn, IDbTransaction tran, Guid newLatestBookmark)
         {
-            await WithConnection(async connection =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@id", contractFeedEvent.Id, DbType.Guid);
-                parameters.Add("@providerId", contractFeedEvent.ProviderId, DbType.Int64);
-                parameters.Add("@hierarchyType", contractFeedEvent.HierarchyType, DbType.String);
-                parameters.Add("@fundingTypeCode", contractFeedEvent.FundingTypeCode, DbType.String);
-                parameters.Add("@status", contractFeedEvent.Status, DbType.String);
-                parameters.Add("@parentStatus", contractFeedEvent.ParentStatus, DbType.String);
-                parameters.Add("@updated", contractFeedEvent.Updated, DbType.DateTime);
-                parameters.Add("@pageNumber", contractFeedEvent.PageNumber, DbType.Int32);
+            var previousBookmark = GetLatestBookmark(conn, tran);
 
-                using (var trans = connection.BeginTransaction())
-                {
-                    await connection.ExecuteAsync(
-                        sql:
-                            "INSERT INTO [dbo].[ContractFeedEvent]" +
-                            "(Id, ProviderId, HierarchyType, FundingTypeCode, Status, ParentStatus, Updated, PageNumber)" +
-                            "VALUES(@id, @providerId, @hierarchyType, @fundingTypeCode, @status, @parentStatus, @updated, @pageNumber); ",
-                        param: parameters,
-                        commandType: CommandType.Text,
-                        transaction: trans);
-                    trans.Commit();
-                }
-                return 1L;
+            var parameters = new DynamicParameters();
+            parameters.Add("@latestBookmark", newLatestBookmark, DbType.Guid);
+            parameters.Add("@updatedDate", DateTime.UtcNow, DbType.DateTime);
+
+            if (previousBookmark == null)
+            {
+                await conn.ExecuteAsync(
+                    sql:
+                        "INSERT INTO [dbo].[ContractFeedEventRun]" +
+                        "(LatestBookmark, UpdatedDate)" +
+                        "VALUES(@latestBookmark, @updatedDate); ",
+                    param: parameters,
+                    commandType: CommandType.Text,
+                    transaction: tran);
             }
-            );
-        }
-
-        public async Task SaveLastRun(EventRun lastRun)
-        {
-            await WithConnection(async connection =>
+            else
             {
-                var parameters = new DynamicParameters();
-                parameters.Add("@entriesSaved", lastRun.ContractCount, DbType.Int32);
-                parameters.Add("@executionTimeMs", lastRun.ExecutionTimeMs, DbType.Int64);
-                parameters.Add("@pageNumber", lastRun.NewLastReadPageNumber, DbType.Int32);
-                parameters.Add("@pagesRead", lastRun.PagesRead, DbType.Int32);
-                parameters.Add("@updated", DateTime.Now, DbType.DateTime);
-
-                using (var trans = connection.BeginTransaction())
-                {
-                    await connection.ExecuteAsync(
-                        sql:
-                            "INSERT INTO [dbo].[ContractFeedEventRun]" +
-                            "(EntriesSaved, ExecutionTimeMs, PageNumber, PagesRead, Updated)" +
-                            "VALUES(@entriesSaved, @executionTimeMs, @pageNumber, @pagesRead, @updated); ",
-                        param: parameters,
-                        commandType: CommandType.Text,
-                        transaction: trans);
-                    trans.Commit();
-                }
-                return 1L;
-            });
+                await conn.ExecuteAsync(
+                    sql:
+                        "UPDATE [dbo].[ContractFeedEventRun]" +
+                        "SET LatestBookmark = @latestBookmark, UpdatedDate = updatedDate; ",
+                    param: parameters,
+                    commandType: CommandType.Text,
+                    transaction: tran);
+            }
         }
+
+        private static async Task InsertContract(IDbConnection conn, IDbTransaction tran, ContractFeedEvent contract)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@id", contract.Id, DbType.Guid);
+            parameters.Add("@providerId", contract.ProviderId, DbType.Int64);
+            parameters.Add("@hierarchyType", contract.HierarchyType, DbType.String);
+            parameters.Add("@fundingTypeCode", contract.FundingTypeCode, DbType.String);
+            parameters.Add("@status", contract.Status, DbType.String);
+            parameters.Add("@parentStatus", contract.ParentStatus, DbType.String);
+            parameters.Add("@updatedInFeed", contract.Updated, DbType.DateTime);
+            parameters.Add("@pageNumber", contract.PageNumber, DbType.Int32);
+            parameters.Add("@createdDate", DateTime.UtcNow, DbType.DateTime);
+
+            await conn.ExecuteAsync(
+                    sql:
+                        "INSERT INTO [dbo].[ContractFeedEvent]" +
+                        "(Id, ProviderId, HierarchyType, FundingTypeCode, Status, ParentStatus, UpdatedInFeed, PageNumber, CreatedDate)" +
+                        "VALUES(@id, @providerId, @hierarchyType, @fundingTypeCode, @status, @parentStatus, @updatedInFeed, @pageNumber, @createdDate); ",
+                    param: parameters,
+                    commandType: CommandType.Text,
+                    transaction: tran);
+        }
+
+        //public async Task SaveLastRun(EventRun lastRun)
+        //{
+        //    await WithConnection(async connection =>
+        //    {
+        //        var parameters = new DynamicParameters();
+        //        parameters.Add("@entriesSaved", lastRun.ContractCount, DbType.Int32);
+        //        parameters.Add("@executionTimeMs", lastRun.ExecutionTimeMs, DbType.Int64);
+        //        parameters.Add("@pageNumber", lastRun.NewLastReadPageNumber, DbType.Int32);
+        //        parameters.Add("@pagesRead", lastRun.PagesRead, DbType.Int32);
+        //        parameters.Add("@updated", DateTime.Now, DbType.DateTime);
+
+        //        using (var trans = connection.BeginTransaction())
+        //        {
+        //            await connection.ExecuteAsync(
+        //                sql:
+        //                    "INSERT INTO [dbo].[ContractFeedEventRun]" +
+        //                    "(EntriesSaved, ExecutionTimeMs, PageNumber, PagesRead, Updated)" +
+        //                    "VALUES(@entriesSaved, @executionTimeMs, @pageNumber, @pagesRead, @updated); ",
+        //                param: parameters,
+        //                commandType: CommandType.Text,
+        //                transaction: trans);
+        //            trans.Commit();
+        //        }
+        //        return 1L;
+        //    });
+        //}
     }
 }

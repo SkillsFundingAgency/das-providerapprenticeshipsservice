@@ -53,7 +53,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         }
 
         [Test]
-        public async Task ThenTheApiIsNotCalledIfTheRequestIsNotValid()
+        public void ThenTheApiIsNotCalledIfTheRequestIsNotValid()
         {
             //Arrange
             _validator.Setup(x => x.Validate(It.IsAny<UpdateRelationshipCommand>()))

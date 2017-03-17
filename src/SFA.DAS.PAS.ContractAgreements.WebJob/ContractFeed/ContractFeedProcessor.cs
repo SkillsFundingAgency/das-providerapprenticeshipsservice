@@ -34,14 +34,13 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             _logger = logger;
         }
 
-        public EventRun ReadEvents(int lastPageNumber, Guid lastBookmarkedItemId, Action<int, IEnumerable<ContractFeedEvent>> saveRecordsAction)
+        public int ReadEvents(string pageToReadUri, Guid? latestBookmark, Action<int, IEnumerable<ContractFeedEvent>> saveRecordsAction)
         {
-            _logger.Info($"Reading {_configuration.ReadMaxPages} pages");
-            var newLastReadPageNumber = lastPageNumber;
-            var contractCount = 0;
-            var pagesRead = 0;
+            _logger.Info($"Attempting to read up to {_configuration.ReadMaxPages} pages");
 
-            _reader.Read(lastPageNumber, (pageNumber, pageContent, isLastPage) =>
+            var contractCount = 0;
+
+            _reader.Read(pageToReadUri, (pageNumber, pageUri, pageContent, isLastPage) =>
             {
                 var doc = XDocument.Parse(pageContent);
 
@@ -51,26 +50,19 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
                 var newContractDataPage = entries
                     .Select(ExtractContractFeedEvent)
                     .Where(contractFeedEvent => contractFeedEvent != null)
-                    .TakeWhile(contractFeedEvent => lastBookmarkedItemId == Guid.Empty || contractFeedEvent.Id != lastBookmarkedItemId)
-                    .Where(_validator.Validate) // ToDo: Enable when testing
+                    .TakeWhile(contractFeedEvent => latestBookmark == null || contractFeedEvent.Id != latestBookmark)
+                    .Where(_validator.Validate)
                     .ToList();
 
                 _logger.Info($"Adding: {newContractDataPage.Count} from page: {pageNumber}");
+
                 saveRecordsAction(pageNumber, newContractDataPage);
 
-                newLastReadPageNumber = isLastPage ? pageNumber -1 : pageNumber;
-
                 contractCount += newContractDataPage.Count;
-                pagesRead += 1;
-                return lastPageNumber + (_configuration.ReadMaxPages-1) > pageNumber;
             });
 
-            return new EventRun
-                       {
-                           NewLastReadPageNumber = newLastReadPageNumber,
-                           ContractCount = contractCount,
-                           PagesRead = pagesRead
-                       };
+            //TODO: LWA Log out contract count
+            return contractCount;
         }
 
         private ContractFeedEvent ExtractContractFeedEvent(XContainer element)

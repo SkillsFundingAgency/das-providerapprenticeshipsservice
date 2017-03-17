@@ -31,36 +31,32 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
             var time = new Stopwatch();
             time.Start();
 
-            var lastContract = await _repository.GetMostRecentContractFeedEvent();
-            var lastFullPageNumberRead = await _repository.GetMostRecentPageNumber();
-            var nextPageNumberToRead = lastFullPageNumberRead + 1;
+            var latestBookmark = await _repository.GetLatestBookmark();
+            var pageToReadUri = ""; // TODO: LWA Get url of page with bookmark
 
-            if (lastContract == null && nextPageNumberToRead > 1)
-            {
-                _logger.Warn($"The database doesn't currently contain any valid contracts from the feed after {lastFullPageNumberRead} pages have been read.");
-            }
+            // TODO: LWA - Add check to see if any contracts in the database and log if there isn't
+            //if (latestBookmark == null && nextPageNumberToRead > 1)
+            //{
+            //    _logger.Warn($"The database doesn't currently contain any valid contracts from the feed after {lastFullPageNumberRead} pages have been read.");
+            //}
 
-            _logger.Info($"Bookmark: {lastContract?.Id}, Latest page read: {lastFullPageNumberRead}");
+            _logger.Info($"Bookmark: {latestBookmark?.ToString() ?? "{Not set}"}, Latest page read uri: {pageToReadUri}");
 
-            var lastRun = _dataProvider.ReadEvents(nextPageNumberToRead, lastContract?.Id ?? Guid.Empty, (eventPageNumber, events) =>
+            var insertedEvents = _dataProvider.ReadEvents(pageToReadUri, latestBookmark, async (eventPageNumber, events) =>
                 {
                     var contractFeedEvents = events.ToList();
 
-                    foreach (var contractFeedEvent in contractFeedEvents)
-                    {
-                        contractFeedEvent.PageNumber = eventPageNumber;
-                        _repository.AddContractEvent(contractFeedEvent);
-                    }
+                    await _repository.AddContractEventsForPage(eventPageNumber, contractFeedEvents);
                 });
 
-            if (lastRun.ContractCount > 0)
+            if (insertedEvents > 0)
             {
-                _logger.Info($"Inserted {lastRun.ContractCount} contracts into the database. LastPageRead: {lastRun.NewLastReadPageNumber}");
+                _logger.Info($"Inserted {insertedEvents} contracts into the database.");
             }
 
             time.Stop();
-            lastRun.ExecutionTimeMs = time.ElapsedMilliseconds;
-            await _repository.SaveLastRun(lastRun);
+
+            _logger.Info($"Run took {time.ElapsedMilliseconds} milliseconds.");
         }
     }
 

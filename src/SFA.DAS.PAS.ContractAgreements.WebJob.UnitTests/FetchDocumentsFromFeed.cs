@@ -8,6 +8,7 @@ using NUnit.Framework;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
+using System.Collections.Generic;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
 {
@@ -56,8 +57,8 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
         {
             var helper = new TestHelper(UrlToApi);
             var repository = new InMemoryProviderAgreementStatusRepository(Mock.Of<ILog>());
-            await repository.AddContractEvent(
-                new ContractFeedEvent
+
+            await repository.AddContractEventsForPage(6, new List<ContractFeedEvent> { new ContractFeedEvent
                 {
                     FundingTypeCode = "MAIN",
                     HierarchyType = "CONTRACT",
@@ -66,9 +67,9 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
                     Status = "Approved",
                     Updated = DateTime.Parse("1998-12-07"),
                     PageNumber = 6
-                });
-            await repository.AddContractEvent(
-                new ContractFeedEvent
+                } });
+
+            await repository.AddContractEventsForPage(11, new List<ContractFeedEvent> { new ContractFeedEvent
                 {
                     FundingTypeCode = "MAIN",
                     HierarchyType = "CONTRACT",
@@ -77,19 +78,18 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
                     Status = "Approved",
                     Updated = DateTime.Parse("1998-12-08"),
                     PageNumber = 11
-                });
+                } });
+
             repository.LastFullPageRead = 11;
 
             var service = helper.SetUpProviderAgreementStatusService(repository);
 
-            repository.GetMostRecentPageNumber().Result.Should().Be(11);
-            repository.GetMostRecentContractFeedEvent().Result.PageNumber.Should().Be(11);
+            repository.GetLatestBookmark().Result.Should().Be(11);
 
             await service.UpdateProviderAgreementStatuses();
 
             helper.MockFeedProcessorClient.Verify(m => m.GetAuthorizedHttpClient(), Times.Exactly(2));
-            repository.GetMostRecentPageNumber().Result.Should().Be(12);
-            repository.GetMostRecentContractFeedEvent().Result.PageNumber.Should().Be(13);
+            repository.GetLatestBookmark().Result.Should().Be(12);
         }
 
         [Test(Description = "When no new full pages read but latest page has contracts")]
@@ -97,8 +97,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
         {
             var helper = new TestHelper(UrlToApi);
             var repository = new InMemoryProviderAgreementStatusRepository(Mock.Of<ILog>());
-            await repository.AddContractEvent(
-                new ContractFeedEvent
+            await repository.AddContractEventsForPage(1, new List<ContractFeedEvent> { new ContractFeedEvent
                 {
                     FundingTypeCode = "MAIN",
                     HierarchyType = "CONTRACT",
@@ -107,9 +106,8 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
                     Status = "Approved",
                     Updated = DateTime.Parse("1998-12-07"),
                     PageNumber = 1
-                });
-            await repository.AddContractEvent(
-                new ContractFeedEvent
+                } });
+            await repository.AddContractEventsForPage(12, new List<ContractFeedEvent> { new ContractFeedEvent
                 {
                     FundingTypeCode = "MAIN",
                     HierarchyType = "CONTRACT",
@@ -118,21 +116,18 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
                     Status = "Approved",
                     Updated = DateTime.Parse("1998-12-08"),
                     PageNumber = 12
-                });
+                } });
+
+           
             repository.LastFullPageRead = 12;
             var service = helper.SetUpProviderAgreementStatusService(repository);
-            var expectedLatestId = "985509f9-6da6-48d2-b0e1-90ad8337def9";
 
-            repository.GetMostRecentPageNumber().Result.Should().Be(12);
-            repository.GetMostRecentContractFeedEvent().Result.PageNumber.Should().Be(12);
-            repository.GetMostRecentContractFeedEvent().Result.Id.ToString().Should().NotBe(expectedLatestId);
+            repository.GetLatestBookmark().Result.Should().Be(12);
 
             await service.UpdateProviderAgreementStatuses();
 
             helper.MockFeedProcessorClient.Verify(m => m.GetAuthorizedHttpClient(), Times.Exactly(2));
-            repository.GetMostRecentPageNumber().Result.Should().Be(12);
-            repository.GetMostRecentContractFeedEvent().Result.PageNumber.Should().Be(13);
-            repository.GetMostRecentContractFeedEvent().Result.Id.ToString().Should().Be(expectedLatestId);
+            repository.GetLatestBookmark().Result.Should().Be(12);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,34 +22,25 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses
             Data = new List<ContractFeedEvent>();
         }
 
-        public Task AddContractEvent(ContractFeedEvent contractFeedEvent)
-        {
-            _logger.Info($"Storing event: {contractFeedEvent.Id}");
-            Data.Add(contractFeedEvent);
-            return Task.FromResult(0);
-        }
-
         public Task<IEnumerable<ContractFeedEvent>> GetContractEvents(long providerId)
         {
             return Task.FromResult(Data.Where(e => e.ProviderId == providerId));
         }
 
-        public Task<ContractFeedEvent> GetMostRecentContractFeedEvent()
-        {
-            if (Data.Count == 0) return Task.FromResult((ContractFeedEvent)null);
-
-            return Task.FromResult(Data.OrderByDescending(e => e.Updated).First());
-        }
-
-        public Task<int> GetMostRecentPageNumber()
+        public Task<int> GetLatestBookmark()
         {
             return Task.FromResult(LastFullPageRead);
         }
 
-        public Task SaveLastRun(EventRun lastRun)
+        public Task AddContractEventsForPage(int eventPageNumber, List<ContractFeedEvent> contractFeedEvents)
         {
-            LastFullPageRead = lastRun.NewLastReadPageNumber;
-            return Task.Delay(1);
+            // TODO: LWA - implement
+            throw new NotImplementedException();
+        }
+
+        Task<Guid?> IProviderAgreementStatusRepository.GetLatestBookmark()
+        {
+            throw new NotImplementedException();
         }
     }
 }
