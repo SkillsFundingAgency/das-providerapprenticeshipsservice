@@ -3,7 +3,7 @@
 @model CommitmentDetailsViewModel
 
 @{
-    ViewBag.Title = "Add an apprentice";
+    ViewBag.Title = "Review your cohort";
     ViewBag.PageId = "apprentice-details";
 }
 
@@ -147,7 +147,7 @@
                             </div>
                             <i class="overlap-arrow"></i>
                         }
-                        else if (group.ShowFundingLimitWarning)
+                        else if (group.ShowFundingLimitWarning && !Model.HasOverlappingErrors)
                         {
                             <div class="funding-cap-notification" id="max-funding-group-@group.GroupId">
                                 <p class="heading-medium">
@@ -215,7 +215,7 @@
                                                 <span class="missing">&ndash;</span>
                                             </td>
                                         }
-                                        @if (group.TrainingProgramme != null && apprenticeship.Cost.HasValue && apprenticeship.Cost > group.TrainingProgramme.MaxFunding && !apprenticeship.OverlappingApprenticeships.Any())
+                                        @if (group.TrainingProgramme != null && apprenticeship.Cost.HasValue && apprenticeship.Cost > group.TrainingProgramme.MaxFunding && !Model.HasOverlappingErrors)
                                         {
                                              <td class="funding-cap-alert">
                                                 <a href="#max-funding-group-@group.GroupId" aria-label="Cost is above the maximum funding band" aria-describedby="max-funding-group-@group.GroupId" title="Cost is above the maximum funding band">@FormatCost(apprenticeship.Cost)</a>

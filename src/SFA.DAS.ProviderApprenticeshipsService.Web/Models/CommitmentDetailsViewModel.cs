@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
@@ -19,5 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public string BackLinkUrl { get; set; }
         public bool RelationshipVerified { get; set; }
+
+        public bool HasOverlappingErrors { get; set; }
     }
 }
