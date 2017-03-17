@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses
         private readonly ILog _logger;
 
         public readonly List<ContractFeedEvent> Data;
-        public int LastFullPageRead;
+        public Guid? LastBookmarkRead;
 
         public InMemoryProviderAgreementStatusRepository(ILog logger)
         {
@@ -21,34 +22,27 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses
             Data = new List<ContractFeedEvent>();
         }
 
-        public Task AddContractEvent(ContractFeedEvent contractFeedEvent)
-        {
-            _logger.Info($"Storing event: {contractFeedEvent.Id}");
-            Data.Add(contractFeedEvent);
-            return Task.FromResult(0);
-        }
-
         public Task<IEnumerable<ContractFeedEvent>> GetContractEvents(long providerId)
         {
             return Task.FromResult(Data.Where(e => e.ProviderId == providerId));
         }
 
-        public Task<ContractFeedEvent> GetMostRecentContractFeedEvent()
+        public Task<Guid?> GetLatestBookmark()
         {
-            if (Data.Count == 0) return Task.FromResult((ContractFeedEvent)null);
-
-            return Task.FromResult(Data.OrderByDescending(e => e.Updated).First());
+            return Task.FromResult(LastBookmarkRead);
         }
 
-        public Task<int> GetMostRecentPageNumber()
+        public Task<int> GetCountOfContracts()
         {
-            return Task.FromResult(LastFullPageRead);
+            return Task.FromResult(Data.Count);
         }
 
-        public Task SaveLastRun(EventRun lastRun)
+        public Task AddContractEventsForPage(IList<ContractFeedEvent> contractFeedEvents, Guid newBookmark)
         {
-            LastFullPageRead = lastRun.NewLastReadPageNumber;
-            return Task.Delay(1);
+            Data.AddRange(contractFeedEvents);
+            LastBookmarkRead = newBookmark;
+
+            return Task.FromResult(new object());
         }
     }
 }

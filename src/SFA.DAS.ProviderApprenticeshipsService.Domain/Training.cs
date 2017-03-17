@@ -39,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain
                             int.Parse(parts[2]));
                     }
                 }
-                catch (FormatException ex)
+                catch (FormatException)
                 {
                     //Let it fall through to the IOE below.
                 }
