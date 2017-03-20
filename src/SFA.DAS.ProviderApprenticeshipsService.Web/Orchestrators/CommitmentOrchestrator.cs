@@ -394,6 +394,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 });
             }
 
+            var warnings = new Dictionary<string, string>();
+            apprenticeshipGroups
+                .Where(m => m.ShowFundingLimitWarning)
+                .ForEach(group => warnings.Add(group.GroupId, $"Cost for {group.TrainingProgramme.Title}"));
+
             return new CommitmentDetailsViewModel
             {
                 ProviderId = providerId,
@@ -408,7 +413,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed,
                 ApprenticeshipGroups = apprenticeshipGroups,
                 RelationshipVerified = relationshipRequest.Relationship.Verified.HasValue,
-                HasOverlappingErrors = apprenticeshipGroups.Any(m => m.OverlapErrorCount > 0)
+                HasOverlappingErrors = apprenticeshipGroups.Any(m => m.OverlapErrorCount > 0),
+                FundingCapWarnings = warnings
             };
         }
 
