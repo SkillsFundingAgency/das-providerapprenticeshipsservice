@@ -1,6 +1,5 @@
-﻿
+﻿// custom to overwrite the GDS defaults
 
-// custom to overwrite the GDS defaults
 .hr-double {
     border-bottom: 4px solid $grey-2;
     margin-bottom: 20px;
@@ -400,18 +399,32 @@ only screen and (max-device-width: 667px),
 only screen and (max-width: 480px) { 
 
 #apprentice-details {
-    .tableResponsive{
+    .tableResponsive
+    {
         margin-top:30px;
-        .funding-cap-alert{
+        .funding-cap-alert
+        {
             border-bottom:5px solid $secondary-text-colour;
             background:$panel-colour;
               a{
                 text-decoration:none;
                 color:$text-colour;
+                cursor:pointer;
+                }          
+         }
+         .overlap-alert
+         {
+            border-left:10px solid $error-colour;
+            background:#fff;
+              a{
+                text-decoration:none;
+                color:$text-colour;
+                cursor:pointer;
             }          
-        }
-    }
-}  
+          }
+    }  
+}
+
 
 .bubble-arrow, .overlap-arrow {display:none;}    
     

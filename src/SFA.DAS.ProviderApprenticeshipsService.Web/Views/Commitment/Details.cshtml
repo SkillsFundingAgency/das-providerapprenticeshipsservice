@@ -189,7 +189,18 @@
                                         }
                                     </td>
 
-                                        @if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
+
+                                    <!--DELETE THIS BLOCK static content for test -->
+                                    <td class="overlap-alert">
+                                        <a href="#error-message-@group.GroupId"
+                                           aria-label="The unique learner number already exists for these training dates"
+                                           aria-describedby="max-funding-group-@group.GroupId"
+                                           title="The unique learner number already exists for these training dates">
+                                            @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay() &nbsp;
+                                        </a>
+                                    </td>
+                                    <!--END static content for test -->
+                                        @*@if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
                                         {
                                             if (apprenticeship.OverlappingApprenticeships.Any())
                                             {
@@ -214,7 +225,7 @@
                                             <td>
                                                 <span class="missing">&ndash;</span>
                                             </td>
-                                        }
+                                        }*@
                                         @if (group.TrainingProgramme != null && apprenticeship.Cost.HasValue && apprenticeship.Cost > group.TrainingProgramme.MaxFunding && !Model.HasOverlappingErrors)
                                         {
                                              <td class="funding-cap-alert">
