@@ -2776,6 +2776,7 @@ span.helpText {
 .funding-cap-notification {
   background: #dee0e2;
   padding: 20px 20px 10px;
+  border-left: 10px solid #005ea5;
 }
 
 .grey-background .heading-medium,
@@ -2803,7 +2804,7 @@ span.helpText {
 }
 
 .funding-cap-alert {
-  border-bottom: 5px solid #6f777b;
+  border-bottom: 5px solid #005ea5;
 }
 
 .funding-cap-alert a {
@@ -2858,7 +2859,7 @@ body input::-webkit-contacts-auto-fill-button {
     margin-top: 30px;
   }
   #apprentice-details .tableResponsive .funding-cap-alert {
-    border-left: 10px solid #6f777b;
+    border-left: 10px solid #005ea5;
     background: #fff;
   }
   #apprentice-details .tableResponsive .funding-cap-alert a {
