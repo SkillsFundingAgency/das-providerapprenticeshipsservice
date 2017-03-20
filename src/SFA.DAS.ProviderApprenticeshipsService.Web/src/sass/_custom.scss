@@ -38,6 +38,12 @@
     .heading-xlarge{
          margin-top: 0.625em;
     }
+    .alert-default{
+        border-color:$purple;
+        .heading-medium{
+            font-size:24px;
+        }
+    }
 
 }
 

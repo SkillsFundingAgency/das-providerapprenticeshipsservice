@@ -2561,6 +2561,14 @@ span.helpText {
   margin-top: 0.625em;
 }
 
+#finish-editing .alert-default {
+  border-color: #2e358b;
+}
+
+#finish-editing .alert-default .heading-medium {
+  font-size: 24px;
+}
+
 #apprentice-details .alert-default, #approve-cohorts .alert-default {
   margin-top: 25px;
 }
