@@ -89,13 +89,33 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 return new BulkUploadResultViewModel { HasRowLevelErrors = true, RowLevelErrors = rowErrors };
             }
 
-            await _mediator.SendAsync(new BulkUploadApprenticeshipsCommand
+            try
             {
-                UserId = userId,
-                ProviderId = providerId,
-                CommitmentId = commitmentId,
-                Apprenticeships = await _mapper.MapFrom(commitmentId, rowValidationResult.Data)
-            });
+
+                await _mediator.SendAsync(new BulkUploadApprenticeshipsCommand
+                {
+                    UserId = userId,
+                    ProviderId = providerId,
+                    CommitmentId = commitmentId,
+                    Apprenticeships = await _mapper.MapFrom(commitmentId, rowValidationResult.Data)
+                });
+            }
+            catch (Exception)
+            {
+                var overlaps = (await GetOverlapErrors(fileValidationResult.Data.ToList())).ToList();
+                if (overlaps.Any())
+                {
+                    return new BulkUploadResultViewModel
+                    {
+                        HasRowLevelErrors = true,
+                        RowLevelErrors = overlaps
+                    };
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return new BulkUploadResultViewModel();
         }
