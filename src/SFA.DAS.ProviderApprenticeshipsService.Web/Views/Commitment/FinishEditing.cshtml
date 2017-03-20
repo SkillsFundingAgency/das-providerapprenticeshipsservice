@@ -10,32 +10,29 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-       
-      
-        @if (!Model.ReadyForApproval)
-        {
-            <p>
-                @Html.Raw(GetInvalidStateForApprovalMessage(Model.HasApprenticeships, Model.InvalidApprenticeshipCount))
-            </p>
-        }
 
-        @if (!Model.HasSignedTheAgreement)
+        @if (!Model.ReadyForApproval || !Model.HasSignedTheAgreement || Model.HasOverlappingErrors)
         {
             <div class="panel panel-border-wide alert-default">
-                <p>
-                    Your organisation must have a signed
-                    <a href="@Model.SignAgreementUrl" target="_blank">Skills Funding Agency apprenticeship agreement</a> before you can approve cohorts.
-                </p>
-            </div>
-        }
-
-        @if (Model.HasOverlappingErrors)
-        {
-            <div class="panel panel-border-wide alert-default">
-                <p>
-                    @* ToDo: Need to test styling of messages together  *@
-                    There are overlapping training dates for your apprenticeships.
-                </p>
+                <h2>You can't approve this cohort until: </h2>
+                <ul>
+                    <li>
+                        There's a signed apprenticeship agreement with the Skills Funding Agency
+                        <a href="@Model.SignAgreementUrl" target="_blank">Link to relevant page</a>
+                    </li>
+                    <li>
+                        All apprentice recordes are complete
+                        <a href="@Url.Action("Details", new { Model.ProviderId, Model.HashedCommitmentId })" target="_blank">
+                            Link to relevant page
+                        </a>
+                    </li>
+                    <li>
+                        There are no overlapping training dates for your apprenticeships
+                        <a href="@Url.Action("Details", new { Model.ProviderId, Model.HashedCommitmentId })" target="_blank">
+                            Link to relevant page
+                        </a>
+                    </li>
+                </ul>
             </div>
         }
 
@@ -50,7 +47,7 @@
                 <div>
                     @Html.ValidationMessageFor(m => m.SaveStatus, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SaveStatus) })
                 </div>
-                @if (Model.ReadyForApproval && Model.HasSignedTheAgreement && !Model.HasOverlappingErrors) 
+                @if (Model.ReadyForApproval && Model.HasSignedTheAgreement && !Model.HasOverlappingErrors)
                 {
                     if (Model.IsApproveAndSend)
                     {
@@ -80,7 +77,7 @@
             </div>
 
             <div>
-                <input type="submit" class="button" id="paymentPlan" value="Continue" />
+                <input type="submit" class="button" id="paymentPlan" value="Continue"/>
             </div>
             @Html.HiddenFor(m => m.ProviderId)
             @Html.HiddenFor(m => m.HashedCommitmentId)

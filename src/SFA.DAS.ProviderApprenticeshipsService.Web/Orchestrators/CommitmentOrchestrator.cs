@@ -627,10 +627,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             AssertCommitmentStatus(data.Commitment, EditStatus.ProviderOnly);
             AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
-            var overlaps = await _mediator.SendAsync(new GetOverlappingApprenticeshipsQueryRequest
-                                                         {
-                                                             Apprenticeship = data.Commitment.Apprenticeships
-                                                         });
+            var overlaps = await _mediator.SendAsync(
+                new GetOverlappingApprenticeshipsQueryRequest
+                {
+                    Apprenticeship = data.Commitment.Apprenticeships
+                });
 
             return new FinishEditingViewModel
             {
