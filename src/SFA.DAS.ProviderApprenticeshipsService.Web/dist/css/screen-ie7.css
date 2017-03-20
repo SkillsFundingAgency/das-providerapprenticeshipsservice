@@ -2858,8 +2858,8 @@ body input::-webkit-contacts-auto-fill-button {
     margin-top: 30px;
   }
   #apprentice-details .tableResponsive .funding-cap-alert {
-    border-bottom: 5px solid #6f777b;
-    background: #dee0e2;
+    border-left: 10px solid #6f777b;
+    background: #fff;
   }
   #apprentice-details .tableResponsive .funding-cap-alert a {
     text-decoration: none;

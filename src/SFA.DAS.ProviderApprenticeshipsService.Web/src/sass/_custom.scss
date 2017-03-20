@@ -404,8 +404,8 @@ only screen and (max-width: 480px) {
         margin-top:30px;
         .funding-cap-alert
         {
-            border-bottom:5px solid $secondary-text-colour;
-            background:$panel-colour;
+            border-left:10px solid $secondary-text-colour;
+            background:#fff;
               a{
                 text-decoration:none;
                 color:$text-colour;
