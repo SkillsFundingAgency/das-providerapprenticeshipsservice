@@ -17,20 +17,13 @@
                 <h2>You can't approve this cohort until: </h2>
                 <ul>
                     <li>
-                        There's a signed apprenticeship agreement with the Skills Funding Agency
-                        <a href="@Model.SignAgreementUrl" target="_blank">Link to relevant page</a>
+                        You've signed an <a href="@Model.SignAgreementUrl" target="_blank" >apprenticeship agreement</a> with the Skills Funding Agency
                     </li>
                     <li>
-                        All apprentice recordes are complete
-                        <a href="@Url.Action("Details", new { Model.ProviderId, Model.HashedCommitmentId })" target="_blank">
-                            Link to relevant page
-                        </a>
+                        All <a href="@Url.Action("Details", new { Model.ProviderId, Model.HashedCommitmentId })">apprentice records</a> are complete
                     </li>
                     <li>
-                        There are no overlapping training dates for your apprenticeships
-                        <a href="@Url.Action("Details", new { Model.ProviderId, Model.HashedCommitmentId })" target="_blank">
-                            Link to relevant page
-                        </a>
+                        There are no <a href="@Url.Action("Details", new { Model.ProviderId, Model.HashedCommitmentId })">overlapping training dates</a> for your apprentices
                     </li>
                 </ul>
             </div>
