@@ -34,12 +34,12 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             string startPageUrl = null;
 
             // Load page and check if contains bookmark
-            _reader.Read(currentPageUrl, ReadDirection.Backward, (pageUri, pageContent, pageNavigation) =>
+            _reader.Read(currentPageUrl, ReadDirection.Backward, (pageUrl, pageContent, pageNavigation) =>
             {
                 // Is this the first page?
                 if (pageNavigation.IsStartPage)
                 {
-                    startPageUrl = pageUri;
+                    startPageUrl = pageUrl;
                     _logger.Info($"Start page found at: {startPageUrl}");
 
                     return false;
@@ -50,11 +50,13 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 
                 if (PageContainsBookmark(latestBookmark, doc))
                 {
-                    startPageUrl = pageUri;
+                    startPageUrl = pageUrl;
                     _logger.Info($"Bookmark {latestBookmark.ToString()} found on page: {startPageUrl}");
 
                     return false;
                 }
+
+                _logger.Info($"Bookmark not found on {pageUrl}");
 
                 return true;
             });
@@ -64,8 +66,6 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 
         public int ReadEvents(string pageToReadUri, Guid? latestBookmark, Action<IList<ContractFeedEvent>, Guid?> saveRecordsAction)
         {
-            _logger.Info($"Reading Events");
-
             var contractCount = 0;
 
             _reader.Read(pageToReadUri, ReadDirection.Forward, (pageUri, pageContent, pageNaviation) =>

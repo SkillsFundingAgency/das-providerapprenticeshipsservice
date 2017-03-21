@@ -7,6 +7,7 @@ using System.ServiceModel.Syndication;
 using System.Xml;
 
 using SFA.DAS.NLog.Logger;
+using System.Diagnostics;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
@@ -55,6 +56,16 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             return new Navigation(previousLink, nextLink);
         }
 
+        private T LogTiming<T>(string actionDescription, Func<T> func)
+        {
+            var stopwatch = Stopwatch.StartNew();
+            var result = func();
+            stopwatch.Stop();
+            _logger.Trace($"It took {stopwatch.ElapsedMilliseconds} milliseconds to {actionDescription}");
+
+            return result;
+        }
+
         private HttpResult CallEndpointAndReturnResultForFullUrl(string mediaType, string url)
         {
             using (var client = _httpClient.GetAuthorizedHttpClient())
@@ -63,7 +74,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 
                 try
                 {
-                    var content = client.GetAsync(url).Result;
+                    var content = LogTiming($"download feed page {url}", () => client.GetAsync(url).Result);
                     if (content.StatusCode == HttpStatusCode.NotFound) return new HttpResult(HttpStatusCode.NotFound, string.Empty);
                     content.EnsureSuccessStatusCode();
 

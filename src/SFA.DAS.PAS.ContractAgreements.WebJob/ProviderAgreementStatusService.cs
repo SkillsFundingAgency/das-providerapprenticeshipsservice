@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 using SFA.DAS.NLog.Logger;
@@ -33,11 +32,11 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
             var latestBookmark = await _repository.GetLatestBookmark();
             var pageToReadUrl = _dataProvider.FindPageWithBookmark(latestBookmark);
             
-            _logger.Info($"Bookmark: {latestBookmark?.ToString() ?? "[Empty]"}, Next page to read url: {pageToReadUrl}");
+            _logger.Info($"Last bookmark: {latestBookmark?.ToString() ?? "[not set]"}, Next page to read url: {pageToReadUrl}");
 
             var insertedEvents = _dataProvider.ReadEvents(pageToReadUrl, latestBookmark, (events, newBookmark) =>
                 {
-                        _repository.AddContractEventsForPage(events, newBookmark.Value).Wait();
+                    _repository.AddContractEventsForPage(events, newBookmark.Value).Wait();
                 });
 
             if (insertedEvents > 0)
