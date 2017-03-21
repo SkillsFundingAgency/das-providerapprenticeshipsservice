@@ -14,7 +14,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses
         private readonly ILog _logger;
 
         public readonly List<ContractFeedEvent> Data;
-        public int LastFullPageRead;
+        public Guid? LastBookmarkRead;
 
         public InMemoryProviderAgreementStatusRepository(ILog logger)
         {
@@ -27,24 +27,22 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses
             return Task.FromResult(Data.Where(e => e.ProviderId == providerId));
         }
 
-        public Task<int> GetLatestBookmark()
+        public Task<Guid?> GetLatestBookmark()
         {
-            return Task.FromResult(LastFullPageRead);
-        }
-
-        Task<Guid?> IProviderAgreementStatusRepository.GetLatestBookmark()
-        {
-            throw new NotImplementedException();
+            return Task.FromResult(LastBookmarkRead);
         }
 
         public Task<int> GetCountOfContracts()
         {
-            throw new NotImplementedException();
+            return Task.FromResult(Data.Count);
         }
 
         public Task AddContractEventsForPage(IList<ContractFeedEvent> contractFeedEvents, Guid newBookmark)
         {
-            throw new NotImplementedException();
+            Data.AddRange(contractFeedEvents);
+            LastBookmarkRead = newBookmark;
+
+            return Task.FromResult(new object());
         }
     }
 }
