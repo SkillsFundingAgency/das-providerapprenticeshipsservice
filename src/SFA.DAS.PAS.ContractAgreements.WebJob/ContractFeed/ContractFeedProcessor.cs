@@ -4,7 +4,6 @@ using System.Linq;
 using System.Xml.Linq;
 
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
@@ -15,18 +14,15 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
         private readonly XNamespace _nsUrn = "urn:sfa:schemas:contract";
         private readonly ContractFeedReader _reader;
         private readonly IContractFeedEventValidator _validator;
-        private readonly ContractFeedConfiguration _configuration;
         private readonly ILog _logger;
 
         public ContractFeedProcessor(
             ContractFeedReader reader, 
             IContractFeedEventValidator validator,
-            ContractFeedConfiguration configuration,
             ILog logger)
         {
             _reader = reader;
             _validator = validator;
-            _configuration = configuration;
             _logger = logger;
         }
 
