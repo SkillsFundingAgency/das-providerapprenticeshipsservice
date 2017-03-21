@@ -42,7 +42,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses
             throw new NotImplementedException();
         }
 
-        public Task AddContractEventsForPage(List<ContractFeedEvent> contractFeedEvents, Guid newBookmark)
+        public Task AddContractEventsForPage(IList<ContractFeedEvent> contractFeedEvents, Guid newBookmark)
         {
             throw new NotImplementedException();
         }

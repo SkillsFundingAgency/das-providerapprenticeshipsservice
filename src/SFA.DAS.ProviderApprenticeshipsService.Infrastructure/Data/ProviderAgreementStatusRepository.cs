@@ -16,12 +16,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
     public class ProviderAgreementStatusRepository : DbBaseRepository, IProviderAgreementStatusRepository, IAgreementStatusQueryRepository
     {
         private readonly ILog _logger;
-        private readonly ICurrentDateTime _currentDateTime;
 
-        public ProviderAgreementStatusRepository(IConfiguration config, ILog logger, ICurrentDateTime currentDateTime) : base(config.DatabaseConnectionString)
+        public ProviderAgreementStatusRepository(IConfiguration config, ILog logger) : base(config.DatabaseConnectionString)
         {
             _logger = logger;
-            _currentDateTime = currentDateTime;
         }
 
         public async Task<IEnumerable<ContractFeedEvent>> GetContractEvents(long providerId)
@@ -48,29 +46,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             return contractFeedEvents;
         }
 
-        //public async Task<ContractFeedEvent> GetMostRecentContractFeedEvent()
-        //{
-        //    var contact = await WithConnection(async connection =>
-        //    {
-        //        using (var trans = connection.BeginTransaction())
-        //        {
-        //            var r = (await connection.QueryAsync<ContractFeedEvent>(
-        //                sql:
-        //                    "SELECT TOP 1 [Id], [PageNumber] "
-        //                  + "FROM [dbo].[ContractFeedEvent] "
-        //                  + "ORDER BY [Updated] desc",
-        //                commandType: CommandType.Text,
-        //                transaction: trans)).SingleOrDefault();
-        //            trans.Commit();
-        //            return r;
-        //        }
-        //    });
-
-        //    if (contact == null)
-        //        _logger.Info("No provider agreements found.");
-        //    return contact;
-        //}
-
         public async Task<Guid?> GetLatestBookmark()
         {
             var latestBookmark = await WithConnection(async connection =>
@@ -95,39 +70,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                                     commandType: CommandType.Text, transaction: tran)).SingleOrDefault();
         }
 
-        //public async Task AddContractEvent(ContractFeedEvent contractFeedEvent)
-        //{
-        //    await WithConnection(async connection =>
-        //    {
-        //        var parameters = new DynamicParameters();
-        //        parameters.Add("@id", contractFeedEvent.Id, DbType.Guid);
-        //        parameters.Add("@providerId", contractFeedEvent.ProviderId, DbType.Int64);
-        //        parameters.Add("@hierarchyType", contractFeedEvent.HierarchyType, DbType.String);
-        //        parameters.Add("@fundingTypeCode", contractFeedEvent.FundingTypeCode, DbType.String);
-        //        parameters.Add("@status", contractFeedEvent.Status, DbType.String);
-        //        parameters.Add("@parentStatus", contractFeedEvent.ParentStatus, DbType.String);
-        //        parameters.Add("@updatedInFeed", contractFeedEvent.Updated, DbType.DateTime);
-        //        parameters.Add("@pageNumber", contractFeedEvent.PageNumber, DbType.Int32);
-        //        parameters.Add("@createdDate", DateTime.UtcNow, DbType.DateTime);
-
-        //        using (var trans = connection.BeginTransaction())
-        //        {
-        //            await connection.ExecuteAsync(
-        //                sql:
-        //                    "INSERT INTO [dbo].[ContractFeedEvent]" +
-        //                    "(Id, ProviderId, HierarchyType, FundingTypeCode, Status, ParentStatus, UpdatedInFeed, PageNumber, CreatedDate)" +
-        //                    "VALUES(@id, @providerId, @hierarchyType, @fundingTypeCode, @status, @parentStatus, @updatedInFeed, @pageNumber, @createdDate); ",
-        //                param: parameters,
-        //                commandType: CommandType.Text,
-        //                transaction: trans);
-        //            trans.Commit();
-        //        }
-        //        return 1L;
-        //    }
-        //    );
-        //}
-
-        public async Task AddContractEventsForPage(List<ContractFeedEvent> contractFeedEvents, Guid newBookmark)
+        public async Task AddContractEventsForPage(IList<ContractFeedEvent> contractFeedEvents, Guid newBookmark)
         {
             await WithTransaction(async (conn, tran) =>
             {
@@ -200,32 +143,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 return conn.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM [dbo].[ContractFeedEvent];", commandType: CommandType.Text);
             });
         }
-
-        //public async Task SaveLastRun(EventRun lastRun)
-        //{
-        //    await WithConnection(async connection =>
-        //    {
-        //        var parameters = new DynamicParameters();
-        //        parameters.Add("@entriesSaved", lastRun.ContractCount, DbType.Int32);
-        //        parameters.Add("@executionTimeMs", lastRun.ExecutionTimeMs, DbType.Int64);
-        //        parameters.Add("@pageNumber", lastRun.NewLastReadPageNumber, DbType.Int32);
-        //        parameters.Add("@pagesRead", lastRun.PagesRead, DbType.Int32);
-        //        parameters.Add("@updated", DateTime.Now, DbType.DateTime);
-
-        //        using (var trans = connection.BeginTransaction())
-        //        {
-        //            await connection.ExecuteAsync(
-        //                sql:
-        //                    "INSERT INTO [dbo].[ContractFeedEventRun]" +
-        //                    "(EntriesSaved, ExecutionTimeMs, PageNumber, PagesRead, Updated)" +
-        //                    "VALUES(@entriesSaved, @executionTimeMs, @pageNumber, @pagesRead, @updated); ",
-        //                param: parameters,
-        //                commandType: CommandType.Text,
-        //                transaction: trans);
-        //            trans.Commit();
-        //        }
-        //        return 1L;
-        //    });
-        //}
     }
 }

@@ -44,7 +44,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 
         private static Navigation GetPageNavigation(SyndicationFeed feed)
         {
-            if (feed == null || feed.Links == null || feed.Links.Count == 0)
+            if (feed?.Links == null || feed.Links.Count == 0)
                 return new Navigation(null, null);
 
             const string NextRelationshipType = "next-archive";

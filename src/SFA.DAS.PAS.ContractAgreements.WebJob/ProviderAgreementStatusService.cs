@@ -37,10 +37,9 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
 
             var insertedEvents = _dataProvider.ReadEvents(pageToReadUrl, latestBookmark, (events, newBookmark) =>
                 {
-                    var contractFeedEvents = events.ToList();
-                    if (events.Count() > 0)
+                    if (events.Any())
                     {
-                        _repository.AddContractEventsForPage(contractFeedEvents, newBookmark.Value).Wait();
+                        _repository.AddContractEventsForPage(events, newBookmark.Value).Wait();
                     }
                 });
 
