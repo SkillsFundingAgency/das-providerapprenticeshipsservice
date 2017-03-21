@@ -1,19 +1,21 @@
 ﻿using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
-using SFA.DAS.Commitments.Api.Client;
+
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateRelationship
 {
     public class UpdateRelationshipCommandHandler : AsyncRequestHandler<UpdateRelationshipCommand>
     {
-        private readonly ICommitmentsApi _commitmentsApi;
+        private readonly IRelationshipApi _relationshipApi;
+
         private readonly AbstractValidator<UpdateRelationshipCommand> _validator;
 
-        public UpdateRelationshipCommandHandler(ICommitmentsApi commitmentsApi, AbstractValidator<UpdateRelationshipCommand> validator)
+        public UpdateRelationshipCommandHandler(IRelationshipApi relationship, AbstractValidator<UpdateRelationshipCommand> validator)
         {
-            _commitmentsApi = commitmentsApi;
+            _relationshipApi = relationship;
             _validator = validator;
         }
 
@@ -30,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateRela
                 Relationship = message.Relationship
             };
 
-            await _commitmentsApi.PatchRelationship(message.ProviderId, message.Relationship.EmployerAccountId,
+            await _relationshipApi.PatchRelationship(message.ProviderId, message.Relationship.EmployerAccountId,
                 message.Relationship.LegalEntityId, request);
         }
     }

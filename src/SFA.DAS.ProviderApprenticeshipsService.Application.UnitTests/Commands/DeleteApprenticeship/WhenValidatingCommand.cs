@@ -4,7 +4,8 @@ using FluentAssertions;
 using FluentValidation;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Client;
+
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.DeleteApprenticeship
@@ -24,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 ApprenticeshipId = 123L
             };
 
-            _handler = new DeleteApprenticeshipCommandHandler(new DeleteApprenticeshipCommandValidator(), Mock.Of<ICommitmentsApi>());
+            _handler = new DeleteApprenticeshipCommandHandler(new DeleteApprenticeshipCommandValidator(), Mock.Of<IProviderCommitmentsApi>());
         }
 
         [Test]

@@ -1,5 +1,6 @@
 ﻿using FluentValidation.Attributes;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 

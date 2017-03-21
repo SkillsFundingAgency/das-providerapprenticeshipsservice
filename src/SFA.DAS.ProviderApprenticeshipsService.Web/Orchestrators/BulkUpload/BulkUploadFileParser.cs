@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using CsvHelper;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;

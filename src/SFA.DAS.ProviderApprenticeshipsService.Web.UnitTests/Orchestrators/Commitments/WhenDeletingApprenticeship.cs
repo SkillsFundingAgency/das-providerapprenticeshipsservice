@@ -4,7 +4,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 
-using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;

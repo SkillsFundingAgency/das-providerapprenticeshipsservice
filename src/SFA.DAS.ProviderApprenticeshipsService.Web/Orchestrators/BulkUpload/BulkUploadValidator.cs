@@ -71,6 +71,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             return errors;
         }
 
+        public IEnumerable<UploadError> ValidateUlnUniqueness(IEnumerable<ApprenticeshipUploadModel> records)
+        {
+            var apprenticeshipUploadModels = records as ApprenticeshipUploadModel[] ?? records.ToArray();
+
+            var result = new List<UploadError>();
+
+            var distinctUlns = apprenticeshipUploadModels.Select(x => x.ApprenticeshipViewModel.ULN).Distinct().Count();
+
+            if (apprenticeshipUploadModels.Count() != distinctUlns)
+            {
+                result.Add(new UploadError(_validationText.Uln04.Text.RemoveHtmlTags(), _validationText.Uln04.ErrorCode));
+            }
+
+            return result;
+        }
+
         public IEnumerable<UploadError> ValidateRecords(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes)
         {
             var errors = new ConcurrentBag<UploadError>();

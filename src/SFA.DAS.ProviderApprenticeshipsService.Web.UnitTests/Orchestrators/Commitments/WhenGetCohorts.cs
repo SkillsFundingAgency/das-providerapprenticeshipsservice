@@ -10,6 +10,8 @@ using Moq;
 using NUnit.Framework;
 
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;

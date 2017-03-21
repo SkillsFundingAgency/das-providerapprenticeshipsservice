@@ -2903,6 +2903,14 @@ span.helpText {
   margin-top: 0.625em;
 }
 
+#finish-editing .alert-default {
+  border-color: #2e358b;
+}
+
+#finish-editing .alert-default .heading-medium {
+  font-size: 24px;
+}
+
 #apprentice-details .alert-default, #approve-cohorts .alert-default {
   margin-top: 25px;
 }
@@ -3169,6 +3177,7 @@ span.helpText {
 .funding-cap-notification {
   background: #dee0e2;
   padding: 20px 20px 10px;
+  border-left: 10px solid #005ea5;
 }
 
 .grey-background .heading-medium,
@@ -3185,8 +3194,23 @@ span.helpText {
   margin-right: 75px;
 }
 
+.overlap-arrow {
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-top: 25px solid #dee0e2;
+  content: "";
+  float: right;
+  margin-right: 150px;
+}
+
+@media (min-width: 641px) {
+  .overlap-arrow {
+    margin-right: 290px;
+  }
+}
+
 .funding-cap-alert {
-  border-bottom: 5px solid #6f777b;
+  border-bottom: 5px solid #005ea5;
 }
 
 .funding-cap-alert a {
@@ -3223,19 +3247,50 @@ body input::-webkit-contacts-auto-fill-button {
   right: 0;
 }
 
+#apprentice-details .overlap-notification {
+  border-left: 10px solid #b10e1e;
+}
+
+.overlap-alert {
+  border-bottom: 5px solid #b10e1e;
+}
+
+.overlap-alert a {
+  text-decoration: none;
+  color: #0b0c0c;
+}
+
+.validation-summary-max-funding {
+  border-color: #2e358b;
+}
+
+.validation-summary-max-funding #warning-summary {
+  margin-top: 0;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
   }
   #apprentice-details .tableResponsive .funding-cap-alert {
-    border-bottom: 5px solid #6f777b;
-    background: #dee0e2;
+    border-left: 10px solid #005ea5;
+    background: #fff;
   }
   #apprentice-details .tableResponsive .funding-cap-alert a {
     text-decoration: none;
     color: #0b0c0c;
+    cursor: pointer;
   }
-  .bubble-arrow {
+  #apprentice-details .tableResponsive .overlap-alert {
+    border-left: 10px solid #b10e1e;
+    background: #fff;
+  }
+  #apprentice-details .tableResponsive .overlap-alert a {
+    text-decoration: none;
+    color: #0b0c0c;
+    cursor: pointer;
+  }
+  .bubble-arrow, .overlap-arrow {
     display: none;
   }
   .employerListing td:nth-of-type(1):before {

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
-using SFA.DAS.Commitments.Api.Types;
+
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment
 {

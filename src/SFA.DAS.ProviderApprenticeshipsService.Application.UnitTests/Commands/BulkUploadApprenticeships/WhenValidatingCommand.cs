@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.BulkUploadApprenticeships

@@ -2,15 +2,17 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Commitments.Api.Client;
+
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments
 {
     public class GetCommitmentsQueryHandler : IAsyncRequestHandler<GetCommitmentsQueryRequest, GetCommitmentsQueryResponse>
     {
-        private readonly ICommitmentsApi _commitmentsApi;
+        private readonly IProviderCommitmentsApi _commitmentsApi;
 
-        public GetCommitmentsQueryHandler(ICommitmentsApi commitmentsApi)
+        public GetCommitmentsQueryHandler(IProviderCommitmentsApi commitmentsApi)
         {
             if (commitmentsApi == null)
                 throw new ArgumentNullException(nameof(commitmentsApi));
@@ -24,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitme
             return new GetCommitmentsQueryResponse
             {
                 Commitments = response
-                    .Where(x => x.CommitmentStatus == Commitments.Api.Types.CommitmentStatus.Active)
+                    .Where(x => x.CommitmentStatus == CommitmentStatus.Active)
                     .ToList()
             };
         }

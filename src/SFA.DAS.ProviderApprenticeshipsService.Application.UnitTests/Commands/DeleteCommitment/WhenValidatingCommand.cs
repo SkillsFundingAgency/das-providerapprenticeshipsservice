@@ -10,6 +10,7 @@ using Moq;
 using NUnit.Framework;
 
 using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteCommitment;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.DeleteCommitment
@@ -19,7 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     {
         private DeleteCommitmentCommand _validCommand;
 
-        private Mock<ICommitmentsApi> _mockCommitmentsApi;
+        private Mock<IProviderCommitmentsApi> _mockCommitmentsApi;
 
         private DeleteCommitmentCommandHandler _handler;
 
@@ -33,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 CommitmentId = 123L
             };
 
-            _mockCommitmentsApi = new Mock<ICommitmentsApi>();
+            _mockCommitmentsApi = new Mock<IProviderCommitmentsApi>();
             _handler = new DeleteCommitmentCommandHandler(new DeleteCommitmentCommandValidator(), _mockCommitmentsApi.Object);
         }
 

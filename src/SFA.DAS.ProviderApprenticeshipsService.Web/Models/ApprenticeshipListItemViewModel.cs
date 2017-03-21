@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+
+using SFA.DAS.Commitments.Api.Types.Validation;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
@@ -16,5 +19,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string ULN { get; internal set; }
         public bool CanBeApprove { get; internal set; }
 
+        public IEnumerable<OverlappingApprenticeship> OverlappingApprenticeships { get; set; }
     }
 }

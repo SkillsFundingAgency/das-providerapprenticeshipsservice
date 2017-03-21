@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Client;
+
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.BulkUploadApprenticeships
@@ -13,14 +15,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     [TestFixture]
     public sealed class WhenBulkUploading
     {
-        private Mock<ICommitmentsApi> _mockCommitmentsApi;
+        private Mock<IProviderCommitmentsApi> _mockCommitmentsApi;
         private BulkUploadApprenticeshipsCommand _exampleValidCommand;
         private BulkUploadApprenticeshipsCommandHandler _handler;
 
         [SetUp]
         public void Setup()
         {
-            _mockCommitmentsApi = new Mock<ICommitmentsApi>();
+            _mockCommitmentsApi = new Mock<IProviderCommitmentsApi>();
             _exampleValidCommand = new BulkUploadApprenticeshipsCommand
             {
                 UserId = "user123",
