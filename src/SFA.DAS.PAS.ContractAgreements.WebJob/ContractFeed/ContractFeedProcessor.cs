@@ -34,13 +34,57 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             _logger = logger;
         }
 
+        public string FindPageWithBookmark(Guid? latestBookmark)
+        {
+            _logger.Info($"Finding page for latest bookmark: {(latestBookmark.HasValue ? latestBookmark.ToString() : "[not set]")}");
+
+            bool continueToPrevious = true;
+            string currentPageUrl = _reader.LatestPageUrl; // TODO: LWA - Set lastest page.
+            string startPageUrl = null;
+
+            do
+            {
+                // Load page and check if contains bookmark
+                _reader.Read(currentPageUrl, (pageNumber, pageUri, pageContent, pageNavigation) =>
+                {
+                    // Is this the first page?
+                    if (pageNavigation.IsStartPage)
+                    {
+                        continueToPrevious = false;
+                        startPageUrl = pageUri;
+                    }
+
+                    // Look at items on the page for a match of book mark
+                    var doc = XDocument.Parse(pageContent);
+
+                    if (PageContainsBookmark(latestBookmark, doc))
+                    {
+                        continueToPrevious = false;
+                        startPageUrl = pageUri;
+                    }
+                });
+
+            } while (continueToPrevious);
+
+            return startPageUrl;
+        }
+
+        private bool PageContainsBookmark(Guid? latestBookmark, XDocument doc)
+        {
+            // process page in reverse order as items are provided in ascending datetime from fcs
+            return doc.Descendants(_nsAtom + "entry")
+                                    .Reverse()
+                                    .Select(ExtractContractFeedEvent)
+                                    .Any(x => x.Id == latestBookmark);
+        }
+
         public int ReadEvents(string pageToReadUri, Guid? latestBookmark, Action<int, IEnumerable<ContractFeedEvent>> saveRecordsAction)
         {
             _logger.Info($"Attempting to read up to {_configuration.ReadMaxPages} pages");
 
             var contractCount = 0;
 
-            _reader.Read(pageToReadUri, (pageNumber, pageUri, pageContent, isLastPage) =>
+            _reader.Read(pageToReadUri, (pageNumber, pageUri, pageContent, pageNaviation) =>
             {
                 var doc = XDocument.Parse(pageContent);
 

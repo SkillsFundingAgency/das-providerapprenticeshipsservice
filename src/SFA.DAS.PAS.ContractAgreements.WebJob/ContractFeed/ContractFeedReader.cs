@@ -10,11 +10,33 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
+    public enum PageLinks
+    {
+        None = 0,
+        Next = 1,
+        Previous = 2,
+        Both = Next & Previous
+    }
+
+    public sealed class Navigation
+    {
+        public Navigation(string previousPageUri, string nextPageUri)
+        {
+            PreviousPageUrl = previousPageUri;
+            NextPageUrl = nextPageUri;
+        }
+
+        public string PreviousPageUrl { get; }
+        public string NextPageUrl { get; }
+        public bool IsStartPage => !string.IsNullOrWhiteSpace(NextPageUrl) && string.IsNullOrWhiteSpace(PreviousPageUrl);
+    }
+
     public class ContractFeedReader
     {
         private readonly IContractFeedProcessorHttpClient _httpClient;
-
         private readonly ILog _logger;
+        private const string MostRecentPageUrl = "/api/contracts/notifications";
+        private const string VendorAtomMediaType = "application/vnd.sfa.contract.v1+atom+xml";
 
         public ContractFeedReader(IContractFeedProcessorHttpClient httpClient, ILog logger)
         {
@@ -22,22 +44,32 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             _logger = logger;
         }
 
-        private const string MostRecentPageUrl = "/api/contracts/notifications";
+        public string LatestPageUrl => $"{_httpClient.BaseAddress}{MostRecentPageUrl}";
 
-        private const string VendorAtomMediaType = "application/vnd.sfa.contract.v1+atom+xml";
-
-        public void Read(string pageUri, Action<int, string, string, bool> pageWriter)
+        private static Navigation GetPageNavigation(SyndicationFeed feed)
         {
-            //var url = $"{_httpClient.BaseAddress}{MostRecentPageUrl}/{pageNumber}";
+            if (feed == null || feed.Links == null || feed.Links.Count == 0)
+                return new Navigation(null, null);
+
+            const string NextRelationshipType = "next-archive";
+            const string PreviousRelationshipType = "prev-archive";
+            string previousLink = feed.Links.SingleOrDefault(li => li.RelationshipType == PreviousRelationshipType)?.Uri.ToString();
+            string nextLink = feed.Links.SingleOrDefault(li => li.RelationshipType == NextRelationshipType).Uri.ToString();
+
+            return new Navigation(previousLink, nextLink);
+        }
+
+        public void Read(string pageUri, Action<int, string, string, Navigation> pageWriter)
+        {
             var response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, pageUri);
             SyndicationFeed feed;
-            bool isLastPage;
+            Navigation pageNavigation;
 
             if (response.StatusCode != HttpStatusCode.NotFound)
             {
                 feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
-                isLastPage = feed?.Links.All(li => li.RelationshipType != "next-archive") ?? false;
-                pageWriter(ExtractPageNumberFromFeedItem(feed), pageUri, response.Content, isLastPage);
+                pageNavigation = GetPageNavigation(feed);
+                pageWriter(ExtractPageNumberFromFeedItem(feed), pageUri, response.Content, pageNavigation);
             }
             else
             {
@@ -45,21 +77,22 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
                 var urlLatest = $"{_httpClient.BaseAddress}{MostRecentPageUrl}";
                 var responseLatest = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, urlLatest);
                 feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(responseLatest.Content)));
-                isLastPage = feed?.Links.All(li => li.RelationshipType != "next-archive") ?? false;
-                pageWriter(ExtractPageNumberFromFeedItem(feed), urlLatest, responseLatest.Content, isLastPage);
+                pageNavigation = GetPageNavigation(feed);
+                pageWriter(ExtractPageNumberFromFeedItem(feed), urlLatest, responseLatest.Content, pageNavigation);
             }
 
             SyndicationLink link;
             do
             {
                 link = feed?.Links.FirstOrDefault(li => li.RelationshipType == "next-archive");
-
+                
                 if (link != null)
                 {
-                    response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, link.Uri.ToString());
+                    var newUrl = link.Uri.ToString();
+                    response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, newUrl);
                     feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
-                    isLastPage = feed?.Links.All(li => li.RelationshipType != "next-archive") ?? false;
-                    pageWriter(ExtractPageNumberFromFeedItem(feed), "", response.Content, isLastPage);
+                    pageNavigation = GetPageNavigation(feed);
+                    pageWriter(ExtractPageNumberFromFeedItem(feed), newUrl, response.Content, pageNavigation);
                 }
             } while (link != null);
         }
@@ -67,15 +100,16 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
         private static int ExtractPageNumberFromFeedItem(SyndicationFeed feed)
         {
             int pageNumber;
+            var pageNavigation = GetPageNavigation(feed);
 
-            if (feed.Links.All(li => li.RelationshipType != "prev-archive"))
+            if (pageNavigation.IsStartPage)
             {
                 pageNumber = 1; // First page
             }
             else
             {
                 var previousPageNumber = ExtractPageNumberFromFeedLink(feed.Links.Single(li => li.RelationshipType == "prev-archive"));
-                pageNumber = previousPageNumber + 1;
+                pageNumber = previousPageNumber + 1; // TODO: LWA - This is an incorrect assumption isn't it???
             }
 
             return pageNumber;

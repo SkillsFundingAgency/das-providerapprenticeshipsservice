@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,11 +8,10 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob
 {
-    public class ProviderAgreementStatusService : IProviderAgreementStatusService
+    public sealed class ProviderAgreementStatusService : IProviderAgreementStatusService
     {
         private readonly IContractDataProvider _dataProvider;
         private readonly IProviderAgreementStatusRepository _repository;
-
         private readonly ILog _logger;
 
         public ProviderAgreementStatusService(
@@ -32,7 +30,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
             time.Start();
 
             var latestBookmark = await _repository.GetLatestBookmark();
-            var pageToReadUri = ""; // TODO: LWA Get url of page with bookmark
+            var pageToReadUri = _dataProvider.FindPageWithBookmark(latestBookmark);
 
             // TODO: LWA - Add check to see if any contracts in the database and log if there isn't
             //if (latestBookmark == null && nextPageNumberToRead > 1)

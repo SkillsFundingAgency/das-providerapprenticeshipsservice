@@ -12,5 +12,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
         Task<Guid?> GetLatestBookmark();
 
         Task AddContractEventsForPage(int eventPageNumber, List<ContractFeedEvent> contractFeedEvents);
+
+        Task<int> GetCountOfContracts();
     }
 }
