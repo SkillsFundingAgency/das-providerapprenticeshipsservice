@@ -32,14 +32,21 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses
             return Task.FromResult(LastFullPageRead);
         }
 
-        public Task AddContractEventsForPage(int eventPageNumber, List<ContractFeedEvent> contractFeedEvents)
+        Task<Guid?> IProviderAgreementStatusRepository.GetLatestBookmark()
         {
-            // TODO: LWA - implement
+            // TODO: LWA - Implement
             throw new NotImplementedException();
         }
 
-        Task<Guid?> IProviderAgreementStatusRepository.GetLatestBookmark()
+        public Task<int> GetCountOfContracts()
         {
+            // TODO: LWA - Implement
+            throw new NotImplementedException();
+        }
+
+        public Task AddContractEventsForPage(List<ContractFeedEvent> contractFeedEvents, Guid newBookmark)
+        {
+            // TODO: LWA - implement
             throw new NotImplementedException();
         }
     }

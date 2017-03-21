@@ -157,6 +157,7 @@
     <Compile Include="ContractFeed\IContractFeedProcessorHttpClient.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
+    <Compile Include="Interfaces\IProviderAgreementStatusService.cs" />
     <Compile Include="ProviderAgreementStatusService.cs" />
     <Compile Include="ContractFeed\AzureAuthentication.cs" />
     <Compile Include="ContractFeed\ContractFeedProcessor.cs" />

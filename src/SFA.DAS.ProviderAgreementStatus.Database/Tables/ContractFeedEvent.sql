@@ -7,6 +7,5 @@
 	[Status] NVARCHAR(50) NOT NULL,
 	[ParentStatus] NVARCHAR(50) NOT NULL,
 	[UpdatedInFeed] DateTime NOT NULL,
-	[PageNumber] INT NOT NULL, 
     [CreatedDate] DATETIME NOT NULL
 )

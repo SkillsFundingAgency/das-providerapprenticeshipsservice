@@ -7,6 +7,8 @@ using System.ServiceModel.Syndication;
 using System.Xml;
 
 using SFA.DAS.NLog.Logger;
+using System.Web;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
@@ -29,6 +31,12 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
         public string PreviousPageUrl { get; }
         public string NextPageUrl { get; }
         public bool IsStartPage => !string.IsNullOrWhiteSpace(NextPageUrl) && string.IsNullOrWhiteSpace(PreviousPageUrl);
+    }
+
+    public enum ReadDirection
+    {
+        Forward,
+        Backward
     }
 
     public class ContractFeedReader
@@ -54,66 +62,71 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             const string NextRelationshipType = "next-archive";
             const string PreviousRelationshipType = "prev-archive";
             string previousLink = feed.Links.SingleOrDefault(li => li.RelationshipType == PreviousRelationshipType)?.Uri.ToString();
-            string nextLink = feed.Links.SingleOrDefault(li => li.RelationshipType == NextRelationshipType).Uri.ToString();
+            string nextLink = feed.Links.SingleOrDefault(li => li.RelationshipType == NextRelationshipType)?.Uri.ToString();
 
             return new Navigation(previousLink, nextLink);
         }
 
-        public void Read(string pageUri, Action<int, string, string, Navigation> pageWriter)
+        public void Read(string pageUri, ReadDirection direction, Func<string, string, Navigation, bool> pageWriter)
         {
-            var response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, pageUri);
-            SyndicationFeed feed;
-            Navigation pageNavigation;
+            var relationshipType = direction == ReadDirection.Forward ? "next-archive" : "prev-archive";
+            var continueToNextPage = true;
+            
+            while (continueToNextPage && !string.IsNullOrEmpty(pageUri))
+            {
+                var response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, pageUri);
+                SyndicationFeed feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
+                Navigation pageNavigation = GetPageNavigation(feed);
+                continueToNextPage = pageWriter(pageUri, response.Content, pageNavigation);
 
-            if (response.StatusCode != HttpStatusCode.NotFound)
-            {
-                feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
-                pageNavigation = GetPageNavigation(feed);
-                pageWriter(ExtractPageNumberFromFeedItem(feed), pageUri, response.Content, pageNavigation);
+                if (continueToNextPage)
+                    pageUri = feed?.Links.FirstOrDefault(li => li.RelationshipType == relationshipType)?.Uri.ToString();
             }
-            else
-            {
-                // TODO: LWA - This shouldn't happen should it?
-                var urlLatest = $"{_httpClient.BaseAddress}{MostRecentPageUrl}";
-                var responseLatest = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, urlLatest);
-                feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(responseLatest.Content)));
-                pageNavigation = GetPageNavigation(feed);
-                pageWriter(ExtractPageNumberFromFeedItem(feed), urlLatest, responseLatest.Content, pageNavigation);
-            }
+        }
 
-            SyndicationLink link;
-            do
-            {
-                link = feed?.Links.FirstOrDefault(li => li.RelationshipType == "next-archive");
+        //public void ReadForward(string pageUri, Action<int, string, string, Navigation> pageWriter)
+        //{
+        //    var response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, pageUri);
+        //    SyndicationFeed feed;
+        //    Navigation pageNavigation;
+
+        //    feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
+        //    pageNavigation = GetPageNavigation(feed);
+        //    pageWriter(ExtractPageNumberFromFeedItem(feed), pageUri, response.Content, pageNavigation);
+
+        //    SyndicationLink link;
+        //    do
+        //    {
+        //        link = feed?.Links.FirstOrDefault(li => li.RelationshipType == "next-archive");
                 
-                if (link != null)
-                {
-                    var newUrl = link.Uri.ToString();
-                    response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, newUrl);
-                    feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
-                    pageNavigation = GetPageNavigation(feed);
-                    pageWriter(ExtractPageNumberFromFeedItem(feed), newUrl, response.Content, pageNavigation);
-                }
-            } while (link != null);
-        }
+        //        if (link != null)
+        //        {
+        //            var newUrl = link.Uri.ToString();
+        //            response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, newUrl);
+        //            feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
+        //            pageNavigation = GetPageNavigation(feed);
+        //            pageWriter(ExtractPageNumberFromFeedItem(feed), newUrl, response.Content, pageNavigation);
+        //        }
+        //    } while (link != null);
+        //}
 
-        private static int ExtractPageNumberFromFeedItem(SyndicationFeed feed)
-        {
-            int pageNumber;
-            var pageNavigation = GetPageNavigation(feed);
+        //private static int ExtractPageNumberFromFeedItem(SyndicationFeed feed)
+        //{
+        //    int pageNumber;
+        //    var pageNavigation = GetPageNavigation(feed);
 
-            if (pageNavigation.IsStartPage)
-            {
-                pageNumber = 1; // First page
-            }
-            else
-            {
-                var previousPageNumber = ExtractPageNumberFromFeedLink(feed.Links.Single(li => li.RelationshipType == "prev-archive"));
-                pageNumber = previousPageNumber + 1; // TODO: LWA - This is an incorrect assumption isn't it???
-            }
+        //    if (pageNavigation.IsStartPage)
+        //    {
+        //        pageNumber = 1; // First page
+        //    }
+        //    else
+        //    {
+        //        var previousPageNumber = ExtractPageNumberFromFeedLink(feed.Links.Single(li => li.RelationshipType == "prev-archive"));
+        //        pageNumber = previousPageNumber + 1; // TODO: LWA - This is an incorrect assumption isn't it???
+        //    }
 
-            return pageNumber;
-        }
+        //    return pageNumber;
+        //}
 
         private static int ExtractPageNumberFromFeedLink(SyndicationLink link)
         {

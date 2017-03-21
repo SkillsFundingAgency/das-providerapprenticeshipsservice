@@ -58,7 +58,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
             var helper = new TestHelper(UrlToApi);
             var repository = new InMemoryProviderAgreementStatusRepository(Mock.Of<ILog>());
 
-            await repository.AddContractEventsForPage(6, new List<ContractFeedEvent> { new ContractFeedEvent
+            await repository.AddContractEventsForPage(new List<ContractFeedEvent> { new ContractFeedEvent
                 {
                     FundingTypeCode = "MAIN",
                     HierarchyType = "CONTRACT",
@@ -67,9 +67,9 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
                     Status = "Approved",
                     Updated = DateTime.Parse("1998-12-07"),
                     PageNumber = 6
-                } });
+                } }, Guid.Parse("75419D76-212B-47E2-B0B0-0B46C94120E7"));
 
-            await repository.AddContractEventsForPage(11, new List<ContractFeedEvent> { new ContractFeedEvent
+            await repository.AddContractEventsForPage(new List<ContractFeedEvent> { new ContractFeedEvent
                 {
                     FundingTypeCode = "MAIN",
                     HierarchyType = "CONTRACT",
@@ -78,7 +78,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
                     Status = "Approved",
                     Updated = DateTime.Parse("1998-12-08"),
                     PageNumber = 11
-                } });
+                } }, Guid.Parse("3241322f-d600-4f84-b699-7a9964153ecd"));
 
             repository.LastFullPageRead = 11;
 
@@ -97,7 +97,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
         {
             var helper = new TestHelper(UrlToApi);
             var repository = new InMemoryProviderAgreementStatusRepository(Mock.Of<ILog>());
-            await repository.AddContractEventsForPage(1, new List<ContractFeedEvent> { new ContractFeedEvent
+            await repository.AddContractEventsForPage(new List<ContractFeedEvent> { new ContractFeedEvent
                 {
                     FundingTypeCode = "MAIN",
                     HierarchyType = "CONTRACT",
@@ -106,8 +106,8 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
                     Status = "Approved",
                     Updated = DateTime.Parse("1998-12-07"),
                     PageNumber = 1
-                } });
-            await repository.AddContractEventsForPage(12, new List<ContractFeedEvent> { new ContractFeedEvent
+                } }, Guid.Parse("75419D76-212B-47E2-B0B0-0B46C94120E7"));
+            await repository.AddContractEventsForPage(new List<ContractFeedEvent> { new ContractFeedEvent
                 {
                     FundingTypeCode = "MAIN",
                     HierarchyType = "CONTRACT",
@@ -116,7 +116,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
                     Status = "Approved",
                     Updated = DateTime.Parse("1998-12-08"),
                     PageNumber = 12
-                } });
+                } }, Guid.Parse("b0f5f0ea-2315-444d-8fa0-4c4c5d6f0e3c"));
 
            
             repository.LastFullPageRead = 12;

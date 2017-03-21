@@ -11,7 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 
         Task<Guid?> GetLatestBookmark();
 
-        Task AddContractEventsForPage(int eventPageNumber, List<ContractFeedEvent> contractFeedEvents);
+        Task AddContractEventsForPage(List<ContractFeedEvent> contractFeedEvents, Guid newBookmark);
 
         Task<int> GetCountOfContracts();
     }

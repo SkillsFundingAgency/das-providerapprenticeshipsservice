@@ -128,7 +128,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         //    );
         //}
 
-        public async Task AddContractEventsForPage(int eventPageNumber, List<ContractFeedEvent> contractFeedEvents)
+        public async Task AddContractEventsForPage(List<ContractFeedEvent> contractFeedEvents, Guid newBookmark)
         {
             await WithTransaction(async (conn, tran) =>
             {
@@ -137,17 +137,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                     await InsertContract(conn, tran, contract);
                 }
 
-                var newLatestBookmark = contractFeedEvents[contractFeedEvents.Count - 1].Id;
-
-                await UpdateLatestBookmark(conn, tran, newLatestBookmark);
-
-                tran.Commit();
+                await UpdateLatestBookmark(conn, tran, newBookmark);
             });
         }
 
         private static async Task UpdateLatestBookmark(IDbConnection conn, IDbTransaction tran, Guid newLatestBookmark)
         {
-            var previousBookmark = GetLatestBookmark(conn, tran);
+            var previousBookmark = await GetLatestBookmark(conn, tran);
 
             var parameters = new DynamicParameters();
             parameters.Add("@latestBookmark", newLatestBookmark, DbType.Guid);
@@ -169,7 +165,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 await conn.ExecuteAsync(
                     sql:
                         "UPDATE [dbo].[ContractFeedEventRun]" +
-                        "SET LatestBookmark = @latestBookmark, UpdatedDate = updatedDate; ",
+                        "SET LatestBookmark = @latestBookmark, UpdatedDate = @updatedDate; ",
                     param: parameters,
                     commandType: CommandType.Text,
                     transaction: tran);
@@ -186,17 +182,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             parameters.Add("@status", contract.Status, DbType.String);
             parameters.Add("@parentStatus", contract.ParentStatus, DbType.String);
             parameters.Add("@updatedInFeed", contract.Updated, DbType.DateTime);
-            parameters.Add("@pageNumber", contract.PageNumber, DbType.Int32);
             parameters.Add("@createdDate", DateTime.UtcNow, DbType.DateTime);
 
             await conn.ExecuteAsync(
                     sql:
                         "INSERT INTO [dbo].[ContractFeedEvent]" +
-                        "(Id, ProviderId, HierarchyType, FundingTypeCode, Status, ParentStatus, UpdatedInFeed, PageNumber, CreatedDate)" +
-                        "VALUES(@id, @providerId, @hierarchyType, @fundingTypeCode, @status, @parentStatus, @updatedInFeed, @pageNumber, @createdDate); ",
+                        "(Id, ProviderId, HierarchyType, FundingTypeCode, Status, ParentStatus, UpdatedInFeed, CreatedDate)" +
+                        "VALUES(@id, @providerId, @hierarchyType, @fundingTypeCode, @status, @parentStatus, @updatedInFeed, @createdDate); ",
                     param: parameters,
                     commandType: CommandType.Text,
                     transaction: tran);
+        }
+
+        public async Task<int> GetCountOfContracts()
+        {
+            return await WithConnection<int>(conn => 
+            {
+                return conn.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM [dbo].[ContractFeedEvent];", commandType: CommandType.Text);
+            });
         }
 
         //public async Task SaveLastRun(EventRun lastRun)

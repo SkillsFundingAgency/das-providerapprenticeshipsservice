@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.PAS.ContractAgreements.WebJob.Interfaces;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob
 {
@@ -30,21 +31,17 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
             time.Start();
 
             var latestBookmark = await _repository.GetLatestBookmark();
-            var pageToReadUri = _dataProvider.FindPageWithBookmark(latestBookmark);
+            var pageToReadUrl = _dataProvider.FindPageWithBookmark(latestBookmark);
+            
+            _logger.Info($"Bookmark: {latestBookmark?.ToString() ?? "[Empty]"}, Next page to read url: {pageToReadUrl}");
 
-            // TODO: LWA - Add check to see if any contracts in the database and log if there isn't
-            //if (latestBookmark == null && nextPageNumberToRead > 1)
-            //{
-            //    _logger.Warn($"The database doesn't currently contain any valid contracts from the feed after {lastFullPageNumberRead} pages have been read.");
-            //}
-
-            _logger.Info($"Bookmark: {latestBookmark?.ToString() ?? "{Not set}"}, Latest page read uri: {pageToReadUri}");
-
-            var insertedEvents = _dataProvider.ReadEvents(pageToReadUri, latestBookmark, async (eventPageNumber, events) =>
+            var insertedEvents = _dataProvider.ReadEvents(pageToReadUrl, latestBookmark, (events, newBookmark) =>
                 {
                     var contractFeedEvents = events.ToList();
-
-                    await _repository.AddContractEventsForPage(eventPageNumber, contractFeedEvents);
+                    if (events.Count() > 0)
+                    {
+                        _repository.AddContractEventsForPage(contractFeedEvents, newBookmark.Value).Wait();
+                    }
                 });
 
             if (insertedEvents > 0)
@@ -55,11 +52,11 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
             time.Stop();
 
             _logger.Info($"Run took {time.ElapsedMilliseconds} milliseconds.");
-        }
-    }
 
-    public interface IProviderAgreementStatusService
-    {
-        Task UpdateProviderAgreementStatuses();
+            if (await _repository.GetCountOfContracts() == 0)
+            {
+                _logger.Warn($"The database doesn't currently contain any valid contracts from the feed.");
+            }
+        }
     }
 }
