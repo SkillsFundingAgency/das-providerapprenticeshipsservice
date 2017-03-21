@@ -7,38 +7,9 @@ using System.ServiceModel.Syndication;
 using System.Xml;
 
 using SFA.DAS.NLog.Logger;
-using System.Web;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
-    public enum PageLinks
-    {
-        None = 0,
-        Next = 1,
-        Previous = 2,
-        Both = Next & Previous
-    }
-
-    public sealed class Navigation
-    {
-        public Navigation(string previousPageUri, string nextPageUri)
-        {
-            PreviousPageUrl = previousPageUri;
-            NextPageUrl = nextPageUri;
-        }
-
-        public string PreviousPageUrl { get; }
-        public string NextPageUrl { get; }
-        public bool IsStartPage => !string.IsNullOrWhiteSpace(NextPageUrl) && string.IsNullOrWhiteSpace(PreviousPageUrl);
-    }
-
-    public enum ReadDirection
-    {
-        Forward,
-        Backward
-    }
-
     public class ContractFeedReader
     {
         private readonly IContractFeedProcessorHttpClient _httpClient;
@@ -53,19 +24,6 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
         }
 
         public string LatestPageUrl => $"{_httpClient.BaseAddress}{MostRecentPageUrl}";
-
-        private static Navigation GetPageNavigation(SyndicationFeed feed)
-        {
-            if (feed == null || feed.Links == null || feed.Links.Count == 0)
-                return new Navigation(null, null);
-
-            const string NextRelationshipType = "next-archive";
-            const string PreviousRelationshipType = "prev-archive";
-            string previousLink = feed.Links.SingleOrDefault(li => li.RelationshipType == PreviousRelationshipType)?.Uri.ToString();
-            string nextLink = feed.Links.SingleOrDefault(li => li.RelationshipType == NextRelationshipType)?.Uri.ToString();
-
-            return new Navigation(previousLink, nextLink);
-        }
 
         public void Read(string pageUri, ReadDirection direction, Func<string, string, Navigation, bool> pageWriter)
         {
@@ -84,55 +42,17 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             }
         }
 
-        //public void ReadForward(string pageUri, Action<int, string, string, Navigation> pageWriter)
-        //{
-        //    var response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, pageUri);
-        //    SyndicationFeed feed;
-        //    Navigation pageNavigation;
-
-        //    feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
-        //    pageNavigation = GetPageNavigation(feed);
-        //    pageWriter(ExtractPageNumberFromFeedItem(feed), pageUri, response.Content, pageNavigation);
-
-        //    SyndicationLink link;
-        //    do
-        //    {
-        //        link = feed?.Links.FirstOrDefault(li => li.RelationshipType == "next-archive");
-                
-        //        if (link != null)
-        //        {
-        //            var newUrl = link.Uri.ToString();
-        //            response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, newUrl);
-        //            feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
-        //            pageNavigation = GetPageNavigation(feed);
-        //            pageWriter(ExtractPageNumberFromFeedItem(feed), newUrl, response.Content, pageNavigation);
-        //        }
-        //    } while (link != null);
-        //}
-
-        //private static int ExtractPageNumberFromFeedItem(SyndicationFeed feed)
-        //{
-        //    int pageNumber;
-        //    var pageNavigation = GetPageNavigation(feed);
-
-        //    if (pageNavigation.IsStartPage)
-        //    {
-        //        pageNumber = 1; // First page
-        //    }
-        //    else
-        //    {
-        //        var previousPageNumber = ExtractPageNumberFromFeedLink(feed.Links.Single(li => li.RelationshipType == "prev-archive"));
-        //        pageNumber = previousPageNumber + 1; // TODO: LWA - This is an incorrect assumption isn't it???
-        //    }
-
-        //    return pageNumber;
-        //}
-
-        private static int ExtractPageNumberFromFeedLink(SyndicationLink link)
+        private static Navigation GetPageNavigation(SyndicationFeed feed)
         {
-            var linkUri = link.Uri.AbsoluteUri;
-            var pageNumber = int.Parse(linkUri.Substring(linkUri.LastIndexOf("/", StringComparison.Ordinal) + 1));
-            return pageNumber;
+            if (feed == null || feed.Links == null || feed.Links.Count == 0)
+                return new Navigation(null, null);
+
+            const string NextRelationshipType = "next-archive";
+            const string PreviousRelationshipType = "prev-archive";
+            string previousLink = feed.Links.SingleOrDefault(li => li.RelationshipType == PreviousRelationshipType)?.Uri.ToString();
+            string nextLink = feed.Links.SingleOrDefault(li => li.RelationshipType == NextRelationshipType)?.Uri.ToString();
+
+            return new Navigation(previousLink, nextLink);
         }
 
         private HttpResult CallEndpointAndReturnResultForFullUrl(string mediaType, string url)

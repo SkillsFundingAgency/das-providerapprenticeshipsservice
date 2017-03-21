@@ -155,6 +155,8 @@
     <Compile Include="ContractFeed\IContractDataProvider.cs" />
     <Compile Include="ContractFeed\IContractFeedEventValidator.cs" />
     <Compile Include="ContractFeed\IContractFeedProcessorHttpClient.cs" />
+    <Compile Include="ContractFeed\Navigation.cs" />
+    <Compile Include="ContractFeed\ReadDirection.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="Interfaces\IProviderAgreementStatusService.cs" />

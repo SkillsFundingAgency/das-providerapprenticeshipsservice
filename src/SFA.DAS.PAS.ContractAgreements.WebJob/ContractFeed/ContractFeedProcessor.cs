@@ -6,21 +6,16 @@ using System.Xml.Linq;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
-    public class ContractFeedProcessor : IContractDataProvider
+    public sealed class ContractFeedProcessor : IContractDataProvider
     {
         private readonly XNamespace _nsAtom = "http://www.w3.org/2005/Atom";
         private readonly XNamespace _nsUrn = "urn:sfa:schemas:contract";
-
         private readonly ContractFeedReader _reader;
-
         private readonly IContractFeedEventValidator _validator;
-
         private readonly ContractFeedConfiguration _configuration;
-
         private readonly ILog _logger;
 
         public ContractFeedProcessor(
@@ -71,15 +66,6 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             return startPageUrl;
         }
 
-        private bool PageContainsBookmark(Guid? latestBookmark, XDocument doc)
-        {
-            // process page in reverse order as items are provided in ascending datetime from fcs
-            return doc.Descendants(_nsAtom + "entry")
-                                    .Reverse()
-                                    .Select(ExtractContractFeedEvent)
-                                    .Any(x => x.Id == latestBookmark);
-        }
-
         public int ReadEvents(string pageToReadUri, Guid? latestBookmark, Action<IEnumerable<ContractFeedEvent>, Guid?> saveRecordsAction)
         {
             _logger.Info($"Reading Events");
@@ -114,6 +100,15 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             });
 
             return contractCount;
+        }
+
+        private bool PageContainsBookmark(Guid? latestBookmark, XDocument doc)
+        {
+            // process page in reverse order as items are provided in ascending datetime from fcs
+            return doc.Descendants(_nsAtom + "entry")
+                                    .Reverse()
+                                    .Select(ExtractContractFeedEvent)
+                                    .Any(x => x.Id == latestBookmark);
         }
 
         private ContractFeedEvent ExtractContractFeedEvent(XContainer element)

@@ -75,7 +75,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         {
             var latestBookmark = await WithConnection(async connection =>
             {
-                // TODO: LWA Is this the best way to do this??
                 Guid? bookmark = await GetLatestBookmark(connection, null);
 
                 return bookmark;
