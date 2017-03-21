@@ -30,11 +30,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlapp
                     !string.IsNullOrEmpty(m.ULN))
                 .ToList();
 
-            return new GetOverlappingApprenticeshipsQueryResponse
-            {
-                Overlaps = Enumerable.Empty<ApprenticeshipOverlapValidationResult>()
-            };
-
             if (!apprenticeships.Any())
             {
                 return new GetOverlappingApprenticeshipsQueryResponse
