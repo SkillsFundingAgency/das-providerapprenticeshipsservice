@@ -8,33 +8,31 @@
 }
 
 <div id="cohort-details">
-
-    @if (Model.HasOverlappingErrors)
-    {
-        @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
-    }
-    else if(Model.FundingCapWarnings.Any())
-    {
-        <div class="validation-summary-max-funding">
-            <h1 id="warning-summary" class="heading-medium warning-summary-heading">
-                Warnings for your attention
-            </h1>
-            <p>Review the following details:</p>
-            <ul class="max-funding-summary-list">
-                @foreach (var warning in Model.FundingCapWarnings)
-                {
-                    <li>
-                        <a href="#max-funding-group-@warning.Key" data-focuses="max-funding-group-@warning.Key">
-                            @warning.Value
-                        </a>
-                    </li>
-                }
-            </ul>
-        </div>
-    }
-
     <div class="grid-row">
         <div class="column-full">
+            @if (Model.HasOverlappingErrors)
+            {
+                @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+            }
+            else if (Model.FundingCapWarnings.Any())
+            {
+                <div class="validation-summary-max-funding error-summary">
+                    <h1 id="warning-summary" class="heading-medium warning-summary-heading">
+                        Warnings for your attention
+                    </h1>
+                    <p>Review the following details:</p>
+                    <ul class="max-funding-summary-list">
+                        @foreach (var warning in Model.FundingCapWarnings)
+                {
+                            <li>
+                                <a href="#max-funding-group-@warning.Key" data-focuses="max-funding-group-@warning.Key">
+                                    @warning.Value
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
             <h1 class="heading-xlarge">Review your cohort</h1>
         </div>
     </div>
@@ -104,15 +102,15 @@
 
     @helper GetValueOrDefault(string property)
     {
-        if (!string.IsNullOrEmpty(property))
-        {
-                <span>@property &nbsp;</span>
-        }
-        else
-        {
-                <span class="missing">@Html.Raw("&ndash;")</span>
-        }
-    }
+if (!string.IsNullOrEmpty(property))
+{
+        <span>@property &nbsp;</span>
+}
+else
+{
+        <span class="missing">@Html.Raw("&ndash;")</span>
+}
+}
     <div class="grid-row">
         <div class="column-full bulk-upload-buttons">
             <hr class="hr-top">
@@ -141,7 +139,7 @@
     {
         <div class="grid-row">
             <div class="column-full">
-                
+
                 @foreach (var group in Model.ApprenticeshipGroups)
                 {
                     var groupTitle = String.Format($"{group.Apprenticeships.Count} x {group.GroupName}");
@@ -175,7 +173,8 @@
                                 <p class="heading-medium">
                                     @($"{group.ApprenticeshipsOverFundingLimit} {group.TrainingProgramme.Title} {PluraliseApprentice(group.ApprenticeshipsOverFundingLimit).ToLower()} above funding band maximum")
                                 </p>
-                                <p>The costs are above the £@group.TrainingProgramme.MaxFunding.ToString("N0") <a target="_blank" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">maximum value of the funding band</a> for this apprenticeship. You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.
+                                <p>
+                                    The costs are above the £@group.TrainingProgramme.MaxFunding.ToString("N0") <a target="_blank" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">maximum value of the funding band</a> for this apprenticeship. You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.
                                 </p>
                             </div>
                             <i class="bubble-arrow"></i>
@@ -210,48 +209,48 @@
                                             <span class="missing">&ndash;</span>
                                         }
                                     </td>
-                                        @if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
+                                    @if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
+                                    {
+                                        if (apprenticeship.OverlappingApprenticeships.Any())
                                         {
-                                            if (apprenticeship.OverlappingApprenticeships.Any())
-                                            {
-                                                <td class="overlap-alert">
-                                                    <a href="#error-message-@group.GroupId"
-                                                       aria-label="The unique learner number already exists for these training dates"
-                                                       aria-describedby="max-funding-group-@group.GroupId"
-                                                       title="The unique learner number already exists for these training dates">
-                                                        @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay() &nbsp;
-                                                    </a>
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                <td>
+                                            <td class="overlap-alert">
+                                                <a href="#error-message-@group.GroupId"
+                                                   aria-label="The unique learner number already exists for these training dates"
+                                                   aria-describedby="max-funding-group-@group.GroupId"
+                                                   title="The unique learner number already exists for these training dates">
                                                     @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay() &nbsp;
-                                                </td>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <td>
-                                                <span class="missing">&ndash;</span>
-                                            </td>
-                                        }
-                                        @if (group.TrainingProgramme != null && apprenticeship.Cost.HasValue && apprenticeship.Cost > group.TrainingProgramme.MaxFunding && !Model.HasOverlappingErrors)
-                                        {
-                                             <td class="funding-cap-alert">
-                                                <a href="#max-funding-group-@group.GroupId" aria-label="Cost is above the maximum funding band" aria-describedby="max-funding-group-@group.GroupId" title="Cost is above the maximum funding band">@FormatCost(apprenticeship.Cost)</a>
+                                                </a>
                                             </td>
                                         }
                                         else
                                         {
                                             <td>
-                                                @GetValueOrDefault(FormatCost(apprenticeship.Cost))
+                                                @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay() &nbsp;
                                             </td>
                                         }
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <span class="missing">&ndash;</span>
+                                        </td>
+                                    }
+                                    @if (group.TrainingProgramme != null && apprenticeship.Cost.HasValue && apprenticeship.Cost > group.TrainingProgramme.MaxFunding && !Model.HasOverlappingErrors)
+                                    {
+                                        <td class="funding-cap-alert">
+                                            <a href="#max-funding-group-@group.GroupId" aria-label="Cost is above the maximum funding band" aria-describedby="max-funding-group-@group.GroupId" title="Cost is above the maximum funding band">@FormatCost(apprenticeship.Cost)</a>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            @GetValueOrDefault(FormatCost(apprenticeship.Cost))
+                                        </td>
+                                    }
 
                                     <td>
-                                        <a href="@Url.Action("Edit", new { Model.HashedCommitmentId, apprenticeship.HashedApprenticeshipId })" 
-                                           title="Edit @apprenticeship.ApprenticeshipName" aria-label="Edit @apprenticeship.ApprenticeshipName">Edit </a>
+                                        <a href="@Url.Action("Edit", new { Model.HashedCommitmentId, apprenticeship.HashedApprenticeshipId })"
+                                           title="Edit @apprenticeship.ApprenticeshipName" aria-label="Edit @apprenticeship.ApprenticeshipName">Edit</a>
                                     </td>
                                 </tr>
                             }
@@ -273,6 +272,10 @@
     }
 
 </div>
+
+
+
+
 
 
 
