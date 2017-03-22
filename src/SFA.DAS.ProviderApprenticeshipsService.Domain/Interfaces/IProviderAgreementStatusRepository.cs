@@ -1,17 +1,18 @@
-﻿using System.Threading.Tasks;
-
-using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
     public interface IProviderAgreementStatusRepository
     {
-        Task AddContractEvent(ContractFeedEvent contractFeedEvent);
+        Task<IEnumerable<ContractFeedEvent>> GetContractEvents(long providerId);
 
-        Task<ContractFeedEvent> GetMostRecentContractFeedEvent();
+        Task<Guid?> GetLatestBookmark();
 
-        Task<int> GetMostRecentPageNumber();
+        Task AddContractEventsForPage(IList<ContractFeedEvent> contractFeedEvents, Guid newBookmark);
 
-        Task SaveLastRun(EventRun lastRun);
+        Task<int> GetCountOfContracts();
     }
 }

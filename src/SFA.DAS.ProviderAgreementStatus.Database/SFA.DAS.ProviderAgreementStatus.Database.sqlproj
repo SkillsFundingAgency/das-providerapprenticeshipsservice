@@ -67,4 +67,7 @@
   <ItemGroup>
     <None Include="SFA.DAS.ProviderAgreementStatus.Database.publish.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="SFA.DAS.ProviderAgreementStatus.Database.refactorlog" />
+  </ItemGroup>
 </Project>

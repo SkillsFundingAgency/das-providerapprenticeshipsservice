@@ -7,6 +7,8 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
     public interface IContractDataProvider
     {
-        EventRun ReadEvents(int mostRecentPageNumber, Guid lastBookmarkedItemId, Action<int, IEnumerable<ContractFeedEvent>> action);
+        string FindPageWithBookmark(Guid? latestBookmark);
+
+        int ReadEvents(string pageToReadUri, Guid? latestBookmark, Action<IList<ContractFeedEvent>, Guid?> action);
     }
 }
