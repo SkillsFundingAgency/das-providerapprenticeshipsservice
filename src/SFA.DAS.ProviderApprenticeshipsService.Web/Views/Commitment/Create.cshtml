@@ -102,7 +102,7 @@
                             @Html.ValidationMessageFor(m => m.StartDate, null, new { id = "error-message-" + Html.IdFor(m => m.StartDate), @class = "error-message" })
                             @Html.ValidationMessage("StartDateOverlap",
                                 "The date overlaps with existing training dates for the same apprentice. " +
-                                    "Please check the date - contact your training provider for help.",
+                                    "Please check the date - contact the employer for help.",
                                 new { id = "error-message-StartDateOverlap", @class = "error-message" })
                             <div class="form-group form-group-month">
                                 <label for="@Html.IdFor(m => m.StartDate.Month)">
@@ -130,7 +130,7 @@
                             @Html.ValidationMessageFor(m => m.EndDate, null, new { id = "error-message-" + Html.IdFor(m => m.EndDate), @class = "error-message" })
                             @Html.ValidationMessage("EndDateOverlap",
                                 "The date overlaps with existing training dates for the same apprentice. " +
-                                    "Please check the date - contact your training provider for help.",
+                                    "Please check the date - contact the employer for help.",
                                 new { id = "error-message-EndDateOverlap", @class = "error-message" })
                             <div class="form-group form-group-month">
                                 <label for="@Html.IdFor(m => m.EndDate.Month)">
