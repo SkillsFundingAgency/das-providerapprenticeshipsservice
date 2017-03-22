@@ -7,14 +7,17 @@ using System.ServiceModel.Syndication;
 using System.Xml;
 
 using SFA.DAS.NLog.Logger;
+using System.Diagnostics;
+using System.Net.Http;
+using Polly;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
     public class ContractFeedReader
     {
         private readonly IContractFeedProcessorHttpClient _httpClient;
-
         private readonly ILog _logger;
+        private const string MostRecentPageUrl = "/api/contracts/notifications";
 
         public ContractFeedReader(IContractFeedProcessorHttpClient httpClient, ILog logger)
         {
@@ -22,100 +25,83 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             _logger = logger;
         }
 
-        private const string MostRecentPageUrl = "/api/contracts/notifications";
+        public string LatestPageUrl => $"{_httpClient.BaseAddress}{MostRecentPageUrl}";
 
-        private const string VendorAtomMediaType = "application/vnd.sfa.contract.v1+atom+xml";
-
-        public void Read(int pageNumber, Func<int, string, bool, bool> pageWriter)
+        public void Read(string pageUri, ReadDirection direction, Func<string, string, Navigation, bool> pageWriter)
         {
-            var url = $"{_httpClient.BaseAddress}{MostRecentPageUrl}/{pageNumber}";
-            var response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, url);
-            SyndicationFeed feed;
-            bool isLastPage;
-            if (response.StatusCode != HttpStatusCode.NotFound)
+            var relationshipType = direction == ReadDirection.Forward ? "next-archive" : "prev-archive";
+            var continueToNextPage = true;
+            
+            while (continueToNextPage && !string.IsNullOrEmpty(pageUri))
             {
-                feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
-                isLastPage = feed?.Links.All(li => li.RelationshipType != "next-archive") ?? false;
-                pageWriter(ExtractPageNumberFromFeedItem(feed), response.Content, isLastPage);
-            }
-            else
-            {
-                var urlLatest = $"{_httpClient.BaseAddress}{MostRecentPageUrl}";
-                var responseLatest = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, urlLatest);
-                feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(responseLatest.Content)));
-                isLastPage = feed?.Links.All(li => li.RelationshipType != "next-archive") ?? false;
-                pageWriter(ExtractPageNumberFromFeedItem(feed), responseLatest.Content, isLastPage);
-            }
+                var response = CallEndpointAndReturnResultForFullUrl(pageUri);
+                SyndicationFeed feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
+                Navigation pageNavigation = GetPageNavigation(feed);
+                continueToNextPage = pageWriter(pageUri, response.Content, pageNavigation);
 
-            SyndicationLink link;
-            bool takeMore = true;
-            do
-            {
-                link = feed?.Links.FirstOrDefault(li => li.RelationshipType == "next-archive");
-
-                if (link != null)
-                {
-                    response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, link.Uri.ToString());
-                    feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
-                    isLastPage = feed?.Links.All(li => li.RelationshipType != "next-archive") ?? false;
-                    takeMore = pageWriter(ExtractPageNumberFromFeedItem(feed), response.Content, isLastPage);
-                }
-            } while (link != null && takeMore);
+                if (continueToNextPage)
+                    pageUri = feed?.Links.FirstOrDefault(li => li.RelationshipType == relationshipType)?.Uri.ToString();
+            }
         }
 
-        private static int ExtractPageNumberFromFeedItem(SyndicationFeed feed)
+        private static Navigation GetPageNavigation(SyndicationFeed feed)
         {
-            int pageNumber;
+            if (feed?.Links == null || feed.Links.Count == 0)
+                return new Navigation(null, null);
 
-            if (feed.Links.All(li => li.RelationshipType != "prev-archive"))
-            {
-                pageNumber = 1; // First page
-            }
-            else
-            {
-                var previousPageNumber = ExtractPageNumberFromFeedLink(feed.Links.Single(li => li.RelationshipType == "prev-archive"));
-                pageNumber = previousPageNumber + 1;
-            }
+            const string NextRelationshipType = "next-archive";
+            const string PreviousRelationshipType = "prev-archive";
+            string previousLink = feed.Links.SingleOrDefault(li => li.RelationshipType == PreviousRelationshipType)?.Uri.ToString();
+            string nextLink = feed.Links.SingleOrDefault(li => li.RelationshipType == NextRelationshipType)?.Uri.ToString();
 
-            return pageNumber;
+            return new Navigation(previousLink, nextLink);
         }
 
-        private static int ExtractPageNumberFromFeedLink(SyndicationLink link)
+        private T LogTiming<T>(string actionDescription, Func<T> func)
         {
-            var linkUri = link.Uri.AbsoluteUri;
-            var pageNumber = int.Parse(linkUri.Substring(linkUri.LastIndexOf("/", StringComparison.Ordinal) + 1));
-            return pageNumber;
+            var stopwatch = Stopwatch.StartNew();
+            var result = func();
+            stopwatch.Stop();
+            _logger.Trace($"It took {stopwatch.ElapsedMilliseconds} milliseconds to {actionDescription}");
+
+            return result;
         }
 
-        private HttpResult CallEndpointAndReturnResultForFullUrl(string mediaType, string url)
+        private HttpResult CallEndpointAndReturnResultForFullUrl(string url)
         {
-            using (var client = _httpClient.GetAuthorizedHttpClient())
+            var client = _httpClient.GetAuthorizedHttpClient();
+
+            try
             {
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
-
-                try
+                var content = Policy
+                .Handle<HttpRequestException>()
+                .Retry(3, (exception, retryCount) =>
                 {
-                    var content = client.GetAsync(url).Result;
-                    if (content.StatusCode == HttpStatusCode.NotFound) return new HttpResult(HttpStatusCode.NotFound, string.Empty);
-                    content.EnsureSuccessStatusCode();
+                    _logger.Info($"Retry {retryCount} for page {url}");
+                })
+                .Execute(() => LogTiming($"download feed page {url}", () => client.GetAsync(url).Result));
 
-                    return new HttpResult(content.StatusCode, content.Content.ReadAsStringAsync().Result);
-                }
-                catch (Exception ex)
+                if (content.StatusCode == HttpStatusCode.NotFound)
+                    return new HttpResult(HttpStatusCode.NotFound, string.Empty);
+
+                content.EnsureSuccessStatusCode();
+
+                return new HttpResult(content.StatusCode, content.Content.ReadAsStringAsync().Result);
+            }
+            catch (Exception ex)
+            {
+                var aggregateException = ex as AggregateException;
+                if (aggregateException != null)
                 {
-                    var aggregateException = ex as AggregateException;
-                    if (aggregateException != null)
+                    var aex = aggregateException;
+                    foreach (var exception in aex.InnerExceptions)
                     {
-                        var aex = aggregateException;
-                        foreach (var exception in aex.InnerExceptions)
-                        {
-                            _logger.Error(exception, $"Error in contact feed reader, calling endpoint {url}");
-                        }
-                        throw aex.InnerExceptions.First();
+                        _logger.Error(exception, $"Error in contact feed reader, calling endpoint {url}");
                     }
-                    _logger.Error(ex, $"Error in contact feed reader, calling endpoint {url}");
-                    throw;
+                    throw aex.InnerExceptions.First();
                 }
+                _logger.Error(ex, $"Error in contact feed reader, calling endpoint {url}");
+                throw;
             }
         }
 

@@ -40,7 +40,6 @@
     <Compile Include="Data\IAgreementStatusQueryRepository.cs" />
     <Compile Include="Data\IStandardsRepository.cs" />
     <Compile Include="Duration.cs" />
-    <Compile Include="ContractFeed\EventRun.cs" />
     <Compile Include="Framework.cs" />
     <Compile Include="FrameworksView.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceConfiguration.cs" />
