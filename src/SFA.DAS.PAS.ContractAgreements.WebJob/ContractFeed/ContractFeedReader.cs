@@ -8,6 +8,8 @@ using System.Xml;
 
 using SFA.DAS.NLog.Logger;
 using System.Diagnostics;
+using System.Net.Http;
+using Polly;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
@@ -16,7 +18,6 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
         private readonly IContractFeedProcessorHttpClient _httpClient;
         private readonly ILog _logger;
         private const string MostRecentPageUrl = "/api/contracts/notifications";
-        private const string VendorAtomMediaType = "application/vnd.sfa.contract.v1+atom+xml";
 
         public ContractFeedReader(IContractFeedProcessorHttpClient httpClient, ILog logger)
         {
@@ -33,7 +34,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             
             while (continueToNextPage && !string.IsNullOrEmpty(pageUri))
             {
-                var response = CallEndpointAndReturnResultForFullUrl(VendorAtomMediaType, pageUri);
+                var response = CallEndpointAndReturnResultForFullUrl(pageUri);
                 SyndicationFeed feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
                 Navigation pageNavigation = GetPageNavigation(feed);
                 continueToNextPage = pageWriter(pageUri, response.Content, pageNavigation);
@@ -66,35 +67,41 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             return result;
         }
 
-        private HttpResult CallEndpointAndReturnResultForFullUrl(string mediaType, string url)
+        private HttpResult CallEndpointAndReturnResultForFullUrl(string url)
         {
-            using (var client = _httpClient.GetAuthorizedHttpClient())
+            var client = _httpClient.GetAuthorizedHttpClient();
+
+            try
             {
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
-
-                try
+                var content = Policy
+                .Handle<HttpRequestException>()
+                .Retry(3, (exception, retryCount) =>
                 {
-                    var content = LogTiming($"download feed page {url}", () => client.GetAsync(url).Result);
-                    if (content.StatusCode == HttpStatusCode.NotFound) return new HttpResult(HttpStatusCode.NotFound, string.Empty);
-                    content.EnsureSuccessStatusCode();
+                    _logger.Info($"Retry {retryCount} for page {url}");
+                })
+                .Execute(() => LogTiming($"download feed page {url}", () => client.GetAsync(url).Result));
 
-                    return new HttpResult(content.StatusCode, content.Content.ReadAsStringAsync().Result);
-                }
-                catch (Exception ex)
+                if (content.StatusCode == HttpStatusCode.NotFound)
+                    return new HttpResult(HttpStatusCode.NotFound, string.Empty);
+
+                content.EnsureSuccessStatusCode();
+
+                return new HttpResult(content.StatusCode, content.Content.ReadAsStringAsync().Result);
+            }
+            catch (Exception ex)
+            {
+                var aggregateException = ex as AggregateException;
+                if (aggregateException != null)
                 {
-                    var aggregateException = ex as AggregateException;
-                    if (aggregateException != null)
+                    var aex = aggregateException;
+                    foreach (var exception in aex.InnerExceptions)
                     {
-                        var aex = aggregateException;
-                        foreach (var exception in aex.InnerExceptions)
-                        {
-                            _logger.Error(exception, $"Error in contact feed reader, calling endpoint {url}");
-                        }
-                        throw aex.InnerExceptions.First();
+                        _logger.Error(exception, $"Error in contact feed reader, calling endpoint {url}");
                     }
-                    _logger.Error(ex, $"Error in contact feed reader, calling endpoint {url}");
-                    throw;
+                    throw aex.InnerExceptions.First();
                 }
+                _logger.Error(ex, $"Error in contact feed reader, calling endpoint {url}");
+                throw;
             }
         }
 
