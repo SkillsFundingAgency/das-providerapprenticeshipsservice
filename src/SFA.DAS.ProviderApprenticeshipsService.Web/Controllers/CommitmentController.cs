@@ -354,7 +354,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (viewModel.SaveStatus == SaveStatus.Save)
             {
-                TempData["FlashMessage"] = "Details saved but not sent";
+                TempData["FlashMessage"] = "Cohort saved but not sent";
                 var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(viewModel.ProviderId, GetRequestStatusFromSession());
                 if (currentStatusCohortAny)
                     return Redirect(GetReturnToListUrl(viewModel.ProviderId));

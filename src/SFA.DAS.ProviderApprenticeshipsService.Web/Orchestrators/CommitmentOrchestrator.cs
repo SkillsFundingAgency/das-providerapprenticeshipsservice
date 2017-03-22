@@ -207,9 +207,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 Commitments = await MapFrom(data, _latestMessageToProviderFunc),
-                PageTitle = "Review cohorts",
+                PageTitle = "Cohorts for review",
                 PageId = "review-cohorts-list",
-                PageHeading = "Review cohorts",
+                PageHeading = "Cohorts for review",
                 PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSurfix(data.ToList().Count)} that are ready for review:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
@@ -224,10 +224,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 Commitments = await MapFrom(data, _latestMessageToProviderFunc),
-                PageTitle = "Approve cohorts",
+                PageTitle = "Cohorts for approval",
                 PageId = "approve-cohorts",
-                PageHeading = "Approve cohorts",
-                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSurfix(data.ToList().Count)} that need your approval:",
+                PageHeading = "Cohorts for approval",
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSurfix(data.ToList().Count)} ready for your approval:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
