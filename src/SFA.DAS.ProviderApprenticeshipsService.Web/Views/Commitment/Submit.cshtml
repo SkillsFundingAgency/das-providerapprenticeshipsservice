@@ -3,14 +3,14 @@
 @model SubmitCommitmentViewModel
 
 @{
-    ViewBag.Title = "Add instructions";
+    ViewBag.Title = "Message for employer";
     ViewBag.PageId = "submit-instructions";
 }
 
 <div class="grid-row submit-page">
     <div class="column-two-thirds">
 
-        <h1 class="heading-xlarge">Add instructions</h1>
+        <h1 class="heading-xlarge">Message for employer</h1>
            
             <p class="lede">Let <span class="strong">@Model.EmployerName</span> know what you'd like them to do.</p>
          
@@ -19,7 +19,7 @@
         <form method="POST" action="@Url.Action("Submit")">
             @Html.AntiForgeryToken()
             <div class="form-group">
-                <label class="form-label strong" for="Message">Instructions (optional)</label>
+                <label class="form-label strong" for="Message">Message (optional)</label>
               
                 <textarea class="form-control form-control-3-4 message" id="Message" name="Message"
                           cols="40" rows="10"

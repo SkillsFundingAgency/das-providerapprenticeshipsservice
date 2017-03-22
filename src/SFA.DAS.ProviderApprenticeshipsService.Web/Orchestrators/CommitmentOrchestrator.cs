@@ -855,7 +855,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     .ToList();
         }
 
-        public async Task<AcknowledgementViewModel> GetAcknowledgementViewModel(long providerId, string hashedCommitmentId)
+        public async Task<AcknowledgementViewModel> GetAcknowledgementViewModel(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
         {
             var commitment = await GetCommitment(providerId, hashedCommitmentId);
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
@@ -870,6 +870,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Message = message,
                 RedirectUrl = string.Empty,
                 RedirectLinkText = string.Empty,
+                PageTitle = saveStatus == SaveStatus.ApproveAndSend 
+                    ? "Cohort approved and sent to employer" 
+                    : "Cohort sent for review",
+                WhatHappendsNext = saveStatus == SaveStatus.ApproveAndSend
+                    ? "The employer will review the cohort and either approve it or contact you with an update."
+                    : "Your training provider will review your cohort and contact you as soon as possible."
             };
 
             return result;

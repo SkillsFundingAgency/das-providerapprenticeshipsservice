@@ -378,7 +378,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             else
             {
                 url = Url.Action("Cohorts", "Commitment", new { ProviderId = providerId });
-                linkText = "Return to Your cohorts";
+                linkText = "Return to your cohorts";
             }
 
             var model = new AcknowledgementViewModel { CommitmentReference = commitment.Reference, EmployerName = commitment.LegalEntityName, ProviderName = commitment.ProviderName, Message = string.Empty, RedirectUrl = url, RedirectLinkText = linkText };
@@ -411,14 +411,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             await _commitmentOrchestrator.SubmitCommitment(CurrentUserId, model.ProviderId, model.HashedCommitmentId, model.SaveStatus, model.Message, GetSingedInUser());
 
-            return RedirectToAction("Acknowledgement", new { providerId = model.ProviderId, hashedCommitmentId = model.HashedCommitmentId});
+            return RedirectToAction("Acknowledgement", new { providerId = model.ProviderId, hashedCommitmentId = model.HashedCommitmentId, saveStatus = model.SaveStatus});
         }
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Acknowledgement")]
-        public async Task<ActionResult> Acknowledgement(long providerId, string hashedCommitmentId)
+        public async Task<ActionResult> Acknowledgement(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
         {
-            var viewModel = await _commitmentOrchestrator.GetAcknowledgementViewModel(providerId, hashedCommitmentId);
+            var viewModel = await _commitmentOrchestrator.GetAcknowledgementViewModel(providerId, hashedCommitmentId, saveStatus);
 
             var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(providerId, GetRequestStatusFromSession());
             var url = GetReturnToListUrl(providerId);
