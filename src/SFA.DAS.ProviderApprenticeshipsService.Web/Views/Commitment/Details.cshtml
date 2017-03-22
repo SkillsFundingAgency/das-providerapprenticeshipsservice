@@ -66,7 +66,7 @@
         </div>
 
         <div class="column-one-half employer-details">
-            <p class="strong">Note:</p>
+            <p class="strong">Message:</p>
             <p>@(string.IsNullOrWhiteSpace(Model.LatestMessage) ? "No note added" : Model.LatestMessage)</p>
         </div>
     </div>
@@ -90,7 +90,7 @@
 
         public string PluraliseApprentice(int count)
         {
-            return count == 1 ? "Apprentice" : "Apprentices";
+            return count == 1 ? "Apprenticeship" : "Apprenticeships";
         }
 
         public string PluraliseIncompleteRecords(int count)
@@ -129,7 +129,7 @@ else
             @if (!Model.HasApprenticeships)
             {
                 <div class="panel panel-border-wide alert-default">
-                    <p>You haven't added any apprentices yet. Use the options on this page to add apprentices.</p>
+                    <p>You haven’t added any apprentices yet - <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })">add an apprentice</a>.</p>
                 </div>
             }
         </div>
