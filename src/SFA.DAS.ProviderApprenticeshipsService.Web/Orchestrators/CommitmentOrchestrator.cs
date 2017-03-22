@@ -207,9 +207,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 Commitments = await MapFrom(data, _latestMessageToProviderFunc),
-                PageTitle = "Review cohorts",
+                PageTitle = "Cohorts for review",
                 PageId = "review-cohorts-list",
-                PageHeading = "Review cohorts",
+                PageHeading = "Cohorts for review",
                 PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSurfix(data.ToList().Count)} that are ready for review:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
@@ -224,10 +224,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 Commitments = await MapFrom(data, _latestMessageToProviderFunc),
-                PageTitle = "Approve cohorts",
+                PageTitle = "Cohorts for approval",
                 PageId = "approve-cohorts",
-                PageHeading = "Approve cohorts",
-                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSurfix(data.ToList().Count)} that need your approval:",
+                PageHeading = "Cohorts for approval",
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSurfix(data.ToList().Count)} ready for your approval:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
@@ -855,7 +855,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     .ToList();
         }
 
-        public async Task<AcknowledgementViewModel> GetAcknowledgementViewModel(long providerId, string hashedCommitmentId)
+        public async Task<AcknowledgementViewModel> GetAcknowledgementViewModel(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
         {
             var commitment = await GetCommitment(providerId, hashedCommitmentId);
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
@@ -870,6 +870,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Message = message,
                 RedirectUrl = string.Empty,
                 RedirectLinkText = string.Empty,
+                PageTitle = saveStatus == SaveStatus.ApproveAndSend 
+                    ? "Cohort approved and sent to employer" 
+                    : "Cohort sent for review",
+                WhatHappendsNext = saveStatus == SaveStatus.ApproveAndSend
+                    ? "The employer will review the cohort and either approve it or contact you with an update."
+                    : "Your training provider will review your cohort and contact you as soon as possible."
             };
 
             return result;
