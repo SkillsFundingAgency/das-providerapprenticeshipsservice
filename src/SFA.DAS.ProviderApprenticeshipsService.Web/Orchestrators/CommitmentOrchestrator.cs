@@ -122,7 +122,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageTitle = "Cohorts with employers",
                 PageId = "cohorts-with-employers",
                 PageHeading = "Cohorts with employers",
-                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSurfix(data.ToList().Count)} that are that are with employers:",
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSurfix(data.ToList().Count)} with employers for review or approval:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }

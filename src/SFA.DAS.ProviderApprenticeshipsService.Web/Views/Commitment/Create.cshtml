@@ -2,7 +2,7 @@
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipViewModel
 
 @{
-    ViewBag.Title = "Add an apprentice";
+    ViewBag.Title = "Add apprentice details";
     ViewBag.PageId = "add-apprentice-entry";
 }
 
@@ -18,10 +18,14 @@
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             @Html.AntiForgeryToken()
 
-            <h1 class="heading-xlarge">Add an apprentice</h1>
-            <div class="panel panel-border-wide">
-                <p>You must add the apprentice’s first and last names – fill in as many other fields as you can. You'll be able to return later to make changes or add more information.</p>
-                <p> You can only receive payments for this apprentice once all the fields have been completed - either by yourself or the employer.</p>
+            <h1 class="heading-xlarge">Add apprentice details</h1>
+            <div class="panel panel-border-wide add-edit-desc">
+                <p>You must add the apprentice’s first and last names - fill in as many other fields as you can. You'll be able to return later to make changes or add more information.</p>
+                <p> You can only receive payments for this apprentice if:</p>
+                <ul class="list list-bullet">
+                    <li>all the fields have been completed - either by yourself or the employer</li>
+                    <li>the data matches the individualised learner record (ILR) data you send us</li>
+                </ul>
             </div>
 
             <hr />
@@ -80,16 +84,16 @@
                 <div class="form-group">
                     <hr />
                     <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
-                    <select name="TrainingCode" id="TrainingCode" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
-                        <option value="">Please select</option>
-                        @foreach (var programme in ViewBag.ApprenticeshipProgrammes)
-                        {
-                            <option value="@programme.Id" @if (programme.Id.ToString() == Model.TrainingCode) { @Html.Raw("selected")  }>
-                                @programme.Title
-                            </option>
-                        }
-                    </select>
-
+                    <span class="form-hint">Start typing in the name of the course or choose an option from the list</span>
+                        <select name="TrainingCode" id="TrainingCode" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
+                            <option value="">Please select</option>
+                            @foreach (var programme in ViewBag.ApprenticeshipProgrammes)
+                            {
+                                <option value="@programme.Id" @if (programme.Id.ToString() == Model.TrainingCode) { @Html.Raw("selected")   }>
+                                    @programme.Title
+                                </option>
+                            }
+                        </select>
                 </div>
 
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.StartDate, "error") @Html.AddClassIfPropertyInError("StartDateOverlap", "error")">
@@ -151,9 +155,9 @@
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.Cost, "error")">
                     <hr/>
                     <label for="@Html.IdFor(m => m.Cost)">
-                        <span class="form-label-bold">Total agreed training cost (excluding VAT)</span>
-                        <span class="form-hint">For example, for £1,500 enter 1500</span>
-                        @Html.ValidationMessageFor(m => m.Cost, "Enter the cost in whole pounds", new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
+                        <span class="form-label-bold">Total agreed apprenticeship price (excluding VAT)</span>
+                        <span class="form-hint">Enter the price, including any end-point assessment costs, in whole pounds. For example, for £1,500 enter 1500.</span>
+                        @Html.ValidationMessageFor(m => m.Cost, "Enter the cost in whole pounds, without a £ symbol", new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
                     </label>
                     <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby = Html.IdFor(m => m.Cost) })
                 </div>
@@ -161,7 +165,7 @@
                 <div class="form-group @Html.AddClassIfPropertyInError(x => x.ProviderRef, "error")">
                     <hr />
                     @Html.LabelFor(m => m.ProviderRef, "Reference (optional)", new { @class = "form-label-bold" })
-                    <span class="form-hint">Add a reference, such as employee number or location - this can help identify this apprentice if you have more than one with the same name.</span>
+                    <span class="form-hint">Add a reference, such as employee number or location - this won’t be seen by the employer</span>
                     @Html.ValidationMessageFor(m => m.ProviderRef, null, new { id = "error-message-" + Html.IdFor(m => m.ProviderRef) })
                     @Html.TextBoxFor(m => m.ProviderRef, new { @class = "form-control form-control-3-4" })
                    
