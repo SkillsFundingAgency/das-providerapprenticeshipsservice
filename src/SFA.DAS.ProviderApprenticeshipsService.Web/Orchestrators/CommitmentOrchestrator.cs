@@ -875,7 +875,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     : "Cohort sent for review",
                 WhatHappendsNext = saveStatus == SaveStatus.ApproveAndSend
                     ? "The employer will review the cohort and either approve it or contact you with an update."
-                    : "Your training provider will review your cohort and contact you as soon as possible."
+                    : "The updated cohort will appear in the employer’s account for them to review."
             };
 
             return result;
