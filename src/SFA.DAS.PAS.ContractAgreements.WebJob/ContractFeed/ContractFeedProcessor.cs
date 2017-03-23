@@ -4,73 +4,107 @@ using System.Linq;
 using System.Xml.Linq;
 
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
-    public class ContractFeedProcessor : IContractDataProvider
+    public sealed class ContractFeedProcessor : IContractDataProvider
     {
         private readonly XNamespace _nsAtom = "http://www.w3.org/2005/Atom";
         private readonly XNamespace _nsUrn = "urn:sfa:schemas:contract";
-
         private readonly ContractFeedReader _reader;
-
         private readonly IContractFeedEventValidator _validator;
-
-        private readonly ContractFeedConfiguration _configuration;
-
         private readonly ILog _logger;
 
         public ContractFeedProcessor(
             ContractFeedReader reader, 
             IContractFeedEventValidator validator,
-            ContractFeedConfiguration configuration,
             ILog logger)
         {
             _reader = reader;
             _validator = validator;
-            _configuration = configuration;
             _logger = logger;
         }
 
-        public EventRun ReadEvents(int lastPageNumber, Guid lastBookmarkedItemId, Action<int, IEnumerable<ContractFeedEvent>> saveRecordsAction)
+        public string FindPageWithBookmark(Guid? latestBookmark)
         {
-            _logger.Info($"Reading {_configuration.ReadMaxPages} pages");
-            var newLastReadPageNumber = lastPageNumber;
-            var contractCount = 0;
-            var pagesRead = 0;
+            _logger.Info($"Finding page for latest bookmark: {(latestBookmark.HasValue ? latestBookmark.ToString() : "[not set]")}");
 
-            _reader.Read(lastPageNumber, (pageNumber, pageContent, isLastPage) =>
+            string currentPageUrl = _reader.LatestPageUrl;
+            string startPageUrl = null;
+
+            // Load page and check if contains bookmark
+            _reader.Read(currentPageUrl, ReadDirection.Backward, (pageUrl, pageContent, pageNavigation) =>
+            {
+                // Is this the first page?
+                if (pageNavigation.IsStartPage)
+                {
+                    startPageUrl = pageUrl;
+                    _logger.Info($"Start page found at: {startPageUrl}");
+
+                    return false;
+                }
+
+                // Look at items on the page for a match of book mark
+                var doc = XDocument.Parse(pageContent);
+
+                if (PageContainsBookmark(latestBookmark, doc))
+                {
+                    startPageUrl = pageUrl;
+                    _logger.Info($"Bookmark {latestBookmark.ToString()} found on page: {startPageUrl}");
+
+                    return false;
+                }
+
+                _logger.Info($"Bookmark not found on {pageUrl}");
+
+                return true;
+            });
+
+            return startPageUrl;
+        }
+
+        public int ReadEvents(string pageToReadUri, Guid? latestBookmark, Action<IList<ContractFeedEvent>, Guid?> saveRecordsAction)
+        {
+            var contractCount = 0;
+
+            _reader.Read(pageToReadUri, ReadDirection.Forward, (pageUri, pageContent, pageNaviation) =>
             {
                 var doc = XDocument.Parse(pageContent);
 
                 // process page in reverse order as items are provided in ascending datetime from fcs
-                var entries = doc.Descendants(_nsAtom + "entry").Reverse().ToList();
-
-                var newContractDataPage = entries
+                var entries = doc.Descendants(_nsAtom + "entry")
+                    .Reverse()
                     .Select(ExtractContractFeedEvent)
-                    .Where(contractFeedEvent => contractFeedEvent != null)
-                    .TakeWhile(contractFeedEvent => lastBookmarkedItemId == Guid.Empty || contractFeedEvent.Id != lastBookmarkedItemId)
-                    .Where(_validator.Validate) // ToDo: Enable when testing
                     .ToList();
 
-                _logger.Info($"Adding: {newContractDataPage.Count} from page: {pageNumber}");
-                saveRecordsAction(pageNumber, newContractDataPage);
+                var newBookmark = entries.FirstOrDefault()?.Id;
+                 
+                var matchingContracts = entries
+                    .Where(contractFeedEvent => contractFeedEvent != null)
+                    .TakeWhile(contractFeedEvent => latestBookmark == null || contractFeedEvent.Id != latestBookmark)
+                    .Where(_validator.Validate)
+                    .ToList();
 
-                newLastReadPageNumber = isLastPage ? pageNumber -1 : pageNumber;
+                _logger.Info($"Adding: {matchingContracts.Count} from page: {pageUri}");
 
-                contractCount += newContractDataPage.Count;
-                pagesRead += 1;
-                return lastPageNumber + (_configuration.ReadMaxPages-1) > pageNumber;
+                saveRecordsAction(matchingContracts, newBookmark);
+
+                contractCount += matchingContracts.Count;
+
+                return true; // Continue reading more
             });
 
-            return new EventRun
-                       {
-                           NewLastReadPageNumber = newLastReadPageNumber,
-                           ContractCount = contractCount,
-                           PagesRead = pagesRead
-                       };
+            return contractCount;
+        }
+
+        private bool PageContainsBookmark(Guid? latestBookmark, XDocument doc)
+        {
+            // process page in reverse order as items are provided in ascending datetime from fcs
+            return doc.Descendants(_nsAtom + "entry")
+                                    .Reverse()
+                                    .Select(ExtractContractFeedEvent)
+                                    .Any(x => x.Id == latestBookmark);
         }
 
         private ContractFeedEvent ExtractContractFeedEvent(XContainer element)

@@ -8,7 +8,16 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
     public class ContractFeedProcessorHttpClient : IContractFeedProcessorHttpClient
     {
         private readonly AzureAuthentication _authenticationCredentials;
+        private static readonly HttpClient _httpClient;
+        private static string VendorAtomMediaType = "application/vnd.sfa.contract.v1+atom+xml";
 
+        static ContractFeedProcessorHttpClient()
+        {
+            _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(VendorAtomMediaType));
+        }
+        
         public ContractFeedProcessorHttpClient(ContractFeedConfiguration config)
         {
             _authenticationCredentials = new AzureAuthentication(config.AADInstance, config.Tenant, config.ClientId, config.AppKey, config.ResourceId);
@@ -19,11 +28,10 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 
         public virtual HttpClient GetAuthorizedHttpClient()
         {
-            var client = new HttpClient();
             var token = _authenticationCredentials.GetAuthenticationResult().Result.AccessToken;
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            return client;
+            return _httpClient;
         }
     }
 }

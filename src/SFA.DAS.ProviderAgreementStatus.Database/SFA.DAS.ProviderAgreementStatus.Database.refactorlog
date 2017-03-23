@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="f18754c7-d590-4b4e-b2f0-48261107764a" ChangeDateTime="03/17/2017 15:09:54">
+    <Property Name="ElementName" Value="[dbo].[ContractFeedEvent].[PageNumber]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ContractFeedEvent]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PageIdentifier" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9e7b0643-161f-4db2-8674-71a67f7a91e8" ChangeDateTime="03/17/2017 15:11:35">
+    <Property Name="ElementName" Value="[dbo].[ContractFeedEvent].[PageIdentifier]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ContractFeedEvent]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PageNumber" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="57faf541-58a2-4061-b2ce-1a7bf4324434" ChangeDateTime="03/17/2017 15:16:38">
+    <Property Name="ElementName" Value="[dbo].[ContractFeedEventRun].[PageNumber]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ContractFeedEventRun]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LatestBookmark" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fffe2629-a16e-4c05-8faa-216bba1e6e96" ChangeDateTime="03/17/2017 15:25:49">
+    <Property Name="ElementName" Value="[dbo].[ContractFeedEvent].[Updated]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ContractFeedEvent]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UpdatedInFeed" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6609bb34-8664-44e4-b8c1-3a39c25147c1" ChangeDateTime="03/17/2017 16:03:04">
+    <Property Name="ElementName" Value="[dbo].[ContractFeedEventRun].[Updated]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ContractFeedEventRun]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UpdatedDate" />
+  </Operation>
+</Operations>
