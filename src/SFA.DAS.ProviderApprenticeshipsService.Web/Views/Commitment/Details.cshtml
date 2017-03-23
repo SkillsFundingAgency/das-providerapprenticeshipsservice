@@ -41,13 +41,13 @@
         <div class="column-one-third all-apps">
             <div>
                 <h2 class="bold-xlarge">@Model.Apprenticeships.Count</h2>
-                <p class="heading-small">@PluraliseApprentice(Model.Apprenticeships.Count)</p>
+                <p class="heading-small">@_addS("Apprentice", Model.Apprenticeships.Count)</p>
             </div>
         </div>
         <div class="column-one-third incomplete-apps">
             <div>
                 <h2 class="bold-xlarge">@Model.Apprenticeships.Count(x => !x.CanBeApprove)</h2>
-                <p class="heading-small">@PluraliseIncompleteRecords(Model.Apprenticeships.Count(x => !x.CanBeApprove))</p>
+                <p class="heading-small">Incomplete @_addS("record", Model.Apprenticeships.Count(x => !x.CanBeApprove))</p>
             </div>
         </div>
         <div class="column-one-third total-cost">
@@ -66,51 +66,11 @@
         </div>
 
         <div class="column-one-half employer-details">
-            <p class="strong">Note:</p>
+            <p class="strong">Message:</p>
             <p>@(string.IsNullOrWhiteSpace(Model.LatestMessage) ? "No note added" : Model.LatestMessage)</p>
         </div>
     </div>
 
-    @functions {
-        public string GetApprenticesCountText(IList<ApprenticeshipListItemViewModel> apprenticeships)
-        {
-            if (apprenticeships.Count == 1)
-                return "1 Apprentice";
-
-            return $"{apprenticeships.Count} Apprentices";
-        }
-
-        public string FormatCost(decimal? cost)
-        {
-            if (!cost.HasValue)
-                return string.Empty;
-
-            return $"£{cost.Value:n0}";
-        }
-
-        public string PluraliseApprentice(int count)
-        {
-            return count == 1 ? "Apprentice" : "Apprentices";
-        }
-
-        public string PluraliseIncompleteRecords(int count)
-        {
-            return count == 1 ? "Incomplete record" : "Incomplete records";
-        }
-
-    }
-
-    @helper GetValueOrDefault(string property)
-    {
-if (!string.IsNullOrEmpty(property))
-{
-        <span>@property &nbsp;</span>
-}
-else
-{
-        <span class="missing">@Html.Raw("&ndash;")</span>
-}
-}
     <div class="grid-row">
         <div class="column-full bulk-upload-buttons">
             <hr class="hr-top">
@@ -119,8 +79,6 @@ else
             <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
             <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
             <a href="@Url.Action("UploadApprenticeships", "BulkUpload", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary upload-btn" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
-
-            @*<hr class="hr-bottom">*@
         </div>
     </div>
 
@@ -129,7 +87,7 @@ else
             @if (!Model.HasApprenticeships)
             {
                 <div class="panel panel-border-wide alert-default">
-                    <p>You haven't added any apprentices yet. Use the options on this page to add apprentices.</p>
+                    <p>You haven’t added any apprentices yet - <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })">add an apprentice</a>.</p>
                 </div>
             }
         </div>
@@ -158,7 +116,7 @@ else
                         {
                             <div class="overlap-notification grey-background" id="error-message-@group.GroupId">
                                 <p class="heading-medium">
-                                    @group.OverlapErrorCount @PluraliseApprentice(group.OverlapErrorCount).ToLower() with overlapping training dates
+                                    @group.OverlapErrorCount @_addS("Apprenticeship", group.OverlapErrorCount) with overlapping training dates
                                 </p>
                                 <p>
                                     These apprentices already have records with overlapping training dates in the apprenticeship service.
@@ -171,7 +129,7 @@ else
                         {
                             <div class="funding-cap-notification" id="max-funding-group-@group.GroupId">
                                 <p class="heading-medium">
-                                    @($"{group.ApprenticeshipsOverFundingLimit} {group.TrainingProgramme.Title} {PluraliseApprentice(group.ApprenticeshipsOverFundingLimit).ToLower()} above funding band maximum")
+                                    @($"{group.ApprenticeshipsOverFundingLimit} {group.TrainingProgramme.Title} {_addS("Apprenticeship", group.ApprenticeshipsOverFundingLimit)} above funding band maximum")
                                 </p>
                                 <p>
                                     The costs are above the £@group.TrainingProgramme.MaxFunding.ToString("N0") <a target="_blank" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">maximum value of the funding band</a> for this apprenticeship. You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.
@@ -274,8 +232,25 @@ else
 </div>
 
 
+@functions {
+    public string FormatCost(decimal? cost)
+    {
+        return !cost.HasValue
+            ? string.Empty
+            : $"£{cost.Value:n0}";
+    }
 
+    readonly Func<string, int, string> _addS = (word, count) => count == 1 ? word : $"{word}s";
+}
 
-
-
-
+@helper GetValueOrDefault(string property)
+{
+    if (!string.IsNullOrEmpty(property))
+    {
+            <span>@property &nbsp;</span>
+    }
+    else
+    {
+            <span class="missing">@Html.Raw("&ndash;")</span>
+    }
+}

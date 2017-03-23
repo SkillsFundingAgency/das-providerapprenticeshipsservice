@@ -27,7 +27,6 @@
                 <tr>
                     <td>Employer </td>
                     <td class="strong">@Model.EmployerName</td>
-
                 </tr>
                 <tr>
                     <td>Approved by</td>
@@ -38,7 +37,8 @@
 
         <h2 class="heading-medium">What happens next?</h2>
         <p id="changeMainCopy">
-            Your cohort has been approved - your apprentices will appear in the Manage your apprentices area of your account.
+            Your cohort has been approved. To update the details for any apprentices in this cohort you will need to 
+            <a href="@Url.Action("Index" ,"ManageApprentices")">manage your apprentices</a>.
         </p>
 
         @if (!string.IsNullOrEmpty(Model.RedirectUrl))
@@ -62,6 +62,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("Index", "Home")" aria-label="Back to Account home" class="back-link">Back to Account home</a>
+        <a href="@Url.Action("Index", "Home")" aria-label="Back to Account home" class="back-link">Back to account home</a>
     </div>
 }

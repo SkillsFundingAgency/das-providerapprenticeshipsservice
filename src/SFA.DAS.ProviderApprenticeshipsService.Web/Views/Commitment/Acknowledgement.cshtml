@@ -1,7 +1,7 @@
 ﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.AcknowledgementViewModel
 
 @{
-    ViewBag.Title = "Instructions sent";
+    ViewBag.Title = Model.PageTitle;
     ViewBag.PageId = "instructions-sent-end";
 }
 
@@ -11,6 +11,7 @@
         <div class="govuk-box-highlight">
             <h1 class="heading-xlarge" id="changeHeadline">
                 Instructions sent
+                @Model.PageTitle
             </h1>
         </div>
     </div>
@@ -36,7 +37,7 @@
                     <td class="strong">@Model.ProviderName</td>
                 </tr>
                 <tr>
-                    <td>Instructions</td>
+                    <td>Message</td>
                     <td class="strong">@Model.Message</td>
                 </tr>
             </tbody>
