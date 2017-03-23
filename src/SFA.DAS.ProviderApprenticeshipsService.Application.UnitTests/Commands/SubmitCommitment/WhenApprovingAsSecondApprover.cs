@@ -2,7 +2,7 @@
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Client;
+
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
@@ -10,13 +10,17 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.Tasks.Api.Client;
 using System.Threading.Tasks;
 
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.SubmitCommitment
 {
     [TestFixture]
     public sealed class WhenApprovingAsSecondApprover
     {
         private SubmitCommitmentCommand _validCommand;
-        private Mock<ICommitmentsApi> _mockCommitmentsApi;
+        private Mock<IProviderCommitmentsApi> _mockCommitmentsApi;
         private Mock<IMediator> _mockMediator;
         private Mock<ITasksApi> _mockTasksApi;
         private SubmitCommitmentCommandHandler _handler;
@@ -37,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 UserId = "user123",
             };
 
-            _mockCommitmentsApi = new Mock<ICommitmentsApi>();
+            _mockCommitmentsApi = new Mock<IProviderCommitmentsApi>();
             _mockCommitmentsApi.Setup(x => x.GetProviderCommitment(_validCommand.ProviderId, _validCommand.CommitmentId))
                 .ReturnsAsync(new Commitment
                 {

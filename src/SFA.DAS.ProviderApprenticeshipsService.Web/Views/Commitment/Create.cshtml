@@ -92,7 +92,7 @@
 
                 </div>
 
-                <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.StartDate, "error")">
+                <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.StartDate, "error") @Html.AddClassIfPropertyInError("StartDateOverlap", "error")">
                     <fieldset>
                         <legend>
                             <span class="form-label-bold">Planned training start date</span>
@@ -100,6 +100,10 @@
                         </legend>
                         <div class="form-date">
                             @Html.ValidationMessageFor(m => m.StartDate, null, new { id = "error-message-" + Html.IdFor(m => m.StartDate), @class = "error-message" })
+                            @Html.ValidationMessage("StartDateOverlap",
+                                "The date overlaps with existing training dates for the same apprentice. " +
+                                    "Please check the date - contact the employer for help.",
+                                new { id = "error-message-StartDateOverlap", @class = "error-message" })
                             <div class="form-group form-group-month">
                                 <label for="@Html.IdFor(m => m.StartDate.Month)">
                                     <span class="form-label-bold">Month</span>
@@ -116,7 +120,7 @@
                     </fieldset>
                 </div>
 
-                <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.EndDate, "error")">
+                <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.EndDate, "error") @Html.AddClassIfPropertyInError("EndDateOverlap", "error")">
                     <fieldset>
                         <legend>
                             <span class="form-label-bold">Projected finish date</span>
@@ -124,6 +128,10 @@
                         </legend>
                         <div class="form-date">
                             @Html.ValidationMessageFor(m => m.EndDate, null, new { id = "error-message-" + Html.IdFor(m => m.EndDate), @class = "error-message" })
+                            @Html.ValidationMessage("EndDateOverlap",
+                                "The date overlaps with existing training dates for the same apprentice. " +
+                                    "Please check the date - contact the employer for help.",
+                                new { id = "error-message-EndDateOverlap", @class = "error-message" })
                             <div class="form-group form-group-month">
                                 <label for="@Html.IdFor(m => m.EndDate.Month)">
                                     <span class="form-label-bold">Month</span>

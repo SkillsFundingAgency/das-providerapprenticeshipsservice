@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application;
@@ -161,6 +163,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return RedirectToAction("VerificationOfEmployer", new {providerId, hashedCommitmentId});
             }
 
+            var groupes = model.ApprenticeshipGroups.Where(m => m.ShowOverlapError);
+            foreach (var groupe in groupes)
+            {
+                var errorMessage = groupe.TrainingProgramme?.Title != null 
+                    ? $"{groupe.TrainingProgramme?.Title ?? ""} apprentices training dates"
+                    : "Apprentices training dates";
+
+                ModelState.AddModelError($"{groupe.GroupId}", errorMessage);
+            }
             model.BackLinkUrl = GetReturnToListUrl(providerId);
             return View(model);
         }
@@ -212,6 +223,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Edit(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
             var model = await _commitmentOrchestrator.GetApprenticeship(providerId, hashedCommitmentId, hashedApprenticeshipId);
+            AddErrorsToModelState(model.ValidationErrors);
+            
             ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
 
             return View(model.Apprenticeship);
@@ -224,6 +237,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             try
             {
+                AddErrorsToModelState(await _commitmentOrchestrator.ValidateApprenticeship(apprenticeship));
                 if (!ModelState.IsValid)
                 {
                     return await RedisplayApprenticeshipView(apprenticeship);
@@ -289,6 +303,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             try
             {
+                AddErrorsToModelState(await _commitmentOrchestrator.ValidateApprenticeship(apprenticeship));
                 if (!ModelState.IsValid)
                 {
                     return await RedisplayApprenticeshipView(apprenticeship);
@@ -447,6 +462,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         private void AddErrorsToModelState(InvalidRequestException ex)
         {
             foreach (var error in ex.ErrorMessages)
+            {
+                ModelState.AddModelError(error.Key, error.Value);
+            }
+        }
+
+        private void AddErrorsToModelState(Dictionary<string, string> dict)
+        {
+            foreach (var error in dict)
             {
                 ModelState.AddModelError(error.Key, error.Value);
             }

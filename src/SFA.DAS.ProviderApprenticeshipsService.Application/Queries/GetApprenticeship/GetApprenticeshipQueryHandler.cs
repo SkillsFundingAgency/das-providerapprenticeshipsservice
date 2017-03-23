@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship
 {
     public class GetApprenticeshipQueryHandler : IAsyncRequestHandler<GetApprenticeshipQueryRequest, GetApprenticeshipQueryResponse>
     {
-        private readonly ICommitmentsApi _commitmentsApi;
+        private readonly IProviderCommitmentsApi _commitmentsApi;
 
-        public GetApprenticeshipQueryHandler(ICommitmentsApi commitmentsApi)
+        public GetApprenticeshipQueryHandler(IProviderCommitmentsApi providerCommitmentsApi)
         {
-            if (commitmentsApi == null)
-                throw new ArgumentNullException(nameof(commitmentsApi));
-            _commitmentsApi = commitmentsApi;
+            if (providerCommitmentsApi == null)
+                throw new ArgumentNullException(nameof(providerCommitmentsApi));
+            _commitmentsApi = providerCommitmentsApi;
         }
 
         public async Task<GetApprenticeshipQueryResponse> Handle(GetApprenticeshipQueryRequest message)

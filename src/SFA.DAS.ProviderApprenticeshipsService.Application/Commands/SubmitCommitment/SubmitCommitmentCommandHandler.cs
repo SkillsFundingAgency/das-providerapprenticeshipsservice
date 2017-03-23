@@ -4,8 +4,11 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using Newtonsoft.Json;
-using SFA.DAS.Commitments.Api.Client;
+
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -16,13 +19,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
 {
     public class SubmitCommitmentCommandHandler : AsyncRequestHandler<SubmitCommitmentCommand>
     {
-        private readonly ICommitmentsApi _commitmentsApi;
+        private readonly IProviderCommitmentsApi _commitmentsApi;
         private readonly ITasksApi _tasksApi;
         private readonly AbstractValidator<SubmitCommitmentCommand> _validator;
         private readonly IMediator _mediator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
 
-        public SubmitCommitmentCommandHandler(ICommitmentsApi commitmentsApi, ITasksApi tasksApi, AbstractValidator<SubmitCommitmentCommand> validator, IMediator mediator, ProviderApprenticeshipsServiceConfiguration configuration)
+        public SubmitCommitmentCommandHandler(IProviderCommitmentsApi commitmentsApi, ITasksApi tasksApi, AbstractValidator<SubmitCommitmentCommand> validator, IMediator mediator, ProviderApprenticeshipsServiceConfiguration configuration)
         {
             if (commitmentsApi == null)
                 throw new ArgumentNullException(nameof(commitmentsApi));

@@ -1,6 +1,5 @@
-﻿
+﻿// custom to overwrite the GDS defaults
 
-// custom to overwrite the GDS defaults
 .hr-double {
     border-bottom: 4px solid $grey-2;
     margin-bottom: 20px;
@@ -38,6 +37,12 @@
 #finish-editing{
     .heading-xlarge{
          margin-top: 0.625em;
+    }
+    .alert-default{
+        border-color:$purple;
+        .heading-medium{
+            font-size:24px;
+        }
     }
 
 }
@@ -313,7 +318,7 @@
 .funding-cap-notification{
     background:$panel-colour;
     padding:20px 20px 10px;
-    
+    border-left:10px solid $govuk-blue;
     .heading-medium{margin-top:10px;}  
 }
 .bubble-arrow{    
@@ -324,8 +329,17 @@
     float: right;
     margin-right: 75px;
     }
+.overlap-arrow{    
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-top: 25px solid $panel-colour;
+    content: "";
+    float: right;
+    margin-right:150px;
+    @include media(tablet) {margin-right: 290px;} 
+    }
 .funding-cap-alert{
-    border-bottom:5px solid $secondary-text-colour;
+    border-bottom:5px solid $govuk-blue;
           a{
                 text-decoration:none;
                 color:$text-colour;
@@ -365,6 +379,29 @@ body {
   right: 0;
   }
 }
+
+#apprentice-details{
+    .overlap-notification{
+        border-left:10px solid $red;
+    }
+}
+
+.overlap-alert{
+      border-bottom: 5px solid $red;
+    a{
+        text-decoration:none;
+        color:$text-colour;
+    }
+}
+.validation-summary-max-funding{
+    border-color:$purple;
+    #warning-summary{
+        margin-top:0;
+    }
+ }
+
+
+
     
 //all mobile media query breakpoints
 //==================================
@@ -373,20 +410,34 @@ only screen and (max-device-width: 667px),
 only screen and (max-width: 480px) { 
 
 #apprentice-details {
-    .tableResponsive{
+    .tableResponsive
+    {
         margin-top:30px;
-        .funding-cap-alert{
-            border-bottom:5px solid $secondary-text-colour;
-            background:$panel-colour;
+        .funding-cap-alert
+        {
+            border-left:10px solid $govuk-blue;
+            background:#fff;
               a{
                 text-decoration:none;
                 color:$text-colour;
+                cursor:pointer;
+                }          
+         }
+         .overlap-alert
+         {
+            border-left:10px solid $error-colour;
+            background:#fff;
+              a{
+                text-decoration:none;
+                color:$text-colour;
+                cursor:pointer;
             }          
-        }
-    }
-}  
+          }
+    }  
+}
 
-.bubble-arrow {display:none;}    
+
+.bubble-arrow, .overlap-arrow {display:none;}    
     
     
     

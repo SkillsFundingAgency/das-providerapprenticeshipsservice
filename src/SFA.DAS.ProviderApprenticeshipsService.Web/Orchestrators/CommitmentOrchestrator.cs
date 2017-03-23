@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Newtonsoft.Json;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.Commitments.Api.Types.Validation;
+using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateApprenticeship;
@@ -22,12 +28,13 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.Tasks.Api.Types.Templates;
-using TrainingType = SFA.DAS.Commitments.Api.Types.TrainingType;
+using TrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
 
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateRelationship;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetRelationshipByCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
@@ -367,7 +374,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var message = await GetLatestMessage(providerId, commitmentId, true);
 
-            var apprenticeships = MapFrom(data.Commitment.Apprenticeships);
+
+            var overlapping = await _mediator.SendAsync(
+                new GetOverlappingApprenticeshipsQueryRequest
+                {
+                    Apprenticeship = data.Commitment.Apprenticeships
+                });
+
+            var apprenticeships = MapFrom(data.Commitment.Apprenticeships, overlapping);
             var trainingProgrammes = await GetTrainingProgrammes();
 
             var apprenticeshipGroups = new List<ApprenticeshipListItemGroupViewModel>();
@@ -379,6 +393,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     TrainingProgramme = trainingProgrammes.FirstOrDefault(x => x.Id == group.Key)
                 });
             }
+
+            var warnings = new Dictionary<string, string>();
+            apprenticeshipGroups
+                .Where(m => m.ShowFundingLimitWarning)
+                .ForEach(group => warnings.Add(group.GroupId, $"Cost for {group.TrainingProgramme.Title}"));
 
             return new CommitmentDetailsViewModel
             {
@@ -393,7 +412,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 LatestMessage = message,
                 PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed,
                 ApprenticeshipGroups = apprenticeshipGroups,
-                RelationshipVerified = relationshipRequest.Relationship.Verified.HasValue
+                RelationshipVerified = relationshipRequest.Relationship.Verified.HasValue,
+                HasOverlappingErrors = apprenticeshipGroups.Any(m => m.OverlapErrorCount > 0),
+                FundingCapWarnings = warnings
             };
         }
 
@@ -473,6 +494,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
+            var overlappingErrors = await _mediator.SendAsync(
+                new GetOverlappingApprenticeshipsQueryRequest
+                {
+                    Apprenticeship = new List<Apprenticeship> { data.Apprenticeship }
+                });
+
             var apprenticeship = MapFrom(data.Apprenticeship);
 
             apprenticeship.ProviderId = providerId;
@@ -480,7 +507,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes()
+                ApprenticeshipProgrammes = await GetTrainingProgrammes(),
+                ValidationErrors = MapOverlappingErrors(overlappingErrors)
             };
         }
 
@@ -605,6 +633,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             AssertCommitmentStatus(data.Commitment, EditStatus.ProviderOnly);
             AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
+            var overlaps = await _mediator.SendAsync(
+                new GetOverlappingApprenticeshipsQueryRequest
+                {
+                    Apprenticeship = data.Commitment.Apprenticeships
+                });
+
             return new FinishEditingViewModel
             {
                 HashedCommitmentId = hashedCommitmentId,
@@ -614,7 +648,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 HasApprenticeships = data.Commitment.Apprenticeships.Any(),
                 InvalidApprenticeshipCount = data.Commitment.Apprenticeships.Count(x => !x.CanBeApproved),
                 HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed,
-                SignAgreementUrl = _configuration.ContractAgreementsUrl
+                SignAgreementUrl = _configuration.ContractAgreementsUrl,
+                HasOverlappingErrors = overlaps.Overlaps.Any()
             };
         }
 
@@ -628,21 +663,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return approvalState;
         }
 
-        private IList<ApprenticeshipListItemViewModel> MapFrom(IEnumerable<Apprenticeship> apprenticeships)
+        private IList<ApprenticeshipListItemViewModel> MapFrom(IEnumerable<Apprenticeship> apprenticeships, GetOverlappingApprenticeshipsQueryResponse overlaps)
         {
-            var apprenticeViewModels = apprenticeships.Select(x => new ApprenticeshipListItemViewModel
-            {
-                HashedApprenticeshipId = _hashingService.HashValue(x.Id),
-                ApprenticeshipName = x.ApprenticeshipName,
-                ApprenticeDateOfBirth = x.DateOfBirth,
-                ULN = x.ULN,
-                TrainingCode = x.TrainingCode,
-                TrainingName = x.TrainingName,
-                StartDate = x.StartDate,
-                EndDate = x.EndDate,
-                Cost = x.Cost,
-                CanBeApprove = x.CanBeApproved
-            }).ToList();
+            var apprenticeViewModels = apprenticeships
+                .Select(x => new ApprenticeshipListItemViewModel
+                {
+                    HashedApprenticeshipId = _hashingService.HashValue(x.Id),
+                    ApprenticeshipName = x.ApprenticeshipName,
+                    ApprenticeDateOfBirth = x.DateOfBirth,
+                    ULN = x.ULN,
+                    TrainingCode = x.TrainingCode,
+                    TrainingName = x.TrainingName,
+                    StartDate = x.StartDate,
+                    EndDate = x.EndDate,
+                    Cost = x.Cost,
+                    CanBeApprove = x.CanBeApproved,
+                    OverlappingApprenticeships = 
+                        overlaps?.GetOverlappingApprenticeships(x.ULN)
+                }).ToList();
 
             return apprenticeViewModels;
         }
@@ -765,6 +803,39 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return apprenticeship;
         }
 
+        private Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors)
+        {
+            var dict = new Dictionary<string, string>();
+            const string StartText = "The start date is not valid";
+            const string EndText = "The end date is not valid";
+
+            const string StartDateKey = "StartDateOverlap";
+            const string EndDateKey = "EndDateOverlap";
+
+
+            foreach (var item in overlappingErrors.GetFirstOverlappingApprenticeships())
+            {
+                switch (item.ValidationFailReason)
+                {
+                    case ValidationFailReason.OverlappingStartDate:
+                        dict.AddIfNotExists(StartDateKey, StartText);
+                        break;
+                    case ValidationFailReason.OverlappingEndDate:
+                        dict.AddIfNotExists(EndDateKey, EndText);
+                        break;
+                    case ValidationFailReason.DateEmbrace:
+                        dict.AddIfNotExists(StartDateKey, StartText);
+                        dict.AddIfNotExists(EndDateKey, EndText);
+                        break;
+                    case ValidationFailReason.DateWithin:
+                        dict.AddIfNotExists(StartDateKey, StartText);
+                        dict.AddIfNotExists(EndDateKey, EndText);
+                        break;
+                }
+            }
+            return dict;
+        }
+
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
         {
             return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
@@ -802,6 +873,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
 
             return result;
+        }
+
+        public async Task<Dictionary<string, string>> ValidateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        {
+            var overlappingErrors = await _mediator.SendAsync(
+                new GetOverlappingApprenticeshipsQueryRequest
+                {
+                    Apprenticeship = new List<Apprenticeship> { await MapFrom(apprenticeship) }
+                });
+
+            return MapOverlappingErrors(overlappingErrors);
         }
     }
 }

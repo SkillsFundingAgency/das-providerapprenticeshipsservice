@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Commitments.Api.Client;
+
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetRelationshipByCommitment
 {
     public class GetRelationshipByCommitmentQueryHandler : IAsyncRequestHandler<GetRelationshipByCommitmentQueryRequest, GetRelationshipByCommitmentQueryResponse>
     {
-        private readonly ICommitmentsApi _commitmentsApi;
+        private readonly IRelationshipApi _relationshipApi;
 
-        public GetRelationshipByCommitmentQueryHandler(ICommitmentsApi commitmentsApi)
+        public GetRelationshipByCommitmentQueryHandler(IRelationshipApi relationshipApi)
         {
-            if (commitmentsApi == null)
-                throw new ArgumentNullException(nameof(commitmentsApi));
-            _commitmentsApi = commitmentsApi;
+            if (relationshipApi == null)
+                throw new ArgumentNullException(nameof(relationshipApi));
+            _relationshipApi = relationshipApi;
         }
 
         public async Task<GetRelationshipByCommitmentQueryResponse> Handle(GetRelationshipByCommitmentQueryRequest message)
         {
-            var response = await _commitmentsApi.GetRelationshipByCommitment(message.ProviderId, message.CommitmentId);
+            var response = await _relationshipApi.GetRelationshipByCommitment(message.ProviderId, message.CommitmentId);
 
             return new GetRelationshipByCommitmentQueryResponse
             {

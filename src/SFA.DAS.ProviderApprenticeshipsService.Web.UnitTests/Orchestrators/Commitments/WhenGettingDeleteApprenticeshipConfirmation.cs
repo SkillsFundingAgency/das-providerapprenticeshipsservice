@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             var dummyResponse = new GetApprenticeshipQueryResponse
             {
-                Apprenticeship = new DAS.Commitments.Api.Types.Apprenticeship { FirstName = "Bob", LastName = "Tester", DateOfBirth = new DateTime(1999, 1, 2) }
+                Apprenticeship = new DAS.Commitments.Api.Types.Apprenticeship.Apprenticeship { FirstName = "Bob", LastName = "Tester", DateOfBirth = new DateTime(1999, 1, 2) }
             };
 
             _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
@@ -61,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             var dummyResponse = new GetApprenticeshipQueryResponse
             {
-                Apprenticeship = new DAS.Commitments.Api.Types.Apprenticeship { FirstName = "Bob", LastName = "Tester", DateOfBirth = new DateTime(1999, 1, 2) }
+                Apprenticeship = new DAS.Commitments.Api.Types.Apprenticeship.Apprenticeship { FirstName = "Bob", LastName = "Tester", DateOfBirth = new DateTime(1999, 1, 2) }
             };
 
             _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
@@ -78,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             var dummyResponse = new GetApprenticeshipQueryResponse
             {
-                Apprenticeship = new DAS.Commitments.Api.Types.Apprenticeship { LastName = "Tester", DateOfBirth = new DateTime(1999, 1, 2) }
+                Apprenticeship = new DAS.Commitments.Api.Types.Apprenticeship.Apprenticeship { LastName = "Tester", DateOfBirth = new DateTime(1999, 1, 2) }
             };
 
             _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
@@ -96,7 +96,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             var dummyResponse = new GetApprenticeshipQueryResponse
             {
-                Apprenticeship = new DAS.Commitments.Api.Types.Apprenticeship { FirstName = "Bob", LastName = "Tester", DateOfBirth = new DateTime(1999, 1, 2) }
+                Apprenticeship = new DAS.Commitments.Api.Types.Apprenticeship.Apprenticeship { FirstName = "Bob", LastName = "Tester", DateOfBirth = new DateTime(1999, 1, 2) }
             };
 
             _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
@@ -114,7 +114,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             var dummyResponse = new GetApprenticeshipQueryResponse
             {
-                Apprenticeship = new DAS.Commitments.Api.Types.Apprenticeship { FirstName = "Bob", LastName = "Tester", DateOfBirth = null }
+                Apprenticeship = new DAS.Commitments.Api.Types.Apprenticeship.Apprenticeship { FirstName = "Bob", LastName = "Tester", DateOfBirth = null }
             };
 
             _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))

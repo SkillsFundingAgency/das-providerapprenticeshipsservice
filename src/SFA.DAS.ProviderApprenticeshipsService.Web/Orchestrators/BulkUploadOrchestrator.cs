@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Validation;
+using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -14,6 +17,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
+
+using ApiTrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -54,6 +59,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<BulkUploadResultViewModel> UploadFile(string userId, UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
         {
+            var result = new BulkUploadResultViewModel();
+
             var commitmentId = _hashingService.DecodeValue(uploadApprenticeshipsViewModel.HashedCommitmentId);
             var providerId = uploadApprenticeshipsViewModel.ProviderId;
             var fileName = uploadApprenticeshipsViewModel?.Attachment?.FileName ?? "<unknown>";
@@ -71,24 +78,92 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _logger.Info("Uploading file of apprentices.", providerId, commitmentId);
 
             var rowValidationResult = await _bulkUploader.ValidateFileRows(fileValidationResult.Data, providerId);
+            var overlapErrors = await GetOverlapErrors(fileValidationResult.Data.ToList());
 
-            var errorCount = rowValidationResult.Errors.Count();
-            if (errorCount > 0)
+            var rowErrors = rowValidationResult.Errors.ToList();
+            rowErrors.AddRange(overlapErrors);
+            
+            if (rowErrors.Any())
             {
-                _logger.Info($"{errorCount} Upload errors for", providerId, commitmentId);
-                return new BulkUploadResultViewModel { HasRowLevelErrors = true, RowLevelErrors = rowValidationResult.Errors };
+                _logger.Info($"{rowErrors.Count} Upload errors for", providerId, commitmentId);
+                return new BulkUploadResultViewModel { HasRowLevelErrors = true, RowLevelErrors = rowErrors };
             }
 
-            await _mediator.SendAsync(new BulkUploadApprenticeshipsCommand
+            try
             {
-                UserId = userId,
-                ProviderId = providerId,
-                CommitmentId = commitmentId,
-                Apprenticeships = await _mapper.MapFrom(commitmentId, rowValidationResult.Data)
-            });
+
+                await _mediator.SendAsync(new BulkUploadApprenticeshipsCommand
+                {
+                    UserId = userId,
+                    ProviderId = providerId,
+                    CommitmentId = commitmentId,
+                    Apprenticeships = await _mapper.MapFrom(commitmentId, rowValidationResult.Data)
+                });
+            }
+            catch (Exception)
+            {
+                var overlaps = (await GetOverlapErrors(fileValidationResult.Data.ToList())).ToList();
+                if (overlaps.Any())
+                {
+                    return new BulkUploadResultViewModel
+                    {
+                        HasRowLevelErrors = true,
+                        RowLevelErrors = overlaps
+                    };
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return new BulkUploadResultViewModel();
         }
+
+        private async Task<IEnumerable<UploadError>> GetOverlapErrors(IList<ApprenticeshipUploadModel> uploadedApprenticeships)
+        {
+            var result = new List<UploadError>();
+
+            var apprentices = new List<Apprenticeship>();
+
+            foreach (var apprentice in uploadedApprenticeships)
+            {
+                apprentices.Add(new Apprenticeship
+                {
+                    ULN = apprentice.ApprenticeshipViewModel.ULN,
+                    StartDate = apprentice.ApprenticeshipViewModel.StartDate.DateTime.Value,
+                    EndDate = apprentice.ApprenticeshipViewModel.EndDate.DateTime.Value
+                });
+            }
+
+            var overlapRequest = new GetOverlappingApprenticeshipsQueryRequest
+            {
+                Apprenticeship = apprentices
+            };
+
+            var overlapResponse = await _mediator.SendAsync(overlapRequest);
+
+            if (overlapResponse.Overlaps.Any())
+            {
+                
+                var validationErrors = uploadedApprenticeships.ToList();
+
+                foreach (var overlapGroup in overlapResponse.Overlaps)
+                {
+                    foreach (var overlap in overlapGroup.OverlappingApprenticeships.ToList())
+                    {
+                        var row = validationErrors.Single(x => x.ApprenticeshipViewModel.ULN == overlap.Apprenticeship.ULN);
+                        var rowIndex = validationErrors.IndexOf(row) + 1;
+
+                        var e = GetOverlappingErrors(overlap, rowIndex, row);
+
+                        result.AddRange(e);
+                    }
+                }
+            }
+            return result;
+        }
+
 		
 		private async Task<IList<Apprenticeship>> MapFrom(long commitmentId, IEnumerable<ApprenticeshipUploadModel> data)
         {
@@ -116,7 +191,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
             {
                 var training = trainingProgrammes.Single(x => x.Id == viewModel.TrainingCode);
-                apprenticeship.TrainingType = training is Standard ? Commitments.Api.Types.TrainingType.Standard : Commitments.Api.Types.TrainingType.Framework;
+                apprenticeship.TrainingType = training is Standard ? ApiTrainingType.Standard : ApiTrainingType.Framework;
                 apprenticeship.TrainingCode = viewModel.TrainingCode;
                 apprenticeship.TrainingName = training.Title;
             }
@@ -176,6 +251,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Errors = result,
                 FileErrors = fileErrors
             };
+        }
+
+        private IEnumerable<UploadError> GetOverlappingErrors(OverlappingApprenticeship overlappingResult, int i, ApprenticeshipUploadModel record)
+        {
+            const string TextStartDate = "The <strong>start date</strong> overlaps with existing training dates for the same apprentice";
+            const string TextEndDate = "The <strong>finish date</strong> overlaps with existing training dates for the same apprentice";
+
+            switch (overlappingResult.ValidationFailReason)
+            {
+                case ValidationFailReason.OverlappingStartDate:
+                    return new List<UploadError> { new UploadError(TextStartDate, "OverlappingError", i, record) };
+                case ValidationFailReason.OverlappingEndDate:
+                    return new List<UploadError> { new UploadError(TextEndDate, "OverlappingError", i, record) };
+                case ValidationFailReason.DateEmbrace:
+                case ValidationFailReason.DateWithin:
+                    return new List<UploadError>
+                               {
+                                   new UploadError(TextStartDate, "OverlappingError", i, record),
+                                   new UploadError(TextEndDate, "OverlappingError", i, record)
+                               };
+            }
+            return Enumerable.Empty<UploadError>();
         }
     }
 }

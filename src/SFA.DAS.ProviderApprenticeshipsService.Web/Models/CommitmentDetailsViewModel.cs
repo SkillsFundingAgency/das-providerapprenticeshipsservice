@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
@@ -16,8 +15,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public IList<ApprenticeshipListItemGroupViewModel> ApprenticeshipGroups { get; set; }
         public string LatestMessage { get; set; }
         public bool PendingChanges { get; set; }
-
         public string BackLinkUrl { get; set; }
         public bool RelationshipVerified { get; set; }
+        public bool HasOverlappingErrors { get; set; }
+        public Dictionary<string, string> FundingCapWarnings { get; set; }
     }
 }

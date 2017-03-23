@@ -22,5 +22,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 
             return new MvcHtmlString(errorClass);
         }
+
+        public static MvcHtmlString AddClassIfPropertyInError<TModel>(
+            this HtmlHelper<TModel> htmlHelper,
+            string expressionText,
+            string errorClass)
+        {
+            var fullHtmlFieldName = htmlHelper.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(expressionText);
+            var state = htmlHelper.ViewData.ModelState[fullHtmlFieldName];
+
+            if (state?.Errors == null || state.Errors.Count == 0)
+            {
+                return MvcHtmlString.Empty;
+            }
+
+            return new MvcHtmlString(errorClass);
+        }
     }
 }
