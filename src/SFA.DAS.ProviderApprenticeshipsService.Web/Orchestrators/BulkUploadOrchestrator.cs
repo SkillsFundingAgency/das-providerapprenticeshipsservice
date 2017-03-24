@@ -126,6 +126,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var apprentices = new List<Apprenticeship>();
 
+            var i = 0;
             foreach (var apprentice in uploadedApprenticeships.Where(x=> 
                 !string.IsNullOrWhiteSpace(x.ApprenticeshipViewModel.ULN)
                 && x.ApprenticeshipViewModel.StartDate.DateTime.HasValue
@@ -134,10 +135,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 apprentices.Add(new Apprenticeship
                 {
+                    Id = i, //assign a row id, as this value will be zero for files
                     ULN = apprentice.ApprenticeshipViewModel.ULN,
                     StartDate = apprentice.ApprenticeshipViewModel.StartDate.DateTime.Value,
                     EndDate = apprentice.ApprenticeshipViewModel.EndDate.DateTime.Value
                 });
+                i++;
             }
 
             var overlapRequest = new GetOverlappingApprenticeshipsQueryRequest
