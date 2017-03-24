@@ -126,7 +126,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var apprentices = new List<Apprenticeship>();
 
-            foreach (var apprentice in uploadedApprenticeships)
+            foreach (var apprentice in uploadedApprenticeships.Where(x=> 
+                !string.IsNullOrWhiteSpace(x.ApprenticeshipViewModel.ULN)
+                && x.ApprenticeshipViewModel.StartDate.DateTime.HasValue
+                && x.ApprenticeshipViewModel.EndDate.DateTime.HasValue
+                ))
             {
                 apprentices.Add(new Apprenticeship
                 {

@@ -679,7 +679,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     Cost = x.Cost,
                     CanBeApprove = x.CanBeApproved,
                     OverlappingApprenticeships = 
-                        overlaps?.GetOverlappingApprenticeships(x.ULN)
+                        overlaps?.GetOverlappingApprenticeships(x.Id)
                 }).ToList();
 
             return apprenticeViewModels;
