@@ -16,15 +16,24 @@
             <div class="panel panel-border-wide alert-default">
                 <p class="heading-medium">You can't approve this cohort until: </p>
                 <ul class="list list-bullet">
-                    <li>
-                        You've signed an <a href="@Model.SignAgreementUrl" target="_blank">apprenticeship agreement</a> with the Skills Funding Agency
-                    </li>
-                    <li>
-                        All <a href="@Url.Action("Details", new { Model.ProviderId, Model.HashedCommitmentId })">apprentice records</a> are complete
-                    </li>
-                    <li>
-                        There are no <a href="@Url.Action("Details", new { Model.ProviderId, Model.HashedCommitmentId })">overlapping training dates</a> for your apprentices
-                    </li>
+                    @if (!Model.HasSignedTheAgreement)
+                    {
+                        <li>
+                            You've signed an <a href="@Model.SignAgreementUrl" target="_blank">apprenticeship agreement</a> with the Skills Funding Agency
+                        </li>
+                    }
+                    @if (!Model.ReadyForApproval)
+                    {
+                        <li>
+                            All <a href="@Url.Action("Details", new {Model.ProviderId, Model.HashedCommitmentId})">apprentice records</a> are complete
+                        </li>
+                    }
+                    @if (Model.HasOverlappingErrors)
+                    {
+                        <li>
+                            There are no <a href="@Url.Action("Details", new {Model.ProviderId, Model.HashedCommitmentId})">overlapping training dates</a> for your apprentices
+                        </li>
+                    }
                 </ul>
             </div>
         }
