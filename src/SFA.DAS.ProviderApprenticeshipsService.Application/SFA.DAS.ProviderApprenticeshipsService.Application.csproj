@@ -105,6 +105,9 @@
     <Compile Include="Commands\CompleteTask\CompleteTaskCommand.cs" />
     <Compile Include="Commands\CompleteTask\CompleteTaskCommandHandler.cs" />
     <Compile Include="Commands\CompleteTask\CompleteTaskCommandValidator.cs" />
+    <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommand.cs" />
+    <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommandHandler.cs" />
+    <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommandValidator.cs" />
     <Compile Include="Commands\CreateApprenticeship\CreateApprenticeshipCommand.cs" />
     <Compile Include="Commands\CreateApprenticeship\CreateApprenticeshipCommandHandler.cs" />
     <Compile Include="Commands\CreateApprenticeship\CreateApprenticeshipCommandValidator.cs" />

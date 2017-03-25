@@ -7,6 +7,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetPendingAppre
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.GetPendingApprenticeshipUpdate
 {
+    [TestFixture]
     public class WhenIGetPendingApprenticeshipUpdate
     {
         private GetPendingApprenticeshipUpdateQueryHandler _handler;
