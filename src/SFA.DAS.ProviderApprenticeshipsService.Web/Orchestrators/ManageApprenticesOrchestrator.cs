@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using FluentValidation.Results;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
@@ -14,7 +14,9 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -24,8 +26,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IProviderCommitmentsLogger _logger;
         private readonly IHashingService _hashingService;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
+        private readonly IApprovedApprenticeshipValidator _approvedApprenticeshipValidator;
 
-        public ManageApprenticesOrchestrator(IMediator mediator, IHashingService hashingService, IProviderCommitmentsLogger logger, IApprenticeshipMapper apprenticeshipMapper)
+        public ManageApprenticesOrchestrator(IMediator mediator, IHashingService hashingService,
+            IProviderCommitmentsLogger logger, IApprenticeshipMapper apprenticeshipMapper,
+            IApprovedApprenticeshipValidator approvedApprenticeshipValidator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -35,11 +40,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 throw new ArgumentNullException(nameof(logger));
             if (apprenticeshipMapper == null)
                 throw new ArgumentNullException(nameof(apprenticeshipMapper));
+            if(approvedApprenticeshipValidator == null)
+                throw new ArgumentNullException(nameof(approvedApprenticeshipValidator));
 
             _mediator = mediator;
             _hashingService = hashingService;
             _logger = logger;
             _apprenticeshipMapper = apprenticeshipMapper;
+            _approvedApprenticeshipValidator = approvedApprenticeshipValidator;
         }
 
         public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(long providerId)
@@ -97,6 +105,36 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
+        public async Task<Dictionary<string,string>> ValidateEditApprenticeship(ApprenticeshipViewModel model)
+        {
+            var result = new Dictionary<string, string>();
+
+            var apprenticeshipId = _hashingService.DecodeValue(model.HashedApprenticeshipId);
+
+            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                ProviderId = model.ProviderId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            var overlappingErrors = await _mediator.SendAsync(
+                new GetOverlappingApprenticeshipsQueryRequest
+                {
+                    Apprenticeship = new List<Apprenticeship> { data.Apprenticeship }
+                });
+
+            foreach (var overlap in _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors))
+            {
+                result.Add(overlap.Key, overlap.Value);
+            }
+
+            foreach (var error in _approvedApprenticeshipValidator.Validate(model))
+            {
+                result.Add(error.Key, error.Value);
+            }
+
+            return result;
+        }
 
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
@@ -55,9 +56,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> Edit(long providerid, ApprenticeshipViewModel model)
         {
-            var model2 = await _orchestrator.GetApprenticeshipForEdit(providerid, model.HashedApprenticeshipId);
-            ViewBag.ApprenticeshipProgrammes = model2.ApprenticeshipProgrammes;
-            return View(model2.Apprenticeship);
+            var validationErrors = await _orchestrator.ValidateEditApprenticeship(model);
+
+            foreach (var error in validationErrors)
+            {
+                ModelState.AddModelError(error.Key, error.Value);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return await Edit(providerid, model.HashedApprenticeshipId);
+            }
+
+            return RedirectToAction("Confirm");
         }
     }
 }

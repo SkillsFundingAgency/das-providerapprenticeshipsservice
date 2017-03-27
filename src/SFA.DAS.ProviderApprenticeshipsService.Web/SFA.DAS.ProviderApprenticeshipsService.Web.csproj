@@ -398,6 +398,8 @@
     <Compile Include="Models\VerificationOfRelationshipViewModel.cs" />
     <Compile Include="Models\VerificationOfEmployerViewModel.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
+    <Compile Include="Orchestrators\ApprovedApprenticeshipValidation\ApprovedApprenticeshipValidator.cs" />
+    <Compile Include="Orchestrators\ApprovedApprenticeshipValidation\IApprovedApprenticeshipValidator.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipMapper.cs" />
     <Compile Include="Orchestrators\Mappers\BulkUploadMapper.cs" />
     <Compile Include="Orchestrators\BaseCommitmentOrchestrator.cs" />
@@ -424,6 +426,7 @@
     <Compile Include="Validation\ApprenticeshipCoreValidator.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUploadValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelValidator.cs" />
+    <Compile Include="Validation\ApprovedApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\CsvRecordValidator.cs" />
     <Compile Include="Validation\DeleteCohortConfirmationViewModelValidator.cs" />
     <Compile Include="Validation\DeleteConfirmationViewModelValidator.cs" />
