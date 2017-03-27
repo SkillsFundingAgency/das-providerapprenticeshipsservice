@@ -2682,6 +2682,7 @@ span.helpText {
 
 #cohorts-landing-page .bingo-background .heading-small {
   margin-bottom: 20px;
+  font-size: 24px;
 }
 
 #cohorts-landing-page .block-one, #cohorts-landing-page .block-two {
@@ -2719,6 +2720,10 @@ span.helpText {
   padding: 20px;
   margin-bottom: 30px;
   margin: auto;
+}
+
+#review-cohorts .heading-small {
+  font-size: 24px;
 }
 
 .dynamic-heading strong, #bulk-upload-errors strong {
@@ -2863,6 +2868,10 @@ body input::-webkit-contacts-auto-fill-button {
 
 #apprentice-details .overlap-notification {
   border-left: 10px solid #b10e1e;
+}
+
+#apprentice-details .training-level {
+  margin-bottom: 0;
 }
 
 .overlap-alert {
