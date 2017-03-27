@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
@@ -37,6 +38,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var model = await _orchestrator.GetApprenticeship(providerid, hashedApprenticeshipId);
             return View(model);
+        }
+
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/edit")]
+        [OutputCache(CacheProfile = "NoCache")]
+        public async Task<ActionResult> Edit(long providerid, string hashedApprenticeshipId)
+        {
+            var model = await _orchestrator.GetApprenticeshipForEdit(providerid, hashedApprenticeshipId);
+            ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
+            return View(model.Apprenticeship);
+        }
+
+        [HttpPost]
+        [Route("{hashedApprenticeshipId}/edit")]
+        [OutputCache(CacheProfile = "NoCache")]
+        public async Task<ActionResult> Edit(long providerid, ApprenticeshipViewModel model)
+        {
+            var model2 = await _orchestrator.GetApprenticeshipForEdit(providerid, model.HashedApprenticeshipId);
+            ViewBag.ApprenticeshipProgrammes = model2.ApprenticeshipProgrammes;
+            return View(model2.Apprenticeship);
         }
     }
 }

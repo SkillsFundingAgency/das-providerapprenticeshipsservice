@@ -398,6 +398,7 @@
     <Compile Include="Models\VerificationOfRelationshipViewModel.cs" />
     <Compile Include="Models\VerificationOfEmployerViewModel.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
+    <Compile Include="Orchestrators\Mappers\ApprenticeshipMapper.cs" />
     <Compile Include="Orchestrators\Mappers\BulkUploadMapper.cs" />
     <Compile Include="Orchestrators\BaseCommitmentOrchestrator.cs" />
     <Compile Include="Orchestrators\BulkUpload\InstrumentedBulkUploadValidator.cs" />
@@ -415,6 +416,7 @@
     <Compile Include="Orchestrators\ICommitmentStatusCalculator.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Orchestrators\ManageApprenticesOrchestrator.cs" />
+    <Compile Include="Orchestrators\Mappers\IApprenticeshipMapper.cs" />
     <Compile Include="Orchestrators\TaskOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestContext.cs" />
@@ -599,6 +601,8 @@
     <Content Include="Views\Commitment\VerificationOfEmployer.cshtml" />
     <Content Include="Views\Commitment\VerificationOfRelationship.cshtml" />
     <Content Include="Views\Commitment\VerificationStopped.cshtml" />
+    <Content Include="Views\ManageApprentices\Edit.cshtml" />
+    <Content Include="Views\Shared\EditApprenticeship.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

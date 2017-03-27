@@ -1,0 +1,21 @@
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
+@model ApprenticeshipViewModel
+
+@{
+    ViewBag.Title = "Edit Apprentice";
+    ViewBag.PageId = "apprentice-edit";
+}
+
+
+<form method="POST" action="@Url.Action("Edit")" novalidate="novalidate">
+    @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+    @Html.AntiForgeryToken()
+
+    @Html.Partial("EditApprenticeship", Model)
+    
+    
+    <button type="submit" class="button">Save</button>
+    <a class="links" href="@Url.Action("Details", new { Model.HashedApprenticeshipId })" aria-label="Cancel">Cancel</a>
+
+    
+</form>

@@ -18,6 +18,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
@@ -44,7 +45,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             var sut = new CommitmentOrchestrator(_mockMediator.Object, _mockCalculator.Object, 
                 Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(),
-                Mock.Of<ProviderApprenticeshipsServiceConfiguration>());
+                Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
+                Mock.Of<IApprenticeshipMapper>());
 
             await sut.GetCohorts(1234567);
 
@@ -58,7 +60,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             var sut = new CommitmentOrchestrator(_mockMediator.Object, new CommitmentStatusCalculator(), 
                 Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(),
-                Mock.Of<ProviderApprenticeshipsServiceConfiguration>());
+                Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
+                Mock.Of<IApprenticeshipMapper>());
 
             var result = await sut.GetCohorts(1234567);
 
