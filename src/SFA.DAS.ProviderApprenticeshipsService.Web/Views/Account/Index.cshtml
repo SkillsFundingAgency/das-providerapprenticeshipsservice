@@ -15,7 +15,7 @@
 <div class="grid-row">
     <div class="column-full home-page">
         <h1 class="heading-xlarge">@Model.ProviderName</h1>
-        <p class="grey-text">UK PRN: @Model.ProviderId</p>
+        <p class="grey-text">UKPRN: @Model.ProviderId</p>
         <hr class="hr-double">
     </div>
 </div>
@@ -25,19 +25,19 @@
         <div class="grid-row">
                 <div class="column-one-half">
                     <h2 class="heading-medium">
-                        <a href="@Url.Action("Cohorts", "Commitment", new {providerId = Model.ProviderId})">Manage cohorts</a>
+                        <a href="@Url.Action("Cohorts", "Commitment", new {providerId = Model.ProviderId})">Your cohorts</a>
                     </h2>
-                    <p>View and respond to employer training requests.
+                    <p>Review, edit, approve and add apprentices to new cohorts.
                     </p>
                     <hr />
                 </div>
 
             <div class="column-one-half">
                 <h2 class="heading-medium">
-                    <a href="@Url.Action("Index", "ManageApprentices", new {providerId = Model.ProviderId})">Manage approved apprentices</a>
+                    <a href="@Url.Action("Index", "ManageApprentices", new {providerId = Model.ProviderId})">Manage your apprentices</a>
                 </h2>
                 <p>
-                    View and update existing apprentice records.
+                    View and update approved apprentice records.
                 </p>
                 <hr />
             </div>

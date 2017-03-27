@@ -2577,6 +2577,10 @@ span.helpText {
   font-size: 24px;
 }
 
+.add-edit-desc .list-bullet {
+  font-size: 16px;
+}
+
 #apprentice-details .alert-default, #approve-cohorts .alert-default {
   margin-top: 25px;
 }

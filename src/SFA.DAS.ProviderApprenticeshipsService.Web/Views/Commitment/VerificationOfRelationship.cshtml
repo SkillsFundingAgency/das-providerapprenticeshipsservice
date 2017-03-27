@@ -4,7 +4,7 @@
     ViewBag.Title = "Confirm Relationship";
 }
 
-<h1 class="heading-xlarge">Confirm your relationship with the employer</h1>
+<h1 class="heading-xlarge">Your connection to the employer</h1>
 
 @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
@@ -35,7 +35,7 @@
 
     <div class="form-group">
 
-        <h2 id="confirm-organisation" class="heading-medium">Is this organisation your own organisation or a connected company?</h2>
+        <h2 id="confirm-organisation" class="heading-medium">Is this your own organisation, or a connected company or charity?</h2>
        
 
         @if (!ViewData.ModelState.IsValid)
@@ -62,16 +62,16 @@
     </div>
     
     <details id="expand-collapse">
-        <summary id="connected-company"><span class="summary">What is a connected company?</span></summary>
+        <summary id="connected-company"><span class="summary">What is a connected company or charity?</span></summary>
         <div class="panel panel-border-narrow" aria-describedby="#connected-company">
-            <p>Your organisation is a connected company if:</p>
+            <p>@Model.LegalEntityName is a connected company or charity if:</p>
             <ul>
-                <li>it has control of another company, in this case @Model.LegalEntityName</li>
-                <li>both your organisation and @Model.LegalEntityName are controlled by the same people, such as a board of directors</li>
+                <li>one of you has control of the other</li>
+                <li>both companies are under the control of the same person or persons</li>
             </ul>
+            <p>For example, companies linked in a group are connected.</p>
         </div>
     </details>
-
     <input type="submit" class="button" id="continue" value="Continue" /> 
 
 </form>
