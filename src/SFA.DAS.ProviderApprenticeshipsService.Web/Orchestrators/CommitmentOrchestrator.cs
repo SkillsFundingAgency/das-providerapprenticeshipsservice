@@ -210,7 +210,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageTitle = "Cohorts for review",
                 PageId = "review-cohorts-list",
                 PageHeading = "Cohorts for review",
-                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSurfix(data.ToList().Count)} that are ready for review:",
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSurfix(data.ToList().Count)} ready for review:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
