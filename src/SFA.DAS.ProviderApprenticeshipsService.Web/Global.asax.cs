@@ -9,6 +9,7 @@ using FluentValidation.Mvc;
 using SFA.DAS.NLog.Logger;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure;
+using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
@@ -22,6 +23,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            ModelBinders.Binders.Add(typeof(string), new TrimStringModelBinder());
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Name;
             FluentValidationModelValidatorProvider.Configure();
