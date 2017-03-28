@@ -62,10 +62,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             {
                 ModelState.AddModelError(error.Key, error.Value);
             }
-
+            
             if (!ModelState.IsValid)
             {
-                return await Edit(providerid, model.HashedApprenticeshipId);
+                var viewModel = await _orchestrator.GetApprenticeshipForEdit(providerid, model.HashedApprenticeshipId);
+                ViewBag.ApprenticeshipProgrammes = viewModel.ApprenticeshipProgrammes;
+                return View(model);
             }
 
             return RedirectToAction("Confirm");
