@@ -873,7 +873,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageTitle = saveStatus == SaveStatus.ApproveAndSend 
                     ? "Cohort approved and sent to employer" 
                     : "Cohort sent for review",
-                WhatHappendsNext = saveStatus == SaveStatus.ApproveAndSend
+                WhatHappensNext = saveStatus == SaveStatus.ApproveAndSend
                     ? "The employer will review the cohort and either approve it or contact you with an update."
                     : "The updated cohort will appear in the employer’s account for them to review."
             };
