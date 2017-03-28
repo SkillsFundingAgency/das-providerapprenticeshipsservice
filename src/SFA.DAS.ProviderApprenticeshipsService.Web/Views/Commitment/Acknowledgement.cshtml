@@ -44,7 +44,9 @@
 
 
         <h2 class="heading-medium">What happens next?</h2>
-        <p id="changeMainCopy">The employer will review the cohort and either approve it or contact you with an update.</p>
+        <p id="changeMainCopy">
+            @Model.WhatHappendsNext
+        </p>
 
         @if (!string.IsNullOrEmpty(Model.RedirectUrl))
         {
