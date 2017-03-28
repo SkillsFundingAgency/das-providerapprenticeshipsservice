@@ -15,6 +15,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public string PageTitle { get; set; }
 
-        public string WhatHappendsNext { get; set; }
+        public string WhatHappensNext { get; set; }
     }
 }
