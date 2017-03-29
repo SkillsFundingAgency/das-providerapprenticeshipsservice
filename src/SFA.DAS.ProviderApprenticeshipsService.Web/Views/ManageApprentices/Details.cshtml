@@ -10,6 +10,23 @@
 <div class="grid-row list-apprentice">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@Model.FirstName @Model.LastName</h1>
+        
+        @if (Model.PendingChanges == PendingChanges.ReadyForApproval)
+            {
+            <div class="panel panel-border-wide alert-default">
+                <p>There are changes to this apprentice's details that you need to review.  Until you've reviewed the changes, you'll only be able to edit the apprentice's status. </p>
+                
+            </div>
+        }
+        else if (Model.PendingChanges == PendingChanges.WaitingForApproval)
+        {
+            <div class="panel panel-border-wide">
+                <p>
+                    There are changes to this apprentice's details that are waiting for approval by the employer.  You can continue to edit this apprentice if you need to.
+                
+                </p>
+            </div>
+        }
 
         <table class="status-section">
             <thead>
@@ -28,7 +45,13 @@
         <table class="apprentice-section">
             <thead>
                 <tr>
-                    <th colspan="2">Apprentice</th>
+                    <th colspan="2">Apprentice
+                    
+                    @if (Model.PendingChanges == PendingChanges.None)
+                    {
+                        <a href="@Url.RouteUrl("EditApprovedApprentice")" class="float-right">Edit</a>
+                    }
+                    </th>
                 </tr>
             </thead>
             <tbody>

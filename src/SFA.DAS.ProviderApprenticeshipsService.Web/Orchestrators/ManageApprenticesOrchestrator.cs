@@ -10,6 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentic
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetPendingApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -58,7 +59,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var apprenticeships = 
                 data.Apprenticeships
                 .OrderBy(m => m.ApprenticeshipName)
-                .Select(MapFrom)
+                .Select(m=> MapFrom(m, null)) //todo: for list
                 .ToList();
 
             return new ManageApprenticeshipsViewModel
@@ -76,7 +77,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { ProviderId = providerId, ApprenticeshipId = apprenticeshipId });
 
-            return MapFrom(data.Apprenticeship);
+            var updateRequests = await _mediator.SendAsync(new GetPendingApprenticeshipUpdateQueryRequest
+            {
+                ApprenticeshipId = apprenticeshipId,
+                ProviderId = providerId
+            });
+
+            return MapFrom(data.Apprenticeship, updateRequests.ApprenticeshipUpdate);
         }
 
         public async Task<ExtendedApprenticeshipViewModel> GetApprenticeshipForEdit(long providerId, string hashedApprenticeshipId)
@@ -155,7 +162,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     .ToList();
         }
 
-        private ApprenticeshipDetailsViewModel MapFrom(Apprenticeship apprenticeship)
+        private ApprenticeshipDetailsViewModel MapFrom(Apprenticeship apprenticeship, ApprenticeshipUpdate pendingUpdate)
         {
             // ToDo: Move out mapping and add test for status
             // ToDo: new stroy in sprint 8
@@ -164,6 +171,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 && apprenticeship.StartDate.Value > new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1)
                         ? "Waiting to start"
                         : MapPaymentStatus(apprenticeship.PaymentStatus);
+
+            var pendingChange = PendingChanges.None;
+            if (pendingUpdate?.Originator == Originator.Employer)
+                pendingChange = PendingChanges.ReadyForApproval;
+            if (pendingUpdate?.Originator == Originator.Provider)
+                pendingChange = PendingChanges.WaitingForApproval;
 
             return new ApprenticeshipDetailsViewModel
             {
@@ -177,7 +190,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,
                 Status = statusText,
-                EmployerName = string.Empty
+                EmployerName = string.Empty,
+                PendingChanges = pendingChange
             };
         }
 

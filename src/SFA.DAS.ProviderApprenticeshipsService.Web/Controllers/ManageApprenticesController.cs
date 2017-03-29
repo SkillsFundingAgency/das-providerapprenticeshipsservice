@@ -42,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{hashedApprenticeshipId}/edit")]
+        [Route("{hashedApprenticeshipId}/edit", Name = "EditApprovedApprentice")]
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> Edit(long providerid, string hashedApprenticeshipId)
         {

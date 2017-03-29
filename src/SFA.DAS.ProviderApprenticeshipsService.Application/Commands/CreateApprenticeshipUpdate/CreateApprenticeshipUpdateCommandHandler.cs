@@ -35,7 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateAppr
                 UserId = command.UserId
             };
 
-            await _commitmentsApi.CreateApprenticeshipUpdate(command.ProviderId, request);
+            await _commitmentsApi.CreateApprenticeshipUpdate(command.ProviderId, command.ApprenticeshipUpdate.ApprenticeshipId, request);
         }
     }
 }

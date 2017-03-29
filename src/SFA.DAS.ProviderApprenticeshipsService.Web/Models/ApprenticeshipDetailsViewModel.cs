@@ -1,4 +1,5 @@
 ﻿using System;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
@@ -25,5 +26,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string Status { get; set; }
 
         public string EmployerName { get; set; }
+        public PendingChanges PendingChanges { get; set; }
+    }
+
+    public enum PendingChanges
+    {
+        None = 0,
+        ReadyForApproval = 1,
+        WaitingForApproval = 2
     }
 }
