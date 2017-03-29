@@ -177,7 +177,7 @@
                      color:#fff;
                  }
               }
-              .heading-small{margin-bottom:20px;}
+              .heading-small{margin-bottom:20px;font-size:24px;}
         }
  
   .block-one, .block-two{
@@ -227,6 +227,9 @@
             margin:auto;
             }
     }
+   .heading-small{
+             font-size:24px;
+         }
 
 }
 
@@ -390,6 +393,9 @@ body {
     .overlap-notification{
         border-left:10px solid $red;
     }
+    .training-level{
+        margin-bottom:0;
+    }
 }
 
 .overlap-alert{
@@ -523,11 +529,6 @@ only screen and (max-width: 480px) {
         margin-top: 5px;
         } 
     }
-
-
-
-
-
 
 
 }
