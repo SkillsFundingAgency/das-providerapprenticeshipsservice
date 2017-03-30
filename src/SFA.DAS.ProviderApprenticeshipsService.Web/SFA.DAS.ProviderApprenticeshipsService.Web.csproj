@@ -438,6 +438,7 @@
     <Compile Include="Validation\Text\WebApprenticeshipValidationText.cs" />
     <Compile Include="Validation\Text\IApprenticeshipValidationErrorText.cs" />
     <Compile Include="Validation\Text\ValidationMessage.cs" />
+    <Compile Include="Validation\UpdateApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\VerificationOfEmployerViewModelValidator.cs" />
     <Compile Include="Validation\VerificationOfRelationshipViewModelValidator.cs" />
   </ItemGroup>

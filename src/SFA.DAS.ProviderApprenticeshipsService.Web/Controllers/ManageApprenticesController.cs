@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
+using Newtonsoft.Json;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
@@ -88,9 +90,32 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [Route("{hashedApprenticeshipId}/submit")]
         [OutputCache(CacheProfile = "NoCache")]
-        public async Task<ActionResult> SubmitChanges(long providerid, ApprenticeshipViewModel model)
+        public async Task<ActionResult> SubmitChanges(long providerid, string hashedApprenticeshipId, UpdateApprenticeshipViewModel updateApprenticeship, string originalApprenticeshipDecoded)
         {
-            return View(model);
+            var originalApprenticeship = System.Web.Helpers.Json.Decode<Apprenticeship>(originalApprenticeshipDecoded);
+            updateApprenticeship.OriginalApprenticeship = originalApprenticeship;
+
+            if (!ModelState.IsValid)
+            {
+                return View("ConfirmChanges", updateApprenticeship);
+            }
+
+            if (updateApprenticeship.ChangesConfirmed != null && !updateApprenticeship.ChangesConfirmed.Value)
+            {
+                return RedirectToAction("Details", new { providerid, hashedApprenticeshipId });
+            }
+
+            await _orchestrator.CreateApprenticeshipUpdate(updateApprenticeship, providerid, CurrentUserId);
+
+
+            var flashmessage = new FlashMessageViewModel
+            {
+                Message = $"You suggested changes to the record for {originalApprenticeship.FirstName} {originalApprenticeship.LastName}. The employer needs to approve these changes.",
+                Severity = FlashMessageSeverityLevel.Okay
+            };
+            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
+
+            return RedirectToAction("Details", new { providerid, hashedApprenticeshipId });
         }
 
         private bool AnyChanges(UpdateApprenticeshipViewModel data)

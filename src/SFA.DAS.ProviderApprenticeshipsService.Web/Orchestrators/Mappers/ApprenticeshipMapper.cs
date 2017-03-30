@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
@@ -13,6 +14,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+using TrainingType = SFA.DAS.ProviderApprenticeshipsService.Domain.TrainingType;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
@@ -151,5 +153,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                     .ToList();
         }
 
+        public ApprenticeshipUpdate MapFrom(UpdateApprenticeshipViewModel viewModel)
+        {
+            return new ApprenticeshipUpdate
+            {
+                ApprenticeshipId = viewModel.OriginalApprenticeship.Id,
+                Cost = viewModel.Cost,
+                DateOfBirth = viewModel.DateOfBirth?.DateTime,
+                FirstName = viewModel.FirstName,
+                LastName = viewModel.LastName,
+                StartDate = viewModel.StartDate?.DateTime,
+                EndDate = viewModel.EndDate?.DateTime,
+                Originator = Originator.Provider,
+                Status = ApprenticeshipUpdateStatus.Pending,
+                TrainingName = viewModel.TrainingName,
+                TrainingCode = viewModel.TrainingCode,
+                TrainingType = (Commitments.Api.Types.Apprenticeship.Types.TrainingType?) viewModel.TrainingType,
+            };
+        }
     }
 }

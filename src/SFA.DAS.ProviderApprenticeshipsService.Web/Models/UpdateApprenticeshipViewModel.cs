@@ -1,9 +1,12 @@
-﻿using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+﻿using FluentValidation.Attributes;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
+    [Validator(typeof(UpdateApprenticeshipViewModelValidator))]
     public class UpdateApprenticeshipViewModel
     {
         public string FirstName { get; set; }
@@ -13,7 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public string ULN { get; set; }
 
-        public TrainingType TrainingType { get; set; }
+        public TrainingType? TrainingType { get; set; }
         public string TrainingCode { get; set; }
         public string TrainingName { get; set; }
         public decimal? Cost { get; set; }

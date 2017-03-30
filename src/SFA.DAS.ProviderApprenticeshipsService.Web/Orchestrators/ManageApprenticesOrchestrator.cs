@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentices;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
@@ -226,6 +227,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 default:
                     return string.Empty;
             }
+        }
+
+        public async Task CreateApprenticeshipUpdate(UpdateApprenticeshipViewModel updateApprenticeship, long providerId, string userId)
+        {
+            await _mediator.SendAsync(new CreateApprenticeshipUpdateCommand
+            {
+                ProviderId = providerId,
+                ApprenticeshipUpdate = _apprenticeshipMapper.MapFrom(updateApprenticeship),
+                UserId = userId
+            });
+
         }
     }
 }
