@@ -7,7 +7,7 @@
 }
 
 
-<form method="POST" action="@Url.Action("Edit")" novalidate="novalidate">
+<form method="POST" action="@Url.Action("ConfirmChanges")" novalidate="novalidate">
     @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
     @Html.AntiForgeryToken()
 

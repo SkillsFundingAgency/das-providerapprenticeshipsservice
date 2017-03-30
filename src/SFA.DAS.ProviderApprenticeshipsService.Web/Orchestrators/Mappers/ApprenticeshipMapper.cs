@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
+using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -14,13 +19,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
     public class ApprenticeshipMapper : IApprenticeshipMapper
     {
         private readonly IHashingService _hashingService;
+        private readonly IMediator _mediator;
 
-        public ApprenticeshipMapper(IHashingService hashingService)
+        public ApprenticeshipMapper(IHashingService hashingService, IMediator mediator)
         {
             if (hashingService == null)
                 throw new ArgumentNullException(nameof(hashingService));
+            if(mediator==null)
+                throw new ArgumentNullException(nameof(mediator));
 
             _hashingService = hashingService;
+            _mediator = mediator;
         }
 
         public ApprenticeshipViewModel MapToApprenticeshipViewModel(Apprenticeship apprenticeship)
@@ -82,6 +91,64 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 }
             }
             return dict;
+        }
+
+        public async Task<UpdateApprenticeshipViewModel> CompareAndMapToUpdateApprenticeshipViewModel(Apprenticeship original, ApprenticeshipViewModel edited)
+        {
+            Func<string, string, string> changedOrNull = (a, edit) =>
+               a?.Trim() == edit?.Trim() ? null : edit;
+
+            // ToDo: The rest of the mapping
+            var model = new UpdateApprenticeshipViewModel
+            {
+                FirstName = changedOrNull(original.FirstName, edited.FirstName),
+                LastName = changedOrNull(original.LastName, edited.LastName),
+                DateOfBirth = original.DateOfBirth == edited.DateOfBirth.DateTime
+                    ? null
+                    : edited.DateOfBirth,
+                Cost = NullableDecimalToString(original.Cost) == edited.Cost
+                    ? default(decimal?)
+                    : string.IsNullOrEmpty(edited.Cost) ? 0m : decimal.Parse(edited.Cost),
+                StartDate = original.StartDate == edited.StartDate.DateTime
+                  ? null
+                  : edited.StartDate,
+                EndDate = original.EndDate == edited.EndDate.DateTime
+                    ? null
+                    : edited.EndDate,
+                EmployerRef = changedOrNull(original.EmployerRef, edited.EmployerRef),
+                OriginalApprenticeship = original
+            };
+
+            if (!string.IsNullOrWhiteSpace(edited.TrainingCode) && original.TrainingCode != edited.TrainingCode)
+            {
+                var training = await GetTrainingProgramme(edited.TrainingCode);
+                model.TrainingType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
+                model.TrainingCode = edited.TrainingCode;
+                model.TrainingName = training.Title;
+            }
+
+            return model;
+        }
+
+
+
+        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
+        {
+            return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
+        }
+
+        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
+        {
+            var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
+            var frameworksTask = _mediator.SendAsync(new GetFrameworksQueryRequest());
+
+            await Task.WhenAll(standardsTask, frameworksTask);
+
+            return
+                standardsTask.Result.Standards.Cast<ITrainingProgramme>()
+                    .Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>())
+                    .OrderBy(m => m.Title)
+                    .ToList();
         }
 
     }

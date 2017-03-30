@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentValidation.Results;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
@@ -17,7 +16,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -141,6 +139,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             }
 
             return result;
+        }
+
+        public async Task<UpdateApprenticeshipViewModel> GetConfirmChangesModel(long providerId, string hashedApprenticeshipId, ApprenticeshipViewModel apprenticeship)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                ProviderId = providerId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            var viewModel = await _apprenticeshipMapper.CompareAndMapToUpdateApprenticeshipViewModel(data.Apprenticeship, apprenticeship);
+            return viewModel;
         }
 
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)

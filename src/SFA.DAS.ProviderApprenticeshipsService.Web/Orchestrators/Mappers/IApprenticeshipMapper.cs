@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
@@ -13,5 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
     {
         ApprenticeshipViewModel MapToApprenticeshipViewModel(Apprenticeship apprenticeship);
         Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors);
+
+        Task<UpdateApprenticeshipViewModel> CompareAndMapToUpdateApprenticeshipViewModel(Apprenticeship original, ApprenticeshipViewModel edited);
     }
 }

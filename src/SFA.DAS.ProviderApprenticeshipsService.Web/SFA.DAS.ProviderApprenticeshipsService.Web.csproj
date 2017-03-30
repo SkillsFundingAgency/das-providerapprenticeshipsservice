@@ -352,6 +352,7 @@
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Exceptions\InvalidStateExceptionFilter.cs" />
+    <Compile Include="Extensions\DecimalExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
@@ -393,6 +394,7 @@
     <Compile Include="Models\TaskItemViewModel.cs" />
     <Compile Include="Models\TaskListViewModel.cs" />
     <Compile Include="Models\TaskViewModel.cs" />
+    <Compile Include="Models\UpdateApprenticeshipViewModel.cs" />
     <Compile Include="Models\UploadApprenticeshipsViewModel.cs" />
     <Compile Include="Models\UploadRowErrorViewModel.cs" />
     <Compile Include="Models\VerificationOfRelationshipViewModel.cs" />
@@ -606,6 +608,7 @@
     <Content Include="Views\Commitment\VerificationStopped.cshtml" />
     <Content Include="Views\ManageApprentices\Edit.cshtml" />
     <Content Include="Views\Shared\EditApprenticeship.cshtml" />
+    <Content Include="Views\ManageApprentices\ConfirmChanges.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

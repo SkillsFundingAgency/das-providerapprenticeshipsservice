@@ -52,9 +52,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        [Route("{hashedApprenticeshipId}/edit")]
+        [Route("{hashedApprenticeshipId}/confirm")]
         [OutputCache(CacheProfile = "NoCache")]
-        public async Task<ActionResult> Edit(long providerid, ApprenticeshipViewModel model)
+        public async Task<ActionResult> ConfirmChanges(long providerId, ApprenticeshipViewModel model)
         {
             var validationErrors = await _orchestrator.ValidateEditApprenticeship(model);
 
@@ -65,12 +65,45 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             
             if (!ModelState.IsValid)
             {
-                var viewModel = await _orchestrator.GetApprenticeshipForEdit(providerid, model.HashedApprenticeshipId);
+                var viewModel = await _orchestrator.GetApprenticeshipForEdit(providerId, model.HashedApprenticeshipId);
                 ViewBag.ApprenticeshipProgrammes = viewModel.ApprenticeshipProgrammes;
-                return View(model);
+                return View("Edit", model);
             }
 
-            return RedirectToAction("Confirm");
+            var updateViewModel = await _orchestrator.GetConfirmChangesModel(providerId, model.HashedApprenticeshipId, model);
+
+            if (!AnyChanges(updateViewModel))
+            {
+                //todo: put this in a method
+                var viewModel = await _orchestrator.GetApprenticeshipForEdit(providerId, model.HashedApprenticeshipId);
+                ModelState.AddModelError("NoChangesRequested", "No changes made");
+                ViewBag.ApprenticeshipProgrammes = viewModel.ApprenticeshipProgrammes;
+                return View("Edit", model);
+            }
+
+            return View(updateViewModel);
+        }
+
+
+        [HttpPost]
+        [Route("{hashedApprenticeshipId}/submit")]
+        [OutputCache(CacheProfile = "NoCache")]
+        public async Task<ActionResult> SubmitChanges(long providerid, ApprenticeshipViewModel model)
+        {
+            return View(model);
+        }
+
+        private bool AnyChanges(UpdateApprenticeshipViewModel data)
+        {
+            return
+                   !string.IsNullOrEmpty(data.FirstName)
+                || !string.IsNullOrEmpty(data.LastName)
+                || data.DateOfBirth != null
+                || !string.IsNullOrEmpty(data.TrainingName)
+                || data.StartDate != null
+                || data.EndDate != null
+                || data.Cost != null
+                || !string.IsNullOrEmpty(data.EmployerRef);
         }
     }
 }
