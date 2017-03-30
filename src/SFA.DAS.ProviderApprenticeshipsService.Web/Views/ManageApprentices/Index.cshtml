@@ -24,8 +24,8 @@
                         <th>Date of birth</th>
                         <th>Unique learner number</th>
                         <th>Status</th>
+                        <th>Record status</th>
                         <th></th>
-
                     </tr>
                 </thead>
                 <tbody>
@@ -47,6 +47,9 @@
                             </td>
                             <td>
                                 @apprenticeships.Status &nbsp;
+                            </td>
+                            <td>
+                                @apprenticeships.RecordStatus &nbsp;
                             </td>
                             <td>
                                 <a href="@Url.Action("Details", new { Model.ProviderId, hashedApprenticeshipId = apprenticeships.HashedApprenticeshipId })"
