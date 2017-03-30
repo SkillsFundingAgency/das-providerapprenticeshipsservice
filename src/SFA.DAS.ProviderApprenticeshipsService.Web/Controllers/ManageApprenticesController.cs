@@ -107,13 +107,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             await _orchestrator.CreateApprenticeshipUpdate(updateApprenticeship, providerid, CurrentUserId);
 
-
-            var flashmessage = new FlashMessageViewModel
-            {
-                Message = $"You suggested changes to the record for {originalApprenticeship.FirstName} {originalApprenticeship.LastName}. The employer needs to approve these changes.",
-                Severity = FlashMessageSeverityLevel.Okay
-            };
-            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
+            SetInfoMessage($"You suggested changes to the record for {originalApprenticeship.FirstName} {originalApprenticeship.LastName}. The employer needs to approve these changes.", FlashMessageSeverityLevel.Okay);
 
             return RedirectToAction("Details", new { providerid, hashedApprenticeshipId });
         }
