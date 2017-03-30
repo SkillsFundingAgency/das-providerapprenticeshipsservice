@@ -191,6 +191,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             if (pendingUpdate?.Originator == Originator.Provider)
                 pendingChange = PendingChanges.WaitingForApproval;
 
+            var cohortReference = _hashingService.HashValue(apprenticeship.CommitmentId);
             return new ApprenticeshipDetailsViewModel
             {
                 HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
@@ -203,9 +204,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,
                 Status = statusText,
-                EmployerName = string.Empty,
+                EmployerName = apprenticeship.LegalEntityName,
                 PendingChanges = pendingChange,
-                RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator)
+                RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator),
+                CohortReference = cohortReference
             };
         }
 
