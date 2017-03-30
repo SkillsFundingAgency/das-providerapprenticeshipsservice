@@ -203,8 +203,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Cost = apprenticeship.Cost,
                 Status = statusText,
                 EmployerName = string.Empty,
-                PendingChanges = pendingChange
+                PendingChanges = pendingChange,
+                RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator)
             };
+        }
+
+        private string MapRecordStatus(Originator? pendingUpdateOriginator)
+        {
+            if (pendingUpdateOriginator == null) return string.Empty;
+
+            return pendingUpdateOriginator == Originator.Provider
+                ? "Changes pending"
+                : "Changes for review";
         }
 
         private string MapPaymentStatus(PaymentStatus paymentStatus)

@@ -26,7 +26,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string Status { get; set; }
 
         public string EmployerName { get; set; }
+
         public PendingChanges PendingChanges { get; set; }
+
+        public string RecordStatus { get; set; }
     }
 
     public enum PendingChanges
