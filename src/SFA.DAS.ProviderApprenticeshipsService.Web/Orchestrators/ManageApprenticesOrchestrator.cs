@@ -115,18 +115,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var result = new Dictionary<string, string>();
 
-            var apprenticeshipId = _hashingService.DecodeValue(model.HashedApprenticeshipId);
-
-            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
-            {
-                ProviderId = model.ProviderId,
-                ApprenticeshipId = apprenticeshipId
-            });
-
             var overlappingErrors = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
-                    Apprenticeship = new List<Apprenticeship> { data.Apprenticeship }
+                    Apprenticeship = new List<Apprenticeship> { _apprenticeshipMapper.MapFromApprenticeshipViewModel(model) }
                 });
 
             foreach (var overlap in _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors))
@@ -241,6 +233,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task CreateApprenticeshipUpdate(UpdateApprenticeshipViewModel updateApprenticeship, long providerId, string userId)
         {
+            //todo: check for overlapping commitments?
+
             await _mediator.SendAsync(new CreateApprenticeshipUpdateCommand
             {
                 ProviderId = providerId,

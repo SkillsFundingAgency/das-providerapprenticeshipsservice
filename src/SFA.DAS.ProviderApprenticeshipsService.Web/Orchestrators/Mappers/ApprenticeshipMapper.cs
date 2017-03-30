@@ -103,6 +103,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             // ToDo: The rest of the mapping
             var model = new UpdateApprenticeshipViewModel
             {
+                ULN = changedOrNull(original.ULN, edited.ULN),
                 FirstName = changedOrNull(original.FirstName, edited.FirstName),
                 LastName = changedOrNull(original.LastName, edited.LastName),
                 DateOfBirth = original.DateOfBirth == edited.DateOfBirth.DateTime
@@ -158,6 +159,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             return new ApprenticeshipUpdate
             {
                 ApprenticeshipId = viewModel.OriginalApprenticeship.Id,
+                ULN = viewModel.ULN,
                 Cost = viewModel.Cost,
                 DateOfBirth = viewModel.DateOfBirth?.DateTime,
                 FirstName = viewModel.FirstName,
@@ -169,6 +171,37 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 TrainingName = viewModel.TrainingName,
                 TrainingCode = viewModel.TrainingCode,
                 TrainingType = (Commitments.Api.Types.Apprenticeship.Types.TrainingType?) viewModel.TrainingType,
+            };
+        }
+
+        public Apprenticeship MapFromApprenticeshipViewModel(ApprenticeshipViewModel model)
+        {
+            var id = _hashingService.DecodeValue(model.HashedApprenticeshipId);
+
+            var cost = default(decimal?);
+            decimal parsed;
+            if(decimal.TryParse(model.Cost, out parsed))
+            {
+                cost = parsed;
+            }
+
+            return new Apprenticeship
+            {
+                Id = id,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                DateOfBirth = model.DateOfBirth.DateTime,
+                NINumber = model.NINumber,
+                ULN = model.ULN,
+                TrainingType = model.TrainingType,
+                TrainingCode = model.TrainingCode,
+                Cost = cost,
+                StartDate = model.StartDate.DateTime,
+                EndDate = model.EndDate.DateTime,
+                PaymentStatus = model.PaymentStatus,
+                AgreementStatus = model.AgreementStatus,
+                ProviderRef = model.ProviderRef,
+                EmployerRef = model.EmployerRef
             };
         }
     }

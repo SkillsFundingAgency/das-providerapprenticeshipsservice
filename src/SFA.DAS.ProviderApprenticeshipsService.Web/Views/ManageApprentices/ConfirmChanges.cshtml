@@ -52,6 +52,16 @@
                         </tr>
                     }
 
+                    @if (Model.ULN != null)
+                    {
+                        <tr>
+                            <td>Unique learner number</td>
+                            <td>@Model.OriginalApprenticeship.ULN </td>
+                            <td class="changed-item">@Model.ULN</td>
+                            @Html.Hidden("ULN", Model.ULN)
+                        </tr>
+                    }
+
                     @if (Model.TrainingName != null)
                     {
                         <tr>

@@ -115,14 +115,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         private bool AnyChanges(UpdateApprenticeshipViewModel data)
         {
             return
-                   !string.IsNullOrEmpty(data.FirstName)
-                || !string.IsNullOrEmpty(data.LastName)
+                !string.IsNullOrWhiteSpace(data.ULN)
+                || !string.IsNullOrWhiteSpace(data.FirstName)
+                || !string.IsNullOrWhiteSpace(data.LastName)
                 || data.DateOfBirth != null
-                || !string.IsNullOrEmpty(data.TrainingName)
+                || !string.IsNullOrWhiteSpace(data.TrainingName)
                 || data.StartDate != null
                 || data.EndDate != null
                 || data.Cost != null
-                || !string.IsNullOrEmpty(data.EmployerRef);
+                || !string.IsNullOrWhiteSpace(data.ProviderRef);
         }
     }
 }
