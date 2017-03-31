@@ -157,7 +157,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             {
                 ApprenticeshipId = viewModel.OriginalApprenticeship.Id,
                 ULN = viewModel.ULN,
-                Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
+                Cost = viewModel.Cost.AsNullableDecimal(),
                 DateOfBirth = viewModel.DateOfBirth?.DateTime,
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
