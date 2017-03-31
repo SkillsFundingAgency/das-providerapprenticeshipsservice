@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
         {
             var ex = Server.GetLastError().GetBaseException();
             
-            Logger.Error(ex, "Unhanded Exception");
+            Logger.Error(ex, "Unhandled Exception");
         }
     }
 }
