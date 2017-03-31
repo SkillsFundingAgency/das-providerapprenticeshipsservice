@@ -202,7 +202,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 EmployerName = apprenticeship.LegalEntityName,
                 PendingChanges = pendingChange,
                 RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator),
-                CohortReference = cohortReference
+                CohortReference = cohortReference,
+                ProviderReference = apprenticeship.ProviderRef
             };
         }
 

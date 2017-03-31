@@ -168,6 +168,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 TrainingName = viewModel.TrainingName,
                 TrainingCode = viewModel.TrainingCode,
                 TrainingType = (Commitments.Api.Types.Apprenticeship.Types.TrainingType?) viewModel.TrainingType,
+                ProviderRef = viewModel.ProviderRef
             };
         }
 

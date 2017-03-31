@@ -1,5 +1,4 @@
 ﻿using System;
-using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
@@ -31,7 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public string RecordStatus { get; set; }
 
-        public string EmployerReference { get; set; }
+        public string ProviderReference { get; set; }
 
         public string CohortReference { get; set; }
     }

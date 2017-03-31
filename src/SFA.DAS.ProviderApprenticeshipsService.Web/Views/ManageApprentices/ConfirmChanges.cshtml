@@ -104,13 +104,13 @@
                         </tr>
                     }
 
-                    @if (Model.EmployerRef != null)
+                    @if (Model.ProviderRef != null)
                     {
                         <tr>
                             <td>Reference</td>
-                            <td>@Model.OriginalApprenticeship.EmployerRef</td>
-                            <td class="changed-item">@Model.EmployerRef</td>
-                            @Html.Hidden("EmployerRef", Model.EmployerRef)
+                            <td>@Model.OriginalApprenticeship.ProviderRef</td>
+                            <td class="changed-item">@Model.ProviderRef</td>
+                            @Html.Hidden("ProviderRef", Model.ProviderRef)
                         </tr>
                     }
 
