@@ -54,7 +54,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("{hashedApprenticeshipId}/confirm")]
-        [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> ConfirmChanges(long providerId, ApprenticeshipViewModel model)
         {
             var validationErrors = await _orchestrator.ValidateEditApprenticeship(model);
@@ -82,7 +81,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("{hashedApprenticeshipId}/submit")]
-        [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> SubmitChanges(long providerid, string hashedApprenticeshipId, UpdateApprenticeshipViewModel updateApprenticeship, string originalApprenticeshipDecoded)
         {
             var originalApprenticeship = System.Web.Helpers.Json.Decode<Apprenticeship>(originalApprenticeshipDecoded);
@@ -111,7 +109,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             ViewBag.ApprenticeshipProgrammes = viewModel.ApprenticeshipProgrammes;
             return View("Edit", apprenticeship);
         }
-
         private bool AnyChanges(UpdateApprenticeshipViewModel data)
         {
             return

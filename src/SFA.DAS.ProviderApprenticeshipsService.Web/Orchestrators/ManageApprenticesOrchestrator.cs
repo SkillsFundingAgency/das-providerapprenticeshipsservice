@@ -14,6 +14,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetPendingAppre
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
@@ -87,7 +88,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<ExtendedApprenticeshipViewModel> GetApprenticeshipForEdit(long providerId, string hashedApprenticeshipId)
         {
-            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);           
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+            await AssertNoPendingApprenticeshipUpdate(providerId, apprenticeshipId);
 
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
             {
@@ -137,6 +139,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         public async Task<UpdateApprenticeshipViewModel> GetConfirmChangesModel(long providerId, string hashedApprenticeshipId, ApprenticeshipViewModel apprenticeship)
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+            await AssertNoPendingApprenticeshipUpdate(providerId, apprenticeshipId);
 
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
             {
@@ -235,15 +238,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task CreateApprenticeshipUpdate(UpdateApprenticeshipViewModel updateApprenticeship, long providerId, string userId)
         {
-            //todo: check for overlapping commitments?
-
             await _mediator.SendAsync(new CreateApprenticeshipUpdateCommand
             {
                 ProviderId = providerId,
                 ApprenticeshipUpdate = _apprenticeshipMapper.MapFrom(updateApprenticeship),
                 UserId = userId
             });
+        }
 
+
+        private async Task AssertNoPendingApprenticeshipUpdate(long providerId, long apprenticeshipId)
+        {
+            var result = await _mediator.SendAsync(new GetPendingApprenticeshipUpdateQueryRequest
+            {
+                ProviderId = providerId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            if (result.ApprenticeshipUpdate != null)
+                throw new InvalidStateException("Pending apprenticeship update");
         }
     }
 }
