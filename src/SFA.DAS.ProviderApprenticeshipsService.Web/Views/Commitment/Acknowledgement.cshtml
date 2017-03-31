@@ -44,7 +44,9 @@
 
 
         <h2 class="heading-medium">What happens next?</h2>
-        <p id="changeMainCopy">The updated request will appear in the employer’s account for them to review.</p>
+        <p id="changeMainCopy">
+            @Model.WhatHappensNext
+        </p>
 
         @if (!string.IsNullOrEmpty(Model.RedirectUrl))
         {
@@ -71,6 +73,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("Index", "Home")" aria-label="Back to Account home" class="back-link">Back to Account home</a>
+        <a href="@Url.Action("Index", "Home")" aria-label="Back to account home" class="back-link">Back to account home</a>
     </div>
 }
