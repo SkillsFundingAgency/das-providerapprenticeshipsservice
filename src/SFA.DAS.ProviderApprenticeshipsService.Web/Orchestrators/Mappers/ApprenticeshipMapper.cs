@@ -115,7 +115,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 EndDate = original.EndDate == edited.EndDate.DateTime
                     ? null
                     : edited.EndDate,
-                EmployerRef = changedOrNull(original.EmployerRef, edited.EmployerRef),
+                ProviderRef = changedOrNull(original.ProviderRef, edited.ProviderRef),
                 OriginalApprenticeship = original
             };
 
