@@ -99,7 +99,7 @@
                         <tr>
                             <td>Cost</td>
                             <td>@Model.OriginalApprenticeship.Cost.FormatCost() </td>
-                            <td class="changed-item">@Model.Cost.FormatCost() </td>
+                            <td class="changed-item">@Model.Cost.AsNullableDecimal().FormatCost()</td>
                             @Html.Hidden("Cost", Model.Cost)
                         </tr>
                     }

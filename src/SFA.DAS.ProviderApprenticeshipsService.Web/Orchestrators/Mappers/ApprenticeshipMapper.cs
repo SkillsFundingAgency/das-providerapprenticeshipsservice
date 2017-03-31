@@ -100,7 +100,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             Func<string, string, string> changedOrNull = (a, edit) =>
                a?.Trim() == edit?.Trim() ? null : edit;
 
-            // ToDo: The rest of the mapping
             var model = new UpdateApprenticeshipViewModel
             {
                 ULN = changedOrNull(original.ULN, edited.ULN),
@@ -109,9 +108,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 DateOfBirth = original.DateOfBirth == edited.DateOfBirth.DateTime
                     ? null
                     : edited.DateOfBirth,
-                Cost = NullableDecimalToString(original.Cost) == edited.Cost
-                    ? default(decimal?)
-                    : string.IsNullOrEmpty(edited.Cost) ? 0m : decimal.Parse(edited.Cost),
+                Cost = original.Cost == edited.Cost.AsNullableDecimal() ? null : edited.Cost,
                 StartDate = original.StartDate == edited.StartDate.DateTime
                   ? null
                   : edited.StartDate,
@@ -160,7 +157,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             {
                 ApprenticeshipId = viewModel.OriginalApprenticeship.Id,
                 ULN = viewModel.ULN,
-                Cost = viewModel.Cost,
+                Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
                 DateOfBirth = viewModel.DateOfBirth?.DateTime,
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
@@ -178,13 +175,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         {
             var id = _hashingService.DecodeValue(model.HashedApprenticeshipId);
 
-            var cost = default(decimal?);
-            decimal parsed;
-            if(decimal.TryParse(model.Cost, out parsed))
-            {
-                cost = parsed;
-            }
-
             return new Apprenticeship
             {
                 Id = id,
@@ -195,7 +185,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 ULN = model.ULN,
                 TrainingType = model.TrainingType,
                 TrainingCode = model.TrainingCode,
-                Cost = cost,
+                Cost = model.Cost.AsNullableDecimal(),
                 StartDate = model.StartDate.DateTime,
                 EndDate = model.EndDate.DateTime,
                 PaymentStatus = model.PaymentStatus,

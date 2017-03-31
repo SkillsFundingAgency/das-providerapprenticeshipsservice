@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Newtonsoft.Json;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -67,25 +66,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             
             if (!ModelState.IsValid)
             {
-                var viewModel = await _orchestrator.GetApprenticeshipForEdit(providerId, model.HashedApprenticeshipId);
-                ViewBag.ApprenticeshipProgrammes = viewModel.ApprenticeshipProgrammes;
-                return View("Edit", model);
+                return await RedisplayEditApprenticeshipView(model);
             }
 
             var updateViewModel = await _orchestrator.GetConfirmChangesModel(providerId, model.HashedApprenticeshipId, model);
 
             if (!AnyChanges(updateViewModel))
             {
-                //todo: put this in a method
-                var viewModel = await _orchestrator.GetApprenticeshipForEdit(providerId, model.HashedApprenticeshipId);
                 ModelState.AddModelError("NoChangesRequested", "No changes made");
-                ViewBag.ApprenticeshipProgrammes = viewModel.ApprenticeshipProgrammes;
-                return View("Edit", model);
+                return await RedisplayEditApprenticeshipView(model);
             }
 
             return View(updateViewModel);
         }
-
 
         [HttpPost]
         [Route("{hashedApprenticeshipId}/submit")]
@@ -110,6 +103,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             SetInfoMessage($"You suggested changes to the record for {originalApprenticeship.FirstName} {originalApprenticeship.LastName}. The employer needs to approve these changes.", FlashMessageSeverityLevel.Okay);
 
             return RedirectToAction("Details", new { providerid, hashedApprenticeshipId });
+        }
+
+        private async Task<ActionResult> RedisplayEditApprenticeshipView(ApprenticeshipViewModel apprenticeship)
+        {
+            var viewModel = await _orchestrator.GetApprenticeshipForEdit(apprenticeship.ProviderId, apprenticeship.HashedApprenticeshipId);
+            ViewBag.ApprenticeshipProgrammes = viewModel.ApprenticeshipProgrammes;
+            return View("Edit", apprenticeship);
         }
 
         private bool AnyChanges(UpdateApprenticeshipViewModel data)

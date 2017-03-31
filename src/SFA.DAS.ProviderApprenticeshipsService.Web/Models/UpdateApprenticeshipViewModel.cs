@@ -19,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public TrainingType? TrainingType { get; set; }
         public string TrainingCode { get; set; }
         public string TrainingName { get; set; }
-        public decimal? Cost { get; set; }
+        public string Cost { get; set; }
 
         public DateTimeViewModel StartDate { get; set; }
 
