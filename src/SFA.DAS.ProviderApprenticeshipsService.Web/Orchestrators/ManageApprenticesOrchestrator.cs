@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -97,14 +98,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
+            AssertApprenticeshipIsEditable(data.Apprenticeship);
+
             var overlappingErrors = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
                     Apprenticeship = new List<Apprenticeship> { data.Apprenticeship }
                 });
 
-
             var apprenticeship = _apprenticeshipMapper.MapToApprenticeshipViewModel(data.Apprenticeship);
+
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
@@ -174,9 +177,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             // ToDo: Move out mapping and add test for status
             // ToDo: new stroy in sprint 8
-            var statusText =
-                apprenticeship.StartDate.HasValue
-                && apprenticeship.StartDate.Value > new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1)
+
+            var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
+                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
+            var statusText = isStartDateInFuture
                         ? "Waiting to start"
                         : MapPaymentStatus(apprenticeship.PaymentStatus);
 
@@ -203,7 +208,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PendingChanges = pendingChange,
                 RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator),
                 CohortReference = cohortReference,
-                ProviderReference = apprenticeship.ProviderRef
+                ProviderReference = apprenticeship.ProviderRef,
+                EnableEdit = isStartDateInFuture
+                            && pendingChange == PendingChanges.None
+                            && apprenticeship.PaymentStatus == PaymentStatus.Active
             };
         }
 
@@ -258,6 +266,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             if (result.ApprenticeshipUpdate != null)
                 throw new InvalidStateException("Pending apprenticeship update");
+        }
+
+        private void AssertApprenticeshipIsEditable(Apprenticeship apprenticeship)
+        {
+            var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
+                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
+            var editable = isStartDateInFuture
+                         && apprenticeship.PaymentStatus == PaymentStatus.Active;
+
+            if (!editable)
+            {
+                throw new ValidationException("Unable to edit apprenticeship - not waiting to start");
+            }
+
         }
     }
 }

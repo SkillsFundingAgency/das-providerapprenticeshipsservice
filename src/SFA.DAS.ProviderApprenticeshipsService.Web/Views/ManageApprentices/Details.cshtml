@@ -63,7 +63,7 @@
             <thead>
                 <tr>
                     <th colspan="2">Apprentice
-                        @if (Model.PendingChanges == PendingChanges.None)
+                        @if (Model.EnableEdit)
                         {
                             <a href="@Url.RouteUrl("EditApprovedApprentice")" class="float-right">Edit</a>
                         }
