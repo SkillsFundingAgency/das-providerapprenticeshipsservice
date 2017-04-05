@@ -373,6 +373,7 @@
     <Compile Include="Models\ApprenticeshipUpdate\ApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\ReviewApprenticeshipUpdateViewModel.cs" />
+    <Compile Include="Models\ApprenticeshipUpdate\UndoApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
     <Compile Include="Models\BulkUpload\BulkUploadResultViewModel.cs" />
     <Compile Include="Models\BulkUpload\BulkUploadResult.cs" />
@@ -432,6 +433,7 @@
     <Compile Include="Validation\ApprenticeshipBulkUploadValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\ReviewApprenticeshipUpdateViewModelValidator.cs" />
+    <Compile Include="Validation\ApprenticeshipUpdate\UndoApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\ApprovedApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\CsvRecordValidator.cs" />
@@ -616,6 +618,7 @@
     <Content Include="Views\ManageApprentices\ConfirmChanges.cshtml" />
     <Content Include="Views\ManageApprentices\ReviewChanges.cshtml" />
     <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
+    <Content Include="Views\ManageApprentices\UndoChanges.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

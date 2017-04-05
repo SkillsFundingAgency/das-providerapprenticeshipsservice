@@ -202,6 +202,40 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
         }
 
+        public async Task<UndoApprenticeshipUpdateViewModel> GetUndoApprenticeshipUpdateModel(long providerId, string hashedApprenticeshipId)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            var update = await _mediator.SendAsync(new GetPendingApprenticeshipUpdateQueryRequest
+            {
+                ApprenticeshipId = apprenticeshipId,
+                ProviderId = providerId
+            });
+
+            AssertApprenticeshipUpdateUndoable(update.ApprenticeshipUpdate);
+
+            var original = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                ProviderId = providerId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            var viewModel = _apprenticeshipMapper.MapApprenticeshipUpdateViewModel<UndoApprenticeshipUpdateViewModel>(original.Apprenticeship, update.ApprenticeshipUpdate);
+            return viewModel;
+        }
+
+        public async Task SubmitUndoApprenticeshipUpdate(long providerId, string hashedApprenticeshipId, string userId)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            await _mediator.SendAsync(new UndoApprenticeshipUpdateCommand
+            {
+                ProviderId = providerId,
+                ApprenticeshipId = apprenticeshipId,
+                UserId = userId
+            });
+        }
+
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
         {
             return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
@@ -322,6 +356,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private void AssertApprenticeshipUpdateReviewable(ApprenticeshipUpdate update)
         {
             if (update.Originator == Originator.Provider)
+            {
+                throw new ValidationException("Unable to review a provider-originated update");
+            }
+        }
+        private void AssertApprenticeshipUpdateUndoable(ApprenticeshipUpdate update)
+        {
+            if (update.Originator == Originator.Employer)
             {
                 throw new ValidationException("Unable to review a provider-originated update");
             }

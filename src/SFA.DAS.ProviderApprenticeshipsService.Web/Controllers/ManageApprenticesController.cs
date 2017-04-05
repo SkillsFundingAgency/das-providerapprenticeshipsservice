@@ -127,6 +127,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return RedirectToAction("Details", new { providerId, hashedApprenticeshipId});
         }
 
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/undo", Name = "UndoApprovedApprenticeChange")]
+        [OutputCache(CacheProfile = "NoCache")]
+        public async Task<ActionResult> UndoChanges(long providerId, string hashedApprenticeshipId)
+        {
+            var model = await _orchestrator.GetUndoApprenticeshipUpdateModel(providerId, hashedApprenticeshipId);
+            return View(model);
+        }
+
+        [HttpPost]
+        [Route("{hashedApprenticeshipId}/undo")]
+        public async Task<ActionResult> UndoChanges(long providerId, string hashedApprenticeshipId, UndoApprenticeshipUpdateViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return await UndoChanges(providerId, hashedApprenticeshipId);
+            }
+
+            await _orchestrator.SubmitUndoApprenticeshipUpdate(providerId, hashedApprenticeshipId, CurrentUserId);
+
+            return RedirectToAction("Details", new { providerId, hashedApprenticeshipId });
+        }
+
         private async Task<ActionResult> RedisplayEditApprenticeshipView(ApprenticeshipViewModel apprenticeship)
         {
             var viewModel = await _orchestrator.GetApprenticeshipForEdit(apprenticeship.ProviderId, apprenticeship.HashedApprenticeshipId);
