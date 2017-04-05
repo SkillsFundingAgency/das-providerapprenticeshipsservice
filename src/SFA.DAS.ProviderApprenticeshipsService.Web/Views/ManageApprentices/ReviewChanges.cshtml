@@ -1,4 +1,5 @@
-﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate.ReviewApprenticeshipUpdateViewModel
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate.ReviewApprenticeshipUpdateViewModel
 @{
     ViewBag.Title = "Review changes";
     ViewBag.PageId = "review-changes";
@@ -21,15 +22,21 @@
             <h1 class="heading-medium">Are you happy to approve these changes?</h1>
             <fieldset>
                 <legend class="visually-hidden">Are you happy to approve these changes?</legend>
+                
+                <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.ApproveChanges, "error")">
+                    <div>
+                        @Html.ValidationMessageFor(m => m.ApproveChanges, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.ApproveChanges) })
+                    </div>
 
-                <label class="block-label selection-button-radio" for="changes-confirmed-true">
-                    @Html.RadioButton("ApproveChanges", true, new {id = "changes-approved-true"})
-                    Yes, approve these changes
-                </label>
-                <label class="block-label selection-button-radio" for="changes-confirmed-false">
-                    @Html.RadioButton("ApproveChanges", false, new {id = "changes-approved-false"})
-                    No, reject these changes
-                </label>
+                    <label class="block-label selection-button-radio" for="changes-confirmed-true">
+                        @Html.RadioButton("ApproveChanges", true, new { id = "changes-approved-true" })
+                        Yes, approve these changes
+                    </label>
+                    <label class="block-label selection-button-radio" for="changes-confirmed-false">
+                        @Html.RadioButton("ApproveChanges", false, new { id = "changes-approved-false" })
+                        No, reject these changes
+                    </label>
+                </div>
             </fieldset>
 
             @Html.Hidden("OriginalApprenticeshipDecoded", @Json.Encode(Model.OriginalApprenticeship))
