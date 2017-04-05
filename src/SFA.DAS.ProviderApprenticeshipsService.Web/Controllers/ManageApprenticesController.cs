@@ -124,6 +124,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             await _orchestrator.SubmitReviewApprenticeshipUpdate(providerId, hashedApprenticeshipId, CurrentUserId, viewModel.ApproveChanges.Value);
 
+            SetInfoMessage(viewModel.ApproveChanges.Value ? "Record updated" : "Changes rejected",
+                FlashMessageSeverityLevel.Okay);
+
             return RedirectToAction("Details", new { providerId, hashedApprenticeshipId});
         }
 
