@@ -9,6 +9,7 @@ using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewApprenticeshipUpdate;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentices;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
