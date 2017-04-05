@@ -65,7 +65,7 @@
                     <th colspan="2">Apprentice
                         @if (Model.EnableEdit)
                         {
-                            <a href="@Url.RouteUrl("EditApprovedApprentice")" class="float-right">Edit</a>
+                            <a href="@Url.RouteUrl("EditApprovedApprentice")" class="float-right">Edit apprentice</a>
                         }
                     </th>
                 </tr>
@@ -101,7 +101,7 @@
                             @Model.StartDate.Value.ToGdsFormat()
                         }
                     </td>
-                    <td>&nbsp;</td>
+                   
                 </tr>
             <tr>
                 <td>Training end date</td>
@@ -111,7 +111,7 @@
                         @Model.EndDate.Value.ToGdsFormat()
                     }
                 </td>
-                <td>&nbsp;</td>
+               
             </tr>
                 <tr>
                     <td>Total cost of training </td>
