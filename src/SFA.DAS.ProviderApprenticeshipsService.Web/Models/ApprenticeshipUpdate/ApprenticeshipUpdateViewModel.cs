@@ -27,5 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate
         public string EmployerRef { get; set; }
 
         public Apprenticeship OriginalApprenticeship { get; set; }
+        public string LegalEntityName { get; set; }
+        public string ProviderName { get; set; }
     }
 }
