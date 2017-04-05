@@ -178,7 +178,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 EndDate = new DateTimeViewModel(update.EndDate),
                 ProviderRef = update.ProviderRef,
                 EmployerRef = update.EmployerRef,
-                OriginalApprenticeship = original
+                OriginalApprenticeship = original,
+                LegalEntityName = original.LegalEntityName,
+                ProviderName = original.ProviderName
             };
         }
 
@@ -204,7 +206,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                     ? null
                     : edited.EndDate,
                 ProviderRef = changedOrNull(original.ProviderRef, edited.ProviderRef),
-                OriginalApprenticeship = original
+                OriginalApprenticeship = original,
+                ProviderName = original.ProviderName,
+                LegalEntityName = original.LegalEntityName
             };
 
             if (!string.IsNullOrWhiteSpace(edited.TrainingCode) && original.TrainingCode != edited.TrainingCode)
