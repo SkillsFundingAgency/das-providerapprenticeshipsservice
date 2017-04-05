@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewApprenticeshipUpdate
 {
@@ -30,8 +32,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewAppr
                 throw new ValidationException(validationResult.Errors);
             }
 
-            //todo:cf complete
-            //throw new NotImplementedException();
+            var submission = new ApprenticeshipUpdateSubmission
+            {
+                UpdateStatus = command.IsApproved ? ApprenticeshipUpdateStatus.Approved : ApprenticeshipUpdateStatus.Rejected
+            };
+
+            await _commitmentsApi.PatchApprenticeshipUpdate(command.ProviderId, command.ApprenticeshipId, submission);
         }
     }
 }

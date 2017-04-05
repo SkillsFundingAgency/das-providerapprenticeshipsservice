@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewApprenticeshipUpdate;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.ReviewApprenticeshipUpdate
