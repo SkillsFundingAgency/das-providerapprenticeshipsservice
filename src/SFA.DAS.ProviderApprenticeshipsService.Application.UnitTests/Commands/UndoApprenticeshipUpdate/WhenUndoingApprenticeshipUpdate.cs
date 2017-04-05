@@ -3,9 +3,12 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoApprenticeshipUpdate;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.UndoApprenticeshipUpdate
@@ -25,7 +28,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 .Returns(() => new ValidationResult());
 
             _commitmentsApi = new Mock<IProviderCommitmentsApi>();
-            //_commitmentsApi.Setup(x=> x.) //todo: update method
+            _commitmentsApi.Setup(x => x.PatchApprenticeshipUpdate(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ApprenticeshipUpdateSubmission>()))
+                .Returns(() => Task.FromResult(new Unit()));
 
             _handler = new UndoApprenticeshipUpdateCommandHandler(_validator.Object, _commitmentsApi.Object);
         }
@@ -61,7 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         }
 
         [Test]
-        public async Task ThenTheCommitmentsApiIsCalledToUndoTheUpdate()
+        public async Task ThenTheCommitmentsApiIsCalledToSubmitTheUpdate()
         {
             //Arrange
             var command = new UndoApprenticeshipUpdateCommand
@@ -75,10 +79,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             await _handler.Handle(command);
 
             //Assert
-            //todo:cf complete
-            //_commitmentsApi.Verify();
-            Assert.Fail();
-
+            _commitmentsApi.Verify(x => x.PatchApprenticeshipUpdate(
+                It.IsAny<long>(),
+                It.IsAny<long>(),
+                It.Is<ApprenticeshipUpdateSubmission>(s => s.UpdateStatus == ApprenticeshipUpdateStatus.Deleted)),
+                Times.Once);
         }
     }
 }

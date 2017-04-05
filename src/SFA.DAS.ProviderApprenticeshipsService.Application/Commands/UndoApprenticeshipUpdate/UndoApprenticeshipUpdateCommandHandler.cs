@@ -3,7 +3,8 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoApprenticeshipUpdate
 {
@@ -31,8 +32,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoAppren
                 throw new ValidationException(validationResult.Errors);
             }
 
-            //todo:cf complete
-            //throw new NotImplementedException();
+            var submission = new ApprenticeshipUpdateSubmission
+            {
+                UpdateStatus = ApprenticeshipUpdateStatus.Deleted
+            };
+
+            await _commitmentsApi.PatchApprenticeshipUpdate(command.ProviderId, command.ApprenticeshipId, submission);
         }
     }
 }
