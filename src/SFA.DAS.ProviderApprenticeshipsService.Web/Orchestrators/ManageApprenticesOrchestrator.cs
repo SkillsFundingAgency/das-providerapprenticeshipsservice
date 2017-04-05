@@ -63,7 +63,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var apprenticeships = 
                 data.Apprenticeships
                 .OrderBy(m => m.ApprenticeshipName)
-                .Select(m=> MapFrom(m, null)) //todo: for list
+                .Select(m=> MapFrom(m, null))
                 .ToList();
 
             return new ManageApprenticeshipsViewModel

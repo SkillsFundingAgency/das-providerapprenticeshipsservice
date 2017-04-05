@@ -6,16 +6,19 @@
     ViewBag.PageId = "apprentice-edit";
 }
 
+@section pageSpecificJS {
+    @Scripts.Render("~/bundles/apprentice")
+}
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <form method="POST" action="@Url.Action("ConfirmChanges")" novalidate="novalidate">
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+            @Html.AntiForgeryToken()
 
-<form method="POST" action="@Url.Action("ConfirmChanges")" novalidate="novalidate">
-    @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
-    @Html.AntiForgeryToken()
+            @Html.Partial("EditApprenticeship", Model)
 
-    @Html.Partial("EditApprenticeship", Model)
-    
-    
-    <button type="submit" class="button">Update details</button>
-    <a class="links" href="@Url.Action("Details", new { Model.HashedApprenticeshipId })" aria-label="Cancel">Cancel</a>
-
-    
-</form>
+            <button type="submit" class="button">Update details</button>
+            <a class="links" href="@Url.Action("Details", new { Model.HashedApprenticeshipId })" aria-label="Cancel">Cancel</a>
+        </form>
+    </div>
+</div>
