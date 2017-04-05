@@ -13,6 +13,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using TrainingType = SFA.DAS.ProviderApprenticeshipsService.Domain.TrainingType;
 
@@ -95,43 +96,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             return dict;
         }
 
-        public async Task<UpdateApprenticeshipViewModel> CompareAndMapToUpdateApprenticeshipViewModel(Apprenticeship original, ApprenticeshipViewModel edited)
-        {
-            Func<string, string, string> changedOrNull = (a, edit) =>
-               a?.Trim() == edit?.Trim() ? null : edit;
-
-            var model = new UpdateApprenticeshipViewModel
-            {
-                ULN = changedOrNull(original.ULN, edited.ULN),
-                FirstName = changedOrNull(original.FirstName, edited.FirstName),
-                LastName = changedOrNull(original.LastName, edited.LastName),
-                DateOfBirth = original.DateOfBirth == edited.DateOfBirth.DateTime
-                    ? null
-                    : edited.DateOfBirth,
-                Cost = original.Cost == edited.Cost.AsNullableDecimal() ? null : edited.Cost,
-                StartDate = original.StartDate == edited.StartDate.DateTime
-                  ? null
-                  : edited.StartDate,
-                EndDate = original.EndDate == edited.EndDate.DateTime
-                    ? null
-                    : edited.EndDate,
-                ProviderRef = changedOrNull(original.ProviderRef, edited.ProviderRef),
-                OriginalApprenticeship = original
-            };
-
-            if (!string.IsNullOrWhiteSpace(edited.TrainingCode) && original.TrainingCode != edited.TrainingCode)
-            {
-                var training = await GetTrainingProgramme(edited.TrainingCode);
-                model.TrainingType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
-                model.TrainingCode = edited.TrainingCode;
-                model.TrainingName = training.Title;
-            }
-
-            return model;
-        }
-
-
-
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
         {
             return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
@@ -151,7 +115,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                     .ToList();
         }
 
-        public ApprenticeshipUpdate MapFrom(UpdateApprenticeshipViewModel viewModel)
+        public ApprenticeshipUpdate MapFrom(ApprenticeshipUpdateViewModel viewModel)
         {
             return new ApprenticeshipUpdate
             {
@@ -194,6 +158,64 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 ProviderRef = model.ProviderRef,
                 EmployerRef = model.EmployerRef
             };
+        }
+
+        public T MapApprenticeshipUpdateViewModel<T>(Apprenticeship original, ApprenticeshipUpdate update) where T : ApprenticeshipUpdateViewModel, new()
+        {
+            return new T
+            {
+                HashedApprenticeshipId = _hashingService.HashValue(update.ApprenticeshipId),
+                FirstName = update.FirstName,
+                LastName = update.LastName,
+                DateOfBirth = new DateTimeViewModel(update.DateOfBirth),
+                ULN = update.ULN,
+                TrainingType = update.TrainingType.HasValue
+                    ? (TrainingType) update.TrainingType.Value
+                    : default(TrainingType?),
+                TrainingCode = update.TrainingCode,
+                Cost = update.Cost.HasValue ? update.Cost.ToString() : string.Empty,
+                StartDate = new DateTimeViewModel(update.StartDate),
+                EndDate = new DateTimeViewModel(update.EndDate),
+                ProviderRef = update.ProviderRef,
+                EmployerRef = update.EmployerRef,
+                OriginalApprenticeship = original
+            };
+        }
+
+        public async Task<CreateApprenticeshipUpdateViewModel> CompareAndMapToCreateUpdateApprenticeshipViewModel(Apprenticeship original, ApprenticeshipViewModel edited)
+        {
+            Func<string, string, string> changedOrNull = (a, edit) =>
+               a?.Trim() == edit?.Trim() ? null : edit;
+
+            var model = new CreateApprenticeshipUpdateViewModel
+            {
+                HashedApprenticeshipId = _hashingService.HashValue(original.Id),
+                ULN = changedOrNull(original.ULN, edited.ULN),
+                FirstName = changedOrNull(original.FirstName, edited.FirstName),
+                LastName = changedOrNull(original.LastName, edited.LastName),
+                DateOfBirth = original.DateOfBirth == edited.DateOfBirth.DateTime
+                    ? null
+                    : edited.DateOfBirth,
+                Cost = original.Cost == edited.Cost.AsNullableDecimal() ? null : edited.Cost,
+                StartDate = original.StartDate == edited.StartDate.DateTime
+                  ? null
+                  : edited.StartDate,
+                EndDate = original.EndDate == edited.EndDate.DateTime
+                    ? null
+                    : edited.EndDate,
+                ProviderRef = changedOrNull(original.ProviderRef, edited.ProviderRef),
+                OriginalApprenticeship = original
+            };
+
+            if (!string.IsNullOrWhiteSpace(edited.TrainingCode) && original.TrainingCode != edited.TrainingCode)
+            {
+                var training = await GetTrainingProgramme(edited.TrainingCode);
+                model.TrainingType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
+                model.TrainingCode = edited.TrainingCode;
+                model.TrainingName = training.Title;
+            }
+
+            return model;
         }
     }
 }

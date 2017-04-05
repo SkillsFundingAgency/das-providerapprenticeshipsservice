@@ -98,6 +98,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApprenticeshipInfoServiceWrapper.cs" />
+    <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommand.cs" />
+    <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommandHandler.cs" />
+    <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommandValidator.cs" />
     <Compile Include="Commands\BulkUploadApprenticeships\BulkUploadApprenticeshipsCommand.cs" />
     <Compile Include="Commands\BulkUploadApprenticeships\BulkUploadApprenticeshipsCommandHandler.cs" />
     <Compile Include="Commands\BulkUploadApprenticeships\BulkUploadApprenticeshipsCommandValidator.cs" />

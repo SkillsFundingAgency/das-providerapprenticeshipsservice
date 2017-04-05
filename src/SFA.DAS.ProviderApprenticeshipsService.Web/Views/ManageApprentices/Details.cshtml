@@ -15,7 +15,7 @@
             {
             <div class="panel panel-border-wide alert-default">
                 <p>There are changes to this apprentice's details that you need to review.</p>
-                
+                <a href="@Url.RouteUrl("ReviewApprovedApprenticeChange")" aria-label="Review changes" class="">Review changes</a>
             </div>
         }
         else if (Model.PendingChanges == PendingChanges.WaitingForApproval)

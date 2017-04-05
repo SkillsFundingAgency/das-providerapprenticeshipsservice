@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
@@ -81,7 +82,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("{hashedApprenticeshipId}/submit")]
-        public async Task<ActionResult> SubmitChanges(long providerid, string hashedApprenticeshipId, UpdateApprenticeshipViewModel updateApprenticeship, string originalApprenticeshipDecoded)
+        public async Task<ActionResult> SubmitChanges(long providerid, string hashedApprenticeshipId, CreateApprenticeshipUpdateViewModel updateApprenticeship, string originalApprenticeshipDecoded)
         {
             var originalApprenticeship = System.Web.Helpers.Json.Decode<Apprenticeship>(originalApprenticeshipDecoded);
             updateApprenticeship.OriginalApprenticeship = originalApprenticeship;
@@ -103,13 +104,36 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return RedirectToAction("Details", new { providerid, hashedApprenticeshipId });
         }
 
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/review", Name = "ReviewApprovedApprenticeChange")]
+        [OutputCache(CacheProfile = "NoCache")]
+        public async Task<ActionResult> ReviewChanges(long providerId, string hashedApprenticeshipId)
+        {
+            var model = await _orchestrator.GetReviewApprenticeshipUpdateModel(providerId, hashedApprenticeshipId);
+            return View(model);
+        }
+
+        [HttpPost]
+        [Route("{hashedApprenticeshipId}/review")]
+        public async Task<ActionResult> ReviewChanges(long providerId, string hashedApprenticeshipId, ReviewApprenticeshipUpdateViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return await ReviewChanges(providerId, hashedApprenticeshipId);
+            }
+
+            await _orchestrator.SubmitReviewApprenticeshipUpdate(providerId, hashedApprenticeshipId, CurrentUserId, viewModel.ApproveChanges.Value);
+
+            return RedirectToAction("Details", new { providerId, hashedApprenticeshipId});
+        }
+
         private async Task<ActionResult> RedisplayEditApprenticeshipView(ApprenticeshipViewModel apprenticeship)
         {
             var viewModel = await _orchestrator.GetApprenticeshipForEdit(apprenticeship.ProviderId, apprenticeship.HashedApprenticeshipId);
             ViewBag.ApprenticeshipProgrammes = viewModel.ApprenticeshipProgrammes;
             return View("Edit", apprenticeship);
         }
-        private bool AnyChanges(UpdateApprenticeshipViewModel data)
+        private bool AnyChanges(CreateApprenticeshipUpdateViewModel data)
         {
             return
                 !string.IsNullOrWhiteSpace(data.ULN)

@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Application;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeshipUpdate;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentices;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
@@ -17,6 +19,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
@@ -139,7 +142,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return result;
         }
 
-        public async Task<UpdateApprenticeshipViewModel> GetConfirmChangesModel(long providerId, string hashedApprenticeshipId, ApprenticeshipViewModel apprenticeship)
+        public async Task<CreateApprenticeshipUpdateViewModel> GetConfirmChangesModel(long providerId, string hashedApprenticeshipId, ApprenticeshipViewModel apprenticeship)
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
             await AssertNoPendingApprenticeshipUpdate(providerId, apprenticeshipId);
@@ -150,8 +153,53 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
-            var viewModel = await _apprenticeshipMapper.CompareAndMapToUpdateApprenticeshipViewModel(data.Apprenticeship, apprenticeship);
+            var viewModel = await _apprenticeshipMapper.CompareAndMapToCreateUpdateApprenticeshipViewModel(data.Apprenticeship, apprenticeship);
             return viewModel;
+        }
+
+        public async Task CreateApprenticeshipUpdate(CreateApprenticeshipUpdateViewModel updateApprenticeship, long providerId, string userId)
+        {
+            await _mediator.SendAsync(new CreateApprenticeshipUpdateCommand
+            {
+                ProviderId = providerId,
+                ApprenticeshipUpdate = _apprenticeshipMapper.MapFrom(updateApprenticeship),
+                UserId = userId
+            });
+        }
+
+        public async Task<ReviewApprenticeshipUpdateViewModel> GetReviewApprenticeshipUpdateModel(long providerId, string hashedApprenticeshipId)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            var update = await _mediator.SendAsync(new GetPendingApprenticeshipUpdateQueryRequest
+            {
+                ApprenticeshipId = apprenticeshipId,
+                ProviderId = providerId
+            });
+
+            AssertApprenticeshipUpdateReviewable(update.ApprenticeshipUpdate);
+
+            var original = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                ProviderId = providerId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            var viewModel = _apprenticeshipMapper.MapApprenticeshipUpdateViewModel<ReviewApprenticeshipUpdateViewModel>(original.Apprenticeship, update.ApprenticeshipUpdate);
+            return viewModel;
+        }
+
+        public async Task SubmitReviewApprenticeshipUpdate(long providerId, string hashedApprenticeshipId, string userId, bool isApproved)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            await _mediator.SendAsync(new ReviewApprenticeshipUpdateCommand
+            {
+                ProviderId = providerId,
+                ApprenticeshipId = apprenticeshipId,
+                UserId = userId,
+                IsApproved = isApproved
+            });
         }
 
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
@@ -245,17 +293,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             }
         }
 
-        public async Task CreateApprenticeshipUpdate(UpdateApprenticeshipViewModel updateApprenticeship, long providerId, string userId)
-        {
-            await _mediator.SendAsync(new CreateApprenticeshipUpdateCommand
-            {
-                ProviderId = providerId,
-                ApprenticeshipUpdate = _apprenticeshipMapper.MapFrom(updateApprenticeship),
-                UserId = userId
-            });
-        }
-
-
         private async Task AssertNoPendingApprenticeshipUpdate(long providerId, long apprenticeshipId)
         {
             var result = await _mediator.SendAsync(new GetPendingApprenticeshipUpdateQueryRequest
@@ -280,7 +317,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 throw new ValidationException("Unable to edit apprenticeship - not waiting to start");
             }
+        }
 
+        private void AssertApprenticeshipUpdateReviewable(ApprenticeshipUpdate update)
+        {
+            if (update.Originator == Originator.Provider)
+            {
+                throw new ValidationException("Unable to review a provider-originated update");
+            }
         }
     }
 }

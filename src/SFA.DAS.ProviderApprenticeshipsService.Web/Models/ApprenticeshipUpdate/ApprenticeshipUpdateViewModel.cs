@@ -1,14 +1,12 @@
-﻿using FluentValidation.Attributes;
-using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+﻿using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate
 {
-    [Validator(typeof(UpdateApprenticeshipViewModelValidator))]
-    public class UpdateApprenticeshipViewModel
+    public class ApprenticeshipUpdateViewModel
     {
+        public string HashedApprenticeshipId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
@@ -29,6 +27,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string EmployerRef { get; set; }
 
         public Apprenticeship OriginalApprenticeship { get; set; }
-        public bool? ChangesConfirmed { get; set; }
     }
 }

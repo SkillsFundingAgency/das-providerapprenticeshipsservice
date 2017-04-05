@@ -370,6 +370,9 @@
     <Compile Include="Models\AgreementNotSignedViewModel.cs" />
     <Compile Include="Models\ApprenticeshipListItemGroupViewModel.cs" />
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
+    <Compile Include="Models\ApprenticeshipUpdate\ApprenticeshipUpdateViewModel.cs" />
+    <Compile Include="Models\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModel.cs" />
+    <Compile Include="Models\ApprenticeshipUpdate\ReviewApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
     <Compile Include="Models\BulkUpload\BulkUploadResultViewModel.cs" />
     <Compile Include="Models\BulkUpload\BulkUploadResult.cs" />
@@ -395,7 +398,6 @@
     <Compile Include="Models\TaskItemViewModel.cs" />
     <Compile Include="Models\TaskListViewModel.cs" />
     <Compile Include="Models\TaskViewModel.cs" />
-    <Compile Include="Models\UpdateApprenticeshipViewModel.cs" />
     <Compile Include="Models\UploadApprenticeshipsViewModel.cs" />
     <Compile Include="Models\UploadRowErrorViewModel.cs" />
     <Compile Include="Models\VerificationOfRelationshipViewModel.cs" />
@@ -428,6 +430,8 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Validation\ApprenticeshipCoreValidator.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUploadValidator.cs" />
+    <Compile Include="Validation\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModelValidator.cs" />
+    <Compile Include="Validation\ApprenticeshipUpdate\ReviewApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\ApprovedApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\CsvRecordValidator.cs" />
@@ -439,7 +443,6 @@
     <Compile Include="Validation\Text\WebApprenticeshipValidationText.cs" />
     <Compile Include="Validation\Text\IApprenticeshipValidationErrorText.cs" />
     <Compile Include="Validation\Text\ValidationMessage.cs" />
-    <Compile Include="Validation\UpdateApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\VerificationOfEmployerViewModelValidator.cs" />
     <Compile Include="Validation\VerificationOfRelationshipViewModelValidator.cs" />
   </ItemGroup>
@@ -611,6 +614,8 @@
     <Content Include="Views\ManageApprentices\Edit.cshtml" />
     <Content Include="Views\Shared\EditApprenticeship.cshtml" />
     <Content Include="Views\ManageApprentices\ConfirmChanges.cshtml" />
+    <Content Include="Views\ManageApprentices\ReviewChanges.cshtml" />
+    <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
