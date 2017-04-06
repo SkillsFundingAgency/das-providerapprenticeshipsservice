@@ -15,7 +15,7 @@
         <div class="column-two-thirds">
 
             <p>@Model.LegalEntityName are reviewing these changes:</p>
-            
+
             @Html.Partial("ApprenticeshipUpdate", Model)
 
             <h1 class="heading-medium">Do you want to undo these changes?</h1>
@@ -46,6 +46,10 @@
         <div class="column-one-third">
         </div>
     </div>
-
-
 </form>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Details", new { Model.HashedApprenticeshipId })" aria-label="Back to apprenticeship details" class="back-link">Back to apprenticeship details</a>
+    </div>
+}

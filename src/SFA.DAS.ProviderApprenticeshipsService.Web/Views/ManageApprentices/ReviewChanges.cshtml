@@ -13,7 +13,7 @@
 
     <div class="grid-row list-apprentice">
         <div class="column-two-thirds">
-            
+
             <p>@Model.LegalEntityName have suggested these changes:</p>
 
             @Html.Partial("ApprenticeshipUpdate", Model)
@@ -21,7 +21,7 @@
             <h1 class="heading-medium">Are you happy to approve these changes?</h1>
             <fieldset>
                 <legend class="visually-hidden">Are you happy to approve these changes?</legend>
-                
+
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.ApproveChanges, "error")">
                     <div>
                         @Html.ValidationMessageFor(m => m.ApproveChanges, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.ApproveChanges) })
@@ -41,13 +41,17 @@
             @Html.Hidden("OriginalApprenticeshipDecoded", @Json.Encode(Model.OriginalApprenticeship))
             <button type="submit" class="button" aria-label="Finish">Continue</button>
 
-            @Html.ActionLink("Cancel and return", "Details", new {providerId = Model.OriginalApprenticeship.ProviderId, hashedApprenticeshipId = Model.HashedApprenticeshipId})
+            @Html.ActionLink("Cancel and return", "Details", new { providerId = Model.OriginalApprenticeship.ProviderId, hashedApprenticeshipId = Model.HashedApprenticeshipId })
 
         </div>
-        
+
         <div class="column-one-third">
         </div>
     </div>
-
-
 </form>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Details", new { Model.HashedApprenticeshipId })" aria-label="Back to apprenticeship details" class="back-link">Back to apprenticeship details</a>
+    </div>
+}
