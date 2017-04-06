@@ -412,6 +412,14 @@ body {
     }
  }
 
+//character count error
+.form-group {
+    .exceeded{
+        color:$error-colour;
+        font-weight:bold;
+      
+    }
+}
 
 
     

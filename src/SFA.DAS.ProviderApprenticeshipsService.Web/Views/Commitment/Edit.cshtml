@@ -172,6 +172,8 @@
                 <span class="form-hint">Add a reference, such as employee number or location - this won’t be seen by the employer</span>
                 @Html.ValidationMessageFor(m => m.ProviderRef, null, new { id = "error-message-" + Html.IdFor(m => m.ProviderRef) })
                 @Html.TextBoxFor(m => m.ProviderRef, new { @class = "form-control form-control-3-4" })
+                <p id="charCount-noJS">Enter upto a maximum of 20 characters</p>
+                <p id="charCount" style="display:none;"><span name="countchars" id="countchars"></span> characters remaining</p>
             </div>
             <div class="form-group">
                 <hr />
