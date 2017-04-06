@@ -148,7 +148,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return await UndoChanges(providerId, hashedApprenticeshipId);
             }
 
-            await _orchestrator.SubmitUndoApprenticeshipUpdate(providerId, hashedApprenticeshipId, CurrentUserId);
+            if (viewModel.ConfirmUndo.HasValue && viewModel.ConfirmUndo.Value)
+            {
+                await _orchestrator.SubmitUndoApprenticeshipUpdate(providerId, hashedApprenticeshipId, CurrentUserId);
+            }
 
             return RedirectToAction("Details", new { providerId, hashedApprenticeshipId });
         }
