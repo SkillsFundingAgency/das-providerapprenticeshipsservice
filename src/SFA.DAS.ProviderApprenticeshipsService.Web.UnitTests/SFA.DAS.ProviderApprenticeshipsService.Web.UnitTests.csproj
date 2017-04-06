@@ -84,6 +84,9 @@
     <Compile Include="Orchestrators\Commitments\WhenGettingDeleteApprenticeshipConfirmation.cs" />
     <Compile Include="Orchestrators\Commitments\WhenDeletingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGetCohorts.cs" />
+    <Compile Include="Orchestrators\Commitments\WhenGettingReviewApprenticeshipUpdate.cs" />
+    <Compile Include="Orchestrators\Commitments\WhenMappingApprenticeshipUpdate.cs" />
+    <Compile Include="Orchestrators\Commitments\WhenSubmittingReviewApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\Commitments\WhenUploadingFile.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\ApprenticeshipBulkUploadValidationTestBase.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingCost.cs" />
@@ -102,6 +105,8 @@
     <Compile Include="Validation\ApprenticeshipCreateOrEdit\WhenValidatingCost.cs" />
     <Compile Include="Validation\ApprenticeshipCreateOrEdit\WhenValidatingProviderReference.cs" />
     <Compile Include="Validation\ApprenticeshipCreateOrEdit\WhenValidatingLastName.cs" />
+    <Compile Include="Validation\ApprenticeshipUpdate\WhenValidatingCreateApprenticeshipUpdateViewModel.cs" />
+    <Compile Include="Validation\ApprenticeshipUpdate\WhenValidatingReviewApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Validation\WhenValidatingVerificationOfRelationshipViewModel.cs" />
     <Compile Include="Validation\WhenValidatingVerificationOfEmployerViewModel.cs" />
     <Compile Include="WhenValidatingCsvRecord.cs" />

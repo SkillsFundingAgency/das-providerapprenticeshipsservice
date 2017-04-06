@@ -173,6 +173,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                     ? (TrainingType) update.TrainingType.Value
                     : default(TrainingType?),
                 TrainingCode = update.TrainingCode,
+                TrainingName = update.TrainingName,
                 Cost = update.Cost.HasValue ? update.Cost.ToString() : string.Empty,
                 StartDate = new DateTimeViewModel(update.StartDate),
                 EndDate = new DateTimeViewModel(update.EndDate),
