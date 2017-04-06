@@ -27,11 +27,11 @@
                         @Html.ValidationMessageFor(m => m.ApproveChanges, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.ApproveChanges) })
                     </div>
 
-                    <label class="block-label selection-button-radio" for="changes-confirmed-true">
+                    <label class="block-label selection-button-radio" for="changes-approved-true">
                         @Html.RadioButton("ApproveChanges", true, new { id = "changes-approved-true" })
                         Yes, approve these changes
                     </label>
-                    <label class="block-label selection-button-radio" for="changes-confirmed-false">
+                    <label class="block-label selection-button-radio" for="changes-approved-false">
                         @Html.RadioButton("ApproveChanges", false, new { id = "changes-approved-false" })
                         No, reject these changes
                     </label>
