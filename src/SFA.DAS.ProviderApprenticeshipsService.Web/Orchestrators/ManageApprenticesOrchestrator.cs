@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Application;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoApprenticeshipUpdate;
@@ -350,7 +348,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             if (!editable)
             {
-                throw new ValidationException("Unable to edit apprenticeship - not waiting to start");
+                throw new FluentValidation.ValidationException("Unable to edit apprenticeship - not waiting to start");
             }
         }
 
@@ -358,14 +356,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             if (update.Originator == Originator.Provider)
             {
-                throw new ValidationException("Unable to review a provider-originated update");
+                throw new FluentValidation.ValidationException("Unable to review a provider-originated update");
             }
         }
         private void AssertApprenticeshipUpdateUndoable(ApprenticeshipUpdate update)
         {
             if (update.Originator == Originator.Employer)
             {
-                throw new ValidationException("Unable to review a provider-originated update");
+                throw new FluentValidation.ValidationException("Unable to review a provider-originated update");
             }
         }
     }
