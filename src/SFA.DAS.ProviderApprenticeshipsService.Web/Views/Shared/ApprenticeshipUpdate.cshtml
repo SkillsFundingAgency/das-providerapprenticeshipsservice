@@ -2,12 +2,16 @@
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate
 @model ApprenticeshipUpdateViewModel
+            
+@{
+    var currentValueHeader = Model is UndoApprenticeshipUpdateViewModel ? "Previous" : "Current";
+}
     
 <table class="edited-changes">
     <thead>
     <tr>
         <th></th>
-        <th>Current</th>
+        <th>@currentValueHeader</th>
         <th>Changed to</th>
     </tr>
     </thead>
