@@ -22,3 +22,9 @@
         </form>
     </div>
 </div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Details", new { Model.HashedApprenticeshipId })" aria-label="Back to apprenticeship details" class="back-link">Back to apprenticeship details</a>
+    </div>
+}
