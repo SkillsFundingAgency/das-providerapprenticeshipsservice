@@ -76,7 +76,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         private UploadRowErrorViewModel MapError(IGrouping<int?, UploadError> arg)
         {
             var firstRecord = arg.FirstOrDefault();
-            Func<string, string> stringOrDefault = str => string.IsNullOrWhiteSpace(str) ? "&ndash;" : str;
+            Func<string, string> stringOrDefault = str => string.IsNullOrWhiteSpace(str) ? "–" : str;
             if (arg.Key != null && firstRecord != null)
             {
                 return new UploadRowErrorViewModel
