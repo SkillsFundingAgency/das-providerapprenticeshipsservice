@@ -85,6 +85,7 @@
     <Compile Include="Orchestrators\Commitments\WhenDeletingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGetCohorts.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingReviewApprenticeshipUpdate.cs" />
+    <Compile Include="Orchestrators\Commitments\WhenMappingApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\Commitments\WhenSubmittingReviewApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\Commitments\WhenUploadingFile.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\ApprenticeshipBulkUploadValidationTestBase.cs" />

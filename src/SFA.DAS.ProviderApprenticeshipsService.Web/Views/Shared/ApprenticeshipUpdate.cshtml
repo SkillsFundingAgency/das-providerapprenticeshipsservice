@@ -46,7 +46,7 @@
         </tr>
     }
 
-    @if (Model.TrainingName != null)
+    @if (!string.IsNullOrWhiteSpace(Model.TrainingName))
     {
         <tr>
             <td>Apprenticeship training course</td>
@@ -78,7 +78,7 @@
         </tr>
     }
 
-    @if (Model.Cost != null)
+    @if (!string.IsNullOrWhiteSpace(Model.Cost))
     {
         <tr>
             <td>Cost</td>
