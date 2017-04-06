@@ -10,11 +10,27 @@
 <div class="grid-row list-apprentice">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@Model.FirstName @Model.LastName</h1>
+        
+        @if (Model.PendingChanges == PendingChanges.ReadyForApproval)
+            {
+            <div class="panel panel-border-wide alert-default">
+                <p>There are changes to this apprentice's details that you need to review.</p>
+                
+            </div>
+        }
+        else if (Model.PendingChanges == PendingChanges.WaitingForApproval)
+        {
+            <div class="panel panel-border-wide">
+                <p>
+                    There are changes to this apprentice's details that are waiting for approval by the employer.
+                </p>
+            </div>
+        }
 
-        <table class="status-section">
+        <table id="app-status">
             <thead>
                 <tr>
-                    <th colspan="2">Status</th>
+                    <th colspan="3">Apprentice Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,16 +41,43 @@
             </tbody>
         </table>
 
-        <table class="apprentice-section">
+        <table>
             <thead>
                 <tr>
-                    <th colspan="2">Apprentice</th>
+                    <th colspan="2">Overview</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Name</td>
-                    <td>@Model.FirstName @Model.LastName</td>
+                    <td>Employer</td>
+                    <td>@Model.EmployerName</td>
+                </tr>
+                <tr>
+                    <td>Cohort reference</td>
+                    <td>@Model.CohortReference</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">Apprentice
+                        @if (Model.EnableEdit)
+                        {
+                            <a href="@Url.RouteUrl("EditApprovedApprentice")" class="float-right">Edit apprentice</a>
+                        }
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Name</td>
+                <td>@Model.FirstName @Model.LastName</td>
+            </tr>
+                <tr>
+                    <td>Unique learner number</td>
+                    <td>@Model.Uln</td>
                 </tr>
                 <tr>
                     <td>Date of birth</td>
@@ -45,52 +88,11 @@
                         }
                     </td>
                 </tr>
-                <tr>
-                    <td>Unique learner number</td>
-                    <td>@Model.Uln</td>
-                </tr>
-
-            </tbody>
-        </table>
-
-        <table class="training-section">
-            <thead>
-                <tr>
-                    <th colspan="2">Training</th>
-                </tr>
-            </thead>
-            <tbody>
             <tr>
                 <td>Apprenticeship training course</td>
                 <td>@Model.TrainingName</td>
-
             </tr>
-            <!--
-                enhancement
-                <tr>
-                    <td>Employer</td>
-                    <td>@Model.EmployerName </td>
-                </tr>
-                -->
 
-            <!--
-            enhancement
-                <tr>
-                    <td>End-point assessor</td>
-                    <td>Pham Assessment Ltd</td>
-                </tr>
-            -->
-
-            </tbody>
-        </table>
-
-        <table class="dates-section">
-            <thead>
-                <tr>
-                    <th colspan="3">Dates</th>                
-                </tr>
-            </thead>
-            <tbody>
                 <tr>
                     <td>Training start date</td>
                     <td>
@@ -99,51 +101,26 @@
                             @Model.StartDate.Value.ToGdsFormat()
                         }
                     </td>
-                    <td>&nbsp;</td>
+                   
+                </tr>
+            <tr>
+                <td>Training end date</td>
+                <td>
+                    @if (Model.EndDate.HasValue)
+                    {
+                        @Model.EndDate.Value.ToGdsFormat()
+                    }
+                </td>
+               
+            </tr>
+                <tr>
+                    <td>Total cost of training </td>
+                    <td>@FormatCost(Model.Cost) </td>
                 </tr>
                 <tr>
-                    <td>Training end date</td>
-                    <td>
-                        @if (Model.EndDate.HasValue)
-                        {
-                            @Model.EndDate.Value.ToGdsFormat()
-                        }
-                    </td>
-                    <td>&nbsp;</td>
+                    <td>Reference </td>
+                    <td>@Model.ProviderReference</td>
                 </tr>
-               <!--improvisation <tr>
-                    <td>Time left</td>
-                    <td> 10 months</td>
-                    <td>&nbsp;</td>
-                </tr>-->
-
-            </tbody>
-        </table>
-
-        <table class="payment-section">
-            <thead>
-                <tr>
-                    <th colspan="3">Payment</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Apprenticeship price</td>
-                    <td>
-                        @FormatCost(Model.Cost)
-                    </td>
-                    <td>&nbsp;</td>
-                </tr>
-               <!-- improvisation <tr>
-                    <td>Amount paid to date</td>
-                    <td>&pound;1,312.56</td>
-                    <td><a href="#">View</a></td>
-                </tr>
-                <tr>
-                    <td>Balance</td>
-                    <td>&pound;1,645.00</td>
-                    <td><a href="#">View</a></td>
-                </tr>-->
 
             </tbody>
         </table>
