@@ -13,20 +13,13 @@
 
     <div class="grid-row list-apprentice">
         <div class="column-two-thirds">
-
             <p>@Model.LegalEntityName are reviewing these changes:</p>
-
             @Html.Partial("ApprenticeshipUpdate", Model)
-
             <h1 class="heading-medium">Do you want to undo these changes?</h1>
             <fieldset>
                 <legend class="visually-hidden">Do you want to undo these changes?</legend>
-
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.ConfirmUndo, "error")">
-                    <div>
-                        @Html.ValidationMessageFor(m => m.ConfirmUndo, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.ConfirmUndo) })
-                    </div>
-
+                        @Html.ValidationMessageFor(m => m.ConfirmUndo, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.ConfirmUndo) })                 
                     <label class="block-label selection-button-radio" for="undo-changes-true">
                         @Html.RadioButton("ConfirmUndo", true, new { id = "undo-changes-true" })
                         Yes, undo these changes
@@ -40,11 +33,8 @@
 
             @Html.Hidden("OriginalApprenticeshipDecoded", @Json.Encode(Model.OriginalApprenticeship))
             <button type="submit" class="button" aria-label="Finish">Continue</button>
-
         </div>
-
-        <div class="column-one-third">
-        </div>
+    
     </div>
 </form>
 

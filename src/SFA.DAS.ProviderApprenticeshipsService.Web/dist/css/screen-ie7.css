@@ -2887,7 +2887,7 @@ body input::-webkit-contacts-auto-fill-button {
   margin-top: 0;
 }
 
-.changed-item {
+table .changed-item {
   font-weight: bold;
 }
 
