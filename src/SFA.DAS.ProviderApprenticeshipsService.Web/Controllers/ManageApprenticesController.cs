@@ -150,6 +150,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (viewModel.ConfirmUndo.HasValue && viewModel.ConfirmUndo.Value)
             {
+                SetInfoMessage("Changes undone", FlashMessageSeverityLevel.Okay);
                 await _orchestrator.SubmitUndoApprenticeshipUpdate(providerId, hashedApprenticeshipId, CurrentUserId);
             }
 
