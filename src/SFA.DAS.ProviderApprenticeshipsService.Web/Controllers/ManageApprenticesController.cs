@@ -54,6 +54,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("{hashedApprenticeshipId}/confirm")]
         public async Task<ActionResult> ConfirmChanges(long providerId, ApprenticeshipViewModel model)
         {
@@ -81,6 +82,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("{hashedApprenticeshipId}/submit")]
         public async Task<ActionResult> SubmitChanges(long providerid, string hashedApprenticeshipId, CreateApprenticeshipUpdateViewModel updateApprenticeship, string originalApprenticeshipDecoded)
         {
@@ -114,6 +116,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("{hashedApprenticeshipId}/review")]
         public async Task<ActionResult> ReviewChanges(long providerId, string hashedApprenticeshipId, ReviewApprenticeshipUpdateViewModel viewModel)
         {
@@ -140,6 +143,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("{hashedApprenticeshipId}/undo")]
         public async Task<ActionResult> UndoChanges(long providerId, string hashedApprenticeshipId, UndoApprenticeshipUpdateViewModel viewModel)
         {
