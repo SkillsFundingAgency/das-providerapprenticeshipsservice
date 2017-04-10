@@ -2883,7 +2883,7 @@ body input::-webkit-contacts-auto-fill-button {
   margin-top: 0;
 }
 
-.form-group .exceeded {
+.form-group .limit-reached {
   color: #b10e1e;
   font-weight: bold;
 }

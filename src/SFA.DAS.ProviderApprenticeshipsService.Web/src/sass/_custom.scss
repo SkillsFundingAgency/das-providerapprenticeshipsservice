@@ -414,12 +414,14 @@ body {
 
 //character count error
 .form-group {
-    .exceeded{
+    .limit-reached{
         color:$error-colour;
         font-weight:bold;
       
     }
 }
+
+
 
 
     
