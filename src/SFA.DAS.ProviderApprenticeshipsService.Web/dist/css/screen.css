@@ -2876,6 +2876,10 @@ span.helpText {
   margin-top: 22px;
 }
 
+.float-right {
+  float: right;
+}
+
 #add-apprentice-entry hr,
 #edit-apprentice hr {
   margin-top: 0;
@@ -3279,6 +3283,14 @@ body input::-webkit-contacts-auto-fill-button {
 
 .validation-summary-max-funding #warning-summary {
   margin-top: 0;
+}
+
+table .changed-item {
+  font-weight: bold;
+}
+
+#confirm-edited-changes fieldset {
+  margin-bottom: 40px;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {

@@ -19,5 +19,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 
             return null;
         }
+
+        public static decimal? AsNullableDecimal(this string input)
+        {
+            var result = default(decimal?);
+            decimal parsed;
+            if (decimal.TryParse(input, out parsed))
+            {
+                result = parsed;
+            }
+
+            return result;
+        }
     }
 }
