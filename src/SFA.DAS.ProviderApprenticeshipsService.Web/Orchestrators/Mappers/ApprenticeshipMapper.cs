@@ -58,10 +58,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 EmployerRef = apprenticeship.EmployerRef
             };
         }
-        private static string NullableDecimalToString(decimal? item)
-        {
-            return (item.HasValue) ? string.Format("{0:#}", item.Value) : "";
-        }
         
         public Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors)
         {
@@ -94,25 +90,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 }
             }
             return dict;
-        }
-
-        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
-        {
-            return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
-        }
-
-        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
-        {
-            var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
-            var frameworksTask = _mediator.SendAsync(new GetFrameworksQueryRequest());
-
-            await Task.WhenAll(standardsTask, frameworksTask);
-
-            return
-                standardsTask.Result.Standards.Cast<ITrainingProgramme>()
-                    .Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>())
-                    .OrderBy(m => m.Title)
-                    .ToList();
         }
 
         public ApprenticeshipUpdate MapFrom(ApprenticeshipUpdateViewModel viewModel)
@@ -221,6 +198,99 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             }
 
             return model;
+        }
+
+        public ApprenticeshipDetailsViewModel MapFrom(Apprenticeship apprenticeship)
+        {
+            var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
+                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
+            var statusText = isStartDateInFuture
+                        ? "Waiting to start"
+                        : MapPaymentStatus(apprenticeship.PaymentStatus);
+
+            var pendingChange = PendingChanges.None;
+            if (apprenticeship.PendingUpdateOriginator == Originator.Employer)
+                pendingChange = PendingChanges.ReadyForApproval;
+            if (apprenticeship.PendingUpdateOriginator == Originator.Provider && apprenticeship.PaymentStatus != PaymentStatus.Withdrawn)
+                pendingChange = PendingChanges.WaitingForEmployer;
+
+            var cohortReference = _hashingService.HashValue(apprenticeship.CommitmentId);
+            return new ApprenticeshipDetailsViewModel
+            {
+                HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
+                FirstName = apprenticeship.FirstName,
+                LastName = apprenticeship.LastName,
+                DateOfBirth = apprenticeship.DateOfBirth,
+                Uln = apprenticeship.ULN,
+                StartDate = apprenticeship.StartDate,
+                EndDate = apprenticeship.EndDate,
+                TrainingName = apprenticeship.TrainingName,
+                Cost = apprenticeship.Cost,
+                Status = statusText,
+                EmployerName = apprenticeship.LegalEntityName,
+                PendingChanges = pendingChange,
+                RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator),
+                CohortReference = cohortReference,
+                ProviderReference = apprenticeship.ProviderRef,
+                EnableEdit = isStartDateInFuture
+                            && pendingChange == PendingChanges.None
+                            && apprenticeship.PaymentStatus == PaymentStatus.Active
+            };
+        }
+
+        private string MapRecordStatus(Originator? pendingUpdateOriginator)
+        {
+            if (pendingUpdateOriginator == null) return string.Empty;
+
+            return pendingUpdateOriginator == Originator.Provider
+                ? "Changes pending"
+                : "Changes for review";
+        }
+
+        private string MapPaymentStatus(PaymentStatus paymentStatus)
+        {
+            switch (paymentStatus)
+            {
+                case PaymentStatus.PendingApproval:
+                    return "Approval needed";
+                case PaymentStatus.Active:
+                    return "On programme";
+                case PaymentStatus.Paused:
+                    return "Paused";
+                case PaymentStatus.Withdrawn:
+                    return "Stopped";
+                case PaymentStatus.Completed:
+                    return "Completed";
+                case PaymentStatus.Deleted:
+                    return "Deleted";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
+        {
+            return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
+        }
+
+        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
+        {
+            var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
+            var frameworksTask = _mediator.SendAsync(new GetFrameworksQueryRequest());
+
+            await Task.WhenAll(standardsTask, frameworksTask);
+
+            return
+                standardsTask.Result.Standards.Cast<ITrainingProgramme>()
+                    .Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>())
+                    .OrderBy(m => m.Title)
+                    .ToList();
+        }
+
+        private static string NullableDecimalToString(decimal? item)
+        {
+            return (item.HasValue) ? string.Format("{0:#}", item.Value) : "";
         }
     }
 }
