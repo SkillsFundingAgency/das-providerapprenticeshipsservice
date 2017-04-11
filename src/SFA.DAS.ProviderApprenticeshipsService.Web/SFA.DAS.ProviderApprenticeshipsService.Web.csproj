@@ -422,6 +422,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Validation\ApprenticeshipCoreValidator.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUploadValidator.cs" />
+    <Compile Include="Validation\ApprenticeshipViewModelUniqueUlnValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\CsvRecordValidator.cs" />
     <Compile Include="Validation\DeleteCohortConfirmationViewModelValidator.cs" />
