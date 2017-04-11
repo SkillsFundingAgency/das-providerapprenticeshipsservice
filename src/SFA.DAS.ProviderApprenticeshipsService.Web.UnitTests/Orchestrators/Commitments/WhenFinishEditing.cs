@@ -18,6 +18,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
@@ -52,7 +53,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             mockMediator.Setup(m => m.SendAsync(It.IsAny<GetProviderAgreementQueryRequest>()))
                 .Returns(Task.FromResult(new GetProviderAgreementQueryResponse { HasAgreement = ProviderAgreementStatus.Agreed }));
 
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>());
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
@@ -71,7 +72,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 };
 
             var mockMediator = GetMediator(_testCommitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>());
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
@@ -90,7 +91,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 };
            
             var mockMediator = GetMediator(_testCommitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>());
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
@@ -109,7 +110,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 };
 
             var mockMediator = GetMediator(_testCommitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>());
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
