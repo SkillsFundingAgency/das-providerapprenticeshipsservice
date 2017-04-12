@@ -415,6 +415,16 @@ body {
     }
  }
 
+#confirm-employer{
+    .alert-default{
+        margin-top:20px;
+    }
+    #confirm-organisation{
+        margin-top:20px;
+    }
+}
+
+
 table{
 .changed-item{
     font-weight:bold;
@@ -426,6 +436,7 @@ table{
         margin-bottom:40px;
     }
 }
+
     
 //all mobile media query breakpoints
 //==================================
