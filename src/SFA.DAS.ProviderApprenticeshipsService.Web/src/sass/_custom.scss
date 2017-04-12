@@ -10,6 +10,9 @@
 .hr-bottom {
     margin-top: 22px;
 }
+.float-right{
+    float:right;
+}
 // add apprentice entry
 #add-apprentice-entry,
 #edit-apprentice {
@@ -418,6 +421,19 @@ body {
     }
     #confirm-organisation{
         margin-top:20px;
+    }
+}
+
+
+table{
+.changed-item{
+    font-weight:bold;
+    }
+}
+
+#confirm-edited-changes{
+    fieldset{
+        margin-bottom:40px;
     }
 }
 

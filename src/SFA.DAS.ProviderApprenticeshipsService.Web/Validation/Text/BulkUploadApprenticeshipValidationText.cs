@@ -25,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
             new ValidationMessage("You must enter a <strong>first name</strong> that's no longer than 100 characters", "GivenNames_02");
 
         public ValidationMessage DateOfBirth01 =>
-            new ValidationMessage("You must enter the apprentice's <strong>date of birth</strong>, for example 2001-04-23", "DateOfBirth_01");
+            new ValidationMessage("You must enter the apprentice's <strong>date of birth</strong> using the format yyyy-mm-dd, for example 2001-04-23", "DateOfBirth_01");
         public ValidationMessage DateOfBirth02 =>
             new ValidationMessage("The apprentice's <strong>date of birth</strong> must show that they're at least 15 years old at the start of their training", "DateOfBirth_02");
 
