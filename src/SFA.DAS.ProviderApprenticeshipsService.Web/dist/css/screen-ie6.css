@@ -2895,6 +2895,14 @@ body input::-webkit-contacts-auto-fill-button {
   margin-top: 0;
 }
 
+#confirm-employer .alert-default {
+  margin-top: 20px;
+}
+
+#confirm-employer #confirm-organisation {
+  margin-top: 20px;
+}
+
 table .changed-item {
   font-weight: bold;
 }

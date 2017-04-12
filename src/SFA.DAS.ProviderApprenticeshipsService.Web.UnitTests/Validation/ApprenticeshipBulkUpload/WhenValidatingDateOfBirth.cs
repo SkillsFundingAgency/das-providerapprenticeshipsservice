@@ -37,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase(1, 18, 1998)]
         public void ShouldFailValidationOnDateOfBirth(int? day, int? month, int? year)
         {
-            var expected = "You must enter the apprentice's <strong>date of birth</strong>, for example 2001-04-23";
+            var expected = "You must enter the apprentice's <strong>date of birth</strong> using the format yyyy-mm-dd, for example 2001-04-23";
             ValidModel.DateOfBirth = new DateTimeViewModel(day, month, year);
 
             var result = Validator.Validate(ValidModel);
