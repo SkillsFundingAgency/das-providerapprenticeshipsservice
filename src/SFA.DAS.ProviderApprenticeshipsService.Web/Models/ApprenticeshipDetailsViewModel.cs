@@ -33,6 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string ProviderReference { get; set; }
 
         public string CohortReference { get; set; }
+
         public bool EnableEdit { get; set; }
     }
 

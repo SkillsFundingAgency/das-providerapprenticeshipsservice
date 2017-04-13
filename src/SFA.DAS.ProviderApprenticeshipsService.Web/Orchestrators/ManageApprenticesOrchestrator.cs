@@ -290,8 +290,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator),
                 CohortReference = cohortReference,
                 ProviderReference = apprenticeship.ProviderRef,
-                EnableEdit = isStartDateInFuture
-                            && pendingChange == PendingChanges.None
+                EnableEdit = pendingChange == PendingChanges.None
                             && apprenticeship.PaymentStatus == PaymentStatus.Active
             };
         }
@@ -340,15 +339,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private void AssertApprenticeshipIsEditable(Apprenticeship apprenticeship)
         {
-            var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
-                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-
-            var editable = isStartDateInFuture
-                         && apprenticeship.PaymentStatus == PaymentStatus.Active;
-
-            if (!editable)
+            if (apprenticeship.PaymentStatus != PaymentStatus.Active)
             {
-                throw new FluentValidation.ValidationException("Unable to edit apprenticeship - not waiting to start");
+                throw new FluentValidation.ValidationException("Unable to edit apprenticeship - not not in active state");
             }
         }
 

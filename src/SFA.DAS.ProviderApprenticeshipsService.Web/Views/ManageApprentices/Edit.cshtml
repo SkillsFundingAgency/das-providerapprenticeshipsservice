@@ -15,8 +15,19 @@
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             @Html.AntiForgeryToken()
 
-            @Html.Partial("EditApprenticeship", Model)
+            @if (Model.HasStarted)
+            {
+                @Html.Partial("EditStartedApprenticeship", Model)
+            }
+            else
+            {
+                @Html.Partial("EditApprenticeship", Model)
+            }
 
+            @Html.HiddenFor(m => m.HashedCommitmentId)
+            @Html.HiddenFor(m => m.ProviderId)
+            @Html.HiddenFor(m => m.AgreementStatus)
+            @Html.HiddenFor(m => m.EmployerRef)
             <button type="submit" class="button">Update details</button>
             <a class="links" href="@Url.Action("Details", new { Model.HashedApprenticeshipId })" aria-label="Cancel">Cancel</a>
         </form>

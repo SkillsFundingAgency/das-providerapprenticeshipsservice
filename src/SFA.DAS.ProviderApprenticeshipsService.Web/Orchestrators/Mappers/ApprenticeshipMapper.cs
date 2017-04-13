@@ -37,6 +37,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         public ApprenticeshipViewModel MapToApprenticeshipViewModel(Apprenticeship apprenticeship)
         {
+            var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
+                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
             var dateOfBirth = apprenticeship.DateOfBirth;
             return new ApprenticeshipViewModel
             {
@@ -48,6 +51,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 NINumber = apprenticeship.NINumber,
                 ULN = apprenticeship.ULN,
                 TrainingType = apprenticeship.TrainingType,
+                TrainingName = apprenticeship.TrainingName,
                 TrainingCode = apprenticeship.TrainingCode,
                 Cost = NullableDecimalToString(apprenticeship.Cost),
                 StartDate = new DateTimeViewModel(apprenticeship.StartDate),
@@ -55,7 +59,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 PaymentStatus = apprenticeship.PaymentStatus,
                 AgreementStatus = apprenticeship.AgreementStatus,
                 ProviderRef = apprenticeship.ProviderRef,
-                EmployerRef = apprenticeship.EmployerRef
+                EmployerRef = apprenticeship.EmployerRef,
+                HasStarted = !isStartDateInFuture
             };
         }
         private static string NullableDecimalToString(decimal? item)
@@ -140,7 +145,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         {
             var id = _hashingService.DecodeValue(model.HashedApprenticeshipId);
 
-            return new Apprenticeship
+            return new Apprenticeship   
             {
                 Id = id,
                 FirstName = model.FirstName,
