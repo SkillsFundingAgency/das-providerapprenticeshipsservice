@@ -3285,13 +3285,11 @@ body input::-webkit-contacts-auto-fill-button {
   margin-top: 0;
 }
 
-<<<<<<< HEAD
 .form-group .limit-reached {
   color: #b10e1e;
   font-weight: bold;
 }
 
-=======
 #confirm-employer .alert-default {
   margin-top: 20px;
 }
@@ -3308,7 +3306,6 @@ table .changed-item {
   margin-bottom: 40px;
 }
 
->>>>>>> c5b25df49a8e7cddd980dd54a744bda42e24c890
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
