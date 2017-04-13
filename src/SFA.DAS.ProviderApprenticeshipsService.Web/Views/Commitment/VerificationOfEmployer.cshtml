@@ -5,68 +5,73 @@
     ViewBag.PageId = "confirm-employer";
 }
 
-<h1 class="heading-xlarge">Confirm employer</h1>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Confirm employer</h1>
 
-@Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+        @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
-<p>You’ve received a new cohort from @Model.LegalEntityName:</p>
+        <p>You’ve received a new cohort from @Model.LegalEntityName:</p>
 
-<div id="company-info">
-    <strong>Name: </strong> @Model.LegalEntityName <br/>
-    <strong>Address: </strong> @Model.LegalEntityAddress <br />
-    
-    @if (Model.LegalEntityOrganisationType == OrganisationType.Charities)
-    {
-        <strong>Registered charity number: </strong> @Model.LegalEntityId <br />
-    }
-    else if (Model.LegalEntityOrganisationType == OrganisationType.CompaniesHouse)
-    {
-        <strong>Companies House number: </strong> @Model.LegalEntityId <br />
-    }
-   
-</div>
+        <div id="company-info">
+            <strong>Name: </strong> @Model.LegalEntityName <br />
+            <strong>Registered address: </strong> @Model.LegalEntityAddress <br />
 
-<form action="@Url.Action("VerificationOfEmployer")" method="POST">
-    @Html.AntiForgeryToken()
-    
-    @Html.HiddenFor(m=> m.ProviderId)
-    @Html.HiddenFor(m => m.HashedCommitmentId)
-    @Html.HiddenFor(m => m.LegalEntityName)
-    @Html.HiddenFor(m => m.LegalEntityAddress)
-    @Html.HiddenFor(m => m.LegalEntityOrganisationType)
+            @if (Model.LegalEntityOrganisationType == OrganisationType.Charities)
+            {
+                <strong>Registered charity number: </strong> @Model.LegalEntityId <br />
+            }
+            else if (Model.LegalEntityOrganisationType == OrganisationType.CompaniesHouse)
+            {
+                <strong>Companies House number: </strong> @Model.LegalEntityId <br />
+            }
 
-        
-        <h2 id="confirm-organisation" class="heading-medium">Is this the organisation you're providing apprenticeship training to?</h2>
-     
-        
-        @if (!ViewData.ModelState.IsValid)
-        {
-         
+        </div>
+
+        <form action="@Url.Action("VerificationOfEmployer")" method="POST">
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(m => m.ProviderId)
+            @Html.HiddenFor(m => m.HashedCommitmentId)
+            @Html.HiddenFor(m => m.LegalEntityName)
+            @Html.HiddenFor(m => m.LegalEntityAddress)
+            @Html.HiddenFor(m => m.LegalEntityOrganisationType)
+
+            <div class="panel panel-border-wide alert-default">
+                <p> If you need a contract for services between you and the employer, this organisation must be the one named on the contract.</p>
+            </div>
+
+
+            <h2 id="confirm-organisation" class="heading-medium">Have you agreed to provide apprenticeship training to @Model.LegalEntityName?</h2>
+
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+
                 @Html.ValidationMessageFor(m => m.ConfirmProvisionOfTrainingForOrganisation, "Please select an option", new { id = "error-message-" + Html.IdFor(m => m.ConfirmProvisionOfTrainingForOrganisation) })
-           
-        }
 
-        <fieldset aria-describedby="confirm-organisation">
+            }
 
-            <label class="block-label" for="@RadioButtonId(true)">
-                @Html.RadioButtonFor(m => m.ConfirmProvisionOfTrainingForOrganisation, true, new { id = RadioButtonId(true) })
-                <span id="confirmYes">Yes, we’re providing apprenticeship training to @Model.LegalEntityName</span>
-            </label>
+            <fieldset aria-describedby="confirm-organisation">
 
-            <label class="block-label" for="@RadioButtonId(false)">
-                @Html.RadioButtonFor(m => m.ConfirmProvisionOfTrainingForOrganisation, false, new { id = RadioButtonId(false) })
-                <span id="confirmNo">No, we’re not providing apprenticeship training to @Model.LegalEntityName</span>
-            </label>
-          
-        </fieldset>
-    <input type="submit" class="button" id="continue" value="Continue" />
- 
-</form>
+                <label class="block-label" for="@RadioButtonId(true)">
+                    @Html.RadioButtonFor(m => m.ConfirmProvisionOfTrainingForOrganisation, true, new { id = RadioButtonId(true) })
+                    <span id="confirmYes">Yes</span>
+                </label>
 
+                <label class="block-label" for="@RadioButtonId(false)">
+                    @Html.RadioButtonFor(m => m.ConfirmProvisionOfTrainingForOrganisation, false, new { id = RadioButtonId(false) })
+                    <span id="confirmNo">No</span>
+                </label>
 
-<div class="panel panel-border-wide alert-default">
-    <p> If you need a contract for services (formal agreement) between you and the employer, @Model.LegalEntityName must be the employer named on the contract.</p>
+            </fieldset>
+            <input type="submit" class="button" id="continue" value="Continue" />
+
+        </form>
+
+    </div>
 </div>
+
 
 @functions
 {

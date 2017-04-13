@@ -35,6 +35,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebGrease.Css.Extensions;
 using TrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -44,11 +45,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly ICommitmentStatusCalculator _statusCalculator;
         private readonly IHashingService _hashingService;
         private readonly IProviderCommitmentsLogger _logger;
+        private readonly IApprenticeshipMapper _apprenticeshipMapper;
+
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
         private readonly Func<int, string> _addSSuffix = i => i > 1 ? "s" : "";
 
         public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator, 
-            IHashingService hashingService, IProviderCommitmentsLogger logger, ProviderApprenticeshipsServiceConfiguration configuration)
+            IHashingService hashingService, IProviderCommitmentsLogger logger, ProviderApprenticeshipsServiceConfiguration configuration, IApprenticeshipMapper apprenticeshipMapper)
             : base (mediator)
         {
             if (mediator == null)
@@ -61,12 +64,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 throw new ArgumentNullException(nameof(logger));
             if (configuration == null)
                 throw new ArgumentNullException(nameof(configuration));
+            if (apprenticeshipMapper == null)
+                throw new ArgumentNullException(nameof(apprenticeshipMapper));
 
             _mediator = mediator;
             _statusCalculator = statusCalculator;
             _hashingService = hashingService;
             _logger = logger;
             _configuration = configuration;
+            _apprenticeshipMapper = apprenticeshipMapper;
         }
 
         public async Task<CohortsViewModel> GetCohorts(long providerId)
@@ -501,7 +507,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     Apprenticeship = new List<Apprenticeship> { data.Apprenticeship }
                 });
 
-            var apprenticeship = MapFrom(data.Apprenticeship);
+            var apprenticeship = _apprenticeshipMapper.MapToApprenticeshipViewModel(data.Apprenticeship);
 
             apprenticeship.ProviderId = providerId;
 
@@ -509,7 +515,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 Apprenticeship = apprenticeship,
                 ApprenticeshipProgrammes = await GetTrainingProgrammes(),
-                ValidationErrors = MapOverlappingErrors(overlappingErrors)
+                ValidationErrors = _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors)
             };
         }
 
@@ -752,35 +758,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
-        {
-            var dateOfBirth = apprenticeship.DateOfBirth;
-            return new ApprenticeshipViewModel
-            {
-                HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
-                HashedCommitmentId = _hashingService.HashValue(apprenticeship.CommitmentId),
-                FirstName = apprenticeship.FirstName,
-                LastName = apprenticeship.LastName,
-                DateOfBirth = new DateTimeViewModel(dateOfBirth?.Day, dateOfBirth?.Month, dateOfBirth?.Year),
-                NINumber = apprenticeship.NINumber,
-                ULN = apprenticeship.ULN,
-                TrainingType = apprenticeship.TrainingType,
-                TrainingCode = apprenticeship.TrainingCode,
-                Cost = NullableDecimalToString(apprenticeship.Cost),
-                StartDate = new DateTimeViewModel(apprenticeship.StartDate),
-                EndDate = new DateTimeViewModel(apprenticeship.EndDate),
-                PaymentStatus = apprenticeship.PaymentStatus,
-                AgreementStatus = apprenticeship.AgreementStatus,
-                ProviderRef = apprenticeship.ProviderRef,
-                EmployerRef = apprenticeship.EmployerRef
-            };
-        }
-
-        private static string NullableDecimalToString(decimal? item)
-        {
-            return (item.HasValue) ? string.Format("{0:#}", item.Value) : "";
-        }
-
         private async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)
         {
             var hashedApprenticeshipId = string.IsNullOrEmpty(viewModel.HashedApprenticeshipId) ?
@@ -814,40 +791,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             return apprenticeship;
         }
-
-        private Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors)
-        {
-            var dict = new Dictionary<string, string>();
-            const string StartText = "The start date is not valid";
-            const string EndText = "The end date is not valid";
-
-            const string StartDateKey = "StartDateOverlap";
-            const string EndDateKey = "EndDateOverlap";
-
-
-            foreach (var item in overlappingErrors.GetFirstOverlappingApprenticeships())
-            {
-                switch (item.ValidationFailReason)
-                {
-                    case ValidationFailReason.OverlappingStartDate:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        break;
-                    case ValidationFailReason.OverlappingEndDate:
-                        dict.AddIfNotExists(EndDateKey, EndText);
-                        break;
-                    case ValidationFailReason.DateEmbrace:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        dict.AddIfNotExists(EndDateKey, EndText);
-                        break;
-                    case ValidationFailReason.DateWithin:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        dict.AddIfNotExists(EndDateKey, EndText);
-                        break;
-                }
-            }
-            return dict;
-        }
-
+        
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
         {
             return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
@@ -901,7 +845,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     Apprenticeship = new List<Apprenticeship> { await MapFrom(apprenticeship) }
                 });
 
-            return MapOverlappingErrors(overlappingErrors);
+            return _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors);
         }
     }
 }
