@@ -202,12 +202,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         public ApprenticeshipDetailsViewModel MapFrom(Apprenticeship apprenticeship)
         {
-            var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
-                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-
-            var statusText = isStartDateInFuture
-                        ? "Waiting to start"
-                        : MapPaymentStatus(apprenticeship.PaymentStatus);
+            var statusText = MapPaymentStatus(apprenticeship.PaymentStatus, apprenticeship.StartDate);
 
             var pendingChange = PendingChanges.None;
             if (apprenticeship.PendingUpdateOriginator == Originator.Employer)
@@ -233,8 +228,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator),
                 CohortReference = cohortReference,
                 ProviderReference = apprenticeship.ProviderRef,
-                EnableEdit = isStartDateInFuture
-                            && pendingChange == PendingChanges.None
+                EnableEdit = pendingChange == PendingChanges.None
                             && apprenticeship.PaymentStatus == PaymentStatus.Active
             };
         }
@@ -248,14 +242,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 : "Changes for review";
         }
 
-        private string MapPaymentStatus(PaymentStatus paymentStatus)
+        private string MapPaymentStatus(PaymentStatus paymentStatus, DateTime? startDate)
         {
+            var isStartDateInFuture = startDate.HasValue && startDate.Value >
+                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
             switch (paymentStatus)
             {
                 case PaymentStatus.PendingApproval:
                     return "Approval needed";
                 case PaymentStatus.Active:
-                    return "On programme";
+                    return
+                        isStartDateInFuture ? "Waiting to start" : "On programme";
                 case PaymentStatus.Paused:
                     return "Paused";
                 case PaymentStatus.Withdrawn:
