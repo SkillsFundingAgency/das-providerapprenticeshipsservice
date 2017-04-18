@@ -341,7 +341,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             if (apprenticeship.PaymentStatus != PaymentStatus.Active)
             {
-                throw new FluentValidation.ValidationException("Unable to edit apprenticeship - not not in active state");
+                throw new FluentValidation.ValidationException("Unable to edit apprenticeship - not in active state");
             }
         }
 
