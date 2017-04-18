@@ -52,7 +52,7 @@ $('#charCount').show(); // javascript enabled version only
 $('#charCount-noJS').hide(); // javascript disabled version only
 
 var totalChars = 20; //Total characters allowed in textarea
-var countTextBox = $('#ProviderRef') // Textarea input box
+var countTextBox = $('#ProviderRef'); // Textarea input box
 var charsCountEl = $('#countchars'); // Remaining characters
 charsCountEl.text(totalChars); //initial value of countchars element
 
