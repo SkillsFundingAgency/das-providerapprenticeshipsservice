@@ -620,6 +620,7 @@
     <Content Include="Views\ManageApprentices\ReviewChanges.cshtml" />
     <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
     <Content Include="Views\ManageApprentices\UndoChanges.cshtml" />
+    <Content Include="Views\ManageApprentices\EditStartedApprenticeship.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
