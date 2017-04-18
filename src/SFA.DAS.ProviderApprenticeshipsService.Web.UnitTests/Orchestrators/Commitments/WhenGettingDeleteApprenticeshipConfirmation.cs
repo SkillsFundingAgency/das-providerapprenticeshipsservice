@@ -8,6 +8,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticesh
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
@@ -32,6 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Mock.Of<ICommitmentStatusCalculator>(), 
                 mockHashingService.Object, 
                 Mock.Of<IProviderCommitmentsLogger>(),
+                Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
                 Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
                 Mock.Of<IApprenticeshipMapper>());
         }

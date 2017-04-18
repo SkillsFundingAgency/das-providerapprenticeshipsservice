@@ -14,6 +14,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
@@ -43,7 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     }
                 }));
 
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), mockHashingService.Object, Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), mockHashingService.Object, Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>());
             await _sut.SubmitCommitment("UserId", 1L, "ABBA99", input, string.Empty, new SignInUserModel());
 
             mockMediator.Verify(m => m
