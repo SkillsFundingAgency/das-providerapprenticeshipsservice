@@ -262,15 +262,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private void AssertApprenticeshipIsEditable(Apprenticeship apprenticeship)
         {
-            var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
-                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-
-            var editable = isStartDateInFuture
-                         && apprenticeship.PaymentStatus == PaymentStatus.Active;
-
-            if (!editable)
+            if (apprenticeship.PaymentStatus != PaymentStatus.Active)
             {
-                throw new FluentValidation.ValidationException("Unable to edit apprenticeship - not waiting to start");
+                throw new FluentValidation.ValidationException("Unable to edit apprenticeship - not in active state");
             }
         }
 
