@@ -144,7 +144,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
         private bool NotBeBeforeMay2017(DateTimeViewModel date)
         {
-            return date.DateTime >= new DateTime(2015, 5, 1);
+            return date.DateTime >= new DateTime(2017, 5, 1);
         }
 
         private bool ValidateDateOfBirth(DateTimeViewModel date)
