@@ -13,6 +13,9 @@
 .float-right{
     float:right;
 }
+.float-left{
+    float:left;
+}
 // add apprentice entry
 #add-apprentice-entry,
 #edit-apprentice {
@@ -437,6 +440,29 @@ table{
     }
 }
 
+
+#app-status,
+#overview-section,
+#apprentice-section{
+    th{
+        a{
+          font-weight:normal;
+            }
+        }
+    td{
+        width:50%;
+    }
+}
+
+.link-left-aligned,
+.button-left-align{
+   display:block;
+   float:left;
+}
+
+.link-left-aligned{
+    margin:7px 0 0 20px;
+}
     
 //all mobile media query breakpoints
 //==================================
