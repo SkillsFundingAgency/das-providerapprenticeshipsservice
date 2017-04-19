@@ -62,7 +62,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var apprenticeships = 
                 data.Apprenticeships
                 .OrderBy(m => m.ApprenticeshipName)
-                .Select(m=> MapFrom(m, null))
+                .Select(m => _apprenticeshipMapper.MapFrom(m))
                 .ToList();
 
             return new ManageApprenticeshipsViewModel
@@ -80,13 +80,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { ProviderId = providerId, ApprenticeshipId = apprenticeshipId });
 
-            var updateRequests = await _mediator.SendAsync(new GetPendingApprenticeshipUpdateQueryRequest
-            {
-                ApprenticeshipId = apprenticeshipId,
-                ProviderId = providerId
-            });
-
-            return MapFrom(data.Apprenticeship, updateRequests.ApprenticeshipUpdate);
+            return _apprenticeshipMapper.MapFrom(data.Apprenticeship);
         }
 
         public async Task<ExtendedApprenticeshipViewModel> GetApprenticeshipForEdit(long providerId, string hashedApprenticeshipId)
@@ -252,77 +246,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     .Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>())
                     .OrderBy(m => m.Title)
                     .ToList();
-        }
-
-        private ApprenticeshipDetailsViewModel MapFrom(Apprenticeship apprenticeship, ApprenticeshipUpdate pendingUpdate)
-        {
-            // ToDo: Move out mapping and add test for status
-            // ToDo: new stroy in sprint 8
-
-            var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
-                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-
-            var statusText = isStartDateInFuture
-                        ? "Waiting to start"
-                        : MapPaymentStatus(apprenticeship.PaymentStatus);
-
-            var pendingChange = PendingChanges.None;
-            if (pendingUpdate?.Originator == Originator.Employer)
-                pendingChange = PendingChanges.ReadyForApproval;
-            if (pendingUpdate?.Originator == Originator.Provider)
-                pendingChange = PendingChanges.WaitingForApproval;
-
-            var cohortReference = _hashingService.HashValue(apprenticeship.CommitmentId);
-            return new ApprenticeshipDetailsViewModel
-            {
-                HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
-                FirstName = apprenticeship.FirstName,
-                LastName  = apprenticeship.LastName,
-                DateOfBirth = apprenticeship.DateOfBirth,
-                Uln = apprenticeship.ULN,
-                StartDate = apprenticeship.StartDate,
-                EndDate = apprenticeship.EndDate,
-                TrainingName = apprenticeship.TrainingName,
-                Cost = apprenticeship.Cost,
-                Status = statusText,
-                EmployerName = apprenticeship.LegalEntityName,
-                PendingChanges = pendingChange,
-                RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator),
-                CohortReference = cohortReference,
-                ProviderReference = apprenticeship.ProviderRef,
-                EnableEdit = pendingChange == PendingChanges.None
-                            && apprenticeship.PaymentStatus == PaymentStatus.Active
-            };
-        }
-
-        private string MapRecordStatus(Originator? pendingUpdateOriginator)
-        {
-            if (pendingUpdateOriginator == null) return string.Empty;
-
-            return pendingUpdateOriginator == Originator.Provider
-                ? "Changes pending"
-                : "Changes for review";
-        }
-
-        private string MapPaymentStatus(PaymentStatus paymentStatus)
-        {
-            switch (paymentStatus)
-            {
-                case PaymentStatus.PendingApproval:
-                    return "Approval needed";
-                case PaymentStatus.Active:
-                    return "On programme";
-                case PaymentStatus.Paused:
-                    return "Paused";
-                case PaymentStatus.Withdrawn:
-                    return "Stopped";
-                case PaymentStatus.Completed:
-                    return "Completed";
-                case PaymentStatus.Deleted:
-                    return "Deleted";
-                default:
-                    return string.Empty;
-            }
         }
 
         private async Task AssertNoPendingApprenticeshipUpdate(long providerId, long apprenticeshipId)

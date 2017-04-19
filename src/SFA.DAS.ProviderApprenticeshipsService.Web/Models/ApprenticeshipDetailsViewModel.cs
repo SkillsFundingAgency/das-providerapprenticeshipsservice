@@ -41,6 +41,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
     {
         None = 0,
         ReadyForApproval = 1,
-        WaitingForApproval = 2
+        WaitingForEmployer = 2
     }
 }
