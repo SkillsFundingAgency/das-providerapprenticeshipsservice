@@ -9,11 +9,14 @@
 @section pageSpecificJS {
     @Scripts.Render("~/bundles/apprentice")
 }
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("ConfirmChanges")" novalidate="novalidate">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             @Html.AntiForgeryToken()
+
+            <h1 class="heading-xlarge">Edit apprentice</h1>
 
             @if (Model.HasStarted)
             {
