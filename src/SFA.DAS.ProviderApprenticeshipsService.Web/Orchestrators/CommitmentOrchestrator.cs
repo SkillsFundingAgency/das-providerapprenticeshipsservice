@@ -33,6 +33,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using WebGrease.Css.Extensions;
 using TrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
@@ -45,13 +46,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly ICommitmentStatusCalculator _statusCalculator;
         private readonly IHashingService _hashingService;
         private readonly IProviderCommitmentsLogger _logger;
-        private readonly IApprenticeshipMapper _apprenticeshipMapper;
-
+		private readonly IApprenticeshipMapper _apprenticeshipMapper;
+        private readonly ApprenticeshipViewModelUniqueUlnValidator _uniqueUlnValidator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
         private readonly Func<int, string> _addSSuffix = i => i > 1 ? "s" : "";
 
         public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator, 
-            IHashingService hashingService, IProviderCommitmentsLogger logger, ProviderApprenticeshipsServiceConfiguration configuration, IApprenticeshipMapper apprenticeshipMapper)
+            IHashingService hashingService, IProviderCommitmentsLogger logger,
+            ApprenticeshipViewModelUniqueUlnValidator uniqueUlnValidator,
+            ProviderApprenticeshipsServiceConfiguration configuration,
+			IApprenticeshipMapper apprenticeshipMapper)
             : base (mediator)
         {
             if (mediator == null)
@@ -64,13 +68,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 throw new ArgumentNullException(nameof(logger));
             if (configuration == null)
                 throw new ArgumentNullException(nameof(configuration));
-            if (apprenticeshipMapper == null)
+            if(uniqueUlnValidator == null)
+                throw new ArgumentNullException(nameof(uniqueUlnValidator));
+ 			if (apprenticeshipMapper == null)
                 throw new ArgumentNullException(nameof(apprenticeshipMapper));
+
 
             _mediator = mediator;
             _statusCalculator = statusCalculator;
             _hashingService = hashingService;
             _logger = logger;
+            _uniqueUlnValidator = uniqueUlnValidator;
             _configuration = configuration;
             _apprenticeshipMapper = apprenticeshipMapper;
         }
@@ -845,7 +853,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     Apprenticeship = new List<Apprenticeship> { await MapFrom(apprenticeship) }
                 });
 
-            return _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors);
+            var result = _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors);
+
+            var uniqueUlnValidationResult = await _uniqueUlnValidator.ValidateAsync(apprenticeship);
+            if (!uniqueUlnValidationResult.IsValid)
+            {
+                foreach (var error in uniqueUlnValidationResult.Errors)
+                {
+                    result.Add(error.PropertyName, error.ErrorMessage);
+                }
+            }
+
+            return result;
         }
     }
 }

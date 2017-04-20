@@ -33,6 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string ProviderReference { get; set; }
 
         public string CohortReference { get; set; }
+
         public bool EnableEdit { get; set; }
     }
 
@@ -40,6 +41,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
     {
         None = 0,
         ReadyForApproval = 1,
-        WaitingForApproval = 2
+        WaitingForEmployer = 2
     }
 }

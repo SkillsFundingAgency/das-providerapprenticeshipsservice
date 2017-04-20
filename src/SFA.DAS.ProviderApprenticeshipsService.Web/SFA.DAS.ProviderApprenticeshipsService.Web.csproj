@@ -436,6 +436,7 @@
     <Compile Include="Validation\ApprenticeshipUpdate\UndoApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\ApprovedApprenticeshipViewModelValidator.cs" />
+    <Compile Include="Validation\ApprenticeshipViewModelUniqueUlnValidator.cs" />
     <Compile Include="Validation\CsvRecordValidator.cs" />
     <Compile Include="Validation\DeleteCohortConfirmationViewModelValidator.cs" />
     <Compile Include="Validation\DeleteConfirmationViewModelValidator.cs" />
@@ -619,6 +620,7 @@
     <Content Include="Views\ManageApprentices\ReviewChanges.cshtml" />
     <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
     <Content Include="Views\ManageApprentices\UndoChanges.cshtml" />
+    <Content Include="Views\ManageApprentices\EditStartedApprenticeship.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
