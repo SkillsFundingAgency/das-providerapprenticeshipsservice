@@ -418,13 +418,18 @@ body {
     }
  }
 
+
+//character count error
+.form-group {
+    .limit-reached{
+        color:$error-colour;
+        font-weight:bold;}
+    }
+      
+
 #confirm-employer{
-    .alert-default{
-        margin-top:20px;
-    }
-    #confirm-organisation{
-        margin-top:20px;
-    }
+    .alert-default{margin-top:20px;}
+    #confirm-organisation{margin-top:20px;}
 }
 
 
@@ -434,12 +439,12 @@ table{
     }
 }
 
+
 #confirm-edited-changes{
     fieldset{
         margin-bottom:40px;
     }
 }
-
 
 #app-status,
 #overview-section,
@@ -463,9 +468,11 @@ table{
 .link-left-aligned{
     margin:7px 0 0 20px;
 }
+#charCount{
+    margin-bottom:0;
+}
     
 //all mobile media query breakpoints
-//==================================
 @media only screen and (max-device-width: 640px),
 only screen and (max-device-width: 667px),
 only screen and (max-width: 480px) { 

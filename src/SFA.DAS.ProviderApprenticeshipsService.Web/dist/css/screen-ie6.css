@@ -2899,6 +2899,11 @@ body input::-webkit-contacts-auto-fill-button {
   margin-top: 0;
 }
 
+.form-group .limit-reached {
+  color: #b10e1e;
+  font-weight: bold;
+}
+
 #confirm-employer .alert-default {
   margin-top: 20px;
 }
@@ -2935,6 +2940,10 @@ table .changed-item {
 
 .link-left-aligned {
   margin: 7px 0 0 20px;
+}
+
+#charCount {
+  margin-bottom: 0;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
