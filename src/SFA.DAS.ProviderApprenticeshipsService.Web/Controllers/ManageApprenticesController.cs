@@ -161,6 +161,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return RedirectToAction("Details", new { providerId, hashedApprenticeshipId });
         }
 
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/datalock", Name = "DataLockDetails")]
+        [OutputCache(CacheProfile = "NoCache")]
+        public async Task<ActionResult> DataLock(long providerId, string hashedApprenticeshipId)
+        {
+            return View();
+        }
+
         private async Task<ActionResult> RedisplayEditApprenticeshipView(ApprenticeshipViewModel apprenticeship)
         {
             var viewModel = await _orchestrator.GetApprenticeshipForEdit(apprenticeship.ProviderId, apprenticeship.HashedApprenticeshipId);
