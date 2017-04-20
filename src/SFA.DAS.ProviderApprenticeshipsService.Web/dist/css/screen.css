@@ -3285,6 +3285,11 @@ body input::-webkit-contacts-auto-fill-button {
   margin-top: 0;
 }
 
+.form-group .limit-reached {
+  color: #b10e1e;
+  font-weight: bold;
+}
+
 #confirm-employer .alert-default {
   margin-top: 20px;
 }
@@ -3299,6 +3304,10 @@ table .changed-item {
 
 #confirm-edited-changes fieldset {
   margin-bottom: 40px;
+}
+
+#charCount {
+  margin-bottom: 0;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {

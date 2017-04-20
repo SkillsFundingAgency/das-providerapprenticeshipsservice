@@ -12,13 +12,13 @@
     @Scripts.Render("~/bundles/apprentice")
 }
 
+
 <div class="grid-row">
     <div class="column-two-thirds">
 
         <form method="POST" action="@Url.Action("Edit")" novalidate="novalidate">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             @Html.AntiForgeryToken()
-
             <h1 class="heading-xlarge">Edit apprentice details</h1>
 
             <div class="panel panel-border-wide add-edit-desc">
@@ -32,7 +32,8 @@
             <hr />
 
             @Html.Partial("EditApprenticeship", Model)
-            
+
+        
             <div class="form-group">
                 <hr />
                 <div class="grey-background">
@@ -40,7 +41,7 @@
                     <p>For apprenticeship standards, we'll contact employers to ask them to add details of their chosen <a href="https://www.gov.uk/government/publications/using-the-register-of-apprentice-assessment-organisations" target="_blank" title="Opens in a new window">end-point assessment organisation</a>. We’ll do this before the final gateway stage of the apprenticeship.</p>
                 </div>
             </div>
-            
+
             <button type="submit" class="button">Save</button>
             <a class="button delete-button" href="@Url.Action("DeleteConfirmation", new { Model.HashedCommitmentId, Model.HashedApprenticeshipId })" aria-label="Cancel">Delete</a>
 
