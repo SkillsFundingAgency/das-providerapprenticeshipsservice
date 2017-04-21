@@ -2880,6 +2880,10 @@ span.helpText {
   float: right;
 }
 
+.float-left {
+  float: left;
+}
+
 #add-apprentice-entry hr,
 #edit-apprentice hr {
   margin-top: 0;
@@ -3304,6 +3308,28 @@ table .changed-item {
 
 #confirm-edited-changes fieldset {
   margin-bottom: 40px;
+}
+
+#app-status th a,
+#overview-section th a,
+#apprentice-section th a {
+  font-weight: normal;
+}
+
+#app-status td,
+#overview-section td,
+#apprentice-section td {
+  width: 50%;
+}
+
+.link-left-aligned,
+.button-left-align {
+  display: block;
+  float: left;
+}
+
+.link-left-aligned {
+  margin: 7px 0 0 20px;
 }
 
 #charCount {
