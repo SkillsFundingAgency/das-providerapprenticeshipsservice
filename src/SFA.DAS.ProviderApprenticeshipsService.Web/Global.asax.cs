@@ -43,8 +43,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
         protected void Application_Error(object sender, EventArgs e)
         {
             var ex = Server.GetLastError().GetBaseException();
-            
-            Logger.Error(ex, "Unhandled Exception");
+
+            if (ex is HttpException)
+            {
+                Logger.Warn(ex, "Http Exception");
+            }
+            else
+            {
+                Logger.Error(ex, "Unhandled Exception");
+            }
         }
     }
 }
