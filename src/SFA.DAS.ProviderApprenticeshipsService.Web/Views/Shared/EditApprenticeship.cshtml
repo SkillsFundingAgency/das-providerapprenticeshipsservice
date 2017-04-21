@@ -1,8 +1,6 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipViewModel
 
-<h1 class="heading-xlarge">Edit apprentice</h1>
-
 <div class="form-group @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
 
     @Html.LabelFor(m => m.FirstName, "First name", new { @class = "form-label form-label-bold" })
