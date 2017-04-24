@@ -151,7 +151,6 @@
     <Compile Include="Configuration\ConfigurationPolicy.cs" />
     <Compile Include="Configuration\ProviderApprenticeshipsServiceConfiguration.cs" />
     <Compile Include="Data\DbBaseRepository.cs" />
-    <Compile Include="Data\FileSystemRepository.cs" />
     <Compile Include="Data\ProviderAgreementStatusRepository.cs" />
     <Compile Include="Logging\ProviderCommitmentsLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

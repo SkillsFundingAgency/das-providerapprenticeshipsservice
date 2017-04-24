@@ -2491,6 +2491,10 @@ span.helpText {
   float: right;
 }
 
+.float-left {
+  float: left;
+}
+
 #add-apprentice-entry hr,
 #edit-apprentice hr {
   margin-top: 0;
@@ -2840,6 +2844,11 @@ body input::-webkit-contacts-auto-fill-button {
   margin-top: 0;
 }
 
+.form-group .limit-reached {
+  color: #b10e1e;
+  font-weight: bold;
+}
+
 #confirm-employer .alert-default {
   margin-top: 20px;
 }
@@ -2854,6 +2863,32 @@ table .changed-item {
 
 #confirm-edited-changes fieldset {
   margin-bottom: 40px;
+}
+
+#app-status th a,
+#overview-section th a,
+#apprentice-section th a {
+  font-weight: normal;
+}
+
+#app-status td,
+#overview-section td,
+#apprentice-section td {
+  width: 50%;
+}
+
+.link-left-aligned,
+.button-left-align {
+  display: block;
+  float: left;
+}
+
+.link-left-aligned {
+  margin: 7px 0 0 20px;
+}
+
+#charCount {
+  margin-bottom: 0;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {

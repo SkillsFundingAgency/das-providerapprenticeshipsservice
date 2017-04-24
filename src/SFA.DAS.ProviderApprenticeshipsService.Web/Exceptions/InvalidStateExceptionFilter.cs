@@ -10,7 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions
         {
             if (filterContext.Exception.GetType() == typeof(InvalidStateException))
             {
-                LogManager.GetCurrentClassLogger().Error(filterContext.Exception, "Invalid state exception");
+                LogManager.GetCurrentClassLogger().Info(filterContext.Exception, "Invalid state exception");
 
                 filterContext.ExceptionHandled = true;
 

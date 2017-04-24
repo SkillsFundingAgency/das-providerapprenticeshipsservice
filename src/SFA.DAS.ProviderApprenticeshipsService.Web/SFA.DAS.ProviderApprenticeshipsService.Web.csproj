@@ -546,8 +546,6 @@
     <Content Include="assets\stylesheets\fonts\GDSTransportTabular-Light.eot" />
     <Content Include="assets\stylesheets\fonts\GDSTransportWebsite-Bold.eot" />
     <Content Include="assets\stylesheets\fonts\GDSTransportWebsite.eot" />
-    <Content Include="App_Data\Users\user_data.json" />
-    <Content Include="App_Data\Standards\standards.json" />
     <Content Include="dist\css\fonts\GDSTransportTabular-Bold.eot" />
     <Content Include="dist\css\fonts\GDSTransportTabular-Light.eot" />
     <Content Include="dist\css\fonts\GDSTransportWebsite-Bold.eot" />
@@ -623,7 +621,9 @@
     <Content Include="Views\ManageApprentices\EditStartedApprenticeship.cshtml" />
     <Content Include="Views\ManageApprentices\DataLock.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
