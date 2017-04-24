@@ -38,8 +38,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
-using SFA.DAS.Tasks.Api.Client;
-using SFA.DAS.Tasks.Api.Client.Configuration;
 using StructureMap;
 using StructureMap.Graph;
 
@@ -68,7 +66,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IRelationshipApi>().Use<RelationshipApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<IValidationApi>().Use<ValidationApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
 
-            For<ITasksApi>().Use<TasksApi>().Ctor<ITasksApiClientConfiguration>().Is(config.TasksApi);
             For<INotificationsApi>().Use<NotificationsApi>().Ctor<INotificationsApiClientConfiguration>().Is(config.NotificationApi);
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
             For<IConfiguration>().Use(config);

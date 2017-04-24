@@ -55,12 +55,12 @@
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.10.29\lib\net45\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.42.0.27461, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.42.0.27461\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.44.0.28812, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.44.0.28812\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.42.0.27461, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.42.0.27461\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.44.0.28812, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.44.0.28812\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.17615, Culture=neutral, processorArchitecture=MSIL">
@@ -77,14 +77,6 @@
     </Reference>
     <Reference Include="SFA.DAS.Providers.Api.Client, Version=0.10.29.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Providers.Api.Client.0.10.29-prerelease\lib\net45\SFA.DAS.Providers.Api.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.6.0.12635\lib\net45\SFA.DAS.Tasks.Api.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SFA.DAS.Tasks.Api.Types, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.6.0.12635\lib\net45\SFA.DAS.Tasks.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -105,9 +97,6 @@
     <Compile Include="Commands\BulkUploadApprenticeships\BulkUploadApprenticeshipsCommandHandler.cs" />
     <Compile Include="Commands\BulkUploadApprenticeships\BulkUploadApprenticeshipsCommandValidator.cs" />
     <Compile Include="Commands\BulkUploadApprenticeships\InstrumentedBulkUploadApprenticeshipsCommandHandler.cs" />
-    <Compile Include="Commands\CompleteTask\CompleteTaskCommand.cs" />
-    <Compile Include="Commands\CompleteTask\CompleteTaskCommandHandler.cs" />
-    <Compile Include="Commands\CompleteTask\CompleteTaskCommandValidator.cs" />
     <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommand.cs" />
     <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommandHandler.cs" />
     <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommandValidator.cs" />
@@ -167,15 +156,9 @@
     <Compile Include="Queries\GetStandards\GetStandardsQueryHandler.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryRequest.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryResponse.cs" />
-    <Compile Include="Queries\GetTasks\GetTasksQueryHandler.cs" />
-    <Compile Include="Queries\GetTasks\GetTasksQueryRequest.cs" />
-    <Compile Include="Queries\GetTasks\GetTasksQueryResponse.cs" />
     <Compile Include="Queries\GetAllApprentices\GetAllApprenticesHandler.cs" />
     <Compile Include="Queries\GetAllApprentices\GetAllApprenticesRequest.cs" />
     <Compile Include="Queries\GetAllApprentices\GetAllApprenticesResponse.cs" />
-    <Compile Include="Queries\GetTask\GetTaskQueryHandler.cs" />
-    <Compile Include="Queries\GetTask\GetTaskQueryRequest.cs" />
-    <Compile Include="Queries\GetTask\GetTaskQueryResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

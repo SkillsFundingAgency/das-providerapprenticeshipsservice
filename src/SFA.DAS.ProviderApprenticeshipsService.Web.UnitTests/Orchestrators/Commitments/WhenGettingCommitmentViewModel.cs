@@ -21,6 +21,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
+using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
@@ -31,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test(Description = "Should return false on PendingChanges if overall agreement status is EmployerAgreed")]
         public void ShouldCommitmentWithEmployerAndBothAgreed()
         {
-            var commitment = new Commitment
+            var commitment = new CommitmentView
             {
                 AgreementStatus = AgreementStatus.EmployerAgreed,
                 EditStatus  = EditStatus.ProviderOnly,
@@ -39,7 +40,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 {
                     new Apprenticeship (),
                     new Apprenticeship ()
-                }
+                },
+                Messages = new List<MessageView>()
             };
 
             var mockMediator = GetMediator(commitment);
@@ -54,7 +56,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test(Description = "Should return true on PendingChanges overall agreement status isn't EmployerAgreed")]
         public void CommitmentWithOneProviderAgreed()
         {
-            var commitment = new Commitment
+            var commitment = new CommitmentView
             {
                 AgreementStatus = AgreementStatus.ProviderAgreed,
                 EditStatus = EditStatus.ProviderOnly,
@@ -62,7 +64,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 {
                     new Apprenticeship (),
                     new Apprenticeship ()
-                }
+                },
+                Messages = new List<MessageView>()
             };
 
             var mockMediator = GetMediator(commitment);
@@ -75,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
         // --- Helpers ---
 
-        private static Mock<IMediator> GetMediator(Commitment commitment)
+        private static Mock<IMediator> GetMediator(CommitmentView commitment)
         {
             var respons = new GetCommitmentQueryResponse
             {

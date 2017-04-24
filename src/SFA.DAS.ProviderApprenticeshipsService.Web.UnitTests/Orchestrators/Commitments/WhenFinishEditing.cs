@@ -15,22 +15,22 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingA
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
+using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
     [TestFixture]
     public class WhenFinishEditing
     {
-        private Commitment _testCommitment;
+        private CommitmentView _testCommitment;
 
         [SetUp]
         public void Setup()
         {
-            _testCommitment = new Commitment
+            _testCommitment = new CommitmentView
             {
                 EditStatus = EditStatus.ProviderOnly,
                 ProviderId = 1L,
@@ -119,7 +119,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
         // --- Helpers ---
 
-        private static Mock<IMediator> GetMediator(Commitment commitment)
+        private static Mock<IMediator> GetMediator(CommitmentView commitment)
         {
             var respons = new GetCommitmentQueryResponse
             {

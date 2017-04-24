@@ -31,7 +31,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
                 .ReturnsAsync(() => new GetCommitmentQueryResponse
                 {
-                    Commitment = new Commitment
+                    Commitment = new CommitmentView
                     {
                         Apprenticeships = new List<Apprenticeship>()
                     }
@@ -81,7 +81,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
                 .ReturnsAsync(() => new GetCommitmentQueryResponse
                 {
-                    Commitment = new Commitment
+                    Commitment = new CommitmentView
                     {
                         Apprenticeships = new List<Apprenticeship>
                         {
@@ -111,7 +111,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
                 .ReturnsAsync(() => new GetCommitmentQueryResponse
                 {
-                    Commitment = new Commitment
+                    Commitment = new CommitmentView
                     {
                         Apprenticeships = new List<Apprenticeship>
                         {
@@ -143,7 +143,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
                 .ReturnsAsync(() => new GetCommitmentQueryResponse
                 {
-                    Commitment = new Commitment
+                    Commitment = new CommitmentView
                     {
                         Apprenticeships = new List<Apprenticeship>
                         {

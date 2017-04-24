@@ -29,6 +29,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
+using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
@@ -82,7 +83,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
                 .Returns(Task.FromResult(new GetCommitmentQueryResponse
                 {
-                    Commitment = new Commitment
+                    Commitment = new CommitmentView
                     {
                         AgreementStatus = AgreementStatus.NotAgreed,
                         EditStatus = EditStatus.ProviderOnly
@@ -125,7 +126,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
                 .Returns(Task.FromResult(new GetCommitmentQueryResponse
                 {
-                    Commitment = new Commitment
+                    Commitment = new CommitmentView
                     {
                         AgreementStatus = AgreementStatus.NotAgreed,
                         EditStatus = EditStatus.ProviderOnly
@@ -169,7 +170,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
                 .Returns(Task.FromResult(new GetCommitmentQueryResponse
                 {
-                    Commitment = new Commitment
+                    Commitment = new CommitmentView
                     {
                         AgreementStatus = AgreementStatus.NotAgreed,
                         EditStatus = EditStatus.ProviderOnly
