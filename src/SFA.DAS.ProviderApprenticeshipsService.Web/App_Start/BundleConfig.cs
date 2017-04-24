@@ -18,7 +18,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
             bundles.Add(new ScriptBundle("~/bundles/apprentice").Include(
                       "~/dist/javascripts/apprentice/select2.min.js",
-                      "~/dist/javascripts/apprentice/dropdown.js"
+                      "~/dist/javascripts/apprentice/dropdown.js",
+                      "~/dist/javascripts/character-limit.js"
                       ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryvalcustom").Include(
