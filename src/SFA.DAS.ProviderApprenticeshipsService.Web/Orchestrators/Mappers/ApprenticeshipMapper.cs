@@ -212,7 +212,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             var pendingChange = PendingChanges.None;
             if (apprenticeship.PendingUpdateOriginator == Originator.Employer)
                 pendingChange = PendingChanges.ReadyForApproval;
-            if (apprenticeship.PendingUpdateOriginator == Originator.Provider && apprenticeship.PaymentStatus != PaymentStatus.Withdrawn)
+            if (apprenticeship.PendingUpdateOriginator == Originator.Provider)
                 pendingChange = PendingChanges.WaitingForEmployer;
 
             var cohortReference = _hashingService.HashValue(apprenticeship.CommitmentId);
