@@ -481,6 +481,7 @@
     <Content Include="assets\stylesheets\images\govuk-crest.png" />
     <Content Include="assets\stylesheets\images\open-government-licence.png" />
     <Content Include="assets\stylesheets\images\open-government-licence_2x.png" />
+    <Content Include="dist\javascripts\character-limit.js" />
     <Content Include="dist\css\external-links\external-link-24x24.png" />
     <Content Include="dist\css\external-links\external-link-black-12x12.png" />
     <Content Include="dist\css\external-links\external-link-black-24x24.png" />
