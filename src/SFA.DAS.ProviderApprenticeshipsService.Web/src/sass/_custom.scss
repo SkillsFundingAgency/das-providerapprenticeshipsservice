@@ -80,6 +80,17 @@
 }
 
 #content{
+    .green-box-alert{
+        border: 5px solid $turquoise;
+        margin-top: 30px;
+        margin-bottom:0;
+        padding: 20px 15px 15px;
+        .strong{
+            font-weight:bold;
+            margin-bottom:10px;
+        }
+        
+    }
      .flash-alert{
         border-color:$turquoise;
          .icon-green-tick{
@@ -88,6 +99,8 @@
         }
     }
 }
+
+
 
 #finish-editing {
     .error-summary{
