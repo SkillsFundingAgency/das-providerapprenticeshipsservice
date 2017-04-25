@@ -247,20 +247,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             };
         }
 
-        public DataLockViewModel MapFrom(DataLockStatus viewModel)
+        public DataLockViewModel MapFrom(DataLockStatus dataLock)
         {
             return new DataLockViewModel
             {
-                DataLockEventId = viewModel.DataLockEventId,
-                DataLockEventDatetime = viewModel.DataLockEventDatetime,
-                PriceEpisodeIdentifier = viewModel.PriceEpisodeIdentifier,
-                ApprenticeshipId = viewModel.ApprenticeshipId,
-                IlrTrainingCourseCode = viewModel.IlrTrainingCourseCode,
-                IlrTrainingType = viewModel.IlrTrainingType,
-                IlrActualStartDate = viewModel.IlrActualStartDate,
-                IlrEffectiveFromDate = viewModel.IlrEffectiveFromDate,
-                IlrTotalCost = viewModel.IlrTotalCost,
-                TriageStatus = (TriageStatus)viewModel.TriageStatus
+                DataLockEventId = dataLock.DataLockEventId,
+                DataLockEventDatetime = dataLock.DataLockEventDatetime,
+                PriceEpisodeIdentifier = dataLock.PriceEpisodeIdentifier,
+                ApprenticeshipId = dataLock.ApprenticeshipId,
+                IlrTrainingCourseCode = dataLock.IlrTrainingCourseCode,
+                IlrTrainingType = dataLock.IlrTrainingType,
+                IlrActualStartDate = dataLock.IlrActualStartDate,
+                IlrEffectiveFromDate = dataLock.IlrEffectiveFromDate,
+                IlrTotalCost = dataLock.IlrTotalCost,
+                TriageStatus = (TriageStatus)dataLock.TriageStatus
             };
         }
 

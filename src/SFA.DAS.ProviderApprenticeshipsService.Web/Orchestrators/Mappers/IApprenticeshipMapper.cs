@@ -25,6 +25,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         ApprenticeshipDetailsViewModel MapFrom(Apprenticeship apprenticeship);
 
-        DataLockViewModel MapFrom(DataLockStatus viewModel);
+        DataLockViewModel MapFrom(DataLockStatus dataLock);
     }
 }

@@ -27,6 +27,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
         public TriageStatus TriageStatus { get; set; }
     }
 
+    public enum SubmitStatus
+    {
+        None = 1,
+        UpdateDataInDas = 2,
+        UpdateDataInIlr = 3,
+
+    }
+
     public enum TriageStatus
     {
         Unknown = 0,

@@ -1,7 +1,10 @@
-﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock.DataLockViewModel
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock.DataLockMismatchViewModel
 
 @{
-    ViewBag.Title = "Apprenticeship data lock";
+    ViewBag.Title = "Apprenticeship data mismatch";
     ViewBag.PageID = "datalock-details-change";
 }
 
@@ -10,6 +13,55 @@
         <h1 class="heading-xlarge">Details of ILR data mismatch</h1>
 
         <p>Details for this apprentice are different in your organisation's ILR submission. </p>
+
+
+        <table class="edited-changes">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Period</th>
+                    <th scope="col">Apprenticeship service</th>
+                    <th scope="col">ILR submission</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.DataLockViewModel.IlrTotalCost != Model.DasApprenticeship.Cost)
+                {
+                    <tr>
+                        <td>Total cost of training</td>
+                        <td>@Model.OriginalApprenticeship.Cost.FormatCost() </td>
+                        <td class="changed-item">@Model.Cost.AsNullableDecimal().FormatCost()</td>
+                        @Html.Hidden("Cost", Model.Cost)
+                    </tr>
+                }
+
+                @if (Model.StartDate?.DateTime != null)
+                {
+                    <tr>
+                        <td>Planned training start date</td>
+                        <td>@Model.OriginalApprenticeship.StartDate.Value.ToGdsFormat() </td>
+                        <td class="changed-item">@Model.StartDate.DateTime.Value.ToGdsFormat()</td>
+                        @Html.Hidden("StartDate.Month", Model.StartDate.Month)
+                        @Html.Hidden("StartDate.Year", Model.StartDate.Year)
+                    </tr>
+                }
+
+                @if (Model.EndDate?.DateTime != null)
+                {
+                    <tr>
+                        <td>Planned training end date</td>
+                        <td>@Model.OriginalApprenticeship.EndDate.Value.ToGdsFormat() </td>
+                        <td class="changed-item">@Model.EndDate.DateTime.Value.ToGdsFormat()</td>
+                        @Html.Hidden("EndDate.Month", Model.EndDate.Month)
+                        @Html.Hidden("EndDate.Year", Model.EndDate.Year)
+                    </tr>
+                }
+
+                
+
+            </tbody>
+        </table>
+
 
         <table>
             <thead>
@@ -40,25 +92,26 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <form>
-            <div class="form-group">
-
+        <form method="POST" action="@Url.Action("FixMismatch")" novalidate="novalidate">
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+            @Html.AntiForgeryToken()
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.SubmitStatus, "error") ">
                 <fieldset>
                     <h2 class="heading-medium">How do you want to fix the mismatch?</h2>
                     <legend class="visually-hidden">How do you want to fix the mismatch?</legend>
                     <div class="form-group">
-                        <label class="block-label selection-button-radio" for="match-this">
-                            <input id="match-this" name="fixMismatch" type="radio">
+                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatus.UpdateDataInDas)">
+                            @Html.RadioButtonFor(m => m.SubmitStatus, SubmitStatus.UpdateDataInDas, new { id = RadioButtonId(SubmitStatus.UpdateDataInDas) })
                             <span>Start to update the details in the apprenticeship service</span>
                         </label>
-
-                        <label class="block-label selection-button-radio" for="match-this1">
-                            <input id="match-this1" name="fixMismatch" type="radio">
+                        
+                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatus.UpdateDataInIlr)">
+                            @Html.RadioButtonFor(m => m.SubmitStatus, SubmitStatus.UpdateDataInIlr, new { id = RadioButtonId(SubmitStatus.UpdateDataInIlr) })
                             <span>Update the details through the ILR instead</span>
                         </label>
-
-                        <label class="block-label selection-button-radio" for="match-this2">
-                            <input id="match-this2" name="fixMismatch" type="radio">
+                        
+                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatus.None)">
+                            @Html.RadioButtonFor(m => m.SubmitStatus, SubmitStatus.None, new { id = RadioButtonId(SubmitStatus.None) })
                             <span>Leave for now</span>
                         </label>
                     </div>
@@ -68,3 +121,14 @@
         </form>
     </div>
 </div>
+
+
+@functions
+{
+
+    public string RadioButtonId(SubmitStatus status)
+    {
+        return $"{Html.IdFor(m => m.SubmitStatus)}-{status}";
+    }
+
+}

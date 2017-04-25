@@ -174,10 +174,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                     break;
                 case TriageStatus.ChangeApprenticeship:
                     return View("UpdateDataLock", model);
-                    break;
                 case TriageStatus.RestartApprenticeship:
                     return View("RequestRestart", new RequestRestartViewModel { HashedApprenticeshipId = hashedApprenticeshipId, ProviderId = providerId });
-                    break;
                 case TriageStatus.FixInIlr:
                     break;
                 default:
@@ -188,6 +186,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("{hashedApprenticeshipId}/datalock/restart")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> RequestRestart(RequestRestartViewModel model)
         {
             if (!ModelState.IsValid)
@@ -203,6 +202,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
 
             return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
+        }
+
+        [HttpPost]
+        [Route("{hashedApprenticeshipId}/datalock/fix")]
+        [ValidateAntiForgeryToken]
+        public ActionResult FixMismatch(long providerId, string hashedApprenticeshipId)
+        {
+            return RedirectToAction("Details", new { providerId, hashedApprenticeshipId });
         }
 
         private async Task<ActionResult> RedisplayEditApprenticeshipView(ApprenticeshipViewModel apprenticeship)

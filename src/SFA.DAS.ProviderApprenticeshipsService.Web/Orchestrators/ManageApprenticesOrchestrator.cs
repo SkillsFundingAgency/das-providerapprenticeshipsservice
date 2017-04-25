@@ -24,6 +24,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
+using TriageStatus = SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock.TriageStatus;
+
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public sealed class ManageApprenticesOrchestrator
@@ -241,14 +243,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
 
             var viewModel = _apprenticeshipMapper.MapFrom(dataLockResponse.Data);
-
             return viewModel;
         }
 
-        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
-        {
-            return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
-        }
+        //private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
+        //{
+        //    return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
+        //}
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
