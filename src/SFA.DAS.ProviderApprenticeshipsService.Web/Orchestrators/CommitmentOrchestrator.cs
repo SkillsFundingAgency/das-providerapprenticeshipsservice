@@ -458,7 +458,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return MapFrom(data.Commitment, GetLatestMessage(data.Commitment.Messages, true)?.Message);
         }
 
-        public async Task<CommitmentListItemViewModel> GetCommitment(long providerId, string hashedCommitmentId)
+        public async Task<CommitmentListItemViewModel> GetCommitment(long providerId, string hashedCommitmentId, bool showProviderMessage = true)
         {
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
 
@@ -470,7 +470,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
-            return MapFrom(data.Commitment, GetLatestMessage(data.Commitment.Messages, true)?.Message);
+            return MapFrom(data.Commitment, GetLatestMessage(data.Commitment.Messages, showProviderMessage)?.Message);
         }
 
         public async Task<ExtendedApprenticeshipViewModel> GetApprenticeship(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
@@ -775,7 +775,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<AcknowledgementViewModel> GetAcknowledgementViewModel(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
         {
-            var commitment = await GetCommitment(providerId, hashedCommitmentId);
+            var commitment = await GetCommitment(providerId, hashedCommitmentId, false);
             var result = new AcknowledgementViewModel
             {
                 CommitmentReference = commitment.Reference,
