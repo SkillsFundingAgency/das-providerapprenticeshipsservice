@@ -4,6 +4,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitme
 {
     public class GetCommitmentQueryResponse
     {
-        public Commitment Commitment { get; set; }
+        public CommitmentView Commitment { get; set; }
     }
 }

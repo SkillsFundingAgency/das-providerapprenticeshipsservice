@@ -5,7 +5,6 @@ using NUnit.Framework;
 
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.Tasks.Api.Client;
 using System;
 using System.Threading.Tasks;
 
@@ -20,7 +19,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         private SubmitCommitmentCommand _validCommand;
         private Mock<IProviderCommitmentsApi> _mockCommitmentsApi;
         private Mock<IMediator> _mockMediator;
-        private Mock<ITasksApi> _mockTasksApi;
         private SubmitCommitmentCommandHandler _handler;
 
         [SetUp]
@@ -40,9 +38,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             };
 
             _mockCommitmentsApi = new Mock<IProviderCommitmentsApi>();
-            _mockTasksApi = new Mock<ITasksApi>();
             _mockMediator = new Mock<IMediator>();
-            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentsApi.Object, _mockTasksApi.Object, new SubmitCommitmentCommandValidator(), _mockMediator.Object, new ProviderApprenticeshipsServiceConfiguration());
+            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentsApi.Object, new SubmitCommitmentCommandValidator(), _mockMediator.Object, new ProviderApprenticeshipsServiceConfiguration());
         }
 
         [Test]

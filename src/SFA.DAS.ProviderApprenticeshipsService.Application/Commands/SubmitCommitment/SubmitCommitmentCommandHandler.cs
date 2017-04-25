@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
-using Newtonsoft.Json;
-
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
@@ -12,25 +10,20 @@ using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.Tasks.Api.Client;
-using SFA.DAS.Tasks.Api.Types.Templates;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment
 {
     public class SubmitCommitmentCommandHandler : AsyncRequestHandler<SubmitCommitmentCommand>
     {
         private readonly IProviderCommitmentsApi _commitmentsApi;
-        private readonly ITasksApi _tasksApi;
         private readonly AbstractValidator<SubmitCommitmentCommand> _validator;
         private readonly IMediator _mediator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
 
-        public SubmitCommitmentCommandHandler(IProviderCommitmentsApi commitmentsApi, ITasksApi tasksApi, AbstractValidator<SubmitCommitmentCommand> validator, IMediator mediator, ProviderApprenticeshipsServiceConfiguration configuration)
+        public SubmitCommitmentCommandHandler(IProviderCommitmentsApi commitmentsApi, AbstractValidator<SubmitCommitmentCommand> validator, IMediator mediator, ProviderApprenticeshipsServiceConfiguration configuration)
         {
             if (commitmentsApi == null)
                 throw new ArgumentNullException(nameof(commitmentsApi));
-            if (tasksApi == null)
-                throw new ArgumentNullException(nameof(tasksApi));
             if (validator == null)
                 throw new ArgumentNullException(nameof(validator));
             if (mediator == null)
@@ -39,7 +32,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                 throw new ArgumentNullException(nameof(configuration));
 
             _commitmentsApi = commitmentsApi;
-            _tasksApi = tasksApi;
             _validator = validator;
             _mediator = mediator;
             _configuration = configuration;
@@ -63,13 +55,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                         Name = message?.UserDisplayName ?? "",
                         EmailAddress = message?.UserEmailAddress ?? ""
                     },
+                    Message = message.Message,
                     UserId = message.UserId
                 };
 
             await _commitmentsApi.PatchProviderCommitment(message.ProviderId, message.CommitmentId, submission);
-
-            if (message.CreateTask)
-                await CreateTask(message, commitment);
 
             if (_configuration.EnableEmailNotifications && message.LastAction != LastAction.None)
             {
@@ -77,7 +67,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
             }
         }
 
-        private async Task SendEmailNotification(SubmitCommitmentCommand message, Commitment commitment)
+        private async Task SendEmailNotification(SubmitCommitmentCommand message, CommitmentView commitment)
         {
             var notificationCommand = BuildNotificationCommand(commitment, message.LastAction,
                                 message.HashedCommitmentId);
@@ -85,7 +75,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
             await _mediator.SendAsync(notificationCommand);
         }
 
-        private SendNotificationCommand BuildNotificationCommand(Commitment commitment, LastAction action, string hashedCommitmentId)
+        private SendNotificationCommand BuildNotificationCommand(CommitmentView commitment, LastAction action, string hashedCommitmentId)
         {
             var template = commitment.AgreementStatus == AgreementStatus.NotAgreed ? "EmployerCommitmentNotification" : "EmployerCohortApproved";
 
@@ -105,30 +95,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                     }
                 }
             };
-        }
-
-        private async Task CreateTask(SubmitCommitmentCommand message, Commitment commitment)
-        {
-            if (!string.IsNullOrWhiteSpace(message.Message))
-            {
-                var taskTemplate = new SubmitCommitmentTemplate
-                    {
-                        CommitmentId = message.CommitmentId,
-                        Message = message.Message,
-                        Source =
-                            $"PROVIDER-{message.ProviderId}-{commitment.ProviderName}"
-                    };
-
-                var task = new Tasks.Api.Types.Task
-                    {
-                        Assignee = $"EMPLOYER-{commitment.EmployerAccountId}",
-                        TaskTemplateId = SubmitCommitmentTemplate.TemplateId,
-                        Name = $"Submit Commitment - {commitment.Reference}",
-                        Body = JsonConvert.SerializeObject(taskTemplate)
-                    };
-
-                await _tasksApi.CreateTask(task.Assignee, task);
-            }
         }
     }
 }

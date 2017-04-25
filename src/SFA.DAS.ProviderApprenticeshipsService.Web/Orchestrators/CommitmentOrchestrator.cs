@@ -4,7 +4,6 @@ using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
-using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteCommitment;
@@ -19,7 +18,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetRelationshipByCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTasks;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -27,9 +25,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
-using SFA.DAS.Tasks.Api.Types.Templates;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,6 +33,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using WebGrease.Css.Extensions;
 using TrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
+using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -115,19 +112,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var data = sentForReview.Concat(sentForApproval).ToList();
             _logger.Info($"Provider getting all with employer ({data.Count}) :{providerId}", providerId);
 
-            var uniqueEmployerAccountIds = data.Select(x => x.EmployerAccountId).Distinct();
-
-            var employerCommitmentMessages = new List<CreateCommitmentTemplate>();
-
-            foreach (var accountId in uniqueEmployerAccountIds)
-            {
-                employerCommitmentMessages.AddRange(await GetLatestCommitmentMessages(accountId, isProvider: false));
-            }
-
             return new CommitmentListViewModel
             {
                 ProviderId = providerId,
-                Commitments = MapFrom(data, employerCommitmentMessages),
+                Commitments = MapFrom(data, false),
                 PageTitle = "Cohorts with employers",
                 PageId = "cohorts-with-employers",
                 PageHeading = "Cohorts with employers",
@@ -141,12 +129,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var data = (await GetAll(providerId, RequestStatus.NewRequest)).ToList();
             _logger.Info($"Provider getting all new request ({data.Count}) :{providerId}", providerId);
 
-            var latestMessagesForAllCommitments = await GetLatestCommitmentMessages(providerId, true);
-
             return new CommitmentListViewModel
             {
                 ProviderId = providerId,
-                Commitments = MapFrom(data, latestMessagesForAllCommitments.ToList()),
+                Commitments = MapFrom(data, true),
                 PageTitle = "New cohorts",
                 PageId = "new-cohorts",
                 PageHeading = "New cohorts",
@@ -215,12 +201,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var data = (await GetAll(providerId, RequestStatus.ReadyForReview)).ToList();
             _logger.Info($"Provider getting all ready for review ({data.Count}) :{providerId}", providerId);
 
-            var latestMessagesForAllCommitments = await GetLatestCommitmentMessages(providerId, true);
-
             return new CommitmentListViewModel
             {
                 ProviderId = providerId,
-                Commitments = MapFrom(data, latestMessagesForAllCommitments.ToList()),
+                Commitments = MapFrom(data, true),
                 PageTitle = "Cohorts for review",
                 PageId = "review-cohorts-list",
                 PageHeading = "Cohorts for review",
@@ -234,12 +218,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var data = (await GetAll(providerId, RequestStatus.ReadyForApproval)).ToList();
             _logger.Info($"Provider getting all ready for approval ({data.Count}) :{providerId}", providerId);
 
-            var latestMessagesForAllCommitments = await GetLatestCommitmentMessages(providerId, true);
-
             return new CommitmentListViewModel
             {
                 ProviderId = providerId,
-                Commitments = MapFrom(data, latestMessagesForAllCommitments.ToList()),
+                Commitments = MapFrom(data, true),
                 PageTitle = "Cohorts for approval",
                 PageId = "approve-cohorts",
                 PageHeading = "Cohorts for approval",
@@ -388,8 +370,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
-            var message = await GetLatestMessage(providerId, commitmentId, true);
-
             var overlapping = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
@@ -418,13 +398,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 HashedCommitmentId = hashedCommitmentId,
-                LegalEntityId = data.Commitment.LegalEntityId,
                 LegalEntityName = data.Commitment.LegalEntityName,
                 Reference = data.Commitment.Reference,
                 Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus, data.Commitment.ProviderLastUpdateInfo),
                 HasApprenticeships = apprenticeships.Count > 0,
                 Apprenticeships = apprenticeships,
-                LatestMessage = message,
+                LatestMessage = GetLatestMessage(data.Commitment.Messages, true)?.Message,
                 PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed,
                 ApprenticeshipGroups = apprenticeshipGroups,
                 RelationshipVerified = relationshipRequest.Relationship.Verified.HasValue,
@@ -476,7 +455,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             AssertCommitmentStatus(data.Commitment, EditStatus.ProviderOnly);
             AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
-            return MapFrom(data.Commitment);
+            return MapFrom(data.Commitment, GetLatestMessage(data.Commitment.Messages, true)?.Message);
         }
 
         public async Task<CommitmentListItemViewModel> GetCommitment(long providerId, string hashedCommitmentId)
@@ -491,8 +470,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
-            
-            return MapFrom(data.Commitment);
+            return MapFrom(data.Commitment, GetLatestMessage(data.Commitment.Messages, true)?.Message);
         }
 
         public async Task<ExtendedApprenticeshipViewModel> GetApprenticeship(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
@@ -668,7 +646,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        private static ApprovalState GetApprovalState(Commitment commitment)
+        private static ApprovalState GetApprovalState(CommitmentView commitment)
         {
             if (!commitment.Apprenticeships.Any()) return ApprovalState.ApproveAndSend;
 
@@ -700,42 +678,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return apprenticeViewModels;
         }
 
-        private async Task<string> GetLatestMessage(long? id, long commitmentId, bool isProvider)
-        {
-            if (id == null) return string.Empty;
-
-            var allTasks = await GetLatestCommitmentMessages(id, isProvider);
-
-            var taskForCommitment = allTasks?.SingleOrDefault(x => x.CommitmentId == commitmentId);
-
-            var message = taskForCommitment?.Message ?? string.Empty;
-
-            return message;
-        }
-
-        private async Task<IEnumerable<CreateCommitmentTemplate>> GetLatestCommitmentMessages(long? id, bool isProvider)
-        {
-            if (!id.HasValue)
-                return new List<CreateCommitmentTemplate>(0);
-
-            var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { Id = id.Value, IsProvider = isProvider });
-
-            var allMessages = allTasks?.Tasks
-                .Select(x => new { TaskItem = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body), CreateDate = x.CreatedOn })
-                .OrderByDescending(x => x.CreateDate)
-                .GroupBy(x => x.TaskItem.CommitmentId)
-                .Select(g => g.First().TaskItem);
-
-            return allMessages;
-        }
-
-
         // TODO: Move mappers into own class
-        private IEnumerable<CommitmentListItemViewModel> MapFrom(List<CommitmentListItem> commitments, IList<CreateCommitmentTemplate> allLastestMessages)
+        private IEnumerable<CommitmentListItemViewModel> MapFrom(List<CommitmentListItem> commitments, bool showProviderMessage)
         {
-            var commitmentsList = commitments.Select(m => MapFrom(m, allLastestMessages.SingleOrDefault(x => x.CommitmentId == m.Id)?.Message));
+            var commitmentsList = commitments.Select(m => MapFrom(m, GetLatestMessage(m.Messages, showProviderMessage)?.Message));
 
             return commitmentsList;
+        }
+
+        private MessageView GetLatestMessage(List<MessageView> messages, bool showProviderMessage)
+        {
+            return messages.Where(x => x.CreatedBy == (showProviderMessage ? MessageCreator.Employer : MessageCreator.Provider)).OrderByDescending(x => x.CreatedDateTime).FirstOrDefault();
         }
 
         private CommitmentListItemViewModel MapFrom(CommitmentListItem listItem, string lastestMessage)
@@ -752,7 +705,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        private CommitmentListItemViewModel MapFrom(Commitment listItem)
+        private CommitmentListItemViewModel MapFrom(CommitmentView listItem, string latestMessage)
         {
             return new CommitmentListItemViewModel
             {
@@ -762,7 +715,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderName = listItem.ProviderName,
                 Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.LastAction, listItem.AgreementStatus, listItem.ProviderLastUpdateInfo),
                 ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly,
-                EmployerAccountId = listItem.EmployerAccountId
+                EmployerAccountId = listItem.EmployerAccountId,
+                LatestMessage = latestMessage
             };
         }
 
@@ -822,16 +776,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         public async Task<AcknowledgementViewModel> GetAcknowledgementViewModel(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
         {
             var commitment = await GetCommitment(providerId, hashedCommitmentId);
-            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
-
-            var message = await GetLatestMessage(commitment.EmployerAccountId, commitmentId, false);
-
             var result = new AcknowledgementViewModel
             {
                 CommitmentReference = commitment.Reference,
                 EmployerName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
-                Message = message,
+                Message = commitment.LatestMessage,
                 RedirectUrl = string.Empty,
                 RedirectLinkText = string.Empty,
                 PageTitle = saveStatus == SaveStatus.ApproveAndSend 
