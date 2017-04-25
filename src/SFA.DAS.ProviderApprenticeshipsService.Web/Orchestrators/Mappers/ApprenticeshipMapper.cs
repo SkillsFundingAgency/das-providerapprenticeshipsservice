@@ -234,7 +234,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 CohortReference = cohortReference,
                 ProviderReference = apprenticeship.ProviderRef,
                 EnableEdit = pendingChange == PendingChanges.None
-                            && apprenticeship.PaymentStatus == PaymentStatus.Active
+                            && new[] { PaymentStatus.Active, PaymentStatus.Paused, }.Contains(apprenticeship.PaymentStatus)
             };
         }
 
