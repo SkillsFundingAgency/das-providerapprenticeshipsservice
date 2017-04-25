@@ -27,6 +27,19 @@
                 <a href="@Url.RouteUrl("UndoApprovedApprenticeChange")" aria-label="View changes" class="">View changes</a>                
             </div>
         }
+        else if (Model.HasDataLockError)
+        {
+            <div class="panel panel-border-wide">
+                <h3>
+                    IRL data mismatch
+                </h3>
+                <p>
+                    The apprentice's details are different in your organisation's ILR submission.
+                    This may result in a payment failure.
+                </p>
+                <a href="@Url.RouteUrl("DataLockDetails")" aria-label="View details" class="">View details</a>
+            </div>
+        }
 
         <table id="app-status">
             <thead>

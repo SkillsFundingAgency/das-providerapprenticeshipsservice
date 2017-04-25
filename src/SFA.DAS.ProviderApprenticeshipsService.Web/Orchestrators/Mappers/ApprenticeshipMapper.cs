@@ -6,6 +6,7 @@ using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
@@ -14,8 +15,10 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using TrainingType = SFA.DAS.ProviderApprenticeshipsService.Domain.TrainingType;
+using TriageStatus = SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock.TriageStatus;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
@@ -216,6 +219,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 pendingChange = PendingChanges.WaitingForEmployer;
 
             var cohortReference = _hashingService.HashValue(apprenticeship.CommitmentId);
+
+            // ToDo: DCM-475 -> Set property on Apprenticeship object
+            var hasDataLockErrors = apprenticeship.ULN.StartsWith("11122244");
             return new ApprenticeshipDetailsViewModel
             {
                 HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
@@ -230,17 +236,43 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 Status = statusText,
                 EmployerName = apprenticeship.LegalEntityName,
                 PendingChanges = pendingChange,
-                RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator),
+                RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator, hasDataLockErrors),
                 CohortReference = cohortReference,
                 ProviderReference = apprenticeship.ProviderRef,
-                EnableEdit = pendingChange == PendingChanges.None
-                            && apprenticeship.PaymentStatus == PaymentStatus.Active
+                EnableEdit =   !hasDataLockErrors
+                            && pendingChange == PendingChanges.None
+                            && apprenticeship.PaymentStatus == PaymentStatus.Active,
+                HasDataLockError = hasDataLockErrors
+                // ToDo: DCM-475 -> disable edit if any ILR pending
             };
         }
 
-        private string MapRecordStatus(Originator? pendingUpdateOriginator)
+        public DataLockViewModel MapFrom(DataLockStatus viewModel)
         {
-            if (pendingUpdateOriginator == null) return string.Empty;
+            return new DataLockViewModel
+            {
+                DataLockEventId = viewModel.DataLockEventId,
+                DataLockEventDatetime = viewModel.DataLockEventDatetime,
+                PriceEpisodeIdentifier = viewModel.PriceEpisodeIdentifier,
+                ApprenticeshipId = viewModel.ApprenticeshipId,
+                IlrTrainingCourseCode = viewModel.IlrTrainingCourseCode,
+                IlrTrainingType = viewModel.IlrTrainingType,
+                IlrActualStartDate = viewModel.IlrActualStartDate,
+                IlrEffectiveFromDate = viewModel.IlrEffectiveFromDate,
+                IlrTotalCost = viewModel.IlrTotalCost,
+                TriageStatus = (TriageStatus)viewModel.TriageStatus
+            };
+        }
+
+        private string MapRecordStatus(Originator? pendingUpdateOriginator, bool hasDataLockErrors)
+        {
+            // ToDo: DCM-475 -> PendingUpdate will always take priority over IRL changes -> Unit test
+            if (pendingUpdateOriginator == null)
+            {
+                if (hasDataLockErrors) return "ILR data mismatch";
+                // ToDo: DCM-475 -> Check for "ILR data mismatch" or "ILR changes pending"
+                return string.Empty;
+            }
 
             return pendingUpdateOriginator == Originator.Provider
                 ? "Changes pending"

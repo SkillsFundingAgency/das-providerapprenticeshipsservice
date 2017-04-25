@@ -5,6 +5,7 @@ using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
@@ -166,7 +167,42 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> DataLock(long providerId, string hashedApprenticeshipId)
         {
-            return View();
+            var model = await _orchestrator.GetApprenticeshipDataLock(providerId, hashedApprenticeshipId, CurrentUserId);
+            switch (model.TriageStatus)
+            {
+                case TriageStatus.Unknown:
+                    break;
+                case TriageStatus.ChangeApprenticeship:
+                    return View("UpdateDataLock", model);
+                    break;
+                case TriageStatus.RestartApprenticeship:
+                    return View("RequestRestart", new RequestRestartViewModel { HashedApprenticeshipId = hashedApprenticeshipId, ProviderId = providerId });
+                    break;
+                case TriageStatus.FixInIlr:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [Route("{hashedApprenticeshipId}/datalock/restart")]
+        public async Task<ActionResult> RequestRestart(RequestRestartViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("RequestRestart", model);
+            }
+
+            // ToDo: DCM-375 -> Update apprenticehsip? update datalock in DB?
+
+            if (model.SendRequestToEmployer.Value)
+            {
+                SetInfoMessage($"Status changed", FlashMessageSeverityLevel.Okay);
+            }
+
+            return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
         }
 
         private async Task<ActionResult> RedisplayEditApprenticeshipView(ApprenticeshipViewModel apprenticeship)
@@ -175,6 +211,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             ViewBag.ApprenticeshipProgrammes = viewModel.ApprenticeshipProgrammes;
             return View("Edit", apprenticeship);
         }
+
         private bool AnyChanges(CreateApprenticeshipUpdateViewModel data)
         {
             return

@@ -126,6 +126,8 @@
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommand.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandHandler.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandValidator.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLock\DataLockStatus.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLock.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommand.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommandHandler.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommandValidator.cs" />
@@ -140,6 +142,8 @@
     <Compile Include="Queries\GetAgreement\GetProviderAgreementQueryHandler.cs" />
     <Compile Include="Queries\GetAgreement\GetProviderAgreementQueryRequest.cs" />
     <Compile Include="Queries\GetAgreement\GetProviderAgreementQueryResponse.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLockHandler.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLockResponse.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryRequest.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryResponse.cs" />

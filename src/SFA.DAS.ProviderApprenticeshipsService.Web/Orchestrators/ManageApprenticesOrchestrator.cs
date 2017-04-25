@@ -10,6 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewApprenti
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentices;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetPendingApprenticeshipUpdate;
@@ -19,6 +20,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
@@ -227,6 +229,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId,
                 UserId = userId
             });
+        }
+
+        public async Task<DataLockViewModel> GetApprenticeshipDataLock(long providerId, string hashedApprenticeshipId, string userId)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            var dataLockResponse = await _mediator.SendAsync(new GetApprenticeshipDataLockRequest
+            {
+                ApprenticeshipId = apprenticeshipId,
+            });
+
+            var viewModel = _apprenticeshipMapper.MapFrom(dataLockResponse.Data);
+
+            return viewModel;
         }
 
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)

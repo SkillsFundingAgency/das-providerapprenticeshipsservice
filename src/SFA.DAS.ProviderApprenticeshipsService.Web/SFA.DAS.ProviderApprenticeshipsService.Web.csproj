@@ -372,6 +372,7 @@
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\ApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModel.cs" />
+    <Compile Include="Models\DataLock\DataLockViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\ReviewApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\UndoApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
@@ -383,6 +384,7 @@
     <Compile Include="Models\CommitmentListItemViewModel.cs" />
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentDetailsViewModel.cs" />
+    <Compile Include="Models\DataLock\RequestRestartViewModel.cs" />
     <Compile Include="Models\DeleteConfirmationViewModel.cs" />
     <Compile Include="Models\ExtendedApprenticeshipViewModel.cs" />
     <Compile Include="Models\FinishEditingViewModel.cs" />
@@ -432,6 +434,7 @@
     <Compile Include="Validation\ApprenticeshipCoreValidator.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUploadValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModelValidator.cs" />
+    <Compile Include="Validation\DataLock\RequestRestartViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\ReviewApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\UndoApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelValidator.cs" />
@@ -620,6 +623,8 @@
     <Content Include="Views\ManageApprentices\UndoChanges.cshtml" />
     <Content Include="Views\ManageApprentices\EditStartedApprenticeship.cshtml" />
     <Content Include="Views\ManageApprentices\DataLock.cshtml" />
+    <Content Include="Views\ManageApprentices\UpdateDataLock.cshtml" />
+    <Content Include="Views\ManageApprentices\RequestRestart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
