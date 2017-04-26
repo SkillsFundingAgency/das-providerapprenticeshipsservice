@@ -9,5 +9,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
         public Apprenticeship DasApprenticeship { get; set; }
 
         public SubmitStatus? SubmitStatus { get; set; }
+
+        public long ProviderId { get; set; }
+
+        public string HashedApprenticeshipId { get; set; }
     }
 }

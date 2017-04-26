@@ -7,6 +7,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 
+using TriageStatus = SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLock.TriageStatus;
+
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
     public interface IApprenticeshipMapper
@@ -26,5 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         ApprenticeshipDetailsViewModel MapFrom(Apprenticeship apprenticeship);
 
         DataLockViewModel MapFrom(DataLockStatus dataLock);
+
+        TriageStatus MapTriangeStatus(SubmitStatus submitStatus);
     }
 }

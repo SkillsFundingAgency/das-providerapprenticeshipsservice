@@ -6,8 +6,10 @@ using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeshipUpdate;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.RequestApprenticeshipRestart;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoApprenticeshipUpdate;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateDataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentices;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLock;
@@ -23,8 +25,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
-
-using TriageStatus = SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock.TriageStatus;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -246,10 +246,55 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return viewModel;
         }
 
-        //private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
-        //{
-        //    return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
-        //}
+        public async Task<DataLockMismatchViewModel> GetApprenticeshipMismatchDataLock(long providerId, string hashedApprenticeshipId, string userId)
+        {
+            _logger.Info($"Getting apprenticeship datalock for provider: {providerId}", providerId: providerId);
+
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+            var dataLockResponse = await _mediator.SendAsync(new GetApprenticeshipDataLockRequest
+            {
+                ApprenticeshipId = apprenticeshipId,
+            });
+
+            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                ProviderId = providerId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            var datalockViewModel = _apprenticeshipMapper.MapFrom(dataLockResponse.Data);
+
+            return new DataLockMismatchViewModel
+                       {
+                           DasApprenticeship = data.Apprenticeship, 
+                           DataLockViewModel = datalockViewModel
+                       };
+        }
+
+        public async Task RequestRestart(long providerId, string hashedApprenticeshipId, string currentUserId)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            await _mediator.SendAsync(new RestartApprenticeshipCommand
+            {
+                ApprenticeshipId = apprenticeshipId,
+                ProviderId = providerId,
+                UserId = currentUserId
+            });
+        }
+
+        public async Task UpdateDataLock(long providerId, string hashedApprenticeshipId, SubmitStatus submitStatus, string currentUserId)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            await _mediator.SendAsync(new UpdateDataLockCommand
+            {
+                ApprenticeshipId = apprenticeshipId,
+                ProviderId = providerId,
+                UserId = currentUserId,
+                TriageStatus = _apprenticeshipMapper.MapTriangeStatus(submitStatus)
+            });
+        }
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
@@ -260,7 +305,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             return
                 standardsTask.Result.Standards.Cast<ITrainingProgramme>()
-                    .Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>())
+                    .Union(frameworksTask.Result.Frameworks)
                     .OrderBy(m => m.Title)
                     .ToList();
         }

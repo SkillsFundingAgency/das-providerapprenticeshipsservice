@@ -30,28 +30,14 @@
                     <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.SendRequestToEmployer, "error")">
                         @Html.ValidationMessageFor(m => m.SendRequestToEmployer, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SendRequestToEmployer) })
                         <label class="block-label selection-button-radio" for="undo-changes-true">
-                            @*@Html.RadioButton("ConfirmUndo", true, new { id = "undo-changes-true" })*@
                             @Html.RadioButtonFor(m => m.SendRequestToEmployer, true, new { id = "undo-changes-true" })
                             Yes, send an automated request to the employer
                         </label>
                         <label class="block-label selection-button-radio" for="undo-changes-false">
                             @Html.RadioButtonFor(m => m.SendRequestToEmployer, false, new { id = "undo-changes-false" })
-                            @*@Html.RadioButton("ConfirmUndo", false, new { id = "undo-changes-false" })*@
                             No, leave for now
                         </label>
                     </div>
-
-                    @*<div class="form-group">
-                        <label class="block-label selection-button-radio" for="match-this">
-                            <input id="match-this" name="fixMismatch" type="radio">
-                            <span></span>
-                        </label>
-
-                        <label class="block-label selection-button-radio" for="match-this2">
-                            <input id="match-this2" name="fixMismatch" type="radio">
-                            <span></span>
-                        </label>
-                    </div>*@
                 </fieldset>
                 <input type="submit" class="button" id="finish" value="Finish"/>
             </div>

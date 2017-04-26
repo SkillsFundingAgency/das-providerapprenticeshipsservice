@@ -98,6 +98,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApprenticeshipInfoServiceWrapper.cs" />
+    <Compile Include="Commands\RequestApprenticeshipRestart\RestartApprenticeshipUpdateCommandHandler.cs" />
+    <Compile Include="Commands\RequestApprenticeshipRestart\UndoApprenticeshipUpdateCommandValidator.cs" />
+    <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommand.cs" />
     <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommand.cs" />
     <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommandHandler.cs" />
     <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommandValidator.cs" />
@@ -126,6 +129,9 @@
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommand.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandHandler.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandValidator.cs" />
+    <Compile Include="Commands\RequestApprenticeshipRestart\RestartApprenticeshipCommand.cs" />
+    <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommandHandler.cs" />
+    <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommandValidator.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLock\DataLockStatus.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLock.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommand.cs" />

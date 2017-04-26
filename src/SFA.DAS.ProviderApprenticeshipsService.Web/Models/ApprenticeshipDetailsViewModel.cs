@@ -37,6 +37,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool EnableEdit { get; set; }
 
         public bool HasDataLockError { get; set; }
+
+        public DataLockErrorType ErrorType { get; set; }
+
+        public string DataLockStatus { get; set; }
+    }
+
+    public enum DataLockErrorType
+    {
+        None = 0,
+        RestartRequire = 1,
+        UpdateNeeded = 2
     }
 
     public enum PendingChanges

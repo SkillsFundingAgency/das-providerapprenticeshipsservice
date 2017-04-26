@@ -236,13 +236,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 Status = statusText,
                 EmployerName = apprenticeship.LegalEntityName,
                 PendingChanges = pendingChange,
-                RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator, hasDataLockErrors),
+                RecordStatus = MapRecordStatus(apprenticeship .PendingUpdateOriginator, hasDataLockErrors),
+                DataLockStatus = MapDataLockStatus(hasDataLockErrors, apprenticeship.ULN),
                 CohortReference = cohortReference,
                 ProviderReference = apprenticeship.ProviderRef,
                 EnableEdit =   !hasDataLockErrors
                             && pendingChange == PendingChanges.None
                             && apprenticeship.PaymentStatus == PaymentStatus.Active,
-                HasDataLockError = hasDataLockErrors
+                HasDataLockError = hasDataLockErrors,
+                ErrorType = apprenticeship.ULN == "1112224402" 
+                    ? DataLockErrorType.UpdateNeeded 
+                    : DataLockErrorType.RestartRequire
                 // ToDo: DCM-475 -> disable edit if any ILR pending
             };
         }
@@ -264,19 +268,44 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             };
         }
 
+        public Application.Queries.GetApprenticeshipDataLock.TriageStatus MapTriangeStatus(SubmitStatus submitStatus)
+        {
+            if (submitStatus == SubmitStatus.UpdateDataInDas)
+                return Application.Queries.GetApprenticeshipDataLock.TriageStatus.Change;
+            if (submitStatus == SubmitStatus.UpdateDataInIlr)
+                return Application.Queries.GetApprenticeshipDataLock.TriageStatus.FixInIlr;
+
+            return Application.Queries.GetApprenticeshipDataLock.TriageStatus.Unknown;
+        }
+
+        private string MapDataLockStatus(bool hasDataLockErrors, string uln)
+        {
+            if (uln == "1112224401")
+                return "ILR data mismatch";
+            if (uln == "1112224402")
+                return "ILR data mismatch";
+            if (uln == "1112224403")
+                return "ILR changes pending";
+
+            // ToDo: DCM-475 -> Check for "ILR data mismatch" or "ILR changes pending"
+            if (hasDataLockErrors) return "ILR data mismatch";
+            return string.Empty;
+        }
+
         private string MapRecordStatus(Originator? pendingUpdateOriginator, bool hasDataLockErrors)
         {
-            // ToDo: DCM-475 -> PendingUpdate will always take priority over IRL changes -> Unit test
-            if (pendingUpdateOriginator == null)
-            {
-                if (hasDataLockErrors) return "ILR data mismatch";
-                // ToDo: DCM-475 -> Check for "ILR data mismatch" or "ILR changes pending"
-                return string.Empty;
-            }
+                // ToDo: DCM-475 -> PendingUpdate will always take priority over IRL changes -> Unit test
+                //if (pendingUpdateOriginator == null)
+                //{
+                //    if (hasDataLockErrors) return "ILR data mismatch";
+                //    // ToDo: DCM-475 -> Check for "ILR data mismatch" or "ILR changes pending"
+                //    return string.Empty;
+                //}
+            if (pendingUpdateOriginator == null) return string.Empty;
 
             return pendingUpdateOriginator == Originator.Provider
-                ? "Changes pending"
-                : "Changes for review";
+            ? "Changes pending"
+            : "Changes for review";
         }
 
         private string MapPaymentStatus(PaymentStatus paymentStatus, DateTime? startDate)

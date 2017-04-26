@@ -163,25 +163,60 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{hashedApprenticeshipId}/datalock", Name = "DataLockDetails")]
+        [Route("{hashedApprenticeshipId}/datalock", Name = "UpdateDataLock")]
         [OutputCache(CacheProfile = "NoCache")]
-        public async Task<ActionResult> DataLock(long providerId, string hashedApprenticeshipId)
+        public async Task<ActionResult> UpdateDataLock(long providerId, string hashedApprenticeshipId)
         {
-            var model = await _orchestrator.GetApprenticeshipDataLock(providerId, hashedApprenticeshipId, CurrentUserId);
-            switch (model.TriageStatus)
+            var model = await _orchestrator.GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId, CurrentUserId);
+            return View("UpdateDataLock", model);
+        }
+
+        [HttpPost]
+        [Route("{hashedApprenticeshipId}/datalock")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdateDataLock(DataLockMismatchViewModel model)
+        {
+            if (model.SubmitStatus == SubmitStatus.UpdateDataInIlr)
             {
-                case TriageStatus.Unknown:
-                    break;
-                case TriageStatus.ChangeApprenticeship:
-                    return View("UpdateDataLock", model);
-                case TriageStatus.RestartApprenticeship:
-                    return View("RequestRestart", new RequestRestartViewModel { HashedApprenticeshipId = hashedApprenticeshipId, ProviderId = providerId });
-                case TriageStatus.FixInIlr:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                // Change status
+                await _orchestrator.UpdateDataLock(
+                    model.ProviderId,
+                    model.HashedApprenticeshipId,
+                    model.SubmitStatus.Value,
+                    CurrentUserId);
+
+                return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
             }
+
+            if (model.SubmitStatus == SubmitStatus.UpdateDataInDas)
+            {
+                return RedirectToAction("ConfirmDataLockChanges", new { model.ProviderId, model.HashedApprenticeshipId });
+            }
+
+            return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
+        }
+
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/datalock/confirm", Name = "UpdateDataLockConfirm")]
+        [OutputCache(CacheProfile = "NoCache")]
+        public async Task<ActionResult> ConfirmDataLockChanges(long providerId, string hashedApprenticeshipId)
+        {
+            var model = await _orchestrator.GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId, CurrentUserId);
+
             return View(model);
+        }
+
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/RequestRestart", Name = "RequestRestart")]
+        [OutputCache(CacheProfile = "NoCache")]
+        public async Task<ActionResult> RequestRestart(long providerId, string hashedApprenticeshipId)
+        {
+            var model = new RequestRestartViewModel
+                            {
+                                HashedApprenticeshipId = hashedApprenticeshipId,
+                                ProviderId = providerId
+                            };
+            return View("RequestRestart", model);
         }
 
         [HttpPost]
@@ -194,22 +229,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return View("RequestRestart", model);
             }
 
-            // ToDo: DCM-375 -> Update apprenticehsip? update datalock in DB?
-
             if (model.SendRequestToEmployer.Value)
             {
+                await _orchestrator.RequestRestart(model.ProviderId, model.HashedApprenticeshipId, CurrentUserId);
                 SetInfoMessage($"Status changed", FlashMessageSeverityLevel.Okay);
             }
 
             return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
-        }
-
-        [HttpPost]
-        [Route("{hashedApprenticeshipId}/datalock/fix")]
-        [ValidateAntiForgeryToken]
-        public ActionResult FixMismatch(long providerId, string hashedApprenticeshipId)
-        {
-            return RedirectToAction("Details", new { providerId, hashedApprenticeshipId });
         }
 
         private async Task<ActionResult> RedisplayEditApprenticeshipView(ApprenticeshipViewModel apprenticeship)

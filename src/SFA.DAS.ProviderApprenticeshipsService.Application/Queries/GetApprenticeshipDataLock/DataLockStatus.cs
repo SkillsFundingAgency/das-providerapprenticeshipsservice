@@ -31,8 +31,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenti
     public enum TriageStatus
     {
         Unknown = 0,
-        ChangeApprenticeship = 1,
-        RestartApprenticeship = 2,
+        Change = 1,
+        Restart = 2,
         FixInIlr = 3
     }
 

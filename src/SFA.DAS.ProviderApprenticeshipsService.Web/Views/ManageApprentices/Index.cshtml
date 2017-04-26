@@ -49,7 +49,9 @@
                                 @apprenticeships.Status &nbsp;
                             </td>
                             <td>
+                                @apprenticeships.DataLockStatus &nbsp; <br />
                                 @apprenticeships.RecordStatus &nbsp;
+
                             </td>
                             <td>
                                 <a href="@Url.Action("Details", new { Model.ProviderId, hashedApprenticeshipId = apprenticeships.HashedApprenticeshipId })"

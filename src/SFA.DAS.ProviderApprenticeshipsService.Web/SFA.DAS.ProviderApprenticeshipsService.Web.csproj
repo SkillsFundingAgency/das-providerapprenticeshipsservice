@@ -372,6 +372,7 @@
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\ApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModel.cs" />
+    <Compile Include="Models\DataLock\DataLockMismatchViewModel.cs" />
     <Compile Include="Models\DataLock\DataLockViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\ReviewApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\UndoApprenticeshipUpdateViewModel.cs" />
@@ -625,6 +626,8 @@
     <Content Include="Views\ManageApprentices\DataLock.cshtml" />
     <Content Include="Views\ManageApprentices\UpdateDataLockDelete.cshtml" />
     <Content Include="Views\ManageApprentices\RequestRestart.cshtml" />
+    <Content Include="Views\ManageApprentices\UpdateDataLock.cshtml" />
+    <Content Include="Views\ManageApprentices\ConfirmDataLockChanges.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

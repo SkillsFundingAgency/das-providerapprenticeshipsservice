@@ -27,7 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenti
                     IlrTrainingType = TrainingType.Framework,
                     PriceEpisodeIdentifier = "price-epi",
                     Status = Status.Fail,
-                    TriageStatus = TriageStatus.RestartApprenticeship,
+                    TriageStatus = TriageStatus.Restart,
                     ErrorCode = DataLockErrorCode.Dlock04 & DataLockErrorCode.Dlock05
                 };
 
@@ -48,7 +48,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenti
                     IlrTrainingType = TrainingType.Framework,
                     PriceEpisodeIdentifier = "price-epi",
                     Status = Status.Fail,
-                    TriageStatus = TriageStatus.ChangeApprenticeship,
+                    TriageStatus = TriageStatus.Change,
                     ErrorCode = DataLockErrorCode.Dlock07 & DataLockErrorCode.Dlock09
                 };
                 // Fix errors
