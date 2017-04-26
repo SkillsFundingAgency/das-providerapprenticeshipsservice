@@ -1,8 +1,12 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 
 using NUnit.Framework;
-
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
@@ -10,13 +14,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
 {
     public class WhenValidatingCsvRecord
     {
-        private readonly CsvRecordValidator _validator = new CsvRecordValidator(new BulkUploadApprenticeshipValidationText());
-        private CsvRecord _validModel;
+        private readonly ApprenticeshipBulkUploadValidator _validator = new ApprenticeshipBulkUploadValidator(new BulkUploadApprenticeshipValidationText(), new CurrentDateTime());
+        private ApprenticeshipUploadModel _validModel;
 
         [SetUp]
         public void Setup()
         {
-            _validModel = new CsvRecord { CohortRef = "abba123" };
+            _validModel = new ApprenticeshipUploadModel
+            {
+                ApprenticeshipViewModel = new ApprenticeshipViewModel
+                {
+                    ULN = "1001234567",
+                    FirstName = "TestFirstName",
+                    LastName = "TestLastName",
+                    TrainingCode = "12",
+                    DateOfBirth = new DateTimeViewModel(DateTime.UtcNow.AddYears(-16)),
+                    StartDate = new DateTimeViewModel(new DateTime(2017, 06, 20)),
+                    EndDate = new DateTimeViewModel(new DateTime(2018, 05, 15)),
+                    Cost = "1234"
+                },
+                CsvRecord = new CsvRecord { CohortRef = "abba123" }
+            };
         }
 
         [TestCase("1", "The <strong>Programme type</strong> you've added isn't valid", "ProgType_02")]
@@ -27,7 +45,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         [TestCase("abba123", "You must enter a <strong>Programme type</strong> - you can add up to 2 characters", "ProgType_01")]
         public void ProgTypeValidationFail(string progType, string message, string errorCode)
         {
-            _validModel.ProgType = progType;
+            _validModel.CsvRecord.ProgType = progType;
             var result = _validator.Validate(_validModel);
 
             result.IsValid.Should().BeFalse();
@@ -45,10 +63,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         [TestCase("25", null, null, "42")]
         public void ProgTypeValidationSuccess(string progType, string frameworkCode, string pathwayCode, string standardCode)
         {
-            _validModel.ProgType = progType;
-            _validModel.StdCode = standardCode;
-            _validModel.FworkCode = frameworkCode;
-            _validModel.PwayCode = pathwayCode;
+            _validModel.CsvRecord.ProgType = progType;
+            _validModel.CsvRecord.StdCode = standardCode;
+            _validModel.CsvRecord.FworkCode = frameworkCode;
+            _validModel.CsvRecord.PwayCode = pathwayCode;
 
             var result = _validator.Validate(_validModel);
             result.IsValid.Should().BeTrue();
@@ -62,10 +80,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         [TestCase("23", "ab3", "10", null, "The <strong>Framework code</strong> must be 3 characters or fewer", "FworkCode_01")]
         public void FrameworkCodeValidationFail(string progType, string frameworkCode, string pathwayCode, string standardCode, string message, string errorCode)
         {
-            _validModel.ProgType = progType;
-            _validModel.FworkCode = frameworkCode;
-            _validModel.PwayCode = pathwayCode;
-            _validModel.StdCode = standardCode;
+            _validModel.CsvRecord.ProgType = progType;
+            _validModel.CsvRecord.FworkCode = frameworkCode;
+            _validModel.CsvRecord.PwayCode = pathwayCode;
+            _validModel.CsvRecord.StdCode = standardCode;
 
             var result = _validator.Validate(_validModel);
             result.IsValid.Should().BeFalse();
@@ -78,10 +96,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         [TestCase("23", "10", "-1", null, "You must enter a <strong>Pathway code</strong> = you can add up to 3 characters", "PwayCode_02")]
         public void PathwayCodeValidationFail(string progType, string frameworkCode, string pathwayCode, string standardCode, string message, string errorCode)
         {
-            _validModel.ProgType = progType;
-            _validModel.FworkCode = frameworkCode;
-            _validModel.PwayCode = pathwayCode;
-            _validModel.StdCode = standardCode;
+            _validModel.CsvRecord.ProgType = progType;
+            _validModel.CsvRecord.FworkCode = frameworkCode;
+            _validModel.CsvRecord.PwayCode = pathwayCode;
+            _validModel.CsvRecord.StdCode = standardCode;
 
             var result = _validator.Validate(_validModel);
             result.IsValid.Should().BeFalse();
@@ -92,10 +110,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         [Test]
         public void FrameworkAndPathwayValidationErrorWhenProgTypeIs25()
         {
-            _validModel.ProgType = "25";
-            _validModel.FworkCode = "8";
-            _validModel.PwayCode = "10";
-            _validModel.StdCode = "20";
+            _validModel.CsvRecord.ProgType = "25";
+            _validModel.CsvRecord.FworkCode = "8";
+            _validModel.CsvRecord.PwayCode = "10";
+            _validModel.CsvRecord.StdCode = "20";
 
             var result = _validator.Validate(_validModel);
             result.IsValid.Should().BeFalse();
@@ -114,10 +132,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         [TestCase("25", null, null, "abba", "The <strong>Standard code</strong> must be 5 characters or fewer", "StdCode_01")]
         public void StandardCodeValidationFail(string progType, string frameworkCode, string pathwayCode, string standardCode, string message, string errorCode)
         {
-            _validModel.ProgType = progType;
-            _validModel.FworkCode = frameworkCode;
-            _validModel.PwayCode = pathwayCode;
-            _validModel.StdCode = standardCode;
+            _validModel.CsvRecord.ProgType = progType;
+            _validModel.CsvRecord.FworkCode = frameworkCode;
+            _validModel.CsvRecord.PwayCode = pathwayCode;
+            _validModel.CsvRecord.StdCode = standardCode;
 
             var result = _validator.Validate(_validModel);
             result.IsValid.Should().BeFalse();

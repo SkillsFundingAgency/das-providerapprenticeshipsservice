@@ -10,7 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase(null)]
         public void ProviderReferenceIsOptional(string reference)
         {
-            ValidModel.ProviderRef = reference;
+            ValidModel.ApprenticeshipViewModel.ProviderRef = reference;
 
             var result = Validator.Validate(ValidModel);
 
@@ -20,7 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void ProviderReferenceCanBeAMaximumOf20Characters()
         {
-            ValidModel.ProviderRef = new string('*', 21);
+            ValidModel.ApprenticeshipViewModel.ProviderRef = new string('*', 21);
 
             var result = Validator.Validate(ValidModel);
 
@@ -32,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void ProviderReferenceLessCanBeLessThan20Characters()
         {
-            ValidModel.ProviderRef = "A valid reference";
+            ValidModel.ApprenticeshipViewModel.ProviderRef = "A valid reference";
 
             var result = Validator.Validate(ValidModel);
 

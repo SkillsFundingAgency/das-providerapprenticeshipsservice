@@ -424,7 +424,6 @@
     <Compile Include="Validation\ApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\ApprovedApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelUniqueUlnValidator.cs" />
-    <Compile Include="Validation\CsvRecordValidator.cs" />
     <Compile Include="Validation\DeleteCohortConfirmationViewModelValidator.cs" />
     <Compile Include="Validation\DeleteConfirmationViewModelValidator.cs" />
     <Compile Include="Validation\FinishEditingViewModelValidator.cs" />

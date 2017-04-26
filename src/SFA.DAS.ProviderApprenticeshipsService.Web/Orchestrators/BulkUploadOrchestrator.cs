@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -78,7 +79,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _logger.Info("Uploading file of apprentices.", providerId, commitmentId);
 
             var rowValidationResult = await _bulkUploader.ValidateFileRows(fileValidationResult.Data, providerId);
+
+            var sw = Stopwatch.StartNew();
             var overlapErrors = await GetOverlapErrors(fileValidationResult.Data.ToList());
+            _logger.Trace($"Validating overlaps took {sw.ElapsedMilliseconds}");
 
             var rowErrors = rowValidationResult.Errors.ToList();
             rowErrors.AddRange(overlapErrors);
