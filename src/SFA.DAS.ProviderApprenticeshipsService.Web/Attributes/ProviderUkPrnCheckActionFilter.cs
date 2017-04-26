@@ -31,7 +31,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
                 if ($"{providerIdFromAction}" != claimUkprn)
                 {
                     throw new HttpException((int) HttpStatusCode.Forbidden,
-                        $"User ukprn: {providerIdFromAction}, Resources ukprn: {claimUkprn}");
+                        $"Mismatched UKPRNs ({providerIdFromAction} requested on URL, user's claim contains {claimUkprn}");
                 }
             }
         }

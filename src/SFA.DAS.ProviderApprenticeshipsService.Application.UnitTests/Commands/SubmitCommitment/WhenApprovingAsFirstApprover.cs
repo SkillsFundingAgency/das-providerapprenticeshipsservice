@@ -9,7 +9,6 @@ using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.Tasks.Api.Client;
 
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -24,7 +23,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         private SubmitCommitmentCommand _validCommand;
         private Mock<IProviderCommitmentsApi> _mockCommitmentsApi;
         private Mock<IMediator> _mockMediator;
-        private Mock<ITasksApi> _mockTasksApi;
         private SubmitCommitmentCommandHandler _handler;
 
         [SetUp]
@@ -45,7 +43,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
 
             _mockCommitmentsApi = new Mock<IProviderCommitmentsApi>();
             _mockCommitmentsApi.Setup(x => x.GetProviderCommitment(_validCommand.ProviderId, _validCommand.CommitmentId))
-                .ReturnsAsync(new Commitment
+                .ReturnsAsync(new CommitmentView
                 {
                     ProviderId = _validCommand.ProviderId,
                     AgreementStatus = AgreementStatus.NotAgreed,
@@ -57,9 +55,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 });
 
             var configuration = new ProviderApprenticeshipsServiceConfiguration { EnableEmailNotifications = true };
-            _mockTasksApi = new Mock<ITasksApi>();
             _mockMediator = new Mock<IMediator>();
-            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentsApi.Object, _mockTasksApi.Object, new SubmitCommitmentCommandValidator(), _mockMediator.Object, configuration);
+            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentsApi.Object, new SubmitCommitmentCommandValidator(), _mockMediator.Object, configuration);
         }
 
         [Test]

@@ -141,7 +141,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var viewModel = _mapper.MapFrom(_model);
 
             viewModel.EnableEdit.Should().BeFalse();
-            viewModel.PendingChanges.Should().Be(PendingChanges.None);
+            viewModel.PendingChanges.Should().Be(PendingChanges.WaitingForEmployer);
         }
 
         [Test]

@@ -34,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             AssertCommitmentStatus(commitmentData.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
         }
 
-        protected static void AssertCommitmentStatus(Commitment commitment, params AgreementStatus[] allowedAgreementStatuses)
+        protected static void AssertCommitmentStatus(CommitmentView commitment, params AgreementStatus[] allowedAgreementStatuses)
         {
             if (commitment == null)
                 throw new InvalidStateException("Null commitment");
@@ -43,7 +43,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 throw new InvalidStateException($"Invalid commitment state (agreement status is {commitment.AgreementStatus}, expected {string.Join(",", allowedAgreementStatuses)})");
         }
 
-        protected static void AssertCommitmentStatus(Commitment commitment, params EditStatus[] allowedEditStatuses)
+        protected static void AssertCommitmentStatus(CommitmentView commitment, params EditStatus[] allowedEditStatuses)
         {
             if (commitment == null)
                 throw new InvalidStateException("Null commitment");

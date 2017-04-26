@@ -215,7 +215,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             var pendingChange = PendingChanges.None;
             if (apprenticeship.PendingUpdateOriginator == Originator.Employer)
                 pendingChange = PendingChanges.ReadyForApproval;
-            if (apprenticeship.PendingUpdateOriginator == Originator.Provider && apprenticeship.PaymentStatus != PaymentStatus.Withdrawn)
+            if (apprenticeship.PendingUpdateOriginator == Originator.Provider)
                 pendingChange = PendingChanges.WaitingForEmployer;
 
             var cohortReference = _hashingService.HashValue(apprenticeship.CommitmentId);
@@ -240,14 +240,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 DataLockStatus = MapDataLockStatus(hasDataLockErrors, apprenticeship.ULN),
                 CohortReference = cohortReference,
                 ProviderReference = apprenticeship.ProviderRef,
-                EnableEdit =   !hasDataLockErrors
-                            && pendingChange == PendingChanges.None
-                            && apprenticeship.PaymentStatus == PaymentStatus.Active,
+                EnableEdit =   pendingChange == PendingChanges.None
+                            && apprenticeship.PaymentStatus == PaymentStatus.Active
+                            && new[] { PaymentStatus.Active, PaymentStatus.Paused, }.Contains(apprenticeship.PaymentStatus),
                 HasDataLockError = hasDataLockErrors,
                 ErrorType = apprenticeship.ULN == "1112224402" 
                     ? DataLockErrorType.UpdateNeeded 
                     : DataLockErrorType.RestartRequire
                 // ToDo: DCM-475 -> disable edit if any ILR pending
+                            
             };
         }
 
