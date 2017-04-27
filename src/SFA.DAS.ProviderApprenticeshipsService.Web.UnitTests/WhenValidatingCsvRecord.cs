@@ -14,7 +14,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
 {
     public class WhenValidatingCsvRecord
     {
-        private readonly ApprenticeshipBulkUploadValidator _validator = new ApprenticeshipBulkUploadValidator(new BulkUploadApprenticeshipValidationText(), new CurrentDateTime());
+        private readonly ApprenticeshipUploadModelValidator _validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(), new CurrentDateTime());
         private ApprenticeshipUploadModel _validModel;
 
         [SetUp]

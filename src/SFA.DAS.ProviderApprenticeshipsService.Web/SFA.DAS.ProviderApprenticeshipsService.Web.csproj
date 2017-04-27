@@ -417,7 +417,7 @@
     <Compile Include="RequestContext.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Validation\ApprenticeshipCoreValidator.cs" />
-    <Compile Include="Validation\ApprenticeshipBulkUploadValidator.cs" />
+    <Compile Include="Validation\ApprenticeshipUploadModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\ReviewApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\UndoApprenticeshipUpdateViewModelValidator.cs" />
