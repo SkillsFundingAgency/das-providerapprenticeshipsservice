@@ -13,14 +13,14 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
-    public sealed class ApprenticeshipBulkUploadValidator
+    public sealed class ApprenticeshipUploadModelValidator
     {
         private readonly IApprenticeshipValidationErrorText _validationText;
         private readonly ICurrentDateTime _currentDateTime;
 
         private static Func<string, IEnumerable<string>, bool> _inList = (v, l) => string.IsNullOrWhiteSpace(v) || l.Contains(v);
 
-        public ApprenticeshipBulkUploadValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime)
+        public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime)
         {
             _validationText = validationText;
             _currentDateTime = currentDateTime;

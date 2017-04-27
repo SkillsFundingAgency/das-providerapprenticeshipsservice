@@ -14,7 +14,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
 {
     public abstract class ApprenticeshipBulkUploadValidationTestBase
     {
-        protected ApprenticeshipBulkUploadValidator Validator = new ApprenticeshipBulkUploadValidator(new BulkUploadApprenticeshipValidationText(), new CurrentDateTime());
+        protected ApprenticeshipUploadModelValidator Validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(), new CurrentDateTime());
         protected ApprenticeshipUploadModel ValidModel;
         protected Mock<ICurrentDateTime> MockCurrentDateTime;
 
@@ -22,7 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         public void BaseSetup()
         {
             MockCurrentDateTime = new Mock<ICurrentDateTime>();
-            Validator = new ApprenticeshipBulkUploadValidator(new BulkUploadApprenticeshipValidationText(), MockCurrentDateTime.Object);
+            Validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(), MockCurrentDateTime.Object);
 
             ValidModel = new ApprenticeshipUploadModel
             {

@@ -24,7 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
         // TODO: LWA - Can these be injected in?
         private readonly BulkUploadApprenticeshipValidationText _validationText;
-        private readonly ApprenticeshipBulkUploadValidator _viewModelValidator;
+        private readonly ApprenticeshipUploadModelValidator _viewModelValidator;
         
         public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, ILog logger)
         {
@@ -34,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 throw new ArgumentNullException(nameof(config));
 
             _validationText = new BulkUploadApprenticeshipValidationText();
-            _viewModelValidator = new ApprenticeshipBulkUploadValidator(_validationText, new CurrentDateTime());
+            _viewModelValidator = new ApprenticeshipUploadModelValidator(_validationText, new CurrentDateTime());
             
             _logger = logger;
             _config = config;
