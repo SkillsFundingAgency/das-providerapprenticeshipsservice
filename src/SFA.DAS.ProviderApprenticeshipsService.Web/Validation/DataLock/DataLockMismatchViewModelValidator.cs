@@ -9,7 +9,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.DataLock
         public DataLockMismatchViewModelValidator()
         {
             RuleFor(x => x.SubmitStatusViewModel)
-                .Must(m => m != null && m.Value != SubmitStatusViewModel.None).WithMessage("Select an option");
+                .Must(m => m != null && m.Value != SubmitStatusViewModel.UpdateDataInIlr).WithMessage("Select an option");
         }
     }
 }
