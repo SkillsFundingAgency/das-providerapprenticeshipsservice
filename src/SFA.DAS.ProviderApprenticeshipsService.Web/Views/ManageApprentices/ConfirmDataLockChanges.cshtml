@@ -1,38 +1,96 @@
-﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock.DataLockMismatchViewModel
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock.DataLockMismatchViewModel
 
 @{
     ViewBag.Title = "title";
 }
+
+@*
+
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <h1 class="heading-xlarge">Change apprentice details</h1>
+
+            <p>A request will be sent to &lt;Defence Ministry&gt; to approve the following change in the apprenticeship service.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Period</th>
+                        <th scope="col">Current</th>
+                        <th scope="col">Change to</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Total cost of training</td>
+                        <td>4th May 2017 to 19th May 2018</td>
+                        <td>&pound;6,555</td>
+                        <td class="changed-item">&pound;7,000</td>
+                    </tr>
+                    <tr>
+                        <td>Planned training start date</td>
+                        <td>--</td>
+                        <td>August 2017</td>
+                        <td class="changed-item">July 2017</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>*@
+
 
 
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Change apprentice details</h1>
 
-        <p>A request will be sent to &lt;Defence Ministry&gt; to approve the following change in the apprenticeship service.</p>
+        <p>
+            A request will be sent to &lt;Defence Ministry&gt; to approve the following change in the apprenticeship service.
+        </p>
 
-        <table>
+
+        <table class="edited-changes">
             <thead>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Period</th>
-                    <th scope="col">Current</th>
-                    <th scope="col">Change to</th>
-                </tr>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Period</th>
+                <th scope="col">Apprenticeship service</th>
+                <th scope="col">ILR submission</th>
+            </tr>
             </thead>
             <tbody>
+            @if (Model.DataLockViewModel.IlrTotalCost != Model.DasApprenticeship.Cost)
+            {
                 <tr>
                     <td>Total cost of training</td>
-                    <td>4th May 2017 to 19th May 2018</td>
-                    <td>&pound;6,555</td>
-                    <td class="changed-item">&pound;7,000</td>
+                    <td>
+                        @if (Model.DataLockViewModel.IlrEffectiveFromDate.HasValue)
+                        {
+                            @Model.DataLockViewModel.IlrEffectiveFromDate.Value.ToGdsFormat()
+                        }
+                        else
+                        {
+                            <span>--</span>
+                        }
+                    </td>
+                    <td>@Model.DasApprenticeship.Cost.FormatCost() </td>
+                    <td class="changed-item">@Model.DataLockViewModel.IlrTotalCost.FormatCost()</td>
                 </tr>
+            }
+
+            @if (Model.DataLockViewModel.IlrActualStartDate != Model.DasApprenticeship.StartDate)
+            {
                 <tr>
                     <td>Planned training start date</td>
                     <td>--</td>
-                    <td>August 2017</td>
-                    <td class="changed-item">July 2017</td>
+                    <td>@Model.DasApprenticeship.StartDate.Value.ToGdsFormat() </td>
+                    <td class="changed-item">@Model.DataLockViewModel.IlrActualStartDate.Value.ToGdsFormat()</td>
                 </tr>
+            }
+
             </tbody>
         </table>
     </div>
@@ -40,26 +98,48 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <form>
+        
+        <form method="POST" action="@Url.Action("ConfirmDataLockChangesPost")" novalidate="novalidate">
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+            @Html.AntiForgeryToken()
+
             <div class="form-group">
 
                 <fieldset>
                     <h2 class="heading-medium">Do you want to request these changes?</h2>
                     <legend class="visually-hidden">How do you want to fix the mismatch?</legend>
                     <div class="form-group">
-                        <label class="block-label selection-button-radio" for="match-this">
-                            <input id="match-this" name="fixMismatch" type="radio">
+                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.Confirm)">
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new { id = RadioButtonId(SubmitStatusViewModel.Confirm) })
                             <span>Yes, request this change</span>
                         </label>
 
-                        <label class="block-label selection-button-radio" for="match-this1">
-                            <input id="match-this1" name="fixMismatch" type="radio">
+                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new { id = RadioButtonId(SubmitStatusViewModel.None) })
                             <span>No, leave for now</span>
                         </label>
                     </div>
-                    <input type="submit" class="button" id="fix-mismatch" value="Finish" />
+
+                    @Html.HiddenFor(m => m.DataLockEventId)
+                    <input type="submit" class="button" id="fix-mismatch" value="Finish"/>
                 </fieldset>
             </div>
         </form>
+
     </div>
 </div>
+
+
+@functions
+{
+    public string RadioButtonId(SubmitStatusViewModel statusViewModel)
+    {
+        return $"{Html.IdFor(m => m.SubmitStatusViewModel)}-{statusViewModel}";
+    }
+}
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Details")" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
+    </div>
+}

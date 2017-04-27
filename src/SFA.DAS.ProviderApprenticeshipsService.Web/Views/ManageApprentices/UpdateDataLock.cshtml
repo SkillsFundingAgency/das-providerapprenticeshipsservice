@@ -40,7 +40,6 @@
                         </td>
                         <td>@Model.DasApprenticeship.Cost.FormatCost() </td>
                         <td class="changed-item">@Model.DataLockViewModel.IlrTotalCost.FormatCost()</td>
-                        @*@Html.Hidden("Cost", Model.Cost)*@
                     </tr>
                 }
 
@@ -73,17 +72,19 @@
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new { id = RadioButtonId(SubmitStatusViewModel.Confirm) })
                             <span>Start to update the details in the apprenticeship service</span>
                         </label>
-                        
+
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.UpdateDataInIlr, new { id = RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr) })
                             <span>Update the details through the ILR instead</span>
                         </label>
-                        
+
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new { id = RadioButtonId(SubmitStatusViewModel.None) })
                             <span>Leave for now</span>
                         </label>
                     </div>
+                    
+                    @Html.HiddenFor(m => m.DataLockEventId)
                     <input type="submit" class="button" id="fix-mismatch" value="Continue" />
                 </fieldset>
             </div>
@@ -94,10 +95,14 @@
 
 @functions
 {
-
     public string RadioButtonId(SubmitStatusViewModel statusViewModel)
     {
         return $"{Html.IdFor(m => m.SubmitStatusViewModel)}-{statusViewModel}";
     }
+}
 
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Details")" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
+    </div>
 }

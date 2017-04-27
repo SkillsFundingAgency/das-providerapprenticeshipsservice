@@ -167,8 +167,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> UpdateDataLock(long providerId, string hashedApprenticeshipId)
         {
-            var model = await _orchestrator.GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId, CurrentUserId);
-            // List mismatch
+            var model = await _orchestrator.GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId);
             return View("UpdateDataLock", model);
         }
 
@@ -177,10 +176,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> UpdateDataLock(DataLockMismatchViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = await _orchestrator.GetApprenticeshipMismatchDataLock(model.ProviderId, model.HashedApprenticeshipId);
+                return View("UpdateDataLock", viewModel);
+            }
+
             if (model.SubmitStatusViewModel == SubmitStatusViewModel.UpdateDataInIlr)
             {
-                // Change status
-                // Matby not in v1?
                 await _orchestrator.UpdateDataLock(
                     model.DataLockEventId,
                     model.HashedApprenticeshipId,
@@ -202,10 +205,31 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> ConfirmDataLockChanges(long providerId, string hashedApprenticeshipId)
         {
-            // ToDO: This!
-            var model = await _orchestrator.GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId, CurrentUserId);
-            var m = _orchestrator.GetRequestRestartViewModel(providerId, hashedApprenticeshipId);
+            var model = await _orchestrator.GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId);
             return View(model);
+        }
+
+        [HttpPost]
+        [Route("{hashedApprenticeshipId}/datalock/confirm")]
+        [OutputCache(CacheProfile = "NoCache")]
+        public async Task<ActionResult> ConfirmDataLockChangesPost(DataLockMismatchViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = await _orchestrator.GetApprenticeshipMismatchDataLock(model.ProviderId, model.HashedApprenticeshipId);
+                return View("ConfirmDataLockChanges", viewModel);
+            }
+
+            if (model.SubmitStatusViewModel != null && model.SubmitStatusViewModel.Value == SubmitStatusViewModel.Confirm)
+            {
+                await _orchestrator.UpdateDataLock(
+                    model.DataLockEventId,
+                    model.HashedApprenticeshipId,
+                    model.SubmitStatusViewModel.Value);
+                SetInfoMessage($"Changes sent to employer for approval", FlashMessageSeverityLevel.Okay);
+            }
+
+            return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
         }
 
         [HttpGet]

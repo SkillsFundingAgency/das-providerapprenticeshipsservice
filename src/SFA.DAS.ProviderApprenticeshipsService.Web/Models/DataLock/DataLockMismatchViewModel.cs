@@ -1,7 +1,11 @@
+using FluentValidation.Attributes;
+
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.DataLock;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
 {
+    [Validator(typeof(DataLockMismatchViewModelValidator))]
     public class DataLockMismatchViewModel
     {
         public DataLockViewModel DataLockViewModel { get; set; }

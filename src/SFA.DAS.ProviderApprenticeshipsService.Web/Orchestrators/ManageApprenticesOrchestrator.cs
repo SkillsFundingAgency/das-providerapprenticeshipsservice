@@ -243,15 +243,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId,
             });
 
+            _logger.Debug($"Getting {dataLockResponse.Data.DataLockEventId} with course code {dataLockResponse.Data.IlrTrainingCourseCode}");
             return await _apprenticeshipMapper.MapFrom(dataLockResponse.Data);
         }
 
-        public async Task<DataLockMismatchViewModel> GetApprenticeshipMismatchDataLock(long providerId, string hashedApprenticeshipId, string userId)
+        public async Task<DataLockMismatchViewModel> GetApprenticeshipMismatchDataLock(long providerId, string hashedApprenticeshipId)
         {
             _logger.Info($"Getting apprenticeship datalock for provider: {providerId}", providerId: providerId);
 
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
-            var dataLockResponse = await _mediator.SendAsync(new GetApprenticeshipDataLockRequest
+            var dataLock = await _mediator.SendAsync(new GetApprenticeshipDataLockRequest
             {
                 ApprenticeshipId = apprenticeshipId,
             });
@@ -262,7 +263,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
-            var datalockViewModel = await _apprenticeshipMapper.MapFrom(dataLockResponse.Data);
+            _logger.Debug($"Getting {dataLock.Data.DataLockEventId} with course code {dataLock.Data.IlrTrainingCourseCode}");
+            var datalockViewModel = await _apprenticeshipMapper.MapFrom(dataLock.Data);
 
             return new DataLockMismatchViewModel
                        {
@@ -275,7 +277,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         public async Task<RequestRestartViewModel> GetRequestRestartViewModel(long providerId, string hashedApprenticeshipId)
         {
             _logger.Info($"Getting apprenticeship restart request for provider: {providerId}", providerId);
-            var dataLock = await GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId, "");
+            var dataLock = await GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId);
             return new RequestRestartViewModel
                        {
                            ProviderId = providerId,
@@ -288,7 +290,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         public async Task<ConfirmRestartViewModel> GetConfirmRestartViewModel(long providerId, string hashedApprenticeshipId)
         {
             _logger.Info($"Getting apprenticeship restart request for provider: {providerId}", providerId);
-            var dataLock = await GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId, "");
+            var dataLock = await GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId);
             return new ConfirmRestartViewModel
             {
                 ProviderId = providerId,
