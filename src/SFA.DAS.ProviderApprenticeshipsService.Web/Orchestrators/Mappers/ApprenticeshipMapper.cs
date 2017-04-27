@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
@@ -18,7 +19,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using TrainingType = SFA.DAS.ProviderApprenticeshipsService.Domain.TrainingType;
-using TriageStatus = SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock.TriageStatus;
+using TriageStatus = SFA.DAS.Commitments.Api.Types.DataLock.Types.TriageStatus;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
@@ -237,11 +238,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 EmployerName = apprenticeship.LegalEntityName,
                 PendingChanges = pendingChange,
                 RecordStatus = MapRecordStatus(apprenticeship .PendingUpdateOriginator, hasDataLockErrors),
-                DataLockStatus = MapDataLockStatus(hasDataLockErrors, apprenticeship.ULN),
+                DataLockStatus = MapDataLockStatus(apprenticeship.DataLockTriageStatus),
                 CohortReference = cohortReference,
                 ProviderReference = apprenticeship.ProviderRef,
                 EnableEdit =   pendingChange == PendingChanges.None
-                            && apprenticeship.PaymentStatus == PaymentStatus.Active
+                            && apprenticeship.DataLockTriageStatus != TriageStatus.Unknown
                             && new[] { PaymentStatus.Active, PaymentStatus.Paused, }.Contains(apprenticeship.PaymentStatus),
                 HasDataLockError = hasDataLockErrors,
                 ErrorType = apprenticeship.ULN == "1112224402" 
@@ -252,8 +253,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             };
         }
 
-        public DataLockViewModel MapFrom(DataLockStatus dataLock)
+        public async Task<DataLockViewModel> MapFrom(DataLockStatus dataLock)
         {
+            var training = await GetTrainingProgramme(dataLock.IlrTrainingCourseCode);
             return new DataLockViewModel
             {
                 DataLockEventId = dataLock.DataLockEventId,
@@ -261,66 +263,68 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 PriceEpisodeIdentifier = dataLock.PriceEpisodeIdentifier,
                 ApprenticeshipId = dataLock.ApprenticeshipId,
                 IlrTrainingCourseCode = dataLock.IlrTrainingCourseCode,
-                IlrTrainingType = dataLock.IlrTrainingType,
+                IlrTrainingType = (TrainingType)dataLock.IlrTrainingType,
+                IlrTrainingCourseName = training.Title,
                 IlrActualStartDate = dataLock.IlrActualStartDate,
                 IlrEffectiveFromDate = dataLock.IlrEffectiveFromDate,
                 IlrTotalCost = dataLock.IlrTotalCost,
-                TriageStatus = (TriageStatus)dataLock.TriageStatus
+                TriageStatusViewModel = (TriageStatusViewModel)dataLock.TriageStatus
             };
         }
 
-        public Application.Queries.GetApprenticeshipDataLock.TriageStatus MapTriangeStatus(SubmitStatus submitStatus)
+        public TriageStatus MapTriangeStatus(SubmitStatusViewModel submitStatusViewModel)
         {
-            if (submitStatus == SubmitStatus.UpdateDataInDas)
-                return Application.Queries.GetApprenticeshipDataLock.TriageStatus.Change;
-            if (submitStatus == SubmitStatus.UpdateDataInIlr)
-                return Application.Queries.GetApprenticeshipDataLock.TriageStatus.FixInIlr;
+            if (submitStatusViewModel == SubmitStatusViewModel.Confirm)
+                return TriageStatus.Change;
+            if (submitStatusViewModel == SubmitStatusViewModel.UpdateDataInIlr)
+                return TriageStatus.FixIlr;
 
-            return Application.Queries.GetApprenticeshipDataLock.TriageStatus.Unknown;
+            return TriageStatus.Unknown;
         }
 
-        private string MapDataLockStatus(bool hasDataLockErrors, string uln)
+        private string MapDataLockStatus(TriageStatus dataLockTriageStatus)
         {
-            if (uln == "1112224401")
-                return "ILR data mismatch";
-            if (uln == "1112224402")
-                return "ILR data mismatch";
-            if (uln == "1112224403")
-                return "ILR changes pending";
-
-            // ToDo: DCM-475 -> Check for "ILR data mismatch" or "ILR changes pending"
-            if (hasDataLockErrors) return "ILR data mismatch";
-            return string.Empty;
+            switch (dataLockTriageStatus)
+            {
+                case TriageStatus.Unknown:
+                    break;
+                case TriageStatus.Change:
+                    return "ILR data mismatch";
+                case TriageStatus.Restart:
+                    return "Change requested";
+                case TriageStatus.FixIlr:
+                    return "ILR changes pending";
+            }
+            return "";
         }
 
         private string MapRecordStatus(Originator? pendingUpdateOriginator, bool hasDataLockErrors)
         {
-                // ToDo: DCM-475 -> PendingUpdate will always take priority over IRL changes -> Unit test
-                //if (pendingUpdateOriginator == null)
-                //{
-                //    if (hasDataLockErrors) return "ILR data mismatch";
-                //    // ToDo: DCM-475 -> Check for "ILR data mismatch" or "ILR changes pending"
-                //    return string.Empty;
-                //}
-            if (pendingUpdateOriginator == null) return string.Empty;
+            // ToDo: DCM-475 -> PendingUpdate will always take priority over IRL changes -> Unit test
+            //if (pendingUpdateOriginator == null)
+            //{
+            //    if (hasDataLockErrors) return "ILR data mismatch";
+            //    // ToDo: DCM-475 -> Check for "ILR data mismatch" or "ILR changes pending"
+            //    return string.Empty;
+            //}
+            if (pendingUpdateOriginator == null)
+            {
+                return string.Empty;
+            }
 
-            return pendingUpdateOriginator == Originator.Provider
-            ? "Changes pending"
-            : "Changes for review";
+            return pendingUpdateOriginator == Originator.Provider ? "Changes pending" : "Changes for review";
         }
 
         private string MapPaymentStatus(PaymentStatus paymentStatus, DateTime? startDate)
         {
-            var isStartDateInFuture = startDate.HasValue && startDate.Value >
-                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            var isStartDateInFuture = startDate.HasValue && startDate.Value > new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
 
             switch (paymentStatus)
             {
                 case PaymentStatus.PendingApproval:
                     return "Approval needed";
                 case PaymentStatus.Active:
-                    return
-                        isStartDateInFuture ? "Waiting to start" : "On programme";
+                    return isStartDateInFuture ? "Waiting to start" : "On programme";
                 case PaymentStatus.Paused:
                     return "Paused";
                 case PaymentStatus.Withdrawn:
@@ -346,11 +350,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
             await Task.WhenAll(standardsTask, frameworksTask);
 
-            return
-                standardsTask.Result.Standards.Cast<ITrainingProgramme>()
-                    .Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>())
-                    .OrderBy(m => m.Title)
-                    .ToList();
+            return standardsTask.Result.Standards.Cast<ITrainingProgramme>().Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>()).OrderBy(m => m.Title).ToList();
         }
 
         private static string NullableDecimalToString(decimal? item)

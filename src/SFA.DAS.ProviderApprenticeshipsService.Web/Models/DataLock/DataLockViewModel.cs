@@ -16,6 +16,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
 
         public string IlrTrainingCourseCode { get; set; }
 
+        public string IlrTrainingCourseName { get; set; }
+
         public TrainingType IlrTrainingType { get; set; }
 
         public DateTime? IlrActualStartDate { get; set; }
@@ -24,18 +26,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
 
         public decimal? IlrTotalCost { get; set; }
 
-        public TriageStatus TriageStatus { get; set; }
+        public TriageStatusViewModel TriageStatusViewModel { get; set; }
     }
 
-    public enum SubmitStatus
-    {
-        None = 1,
-        UpdateDataInDas = 2,
-        UpdateDataInIlr = 3,
-
-    }
-
-    public enum TriageStatus
+    public enum TriageStatusViewModel
     {
         Unknown = 0,
         ChangeApprenticeship = 1,

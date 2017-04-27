@@ -1,9 +1,11 @@
 using FluentValidation;
 
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoApprenticeshipUpdate;
+
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.RequestApprenticeshipRestart
 {
     public sealed class UndoApprenticeshipUpdateCommandValidator :
-        AbstractValidator<RestartApprenticeshipCommand>
+        AbstractValidator<UndoApprenticeshipUpdateCommand>
     {
         public UndoApprenticeshipUpdateCommandValidator()
         {

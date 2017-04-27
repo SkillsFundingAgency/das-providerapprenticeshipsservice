@@ -1,6 +1,6 @@
 using FluentValidation;
 
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLock;
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateDataLock
 {
@@ -9,10 +9,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateData
         public UpdateDataLockCommandValidator()
         {
             RuleFor(x => x.ApprenticeshipId).NotEmpty();
-            RuleFor(x => x.ProviderId).NotEmpty();
-            RuleFor(x => x.UserId).NotEmpty();
+            RuleFor(x => x.DataLockEventId).NotEmpty();
             RuleFor(x => x.TriageStatus)
-                .Must(m => m == TriageStatus.FixInIlr || m == TriageStatus.Change);
+                .Must(m => m != TriageStatus.Unknown );
         }
     }
 }

@@ -2,6 +2,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenti
 {
     public sealed class GetApprenticeshipDataLockResponse
     {
-        public DataLockStatus Data { get; set; }
+        public Commitments.Api.Types.DataLock.DataLockStatus Data { get; set; }
     }
 }

@@ -1,0 +1,54 @@
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock.ConfirmRestartViewModel
+
+@{
+    ViewBag.Title = "Restart apprenticeship";
+    ViewBag.PageID = "datalock-details-restart";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Change apprentice details</h1>
+        <p>To update this apprentice's training details in the apprenticeship service, the employer needs to do the following: </p>
+        <ul class="list list-bullet">
+            <li>Change the apprentice's status to stopped</li>
+            <li>Create a new record for the apprentice, using the updated training course details - you will need to approve this once it's been added</li>
+        </ul>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <form method="POST" action="@Url.Action("ConfirmRestart")" novalidate="novalidate">
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <h2 class="heading-medium">Do you want to ask the employer to make these changes?</h2>
+                <fieldset>
+                    <legend class="visually-hidden">Do you want to ask the employer to make these changes?</legend>
+
+                    <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.SendRequestToEmployer, "error")">
+                        @Html.ValidationMessageFor(m => m.SendRequestToEmployer, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SendRequestToEmployer) })
+                        <label class="block-label selection-button-radio" for="undo-changes-true">
+                            @Html.RadioButtonFor(m => m.SendRequestToEmployer, true, new { id = "undo-changes-true" })
+                            Yes, send an automated request to the employer
+                        </label>
+                        <label class="block-label selection-button-radio" for="undo-changes-false">
+                            @Html.RadioButtonFor(m => m.SendRequestToEmployer, false, new { id = "undo-changes-false" })
+                            No, leave for now
+                        </label>
+                    </div>
+                </fieldset>
+                @Html.HiddenFor(m => m.DataLockEventId)
+                <input type="submit" class="button" id="finish" value="Finish"/>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Details", new { Model.HashedApprenticeshipId })" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
+    </div>
+}

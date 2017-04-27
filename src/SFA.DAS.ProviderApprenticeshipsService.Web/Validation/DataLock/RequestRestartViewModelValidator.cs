@@ -8,7 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.DataLock
     {
         public RequestRestartViewModelValidator()
         {
-            RuleFor(x => x.SendRequestToEmployer).NotEmpty().WithMessage("Select an option");
+            RuleFor(x => x.SubmitStatusViewModel).NotEmpty().WithMessage("Select an option");
         }
     }
 }

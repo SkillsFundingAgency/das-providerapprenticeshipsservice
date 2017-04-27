@@ -51,8 +51,6 @@
                         <td>--</td>
                         <td>@Model.DasApprenticeship.StartDate.Value.ToGdsFormat() </td>
                         <td class="changed-item">@Model.DataLockViewModel.IlrActualStartDate.Value.ToGdsFormat()</td>
-                        @*@Html.Hidden("StartDate.Month", Model.StartDate.Month)
-                        @Html.Hidden("StartDate.Year", Model.StartDate.Year)*@
                     </tr>
                 }
 
@@ -66,23 +64,23 @@
         <form method="POST" action="@Url.Action("UpdateDataLock")" novalidate="novalidate">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             @Html.AntiForgeryToken()
-            <div class="form-group @Html.AddClassIfPropertyInError(x => x.SubmitStatus, "error") ">
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.SubmitStatusViewModel, "error") ">
                 <fieldset>
                     <h2 class="heading-medium">How do you want to fix the mismatch?</h2>
                     <legend class="visually-hidden">How do you want to fix the mismatch?</legend>
                     <div class="form-group">
-                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatus.UpdateDataInDas)">
-                            @Html.RadioButtonFor(m => m.SubmitStatus, SubmitStatus.UpdateDataInDas, new { id = RadioButtonId(SubmitStatus.UpdateDataInDas) })
+                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.Confirm)">
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new { id = RadioButtonId(SubmitStatusViewModel.Confirm) })
                             <span>Start to update the details in the apprenticeship service</span>
                         </label>
                         
-                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatus.UpdateDataInIlr)">
-                            @Html.RadioButtonFor(m => m.SubmitStatus, SubmitStatus.UpdateDataInIlr, new { id = RadioButtonId(SubmitStatus.UpdateDataInIlr) })
+                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr)">
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.UpdateDataInIlr, new { id = RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr) })
                             <span>Update the details through the ILR instead</span>
                         </label>
                         
-                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatus.None)">
-                            @Html.RadioButtonFor(m => m.SubmitStatus, SubmitStatus.None, new { id = RadioButtonId(SubmitStatus.None) })
+                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new { id = RadioButtonId(SubmitStatusViewModel.None) })
                             <span>Leave for now</span>
                         </label>
                     </div>
@@ -97,9 +95,9 @@
 @functions
 {
 
-    public string RadioButtonId(SubmitStatus status)
+    public string RadioButtonId(SubmitStatusViewModel statusViewModel)
     {
-        return $"{Html.IdFor(m => m.SubmitStatus)}-{status}";
+        return $"{Html.IdFor(m => m.SubmitStatusViewModel)}-{statusViewModel}";
     }
 
 }

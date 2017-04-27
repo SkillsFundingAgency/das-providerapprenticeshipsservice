@@ -121,7 +121,6 @@
     <Compile Include="Commands\RequestApprenticeshipRestart\RestartApprenticeshipCommand.cs" />
     <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommandHandler.cs" />
     <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommandValidator.cs" />
-    <Compile Include="Queries\GetApprenticeshipDataLock\DataLockStatus.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLock.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommand.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommandHandler.cs" />

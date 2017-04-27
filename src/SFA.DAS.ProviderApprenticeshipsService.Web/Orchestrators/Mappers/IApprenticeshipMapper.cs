@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLock;
+using SFA.DAS.Commitments.Api.Types.DataLock;
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
-
-using TriageStatus = SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLock.TriageStatus;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
@@ -27,8 +26,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         ApprenticeshipDetailsViewModel MapFrom(Apprenticeship apprenticeship);
 
-        DataLockViewModel MapFrom(DataLockStatus dataLock);
+        Task<DataLockViewModel> MapFrom(DataLockStatus dataLock);
 
-        TriageStatus MapTriangeStatus(SubmitStatus submitStatus);
+        TriageStatus MapTriangeStatus(SubmitStatusViewModel submitStatusViewModel);
     }
 }

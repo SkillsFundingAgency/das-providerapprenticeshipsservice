@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.RequestApprenticeshipRestart;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewApprenticeshipUpdate;
@@ -242,8 +243,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId,
             });
 
-            var viewModel = _apprenticeshipMapper.MapFrom(dataLockResponse.Data);
-            return viewModel;
+            return await _apprenticeshipMapper.MapFrom(dataLockResponse.Data);
         }
 
         public async Task<DataLockMismatchViewModel> GetApprenticeshipMismatchDataLock(long providerId, string hashedApprenticeshipId, string userId)
@@ -262,37 +262,63 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
-            var datalockViewModel = _apprenticeshipMapper.MapFrom(dataLockResponse.Data);
+            var datalockViewModel = await _apprenticeshipMapper.MapFrom(dataLockResponse.Data);
 
             return new DataLockMismatchViewModel
                        {
                            DasApprenticeship = data.Apprenticeship, 
-                           DataLockViewModel = datalockViewModel
+                           DataLockViewModel = datalockViewModel,
+                           DataLockEventId = datalockViewModel.DataLockEventId
                        };
         }
 
-        public async Task RequestRestart(long providerId, string hashedApprenticeshipId, string currentUserId)
+        public async Task<RequestRestartViewModel> GetRequestRestartViewModel(long providerId, string hashedApprenticeshipId)
         {
-            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
-
-            await _mediator.SendAsync(new RestartApprenticeshipCommand
-            {
-                ApprenticeshipId = apprenticeshipId,
-                ProviderId = providerId,
-                UserId = currentUserId
-            });
+            _logger.Info($"Getting apprenticeship restart request for provider: {providerId}", providerId);
+            var dataLock = await GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId, "");
+            return new RequestRestartViewModel
+                       {
+                           ProviderId = providerId,
+                           HashedApprenticeshipId = hashedApprenticeshipId,
+                           DataLockEventId = dataLock.DataLockEventId,
+                           DataMismatchModel = dataLock
+                       };       
         }
 
-        public async Task UpdateDataLock(long providerId, string hashedApprenticeshipId, SubmitStatus submitStatus, string currentUserId)
+        public async Task<ConfirmRestartViewModel> GetConfirmRestartViewModel(long providerId, string hashedApprenticeshipId)
+        {
+            _logger.Info($"Getting apprenticeship restart request for provider: {providerId}", providerId);
+            var dataLock = await GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId, "");
+            return new ConfirmRestartViewModel
+            {
+                ProviderId = providerId,
+                HashedApprenticeshipId = hashedApprenticeshipId,
+                DataLockEventId = dataLock.DataLockViewModel.DataLockEventId,
+                DataMismatchModel = dataLock
+            };
+        }
+
+        public async Task RequestRestart(long dataLockEventId, string hashedApprenticeshipId)
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
 
             await _mediator.SendAsync(new UpdateDataLockCommand
             {
                 ApprenticeshipId = apprenticeshipId,
-                ProviderId = providerId,
-                UserId = currentUserId,
-                TriageStatus = _apprenticeshipMapper.MapTriangeStatus(submitStatus)
+                DataLockEventId = dataLockEventId,
+                TriageStatus = TriageStatus.Restart
+            });
+        }
+
+        public async Task UpdateDataLock(long dataLockEventId, string hashedApprenticeshipId, SubmitStatusViewModel submitStatusViewModel)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            await _mediator.SendAsync(new UpdateDataLockCommand
+            {
+                ApprenticeshipId = apprenticeshipId,
+                DataLockEventId = dataLockEventId,
+                TriageStatus = _apprenticeshipMapper.MapTriangeStatus(submitStatusViewModel)
             });
         }
 

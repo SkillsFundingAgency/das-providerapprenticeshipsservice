@@ -6,6 +6,7 @@ using FluentValidation;
 using MediatR;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.RequestApprenticeshipRestart
 {
@@ -13,24 +14,31 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.RequestApp
     {
         private readonly AbstractValidator<RestartApprenticeshipCommand> _validator;
 
+        private readonly IDataLockApi _dataLockApi;
+
         private IProviderCommitmentsApi _commitmentsApi;
 
         public RestartApprenticeshipUpdateCommandHandler(
             AbstractValidator<RestartApprenticeshipCommand> validator,
-            IProviderCommitmentsApi commitmentsApi)
+            IDataLockApi dataLockApi)
         {
             if (validator == null)
                 throw new ArgumentNullException(nameof(validator));
-            if (commitmentsApi == null)
-                throw new ArgumentNullException(nameof(commitmentsApi));
+            if (dataLockApi == null)
+                throw new ArgumentNullException(nameof(dataLockApi));
 
             _validator = validator;
-            _commitmentsApi = commitmentsApi;
+            _dataLockApi = dataLockApi;
         }
 
         protected override async Task HandleCore(RestartApprenticeshipCommand command)
         {
             _validator.ValidateAndThrow(command);
+
+            var dataLock = await _dataLockApi.GetDataLock(command.ApprenticeshipId, command.ProviderId);
+
+            dataLock.TriageStatus = TriageStatus.Restart;
+            await _dataLockApi.PatchDataLock(command.ApprenticeshipId, dataLock);
 
             //var submission = new RequestApprenticeshipRestartSubmission
             //{

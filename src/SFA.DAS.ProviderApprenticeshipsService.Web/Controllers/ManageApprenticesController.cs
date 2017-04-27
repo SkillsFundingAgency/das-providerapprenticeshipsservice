@@ -168,6 +168,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> UpdateDataLock(long providerId, string hashedApprenticeshipId)
         {
             var model = await _orchestrator.GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId, CurrentUserId);
+            // List mismatch
             return View("UpdateDataLock", model);
         }
 
@@ -176,19 +177,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> UpdateDataLock(DataLockMismatchViewModel model)
         {
-            if (model.SubmitStatus == SubmitStatus.UpdateDataInIlr)
+            if (model.SubmitStatusViewModel == SubmitStatusViewModel.UpdateDataInIlr)
             {
                 // Change status
+                // Matby not in v1?
                 await _orchestrator.UpdateDataLock(
-                    model.ProviderId,
+                    model.DataLockEventId,
                     model.HashedApprenticeshipId,
-                    model.SubmitStatus.Value,
-                    CurrentUserId);
+                    model.SubmitStatusViewModel.Value);
 
                 return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
             }
 
-            if (model.SubmitStatus == SubmitStatus.UpdateDataInDas)
+            if (model.SubmitStatusViewModel == SubmitStatusViewModel.Confirm)
             {
                 return RedirectToAction("ConfirmDataLockChanges", new { model.ProviderId, model.HashedApprenticeshipId });
             }
@@ -201,37 +202,72 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> ConfirmDataLockChanges(long providerId, string hashedApprenticeshipId)
         {
+            // ToDO: This!
             var model = await _orchestrator.GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId, CurrentUserId);
-
+            var m = _orchestrator.GetRequestRestartViewModel(providerId, hashedApprenticeshipId);
             return View(model);
         }
 
         [HttpGet]
-        [Route("{hashedApprenticeshipId}/RequestRestart", Name = "RequestRestart")]
+        [Route("{hashedApprenticeshipId}/datalock/requestrestart", Name = "RequestRestart")]
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> RequestRestart(long providerId, string hashedApprenticeshipId)
         {
-            var model = new RequestRestartViewModel
-                            {
-                                HashedApprenticeshipId = hashedApprenticeshipId,
-                                ProviderId = providerId
-                            };
+            var model = await _orchestrator.GetRequestRestartViewModel(providerId, hashedApprenticeshipId);
             return View("RequestRestart", model);
         }
 
         [HttpPost]
-        [Route("{hashedApprenticeshipId}/datalock/restart")]
+        [Route("{hashedApprenticeshipId}/datalock/requestrestart")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RequestRestart(RequestRestartViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View("RequestRestart", model);
+                var newModel = await _orchestrator.GetRequestRestartViewModel(model.ProviderId , model.HashedApprenticeshipId);
+                return View("RequestRestart", newModel);
             }
 
-            if (model.SendRequestToEmployer.Value)
+            if (model.SubmitStatusViewModel.HasValue && model.SubmitStatusViewModel.Value == SubmitStatusViewModel.Confirm)
             {
-                await _orchestrator.RequestRestart(model.ProviderId, model.HashedApprenticeshipId, CurrentUserId);
+                return RedirectToAction(
+                    "ConfirmRestart",
+                    new { model.ProviderId, model.HashedApprenticeshipId });
+            }
+
+            if (model.SubmitStatusViewModel.HasValue
+                && model.SubmitStatusViewModel.Value == SubmitStatusViewModel.UpdateDataInIlr)
+            {
+                // ToDo: Remove in V1?
+                await _orchestrator.UpdateDataLock(model.DataLockEventId, model.HashedApprenticeshipId, SubmitStatusViewModel.UpdateDataInIlr);
+                return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
+            }
+
+            return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
+        }
+
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/datalock/ConfirmRestart", Name = "ConfirmRestart")]
+        [OutputCache(CacheProfile = "NoCache")]
+        public async Task<ActionResult> ConfirmRestart(long providerId, string hashedApprenticeshipId)
+        {
+            var model = await _orchestrator.GetConfirmRestartViewModel(providerId, hashedApprenticeshipId);
+            return View("ConfirmRestart", model);
+        }
+
+        [HttpPost]
+        [Route("{hashedApprenticeshipId}/datalock/ConfirmRestart")]
+        [OutputCache(CacheProfile = "NoCache")]
+        public async Task<ActionResult> ConfirmRestartPost(ConfirmRestartViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var newModel = await _orchestrator.GetConfirmRestartViewModel(model.ProviderId, model.HashedApprenticeshipId);
+                return View("ConfirmRestart", newModel);
+            }
+            if (model.SendRequestToEmployer.HasValue && model.SendRequestToEmployer.Value)
+            {
+                await _orchestrator.RequestRestart(model.DataLockEventId, model.HashedApprenticeshipId);
                 SetInfoMessage($"Status changed", FlashMessageSeverityLevel.Okay);
             }
 

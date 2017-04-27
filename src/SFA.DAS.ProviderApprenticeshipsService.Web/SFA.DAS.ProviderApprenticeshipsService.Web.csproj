@@ -363,6 +363,7 @@
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\ApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModel.cs" />
+    <Compile Include="Models\DataLock\ConfirmRestartViewModel.cs" />
     <Compile Include="Models\DataLock\DataLockMismatchViewModel.cs" />
     <Compile Include="Models\DataLock\DataLockViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\ReviewApprenticeshipUpdateViewModel.cs" />
@@ -377,6 +378,7 @@
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentDetailsViewModel.cs" />
     <Compile Include="Models\DataLock\RequestRestartViewModel.cs" />
+    <Compile Include="Models\DataLock\SubmitStatusViewModel.cs" />
     <Compile Include="Models\DeleteConfirmationViewModel.cs" />
     <Compile Include="Models\ExtendedApprenticeshipViewModel.cs" />
     <Compile Include="Models\FinishEditingViewModel.cs" />
@@ -422,6 +424,7 @@
     <Compile Include="Validation\ApprenticeshipCoreValidator.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUploadValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModelValidator.cs" />
+    <Compile Include="Validation\DataLock\ConfirmRestartViewModelValidator.cs" />
     <Compile Include="Validation\DataLock\RequestRestartViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\ReviewApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\UndoApprenticeshipUpdateViewModelValidator.cs" />
@@ -614,6 +617,7 @@
     <Content Include="Views\ManageApprentices\RequestRestart.cshtml" />
     <Content Include="Views\ManageApprentices\UpdateDataLock.cshtml" />
     <Content Include="Views\ManageApprentices\ConfirmDataLockChanges.cshtml" />
+    <Content Include="Views\ManageApprentices\ConfirmRestart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,53 +1,134 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock.RequestRestartViewModel
 
 @{
-    ViewBag.Title = "Restart apprenticeship";
-    ViewBag.PageID = "datalock-details-restart";
+    ViewBag.Title = "Request restart";
 }
+
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Change apprentice details</h1>
-        <p>To update this apprentice's training details in the apprenticeship service, the employer needs to do the following: </p>
-        <ul class="list list-bullet">
-            <li>Change the apprentice's status to stopped</li>
-            <li>Create a new record for the apprentice, using the updated training course details - you will need to approve this once it's been added</li>
-        </ul>
+        <h1 class="heading-xlarge">Details of ILR data mismatch</h1>
+
+        <p>Details for this apprentice are different in your organisation's ILR submission. </p>
+
+
+        <table class="edited-changes">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Period</th>
+                    <th scope="col">Apprenticeship service</th>
+                    <th scope="col">ILR submission</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (Model.DataMismatchModel.DataLockViewModel.IlrTrainingCourseCode != Model.DataMismatchModel.DasApprenticeship.TrainingCode)
+            {
+                <tr>
+                    <td>Apprenticeship training course</td>
+                    <td>
+                        @if (Model.DataMismatchModel.DataLockViewModel.IlrEffectiveFromDate.HasValue)
+                        {
+                            @Model.DataMismatchModel.DataLockViewModel.IlrEffectiveFromDate.Value.ToGdsFormat()
+                        }
+                        else
+                        {
+                            <span>--</span>
+                        }
+                    </td>
+                    <td>@Model.DataMismatchModel.DasApprenticeship.TrainingName </td>
+                    <td class="changed-item">@Model.DataMismatchModel.DataLockViewModel.IlrTrainingCourseName </td>
+                </tr>
+            }
+
+            @if (Model.DataMismatchModel.DataLockViewModel.IlrTotalCost != Model.DataMismatchModel.DasApprenticeship.Cost)
+            {
+                <tr>
+                    <td>Total cost of training</td>
+                    <td>
+                        @if (Model.DataMismatchModel.DataLockViewModel.IlrEffectiveFromDate.HasValue)
+                        {
+                            @Model.DataMismatchModel.DataLockViewModel.IlrEffectiveFromDate.Value.ToGdsFormat()
+                        }
+                        else
+                        {
+                            <span>--</span>
+                        }
+                    </td>
+                    <td>@Model.DataMismatchModel.DasApprenticeship.Cost.FormatCost() </td>
+                    <td class="changed-item">@Model.DataMismatchModel.DataLockViewModel.IlrTotalCost.FormatCost()</td>
+                    @*@Html.Hidden("Cost", Model.Cost)*@
+                </tr>
+            }
+
+            @if (Model.DataMismatchModel.DataLockViewModel.IlrActualStartDate != Model.DataMismatchModel.DasApprenticeship.StartDate)
+            {
+                <tr>
+                    <td>Planned training start date</td>
+                    <td>--</td>
+                    <td>@Model.DataMismatchModel.DasApprenticeship.StartDate.Value.ToGdsFormat() </td>
+                    <td class="changed-item">@Model.DataMismatchModel.DataLockViewModel.IlrActualStartDate.Value.ToGdsFormat()</td>
+                </tr>
+            }
+
+            </tbody>
+        </table>
     </div>
 </div>
+
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("RequestRestart")" novalidate="novalidate">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             @Html.AntiForgeryToken()
-
-            <div class="form-group">
-                <h2 class="heading-medium">Do you want to ask the employer to make these changes?</h2>
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.SubmitStatusViewModel, "error") ">
                 <fieldset>
-                    <legend class="visually-hidden">Do you want to ask the employer to make these changes?</legend>
+                    <h2 class="heading-medium">How do you want to fix the mismatch?</h2>
+                    <legend class="visually-hidden">How do you want to fix the mismatch?</legend>
+                    <div class="form-group">
 
-                    <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.SendRequestToEmployer, "error")">
-                        @Html.ValidationMessageFor(m => m.SendRequestToEmployer, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SendRequestToEmployer) })
-                        <label class="block-label selection-button-radio" for="undo-changes-true">
-                            @Html.RadioButtonFor(m => m.SendRequestToEmployer, true, new { id = "undo-changes-true" })
-                            Yes, send an automated request to the employer
+                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.Confirm)">
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new { id = RadioButtonId(SubmitStatusViewModel.Confirm) })
+                            <span>
+                                Ask the emplyer to restart the apprenticeship
+                            </span>
                         </label>
-                        <label class="block-label selection-button-radio" for="undo-changes-false">
-                            @Html.RadioButtonFor(m => m.SendRequestToEmployer, false, new { id = "undo-changes-false" })
-                            No, leave for now
+
+                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr)">
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.UpdateDataInIlr, new { id = RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr) })
+                            <span>Update the details through the ILR instead</span>
                         </label>
+
+                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new { id = RadioButtonId(SubmitStatusViewModel.None) })
+                            <span>Leave for now</span>
+                        </label>
+
                     </div>
+                    @Html.HiddenFor(m => m.DataLockEventId)
+                    <input type="submit" class="button" id="fix-mismatch" value="Continue" />
                 </fieldset>
-                <input type="submit" class="button" id="finish" value="Finish"/>
             </div>
         </form>
-
     </div>
 </div>
 
+
+@functions
+{
+
+    public string RadioButtonId(SubmitStatusViewModel statusViewModel)
+    {
+        return $"{Html.IdFor(m => m.SubmitStatusViewModel)}-{statusViewModel}";
+    }
+
+}
+
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("Details", new { Model.HashedApprenticeshipId })" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
+        <a href="@Url.Action("Details")" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
     </div>
 }
