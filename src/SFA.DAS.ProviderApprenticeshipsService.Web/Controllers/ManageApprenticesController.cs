@@ -187,7 +187,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 await _orchestrator.UpdateDataLock(
                     model.DataLockEventId,
                     model.HashedApprenticeshipId,
-                    model.SubmitStatusViewModel.Value);
+                    model.SubmitStatusViewModel.Value,
+                    CurrentUserId);
 
                 return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
             }
@@ -225,7 +226,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 await _orchestrator.UpdateDataLock(
                     model.DataLockEventId,
                     model.HashedApprenticeshipId,
-                    model.SubmitStatusViewModel.Value);
+                    model.SubmitStatusViewModel.Value, CurrentUserId);
                 SetInfoMessage($"Changes sent to employer for approval", FlashMessageSeverityLevel.Okay);
             }
 
@@ -263,7 +264,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 && model.SubmitStatusViewModel.Value == SubmitStatusViewModel.UpdateDataInIlr)
             {
                 // ToDo: Remove in V1?
-                await _orchestrator.UpdateDataLock(model.DataLockEventId, model.HashedApprenticeshipId, SubmitStatusViewModel.UpdateDataInIlr);
+                await _orchestrator.UpdateDataLock(model.DataLockEventId, model.HashedApprenticeshipId, SubmitStatusViewModel.UpdateDataInIlr, CurrentUserId);
                 return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
             }
 
@@ -291,7 +292,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
             if (model.SendRequestToEmployer.HasValue && model.SendRequestToEmployer.Value)
             {
-                await _orchestrator.RequestRestart(model.DataLockEventId, model.HashedApprenticeshipId);
+                await _orchestrator.RequestRestart(model.DataLockEventId, model.HashedApprenticeshipId, CurrentUserId);
                 SetInfoMessage($"Status changed", FlashMessageSeverityLevel.Okay);
             }
 

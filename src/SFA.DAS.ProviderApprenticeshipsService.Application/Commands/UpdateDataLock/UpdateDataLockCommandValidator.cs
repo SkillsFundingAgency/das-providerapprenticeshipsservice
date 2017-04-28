@@ -10,6 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateData
         {
             RuleFor(x => x.ApprenticeshipId).NotEmpty();
             RuleFor(x => x.DataLockEventId).NotEmpty();
+            RuleFor(x => x.UserId).NotEmpty();
             RuleFor(x => x.TriageStatus)
                 .Must(m => m != TriageStatus.Unknown );
         }

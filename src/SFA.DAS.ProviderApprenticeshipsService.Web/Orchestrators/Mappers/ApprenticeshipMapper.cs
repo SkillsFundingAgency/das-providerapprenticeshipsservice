@@ -282,7 +282,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             return TriageStatus.Unknown;
         }
 
-        private string MapDataLockStatus(TriageStatus dataLockTriageStatus)
+        private string MapDataLockStatus(TriageStatus? dataLockTriageStatus)
         {
             switch (dataLockTriageStatus)
             {

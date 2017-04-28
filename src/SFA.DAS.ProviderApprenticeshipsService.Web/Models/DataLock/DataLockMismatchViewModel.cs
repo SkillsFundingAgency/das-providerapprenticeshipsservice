@@ -10,7 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
     {
         public DataLockViewModel DataLockViewModel { get; set; }
 
-        public Apprenticeship DasApprenticeship { get; set; }
+        public ApprenticeshipViewModel DasApprenticeship { get; set; }
 
         public SubmitStatusViewModel? SubmitStatusViewModel { get; set; }
 

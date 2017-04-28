@@ -43,7 +43,7 @@
                 </tr>
             }
 
-            @if (Model.DataMismatchModel.DataLockViewModel.IlrTotalCost != Model.DataMismatchModel.DasApprenticeship.Cost)
+            @if (Model.DataMismatchModel.DataLockViewModel.IlrTotalCost.ToString() != Model.DataMismatchModel.DasApprenticeship.Cost)
             {
                 <tr>
                     <td>Total cost of training</td>
@@ -57,18 +57,18 @@
                             <span>--</span>
                         }
                     </td>
-                    <td>@Model.DataMismatchModel.DasApprenticeship.Cost.FormatCost() </td>
+                    <td>@Model.DataMismatchModel.DasApprenticeship.Cost.AsNullableDecimal().FormatCost() </td>
                     <td class="changed-item">@Model.DataMismatchModel.DataLockViewModel.IlrTotalCost.FormatCost()</td>
                     @*@Html.Hidden("Cost", Model.Cost)*@
                 </tr>
             }
 
-            @if (Model.DataMismatchModel.DataLockViewModel.IlrActualStartDate != Model.DataMismatchModel.DasApprenticeship.StartDate)
+            @if (Model.DataMismatchModel.DataLockViewModel.IlrActualStartDate != Model.DataMismatchModel.DasApprenticeship.StartDate.DateTime)
             {
                 <tr>
                     <td>Planned training start date</td>
                     <td>--</td>
-                    <td>@Model.DataMismatchModel.DasApprenticeship.StartDate.Value.ToGdsFormat() </td>
+                    <td>@Model.DataMismatchModel.DasApprenticeship.StartDate?.DateTime.ToGdsFormat() </td>
                     <td class="changed-item">@Model.DataMismatchModel.DataLockViewModel.IlrActualStartDate.Value.ToGdsFormat()</td>
                 </tr>
             }

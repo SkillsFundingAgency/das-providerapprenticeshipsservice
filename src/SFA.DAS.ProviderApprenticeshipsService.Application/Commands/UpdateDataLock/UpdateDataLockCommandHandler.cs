@@ -5,6 +5,8 @@ using FluentValidation;
 using MediatR;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.DataLock;
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateDataLock
@@ -39,9 +41,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateData
             _validator.ValidateAndThrow(command);
             try
             {
-                var dataLock = await _dataLockApi.GetDataLock(command.ApprenticeshipId, command.DataLockEventId);
-                dataLock.TriageStatus = command.TriageStatus;
-                await _dataLockApi.PatchDataLock(command.ApprenticeshipId, dataLock);
+                var submission = new DataLockTriageSubmission
+                        {
+                        TriageStatus = TriageStatus.Restart,
+                        UserId = command.UserId
+                        };
+
+                await _dataLockApi.PatchDataLock(command.ApprenticeshipId, command.DataLockEventId, submission);
             }
             catch (Exception ex)
             {
