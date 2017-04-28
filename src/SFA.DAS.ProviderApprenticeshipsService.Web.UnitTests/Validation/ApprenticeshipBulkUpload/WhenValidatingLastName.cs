@@ -9,7 +9,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void TestLastNameNotNull()
         {
-            ValidModel.LastName = null;
+            ValidModel.ApprenticeshipViewModel.LastName = null;
 
             var result = Validator.Validate(ValidModel);
 
@@ -20,7 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void LastNameShouldNotBeEmpty()
         {
-            ValidModel.LastName = " ";
+            ValidModel.ApprenticeshipViewModel.LastName = " ";
 
             var result = Validator.Validate(ValidModel);
             result.Errors.Count.Should().Be(1);
@@ -33,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase(101, 1)]
         public void TestLengthOfLastName(int length, int expectedErrorCount)
         {
-            ValidModel.LastName = new string('*', length);
+            ValidModel.ApprenticeshipViewModel.LastName = new string('*', length);
 
             var result = Validator.Validate(ValidModel);
 

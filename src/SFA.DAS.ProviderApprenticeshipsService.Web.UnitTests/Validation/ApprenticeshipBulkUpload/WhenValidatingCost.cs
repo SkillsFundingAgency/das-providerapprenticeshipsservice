@@ -10,7 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase(null)]
         public void CostMustNotBeEmpty(string cost)
         {
-            ValidModel.Cost = cost;
+            ValidModel.ApprenticeshipViewModel.Cost = cost;
 
             var result = Validator.Validate(ValidModel);
 
@@ -23,7 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase("1")]
         public void CostIsWholeNumberGreaterThanZeroIsValid(string cost)
         {
-            ValidModel.Cost = cost;
+            ValidModel.ApprenticeshipViewModel.Cost = cost;
 
             var result = Validator.Validate(ValidModel);
 
@@ -37,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase("123.000")]
         public void CostNotNumericOrIsNotAWholeNumber(string cost)
         {
-            ValidModel.Cost = cost;
+            ValidModel.ApprenticeshipViewModel.Cost = cost;
 
             var result = Validator.Validate(ValidModel);
 
@@ -52,7 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase("-0.001")]
         public void CostThatIsZeroOrNegativeNumberIsInvalid(string cost)
         {
-            ValidModel.Cost = cost;
+            ValidModel.ApprenticeshipViewModel.Cost = cost;
 
             var result = Validator.Validate(ValidModel);
 
@@ -62,7 +62,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase("1234567")]
         public void CostMustContain6DigitsOrLess(string value)
         {
-            ValidModel.Cost = value;
+            ValidModel.ApprenticeshipViewModel.Cost = value;
 
             var result = Validator.Validate(ValidModel);
 
@@ -72,7 +72,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase("100,000")]
         public void CostMustContain6DigitsOrLessIgnoringCommas(string value)
         {
-            ValidModel.Cost = value;
+            ValidModel.ApprenticeshipViewModel.Cost = value;
 
             var result = Validator.Validate(ValidModel);
 
@@ -81,7 +81,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
 
         public void CostContainingValidCommaSeparatorIsValid()
         {
-            ValidModel.Cost = "1,234";
+            ValidModel.ApprenticeshipViewModel.Cost = "1,234";
 
             var result = Validator.Validate(ValidModel);
 
@@ -94,7 +94,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase("12222,")]
         public void CostThatContainsBadlyFormatedCommaSeparatorsIsInvalid(string cost)
         {
-            ValidModel.Cost = cost;
+            ValidModel.ApprenticeshipViewModel.Cost = cost;
 
             var result = Validator.Validate(ValidModel);
 
@@ -104,7 +104,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void CostCannotBeOver100000()
         {
-            ValidModel.Cost = "100001";
+            ValidModel.ApprenticeshipViewModel.Cost = "100001";
 
             var result = Validator.Validate(ValidModel);
 

@@ -9,7 +9,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void ShouldBeInValidIfNoTrainingCodeValuesSet()
         {
-            ValidModel.TrainingCode = null;
+            ValidModel.ApprenticeshipViewModel.TrainingCode = null;
 
             var result = Validator.Validate(ValidModel);
 
@@ -19,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void ShouldBeValidIfTrainingCodeValuesSet()
         {
-            ValidModel.TrainingCode = "123";
+            ValidModel.ApprenticeshipViewModel.TrainingCode = "123";
 
             var result = Validator.Validate(ValidModel);
 

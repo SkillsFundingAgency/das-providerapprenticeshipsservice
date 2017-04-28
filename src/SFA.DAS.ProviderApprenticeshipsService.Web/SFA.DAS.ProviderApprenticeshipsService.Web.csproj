@@ -417,14 +417,13 @@
     <Compile Include="RequestContext.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Validation\ApprenticeshipCoreValidator.cs" />
-    <Compile Include="Validation\ApprenticeshipBulkUploadValidator.cs" />
+    <Compile Include="Validation\ApprenticeshipUploadModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\ReviewApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\UndoApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\ApprovedApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelUniqueUlnValidator.cs" />
-    <Compile Include="Validation\CsvRecordValidator.cs" />
     <Compile Include="Validation\DeleteCohortConfirmationViewModelValidator.cs" />
     <Compile Include="Validation\DeleteConfirmationViewModelValidator.cs" />
     <Compile Include="Validation\FinishEditingViewModelValidator.cs" />
