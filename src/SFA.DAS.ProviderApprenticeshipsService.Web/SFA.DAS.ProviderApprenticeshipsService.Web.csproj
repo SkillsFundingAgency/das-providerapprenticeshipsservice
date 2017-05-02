@@ -377,7 +377,6 @@
     <Compile Include="Models\CommitmentListItemViewModel.cs" />
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentDetailsViewModel.cs" />
-    <Compile Include="Models\DataLock\RequestRestartViewModel.cs" />
     <Compile Include="Models\DataLock\SubmitStatusViewModel.cs" />
     <Compile Include="Models\DeleteConfirmationViewModel.cs" />
     <Compile Include="Models\ExtendedApprenticeshipViewModel.cs" />
@@ -426,7 +425,6 @@
     <Compile Include="Validation\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\DataLock\ConfirmRestartViewModelValidator.cs" />
     <Compile Include="Validation\DataLock\DataLockMismatchViewModelValidator.cs" />
-    <Compile Include="Validation\DataLock\RequestRestartViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\ReviewApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\UndoApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelValidator.cs" />

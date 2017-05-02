@@ -9,7 +9,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.DataLock
         public DataLockMismatchViewModelValidator()
         {
             RuleFor(x => x.SubmitStatusViewModel)
-                .Must(m => m != null && m.Value != SubmitStatusViewModel.UpdateDataInIlr).WithMessage("Select an option");
+                .Cascade(CascadeMode.StopOnFirstFailure)
+                .NotNull()
+                    .WithMessage("Select an option")
+                .Must(m => m.HasValue && m.Value != SubmitStatusViewModel.UpdateDataInIlr)
+                    .WithMessage("This option is currently not supported");
         }
     }
 }

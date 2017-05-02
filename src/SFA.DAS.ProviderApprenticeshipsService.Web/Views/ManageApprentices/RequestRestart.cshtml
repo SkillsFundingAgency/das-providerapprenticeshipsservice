@@ -1,6 +1,6 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
-@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock.RequestRestartViewModel
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock.DataLockMismatchViewModel
 
 @{
     ViewBag.Title = "Request restart";
@@ -24,53 +24,53 @@
                 </tr>
             </thead>
             <tbody>
-            @if (Model.DataMismatchModel.DataLockViewModel.IlrTrainingCourseCode != Model.DataMismatchModel.DasApprenticeship.TrainingCode)
+            @if (Model.DataLockViewModel.IlrTrainingCourseCode != Model.DasApprenticeship.TrainingCode)
             {
                 <tr>
                     <td>Apprenticeship training course</td>
                     <td>
-                        @if (Model.DataMismatchModel.DataLockViewModel.IlrEffectiveFromDate.HasValue)
+                        @if (Model.DataLockViewModel.IlrEffectiveFromDate.HasValue)
                         {
-                            @Model.DataMismatchModel.DataLockViewModel.IlrEffectiveFromDate.Value.ToGdsFormat()
+                            @Model.DataLockViewModel.IlrEffectiveFromDate.Value.ToGdsFormat()
                         }
                         else
                         {
                             <span>--</span>
                         }
                     </td>
-                    <td>@Model.DataMismatchModel.DasApprenticeship.TrainingName </td>
-                    <td class="changed-item">@Model.DataMismatchModel.DataLockViewModel.IlrTrainingCourseName </td>
+                    <td>@Model.DasApprenticeship.TrainingName </td>
+                    <td class="changed-item">@Model.DataLockViewModel.IlrTrainingCourseName </td>
                 </tr>
             }
 
-            @if (Model.DataMismatchModel.DataLockViewModel.IlrTotalCost.ToString() != Model.DataMismatchModel.DasApprenticeship.Cost)
+            @if (Model.DataLockViewModel.IlrTotalCost.ToString() != Model.DasApprenticeship.Cost)
             {
                 <tr>
                     <td>Total cost of training</td>
                     <td>
-                        @if (Model.DataMismatchModel.DataLockViewModel.IlrEffectiveFromDate.HasValue)
+                        @if (Model.DataLockViewModel.IlrEffectiveFromDate.HasValue)
                         {
-                            @Model.DataMismatchModel.DataLockViewModel.IlrEffectiveFromDate.Value.ToGdsFormat()
+                            @Model.DataLockViewModel.IlrEffectiveFromDate.Value.ToGdsFormat()
                         }
                         else
                         {
                             <span>--</span>
                         }
                     </td>
-                    <td>@Model.DataMismatchModel.DasApprenticeship.Cost.AsNullableDecimal().FormatCost() </td>
-                    <td class="changed-item">@Model.DataMismatchModel.DataLockViewModel.IlrTotalCost.FormatCost()</td>
+                    <td>@Model.DasApprenticeship.Cost.AsNullableDecimal().FormatCost() </td>
+                    <td class="changed-item">@Model.DataLockViewModel.IlrTotalCost.FormatCost()</td>
                 </tr>
             }
 
-            @if (Model.DataMismatchModel.DataLockViewModel.IlrActualStartDate != Model.DataMismatchModel.DasApprenticeship.StartDate.DateTime)
+            @if (Model.DataLockViewModel.IlrActualStartDate != Model.DasApprenticeship.StartDate.DateTime)
             {
                 <tr>
                     <td>Planned training start date</td>
                     <td>--</td>
                     <td>
-                        @Model.DataMismatchModel.DasApprenticeship.StartDate.DateTime.Value.ToGdsFormat()
+                        @Model.DasApprenticeship.StartDate.DateTime.Value.ToGdsFormat()
                     </td>
-                    <td class="changed-item">@Model.DataMismatchModel.DataLockViewModel.IlrActualStartDate.Value.ToGdsFormat()</td>
+                    <td class="changed-item">@Model.DataLockViewModel.IlrActualStartDate.Value.ToGdsFormat()</td>
                 </tr>
             }
 

@@ -234,19 +234,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
         }
 
-        public async Task<DataLockViewModel> GetApprenticeshipDataLock(long providerId, string hashedApprenticeshipId, string userId)
-        {
-            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
-
-            var dataLockResponse = await _mediator.SendAsync(new GetApprenticeshipDataLockRequest
-            {
-                ApprenticeshipId = apprenticeshipId,
-            });
-
-            _logger.Debug($"Getting {dataLockResponse.Data.DataLockEventId} with course code {dataLockResponse.Data.IlrTrainingCourseCode}");
-            return await _apprenticeshipMapper.MapFrom(dataLockResponse.Data);
-        }
-
         public async Task<DataLockMismatchViewModel> GetApprenticeshipMismatchDataLock(long providerId, string hashedApprenticeshipId)
         {
             _logger.Info($"Getting apprenticeship datalock for provider: {providerId}", providerId: providerId);
@@ -263,28 +250,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
-            _logger.Debug($"Getting {dataLock.Data.DataLockEventId} with course code {dataLock.Data.IlrTrainingCourseCode}");
             var datalockViewModel = await _apprenticeshipMapper.MapFrom(dataLock.Data);
-
+            var dasRecordViewModel = _apprenticeshipMapper.MapToApprenticeshipViewModel(data.Apprenticeship);
             return new DataLockMismatchViewModel
                        {
-                           DasApprenticeship = _apprenticeshipMapper.MapToApprenticeshipViewModel(data.Apprenticeship), 
-                           DataLockViewModel = datalockViewModel,
-                           DataLockEventId = datalockViewModel.DataLockEventId
+                            ProviderId = providerId,
+                            HashedApprenticeshipId = hashedApprenticeshipId,
+                            DataLockEventId = datalockViewModel.DataLockEventId,
+                            DasApprenticeship = dasRecordViewModel,
+                            DataLockViewModel = datalockViewModel,
                        };
-        }
-
-        public async Task<RequestRestartViewModel> GetRequestRestartViewModel(long providerId, string hashedApprenticeshipId)
-        {
-            _logger.Info($"Getting apprenticeship restart request for provider: {providerId}", providerId);
-            var dataLock = await GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId);
-            return new RequestRestartViewModel
-                       {
-                           ProviderId = providerId,
-                           HashedApprenticeshipId = hashedApprenticeshipId,
-                           DataLockEventId = dataLock.DataLockEventId,
-                           DataMismatchModel = dataLock
-                       };       
         }
 
         public async Task<ConfirmRestartViewModel> GetConfirmRestartViewModel(long providerId, string hashedApprenticeshipId)

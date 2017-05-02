@@ -238,18 +238,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> RequestRestart(long providerId, string hashedApprenticeshipId)
         {
-            var model = await _orchestrator.GetRequestRestartViewModel(providerId, hashedApprenticeshipId);
+            var model = await _orchestrator.GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId);
             return View("RequestRestart", model);
         }
 
         [HttpPost]
         [Route("{hashedApprenticeshipId}/datalock/requestrestart")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RequestRestart(RequestRestartViewModel model)
+        public async Task<ActionResult> RequestRestart(DataLockMismatchViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                var newModel = await _orchestrator.GetRequestRestartViewModel(model.ProviderId , model.HashedApprenticeshipId);
+                var newModel = await _orchestrator.GetApprenticeshipMismatchDataLock(model.ProviderId , model.HashedApprenticeshipId);
                 return View("RequestRestart", newModel);
             }
 
