@@ -234,7 +234,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 Status = statusText,
                 EmployerName = apprenticeship.LegalEntityName,
                 PendingChanges = pendingChange,
-                RecordStatus = MapRecordStatus(apprenticeship .PendingUpdateOriginator),
+                RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator),
                 DataLockStatus = MapDataLockStatus(apprenticeship.DataLockTriageStatus),
                 CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
                 ProviderReference = apprenticeship.ProviderRef,

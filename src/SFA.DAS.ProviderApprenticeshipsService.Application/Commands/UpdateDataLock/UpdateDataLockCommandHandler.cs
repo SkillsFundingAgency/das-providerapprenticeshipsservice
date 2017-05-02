@@ -43,7 +43,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateData
             {
                 var submission = new DataLockTriageSubmission
                         {
-                        TriageStatus = TriageStatus.Restart,
+                        TriageStatus = command.TriageStatus,
                         UserId = command.UserId
                         };
 
