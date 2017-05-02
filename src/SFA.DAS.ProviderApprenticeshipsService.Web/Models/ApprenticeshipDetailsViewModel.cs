@@ -27,9 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string EmployerName { get; set; }
 
         public PendingChanges PendingChanges { get; set; }
-
-        public string RecordStatus { get; set; }
-
+        
         public string ProviderReference { get; set; }
 
         public string CohortReference { get; set; }
@@ -39,6 +37,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool HasDataLockError { get; set; }
 
         public DataLockErrorType ErrorType { get; set; }
+
+        public string RecordStatus { get; set; }
 
         public string DataLockStatus { get; set; }
     }

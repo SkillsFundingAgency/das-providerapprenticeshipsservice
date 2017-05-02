@@ -26,7 +26,7 @@
             </tr>
             </thead>
             <tbody>
-            @if (Model.DataLockViewModel.IlrTotalCost != Model.DasApprenticeship.Cost)
+            @if (Model.DataLockViewModel.IlrTotalCost != Model.DasApprenticeship.Cost.AsNullableDecimal())
             {
                 <tr>
                     <td>Total cost of training</td>
@@ -40,17 +40,19 @@
                             <span>--</span>
                         }
                     </td>
-                    <td>@Model.DasApprenticeship.Cost.FormatCost() </td>
+                    <td>@Model.DasApprenticeship.Cost.AsNullableDecimal().FormatCost() </td>
                     <td class="changed-item">@Model.DataLockViewModel.IlrTotalCost.FormatCost()</td>
                 </tr>
             }
 
-            @if (Model.DataLockViewModel.IlrActualStartDate != Model.DasApprenticeship.StartDate)
+            @if (  Model.DataLockViewModel.IlrActualStartDate != Model.DasApprenticeship.StartDate.DateTime
+                && Model.DasApprenticeship.StartDate.DateTime.HasValue
+                && Model.DataLockViewModel.IlrActualStartDate.HasValue)
             {
                 <tr>
                     <td>Planned training start date</td>
                     <td>--</td>
-                    <td>@Model.DasApprenticeship.StartDate.Value.ToGdsFormat() </td>
+                    <td>@Model.DasApprenticeship.StartDate.DateTime.Value.ToGdsFormat() </td>
                     <td class="changed-item">@Model.DataLockViewModel.IlrActualStartDate.Value.ToGdsFormat()</td>
                 </tr>
             }

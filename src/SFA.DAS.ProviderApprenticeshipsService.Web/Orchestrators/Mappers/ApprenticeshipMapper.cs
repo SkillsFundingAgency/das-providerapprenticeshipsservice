@@ -7,6 +7,7 @@ using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.Commitments.Api.Types.DataLock;
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
@@ -218,11 +219,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 pendingChange = PendingChanges.ReadyForApproval;
             if (apprenticeship.PendingUpdateOriginator == Originator.Provider)
                 pendingChange = PendingChanges.WaitingForEmployer;
-
-            var cohortReference = _hashingService.HashValue(apprenticeship.CommitmentId);
-
-            // ToDo: DCM-475 -> Set property on Apprenticeship object
-            var hasDataLockErrors = apprenticeship.ULN.StartsWith("11122244");
+            
             return new ApprenticeshipDetailsViewModel
             {
                 HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
@@ -237,20 +234,32 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 Status = statusText,
                 EmployerName = apprenticeship.LegalEntityName,
                 PendingChanges = pendingChange,
-                RecordStatus = MapRecordStatus(apprenticeship .PendingUpdateOriginator, hasDataLockErrors),
+                RecordStatus = MapRecordStatus(apprenticeship .PendingUpdateOriginator),
                 DataLockStatus = MapDataLockStatus(apprenticeship.DataLockTriageStatus),
-                CohortReference = cohortReference,
+                CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
                 ProviderReference = apprenticeship.ProviderRef,
                 EnableEdit =   pendingChange == PendingChanges.None
-                            && apprenticeship.DataLockTriageStatus != TriageStatus.Unknown
+                            && apprenticeship.DataLockTriageStatus == null
                             && new[] { PaymentStatus.Active, PaymentStatus.Paused, }.Contains(apprenticeship.PaymentStatus),
-                HasDataLockError = hasDataLockErrors,
-                ErrorType = apprenticeship.ULN == "1112224402" 
-                    ? DataLockErrorType.UpdateNeeded 
-                    : DataLockErrorType.RestartRequire
-                // ToDo: DCM-475 -> disable edit if any ILR pending
-                            
+                HasDataLockError = apprenticeship.DataLockTriageStatus != null,
+                ErrorType = MapErrorType(apprenticeship.DataLockErrorCode)
             };
+        }
+
+        public DataLockErrorType MapErrorType(DataLockErrorCode errorCode)
+        {
+            if (   errorCode.HasFlag(DataLockErrorCode.Dlock03)
+                || errorCode.HasFlag(DataLockErrorCode.Dlock04)
+                || errorCode.HasFlag(DataLockErrorCode.Dlock05)
+                || errorCode.HasFlag(DataLockErrorCode.Dlock06)
+                )
+                return DataLockErrorType.RestartRequire;
+
+            if (errorCode.HasFlag(DataLockErrorCode.Dlock07)
+                || errorCode.HasFlag(DataLockErrorCode.Dlock09))
+                return DataLockErrorType.UpdateNeeded;
+
+            return DataLockErrorType.None;
         }
 
         public async Task<DataLockViewModel> MapFrom(DataLockStatus dataLock)
@@ -287,9 +296,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             switch (dataLockTriageStatus)
             {
                 case TriageStatus.Unknown:
-                    break;
-                case TriageStatus.Change:
                     return "ILR data mismatch";
+                case TriageStatus.Change:
+                    return "Change requested";
                 case TriageStatus.Restart:
                     return "Change requested";
                 case TriageStatus.FixIlr:
@@ -298,15 +307,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             return "";
         }
 
-        private string MapRecordStatus(Originator? pendingUpdateOriginator, bool hasDataLockErrors)
+        private string MapRecordStatus(Originator? pendingUpdateOriginator)
         {
-            // ToDo: DCM-475 -> PendingUpdate will always take priority over IRL changes -> Unit test
-            //if (pendingUpdateOriginator == null)
-            //{
-            //    if (hasDataLockErrors) return "ILR data mismatch";
-            //    // ToDo: DCM-475 -> Check for "ILR data mismatch" or "ILR changes pending"
-            //    return string.Empty;
-            //}
             if (pendingUpdateOriginator == null)
             {
                 return string.Empty;

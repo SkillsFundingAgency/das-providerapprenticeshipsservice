@@ -43,12 +43,14 @@
                     </tr>
                 }
 
-                @if (Model.DataLockViewModel.IlrActualStartDate != Model.DasApprenticeship.StartDate.DateTime)
+                @if (  Model.DataLockViewModel.IlrActualStartDate != Model.DasApprenticeship.StartDate.DateTime
+                    && Model.DasApprenticeship.StartDate.DateTime.HasValue
+                    && Model.DataLockViewModel.IlrActualStartDate.HasValue)
                 {
                     <tr>
                         <td>Planned training start date</td>
                         <td>--</td>
-                        <td>@Model.DasApprenticeship.StartDate?.DateTime.ToGdsFormat() </td>
+                        <td>@Model.DasApprenticeship.StartDate.DateTime.Value.ToGdsFormat() </td>
                         <td>@Model.DataLockViewModel.IlrActualStartDate.Value.ToGdsFormat()</td>
                     </tr>
                 }
