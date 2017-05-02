@@ -70,12 +70,14 @@
             margin-top:20px;
             margin-bottom:20px;
         }
+        .add-app-btn{margin-right:10px;}
     }
   .group-title{
       margin-bottom:0;
   }
   .finishEditingBtn{
       float:none;
+      margin-right:10px;
   }
 }
 
@@ -488,6 +490,11 @@ table{
      }
 }
 
+.purple-border{
+    border:5px solid $purple;
+    margin-bottom: 20px;
+    padding: 20px;
+}
 
     
 //all mobile media query breakpoints

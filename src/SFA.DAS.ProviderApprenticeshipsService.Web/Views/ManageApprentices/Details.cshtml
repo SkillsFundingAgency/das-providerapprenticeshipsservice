@@ -13,14 +13,14 @@
         
         @if (Model.PendingChanges == PendingChanges.ReadyForApproval)
             {
-            <div class="panel panel-border-wide alert-default">
+            <div class="purple-border">
                 <p>There are changes to this apprentice's details that you need to review.</p>
                 <a href="@Url.RouteUrl("ReviewApprovedApprenticeChange")" aria-label="Review changes" class="">Review changes</a>
             </div>
         }
         else if (Model.PendingChanges == PendingChanges.WaitingForEmployer)
         {
-            <div class="panel panel-border-wide">
+            <div class="purple-border">
                 <p>
                     There are changes to this apprentice's details that are waiting for approval by the employer.
                 </p>

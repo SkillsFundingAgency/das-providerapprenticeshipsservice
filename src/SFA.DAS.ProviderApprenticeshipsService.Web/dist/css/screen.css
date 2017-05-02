@@ -2938,12 +2938,17 @@ span.helpText {
   }
 }
 
+#apprentice-details .bulk-upload-buttons .add-app-btn, #approve-cohorts .bulk-upload-buttons .add-app-btn {
+  margin-right: 10px;
+}
+
 #apprentice-details .group-title, #approve-cohorts .group-title {
   margin-bottom: 0;
 }
 
 #apprentice-details .finishEditingBtn, #approve-cohorts .finishEditingBtn {
   float: none;
+  margin-right: 10px;
 }
 
 #content .flash-alert {
@@ -3352,6 +3357,12 @@ table .changed-item {
   #review-cohorts .incomplete-apps h2.bold-xlarge {
     font-size: 80px;
   }
+}
+
+.purple-border {
+  border: 5px solid #2e358b;
+  margin-bottom: 20px;
+  padding: 20px;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
