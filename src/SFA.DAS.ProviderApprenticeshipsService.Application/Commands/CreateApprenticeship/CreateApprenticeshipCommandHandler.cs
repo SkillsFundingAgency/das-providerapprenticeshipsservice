@@ -4,6 +4,7 @@ using MediatR;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeship
 {
@@ -30,7 +31,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateAppr
             var request = new ApprenticeshipRequest
             {
                 UserId = message.UserId,
-                Apprenticeship = message.Apprenticeship
+                Apprenticeship = message.Apprenticeship,
+                LastUpdatedByInfo = new LastUpdateInfo
+                {
+                    EmailAddress = message.UserEmailAddress,
+                    Name = message.UserDisplayName
+                }
             };
 
             await _commitmentsApi.CreateProviderApprenticeship(message.ProviderId, message.Apprenticeship.CommitmentId, request);
