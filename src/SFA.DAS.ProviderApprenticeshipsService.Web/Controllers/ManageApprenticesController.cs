@@ -125,7 +125,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return await ReviewChanges(providerId, hashedApprenticeshipId);
             }
 
-            await _orchestrator.SubmitReviewApprenticeshipUpdate(providerId, hashedApprenticeshipId, CurrentUserId, viewModel.ApproveChanges.Value);
+            await _orchestrator.SubmitReviewApprenticeshipUpdate(providerId, hashedApprenticeshipId, CurrentUserId, viewModel.ApproveChanges.Value, GetSingedInUser());
 
             SetInfoMessage(viewModel.ApproveChanges.Value ? "Record updated" : "Changes rejected",
                 FlashMessageSeverityLevel.Okay);
@@ -155,7 +155,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (viewModel.ConfirmUndo.HasValue && viewModel.ConfirmUndo.Value)
             {
                 SetInfoMessage("Changes undone", FlashMessageSeverityLevel.Okay);
-                await _orchestrator.SubmitUndoApprenticeshipUpdate(providerId, hashedApprenticeshipId, CurrentUserId);
+                await _orchestrator.SubmitUndoApprenticeshipUpdate(providerId, hashedApprenticeshipId, CurrentUserId, GetSingedInUser());
             }
 
             return RedirectToAction("Details", new { providerId, hashedApprenticeshipId });

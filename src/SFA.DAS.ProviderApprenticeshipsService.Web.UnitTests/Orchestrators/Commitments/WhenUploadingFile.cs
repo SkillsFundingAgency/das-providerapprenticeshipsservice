@@ -12,7 +12,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
-using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.Commitments.Api.Types.Validation;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
@@ -104,7 +103,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 1234L };
             var stopwatch = Stopwatch.StartNew();
-            var r1 = await _sut.UploadFile("user123", model);
+            var r1 = await _sut.UploadFile("user123", model, new SignInUserModel());
             stopwatch.Stop(); Console.WriteLine($"Time TOTAL: {stopwatch.Elapsed.Seconds}");
             r1.RowLevelErrors.Count().Should().Be(80 * 1000);
             stopwatch.Elapsed.Seconds.Should().BeLessThan(7);   
@@ -134,7 +133,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 }));
 
             var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111 };
-            var file = await _sut.UploadFile("user123", model);
+            var signinUser = new SignInUserModel { DisplayName = "Bob", Email = "test@email.com" };
+
+            var file = await _sut.UploadFile("user123", model, signinUser);
 
             _mockMediator.Verify(x => x.SendAsync(It.IsAny<BulkUploadApprenticeshipsCommand>()), Times.Once);
 
@@ -152,6 +153,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             commandArgument.Apprenticeships.ToList()[0].Cost.Should().Be(1500);
             commandArgument.Apprenticeships.ToList()[0].ProviderRef.Should().Be("Provider ref");
             commandArgument.Apprenticeships.ToList()[0].ULN.Should().Be("1113335559");
+            commandArgument.UserEmailAddress.Should().Be(signinUser.Email);
+            commandArgument.UserDisplayName.Should().Be(signinUser.DisplayName);
+            commandArgument.UserId.Should().Be("user123");
         }
 
         [Test]
@@ -198,7 +202,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     }));
 
             var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111 };
-            var file = await _sut.UploadFile("user123", model);
+            var file = await _sut.UploadFile("user123", model, new SignInUserModel());
 
             //Assert
             Assert.IsTrue(file.HasRowLevelErrors);

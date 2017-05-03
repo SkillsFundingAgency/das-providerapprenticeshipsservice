@@ -42,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var result = await _bulkUploadOrchestrator.UploadFile(CurrentUserId, model);
+            var result = await _bulkUploadOrchestrator.UploadFile(CurrentUserId, model, GetSingedInUser());
 
             if (result.HasFileLevelErrors)
             {

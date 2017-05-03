@@ -4,11 +4,12 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.ManageApprentices
 {
     [TestFixture]
     public class WhenSubmittingReviewApprenticeshipUpdate
@@ -40,9 +41,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var providerId = 1;
             var apprenticeshipId = "appid";
             var userId = "tester";
+            var loginUser = new SignInUserModel { DisplayName = "Bob", Email = "test@email.com" };
 
             //Act
-            await _orchestrator.SubmitReviewApprenticeshipUpdate(providerId, apprenticeshipId, userId, isApproved);
+            await _orchestrator.SubmitReviewApprenticeshipUpdate(providerId, apprenticeshipId, userId, isApproved, loginUser);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(
@@ -50,6 +52,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     r.IsApproved == isApproved
                     && r.ProviderId == providerId
                     && r.UserId == userId
+                    && r.UserDisplayName == loginUser.DisplayName
+                    && r.UserEmailAddress == loginUser.Email
                 )), Times.Once());
         }
     }
