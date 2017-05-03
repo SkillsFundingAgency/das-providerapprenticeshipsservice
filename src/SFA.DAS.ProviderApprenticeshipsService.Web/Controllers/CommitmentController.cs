@@ -203,7 +203,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                     new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
             }
 
-            await _commitmentOrchestrator.DeleteCommitment(CurrentUserId, viewModel.ProviderId, viewModel.HashedCommitmentId);
+            await _commitmentOrchestrator.DeleteCommitment(CurrentUserId, viewModel.ProviderId, viewModel.HashedCommitmentId, GetSignedInUser());
 
             SetInfoMessage("Cohort deleted", FlashMessageSeverityLevel.Okay);
 
@@ -279,7 +279,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return RedirectToRoute("EditApprenticeship", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId, hashedApprenticeshipId = viewModel.HashedApprenticeshipId });
             }
 
-            var deletedApprenticeshipName = await _commitmentOrchestrator.DeleteApprenticeship(CurrentUserId, viewModel);
+            var deletedApprenticeshipName = await _commitmentOrchestrator.DeleteApprenticeship(CurrentUserId, viewModel, GetSignedInUser());
             SetInfoMessage($"Apprentice record for {deletedApprenticeshipName} deleted", FlashMessageSeverityLevel.Okay);
 
             return RedirectToRoute("CohortDetails", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
@@ -309,7 +309,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                     return await RedisplayApprenticeshipView(apprenticeship);
                 }
 
-                await _commitmentOrchestrator.CreateApprenticeship(CurrentUserId, apprenticeship);
+                await _commitmentOrchestrator.CreateApprenticeship(CurrentUserId, apprenticeship, GetSignedInUser());
             }
             catch (InvalidRequestException ex)
             {
@@ -348,7 +348,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (viewModel.SaveStatus == SaveStatus.Approve)
             {
-                await _commitmentOrchestrator.SubmitCommitment(CurrentUserId, viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty, GetSingedInUser());
+                await _commitmentOrchestrator.SubmitCommitment(CurrentUserId, viewModel.ProviderId, viewModel.HashedCommitmentId, viewModel.SaveStatus, string.Empty, GetSignedInUser());
                 return RedirectToAction("Approved", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
             }
 
@@ -409,7 +409,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedCommitmentId}/Submit")]
         public async Task<ActionResult> Submit(SubmitCommitmentViewModel model)
         {
-            await _commitmentOrchestrator.SubmitCommitment(CurrentUserId, model.ProviderId, model.HashedCommitmentId, model.SaveStatus, model.Message, GetSingedInUser());
+            await _commitmentOrchestrator.SubmitCommitment(CurrentUserId, model.ProviderId, model.HashedCommitmentId, model.SaveStatus, model.Message, GetSignedInUser());
 
             return RedirectToAction("Acknowledgement", new { providerId = model.ProviderId, hashedCommitmentId = model.HashedCommitmentId, saveStatus = model.SaveStatus});
         }
@@ -482,15 +482,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
 
             return View(model.Apprenticeship);
-        }
-
-        private SignInUserModel GetSingedInUser()
-        {
-            return new SignInUserModel
-            {
-                DisplayName = HttpContext.GetClaimValue("http://schemas.portal.com/displayname"),
-                Email = HttpContext.GetClaimValue("http://schemas.portal.com/mail")
-            };
         }
     }
 }
