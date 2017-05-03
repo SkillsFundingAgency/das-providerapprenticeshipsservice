@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
         }
 
-        protected SignInUserModel GetSingedInUser()
+        protected SignInUserModel GetSignedInUser()
         {
             return new SignInUserModel
             {
