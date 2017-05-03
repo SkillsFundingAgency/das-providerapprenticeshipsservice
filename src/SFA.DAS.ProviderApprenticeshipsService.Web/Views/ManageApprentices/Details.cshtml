@@ -27,8 +27,19 @@
                 <a href="@Url.RouteUrl("UndoApprovedApprenticeChange")" aria-label="View changes" class="">View changes</a>                
             </div>
         }
-        
-        @if (Model.HasDataLockError)
+
+        @if (Model.HasRequestedRestart)
+        {
+            <div class="panel panel-border-wide">
+                <h3>
+                    Changes requested
+                </h3>
+                <p>
+                    You've sent an automated message to the employer asking them to stop 
+                    this apprentice and create a new record for them.
+                </p>
+            </div>
+        }else if (Model.HasDataLockError)
         {
             <div class="panel panel-border-wide">
                 <h3>

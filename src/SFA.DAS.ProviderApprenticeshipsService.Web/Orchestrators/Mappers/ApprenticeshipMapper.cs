@@ -242,7 +242,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                             && apprenticeship.DataLockTriageStatus == null
                             && new[] { PaymentStatus.Active, PaymentStatus.Paused, }.Contains(apprenticeship.PaymentStatus),
                 HasDataLockError = apprenticeship.DataLockTriageStatus != null,
-                ErrorType = MapErrorType(apprenticeship.DataLockErrorCode)
+                ErrorType = MapErrorType(apprenticeship.DataLockErrorCode),
+                HasRequestedRestart = apprenticeship.DataLockTriageStatus == TriageStatus.Restart
             };
         }
 

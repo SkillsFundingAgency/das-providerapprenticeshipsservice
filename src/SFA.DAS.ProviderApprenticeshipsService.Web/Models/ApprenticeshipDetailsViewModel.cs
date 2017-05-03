@@ -41,6 +41,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string RecordStatus { get; set; }
 
         public string DataLockStatus { get; set; }
+
+        public bool HasRequestedRestart { get; set; }
     }
 
     public enum DataLockErrorType
