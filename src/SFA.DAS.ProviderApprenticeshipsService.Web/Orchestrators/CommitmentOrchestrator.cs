@@ -161,7 +161,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task DeleteCommitment(string userId, long providerId, string hashedCommitmentId)
+        public async Task DeleteCommitment(string userId, long providerId, string hashedCommitmentId, SignInUserModel signinUser)
         {
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             _logger.Info($"Deleting commitment {hashedCommitmentId}", providerId, commitmentId);
@@ -170,11 +170,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 UserId = userId,
                 ProviderId = providerId,
-                CommitmentId = commitmentId
+                CommitmentId = commitmentId,
+                UserDisplayName = signinUser.DisplayName,
+                UserEmailAddress = signinUser.Email
             });
         }
 
-        public async Task<string> DeleteApprenticeship(string userId, DeleteConfirmationViewModel viewModel)
+        public async Task<string> DeleteApprenticeship(string userId, DeleteConfirmationViewModel viewModel, SignInUserModel signinUser)
         {
             var apprenticeshipId = _hashingService.DecodeValue(viewModel.HashedApprenticeshipId);
             _logger.Info($"Deleting apprenticeship {apprenticeshipId}", providerId: viewModel.ProviderId, apprenticeshipId: apprenticeshipId);
@@ -189,8 +191,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 UserId = userId,
                 ProviderId = viewModel.ProviderId,
-                ApprenticeshipId = apprenticeshipId
-                
+                ApprenticeshipId = apprenticeshipId,
+                UserDisplayName = signinUser.DisplayName,
+                UserEmailAddress = signinUser.Email
             });
 
             return apprenticeship.Apprenticeship.ApprenticeshipName;
