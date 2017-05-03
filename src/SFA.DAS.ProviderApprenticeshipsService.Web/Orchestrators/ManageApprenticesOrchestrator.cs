@@ -150,13 +150,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return viewModel;
         }
 
-        public async Task CreateApprenticeshipUpdate(CreateApprenticeshipUpdateViewModel updateApprenticeship, long providerId, string userId)
+        public async Task CreateApprenticeshipUpdate(CreateApprenticeshipUpdateViewModel updateApprenticeship, long providerId, string userId, SignInUserModel signedInUser)
         {
             await _mediator.SendAsync(new CreateApprenticeshipUpdateCommand
             {
                 ProviderId = providerId,
                 ApprenticeshipUpdate = _apprenticeshipMapper.MapFrom(updateApprenticeship),
-                UserId = userId
+                UserId = userId,
+                UserDisplayName = signedInUser.DisplayName,
+                UserEmailAddress = signedInUser.Email
             });
         }
 

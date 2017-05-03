@@ -483,15 +483,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             return View(model.Apprenticeship);
         }
-
-        private SignInUserModel GetSingedInUser()
-        {
-            return new SignInUserModel
-            {
-                DisplayName = HttpContext.GetClaimValue("http://schemas.portal.com/displayname"),
-                Email = HttpContext.GetClaimValue("http://schemas.portal.com/mail")
-            };
-        }
     }
 }
 

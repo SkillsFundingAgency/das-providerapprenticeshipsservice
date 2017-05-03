@@ -24,7 +24,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             {
                 UserId = "user123",
                 ProviderId = 123L,
-                Apprenticeship = new Apprenticeship { CommitmentId = 123 }
+                Apprenticeship = new Apprenticeship { CommitmentId = 123 },
+                UserEmailAddress = "test@email.com",
+                UserDisplayName = "Bob"
             };
 
             _handler = new CreateApprenticeshipCommandHandler(_mockCommitmentsApi.Object);

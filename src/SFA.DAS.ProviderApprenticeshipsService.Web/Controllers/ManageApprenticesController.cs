@@ -99,7 +99,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return RedirectToAction("Details", new { providerid, hashedApprenticeshipId });
             }
 
-            await _orchestrator.CreateApprenticeshipUpdate(updateApprenticeship, providerid, CurrentUserId);
+            await _orchestrator.CreateApprenticeshipUpdate(updateApprenticeship, providerid, CurrentUserId, GetSingedInUser());
 
             SetInfoMessage($"You suggested changes to the record for {originalApprenticeship.FirstName} {originalApprenticeship.LastName}. The employer needs to approve these changes.", FlashMessageSeverityLevel.Okay);
 
