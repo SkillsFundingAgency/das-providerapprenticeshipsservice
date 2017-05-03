@@ -259,6 +259,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                             DataLockEventId = datalockViewModel.DataLockEventId,
                             DasApprenticeship = dasRecordViewModel,
                             DataLockViewModel = datalockViewModel,
+                            EmployerName = data.Apprenticeship.LegalEntityName
                        };
         }
 
@@ -291,12 +292,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         public async Task UpdateDataLock(long dataLockEventId, string hashedApprenticeshipId, SubmitStatusViewModel submitStatusViewModel, string userId)
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+            var triage = _apprenticeshipMapper.MapTriangeStatus(submitStatusViewModel);
+            _logger.Info($"Updating data lock to triage {triage}");
 
             await _mediator.SendAsync(new UpdateDataLockCommand
             {
                 ApprenticeshipId = apprenticeshipId,
                 DataLockEventId = dataLockEventId,
-                TriageStatus = _apprenticeshipMapper.MapTriangeStatus(submitStatusViewModel),
+                TriageStatus = triage,
                 UserId = userId
             });
         }

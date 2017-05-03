@@ -24,7 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-                @if (Model.DataLockViewModel.IlrTotalCost.ToString() != Model.DasApprenticeship.Cost)
+                @if (Model.DataLockViewModel.IlrTotalCost != Model.DasApprenticeship.Cost.AsNullableDecimal())
                 {
                     <tr>
                         <td>Total cost of training</td>

@@ -19,5 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
         public string HashedApprenticeshipId { get; set; }
 
         public long DataLockEventId { get; set; }
+
+        public string EmployerName { get; set; }
     }
 }
