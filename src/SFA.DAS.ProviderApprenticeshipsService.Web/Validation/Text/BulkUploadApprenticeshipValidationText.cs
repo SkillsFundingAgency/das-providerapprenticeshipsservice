@@ -42,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
             new ValidationMessage("You must not enter an <strong>end date</strong> that's earlier than today's date", "LearnPlanEndDate_03");
 
         public ValidationMessage TrainingPrice01 =>
-            new ValidationMessage("You must enter the <strong>total cost of training</strong>", "TrainingPrice_01");
+            new ValidationMessage("You must enter the <strong>total cost of training</strong> in whole pounds - don't include any symbols, characters or letters", "TrainingPrice_01");
         public ValidationMessage TrainingPrice02 =>
             new ValidationMessage("The <strong>total cost</strong> must be £100,000 or less", "TrainingPrice_02");
 
