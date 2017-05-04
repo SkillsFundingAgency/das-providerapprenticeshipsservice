@@ -24,7 +24,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
     [TestFixture]
-    public class WhenGetCohorts
+    public class WhenGetCohorts : ApprenticeshipValidationTestBase
     {
         Mock<IMediator> _mockMediator;
         Mock<ICommitmentStatusCalculator> _mockCalculator;
@@ -48,7 +48,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(),
                 Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
                 Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
-                Mock.Of<IApprenticeshipMapper>());
+                Mock.Of<IApprenticeshipMapper>(), 
+                Validator);
 
             await sut.GetCohorts(1234567);
 
@@ -64,7 +65,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(),
                 Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
                 Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
-                Mock.Of<IApprenticeshipMapper>());
+                Mock.Of<IApprenticeshipMapper>(), 
+                Validator);
 
             var result = await sut.GetCohorts(1234567);
 

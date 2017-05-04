@@ -14,7 +14,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
     [TestFixture]
-    public sealed class WhenGettingDeleteApprenticeshipConfirmation
+    public sealed class WhenGettingDeleteApprenticeshipConfirmation : ApprenticeshipValidationTestBase
     {
         private CommitmentOrchestrator _orchestrator;
         private Mock<IMediator> _mockMediator;
@@ -35,7 +35,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Mock.Of<IProviderCommitmentsLogger>(),
                 Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
                 Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
-                Mock.Of<IApprenticeshipMapper>());
+                Mock.Of<IApprenticeshipMapper>(), 
+                Validator);
         }
 
         [Test]
