@@ -243,7 +243,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                     return await RedisplayApprenticeshipView(apprenticeship);
                 }
 
-                await _commitmentOrchestrator.UpdateApprenticeship(CurrentUserId, apprenticeship);
+                await _commitmentOrchestrator.UpdateApprenticeship(CurrentUserId, apprenticeship, GetSignedInUser());
             }
             catch (InvalidRequestException ex)
             {
