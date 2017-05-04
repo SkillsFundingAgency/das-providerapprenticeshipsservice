@@ -100,7 +100,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return RedirectToAction("Details", new { providerid, hashedApprenticeshipId });
             }
 
-            await _orchestrator.CreateApprenticeshipUpdate(updateApprenticeship, providerid, CurrentUserId);
+            await _orchestrator.CreateApprenticeshipUpdate(updateApprenticeship, providerid, CurrentUserId, GetSignedInUser());
 
             SetInfoMessage($"You suggested changes to the record for {originalApprenticeship.FirstName} {originalApprenticeship.LastName}. The employer needs to approve these changes.", FlashMessageSeverityLevel.Okay);
 
@@ -126,7 +126,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return await ReviewChanges(providerId, hashedApprenticeshipId);
             }
 
-            await _orchestrator.SubmitReviewApprenticeshipUpdate(providerId, hashedApprenticeshipId, CurrentUserId, viewModel.ApproveChanges.Value);
+            await _orchestrator.SubmitReviewApprenticeshipUpdate(providerId, hashedApprenticeshipId, CurrentUserId, viewModel.ApproveChanges.Value, GetSignedInUser());
 
             SetInfoMessage(viewModel.ApproveChanges.Value ? "Record updated" : "Changes rejected",
                 FlashMessageSeverityLevel.Okay);
@@ -156,7 +156,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (viewModel.ConfirmUndo.HasValue && viewModel.ConfirmUndo.Value)
             {
                 SetInfoMessage("Changes undone", FlashMessageSeverityLevel.Okay);
-                await _orchestrator.SubmitUndoApprenticeshipUpdate(providerId, hashedApprenticeshipId, CurrentUserId);
+                await _orchestrator.SubmitUndoApprenticeshipUpdate(providerId, hashedApprenticeshipId, CurrentUserId, GetSignedInUser());
             }
 
             return RedirectToAction("Details", new { providerId, hashedApprenticeshipId });

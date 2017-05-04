@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -57,7 +58,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _logger = logger;
         }
 
-        public async Task<BulkUploadResultViewModel> UploadFile(string userId, UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel)
+        public async Task<BulkUploadResultViewModel> UploadFile(string userId, UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel, SignInUserModel signInUser)
         {
             var result = new BulkUploadResultViewModel();
 
@@ -78,7 +79,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _logger.Info("Uploading file of apprentices.", providerId, commitmentId);
 
             var rowValidationResult = await _bulkUploader.ValidateFileRows(fileValidationResult.Data, providerId);
+
+            var sw = Stopwatch.StartNew();
             var overlapErrors = await GetOverlapErrors(fileValidationResult.Data.ToList());
+            _logger.Trace($"Validating overlaps took {sw.ElapsedMilliseconds}");
 
             var rowErrors = rowValidationResult.Errors.ToList();
             rowErrors.AddRange(overlapErrors);
@@ -97,7 +101,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     UserId = userId,
                     ProviderId = providerId,
                     CommitmentId = commitmentId,
-                    Apprenticeships = await _mapper.MapFrom(commitmentId, rowValidationResult.Data)
+                    Apprenticeships = await _mapper.MapFrom(commitmentId, rowValidationResult.Data),
+                    UserEmailAddress = signInUser.Email,
+                    UserDisplayName = signInUser.DisplayName
                 });
             }
             catch (Exception)

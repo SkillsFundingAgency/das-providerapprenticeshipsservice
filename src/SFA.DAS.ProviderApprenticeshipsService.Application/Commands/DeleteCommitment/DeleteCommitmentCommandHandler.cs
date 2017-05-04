@@ -6,6 +6,7 @@ using MediatR;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteCommitment
 {
@@ -30,7 +31,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteComm
         {
             _validator.ValidateAndThrow(message);
 
-            return _commitmentsApi.DeleteProviderCommitment(message.ProviderId, message.CommitmentId, new DeleteRequest { UserId = message.UserId });
+            return _commitmentsApi.DeleteProviderCommitment(message.ProviderId, message.CommitmentId,
+                new DeleteRequest { UserId = message.UserId, LastUpdatedByInfo = new LastUpdateInfo { EmailAddress = message.UserEmailAddress, Name = message.UserDisplayName } });
         }
     }
 }

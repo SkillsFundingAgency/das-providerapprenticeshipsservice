@@ -99,6 +99,8 @@
     <Compile Include="Commands\BulkUploadApprenticeships\WhenValidatingCommand.cs" />
     <Compile Include="Commands\CreateApprenticeshipUpdate\WhenCreatingApprenticeshipUpdate.cs" />
     <Compile Include="Commands\CreateApprenticeshipUpdate\WhenValidatingCommand.cs" />
+    <Compile Include="Commands\CreateApprenticeship\WhenCreatingAnApprentice.cs" />
+    <Compile Include="Commands\CreateApprenticeship\WhenValidatingCommand.cs" />
     <Compile Include="Commands\DeleteApprenticeship\WhenDeletingApprentice.cs" />
     <Compile Include="Commands\DeleteCommitment\WhenDeletingCohort.cs" />
     <Compile Include="Commands\DeleteApprenticeship\WhenValidatingCommand.cs" />

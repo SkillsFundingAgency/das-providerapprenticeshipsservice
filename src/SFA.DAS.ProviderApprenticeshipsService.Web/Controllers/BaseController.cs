@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
@@ -38,6 +39,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             {
                 CurrentUserId = filterContext.HttpContext.GetClaimValue(ClaimTypes.Upn);
             }
+        }
+
+        protected SignInUserModel GetSignedInUser()
+        {
+            return new SignInUserModel
+            {
+                DisplayName = HttpContext.GetClaimValue("http://schemas.portal.com/displayname"),
+                Email = HttpContext.GetClaimValue("http://schemas.portal.com/mail")
+            };
         }
     }
 }

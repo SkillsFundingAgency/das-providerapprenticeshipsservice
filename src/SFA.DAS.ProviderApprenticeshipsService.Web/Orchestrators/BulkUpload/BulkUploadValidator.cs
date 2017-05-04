@@ -24,9 +24,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
         // TODO: LWA - Can these be injected in?
         private readonly BulkUploadApprenticeshipValidationText _validationText;
-        private readonly ApprenticeshipBulkUploadValidator _viewModelValidator;
-        private readonly CsvRecordValidator _csvRecordValidator;
-
+        private readonly ApprenticeshipUploadModelValidator _viewModelValidator;
+        
         public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, ILog logger)
         {
             if (logger == null)
@@ -35,9 +34,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 throw new ArgumentNullException(nameof(config));
 
             _validationText = new BulkUploadApprenticeshipValidationText();
-            _viewModelValidator = new ApprenticeshipBulkUploadValidator(_validationText, new CurrentDateTime());
-            _csvRecordValidator = new CsvRecordValidator(_validationText);
-
+            _viewModelValidator = new ApprenticeshipUploadModelValidator(_validationText, new CurrentDateTime());
+            
             _logger = logger;
             _config = config;
         }
@@ -99,12 +97,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                         int i = (int)index + 1;
 
                         // Validate view model for approval
-                        var validationResult = _viewModelValidator.Validate(viewModel);
+                        var validationResult = _viewModelValidator.Validate(record);
                         validationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i, record)));
-
-                        // Validate csv record
-                        var csvValidationResult = _csvRecordValidator.Validate(record.CsvRecord);
-                        csvValidationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i, record)));
 
                         // TODO: LWA - Should we move this into the validator?
                         if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode) && trainingProgrammes.All(m => m.Id != viewModel.TrainingCode))

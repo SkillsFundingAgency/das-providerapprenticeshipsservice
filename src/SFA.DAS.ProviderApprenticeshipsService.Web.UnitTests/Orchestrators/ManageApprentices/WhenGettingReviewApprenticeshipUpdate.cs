@@ -7,7 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoApprenticeshipUpdate;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetPendingApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -16,21 +16,22 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.ManageApprentices
 {
     [TestFixture]
-    public class WhenGettingUndoApprenticeshipUpdate
+    public class WhenGettingReviewApprenticeshipUpdate
     {
         private ManageApprenticesOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<IApprenticeshipMapper> _apprenticeshipMapper;
+
         private GetPendingApprenticeshipUpdateQueryResponse _pendingApprenticeshipUpdate;
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<UndoApprenticeshipUpdateCommand>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<ReviewApprenticeshipUpdateCommand>()))
                 .ReturnsAsync(() => new Unit());
 
             _pendingApprenticeshipUpdate = new GetPendingApprenticeshipUpdateQueryResponse
@@ -38,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 ApprenticeshipUpdate = new ApprenticeshipUpdate
                 {
                     ApprenticeshipId = 1,
-                    Originator = Originator.Provider,
+                    Originator = Originator.Employer,
                     LastName = "Updated"
                 }
             };
@@ -54,9 +55,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _apprenticeshipMapper = new Mock<IApprenticeshipMapper>();
             _apprenticeshipMapper.Setup(x =>
-                        x.MapApprenticeshipUpdateViewModel<UndoApprenticeshipUpdateViewModel>(
+                        x.MapApprenticeshipUpdateViewModel<ReviewApprenticeshipUpdateViewModel>(
                             It.IsAny<Apprenticeship>(), It.IsAny<ApprenticeshipUpdate>()))
-                .Returns(new UndoApprenticeshipUpdateViewModel());
+                .Returns(new ReviewApprenticeshipUpdateViewModel());
 
             _orchestrator = new ManageApprenticesOrchestrator(
                 _mediator.Object,
@@ -68,13 +69,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         }
 
         [Test]
-        public void ShouldAssertProviderCannotUndoEmployerUpdate()
+        public void ShouldAssertProviderCannotReviewOwnUpdate()
         {
             //Arrange
-            _pendingApprenticeshipUpdate.ApprenticeshipUpdate.Originator = Originator.Employer;
+            _pendingApprenticeshipUpdate.ApprenticeshipUpdate.Originator = Originator.Provider;
 
             //Act
-            Func<Task> act = async () => await _orchestrator.GetUndoApprenticeshipUpdateModel(0, "");
+            Func<Task> act = async () => await _orchestrator.GetReviewApprenticeshipUpdateModel(0, "");
             act.ShouldThrow<ValidationException>();
         }
 
@@ -82,7 +83,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public async Task ShouldCallMediatorToGetTheOriginalApprenticeship()
         {
             //Act
-            await _orchestrator.GetUndoApprenticeshipUpdateModel(0, "");
+            await _orchestrator.GetReviewApprenticeshipUpdateModel(0, "");
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
@@ -92,11 +93,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public async Task ShouldCallMapperToGenerateTheViewModel()
         {
             //Act
-            await _orchestrator.GetUndoApprenticeshipUpdateModel(0, "");
+            await _orchestrator.GetReviewApprenticeshipUpdateModel(0, "");
 
             //Assert
             _apprenticeshipMapper.Verify(x =>
-                x.MapApprenticeshipUpdateViewModel<UndoApprenticeshipUpdateViewModel>(
+                x.MapApprenticeshipUpdateViewModel<ReviewApprenticeshipUpdateViewModel>(
                     It.IsAny<Apprenticeship>(), It.IsAny<ApprenticeshipUpdate>()), Times.Once);
         }
     }

@@ -155,13 +155,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return viewModel;
         }
 
-        public async Task CreateApprenticeshipUpdate(CreateApprenticeshipUpdateViewModel updateApprenticeship, long providerId, string userId)
+        public async Task CreateApprenticeshipUpdate(CreateApprenticeshipUpdateViewModel updateApprenticeship, long providerId, string userId, SignInUserModel signedInUser)
         {
             await _mediator.SendAsync(new CreateApprenticeshipUpdateCommand
             {
                 ProviderId = providerId,
                 ApprenticeshipUpdate = _apprenticeshipMapper.MapFrom(updateApprenticeship),
-                UserId = userId
+                UserId = userId,
+                UserDisplayName = signedInUser.DisplayName,
+                UserEmailAddress = signedInUser.Email
             });
         }
 
@@ -187,7 +189,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return viewModel;
         }
 
-        public async Task SubmitReviewApprenticeshipUpdate(long providerId, string hashedApprenticeshipId, string userId, bool isApproved)
+        public async Task SubmitReviewApprenticeshipUpdate(long providerId, string hashedApprenticeshipId, string userId, bool isApproved, SignInUserModel signedInUser)
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
 
@@ -196,7 +198,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId,
                 UserId = userId,
-                IsApproved = isApproved
+                IsApproved = isApproved,
+                UserDisplayName = signedInUser.DisplayName,
+                UserEmailAddress = signedInUser.Email
             });
         }
 
@@ -222,7 +226,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return viewModel;
         }
 
-        public async Task SubmitUndoApprenticeshipUpdate(long providerId, string hashedApprenticeshipId, string userId)
+        public async Task SubmitUndoApprenticeshipUpdate(long providerId, string hashedApprenticeshipId, string userId, SignInUserModel signedInUser)
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
 
@@ -230,7 +234,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId,
-                UserId = userId
+                UserId = userId,
+                UserDisplayName = signedInUser.DisplayName,
+                UserEmailAddress = signedInUser.Email
             });
         }
 

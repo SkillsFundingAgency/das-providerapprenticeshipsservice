@@ -11,7 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void ShouldFailIfNullObjectReference()
         {
-            ValidModel.DateOfBirth = null;
+            ValidModel.ApprenticeshipViewModel.DateOfBirth = null;
 
             var result = Validator.Validate(ValidModel);
 
@@ -21,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void ShouldFailIfHasNoValuesSet()
         {
-            ValidModel.DateOfBirth = new DateTimeViewModel(null, null, null); ;
+            ValidModel.ApprenticeshipViewModel.DateOfBirth = new DateTimeViewModel(null, null, null); ;
 
             var result = Validator.Validate(ValidModel);
 
@@ -38,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         public void ShouldFailValidationOnDateOfBirth(int? day, int? month, int? year)
         {
             var expected = "You must enter the apprentice's <strong>date of birth</strong> using the format yyyy-mm-dd, for example 2001-04-23";
-            ValidModel.DateOfBirth = new DateTimeViewModel(day, month, year);
+            ValidModel.ApprenticeshipViewModel.DateOfBirth = new DateTimeViewModel(day, month, year);
 
             var result = Validator.Validate(ValidModel);
 
@@ -50,7 +50,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase(1, 1, 1900)]
         public void ShouldNotFailValidationOnDateOfBirth(int? day, int? month, int? year)
         {
-            ValidModel.DateOfBirth = new DateTimeViewModel(day, month, year);
+            ValidModel.ApprenticeshipViewModel.DateOfBirth = new DateTimeViewModel(day, month, year);
 
             var result = Validator.Validate(ValidModel);
 
@@ -60,9 +60,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void ShouldFailIfNotAtLeast15AtStartOfTraining()
         {
-            ValidModel.DateOfBirth = new DateTimeViewModel(new DateTime(2004, 06, 03));
-            ValidModel.StartDate = new DateTimeViewModel(null, 6, 2019);
-            ValidModel.EndDate = new DateTimeViewModel(null, 6, 2020);
+            ValidModel.ApprenticeshipViewModel.DateOfBirth = new DateTimeViewModel(new DateTime(2004, 06, 03));
+            ValidModel.ApprenticeshipViewModel.StartDate = new DateTimeViewModel(null, 6, 2019);
+            ValidModel.ApprenticeshipViewModel.EndDate = new DateTimeViewModel(null, 6, 2020);
 
             var result = Validator.Validate(ValidModel);
 

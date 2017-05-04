@@ -5,6 +5,7 @@ using MediatR;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship
 {
@@ -28,7 +29,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteAppr
         {
             _validator.ValidateAndThrow(message);
 
-            return _commitmentsApi.DeleteProviderApprenticeship(message.ProviderId, message.ApprenticeshipId, new DeleteRequest { UserId = message.UserId });
+            return _commitmentsApi.DeleteProviderApprenticeship(message.ProviderId, message.ApprenticeshipId,
+                new DeleteRequest { UserId = message.UserId, LastUpdatedByInfo = new LastUpdateInfo { EmailAddress = message.UserEmailAddress, Name = message.UserDisplayName } });
         }
     }
 }

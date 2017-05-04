@@ -10,7 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase(null)]
         public void ULNMustNotBeEmpty(string uln)
         {
-            ValidModel.ULN = uln;
+            ValidModel.ApprenticeshipViewModel.ULN = uln;
 
             var result = Validator.Validate(ValidModel);
 
@@ -23,7 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase("9999999999")]
         public void ULNThatIsNotNumericOr10DigitsInLengthIsInvalid(string uln)
         {
-            ValidModel.ULN = uln;
+            ValidModel.ApprenticeshipViewModel.ULN = uln;
 
             var result = Validator.Validate(ValidModel);
 
@@ -33,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void ULN9999999999IsNotValid()
         {
-            ValidModel.ULN = "9999999999";
+            ValidModel.ApprenticeshipViewModel.ULN = "9999999999";
 
             var result = Validator.Validate(ValidModel);
 
@@ -43,7 +43,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void ULNThatStartsWithAZeroIsInvalid()
         {
-            ValidModel.ULN = "0123456789";
+            ValidModel.ApprenticeshipViewModel.ULN = "0123456789";
 
             var result = Validator.Validate(ValidModel);
 
@@ -53,7 +53,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void ULNWithValidValueIsValid()
         {
-            ValidModel.ULN = "1234567898";
+            ValidModel.ApprenticeshipViewModel.ULN = "1234567898";
 
             var result = Validator.Validate(ValidModel);
 
