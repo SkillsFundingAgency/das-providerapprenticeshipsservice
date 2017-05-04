@@ -27,7 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             _dataLockApi = new Mock<IDataLockApi>();
             _logger = new Mock<ILog>();
-            _sut = new GetApprenticeshipDataLockHandler(_dataLockApi.Object, _logger.Object);
+            _sut = new GetApprenticeshipDataLockHandler(_dataLockApi.Object);
         }
 
         [Test]
@@ -57,16 +57,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         }
 
         [Test]
-        public async Task ShouldBeNullIfApiThrowsAnError()
+        public void ShouldThrowExceptionIfApiThrowsAnError()
         {
             _dataLockApi.Setup(m => m.GetDataLocks(It.IsAny<long>())).Throws<Exception>();
             var request = new GetApprenticeshipDataLockRequest { ApprenticeshipId = 1 };
-            var response = await _sut.Handle(request);
 
-            response.Data.Should().BeNull();
-            _logger.Verify(m => m.Warn(
-                It.IsAny<Exception>(), 
-                It.Is<string>(t => t.StartsWith("Can't get apprenticeship data lock for apprenticeship"))), Times.Once);
+            Func<Task<GetApprenticeshipDataLockResponse>> act = async () =>  await _sut.Handle(request);
+
+            act.ShouldThrow<Exception>();
         }
     }
 }

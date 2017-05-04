@@ -12,6 +12,7 @@ using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments.Mappers
 {
@@ -57,7 +58,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                              TrainingType = TrainingType.Framework,
                              ULN = "1112223301"
                          };
-            _mapper = new ApprenticeshipMapper(_hashingService.Object, Mock.Of<IMediator>());
+            _mapper = new ApprenticeshipMapper(_hashingService.Object, Mock.Of<IMediator>(), new CurrentDateTime());
         }
 
         [Test]
@@ -243,7 +244,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public void ShouldMapErrorCodeToRestart(int dataLockErrorCode)
         {
             var result = _mapper.MapErrorType((DataLockErrorCode)dataLockErrorCode);
-            result.Should().Be(DataLockErrorType.RestartRequire);
+            result.Should().Be(DataLockErrorType.RestartRequired);
         }
 
         [TestCase(64, Description = "DLock_07")]
@@ -259,7 +260,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public void ShouldMapErrorCodeToRestartIfBothRestartAndUpdateNeededInErrorCode()
         {
             var result = _mapper.MapErrorType((DataLockErrorCode)68);
-            result.Should().Be(DataLockErrorType.RestartRequire);
+            result.Should().Be(DataLockErrorType.RestartRequired);
         }
 
         public void ShouldMapErrorCodeToNoneIfEmppty()

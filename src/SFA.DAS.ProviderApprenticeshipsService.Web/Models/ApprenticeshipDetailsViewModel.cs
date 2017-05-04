@@ -48,7 +48,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
     public enum DataLockErrorType
     {
         None = 0,
-        RestartRequire = 1,
+        RestartRequired = 1,
         UpdateNeeded = 2
     }
 

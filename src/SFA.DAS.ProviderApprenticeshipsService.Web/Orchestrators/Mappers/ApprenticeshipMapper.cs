@@ -28,22 +28,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
     {
         private readonly IHashingService _hashingService;
         private readonly IMediator _mediator;
+        private readonly ICurrentDateTime _currentDateTime;
 
-        public ApprenticeshipMapper(IHashingService hashingService, IMediator mediator)
+        public ApprenticeshipMapper(IHashingService hashingService, IMediator mediator, ICurrentDateTime currentDateTime)
         {
             if (hashingService == null)
                 throw new ArgumentNullException(nameof(hashingService));
             if(mediator==null)
                 throw new ArgumentNullException(nameof(mediator));
+            if (currentDateTime == null)
+                throw new ArgumentNullException(nameof(currentDateTime));
 
             _hashingService = hashingService;
             _mediator = mediator;
+            _currentDateTime = currentDateTime;
         }
 
         public ApprenticeshipViewModel MapToApprenticeshipViewModel(Apprenticeship apprenticeship)
         {
             var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
-                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                                      new DateTime(_currentDateTime.Now.Year, _currentDateTime.Now.Month, 1);
 
             var dateOfBirth = apprenticeship.DateOfBirth;
             return new ApprenticeshipViewModel
@@ -254,7 +258,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 || errorCode.HasFlag(DataLockErrorCode.Dlock05)
                 || errorCode.HasFlag(DataLockErrorCode.Dlock06)
                 )
-                return DataLockErrorType.RestartRequire;
+                return DataLockErrorType.RestartRequired;
 
             if (errorCode.HasFlag(DataLockErrorCode.Dlock07)
                 || errorCode.HasFlag(DataLockErrorCode.Dlock09))

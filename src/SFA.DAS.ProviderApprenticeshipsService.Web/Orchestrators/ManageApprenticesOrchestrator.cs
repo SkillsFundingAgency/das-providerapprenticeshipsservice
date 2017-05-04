@@ -242,9 +242,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<DataLockMismatchViewModel> GetApprenticeshipMismatchDataLock(long providerId, string hashedApprenticeshipId)
         {
-            _logger.Info($"Getting apprenticeship datalock for provider: {providerId}", providerId: providerId);
-
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Info($"Getting apprenticeship datalock for provider: {providerId}", providerId: providerId, apprenticeshipId: apprenticeshipId);
+
             var dataLock = await _mediator.SendAsync(new GetApprenticeshipDataLockRequest
             {
                 ApprenticeshipId = apprenticeshipId,
@@ -271,7 +272,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<ConfirmRestartViewModel> GetConfirmRestartViewModel(long providerId, string hashedApprenticeshipId)
         {
-            _logger.Info($"Getting apprenticeship restart request for provider: {providerId}", providerId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Info($"Getting apprenticeship restart request for provider: {providerId}, apprenticeship: {apprenticeshipId}", providerId, apprenticeshipId);
+
             var dataLock = await GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId);
             return new ConfirmRestartViewModel
             {
@@ -299,7 +303,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
             var triage = _apprenticeshipMapper.MapTriangeStatus(submitStatusViewModel);
-            _logger.Info($"Updating data lock to triage {triage}");
+
+            _logger.Info($"Updating data lock to triage {triage} for datalock: {dataLockEventId}, apprenticeship: {apprenticeshipId}", apprenticeshipId);
 
             await _mediator.SendAsync(new UpdateDataLockCommand
             {

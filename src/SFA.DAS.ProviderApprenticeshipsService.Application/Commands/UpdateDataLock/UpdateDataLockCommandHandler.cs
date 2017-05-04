@@ -28,7 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateData
                 throw new ArgumentNullException(nameof(validator));
             if (dataLockApi == null)
                 throw new ArgumentNullException(nameof(dataLockApi));
-            if (dataLockApi == null)
+            if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
             _validator = validator;
@@ -45,13 +45,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateData
                         {
                             TriageStatus = command.TriageStatus,
                             UserId = command.UserId
-                        }; ;
+                        };
 
                 await _dataLockApi.PatchDataLock(command.ApprenticeshipId, command.DataLockEventId, submission);
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, $"Error calling commitment API when updating data lock to status {command.TriageStatus} for apprenticeship {command.ApprenticeshipId} and data lock with ID: {command.DataLockEventId}");
+                throw;
             }
         }
     }

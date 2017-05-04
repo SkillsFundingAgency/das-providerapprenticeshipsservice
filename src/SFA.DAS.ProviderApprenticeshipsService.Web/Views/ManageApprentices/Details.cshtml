@@ -51,8 +51,8 @@
                 </p>
                 @if (Model.PendingChanges == PendingChanges.None)
                 {
-                     if (Model.ErrorType == DataLockErrorType.RestartRequire)
-                     {
+                    if (Model.ErrorType == DataLockErrorType.RestartRequired)
+                    {
                          <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
                      }
                      else if (Model.ErrorType == DataLockErrorType.UpdateNeeded)
