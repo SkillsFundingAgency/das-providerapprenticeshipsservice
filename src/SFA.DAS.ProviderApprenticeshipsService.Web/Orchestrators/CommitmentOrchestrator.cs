@@ -545,7 +545,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _logger.Info($"Created apprenticeship for provider:{apprenticeshipViewModel.ProviderId} commitment:{apprenticeship.CommitmentId}", providerId: apprenticeship.ProviderId, commitmentId: apprenticeship.CommitmentId);
         }
 
-        public async Task UpdateApprenticeship(string userId, ApprenticeshipViewModel apprenticeshipViewModel)
+        public async Task UpdateApprenticeship(string userId, ApprenticeshipViewModel apprenticeshipViewModel, SignInUserModel currentUser)
         {
             var apprenticeship = await MapFrom(apprenticeshipViewModel);
             await AssertCommitmentStatus(apprenticeship.CommitmentId, apprenticeship.ProviderId);
@@ -554,7 +554,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 UserId = userId,
                 ProviderId = apprenticeshipViewModel.ProviderId,
-                Apprenticeship = apprenticeship
+                Apprenticeship = apprenticeship,
+                UserEmailAddress = currentUser.Email,
+                UserDisplayName = currentUser.DisplayName
             });
 
             _logger.Info($"Updated apprenticeship for provider:{apprenticeshipViewModel.ProviderId} commitment:{apprenticeship.CommitmentId}", providerId: apprenticeship.ProviderId, commitmentId: apprenticeship.CommitmentId);
