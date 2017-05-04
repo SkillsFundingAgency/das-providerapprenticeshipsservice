@@ -32,7 +32,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 {
                     new Apprenticeship { FirstName = "John", LastName = "Smith" },
                     new Apprenticeship { FirstName = "Emma", LastName = "Jones" },
-                }
+                },
+                UserEmailAddress = "test@email.com",
+                UserDisplayName = "Bob"
             };
 
             _handler = new BulkUploadApprenticeshipsCommandHandler(_mockCommitmentsApi.Object);
@@ -43,7 +45,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             await _handler.Handle(_exampleValidCommand);
 
-            _mockCommitmentsApi.Verify(x => x.BulkUploadApprenticeships(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<BulkApprenticeshipRequest>()));
+            _mockCommitmentsApi.Verify(
+                x =>
+                    x.BulkUploadApprenticeships(_exampleValidCommand.ProviderId, _exampleValidCommand.CommitmentId,
+                        It.Is<BulkApprenticeshipRequest>(
+                            r =>
+                                r.Apprenticeships == _exampleValidCommand.Apprenticeships && r.UserId == _exampleValidCommand.UserId &&
+                                r.LastUpdatedByInfo.EmailAddress == _exampleValidCommand.UserEmailAddress && r.LastUpdatedByInfo.Name == _exampleValidCommand.UserDisplayName)));
         }
 
         [Test]
