@@ -81,6 +81,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Orchestrators\Commitments\ApprenticeshipValidationTestBase.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingDeleteApprenticeshipConfirmation.cs" />
     <Compile Include="Orchestrators\Commitments\WhenDeletingApprenticeship.cs" />
