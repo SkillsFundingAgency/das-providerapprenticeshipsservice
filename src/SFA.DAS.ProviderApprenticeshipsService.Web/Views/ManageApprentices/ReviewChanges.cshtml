@@ -19,7 +19,7 @@
             <fieldset>
                 <legend class="visually-hidden">Are you happy to approve these changes?</legend>
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.ApproveChanges, "error")">
-                        @Html.ValidationMessageFor(m => m.ApproveChanges, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.ApproveChanges) })
+                    @Html.ValidationMessageFor(m => m.ApproveChanges, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.ApproveChanges) })
                     <label class="block-label selection-button-radio" for="changes-approved-true">
                         @Html.RadioButton("ApproveChanges", true, new { id = "changes-approved-true" })
                         Yes, approve these changes
@@ -30,7 +30,7 @@
                     </label>
                 </div>
             </fieldset>
-            @Html.Hidden("OriginalApprenticeshipDecoded", @Json.Encode(Model.OriginalApprenticeship))
+
             <button type="submit" class="button button-left-align" aria-label="Finish">Continue</button>
             @Html.ActionLink("Cancel and return", "Details",  new { providerId = Model.OriginalApprenticeship.ProviderId,  hashedApprenticeshipId = Model.HashedApprenticeshipId }, new { @class = "link-left-aligned" })
         </div>  
