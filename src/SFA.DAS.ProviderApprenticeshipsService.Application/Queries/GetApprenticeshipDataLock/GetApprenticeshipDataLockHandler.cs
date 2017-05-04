@@ -1,13 +1,10 @@
 using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 using MediatR;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.Commitments.Api.Types.DataLock;
-using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLock
@@ -32,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenti
             try
             {
                 var data = await _dataLockApi.GetDataLocks(request.ApprenticeshipId);
-                return new GetApprenticeshipDataLockResponse { Data = data.FirstOrDefault() };
+                return new GetApprenticeshipDataLockResponse { Data = data.FirstOrDefault(m => !m.IsResolved) };
             }
             catch (Exception ex)
             {

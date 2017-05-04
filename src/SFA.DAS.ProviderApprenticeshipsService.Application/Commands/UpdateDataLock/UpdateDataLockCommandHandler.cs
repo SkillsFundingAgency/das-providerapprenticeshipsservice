@@ -43,9 +43,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateData
             {
                 var submission = new DataLockTriageSubmission
                         {
-                        TriageStatus = command.TriageStatus,
-                        UserId = command.UserId
-                        };
+                            TriageStatus = command.TriageStatus,
+                            UserId = command.UserId
+                        }; ;
 
                 await _dataLockApi.PatchDataLock(command.ApprenticeshipId, command.DataLockEventId, submission);
             }
