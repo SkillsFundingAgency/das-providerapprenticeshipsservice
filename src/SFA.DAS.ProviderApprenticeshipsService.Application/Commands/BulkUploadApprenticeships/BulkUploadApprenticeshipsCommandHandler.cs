@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships
 {
@@ -18,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUpload
             _providerCommitmentsApi  = providerCommitmentsApi;
         }
 
-        protected async override Task HandleCore(BulkUploadApprenticeshipsCommand message)
+        protected override async Task HandleCore(BulkUploadApprenticeshipsCommand message)
         {
             var validationResult = new BulkUploadApprenticeshipsCommandValidator().Validate(message);
 
@@ -28,7 +29,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUpload
             var request = new BulkApprenticeshipRequest
             {
                 UserId = message.UserId,
-                Apprenticeships = message.Apprenticeships
+                Apprenticeships = message.Apprenticeships,
+                LastUpdatedByInfo = new LastUpdateInfo { EmailAddress = message.UserEmailAddress, Name = message.UserDisplayName }
             };
 
             await _providerCommitmentsApi.BulkUploadApprenticeships(message.ProviderId, message.CommitmentId, request);

@@ -9,6 +9,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenti
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
@@ -55,16 +56,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
                 .ReturnsAsync(new GetApprenticeshipQueryResponse { Apprenticeship = new Apprenticeship() });
 
+            var signInUser = new SignInUserModel { DisplayName = "Bob", Email = "test@email.com" };
+
             await _orchestrator.DeleteApprenticeship("user123", new Web.Models.DeleteConfirmationViewModel
             {
                 ProviderId = 123L,
                 HashedCommitmentId = "ABBA99",
                 HashedApprenticeshipId = "ABBA66"
-            });
+            }, signInUser);
 
             _mockMediator.Verify(x => x.SendAsync(It.IsAny<DeleteApprenticeshipCommand>()), Times.Once);
             arg.ProviderId.Should().Be(123);
             arg.ApprenticeshipId.Should().Be(321);
+            arg.UserDisplayName.Should().Be(signInUser.DisplayName);
+            arg.UserEmailAddress.Should().Be(signInUser.Email);
         }
     }
 }

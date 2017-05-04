@@ -72,7 +72,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             {
                 ApprenticeshipId = 1,
                 ProviderId = 2,
-                UserId = "tester"
+                UserId = "tester",
+                UserDisplayName = "Bob",
+                UserEmailAddress = "test@email.com"
             };
 
             //Act
@@ -80,9 +82,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
 
             //Assert
             _commitmentsApi.Verify(x => x.PatchApprenticeshipUpdate(
-                It.IsAny<long>(),
-                It.IsAny<long>(),
-                It.Is<ApprenticeshipUpdateSubmission>(s => s.UpdateStatus == ApprenticeshipUpdateStatus.Deleted)),
+                    command.ProviderId,
+                    command.ApprenticeshipId,
+                    It.Is<ApprenticeshipUpdateSubmission>(
+                        s =>
+                            s.UpdateStatus == ApprenticeshipUpdateStatus.Deleted && s.UserId == command.UserId && s.LastUpdatedByInfo.EmailAddress == command.UserEmailAddress &&
+                            s.LastUpdatedByInfo.Name == command.UserDisplayName)),
                 Times.Once);
         }
     }
