@@ -12,6 +12,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
+using TrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
+
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments.Mappers
 {
     [TestFixture]
@@ -56,6 +58,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                              TrainingType = TrainingType.Framework,
                              ULN = "1112223301"
                          };
+
             _mapper = new ApprenticeshipMapper(_hashingService.Object, Mock.Of<IMediator>());
         }
 
