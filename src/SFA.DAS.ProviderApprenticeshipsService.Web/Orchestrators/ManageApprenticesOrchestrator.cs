@@ -62,7 +62,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var apprenticeships = 
                 data.Apprenticeships
                 .OrderBy(m => m.ApprenticeshipName)
-                .Select(m => _apprenticeshipMapper.MapFrom(m))
+                .Select(m => _apprenticeshipMapper.MapApprenticeshipDetails(m))
                 .ToList();
 
             return new ManageApprenticeshipsViewModel
@@ -80,7 +80,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { ProviderId = providerId, ApprenticeshipId = apprenticeshipId });
 
-            return _apprenticeshipMapper.MapFrom(data.Apprenticeship);
+            return _apprenticeshipMapper.MapApprenticeshipDetails(data.Apprenticeship);
         }
 
         public async Task<Apprenticeship> GetApprenticeship(long providerId, string hashedApprenticeshipId)
@@ -113,7 +113,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     Apprenticeship = new List<Apprenticeship> { data.Apprenticeship }
                 });
 
-            var apprenticeship = _apprenticeshipMapper.MapToApprenticeshipViewModel(data.Apprenticeship);
+            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
 
             return new ExtendedApprenticeshipViewModel
             {
@@ -130,7 +130,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var overlappingErrors = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
-                    Apprenticeship = new List<Apprenticeship> { _apprenticeshipMapper.MapFromApprenticeshipViewModel(model) }
+                    Apprenticeship = new List<Apprenticeship> { await _apprenticeshipMapper.MapApprenticeship(model) }
                 });
 
             foreach (var overlap in _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors))
@@ -166,7 +166,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             await _mediator.SendAsync(new CreateApprenticeshipUpdateCommand
             {
                 ProviderId = providerId,
-                ApprenticeshipUpdate = _apprenticeshipMapper.MapFrom(updateApprenticeship),
+                ApprenticeshipUpdate = _apprenticeshipMapper.MapApprenticeshipUpdate(updateApprenticeship),
                 UserId = userId,
                 UserDisplayName = signedInUser.DisplayName,
                 UserEmailAddress = signedInUser.Email

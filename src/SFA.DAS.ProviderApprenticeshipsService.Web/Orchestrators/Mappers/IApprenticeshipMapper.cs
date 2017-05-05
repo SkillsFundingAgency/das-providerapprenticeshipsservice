@@ -9,18 +9,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
     public interface IApprenticeshipMapper
     {
-        ApprenticeshipViewModel MapToApprenticeshipViewModel(Apprenticeship apprenticeship);
+        ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship);
+
+        Task<Apprenticeship> MapApprenticeship(ApprenticeshipViewModel vm);
 
         Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors);
 
-        ApprenticeshipUpdate MapFrom(ApprenticeshipUpdateViewModel viewModel);
-
-        Apprenticeship MapFromApprenticeshipViewModel(ApprenticeshipViewModel model);
+        ApprenticeshipUpdate MapApprenticeshipUpdate(ApprenticeshipUpdateViewModel viewModel);
 
         T MapApprenticeshipUpdateViewModel<T>(Apprenticeship original, ApprenticeshipUpdate update) where T : ApprenticeshipUpdateViewModel, new();
 
         Task<CreateApprenticeshipUpdateViewModel> CompareAndMapToCreateUpdateApprenticeshipViewModel(Apprenticeship original, ApprenticeshipViewModel edited);
 
-        ApprenticeshipDetailsViewModel MapFrom(Apprenticeship apprenticeship);
+        ApprenticeshipDetailsViewModel MapApprenticeshipDetails(Apprenticeship apprenticeship);
     }
 }

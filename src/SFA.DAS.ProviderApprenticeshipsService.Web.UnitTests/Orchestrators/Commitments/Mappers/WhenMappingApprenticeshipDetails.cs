@@ -15,7 +15,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments.Mappers
 {
     [TestFixture]
-    public class WhenMappingApprenticeship
+    public class WhenMappingApprenticeshipDetails
     {
         private Mock<IHashingService> _hashingService;
 
@@ -62,7 +62,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public void ShouldMapToViewModel()
         {
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
             viewModel.HashedApprenticeshipId.Should().Be("hashed");
             viewModel.FirstName.Should().Be("First name");
@@ -87,7 +87,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _model.StartDate = DateTime.Now.AddMonths(-5);
             _model.PaymentStatus = PaymentStatus.Active;
 
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
             viewModel.EnableEdit.Should().BeFalse();
         }
@@ -96,7 +96,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public void ShouldNotEnableEditWhenCanceled()
         {
             _model.PaymentStatus = PaymentStatus.Withdrawn;
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
             viewModel.EnableEdit.Should().BeFalse();
         }
@@ -105,7 +105,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public void ShouldHaveUpdatesToReview()
         {
             _model.PendingUpdateOriginator = Originator.Employer;
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
             viewModel.EnableEdit.Should().BeFalse();
             viewModel.PendingChanges.Should().Be(PendingChanges.ReadyForApproval);
@@ -117,7 +117,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _model.PendingUpdateOriginator = Originator.Employer;
             _model.PaymentStatus = PaymentStatus.Withdrawn;
 
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
             viewModel.PendingChanges.Should().Be(PendingChanges.ReadyForApproval);
         }
@@ -126,7 +126,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public void ShouldHaveUpdatesWaitingForEmployer()
         {
             _model.PendingUpdateOriginator = Originator.Provider;
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
             viewModel.EnableEdit.Should().BeFalse();
             viewModel.PendingChanges.Should().Be(PendingChanges.WaitingForEmployer);
@@ -138,7 +138,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _model.PendingUpdateOriginator = Originator.Provider;
             _model.PaymentStatus = PaymentStatus.Withdrawn;
 
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
             viewModel.EnableEdit.Should().BeFalse();
             viewModel.PendingChanges.Should().Be(PendingChanges.WaitingForEmployer);
@@ -147,7 +147,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public void ShouldHaveStatusTextForFututreStart()
         {
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
             viewModel.Status.Should().Be("Waiting to start");
         }
@@ -157,7 +157,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             _model.PaymentStatus = PaymentStatus.Active;
             _model.StartDate = DateTime.Now.AddMonths(-5);
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
             viewModel.Status.Should().Be("On programme");
         }
@@ -167,7 +167,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             _model.PaymentStatus = PaymentStatus.Withdrawn;
             _model.StartDate = DateTime.Now.AddMonths(-5);
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
             viewModel.Status.Should().Be("Stopped");
         }
@@ -177,7 +177,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             _model.PaymentStatus = PaymentStatus.Paused;
             _model.StartDate = DateTime.Now.AddMonths(-5);
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
             viewModel.Status.Should().Be("Paused");
         }
@@ -187,7 +187,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             _model.PaymentStatus = PaymentStatus.Completed;
             _model.StartDate = DateTime.Now.AddMonths(-5);
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
             viewModel.Status.Should().Be("Completed");
         }
@@ -196,7 +196,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public void ShouldNotHaveRecordStatus()
         {
             _model.PendingUpdateOriginator = null;
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
             viewModel.RecordStatus.Should().Be(string.Empty);
         }
@@ -205,7 +205,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public void ShouldHaveRecordStatusFromEmployer()
         {
             _model.PendingUpdateOriginator = Originator.Employer;
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
             viewModel.RecordStatus.Should().Be("Changes for review");
         }
@@ -214,7 +214,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public void ShouldHaveRecordStatusFromProvider()
         {
             _model.PendingUpdateOriginator = Originator.Provider;
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
             viewModel.RecordStatus.Should().Be("Changes pending");
         }

@@ -35,7 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             _mediator = mediator;
         }
 
-        public ApprenticeshipViewModel MapToApprenticeshipViewModel(Apprenticeship apprenticeship)
+        public ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship)
         {
             var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
                                       new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
@@ -63,7 +63,43 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 HasStarted = !isStartDateInFuture
             };
         }
-        
+
+        public async Task<Apprenticeship> MapApprenticeship(ApprenticeshipViewModel vm)
+        {
+            var id = string.IsNullOrEmpty(vm.HashedApprenticeshipId)
+                ? 0
+                : _hashingService.DecodeValue(vm.HashedApprenticeshipId);
+
+            var apprenticeship = new Apprenticeship
+            {
+                Id = id,
+                CommitmentId = _hashingService.DecodeValue(vm.HashedCommitmentId),
+                ProviderId = vm.ProviderId,
+                FirstName = vm.FirstName,
+                LastName = vm.LastName,
+                DateOfBirth = vm.DateOfBirth.DateTime,
+                NINumber = vm.NINumber,
+                ULN = vm.ULN,
+                Cost = vm.Cost.AsNullableDecimal(),
+                StartDate = vm.StartDate.DateTime,
+                EndDate = vm.EndDate.DateTime,
+                PaymentStatus = vm.PaymentStatus,
+                AgreementStatus = vm.AgreementStatus,
+                ProviderRef = vm.ProviderRef,
+                EmployerRef = vm.EmployerRef
+            };
+
+            if (!string.IsNullOrWhiteSpace(vm.TrainingCode))
+            {
+                var training = await GetTrainingProgramme(vm.TrainingCode);
+                apprenticeship.TrainingType = (Commitments.Api.Types.Apprenticeship.Types.TrainingType)(training is Standard ? TrainingType.Standard : TrainingType.Framework);
+                apprenticeship.TrainingCode = vm.TrainingCode;
+                apprenticeship.TrainingName = training.Title;
+            }
+
+            return apprenticeship;
+        }
+
         public Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors)
         {
             var dict = new Dictionary<string, string>();
@@ -97,7 +133,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             return dict;
         }
 
-        public ApprenticeshipUpdate MapFrom(ApprenticeshipUpdateViewModel viewModel)
+        public ApprenticeshipUpdate MapApprenticeshipUpdate(ApprenticeshipUpdateViewModel viewModel)
         {
             return new ApprenticeshipUpdate
             {
@@ -115,30 +151,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 TrainingCode = viewModel.TrainingCode,
                 TrainingType = (Commitments.Api.Types.Apprenticeship.Types.TrainingType?) viewModel.TrainingType,
                 ProviderRef = viewModel.ProviderRef
-            };
-        }
-
-        public Apprenticeship MapFromApprenticeshipViewModel(ApprenticeshipViewModel model)
-        {
-            var id = _hashingService.DecodeValue(model.HashedApprenticeshipId);
-
-            return new Apprenticeship   
-            {
-                Id = id,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                DateOfBirth = model.DateOfBirth.DateTime,
-                NINumber = model.NINumber,
-                ULN = model.ULN,
-                TrainingType = model.TrainingType,
-                TrainingCode = model.TrainingCode,
-                Cost = model.Cost.AsNullableDecimal(),
-                StartDate = model.StartDate.DateTime,
-                EndDate = model.EndDate.DateTime,
-                PaymentStatus = model.PaymentStatus,
-                AgreementStatus = model.AgreementStatus,
-                ProviderRef = model.ProviderRef,
-                EmployerRef = model.EmployerRef
             };
         }
 
@@ -205,7 +217,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             return model;
         }
 
-        public ApprenticeshipDetailsViewModel MapFrom(Apprenticeship apprenticeship)
+        public ApprenticeshipDetailsViewModel MapApprenticeshipDetails(Apprenticeship apprenticeship)
         {
             var statusText = MapPaymentStatus(apprenticeship.PaymentStatus, apprenticeship.StartDate);
 
