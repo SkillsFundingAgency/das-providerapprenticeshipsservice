@@ -72,7 +72,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<ApprenticeshipDetailsViewModel> GetApprenticeship(long providerId, string hashedApprenticeshipId)
+        public async Task<ApprenticeshipDetailsViewModel> GetApprenticeshipViewModel(long providerId, string hashedApprenticeshipId)
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
 
@@ -81,6 +81,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { ProviderId = providerId, ApprenticeshipId = apprenticeshipId });
 
             return _apprenticeshipMapper.MapFrom(data.Apprenticeship);
+        }
+
+        public async Task<Apprenticeship> GetApprenticeship(long providerId, string hashedApprenticeshipId)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Info($"Getting On-programme apprenticeships Provider: {providerId}, ApprenticeshipId: {apprenticeshipId}", providerId: providerId, apprenticeshipId: apprenticeshipId);
+
+            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { ProviderId = providerId, ApprenticeshipId = apprenticeshipId });
+
+            return data.Apprenticeship;
         }
 
         public async Task<ExtendedApprenticeshipViewModel> GetApprenticeshipForEdit(long providerId, string hashedApprenticeshipId)

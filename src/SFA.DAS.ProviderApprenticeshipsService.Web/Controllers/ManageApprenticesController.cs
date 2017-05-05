@@ -39,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> Details(long providerid, string hashedApprenticeshipId)
         {
-            var model = await _orchestrator.GetApprenticeship(providerid, hashedApprenticeshipId);
+            var model = await _orchestrator.GetApprenticeshipViewModel(providerid, hashedApprenticeshipId);
             return View(model);
         }
 
@@ -84,10 +84,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedApprenticeshipId}/submit")]
-        public async Task<ActionResult> SubmitChanges(long providerid, string hashedApprenticeshipId, CreateApprenticeshipUpdateViewModel updateApprenticeship, string originalApprenticeshipDecoded)
+        public async Task<ActionResult> SubmitChanges(long providerId, string hashedApprenticeshipId, CreateApprenticeshipUpdateViewModel updateApprenticeship)
         {
-            var originalApprenticeship = System.Web.Helpers.Json.Decode<Apprenticeship>(originalApprenticeshipDecoded);
-            updateApprenticeship.OriginalApprenticeship = originalApprenticeship;
+            var originalApp = await _orchestrator.GetApprenticeship(providerId, hashedApprenticeshipId);
+            updateApprenticeship.OriginalApprenticeship = originalApp;
 
             if (!ModelState.IsValid)
             {
@@ -96,14 +96,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (updateApprenticeship.ChangesConfirmed != null && !updateApprenticeship.ChangesConfirmed.Value)
             {
-                return RedirectToAction("Details", new { providerid, hashedApprenticeshipId });
+                return RedirectToAction("Details", new { providerId, hashedApprenticeshipId });
             }
 
-            await _orchestrator.CreateApprenticeshipUpdate(updateApprenticeship, providerid, CurrentUserId, GetSignedInUser());
+            await _orchestrator.CreateApprenticeshipUpdate(updateApprenticeship, providerId, CurrentUserId, GetSignedInUser());
 
-            SetInfoMessage($"You suggested changes to the record for {originalApprenticeship.FirstName} {originalApprenticeship.LastName}. The employer needs to approve these changes.", FlashMessageSeverityLevel.Okay);
+            SetInfoMessage($"You suggested changes to the record for {originalApp.FirstName} {originalApp.LastName}. The employer needs to approve these changes.", FlashMessageSeverityLevel.Okay);
 
-            return RedirectToAction("Details", new { providerid, hashedApprenticeshipId });
+            return RedirectToAction("Details", new { providerId, hashedApprenticeshipId });
         }
 
         [HttpGet]
