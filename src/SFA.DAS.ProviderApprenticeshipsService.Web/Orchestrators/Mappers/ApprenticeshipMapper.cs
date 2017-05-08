@@ -270,13 +270,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                     return "Approval needed";
                 case PaymentStatus.Active:
                     return
-                        isStartDateInFuture ? "Waiting to start" : "On programme";
+                        isStartDateInFuture ? "Waiting to start" : "Live";
                 case PaymentStatus.Paused:
                     return "Paused";
                 case PaymentStatus.Withdrawn:
                     return "Stopped";
                 case PaymentStatus.Completed:
-                    return "Completed";
+                    return "Finished";
                 case PaymentStatus.Deleted:
                     return "Deleted";
                 default:
