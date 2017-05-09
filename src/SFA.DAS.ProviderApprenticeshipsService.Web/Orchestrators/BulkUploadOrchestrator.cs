@@ -89,7 +89,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             
             if (rowErrors.Any())
             {
-                _logger.Info($"{rowErrors.Count} Upload errors for", providerId, commitmentId);
+                _logger.Info($"{rowErrors.Count} Upload errors", providerId, commitmentId);
                 return new BulkUploadResultViewModel { HasRowLevelErrors = true, RowLevelErrors = rowErrors };
             }
 
