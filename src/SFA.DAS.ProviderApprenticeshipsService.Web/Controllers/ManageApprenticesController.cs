@@ -102,7 +102,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             await _orchestrator.CreateApprenticeshipUpdate(updateApprenticeship, providerId, CurrentUserId, GetSignedInUser());
 
-            SetInfoMessage($"You suggested changes to the record for {originalApp.FirstName} {originalApp.LastName}. The employer needs to approve these changes.", FlashMessageSeverityLevel.Okay);
+            var approvalMsg = NeedReapproval(updateApprenticeship) 
+                ? "The employer needs to approve these changes."
+                : string.Empty;
+
+            SetInfoMessage($"You suggested changes to the record for {originalApp.FirstName} {originalApp.LastName}. {approvalMsg}", FlashMessageSeverityLevel.Okay);
 
             return RedirectToAction("Details", new { providerId, hashedApprenticeshipId });
         }
@@ -318,6 +322,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 || data.EndDate != null
                 || data.Cost != null
                 || data.ProviderRef != null;
+        }
+
+        private bool NeedReapproval(CreateApprenticeshipUpdateViewModel model)
+        {
+            return
+                   !string.IsNullOrEmpty(model.FirstName)
+                || !string.IsNullOrEmpty(model.LastName)
+                || model.DateOfBirth?.DateTime != null
+                || !string.IsNullOrEmpty(model.TrainingCode)
+                || model.StartDate?.DateTime != null
+                || model.EndDate?.DateTime != null
+                || !string.IsNullOrEmpty(model.Cost)
+                ;
         }
     }
 }
