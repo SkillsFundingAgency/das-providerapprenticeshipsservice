@@ -3,6 +3,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeship;
@@ -23,12 +24,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         private Mock<IMediator> _mockMediator;
         private Mock<IHashingService> _mockHashingService;
 
+        private Mock<IApprenticeshipMapper> _mockMapper;
+
         [SetUp]
         public void Setup()
         {
             _mockMediator = new Mock<IMediator>();
             _mockHashingService = new Mock<IHashingService>();
-            
+            _mockMapper = new Mock<IApprenticeshipMapper>();
+
             _orchestrator = new CommitmentOrchestrator(
                 _mockMediator.Object, 
                 Mock.Of<ICommitmentStatusCalculator>(), 
@@ -36,7 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Mock.Of<IProviderCommitmentsLogger>(),
                 Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
                 Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
-                Mock.Of<IApprenticeshipMapper>(),
+                _mockMapper.Object,
                 Validator);
         }
 
@@ -58,7 +62,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _mockMediator.Setup(x => x.SendAsync(It.Is<GetCommitmentQueryRequest>(y => y.ProviderId == viewModel.ProviderId && y.CommitmentId == expectedCommitmentId)))
                 .ReturnsAsync(new GetCommitmentQueryResponse { Commitment = new CommitmentView { EditStatus = EditStatus.ProviderOnly, AgreementStatus = AgreementStatus.EmployerAgreed } });
-            
+
+            _mockMapper.Setup(m => m.MapApprenticeship(It.IsAny<ApprenticeshipViewModel>()))
+                .ReturnsAsync(new Apprenticeship { ProviderId = 123L, Id = expectedApprenticeshipId, CommitmentId = expectedCommitmentId});
+
             await _orchestrator.CreateApprenticeship("user123", viewModel, signedInUser);
 
             _mockMediator.Verify(
