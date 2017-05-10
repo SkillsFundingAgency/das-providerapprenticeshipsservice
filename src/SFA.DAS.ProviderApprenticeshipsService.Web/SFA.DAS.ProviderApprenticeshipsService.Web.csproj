@@ -192,12 +192,12 @@
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.10.29\lib\net45\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.49.0.29544, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.49.0.29544\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.51.0.29647, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.51.0.29647\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.49.0.29544, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.49.0.29544\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.51.0.29647, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.51.0.29647\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Configuration, Version=1.0.0.6634, Culture=neutral, processorArchitecture=MSIL">
@@ -363,6 +363,9 @@
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\ApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModel.cs" />
+    <Compile Include="Models\DataLock\ConfirmRestartViewModel.cs" />
+    <Compile Include="Models\DataLock\DataLockMismatchViewModel.cs" />
+    <Compile Include="Models\DataLock\DataLockViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\ReviewApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\UndoApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
@@ -374,6 +377,7 @@
     <Compile Include="Models\CommitmentListItemViewModel.cs" />
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentDetailsViewModel.cs" />
+    <Compile Include="Models\DataLock\SubmitStatusViewModel.cs" />
     <Compile Include="Models\DeleteConfirmationViewModel.cs" />
     <Compile Include="Models\ExtendedApprenticeshipViewModel.cs" />
     <Compile Include="Models\FinishEditingViewModel.cs" />
@@ -419,6 +423,8 @@
     <Compile Include="Validation\ApprenticeshipCoreValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUploadModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModelValidator.cs" />
+    <Compile Include="Validation\DataLock\ConfirmRestartViewModelValidator.cs" />
+    <Compile Include="Validation\DataLock\DataLockMismatchViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\ReviewApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\UndoApprenticeshipUpdateViewModelValidator.cs" />
     <Compile Include="Validation\ApprenticeshipViewModelValidator.cs" />
@@ -604,6 +610,11 @@
     <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
     <Content Include="Views\ManageApprentices\UndoChanges.cshtml" />
     <Content Include="Views\ManageApprentices\EditStartedApprenticeship.cshtml" />
+    <Content Include="Views\ManageApprentices\UpdateDataLockDelete.cshtml" />
+    <Content Include="Views\ManageApprentices\RequestRestart.cshtml" />
+    <Content Include="Views\ManageApprentices\UpdateDataLock.cshtml" />
+    <Content Include="Views\ManageApprentices\ConfirmDataLockChanges.cshtml" />
+    <Content Include="Views\ManageApprentices\ConfirmRestart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

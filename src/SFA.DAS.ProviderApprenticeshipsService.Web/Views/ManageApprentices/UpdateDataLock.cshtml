@@ -1,0 +1,110 @@
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
+@model DataLockMismatchViewModel
+
+@{
+    ViewBag.Title = "Apprenticeship data mismatch";
+    ViewBag.PageID = "datalock-details-change";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Details of ILR data mismatch</h1>
+
+        <p>Details for this apprentice are different in your organisation's ILR submission. </p>
+
+
+        <table class="edited-changes">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Period</th>
+                    <th scope="col">Apprenticeship service</th>
+                    <th scope="col">ILR submission</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.DataLockViewModel.IlrTotalCost != Model.DasApprenticeship.Cost.AsNullableDecimal())
+                {
+                    <tr>
+                        <td>Total cost of training</td>
+                        <td>
+                            @if (Model.DataLockViewModel.IlrEffectiveFromDate.HasValue)
+                            {
+                                @Model.DataLockViewModel.IlrEffectiveFromDate.Value.ToGdsFormat()
+                            }
+                            else
+                            {
+                               <span>--</span>
+                            }
+                        </td>
+                        <td>@Model.DasApprenticeship.Cost.AsNullableDecimal().FormatCost() </td>
+                        <td>@Model.DataLockViewModel.IlrTotalCost.FormatCost()</td>
+                    </tr>
+                }
+
+                @if (  Model.DataLockViewModel.IlrActualStartDate != Model.DasApprenticeship.StartDate.DateTime
+                    && Model.DasApprenticeship.StartDate.DateTime.HasValue
+                    && Model.DataLockViewModel.IlrActualStartDate.HasValue)
+                {
+                    <tr>
+                        <td>Planned training start date</td>
+                        <td>--</td>
+                        <td>@Model.DasApprenticeship.StartDate.DateTime.Value.ToGdsFormat() </td>
+                        <td>@Model.DataLockViewModel.IlrActualStartDate.Value.ToGdsFormat()</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <form method="POST" action="@Url.Action("UpdateDataLock")" novalidate="novalidate">
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+            @Html.AntiForgeryToken()
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.SubmitStatusViewModel, "error") ">
+                <fieldset>
+                    <h2 class="heading-medium">How do you want to fix the mismatch?</h2>
+                    <legend class="visually-hidden">How do you want to fix the mismatch?</legend>
+                    <div class="form-group">
+                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.Confirm)">
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new { id = RadioButtonId(SubmitStatusViewModel.Confirm) })
+                            <span>Start to update the details in the apprenticeship service</span>
+                        </label>
+
+                        @*<label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr)">
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.UpdateDataInIlr, new { id = RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr) })
+                            <span>Update the details through the ILR instead</span>
+                        </label>*@
+
+                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new { id = RadioButtonId(SubmitStatusViewModel.None) })
+                            <span>Leave for now</span>
+                        </label>
+                    </div>
+                    
+                    @Html.HiddenFor(m => m.DataLockEventId)
+                    <input type="submit" class="button" id="fix-mismatch" value="Continue" />
+                </fieldset>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@functions
+{
+    public string RadioButtonId(SubmitStatusViewModel statusViewModel)
+    {
+        return $"{Html.IdFor(m => m.SubmitStatusViewModel)}-{statusViewModel}";
+    }
+}
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Details")" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
+    </div>
+}

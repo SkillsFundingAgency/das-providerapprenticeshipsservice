@@ -8,9 +8,11 @@ using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments.Mappers
 {
@@ -56,7 +58,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                              TrainingType = TrainingType.Framework,
                              ULN = "1112223301"
                          };
-            _mapper = new ApprenticeshipMapper(_hashingService.Object, Mock.Of<IMediator>());
+            _mapper = new ApprenticeshipMapper(_hashingService.Object, Mock.Of<IMediator>(), new CurrentDateTime());
         }
 
         [Test]
@@ -217,6 +219,54 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var viewModel = _mapper.MapFrom(_model);
 
             viewModel.RecordStatus.Should().Be("Changes pending");
+        }
+
+        [TestCase(TriageStatus.Change)]
+        [TestCase(TriageStatus.FixIlr)]
+        [TestCase(TriageStatus.Restart)]
+        [TestCase(TriageStatus.Unknown)]
+        [TestCase(null, true)]
+        public void ShouldDisableEditIfDataLock(TriageStatus? triageStatus, bool expectedEnabled = false)
+        {
+            _model.PendingUpdateOriginator = null;
+            _model.PaymentStatus = PaymentStatus.Active;
+            _model.DataLockTriageStatus = triageStatus;
+
+            var viewModel = _mapper.MapFrom(_model);
+            viewModel.EnableEdit.Should().Be(expectedEnabled);
+        }
+
+        [TestCase(4)]
+        [TestCase(8)]
+        [TestCase(12)]
+        [TestCase(16)]
+        [TestCase(32)]
+        public void ShouldMapErrorCodeToRestart(int dataLockErrorCode)
+        {
+            var result = _mapper.MapErrorType((DataLockErrorCode)dataLockErrorCode);
+            result.Should().Be(DataLockErrorType.RestartRequired);
+        }
+
+        [TestCase(64, Description = "DLock_07")]
+        [TestCase(256, Description = "DLock_09")]
+        [TestCase(320, Description = "DLock_07 and DLock_09")]
+        public void ShouldMapErrorCodeToUpdateNeeded(int dataLockErrorCode)
+        {
+            var result = _mapper.MapErrorType((DataLockErrorCode)dataLockErrorCode);
+            result.Should().Be(DataLockErrorType.UpdateNeeded);
+        }
+
+        [Test(Description = "When DLock 07 and 03 should only return restart")]
+        public void ShouldMapErrorCodeToRestartIfBothRestartAndUpdateNeededInErrorCode()
+        {
+            var result = _mapper.MapErrorType((DataLockErrorCode)68);
+            result.Should().Be(DataLockErrorType.RestartRequired);
+        }
+
+        public void ShouldMapErrorCodeToNoneIfEmppty()
+        {
+            var result = _mapper.MapErrorType(0);
+            result.Should().Be(DataLockErrorType.None);
         }
     }
 }

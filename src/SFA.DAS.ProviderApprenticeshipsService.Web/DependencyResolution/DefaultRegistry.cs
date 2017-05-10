@@ -63,6 +63,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             For<IProviderCommitmentsApi>().Use<ProviderCommitmentsApi>()
                 .Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
+            For<IDataLockApi>().Use<DataLockApi>()
+                .Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<IRelationshipApi>().Use<RelationshipApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<IValidationApi>().Use<ValidationApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
 

@@ -2946,6 +2946,18 @@ span.helpText {
   float: none;
 }
 
+#content .green-box-alert {
+  border: 5px solid #28a197;
+  margin-top: 30px;
+  margin-bottom: 0;
+  padding: 20px 15px 15px;
+}
+
+#content .green-box-alert .strong {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
 #content .flash-alert {
   border-color: #28a197;
 }

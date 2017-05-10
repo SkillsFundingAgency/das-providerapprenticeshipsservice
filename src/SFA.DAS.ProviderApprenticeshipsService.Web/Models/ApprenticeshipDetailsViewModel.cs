@@ -27,14 +27,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string EmployerName { get; set; }
 
         public PendingChanges PendingChanges { get; set; }
-
-        public string RecordStatus { get; set; }
-
+        
         public string ProviderReference { get; set; }
 
         public string CohortReference { get; set; }
 
         public bool EnableEdit { get; set; }
+
+        public bool HasDataLockError { get; set; }
+
+        public DataLockErrorType ErrorType { get; set; }
+
+        public string RecordStatus { get; set; }
+
+        public string DataLockStatus { get; set; }
+
+        public bool HasRequestedRestart { get; set; }
+    }
+
+    public enum DataLockErrorType
+    {
+        None = 0,
+        RestartRequired = 1,
+        UpdateNeeded = 2
     }
 
     public enum PendingChanges
