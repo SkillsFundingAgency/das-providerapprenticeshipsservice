@@ -197,7 +197,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 EndDate = original.EndDate == edited.EndDate.DateTime
                     ? null
                     : edited.EndDate,
-                ProviderRef = changedOrNull(original.ProviderRef, edited.ProviderRef),
+                ProviderRef = original.ProviderRef?.Trim() == edited.ProviderRef?.Trim()
+                            || (string.IsNullOrEmpty(original.ProviderRef) && string.IsNullOrEmpty(edited.ProviderRef))
+                    ? null
+                    : edited.ProviderRef ?? "",
                 OriginalApprenticeship = original,
                 ProviderName = original.ProviderName,
                 LegalEntityName = original.LegalEntityName
