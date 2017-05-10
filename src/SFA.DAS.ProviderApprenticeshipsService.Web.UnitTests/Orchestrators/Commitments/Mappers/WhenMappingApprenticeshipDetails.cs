@@ -163,7 +163,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _model.StartDate = DateTime.Now.AddMonths(-5);
             var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
-            viewModel.Status.Should().Be("On programme");
+            viewModel.Status.Should().Be("Live");
         }
 
         [Test]
@@ -193,7 +193,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _model.StartDate = DateTime.Now.AddMonths(-5);
             var viewModel = _mapper.MapApprenticeshipDetails(_model);
 
-            viewModel.Status.Should().Be("Completed");
+            viewModel.Status.Should().Be("Finished");
         }
 
         [Test]
