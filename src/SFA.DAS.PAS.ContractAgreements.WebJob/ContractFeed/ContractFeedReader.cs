@@ -31,7 +31,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
         {
             var relationshipType = direction == ReadDirection.Forward ? "next-archive" : "prev-archive";
             var continueToNextPage = true;
-            
+
             while (continueToNextPage && !string.IsNullOrEmpty(pageUri))
             {
                 var response = CallEndpointAndReturnResultForFullUrl(pageUri);
@@ -40,7 +40,16 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
                 continueToNextPage = pageWriter(pageUri, response.Content, pageNavigation);
 
                 if (continueToNextPage)
+                {
+                    var lastPageUri = pageUri;
                     pageUri = feed?.Links.FirstOrDefault(li => li.RelationshipType == relationshipType)?.Uri.ToString();
+                    if (string.IsNullOrEmpty(pageUri)
+                        && direction == ReadDirection.Forward
+                        && LatestPageUrl != lastPageUri)
+                    {
+                        pageUri = LatestPageUrl;
+                    }
+                }
             }
         }
 
