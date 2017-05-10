@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
@@ -44,6 +45,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             if (validationErrors.Any())
             {
                 _logger.Warn($"Failed validation bulk upload records with {validationErrors.Count} errors", providerId);
+
+                foreach (var error in validationErrors)
+                {
+                    var message = $"Validation failure: {error.ErrorCode} - \"{StripHtml(error.Message)}\"";
+                    _logger.Info(message, providerId);
+                }
+
                 return new BulkUploadResult { Errors = validationErrors };
             }
 
@@ -91,6 +99,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                     .Union(frameworksTask.Result.Frameworks)
                     .OrderBy(m => m.Title)
                     .ToList();
+        }
+
+        private string StripHtml(string input)
+        {
+            return Regex.Replace(input, "<.*?>", string.Empty);
         }
     }
 }
