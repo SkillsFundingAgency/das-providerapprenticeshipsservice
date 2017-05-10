@@ -70,12 +70,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
         private async Task SendEmailNotification(SubmitCommitmentCommand message, CommitmentView commitment)
         {
             var notificationCommand = BuildNotificationCommand(commitment, message.LastAction,
-                                message.HashedCommitmentId);
+                                message.HashedCommitmentId, message.UserDisplayName);
 
             await _mediator.SendAsync(notificationCommand);
         }
 
-        private SendNotificationCommand BuildNotificationCommand(CommitmentView commitment, LastAction action, string hashedCommitmentId)
+        private SendNotificationCommand BuildNotificationCommand(CommitmentView commitment, LastAction action, string hashedCommitmentId, string displayName)
         {
             var template = commitment.AgreementStatus == AgreementStatus.NotAgreed ? "EmployerCommitmentNotification" : "EmployerCohortApproved";
 
@@ -92,6 +92,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                     {
                         { "type", action == LastAction.Approve ? "approval" : "review" },
                         { "cohort_reference", hashedCommitmentId },
+                        { "first_name", displayName },
                     }
                 }
             };
