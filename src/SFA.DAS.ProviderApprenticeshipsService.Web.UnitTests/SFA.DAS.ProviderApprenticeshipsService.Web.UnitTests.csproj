@@ -89,6 +89,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Orchestrators\Commitments\ApprenticeshipValidationTestBase.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeshipDetails.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingDataLock.cs" />

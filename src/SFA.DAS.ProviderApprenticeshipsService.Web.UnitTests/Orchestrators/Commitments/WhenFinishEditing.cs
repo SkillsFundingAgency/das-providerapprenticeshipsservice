@@ -23,7 +23,7 @@ using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
     [TestFixture]
-    public class WhenFinishEditing
+    public class WhenFinishEditing : ApprenticeshipValidationTestBase
     {
         private CommitmentView _testCommitment;
 
@@ -53,7 +53,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             mockMediator.Setup(m => m.SendAsync(It.IsAny<GetProviderAgreementQueryRequest>()))
                 .Returns(Task.FromResult(new GetProviderAgreementQueryResponse { HasAgreement = ProviderAgreementStatus.Agreed }));
 
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>(), Validator);
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
@@ -72,7 +72,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 };
 
             var mockMediator = GetMediator(_testCommitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>(), Validator);
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
@@ -91,7 +91,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 };
            
             var mockMediator = GetMediator(_testCommitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>(), Validator);
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 
@@ -110,7 +110,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 };
 
             var mockMediator = GetMediator(_testCommitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>());
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>(), Validator);
 
             var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
 

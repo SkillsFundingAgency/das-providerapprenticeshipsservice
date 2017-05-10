@@ -10,17 +10,20 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticesh
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
     [TestFixture]
-    public sealed class WhenDeletingApprenticeship
+    public sealed class WhenDeletingApprenticeship : ApprenticeshipValidationTestBase
     {
         private CommitmentOrchestrator _orchestrator;
         private Mock<IMediator> _mockMediator;
+        
 
         [SetUp]
         public void Setup()
@@ -38,7 +41,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Mock.Of<IProviderCommitmentsLogger>(),
                 Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
                 Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
-                Mock.Of<IApprenticeshipMapper>());
+                Mock.Of<IApprenticeshipMapper>(),
+                Validator);
         }
 
         [Test]
