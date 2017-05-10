@@ -8,7 +8,7 @@
     margin-bottom: 20px;
 }
 .hr-bottom {
-    margin-top: 22px;
+    margin-top: 23px;
 }
 .float-right{
     float:right;
@@ -70,12 +70,14 @@
             margin-top:20px;
             margin-bottom:20px;
         }
+        .add-app-btn{margin-right:10px;}
     }
   .group-title{
       margin-bottom:0;
   }
   .finishEditingBtn{
       float:none;
+      margin-right:10px;
   }
 }
 
@@ -483,6 +485,34 @@ table{
 }
 #charCount{
     margin-bottom:0;
+}
+
+#review-cohorts{ 
+    .column-one-third{
+         @include media(tablet) {height:190px;}
+    }
+    .all-apps{
+        h2.bold-xlarge{
+             @include media(tablet) {font-size:80px;}
+        }
+    }
+    .incomplete-apps{
+        h2.bold-xlarge{
+             @include media(tablet) {font-size:80px;}
+        }
+     }
+}
+
+.purple-border{
+    border:5px solid $purple;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.total-cost{
+    .bold-xlarge{
+        font-size:38px;
+    }
 }
     
 //all mobile media query breakpoints
