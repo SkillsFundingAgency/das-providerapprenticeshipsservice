@@ -610,7 +610,6 @@
     <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
     <Content Include="Views\ManageApprentices\UndoChanges.cshtml" />
     <Content Include="Views\ManageApprentices\EditStartedApprenticeship.cshtml" />
-    <Content Include="Views\ManageApprentices\UpdateDataLockDelete.cshtml" />
     <Content Include="Views\ManageApprentices\RequestRestart.cshtml" />
     <Content Include="Views\ManageApprentices\UpdateDataLock.cshtml" />
     <Content Include="Views\ManageApprentices\ConfirmDataLockChanges.cshtml" />
