@@ -499,7 +499,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     Apprenticeship = new List<Apprenticeship> { data.Apprenticeship }
                 });
 
-            var apprenticeship = _apprenticeshipMapper.MapToApprenticeshipViewModel(data.Apprenticeship);
+            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
 
             apprenticeship.ProviderId = providerId;
 
@@ -533,7 +533,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task CreateApprenticeship(string userId, ApprenticeshipViewModel apprenticeshipViewModel, SignInUserModel signInUser)
         {
-            var apprenticeship = await MapFrom(apprenticeshipViewModel);
+            var apprenticeship = await _apprenticeshipMapper.MapApprenticeship(apprenticeshipViewModel);
+
             await AssertCommitmentStatus(apprenticeship.CommitmentId, apprenticeship.ProviderId);
 
             await _mediator.SendAsync(new CreateApprenticeshipCommand
@@ -550,7 +551,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task UpdateApprenticeship(string userId, ApprenticeshipViewModel apprenticeshipViewModel, SignInUserModel currentUser)
         {
-            var apprenticeship = await MapFrom(apprenticeshipViewModel);
+            var apprenticeship = await _apprenticeshipMapper.MapApprenticeship(apprenticeshipViewModel);
             await AssertCommitmentStatus(apprenticeship.CommitmentId, apprenticeship.ProviderId);
 
             await _mediator.SendAsync(new UpdateApprenticeshipCommand
@@ -730,45 +731,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        private async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)
-        {
-            var hashedApprenticeshipId = string.IsNullOrEmpty(viewModel.HashedApprenticeshipId) ?
-                0
-                : _hashingService.DecodeValue(viewModel.HashedApprenticeshipId);
-
-            var apprenticeship = new Apprenticeship
-            {
-                Id = hashedApprenticeshipId,
-                CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
-                ProviderId = viewModel.ProviderId,
-                FirstName = viewModel.FirstName,
-                LastName = viewModel.LastName,
-                DateOfBirth = viewModel.DateOfBirth.DateTime,
-                NINumber = viewModel.NINumber,
-                ULN = viewModel.ULN,
-                Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
-                StartDate = viewModel.StartDate.DateTime,
-                EndDate = viewModel.EndDate.DateTime,
-                ProviderRef = viewModel.ProviderRef,
-                EmployerRef = viewModel.EmployerRef
-            };
-
-            if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
-            {
-                var training = await GetTrainingProgramme(viewModel.TrainingCode);
-                apprenticeship.TrainingType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
-                apprenticeship.TrainingCode = viewModel.TrainingCode;
-                apprenticeship.TrainingName = training.Title;
-            }
-
-            return apprenticeship;
-        }
-        
-        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
-        {
-            return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
-        }
-
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
             var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
@@ -805,9 +767,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return result;
         }
 
-        public async Task<Dictionary<string, string>> ValidateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        public async Task<Dictionary<string, string>> ValidateApprenticeship(ApprenticeshipViewModel viewModel)
         {
-            var validationResult = await _apprenticeshipValidator.ValidateAsync(apprenticeship);
+            var validationResult = await _apprenticeshipValidator.ValidateAsync(viewModel);
             if (!validationResult.IsValid)
             {
                 return new Dictionary<string, string>();
@@ -816,12 +778,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var overlappingErrors = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
-                    Apprenticeship = new List<Apprenticeship> { await MapFrom(apprenticeship) }
+                    Apprenticeship = new List<Apprenticeship> { await _apprenticeshipMapper.MapApprenticeship(viewModel)   }
                 });
 
             var result = _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors);
 
-            var uniqueUlnValidationResult = await _uniqueUlnValidator.ValidateAsync(apprenticeship);
+            var uniqueUlnValidationResult = await _uniqueUlnValidator.ValidateAsync(viewModel);
             if (!uniqueUlnValidationResult.IsValid)
             {
                 foreach (var error in uniqueUlnValidationResult.Errors)

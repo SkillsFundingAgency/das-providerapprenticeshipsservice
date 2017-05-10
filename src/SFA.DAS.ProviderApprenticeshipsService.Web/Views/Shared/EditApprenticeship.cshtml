@@ -130,7 +130,7 @@
     <label for="@Html.IdFor(m => m.Cost)">
         <span class="form-label-bold">Total agreed apprenticeship price (excluding VAT)</span>
         <span class="form-hint">Enter the price, including any end-point assessment costs, in whole pounds. For example, for £1,500 enter 1500.</span>
-        @Html.ValidationMessageFor(m => m.Cost, "Enter the cost in whole pounds, without a £ symbol", new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
+        @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
     </label>
     <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby = Html.IdFor(m => m.Cost) })
    

@@ -1,18 +1,29 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using FluentAssertions;
+
 using MediatR;
+
 using Moq;
+
 using NUnit.Framework;
 
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
+using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+
+using TrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments.Mappers
 {
@@ -21,204 +32,116 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     {
         private Mock<IHashingService> _hashingService;
 
-        private ApprenticeshipMapper _mapper;
-
         private Apprenticeship _model;
+
+        private ApprenticeshipMapper _mapper;
 
         [SetUp]
         public void Arrange()
         {
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.HashValue(It.IsAny<long>())).Returns("hashed");
+            _hashingService.Setup(x => x.DecodeValue("hashed")).Returns(1998);
 
             _model = new Apprenticeship
-                         {
-                             AgreementStatus = AgreementStatus.BothAgreed,
-                             CanBeApproved = false,
-                             CommitmentId = 222,
-                             Cost = 1700,
-                             DateOfBirth = new DateTime(1998, 12, 08),
-                             EmployerAccountId = 555,
-                             EmployerRef = "",
-                             FirstName = "First name",
-                             Id = 1,
-                             LastName = "Last name",
-                             LegalEntityName = "LegalEntityName",
-                             NINumber = "SE4445566O",
-                             PaymentStatus = PaymentStatus.Active,
-                             PendingUpdateOriginator = Originator.Provider,
-                             ProviderId = 666,
-                             ProviderName = "Provider name",
-                             ProviderRef = "Provider ref",
-                             Reference = "ABBA12",
-                             StartDate = DateTime.Now.AddMonths(2),
-                             EndDate = DateTime.Now.AddMonths(26),
-                             TrainingCode = "code-training",
-                             TrainingName = "Training name",
-                             TrainingType = TrainingType.Framework,
-                             ULN = "1112223301"
-                         };
-            _mapper = new ApprenticeshipMapper(_hashingService.Object, Mock.Of<IMediator>(), new CurrentDateTime());
+
+              {
+    AgreementStatus = AgreementStatus.BothAgreed,
+    CanBeApproved = false,
+    CommitmentId = 222,
+    Cost = 1700,
+    DateOfBirth = new DateTime(1998, 12, 08),
+    EmployerAccountId = 555,
+    EmployerRef = "",
+    FirstName = "First name",
+    Id = 1,
+    LastName = "Last name",
+    LegalEntityName = "LegalEntityName",
+    NINumber = "SE4445566O",
+    PaymentStatus = PaymentStatus.Active,
+    PendingUpdateOriginator = Originator.Provider,
+    ProviderId = 666,
+    ProviderName = "Provider name",
+    ProviderRef = "Provider ref",
+    Reference = "ABBA12",
+    StartDate = DateTime.Now.AddMonths(2),
+    EndDate = DateTime.Now.AddMonths(26),
+    TrainingCode = "code-training",
+    TrainingName = "Training name",
+    TrainingType = TrainingType.Framework,
+    ULN = "1112223301"
+};
+
+var mockMediator = new Mock<IMediator>();
+mockMediator.Setup(m => m.SendAsync(It.IsAny<GetStandardsQueryRequest>()))
+    .ReturnsAsync(new GetStandardsQueryResponse { Standards = new List<Standard>
+                                                                  {
+                                                                      new Standard
+                                                                          {
+                                                                              Duration = new Duration { From = 12, To = 12},
+                                                                              Id = "code-training",
+                                                                              Level = 3, 
+                                                                              Title = "Fake training"
+                                                                          }
+                                                                  } });
+mockMediator.Setup(m => m.SendAsync(It.IsAny<GetFrameworksQueryRequest>()))
+    .ReturnsAsync(new GetFrameworksQueryResponse { Frameworks = new List<Framework>() });
+
+_mapper = new ApprenticeshipMapper(_hashingService.Object, mockMediator.Object, new CurrentDateTime());
         }
 
         [Test]
-        public void ShouldMapToViewModel()
+        public void ShouldMapToApprenticeshipViewModel()
         {
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeship(_model);
 
             viewModel.HashedApprenticeshipId.Should().Be("hashed");
             viewModel.FirstName.Should().Be("First name");
             viewModel.LastName.Should().Be("Last name");
 
-            viewModel.DateOfBirth.Should().Be(new DateTime(1998, 12, 08));
-            viewModel.Uln.Should().Be("1112223301");
-            viewModel.StartDate.Should().BeCloseTo(DateTime.Now.AddMonths(2), 10 * 1000);
+            viewModel.DateOfBirth.DateTime.Should().Be(new DateTime(1998, 12, 08));
+            viewModel.ULN.Should().Be("1112223301");
+            viewModel.StartDate.DateTime.Should().BeCloseTo(new DateTimeViewModel(DateTime.Now.AddMonths(2)).DateTime.Value, 100 * 1000);
 
-            viewModel.EndDate.Should().BeCloseTo(DateTime.Now.AddMonths(26), 10 * 1000);
+            viewModel.EndDate.DateTime.Should().BeCloseTo(new DateTimeViewModel(DateTime.Now.AddMonths(26)).DateTime.Value, 10 * 1000);
             viewModel.TrainingName.Should().Be("Training name");
-            viewModel.Cost.Should().Be(1700);
+            viewModel.Cost.Should().Be("1700");
 
-            viewModel.EmployerName.Should().Be("LegalEntityName");
-            viewModel.CohortReference.Should().Be("hashed");
-            viewModel.ProviderReference.Should().Be("Provider ref");
+            viewModel.ProviderRef.Should().Be("Provider ref");
         }
 
         [Test]
-        public void ShouldNotEnableEditWhenStartDateInPast()
+        public async Task ShouldMapToApprenticeship()
         {
-            _model.StartDate = DateTime.Now.AddMonths(-5);
-            _model.PaymentStatus = PaymentStatus.Active;
+            var viewModel = _mapper.MapApprenticeship(_model);
+            var model = await _mapper.MapApprenticeship(viewModel);
 
-            var viewModel = _mapper.MapFrom(_model);
+            model.Id.Should().Be(1998);
+            model.FirstName.Should().Be("First name");
+            model.LastName.Should().Be("Last name");
 
-            viewModel.EnableEdit.Should().BeFalse();
+            model.DateOfBirth.Should().Be(new DateTime(1998, 12, 08));
+            model.ULN.Should().Be("1112223301");
+            model.StartDate.Should().BeCloseTo(new DateTimeViewModel(DateTime.Now.AddMonths(2)).DateTime.Value, 10 * 1000);
+
+            model.EndDate.Should().BeCloseTo(new DateTimeViewModel(DateTime.Now.AddMonths(26)).DateTime.Value, 10 * 1000);
+            model.TrainingName.Should().Be("Fake training");
+            model.Cost.Should().Be(1700);
+
+            model.ProviderRef.Should().Be("Provider ref");
         }
 
-        [Test]
-        public void ShouldNotEnableEditWhenCanceled()
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("%�$^")]
+        [TestCase("79228162514264337593543950336", Description = "Decimal max val + 1")]
+        public async Task ShouldMapToApprenticeshipCostToNullIfNullOrEmpty(string cost)
         {
-            _model.PaymentStatus = PaymentStatus.Withdrawn;
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeship(_model);
+            viewModel.Cost = cost;
+            var model = await _mapper.MapApprenticeship(viewModel);
 
-            viewModel.EnableEdit.Should().BeFalse();
-        }
-
-        [Test]
-        public void ShouldHaveUpdatesToReview()
-        {
-            _model.PendingUpdateOriginator = Originator.Employer;
-            var viewModel = _mapper.MapFrom(_model);
-
-            viewModel.EnableEdit.Should().BeFalse();
-            viewModel.PendingChanges.Should().Be(PendingChanges.ReadyForApproval);
-        }
-
-        [Test]
-        public void ShouldHaveNotUpdatesToReviewWithCanceled()
-        {
-            _model.PendingUpdateOriginator = Originator.Employer;
-            _model.PaymentStatus = PaymentStatus.Withdrawn;
-
-            var viewModel = _mapper.MapFrom(_model);
-
-            viewModel.PendingChanges.Should().Be(PendingChanges.ReadyForApproval);
-        }
-
-        [Test]
-        public void ShouldHaveUpdatesWaitingForEmployer()
-        {
-            _model.PendingUpdateOriginator = Originator.Provider;
-            var viewModel = _mapper.MapFrom(_model);
-
-            viewModel.EnableEdit.Should().BeFalse();
-            viewModel.PendingChanges.Should().Be(PendingChanges.WaitingForEmployer);
-        }
-
-        [Test]
-        public void ShouldHaveUpdatesWaitingForEmployerEvenIfCanceled()
-        {
-            _model.PendingUpdateOriginator = Originator.Provider;
-            _model.PaymentStatus = PaymentStatus.Withdrawn;
-
-            var viewModel = _mapper.MapFrom(_model);
-
-            viewModel.EnableEdit.Should().BeFalse();
-            viewModel.PendingChanges.Should().Be(PendingChanges.WaitingForEmployer);
-        }
-
-        [Test]
-        public void ShouldHaveStatusTextForFututreStart()
-        {
-            var viewModel = _mapper.MapFrom(_model);
-
-            viewModel.Status.Should().Be("Waiting to start");
-        }
-
-        [Test]
-        public void ShouldHaveStatusTextWhenStarted()
-        {
-            _model.PaymentStatus = PaymentStatus.Active;
-            _model.StartDate = DateTime.Now.AddMonths(-5);
-            var viewModel = _mapper.MapFrom(_model);
-
-            viewModel.Status.Should().Be("On programme");
-        }
-
-        [Test]
-        public void ShouldHaveStatusTextWhenCanceled()
-        {
-            _model.PaymentStatus = PaymentStatus.Withdrawn;
-            _model.StartDate = DateTime.Now.AddMonths(-5);
-            var viewModel = _mapper.MapFrom(_model);
-
-            viewModel.Status.Should().Be("Stopped");
-        }
-
-        [Test]
-        public void ShouldHaveStatusTextWhenPaused()
-        {
-            _model.PaymentStatus = PaymentStatus.Paused;
-            _model.StartDate = DateTime.Now.AddMonths(-5);
-            var viewModel = _mapper.MapFrom(_model);
-
-            viewModel.Status.Should().Be("Paused");
-        }
-
-        [Test]
-        public void ShouldHaveStatusTextWhenCompleted()
-        {
-            _model.PaymentStatus = PaymentStatus.Completed;
-            _model.StartDate = DateTime.Now.AddMonths(-5);
-            var viewModel = _mapper.MapFrom(_model);
-
-            viewModel.Status.Should().Be("Completed");
-        }
-
-        [Test]
-        public void ShouldNotHaveRecordStatus()
-        {
-            _model.PendingUpdateOriginator = null;
-            var viewModel = _mapper.MapFrom(_model);
-
-            viewModel.RecordStatus.Should().Be(string.Empty);
-        }
-
-        [Test]
-        public void ShouldHaveRecordStatusFromEmployer()
-        {
-            _model.PendingUpdateOriginator = Originator.Employer;
-            var viewModel = _mapper.MapFrom(_model);
-
-            viewModel.RecordStatus.Should().Be("Changes for review");
-        }
-
-        [Test]
-        public void ShouldHaveRecordStatusFromProvider()
-        {
-            _model.PendingUpdateOriginator = Originator.Provider;
-            var viewModel = _mapper.MapFrom(_model);
-
-            viewModel.RecordStatus.Should().Be("Changes pending");
+            model.Cost.Should().Be(null);
         }
 
         [TestCase(TriageStatus.Change)]
@@ -232,7 +155,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _model.PaymentStatus = PaymentStatus.Active;
             _model.DataLockTriageStatus = triageStatus;
 
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
             viewModel.EnableEdit.Should().Be(expectedEnabled);
         }
 

@@ -42,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
             var expectedApprenticeship = new ApprenticeshipUpdate();
             var viewModel = new CreateApprenticeshipUpdateViewModel();
             var signedInUser = new SignInUserModel() { DisplayName = "Bob", Email = "bob@test.com" };
-            _mockApprenticeshipMapper.Setup(x => x.MapFrom(viewModel)).Returns(expectedApprenticeship);
+            _mockApprenticeshipMapper.Setup(x => x.MapApprenticeshipUpdate(viewModel)).Returns(expectedApprenticeship);
 
             await _orchestrator.CreateApprenticeshipUpdate(viewModel, providerId, userId, signedInUser);
 
