@@ -46,13 +46,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 		private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly ApprenticeshipViewModelUniqueUlnValidator _uniqueUlnValidator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
+        private readonly ApprenticeshipViewModelValidator _apprenticeshipValidator;
         private readonly Func<int, string> _addSSuffix = i => i > 1 ? "s" : "";
 
         public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator, 
             IHashingService hashingService, IProviderCommitmentsLogger logger,
             ApprenticeshipViewModelUniqueUlnValidator uniqueUlnValidator,
             ProviderApprenticeshipsServiceConfiguration configuration,
-			IApprenticeshipMapper apprenticeshipMapper)
+			IApprenticeshipMapper apprenticeshipMapper,
+            ApprenticeshipViewModelValidator apprenticeshipValidator)
             : base (mediator)
         {
             if (mediator == null)
@@ -78,6 +80,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _uniqueUlnValidator = uniqueUlnValidator;
             _configuration = configuration;
             _apprenticeshipMapper = apprenticeshipMapper;
+            _apprenticeshipValidator = apprenticeshipValidator;
         }
 
         public async Task<CohortsViewModel> GetCohorts(long providerId)
@@ -766,6 +769,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<Dictionary<string, string>> ValidateApprenticeship(ApprenticeshipViewModel viewModel)
         {
+            var validationResult = await _apprenticeshipValidator.ValidateAsync(viewModel);
+            if (!validationResult.IsValid)
+            {
+                return new Dictionary<string, string>();
+            }
+
             var overlappingErrors = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {

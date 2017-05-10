@@ -1,4 +1,6 @@
-﻿using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+﻿using System.ComponentModel.DataAnnotations;
+
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
@@ -20,9 +22,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate
         public string Cost { get; set; }
 
         public DateTimeViewModel StartDate { get; set; }
-
         public DateTimeViewModel EndDate { get; set; }
 
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string ProviderRef { get; set; }
         public string EmployerRef { get; set; }
 

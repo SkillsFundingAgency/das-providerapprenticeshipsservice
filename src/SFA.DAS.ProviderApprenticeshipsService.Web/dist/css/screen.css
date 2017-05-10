@@ -2873,7 +2873,7 @@ span.helpText {
 }
 
 .hr-bottom {
-  margin-top: 22px;
+  margin-top: 23px;
 }
 
 .float-right {
@@ -2938,12 +2938,29 @@ span.helpText {
   }
 }
 
+#apprentice-details .bulk-upload-buttons .add-app-btn, #approve-cohorts .bulk-upload-buttons .add-app-btn {
+  margin-right: 10px;
+}
+
 #apprentice-details .group-title, #approve-cohorts .group-title {
   margin-bottom: 0;
 }
 
 #apprentice-details .finishEditingBtn, #approve-cohorts .finishEditingBtn {
   float: none;
+  margin-right: 10px;
+}
+
+#content .green-box-alert {
+  border: 5px solid #28a197;
+  margin-top: 30px;
+  margin-bottom: 0;
+  padding: 20px 15px 15px;
+}
+
+#content .green-box-alert .strong {
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 #content .flash-alert {
@@ -3334,6 +3351,34 @@ table .changed-item {
 
 #charCount {
   margin-bottom: 0;
+}
+
+@media (min-width: 641px) {
+  #review-cohorts .column-one-third {
+    height: 190px;
+  }
+}
+
+@media (min-width: 641px) {
+  #review-cohorts .all-apps h2.bold-xlarge {
+    font-size: 80px;
+  }
+}
+
+@media (min-width: 641px) {
+  #review-cohorts .incomplete-apps h2.bold-xlarge {
+    font-size: 80px;
+  }
+}
+
+.purple-border {
+  border: 5px solid #2e358b;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.total-cost .bold-xlarge {
+  font-size: 38px;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {

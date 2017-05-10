@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoApprenticeshipUpdate;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateDataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentices;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetPendingApprenticeshipUpdate;
@@ -19,6 +23,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
@@ -246,9 +251,79 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
         }
 
-        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
+        public async Task<DataLockMismatchViewModel> GetApprenticeshipMismatchDataLock(long providerId, string hashedApprenticeshipId)
         {
-            return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Info($"Getting apprenticeship datalock for provider: {providerId}", providerId: providerId, apprenticeshipId: apprenticeshipId);
+
+            var dataLock = await _mediator.SendAsync(new GetApprenticeshipDataLockRequest
+            {
+                ApprenticeshipId = apprenticeshipId,
+            });
+
+            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                ProviderId = providerId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            var datalockViewModel = await _apprenticeshipMapper.MapFrom(dataLock.Data);
+            var dasRecordViewModel = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
+            return new DataLockMismatchViewModel
+                       {
+                            ProviderId = providerId,
+                            HashedApprenticeshipId = hashedApprenticeshipId,
+                            DataLockEventId = datalockViewModel.DataLockEventId,
+                            DasApprenticeship = dasRecordViewModel,
+                            DataLockViewModel = datalockViewModel,
+                            EmployerName = data.Apprenticeship.LegalEntityName
+                       };
+        }
+
+        public async Task<ConfirmRestartViewModel> GetConfirmRestartViewModel(long providerId, string hashedApprenticeshipId)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Info($"Getting apprenticeship restart request for provider: {providerId}, apprenticeship: {apprenticeshipId}", providerId, apprenticeshipId);
+
+            var dataLock = await GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId);
+            return new ConfirmRestartViewModel
+            {
+                ProviderId = providerId,
+                HashedApprenticeshipId = hashedApprenticeshipId,
+                DataLockEventId = dataLock.DataLockViewModel.DataLockEventId,
+                DataMismatchModel = dataLock
+            };
+        }
+
+        public async Task RequestRestart(long dataLockEventId, string hashedApprenticeshipId, string userId)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            await _mediator.SendAsync(new UpdateDataLockCommand
+            {
+                ApprenticeshipId = apprenticeshipId,
+                DataLockEventId = dataLockEventId,
+                TriageStatus = TriageStatus.Restart,
+                UserId = userId
+            });
+        }
+
+        public async Task UpdateDataLock(long dataLockEventId, string hashedApprenticeshipId, SubmitStatusViewModel submitStatusViewModel, string userId)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+            var triage = _apprenticeshipMapper.MapTriangeStatus(submitStatusViewModel);
+
+            _logger.Info($"Updating data lock to triage {triage} for datalock: {dataLockEventId}, apprenticeship: {apprenticeshipId}", apprenticeshipId);
+
+            await _mediator.SendAsync(new UpdateDataLockCommand
+            {
+                ApprenticeshipId = apprenticeshipId,
+                DataLockEventId = dataLockEventId,
+                TriageStatus = triage,
+                UserId = userId
+            });
         }
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
@@ -260,7 +335,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             return
                 standardsTask.Result.Standards.Cast<ITrainingProgramme>()
-                    .Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>())
+                    .Union(frameworksTask.Result.Frameworks)
                     .OrderBy(m => m.Title)
                     .ToList();
         }
