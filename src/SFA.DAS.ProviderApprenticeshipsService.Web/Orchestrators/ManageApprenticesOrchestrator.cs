@@ -269,7 +269,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
 
             var datalockViewModel = await _apprenticeshipMapper.MapFrom(dataLock.Data);
-            var dasRecordViewModel = _apprenticeshipMapper.MapToApprenticeshipViewModel(data.Apprenticeship);
+            var dasRecordViewModel = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
             return new DataLockMismatchViewModel
                        {
                             ProviderId = providerId,

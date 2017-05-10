@@ -21,6 +21,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 
 using TrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
 
@@ -154,7 +155,7 @@ _mapper = new ApprenticeshipMapper(_hashingService.Object, mockMediator.Object, 
             _model.PaymentStatus = PaymentStatus.Active;
             _model.DataLockTriageStatus = triageStatus;
 
-            var viewModel = _mapper.MapFrom(_model);
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
             viewModel.EnableEdit.Should().Be(expectedEnabled);
         }
 

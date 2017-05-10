@@ -25,8 +25,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         Task<CreateApprenticeshipUpdateViewModel> CompareAndMapToCreateUpdateApprenticeshipViewModel(Apprenticeship original, ApprenticeshipViewModel edited);
 
         ApprenticeshipDetailsViewModel MapApprenticeshipDetails(Apprenticeship apprenticeship);
-      
-        ApprenticeshipDetailsViewModel MapFrom(Apprenticeship apprenticeship);
 
         Task<DataLockViewModel> MapFrom(DataLockStatus dataLock);
 
