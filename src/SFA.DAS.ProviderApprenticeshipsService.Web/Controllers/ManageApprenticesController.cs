@@ -178,7 +178,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 || data.StartDate != null
                 || data.EndDate != null
                 || data.Cost != null
-                || !string.IsNullOrWhiteSpace(data.ProviderRef);
+                || data.ProviderRef != null;
         }
     }
 }
