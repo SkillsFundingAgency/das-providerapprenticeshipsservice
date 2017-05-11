@@ -95,7 +95,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .NotNull().WithMessage(_validationText.LearnStartDate01.Text).WithErrorCode(_validationText.LearnStartDate01.ErrorCode)
                 .Must(ValidateDateWithoutDay).WithMessage(_validationText.LearnStartDate01.Text).WithErrorCode(_validationText.LearnStartDate01.ErrorCode)
-                .Must(NotBeBeforeMay2017).WithMessage(_validationText.LearnStartDate02.Text).WithErrorCode(_validationText.LearnStartDate02.ErrorCode);
+                .Must(NotBeBeforeMay2017).WithMessage(_validationText.LearnStartDate02.Text).WithErrorCode(_validationText.LearnStartDate02.ErrorCode)
+                .Must((startDate) =>
+                {
+                    return StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear(startDate);
+                }).WithMessage(_validationText.LearnStartDate05.Text).WithErrorCode(_validationText.LearnStartDate05.ErrorCode);
         }
 
         protected virtual void ValidateEndDate()
@@ -143,6 +147,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         {
             var age = _academicYear.CurrentAcademicYearStartDate.Year - dob.DateTime.Value.Year;
             return age <= 115;
+        }
+
+        private bool StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear(DateTimeViewModel startDate)
+        {
+            return startDate.DateTime.Value <= _academicYear.CurrentAcademicYearEndDate.AddYears(1);
         }
 
         private bool BeGreaterThenStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel date)

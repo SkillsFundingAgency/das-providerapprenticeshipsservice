@@ -21,6 +21,7 @@
         ValidationMessage LearnPlanEndDate03 { get; }
         ValidationMessage LearnStartDate01 { get; }
         ValidationMessage LearnStartDate02 { get; }
+        ValidationMessage LearnStartDate05 { get; }
         ValidationMessage ProgType01 { get; }
         ValidationMessage ProgType02 { get; }
         ValidationMessage ProviderRef01 { get; }
