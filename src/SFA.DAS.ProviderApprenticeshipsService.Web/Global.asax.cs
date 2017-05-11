@@ -26,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
             ModelBinders.Binders.Add(typeof(string), new TrimStringModelBinder());
 
-            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Name;
 
             FluentValidationModelValidatorProvider.Configure();
 
