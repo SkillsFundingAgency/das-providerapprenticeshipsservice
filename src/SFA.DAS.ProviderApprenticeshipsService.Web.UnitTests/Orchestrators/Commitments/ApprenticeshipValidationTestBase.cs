@@ -8,7 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 {
     public abstract class ApprenticeshipValidationTestBase
     {
-        protected readonly ApprenticeshipViewModelValidator Validator = new ApprenticeshipViewModelValidator(new WebApprenticeshipValidationText(), new CurrentDateTime());
+        protected readonly ApprenticeshipViewModelValidator Validator = new ApprenticeshipViewModelValidator(new WebApprenticeshipValidationText(), new CurrentDateTime(), new Infrastructure.Services.AcademicYear(new CurrentDateTime()));
         protected ApprenticeshipViewModel ValidModel;
 
         [SetUp]
