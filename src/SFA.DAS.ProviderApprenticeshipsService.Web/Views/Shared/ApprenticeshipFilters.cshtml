@@ -1,0 +1,33 @@
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipFiltersViewModel
+
+<strong>TrainingProviders</strong>
+<br/>
+
+
+@foreach (var option in Model.TrainingProvidersOptions)
+{
+    var checkedAtt = Model.TrainingProviders!=null && Model.TrainingProviders.Contains(option.Key) ? "checked=\"checked\"" : "";
+    
+    <label for="TrainingProviders">
+        <input name="TrainingProviders" value="@option.Key" id="TrainingProviders-@option.Key" type="checkbox" @checkedAtt aria-controls="js-search-results-info">
+        @option.Value
+    </label>
+    <br/>
+
+}
+
+<br/><br/>
+<strong>ApprenticeshipStatusOptions</strong>
+<br />
+
+@foreach (var option in Model.ApprenticeshipStatusOptions)
+{
+    var checkedAtt = Model.ApprenticeshipStatuses != null && Model.ApprenticeshipStatuses.Contains(option.Key) ? "checked=\"checked\"" : "";
+
+    <label for="ApprenticeshipStatuses">
+        <input name="ApprenticeshipStatuses" value="@option.Key" id="ApprenticeshipStatuses-@option.Key" type="checkbox" @checkedAtt aria-controls="js-search-results-info">
+        @option.Value
+    </label>
+    <br />
+
+}

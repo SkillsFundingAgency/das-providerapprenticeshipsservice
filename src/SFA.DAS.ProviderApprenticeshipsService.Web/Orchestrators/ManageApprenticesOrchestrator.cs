@@ -59,7 +59,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _approvedApprenticeshipValidator = approvedApprenticeshipValidator;
         }
 
-        public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(long providerId)
+        public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(long providerId, ApprenticeshipFiltersViewModel filters)
         {
             _logger.Info($"Getting On-programme apprenticeships for provider: {providerId}", providerId: providerId);
 
@@ -70,10 +70,37 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 .Select(m => _apprenticeshipMapper.MapApprenticeshipDetails(m))
                 .ToList();
 
+
+            //todo: cf - complete this
+
+            //todo: this would fetch from the response to the above request
+            var filterOptions = new ApprenticeshipFiltersViewModel
+            {
+                TrainingProvidersOptions = new KeyValuePair<string, string>[]
+                {
+                    new KeyValuePair<string, string>("opt1", "Option 1"),
+                    new KeyValuePair<string, string>("opt2", "Option 2"),
+                    new KeyValuePair<string, string>("opt3", "Option 3"),
+                    new KeyValuePair<string, string>("opt4", "Option 4")
+                },
+                ApprenticeshipStatusOptions = new KeyValuePair<int, string>[]
+                {
+                    new KeyValuePair<int, string>(0, "Some status"),
+                    new KeyValuePair<int, string>(1, "Another status"),
+                    new KeyValuePair<int, string>(2, "Yet another")
+                }
+            };
+
+            //now set the filters that were checked by the user
+            filterOptions.TrainingProviders = filters.TrainingProviders;
+            filterOptions.ApprenticeshipStatuses = filters.ApprenticeshipStatuses;
+
+
             return new ManageApprenticeshipsViewModel
             {
                 ProviderId = providerId,
-                Apprenticeships = apprenticeships
+                Apprenticeships = apprenticeships,
+                Filters = filterOptions
             };
         }
 

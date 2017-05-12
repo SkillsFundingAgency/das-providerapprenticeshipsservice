@@ -359,6 +359,7 @@
     <Compile Include="Models\AcknowledgementViewModel.cs" />
     <Compile Include="Models\ApprenticeshipDetailsViewModel.cs" />
     <Compile Include="Models\AgreementNotSignedViewModel.cs" />
+    <Compile Include="Models\ApprenticeshipFiltersViewModel.cs" />
     <Compile Include="Models\ApprenticeshipListItemGroupViewModel.cs" />
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\ApprenticeshipUpdateViewModel.cs" />
@@ -614,6 +615,7 @@
     <Content Include="Views\ManageApprentices\UpdateDataLock.cshtml" />
     <Content Include="Views\ManageApprentices\ConfirmDataLockChanges.cshtml" />
     <Content Include="Views\ManageApprentices\ConfirmRestart.cshtml" />
+    <Content Include="Views\Shared\ApprenticeshipFilters.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
