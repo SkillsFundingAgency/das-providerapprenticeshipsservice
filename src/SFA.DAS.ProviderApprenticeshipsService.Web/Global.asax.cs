@@ -10,6 +10,7 @@ using SFA.DAS.NLog.Logger;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure;
 using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
+using System.Linq;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
@@ -48,6 +49,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             if (ex is HttpException)
             {
                 Logger.Warn(ex, "Http Exception");
+            }
+            else if (ex is InvalidOperationException && ex.Message.StartsWith("A claim of type"))
+            {
+                var claims = ((ClaimsIdentity)Context.User.Identity).Claims
+                        .Select(x => $"{x.Type}: {x.Value}").ToArray();
+
+                var logValue = string.Join(Environment.NewLine, claims);
+
+                Logger.Error(ex, $"Invalid Claims: {Environment.NewLine}{logValue}{Environment.NewLine}");
             }
             else
             {
