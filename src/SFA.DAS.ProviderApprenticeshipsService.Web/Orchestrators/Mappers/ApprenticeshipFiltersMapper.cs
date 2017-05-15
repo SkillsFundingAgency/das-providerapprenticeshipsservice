@@ -11,9 +11,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         public ApprenticeshipSearchQuery MapToApprenticeshipSearchQuery(ApprenticeshipFiltersViewModel filters)
         {
             var selectedEmployers = new List<long>();
-            if (filters.EmployerOrganisations != null)
+            if (filters.Employer != null)
             {
-                selectedEmployers.AddRange(filters.EmployerOrganisations.Select(long.Parse));
+                selectedEmployers.AddRange(filters.Employer.Select(long.Parse));
             }
 
 
@@ -30,19 +30,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         {
             var result = new ApprenticeshipFiltersViewModel();
 
-            var trainingProviders = new List<KeyValuePair<string, string>>();
-            foreach (var tp in facets.TrainingProviders)
-            {
-                //todo: only seems to be a single value in the source?
-                trainingProviders.Add(new KeyValuePair<string, string>(tp.Data.Id.ToString(), tp.Data.Name));
-
-                if (tp.Selected)
-                {
-                    result.TrainingProviders.Add(tp.Data.Id.ToString());
-                }
-
-            }
-
             var statuses = new List<KeyValuePair<string, string>>();
             foreach (var status in facets.ApprenticeshipStatuses)
             {
@@ -50,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
                 if (status.Selected)
                 {
-                    result.ApprenticeshipStatuses.Add(status.Data.ToString());
+                    result.Status.Add(status.Data.ToString());
                 }
             }
 
@@ -61,7 +48,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
                 if (course.Selected)
                 {
-                    result.TrainingCourses.Add(course.Data.Id);
+                    result.Course.Add(course.Data.Id);
                 }
             }
 
@@ -72,7 +59,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
                 if (employer.Selected)
                 {
-                    result.EmployerOrganisations.Add(employer.Data.Id.ToString());
+                    result.Employer.Add(employer.Data.Id.ToString());
                 }
             }
 
@@ -83,11 +70,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
                 if (recordStatus.Selected)
                 {
-                    result.RecordStatuses.Add(recordStatus.Data.ToString());
+                    result.RecordStatus.Add(recordStatus.Data.ToString());
                 }
             }
 
-            result.TrainingProvidersOptions = trainingProviders;
             result.ApprenticeshipStatusOptions = statuses;
             result.TrainingCourseOptions = courses;
             result.EmployerOrganisationOptions = employers;

@@ -91,8 +91,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             //now set the filters that were checked by the user
             //no, this comes from api now
-            //filterOptions.TrainingProviders = filters.TrainingProviders;
-            //filterOptions.ApprenticeshipStatuses = filters.ApprenticeshipStatuses;
+            //filterOptions.TrainingProvider = filters.TrainingProvider;
+            //filterOptions.Status = filters.Status;
 
 
             return new ManageApprenticeshipsViewModel
