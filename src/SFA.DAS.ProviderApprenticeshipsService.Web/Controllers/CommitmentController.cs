@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+using System.Security.Claims;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -20,13 +21,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         private const string LastCohortPageSessionKey = "lastCohortPageSessionKey";
 
         private readonly CommitmentOrchestrator _commitmentOrchestrator;
+        private readonly ILog _logger;
 
-        public CommitmentController(CommitmentOrchestrator commitmentOrchestrator)
+        public CommitmentController(CommitmentOrchestrator commitmentOrchestrator, ILog logger)
         {
             if (commitmentOrchestrator == null)
                 throw new ArgumentNullException(nameof(commitmentOrchestrator));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
 
             _commitmentOrchestrator = commitmentOrchestrator;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -156,17 +161,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedCommitmentId}/Details", Name = "CohortDetails")]
         public async Task<ActionResult> Details(long providerId, string hashedCommitmentId)
         {
+            LogUserClaims();
+
             var model = await _commitmentOrchestrator.GetCommitmentDetails(providerId, hashedCommitmentId);
 
             if (!model.RelationshipVerified)
             {
-                return RedirectToAction("VerificationOfEmployer", new {providerId, hashedCommitmentId});
+                return RedirectToAction("VerificationOfEmployer", new { providerId, hashedCommitmentId });
             }
 
             var groupes = model.ApprenticeshipGroups.Where(m => m.ShowOverlapError);
             foreach (var groupe in groupes)
             {
-                var errorMessage = groupe.TrainingProgramme?.Title != null 
+                var errorMessage = groupe.TrainingProgramme?.Title != null
                     ? $"{groupe.TrainingProgramme?.Title ?? ""} apprentices training dates"
                     : "Apprentices training dates";
 
@@ -174,6 +181,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
             model.BackLinkUrl = GetReturnToListUrl(providerId);
             return View(model);
+        }
+
+        private void LogUserClaims()
+        {
+            var claims = ((ClaimsIdentity)HttpContext.User.Identity).Claims
+                        .Select(x => $"{x.Type}: {x.Value}").ToArray();
+
+            var logValue = string.Join(Environment.NewLine, claims);
+
+            _logger.Trace("User claims", new Dictionary<string, object> { { "providerClaims", logValue } });
         }
 
         [OutputCache(CacheProfile = "NoCache")]

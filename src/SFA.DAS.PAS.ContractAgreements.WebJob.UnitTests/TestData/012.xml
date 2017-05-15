@@ -5,8 +5,7 @@
   <updated>2016-11-03T06:59:35Z</updated>
   <author>
     <name>Contract Management Service</name>
-  </author>
-  <link rel="next-archive" type="application/vnd.sfa.contract.v1+atom+xml" href="https://services-at.fct-sfa.com/api/contracts/notifications" />
+  </author>  
   <link rel="self" type="application/vnd.sfa.contract.v1+atom+xml" href="https://services-at.fct-sfa.com/api/contracts/notifications" />
   <link rel="prev-archive" type="application/vnd.sfa.contract.v1+atom+xml" href="https://services-at.fct-sfa.com/api/contracts/notifications/11" />
   <archive xmlns="http://purl.org/syndication/history/1.0"></archive>
