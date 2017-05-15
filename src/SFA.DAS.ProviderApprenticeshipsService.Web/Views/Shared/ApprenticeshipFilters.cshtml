@@ -67,7 +67,7 @@
 
             result.Append("<label for= \"{groupName}\">");
 
-            result.Append($"<input name=\"{groupName}\" value =\"{option.Key}\" id =\"{groupName}-{option.Key}\" type = \"checkbox\" {checkedAtt} aria-controls=\"js-search-results-info\">");
+            result.Append($"<input name=\"{groupName}\" value =\"{option.Key}\" class=\"js-option-select\" id =\"{groupName}-{option.Key}\" type = \"checkbox\" {checkedAtt} aria-controls=\"js-search-results-info\">");
             result.Append(option.Value);
             result.Append("</label>");
 
