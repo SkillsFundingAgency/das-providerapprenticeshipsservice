@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -9,9 +10,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
     {
         public ApprenticeshipSearchQuery MapToApprenticeshipSearchQuery(ApprenticeshipFiltersViewModel filters)
         {
+            var selectedEmployers = new List<long>();
+            if (filters.EmployerOrganisations != null)
+            {
+                selectedEmployers.AddRange(filters.EmployerOrganisations.Select(long.Parse));
+            }
+
+
             var result = new ApprenticeshipSearchQuery
             {
-                TrainingProviders = filters.TrainingProviders?.ToList() ?? new List<string>(),
+                EmployerOrganisationIds = selectedEmployers
 
             };
 
@@ -26,11 +34,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             foreach (var tp in facets.TrainingProviders)
             {
                 //todo: only seems to be a single value in the source?
-                trainingProviders.Add(new KeyValuePair<string, string>(tp.Data, tp.Data));
+                trainingProviders.Add(new KeyValuePair<string, string>(tp.Data.Id.ToString(), tp.Data.Name));
 
                 if (tp.Selected)
                 {
-                    result.TrainingProviders.Add(tp.Data);
+                    result.TrainingProviders.Add(tp.Data.Id.ToString());
                 }
 
             }
@@ -60,11 +68,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             var employers = new List<KeyValuePair<string, string>>();
             foreach (var employer in facets.EmployerOrganisations)
             {
-                employers.Add(new KeyValuePair<string, string>(employer.Data, employer.Data));
+                employers.Add(new KeyValuePair<string, string>(employer.Data.Id.ToString(), employer.Data.Name));
 
                 if (employer.Selected)
                 {
-                    result.EmployerOrganisations.Add(employer.Data);
+                    result.EmployerOrganisations.Add(employer.Data.Id.ToString());
                 }
             }
 

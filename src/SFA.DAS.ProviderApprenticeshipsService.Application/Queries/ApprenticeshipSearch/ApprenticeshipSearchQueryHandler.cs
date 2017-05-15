@@ -28,12 +28,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.Apprentices
             var all = await _commitmentsApi.GetProviderApprenticeships(message.ProviderId);
             var facets = new Facets
             {
-                TrainingProviders = new List<FacetItem<string>>
+                TrainingProviders = new List<FacetItem<TrainingProvider>>
                 {
-                    new FacetItem<string> { Data = "TP1", Selected = false },
-                    new FacetItem<string> { Data = "TP2", Selected = true },
-                    new FacetItem<string> { Data = "TP3", Selected = true },
-                    new FacetItem<string> { Data = "TP4", Selected = false }
+                    new FacetItem<TrainingProvider> { Data = new TrainingProvider { Id = 1, Name = "TP1" } },
+                    new FacetItem<TrainingProvider> { Data = new TrainingProvider { Id = 2, Name = "TP2" } },
+                    new FacetItem<TrainingProvider> { Data = new TrainingProvider { Id = 3, Name = "TP3" } },
+                    new FacetItem<TrainingProvider> { Data = new TrainingProvider { Id = 4, Name = "TP4" } },
                 },
                 ApprenticeshipStatuses = new List<FacetItem<ApprenticeshipStatus>>
                 {
@@ -44,11 +44,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.Apprentices
                     new FacetItem<ApprenticeshipStatus> { Data = ApprenticeshipStatus.Finished },
                     new FacetItem<ApprenticeshipStatus> { Data = ApprenticeshipStatus.Live }
                 },
-                EmployerOrganisations = new List<FacetItem<string>>
+                EmployerOrganisations = new List<FacetItem<EmployerOrganisation>>
                 {
-                    new FacetItem<string> { Data = "Emp1", Selected = false },
-                    new FacetItem<string> { Data = "Emp2", Selected = true },
-                    new FacetItem<string> { Data = "Emp3", Selected = false },
+                    new FacetItem<EmployerOrganisation> { Data = new EmployerOrganisation { Id = 1, Name = "Emp1"} },
+                    new FacetItem<EmployerOrganisation> { Data = new EmployerOrganisation { Id = 2, Name = "Emp2"} },
+                    new FacetItem<EmployerOrganisation> { Data = new EmployerOrganisation { Id = 3, Name = "Emp3"} },
                 },
                 RecordStatuses = new List<FacetItem<RecordStatus>>
                 {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using IdentityServer3.Core.Validation;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
@@ -11,6 +12,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
             TrainingProviders = new List<string>();
             EmployerOrganisations = new List<string>();
             TrainingCourses = new List<string>();
+
+            TrainingProvidersOptions = new List<KeyValuePair<string, string>>();
+            ApprenticeshipStatusOptions = new List<KeyValuePair<string, string>>();
+            TrainingCourseOptions = new List<KeyValuePair<string, string>>();
+            RecordStatusOptions = new List<KeyValuePair<string, string>>();
+            EmployerOrganisationOptions = new List<KeyValuePair<string, string>>();
         }
 
         //options available
