@@ -1,33 +1,52 @@
-﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipFiltersViewModel
+﻿@using System.Text
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipFiltersViewModel
 
-<strong>TrainingProviders</strong>
-<br/>
-
-
-@foreach (var option in Model.TrainingProvidersOptions)
-{
-    var checkedAtt = Model.TrainingProviders!=null && Model.TrainingProviders.Contains(option.Key) ? "checked=\"checked\"" : "";
-    
-    <label for="TrainingProviders">
-        <input name="TrainingProviders" value="@option.Key" id="TrainingProviders-@option.Key" type="checkbox" @checkedAtt aria-controls="js-search-results-info">
-        @option.Value
-    </label>
-    <br/>
-
-}
-
-<br/><br/>
-<strong>ApprenticeshipStatusOptions</strong>
+<strong>Status</strong>
 <br />
 
-@foreach (var option in Model.ApprenticeshipStatusOptions)
+@RenderFilterOptions("Status", Model.ApprenticeshipStatusOptions, Model.ApprenticeshipStatuses)
+<br /><br />
+
+
+<strong>Alerts</strong>
+<br />
+
+@RenderFilterOptions("RecordStatus", Model.RecordStatusOptions, Model.RecordStatuses)
+
+
+<br /><br />
+<strong>Training Courses</strong>
+<br />
+
+@RenderFilterOptions("Courses", Model.TrainingCourseOptions, Model.TrainingCourses)
+
+
+<br /><br />
+<strong>Organisation</strong>
+<br />
+
+@RenderFilterOptions("Employers", Model.EmployerOrganisationOptions, Model.EmployerOrganisations)
+
+
+
+@functions
 {
-    var checkedAtt = Model.ApprenticeshipStatuses != null && Model.ApprenticeshipStatuses.Contains(option.Key) ? "checked=\"checked\"" : "";
+    private static HtmlString RenderFilterOptions(string groupName, List<KeyValuePair<string, string>> options, List<string> selected)
+    {
+        var result = new StringBuilder();
 
-    <label for="ApprenticeshipStatuses">
-        <input name="ApprenticeshipStatuses" value="@option.Key" id="ApprenticeshipStatuses-@option.Key" type="checkbox" @checkedAtt aria-controls="js-search-results-info">
-        @option.Value
-    </label>
-    <br />
+        foreach (var option in options)
+        {
+            var checkedAtt = selected != null && selected.Contains(option.Key) ? "checked=\"checked\"" : "";
 
+            result.Append("<label for= \"{groupName}\">");
+
+            result.Append($"<input name=\"{groupName}\" value =\"{option.Key}\" id =\"{groupName}-{option.Key}\" type = \"checkbox\" {checkedAtt} aria-controls=\"js-search-results-info\">");
+            result.Append(option.Value);
+            result.Append("</label>");
+            result.Append("<br/>");
+        }
+
+        return new HtmlString(result.ToString());
+    }
 }

@@ -4,15 +4,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
     public class ApprenticeshipFiltersViewModel
     {
+        public ApprenticeshipFiltersViewModel()
+        {
+            ApprenticeshipStatuses = new List<string>();
+            RecordStatuses = new List<string>();
+            TrainingProviders = new List<string>();
+            EmployerOrganisations = new List<string>();
+            TrainingCourses = new List<string>();
+        }
+
         //options available
-        public KeyValuePair<string, string>[] TrainingProvidersOptions { get; set; }
-        public KeyValuePair<int, string>[] ApprenticeshipStatusOptions { get; set; }
+        public List<KeyValuePair<string, string>> TrainingProvidersOptions { get; set; }
+        public List<KeyValuePair<string, string>> ApprenticeshipStatusOptions { get; set; }
+        public List<KeyValuePair<string, string>> TrainingCourseOptions { get; set; }
+        public List<KeyValuePair<string, string>> RecordStatusOptions { get; set; }
+        public List<KeyValuePair<string, string>> EmployerOrganisationOptions { get; set; }
 
         //options selected
-        public int[] ApprenticeshipStatuses { get; set; }
-        public string[] RecordStatuses { get; set; }
-        public string[] TrainingProviders { get; set; }
-        public string[] EmployerOrganisations { get; set; }
-        public string[] TrainingCourses { get; set; }
+        public List<string> ApprenticeshipStatuses { get; set; }
+        public List<string> RecordStatuses { get; set; }
+        public List<string> TrainingProviders { get; set; }
+        public List<string> EmployerOrganisations { get; set; }
+        public List<string> TrainingCourses { get; set; }
     }
 }

@@ -6,9 +6,25 @@
     ViewBag.PageId = "manage-apprentices";
 }
 
+<h1 class="heading-xlarge">Manage your apprentices</h1>
+
 <div class="grid-row">
-    <div class="column-full">
-        <h1 class="heading-xlarge">Manage your apprentices</h1>
+    <div class="column-one-third">
+
+        <form method="GET" action="@Url.Action("Index")" novalidate="novalidate">
+
+            @Html.Partial("ApprenticeshipFilters", Model.Filters)
+
+            <br />
+
+
+            <button type="submit" value="Filter">Filter</button>
+
+        </form>
+
+    </div>
+    <div class="column-two-thirds">
+        
         @if (!Model.Apprenticeships.Any())
         {
             <div class="panel panel-border-wide alert-default">
@@ -33,14 +49,14 @@
                 {
                     <tr>
                         <td>
-                            @apprenticeships.FirstName @apprenticeships.LastName 
+                            @apprenticeships.FirstName @apprenticeships.LastName
                         </td>
-                           
+
                         <td>
                             @if (apprenticeships.DateOfBirth != null)
                             {
                                 @apprenticeships.DateOfBirth.Value.ToGdsFormat()
-                            } 
+                            }
                         </td>
                         <td>
                             @apprenticeships.Uln
@@ -58,7 +74,7 @@
 
                         </td>
                         <td>
-                            <a href="@Url.Action("Details", new { Model.ProviderId, hashedApprenticeshipId = apprenticeships.HashedApprenticeshipId })"
+                            <a href="@Url.Action("Details", new {Model.ProviderId, hashedApprenticeshipId = apprenticeships.HashedApprenticeshipId})"
                                title="View  @apprenticeships.FirstName @apprenticeships.LastName"
                                aria-label="View @apprenticeships.FirstName @apprenticeships.LastName">View</a>
                         </td>
@@ -72,19 +88,6 @@
 
 
 
-<h3>Some filters...</h3>
-<br/>
-
-<form method="GET" action="@Url.Action("Index")" novalidate="novalidate">
-    
-    @Html.Partial("ApprenticeshipFilters", Model.Filters)
-
-    <br/>
-
-
-    <button type="submit" value="Filter">Filter</button>
-
-</form>
 
 
 
