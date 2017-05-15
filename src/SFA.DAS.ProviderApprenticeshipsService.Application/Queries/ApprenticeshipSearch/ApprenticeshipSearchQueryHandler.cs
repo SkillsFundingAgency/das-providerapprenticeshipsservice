@@ -84,13 +84,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.Apprentices
                 }
             };
 
-            //var data = await _commitmentsApi.GetProviderApprenticeships(message.ProviderId, message.Query);
-
             return new ApprenticeshipSearchQueryResponse
             {
                 Apprenticeships = all,
                 Facets = facets
             };
+
+
+            //var data = await _commitmentsApi.GetProviderApprenticeships(message.ProviderId, message.Query);
+
+            //return new ApprenticeshipSearchQueryResponse
+            //{
+            //    Apprenticeships = data.Apprenticeships.ToList(),
+            //    Facets = data.Facets
+            //};
 
         }
     }

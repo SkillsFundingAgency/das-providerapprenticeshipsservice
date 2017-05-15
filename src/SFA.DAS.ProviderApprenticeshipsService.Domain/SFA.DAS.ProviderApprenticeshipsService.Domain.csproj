@@ -35,6 +35,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApprenticeshipStatus.cs" />
     <Compile Include="ContractFeed\ContractFeedEvent.cs" />
     <Compile Include="CommitmentView.cs" />
     <Compile Include="Data\IAgreementStatusQueryRepository.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Provider.cs" />
     <Compile Include="ProviderAgreementStatus.cs" />
     <Compile Include="ProvidersView.cs" />
+    <Compile Include="RecordStatus.cs" />
     <Compile Include="Standard.cs" />
     <Compile Include="StandardsView.cs" />
     <Compile Include="Training.cs" />

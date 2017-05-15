@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.ProviderApprenticeshipsService.Domain;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Helpers;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using ApprenticeshipStatus = SFA.DAS.ProviderApprenticeshipsService.Domain.ApprenticeshipStatus;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
@@ -15,7 +17,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             {
                 selectedEmployers.AddRange(filters.Employer.Select(long.Parse));
             }
-
 
             var result = new ApprenticeshipSearchQuery
             {
@@ -33,11 +34,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             var statuses = new List<KeyValuePair<string, string>>();
             foreach (var status in facets.ApprenticeshipStatuses)
             {
-                statuses.Add(new KeyValuePair<string, string>(status.Data.ToString(), status.Data.ToString()));
+                var key = status.Data.ToString();
+                var description = Enumerations.GetDescription((ApprenticeshipStatus) status.Data);
+
+                statuses.Add(new KeyValuePair<string, string>(key, description));
 
                 if (status.Selected)
                 {
-                    result.Status.Add(status.Data.ToString());
+                    result.Status.Add(key);
                 }
             }
 
@@ -66,7 +70,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             var recordStatuses = new List<KeyValuePair<string, string>>();
             foreach (var recordStatus in facets.RecordStatuses)
             {
-                recordStatuses.Add(new KeyValuePair<string, string>(recordStatus.Data.ToString(), recordStatus.Data.ToString()));
+                var key = recordStatus.Data.ToString();
+                var description = Enumerations.GetDescription((RecordStatus)recordStatus.Data);
+
+                recordStatuses.Add(new KeyValuePair<string, string>(key, description));
 
                 if (recordStatus.Selected)
                 {

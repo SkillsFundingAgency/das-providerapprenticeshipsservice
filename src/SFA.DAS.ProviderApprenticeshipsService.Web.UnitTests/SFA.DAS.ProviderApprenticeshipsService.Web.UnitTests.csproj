@@ -93,12 +93,14 @@
     <Compile Include="Orchestrators\Commitments\ApprenticeshipValidationTestBase.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeshipDetails.cs" />
+    <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeshipFilters.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingDataLock.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenCreatingApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\Commitments\WhenCreatingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingDeleteApprenticeshipConfirmation.cs" />
     <Compile Include="Orchestrators\Commitments\WhenDeletingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGetCohorts.cs" />
+    <Compile Include="Orchestrators\ManageApprentices\WhenGettingApprenticeships.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenGettingReviewApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenGettingUndoApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\Commitments\WhenMappingApprenticeshipUpdate.cs" />
