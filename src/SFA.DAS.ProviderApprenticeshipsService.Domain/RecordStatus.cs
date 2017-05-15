@@ -4,13 +4,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain
 {
     public enum RecordStatus
     {
-        [Description("")]
+        [Description("No action needed")]
         NoActionNeeded,
-        [Description("Changes Pending")]
+        [Description("Changes pending")]
         ChangesPending,
-        [Description("Changes For Review")]
+        [Description("Changes for review")]
         ChangesForReview,
-        [Description("Change Requested")]
+        [Description("Change requested")]
         ChangeRequested,
     }
 }

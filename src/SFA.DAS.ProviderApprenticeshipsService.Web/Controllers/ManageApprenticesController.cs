@@ -29,9 +29,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpGet]
         [Route("all")]
         [OutputCache(CacheProfile = "NoCache")]
-        public async Task<ActionResult> Index(long providerId, ApprenticeshipFiltersViewModel filtersViewModel)
+        public async Task<ActionResult> Index(long providerId, ApprenticeshipFiltersViewModel filtersViewModel, string reset)
         {
-            var model = await _orchestrator.GetApprenticeships(providerId, filtersViewModel);
+            var model = await _orchestrator.GetApprenticeships(providerId, filtersViewModel, !string.IsNullOrWhiteSpace(reset));
             return View(model);
         }
 

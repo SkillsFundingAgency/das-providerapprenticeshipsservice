@@ -64,21 +64,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _apprenticeshipFiltersMapper = apprenticeshipFiltersMapper;
         }
 
-        public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(long providerId, ApprenticeshipFiltersViewModel filters)
+        public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(long providerId, ApprenticeshipFiltersViewModel filters, bool reset)
         {
             _logger.Info($"Getting On-programme apprenticeships for provider: {providerId}", providerId: providerId);
 
-            //todo: cf - complete this
-
-            var searchRequest = new ApprenticeshipSearchQueryRequest
-            {
-                Query = _apprenticeshipFiltersMapper.MapToApprenticeshipSearchQuery(filters)
-            };
+            var searchQuery = reset ? new ApprenticeshipSearchQuery()
+                : _apprenticeshipFiltersMapper.MapToApprenticeshipSearchQuery(filters);
 
             var searchResponse = await _mediator.SendAsync(new ApprenticeshipSearchQueryRequest
             {
                 ProviderId = providerId,
-                Query = new ApprenticeshipSearchQuery()
+                Query = searchQuery
             });
 
             var apprenticeships =
@@ -86,14 +82,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 .ToList();
 
             var filterOptions = _apprenticeshipFiltersMapper.Map(searchResponse.Facets);
-
-
-
-            //now set the filters that were checked by the user
-            //no, this comes from api now
-            //filterOptions.TrainingProvider = filters.TrainingProvider;
-            //filterOptions.Status = filters.Status;
-
 
             return new ManageApprenticeshipsViewModel
             {

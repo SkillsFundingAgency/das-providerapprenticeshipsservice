@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -46,16 +44,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.Apprentices
                 },
                 EmployerOrganisations = new List<FacetItem<EmployerOrganisation>>
                 {
-                    new FacetItem<EmployerOrganisation> { Data = new EmployerOrganisation { Id = 1, Name = "Emp1"} },
-                    new FacetItem<EmployerOrganisation> { Data = new EmployerOrganisation { Id = 2, Name = "Emp2"} },
-                    new FacetItem<EmployerOrganisation> { Data = new EmployerOrganisation { Id = 3, Name = "Emp3"} },
+                    new FacetItem<EmployerOrganisation> { Data = new EmployerOrganisation { Id = 1, Name = "Employer Organisation 1"} },
+                    new FacetItem<EmployerOrganisation> { Data = new EmployerOrganisation { Id = 2, Name = "Employer Organisation 2"} },
+                    new FacetItem<EmployerOrganisation> { Data = new EmployerOrganisation { Id = 3, Name = "Employer Organisation 3 which has a long name"} },
                 },
                 RecordStatuses = new List<FacetItem<RecordStatus>>
                 {
                     new FacetItem<RecordStatus> { Data = RecordStatus.ChangeRequested, Selected = true },
                     new FacetItem<RecordStatus> { Data = RecordStatus.ChangesForReview, Selected = false },
                     new FacetItem<RecordStatus> { Data = RecordStatus.ChangesPending, Selected = false },
-                    new FacetItem<RecordStatus> { Data = RecordStatus.NoActionNeeded, Selected = true },
+                    new FacetItem<RecordStatus> { Data = RecordStatus.NoActionNeeded, Selected = false },
                 },
                 TrainingCourses = new List<FacetItem<TrainingCourse>>
                 {
