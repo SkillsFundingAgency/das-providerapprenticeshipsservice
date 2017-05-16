@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
@@ -12,16 +13,44 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
     {
         public ApprenticeshipSearchQuery MapToApprenticeshipSearchQuery(ApprenticeshipFiltersViewModel filters)
         {
+            //todo: cf test this.
+
             var selectedEmployers = new List<long>();
             if (filters.Employer != null)
             {
                 selectedEmployers.AddRange(filters.Employer.Select(long.Parse));
             }
 
+            var selectedStatuses = new List<Commitments.Api.Types.Apprenticeship.Types.ApprenticeshipStatus>();
+            if (filters.Status != null)
+            {
+                selectedStatuses.AddRange(
+                    filters.Status.Select(x =>
+                        (Commitments.Api.Types.Apprenticeship.Types.ApprenticeshipStatus)
+                            Enum.Parse(typeof(Commitments.Api.Types.Apprenticeship.Types.ApprenticeshipStatus), x)));
+            }
+
+            var recordStatuses = new List<Commitments.Api.Types.Apprenticeship.Types.RecordStatus>();
+            if (filters.RecordStatus != null)
+            {
+                recordStatuses.AddRange(
+                    filters.RecordStatus.Select(
+                        x => (Commitments.Api.Types.Apprenticeship.Types.RecordStatus) 
+                            Enum.Parse(typeof(Commitments.Api.Types.Apprenticeship.Types.RecordStatus), x)));
+            }
+
+            var trainingCourses = new List<string>();
+            if (filters.Course != null)
+            {
+                trainingCourses.AddRange(filters.Course);
+            }
+
             var result = new ApprenticeshipSearchQuery
             {
-                EmployerOrganisationIds = selectedEmployers
-
+                EmployerOrganisationIds = selectedEmployers,
+                ApprenticeshipStatuses = selectedStatuses,
+                RecordStatuses = recordStatuses,
+                TrainingCourses = trainingCourses
             };
 
             return result;
