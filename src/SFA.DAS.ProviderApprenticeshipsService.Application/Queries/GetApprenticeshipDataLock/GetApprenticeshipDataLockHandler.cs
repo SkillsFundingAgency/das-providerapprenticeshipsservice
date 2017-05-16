@@ -22,7 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenti
         {
             var data = await _dataLockApi.GetDataLocks(request.ApprenticeshipId);
 
-            return new GetApprenticeshipDataLockResponse { Data = data.FirstOrDefault(m => m.Status != Status.Pass) };
+            return new GetApprenticeshipDataLockResponse { Data = data.FirstOrDefault(m => m.Status == Status.Fail && !m.IsResolved) };
         }
     }
 }
