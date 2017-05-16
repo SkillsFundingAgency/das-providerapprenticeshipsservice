@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLock
 {
@@ -21,7 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenti
         {
             var data = await _dataLockApi.GetDataLocks(request.ApprenticeshipId);
 
-            return new GetApprenticeshipDataLockResponse { Data = data.FirstOrDefault(m => !m.IsResolved) };
+            return new GetApprenticeshipDataLockResponse { Data = data.FirstOrDefault(m => m.Status == Status.Fail && !m.IsResolved) };
         }
     }
 }
