@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.DataLock;
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLock;
 
@@ -34,7 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public async Task ShouldGetDataLockStatus()
         {
             _dataLockApi.Setup(m => m.GetDataLocks(1))
-                .ReturnsAsync(new List<DataLockStatus> { new DataLockStatus { IsResolved = false, ApprenticeshipId = 1, IlrTotalCost = 1500 } });
+                .ReturnsAsync(new List<DataLockStatus> { new DataLockStatus { IsResolved = false, ApprenticeshipId = 1, IlrTotalCost = 1500, Status = Status.Fail} });
 
             var request = new GetApprenticeshipDataLockRequest { ApprenticeshipId = 1 };
             var response = await _sut.Handle(request);
