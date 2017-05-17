@@ -9,21 +9,17 @@
 <h1 class="heading-xlarge">Manage your apprentices</h1>
 
 <div class="grid-row">
+   
     <div class="column-one-third">
-
         <form method="GET" action="@Url.Action("Index")" novalidate="novalidate">
-
             @Html.Partial("ApprenticeshipFilters", Model.Filters)
-
-            <br />
-
             <button type="submit" class="button" value="Filter">Filter</button>
-            <button type="submit" name="Reset" value="Reset">Clear</button>
-
-
+            <a href="#" title="Clear" class="button text-link">Clear</a>
         </form>
 
     </div>
+
+
     <div class="column-two-thirds">
         
         @if (!Model.Apprenticeships.Any())
@@ -83,11 +79,20 @@
                 }
                 </tbody>
             </table>
+
+            <nav role="navigation">
+                <ul class="previous-next-navigation">
+                    <li class="next">
+                        <a href="#">
+                            Next <span class="visuallyhidden">page</span>
+                            <span class="page-numbers">1 of 12</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         }
     </div>
 </div>
-
-
 
 
 

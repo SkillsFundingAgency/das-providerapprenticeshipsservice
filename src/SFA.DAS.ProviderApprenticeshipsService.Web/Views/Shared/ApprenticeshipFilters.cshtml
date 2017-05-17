@@ -1,53 +1,44 @@
 ﻿@using System.Text
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipFiltersViewModel
 
-<style>
-    .option-select-label {
-        font-weight: bold;
-    }
 
-    .option-select {
-        display: inline-block;
-        padding: 7px 0 7px 35px;
-        border-bottom: 1px solid #bfc1c3;
-        width: 90%;
-        cursor: pointer;
-    }
-
-    .option-select .options-container input {
-    float: left;
-    margin: 2px 0 0 -27px;
-    width: 20px;
-    height: 20px;
-}
-</style>
+<div class="filter-option-select">
+    <div class="container-head js-container-head">
+        <div class="option-select-label">Status</div>
+    </div>
+    <div class="options-container">             
+             @RenderFilterOptions("Status", Model.ApprenticeshipStatusOptions, Model.Status)     
+    </div>
+</div>
 
 
-<div class="option-select-label">Status</div>
-<br />
+<div class="filter-option-select">
+    <div class="container-head js-container-head">
+        <div class="option-select-label">Alerts</div>
+    </div>
+    <div class="options-container">
+       @RenderFilterOptions("RecordStatus", Model.RecordStatusOptions, Model.RecordStatus)
+    </div>
+</div>
 
-@RenderFilterOptions("Status", Model.ApprenticeshipStatusOptions, Model.Status)
-<br /><br />
+<div class="filter-option-select">
+    <div class="container-head js-container-head">
+        <div class="option-select-label">Training Courses</div>
+    </div>
+    <div class="options-container">
+        @RenderFilterOptions("Course", Model.TrainingCourseOptions, Model.Course)
+    </div>
+</div>
 
+<div class="filter-option-select">
+    <div class="container-head js-container-head">
+        <div class="option-select-label">Organisation</div>
+    </div>
+    <div class="options-container">
+       @RenderFilterOptions("Employer", Model.EmployerOrganisationOptions, Model.Employer)
+    </div>
+</div>
 
-<div class="option-select-label">Alerts</div>
-<br />
-
-@RenderFilterOptions("RecordStatus", Model.RecordStatusOptions, Model.RecordStatus)
-
-
-<br /><br />
-<div class="option-select-label">Training Courses</div>
-<br />
-
-@RenderFilterOptions("Course", Model.TrainingCourseOptions, Model.Course)
-
-
-<br /><br />
-<div class="option-select-label">Organisation</div>
-<br />
-
-@RenderFilterOptions("Employer", Model.EmployerOrganisationOptions, Model.Employer)
 
 
 
@@ -61,19 +52,16 @@
         {
             var checkedAtt = selected != null && selected.Contains(option.Key) ? "checked=\"checked\"" : "";
 
-            result.Append("<div class=\"option-select\">");
+ 
 
-            result.Append("<div class=\"options-container\"");
-
-            result.Append("<label for= \"{groupName}\">");
+            result.Append($"<label for= \"{groupName}-{option.Key}\">");
 
             result.Append($"<input name=\"{groupName}\" value =\"{option.Key}\" class=\"js-option-select\" id =\"{groupName}-{option.Key}\" type = \"checkbox\" {checkedAtt} aria-controls=\"js-search-results-info\">");
             result.Append(option.Value);
             result.Append("</label>");
 
-            result.Append("</div>");
-            result.Append("</div>");
-            result.Append("<br/>");
+      
+           
         }
 
         return new HtmlString(result.ToString());
