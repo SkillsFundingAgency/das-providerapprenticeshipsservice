@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Web.Mvc;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
-using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 
