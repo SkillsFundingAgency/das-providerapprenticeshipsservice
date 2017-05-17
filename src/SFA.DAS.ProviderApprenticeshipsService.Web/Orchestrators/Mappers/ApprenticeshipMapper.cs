@@ -297,7 +297,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 IlrActualStartDate = dataLock.IlrActualStartDate,
                 IlrEffectiveFromDate = dataLock.IlrEffectiveFromDate,
                 IlrTotalCost = dataLock.IlrTotalCost,
-                TriageStatusViewModel = (TriageStatusViewModel)dataLock.TriageStatus
+                TriageStatusViewModel = (TriageStatusViewModel)dataLock.TriageStatus,
+                DataLockErrorCode = dataLock.ErrorCode
             };
         }
 
