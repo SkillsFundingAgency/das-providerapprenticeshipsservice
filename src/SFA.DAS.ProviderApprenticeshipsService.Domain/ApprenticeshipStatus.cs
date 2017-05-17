@@ -4,15 +4,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain
 {
     public enum ApprenticeshipStatus
     {
+        [Description("")]
+        None = 0,
         [Description("Waiting to start")]
-        WaitingToStart = 0,
+        WaitingToStart = 1,
         [Description("Live")]
-        Live = 1,
+        Live = 2,
         [Description("Paused")]
-        Paused = 2,
+        Paused = 3,
         [Description("Stopped")]
-        Stopped = 3,
+        Stopped = 4,
         [Description("Finished")]
-        Finished = 4
+        Finished = 5
     }
 }
