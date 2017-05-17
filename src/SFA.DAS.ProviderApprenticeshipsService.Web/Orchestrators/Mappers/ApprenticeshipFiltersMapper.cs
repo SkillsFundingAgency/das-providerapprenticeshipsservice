@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Helpers;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using ApprenticeshipStatus = SFA.DAS.ProviderApprenticeshipsService.Domain.ApprenticeshipStatus;
 
@@ -62,7 +62,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             foreach (var status in facets.ApprenticeshipStatuses)
             {
                 var key = status.Data.ToString();
-                var description = Enumerations.GetDescription((ApprenticeshipStatus) status.Data);
+                var description = ((ApprenticeshipStatus) status.Data).GetDescription();
 
                 statuses.Add(new KeyValuePair<string, string>(key, description));
 
@@ -98,7 +98,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             foreach (var recordStatus in facets.RecordStatuses)
             {
                 var key = recordStatus.Data.ToString();
-                var description = Enumerations.GetDescription((RecordStatus)recordStatus.Data);
+                var description = ((RecordStatus)recordStatus.Data).GetDescription();
 
                 recordStatuses.Add(new KeyValuePair<string, string>(key, description));
 

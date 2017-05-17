@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Helpers;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments.Mappers
@@ -86,7 +83,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             var actual = result.ApprenticeshipStatusOptions.First();
             Assert.AreEqual("WaitingToStart", actual.Key);
-            Assert.AreEqual(Enumerations.GetDescription(Domain.ApprenticeshipStatus.WaitingToStart), actual.Value);
+            Assert.AreEqual((Domain.ApprenticeshipStatus.WaitingToStart).GetDescription(), actual.Value);
 
             Assert.AreEqual(1, result.Status.Count);
         }
@@ -118,7 +115,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             var actual = result.RecordStatusOptions.First();
             Assert.AreEqual("ChangeRequested", actual.Key);
-            Assert.AreEqual(Enumerations.GetDescription(Domain.RecordStatus.ChangeRequested), actual.Value);
+            Assert.AreEqual((Domain.RecordStatus.ChangeRequested).GetDescription(), actual.Value);
 
             Assert.AreEqual(2, result.RecordStatus.Count);
         }
