@@ -11,6 +11,7 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure;
 using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 using System.Linq;
+using System.Net;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
@@ -46,7 +47,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
         {
             var ex = Server.GetLastError().GetBaseException();
 
-            if (ex is HttpException)
+            if (ex is HttpException && ((HttpException)ex).GetHttpCode() == (int) HttpStatusCode.Forbidden)
+            {
+                Logger.Info($"{ex.Message} ({HttpStatusCode.Forbidden})");
+            }
+            else if (ex is HttpException)
             {
                 Logger.Warn(ex, "Http Exception");
             }
