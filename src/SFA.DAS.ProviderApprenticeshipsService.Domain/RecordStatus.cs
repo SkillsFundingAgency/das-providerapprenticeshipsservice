@@ -5,12 +5,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain
     public enum RecordStatus
     {
         [Description("No action needed")]
-        NoActionNeeded,
+        NoActionNeeded = 0,
         [Description("Changes pending")]
-        ChangesPending,
+        ChangesPending = 1,
         [Description("Changes for review")]
-        ChangesForReview,
+        ChangesForReview = 2,
         [Description("Change requested")]
-        ChangeRequested,
+        ChangeRequested = 3,
+        [Description("ILR data mismatch")]
+        IlrDataMismatch = 4,
+        [Description("ILR changes pending")]
+        IlrChangesPending = 5
+
     }
 }

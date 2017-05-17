@@ -64,12 +64,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _apprenticeshipFiltersMapper = apprenticeshipFiltersMapper;
         }
 
-        public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(long providerId, ApprenticeshipFiltersViewModel filters, bool reset)
+        public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(long providerId, ApprenticeshipFiltersViewModel filters)
         {
             _logger.Info($"Getting On-programme apprenticeships for provider: {providerId}", providerId: providerId);
 
-            var searchQuery = reset ? new ApprenticeshipSearchQuery()
-                : _apprenticeshipFiltersMapper.MapToApprenticeshipSearchQuery(filters);
+            var searchQuery = _apprenticeshipFiltersMapper.MapToApprenticeshipSearchQuery(filters);
 
             var searchResponse = await _mediator.SendAsync(new ApprenticeshipSearchQueryRequest
             {
@@ -87,7 +86,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 Apprenticeships = apprenticeships,
-                Filters = filterOptions
+                Filters = filterOptions,
+                TotalApprenticeships = searchResponse.TotalApprenticeships
             };
         }
 

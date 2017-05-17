@@ -8,6 +8,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public ApprenticeshipFiltersViewModel Filters { get; set; }
 
+        public int TotalApprenticeships { get; set; }
+
         public long ProviderId { get; set; }
     }
 }

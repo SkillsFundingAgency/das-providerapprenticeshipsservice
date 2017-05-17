@@ -34,7 +34,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.Apprentices
             return new ApprenticeshipSearchQueryResponse
             {
                 Apprenticeships = data.Apprenticeships.ToList(),
-                Facets = data.Facets
+                Facets = data.Facets,
+                TotalApprenticeships = data.TotalApprenticeships
             };
         }
     }

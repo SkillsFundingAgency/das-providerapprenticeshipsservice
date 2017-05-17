@@ -14,7 +14,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
             ApprenticeshipStatusOptions = new List<KeyValuePair<string, string>>();
             TrainingCourseOptions = new List<KeyValuePair<string, string>>();
             RecordStatusOptions = new List<KeyValuePair<string, string>>();
-            EmployerOrganisationOptions = new List<KeyValuePair<string, string>>();
+            EmployerOrganisationOptions = new List<KeyValuePair<string, string>>();   
         }
 
         public List<KeyValuePair<string, string>> ApprenticeshipStatusOptions { get; set; }

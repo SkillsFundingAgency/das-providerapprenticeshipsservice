@@ -7,5 +7,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.Apprentices
     {
         public List<Apprenticeship> Apprenticeships { get; set; }
         public Facets Facets { get; set; }
+        public int TotalApprenticeships { get; set; }
     }
 }

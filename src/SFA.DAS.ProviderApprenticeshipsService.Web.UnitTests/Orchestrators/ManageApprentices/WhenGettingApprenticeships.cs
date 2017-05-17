@@ -59,7 +59,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
         public async Task ThenShouldMapFiltersToSearchQuery()
         {
             //Act
-            await _orchestrator.GetApprenticeships(1, new ApprenticeshipFiltersViewModel(), false);
+            await _orchestrator.GetApprenticeships(1, new ApprenticeshipFiltersViewModel());
 
             //Assert
             _mockApprenticeshipFiltersMapper.Verify(
@@ -71,7 +71,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
         public async Task ThenShouldMapSearchResultsToViewModel()
         {
             //Act
-            await _orchestrator.GetApprenticeships(1, new ApprenticeshipFiltersViewModel(), false);
+            await _orchestrator.GetApprenticeships(1, new ApprenticeshipFiltersViewModel());
 
             //Assert
             _mockApprenticeshipFiltersMapper.Verify(
@@ -84,7 +84,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
         public async Task ThenShouldCallMediatorToQueryApprenticeships()
         {
             //Act
-            await _orchestrator.GetApprenticeships(1, new ApprenticeshipFiltersViewModel(), false);
+            await _orchestrator.GetApprenticeships(1, new ApprenticeshipFiltersViewModel());
 
             //Assert
             _mockMediator.Verify(x => x.SendAsync(It.IsAny<ApprenticeshipSearchQueryRequest>()), Times.Once);
