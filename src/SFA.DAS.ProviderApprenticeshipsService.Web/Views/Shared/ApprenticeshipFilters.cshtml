@@ -7,7 +7,7 @@
         <div class="option-select-label">Status</div>
     </div>
     <div class="options-container">             
-             @RenderFilterOptions("Status", Model.ApprenticeshipStatusOptions, Model.Status)     
+             @RenderFilterOptions("Status", Model.ApprenticeshipStatusOptions, Model.Status)    
     </div>
 </div>
 
@@ -52,16 +52,16 @@
         {
             var checkedAtt = selected != null && selected.Contains(option.Key) ? "checked=\"checked\"" : "";
 
- 
+
 
             result.Append($"<label for= \"{groupName}-{option.Key}\">");
 
             result.Append($"<input name=\"{groupName}\" value =\"{option.Key}\" class=\"js-option-select\" id =\"{groupName}-{option.Key}\" type = \"checkbox\" {checkedAtt} aria-controls=\"js-search-results-info\">");
-            result.Append(option.Value);
+            result.Append($"<span>{option.Value}</span>");
             result.Append("</label>");
 
-      
-           
+
+
         }
 
         return new HtmlString(result.ToString());
