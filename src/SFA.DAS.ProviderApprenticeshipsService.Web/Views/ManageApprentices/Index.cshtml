@@ -8,20 +8,17 @@
 
 <h1 class="heading-xlarge">Manage your apprentices</h1>
 
-<div class="grid-row">
-   
-    <div class="column-one-third">
+<div class="grid-row"> 
+    <div class="column-one-third">       
         <form method="GET" action="@Url.Action("Index")" novalidate="novalidate">
             @Html.Partial("ApprenticeshipFilters", Model.Filters)
             <button type="submit" class="button" value="Filter">Filter apprentices</button>
-            <a href="@Url.Action("Index")" title="Clear" class="button text-link">Reset</a>
+            <a href="@Url.Action("Index")" title="Reset" class="button text-link">Reset</a>
         </form>
-
     </div>
 
 
-    <div class="column-two-thirds">
-        
+    <div class="column-two-thirds">   
         @if (Model.TotalApprenticeships == 0 )
         {
             <div class="panel panel-border-wide alert-default">
@@ -69,7 +66,7 @@
                             <div>
                                 @apprenticeships.DataLockStatus
                             </div>
-
+                            &nbsp;
                         </td>
                         <td>
                             <a href="@Url.Action("Details", new {Model.ProviderId, hashedApprenticeshipId = apprenticeships.HashedApprenticeshipId})"
