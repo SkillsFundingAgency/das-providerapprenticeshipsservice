@@ -540,8 +540,7 @@ table{
             position: relative;
             background-color: #fff;          
             max-height:200px; //container height
-            overflow-x: hidden;
-            overflow-y: scroll;
+            overflow:auto;
                 label{
                     font-size: 16px;
                     line-height: 1.25; 

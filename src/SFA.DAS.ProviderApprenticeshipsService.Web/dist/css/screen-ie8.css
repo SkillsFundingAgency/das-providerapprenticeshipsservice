@@ -2957,8 +2957,7 @@ table .changed-item {
   position: relative;
   background-color: #fff;
   max-height: 200px;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow: auto;
 }
 
 .filter-option-select .options-container label {
