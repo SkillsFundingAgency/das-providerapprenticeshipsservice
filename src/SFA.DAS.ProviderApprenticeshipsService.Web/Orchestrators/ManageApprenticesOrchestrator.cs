@@ -76,8 +76,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Query = searchQuery
             });
 
-            var apprenticeships =
-                searchResponse.Apprenticeships.Select(m => _apprenticeshipMapper.MapApprenticeshipDetails(m))
+            var apprenticeships = searchResponse.Apprenticeships
+                .OrderBy(m => m.ApprenticeshipName)
+                .Select(m => _apprenticeshipMapper.MapApprenticeshipDetails(m))
                 .ToList();
 
             var filterOptions = _apprenticeshipFiltersMapper.Map(searchResponse.Facets);
