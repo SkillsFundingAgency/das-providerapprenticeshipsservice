@@ -1,4 +1,5 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+﻿@using SFA.DAS.Commitments.Api.Types.DataLock.Types
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock.DataLockMismatchViewModel
 
@@ -24,7 +25,10 @@
                 </tr>
             </thead>
             <tbody>
-            @if (Model.DataLockViewModel.IlrTrainingCourseCode != Model.DasApprenticeship.TrainingCode)
+            @if (  Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock03)
+                || Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock04)
+                || Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock05)
+                || Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock06))
             {
                 <tr>
                     <td>Apprenticeship training course</td>
@@ -43,7 +47,7 @@
                 </tr>
             }
 
-            @if (Model.DataLockViewModel.IlrTotalCost !=  Model.DasApprenticeship.Cost.AsNullableDecimal())
+            @if (Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock07))
             {
                 <tr>
                     <td>Total cost of training</td>
@@ -62,7 +66,7 @@
                 </tr>
             }
 
-            @if (Model.DataLockViewModel.IlrActualStartDate != Model.DasApprenticeship.StartDate.DateTime)
+            @if (Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock09))
             {
                 <tr>
                     <td>Planned training start date</td>

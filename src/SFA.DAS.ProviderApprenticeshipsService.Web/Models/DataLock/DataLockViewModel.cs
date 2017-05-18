@@ -1,5 +1,6 @@
 ﻿using System;
 
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
@@ -27,6 +28,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
         public decimal? IlrTotalCost { get; set; }
 
         public TriageStatusViewModel TriageStatusViewModel { get; set; }
+
+        public DataLockErrorCode DataLockErrorCode { get; set; }
     }
 
     public enum TriageStatusViewModel
