@@ -55,7 +55,7 @@
     <hr />
     <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
     <span class="form-hint">Start typing in the name of the course or choose an option from the list</span>
-    @Html.ValidationMessageFor(m => m.TrainingCode, null, new { id = "error-message-" + Html.IdFor(m => m.TrainingCode), @class = "error-message" })
+    @Html.ValidationMessageFor(m => m.TrainingCode, "Choose a training course for this apprentice", new { id = "error-message-" + Html.IdFor(m => m.TrainingCode), @class = "error-message" })
     <select name="TrainingCode" id="TrainingCode" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
         <option value="">Please select</option>
         @foreach (var programme in ViewBag.ApprenticeshipProgrammes)
