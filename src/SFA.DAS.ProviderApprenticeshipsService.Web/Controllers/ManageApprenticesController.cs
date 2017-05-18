@@ -102,11 +102,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             await _orchestrator.CreateApprenticeshipUpdate(updateApprenticeship, providerId, CurrentUserId, GetSignedInUser());
 
-            var approvalMsg = NeedReapproval(updateApprenticeship) 
-                ? "The employer needs to approve these changes."
-                : string.Empty;
+            var message = NeedReapproval(updateApprenticeship) 
+                ? "Suggested changes sent to employer for approval, where needed."
+                : "Apprentice updated";
 
-            SetInfoMessage($"You suggested changes to the record for {originalApp.FirstName} {originalApp.LastName}. {approvalMsg}", FlashMessageSeverityLevel.Okay);
+            SetInfoMessage(message, FlashMessageSeverityLevel.Okay);
 
             return RedirectToAction("Details", new { providerId, hashedApprenticeshipId });
         }
