@@ -3435,8 +3435,13 @@ table .changed-item {
   display: none;
 }
 
-.provider-list-view th {
+#manage-apprentices th {
   font-size: 16px;
+}
+
+#manage-apprentices .reset-link {
+  padding-left: 0;
+  margin-top: 10px;
 }
 
 .previous-next-navigation {

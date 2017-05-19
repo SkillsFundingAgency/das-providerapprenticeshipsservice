@@ -567,11 +567,16 @@ table{
             }
 }
 
-.provider-list-view{
+#manage-apprentices{
     th{
         font-size:16px;
     }
+    .reset-link{
+        padding-left:0;
+        margin-top:10px;
+    }
 }
+
 
 // pagination
 .previous-next-navigation {
