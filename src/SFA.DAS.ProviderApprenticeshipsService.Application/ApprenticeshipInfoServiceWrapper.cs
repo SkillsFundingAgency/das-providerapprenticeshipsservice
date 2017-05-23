@@ -119,7 +119,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
                 {
                     Id = x.Id,
                     Level = x.Level,
-                    Title = GetTitle(x.Title, x.Level),
+                    Title = GetTitle(x.Title, x.Level) + " (Standard)",
                     Duration = new Duration
                     {
                         From = x.TypicalLength.From,
