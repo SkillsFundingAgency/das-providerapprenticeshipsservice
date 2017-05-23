@@ -48,7 +48,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         }
 
         [Test]
-        public async Task ThenIfTheRequestIsNotValidThenAnExceptionIsThrown()
+        public void ThenIfTheRequestIsNotValidThenAnExceptionIsThrown()
         {
             //Arrange
             _validator.Setup(x => x.Validate(It.IsAny<UndoApprenticeshipUpdateCommand>()))
