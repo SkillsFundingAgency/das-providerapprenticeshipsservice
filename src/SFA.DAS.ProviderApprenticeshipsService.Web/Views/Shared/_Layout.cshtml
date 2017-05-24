@@ -125,6 +125,20 @@
                 }
             </div>
         </div>
+
+        <div class="grid-row">
+            <div class="column-full">
+                <div class="header-organisation" role="navigation">
+                    <nav class="header-inner">
+                        <ul role="menubar" id="global-nav-links">
+                            <li><a href="#" class="selected" role="menuitem">Home</a></li>
+                            <li><a href="#" role="menuitem">Manage your apprentices</a></li>
+                            <li><a href="#" role="menuitem">Your cohorts</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
         @RenderSection("breadcrumb", required: false)
         <div id="content">
             @Html.Partial(@"_ModalMessage")
