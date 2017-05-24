@@ -33,9 +33,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 },
                 EmployerOrganisations = new List<FacetItem<EmployerOrganisation>>
                 {
-                    new FacetItem<EmployerOrganisation> {Data = new EmployerOrganisation {Id = 1, Name = "Employer 1"}, Selected = true },
-                    new FacetItem<EmployerOrganisation> {Data = new EmployerOrganisation {Id = 2, Name = "Employer 2"}},
-                    new FacetItem<EmployerOrganisation> {Data = new EmployerOrganisation {Id = 3, Name = "Employer 3"}, Selected = true },
+                    new FacetItem<EmployerOrganisation> {Data = new EmployerOrganisation {Id = "1", Name = "Employer 1"}, Selected = true },
+                    new FacetItem<EmployerOrganisation> {Data = new EmployerOrganisation {Id = "2", Name = "Employer 2"}},
+                    new FacetItem<EmployerOrganisation> {Data = new EmployerOrganisation {Id = "3", Name = "Employer 3"}, Selected = true },
                 },
                 RecordStatuses = new List<FacetItem<RecordStatus>>
                 {
