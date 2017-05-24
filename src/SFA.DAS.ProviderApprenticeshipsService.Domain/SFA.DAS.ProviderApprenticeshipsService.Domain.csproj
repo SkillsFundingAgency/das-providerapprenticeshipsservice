@@ -40,7 +40,6 @@
     <Compile Include="CommitmentView.cs" />
     <Compile Include="Data\IAgreementStatusQueryRepository.cs" />
     <Compile Include="Data\IStandardsRepository.cs" />
-    <Compile Include="Duration.cs" />
     <Compile Include="Framework.cs" />
     <Compile Include="FrameworksView.cs" />
     <Compile Include="Interfaces\IAcademicYear.cs" />

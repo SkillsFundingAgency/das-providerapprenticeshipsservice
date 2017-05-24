@@ -83,12 +83,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
                     Level = x.Level,
                     PathwayCode = x.PathwayCode,
                     PathwayName = x.PathwayName,
-                    Duration = new Duration
-                    {
-                        From = x.TypicalLength.From,
-                        To = x.TypicalLength.To,
-                        Unit = x.TypicalLength.Unit
-                    },
+                    Duration = x.Duration,
                     MaxFunding = x.MaxFunding
                 }).ToList()
             };
@@ -119,13 +114,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
                 {
                     Id = x.Id,
                     Level = x.Level,
-                    Title = GetTitle(x.Title, x.Level),
-                    Duration = new Duration
-                    {
-                        From = x.TypicalLength.From,
-                        To = x.TypicalLength.To,
-                        Unit = x.TypicalLength.Unit
-                    },
+                    Title = GetTitle(x.Title, x.Level) + " (Standard)",
+                    Duration = x.Duration,
                     MaxFunding = x.MaxFunding
                 }).ToList()
             };

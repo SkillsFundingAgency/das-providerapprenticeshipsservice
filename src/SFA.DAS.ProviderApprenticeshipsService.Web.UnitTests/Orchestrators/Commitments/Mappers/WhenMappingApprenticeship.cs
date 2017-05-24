@@ -78,7 +78,7 @@ mockMediator.Setup(m => m.SendAsync(It.IsAny<GetStandardsQueryRequest>()))
                                                                   {
                                                                       new Standard
                                                                           {
-                                                                              Duration = new Duration { From = 12, To = 12},
+                                                                              Duration = 12,
                                                                               Id = "code-training",
                                                                               Level = 3, 
                                                                               Title = "Fake training"

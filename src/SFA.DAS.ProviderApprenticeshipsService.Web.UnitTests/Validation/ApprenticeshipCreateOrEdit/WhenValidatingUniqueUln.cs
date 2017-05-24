@@ -19,8 +19,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         private Mock<IMediator> _mediator;
         private Mock<IHashingService> _hashingService;
 
-        private List<Apprenticeship> _existingCohort;
-
         [SetUp]
         public void Arrange()
         {
