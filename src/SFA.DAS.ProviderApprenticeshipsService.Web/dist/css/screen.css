@@ -1,4 +1,4 @@
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after {
   content: "";
   display: block;
   clear: both;
@@ -25,19 +25,19 @@
   margin: 0 -15px;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after {
   content: "";
   display: block;
   clear: both;
@@ -64,13 +64,13 @@
   margin: 0 -15px;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after {
   content: "";
   display: block;
   clear: both;
@@ -2353,76 +2353,59 @@ table.top-border {
   color: #fff;
 }
 
-.header-organisation {
-  border-bottom: 1px solid #6f777b;
-  font-size: 14px;
-}
-
-.header-organisation ul {
-  margin: 0 -15px;
-}
-
-.header-organisation ul li {
-  list-style: none;
-}
-
-@media (min-width: 641px) {
-  .header-organisation ul li {
-    float: left;
-    font-size: 16px;
-  }
-}
-
-@media (min-width: 769px) {
-  .header-organisation ul li {
-    width: auto;
-  }
-}
-
-@media (min-width: 1000px) {
-  .header-organisation ul li {
-    font-size: 19px;
-  }
-}
-
-.header-organisation ul li a {
-  padding: 12px 15px 10px;
-  display: block;
-  position: relative;
-}
-
-.header-organisation ul li a.selected {
-  text-decoration: none;
-  font-weight: 700;
-  color: #0b0c0c;
-}
-
-.header-organisation ul li a.selected:after {
-  background: #005ea5;
-  bottom: -1px;
-  content: "";
-  display: block;
-  left: 0;
-  top: 0;
-  width: 5px;
-  position: absolute;
-  z-index: 0;
-}
-
-@media (min-width: 769px) {
-  .header-organisation ul li a.selected:after {
-    left: 15px;
-    right: 15px;
-    height: 5px;
-    top: auto;
-    width: auto;
-  }
-}
-
-.header-organisation ul li a:focus {
-  outline: 0;
-}
-
+/*.header-organisation {
+    border-bottom: 1px solid $grey-1;
+    font-size: 14px;
+    ul {
+        @extend %contain-floats;
+        margin: 0 -15px;
+        li {
+            list-style:none;
+            @include media(tablet) {
+                float: left;
+              
+                font-size: 16px;
+            }
+            @include media(desktop) {
+                width: auto;
+            }
+            @include media(1000px) {
+                font-size: 19px;
+            }
+            a {
+                padding: 12px 15px 10px;
+                display: block;
+                position: relative;
+                &.selected {
+                    text-decoration: none;
+                    font-weight: 700;
+                    color: $black;
+                    &:after {
+                        background: $govuk-blue;
+                        bottom: -1px;
+                        content: "";
+                        display: block;
+                        left: 0;
+                        top: 0;
+                        width: 5px;
+                        position: absolute;
+                        z-index: 0;
+                        @include media(desktop) {
+                            left: 15px;
+                            right: 15px;
+                            height: 5px;
+                            top: auto;
+                            width: auto;
+                        }
+                    }
+                }
+                &:focus {
+                    outline:0;
+                }
+            }
+        }
+    }
+}*/
 legend {
   margin-bottom: 10px;
 }
