@@ -16,6 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
     {
         private ManageApprenticesOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
+        private Mock<ApprenticeshipFiltersMapper> _mockApprenticeshipFiltersMapper;
 
         [SetUp]
         public void Arrange()
@@ -24,12 +25,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
             _mediator.Setup(x => x.SendAsync(It.IsAny<ReviewApprenticeshipUpdateCommand>()))
                 .ReturnsAsync(() => new Unit());
 
+            _mockApprenticeshipFiltersMapper = new Mock<ApprenticeshipFiltersMapper>();
+
             _orchestrator = new ManageApprenticesOrchestrator(
                 _mediator.Object,
                 Mock.Of<IHashingService>(),
                 Mock.Of<IProviderCommitmentsLogger>(),
                 Mock.Of<IApprenticeshipMapper>(),
-                Mock.Of<IApprovedApprenticeshipValidator>()
+                Mock.Of<IApprovedApprenticeshipValidator>(),
+                _mockApprenticeshipFiltersMapper.Object
                 );
         }
 

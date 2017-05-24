@@ -35,8 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public async Task ShouldGetDataLockStatus()
         {
             _dataLockApi.Setup(m => m.GetDataLocks(1))
-                .ReturnsAsync(new List<DataLockStatus> { new DataLockStatus { IsResolved = false, ApprenticeshipId = 1, IlrTotalCost = 1500, Status = Status.Fail} });
-
+                .ReturnsAsync(new List<DataLockStatus> { new DataLockStatus { IsResolved = false, Status = Status.Fail, ApprenticeshipId = 1, IlrTotalCost = 1500 } });
             var request = new GetApprenticeshipDataLockRequest { ApprenticeshipId = 1 };
             var response = await _sut.Handle(request);
 

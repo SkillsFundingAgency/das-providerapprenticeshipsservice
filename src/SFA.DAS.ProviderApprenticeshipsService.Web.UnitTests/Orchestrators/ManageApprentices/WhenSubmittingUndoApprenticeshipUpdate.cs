@@ -29,7 +29,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
                 Mock.Of<IHashingService>(),
                 Mock.Of<IProviderCommitmentsLogger>(),
                 Mock.Of<IApprenticeshipMapper>(),
-                Mock.Of<IApprovedApprenticeshipValidator>()
+                Mock.Of<IApprovedApprenticeshipValidator>(),
+                Mock.Of<IApprenticeshipFiltersMapper>()
                 );
         }
 

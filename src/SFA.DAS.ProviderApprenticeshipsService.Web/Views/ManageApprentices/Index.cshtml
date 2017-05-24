@@ -6,11 +6,23 @@
     ViewBag.PageId = "manage-apprentices";
 }
 
-<div class="grid-row">
-    <div class="column-full">
-        <h1 class="heading-xlarge">Manage your apprentices</h1>
-        @if (!Model.Apprenticeships.Any())
-            {
+<h1 class="heading-xlarge">Manage your apprentices</h1>
+
+<div class="grid-row"> 
+    <div class="column-one-third">       
+        <form method="GET" action="@Url.Action("Index")" novalidate="novalidate">
+            @Html.Partial("ApprenticeshipFilters", Model.Filters)
+            <button type="submit" class="button" value="Filter">Filter apprentices</button>
+            <p>
+                <a href="@Url.Action("Index")" title="Reset" class="button text-link reset-link">Reset</a>
+            </p>
+        </form>
+    </div>
+
+
+    <div class="column-two-thirds">   
+        @if (Model.TotalApprenticeships == 0 )
+        {
             <div class="panel panel-border-wide alert-default">
                 <p>Once you and the employer have approved a cohort, the apprentices from that cohort will appear here.</p>
             </div>
@@ -19,61 +31,83 @@
         {
             <table class="tableResponsive provider-list-view">
                 <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Date of birth</th>
-                        <th>Unique learner number</th>
-                        <th>Status</th>
-                        <th>Record status</th>
-                        <th></th>
-                    </tr>
+                <tr>
+                    <th>Name</th>
+                    <th>Date of birth</th>
+                    <th>Unique learner number</th>
+                    <th>Status</th>
+                    <th>Alerts</th>
+                    <th></th>
+                </tr>
                 </thead>
                 <tbody>
-                    @foreach (var apprenticeships in Model.Apprenticeships)
-                    {
-                        <tr>
-                            <td>
-                                @apprenticeships.FirstName @apprenticeships.LastName 
-                            </td>
-                           
-                            <td>
-                                @if (apprenticeships.DateOfBirth != null)
-                                {
-                                    @apprenticeships.DateOfBirth.Value.ToGdsFormat()
-                                } 
-                            </td>
-                            <td>
-                                @apprenticeships.Uln
-                            </td>
-                            <td>
-                                @apprenticeships.Status &nbsp;
-                            </td>
-                            <td>
-                                <div>
-                                    @apprenticeships.RecordStatus
-                                </div>
-                                <div>
-                                    @apprenticeships.DataLockStatus
-                                </div>
 
-                            </td>
-                            <td>
-                                <a href="@Url.Action("Details", new { Model.ProviderId, hashedApprenticeshipId = apprenticeships.HashedApprenticeshipId })"
-                                   title="View  @apprenticeships.FirstName @apprenticeships.LastName"
-                                   aria-label="View @apprenticeships.FirstName @apprenticeships.LastName">View</a>
-                            </td>
-                        </tr>
-                    }
+                @foreach (var apprenticeships in Model.Apprenticeships)
+                {
+                    <tr>
+                        <td>
+                            @apprenticeships.FirstName @apprenticeships.LastName
+                        </td>
+
+                        <td>
+                            @if (apprenticeships.DateOfBirth != null)
+                            {
+                                @apprenticeships.DateOfBirth.Value.ToGdsFormat()
+                            }
+                        </td>
+                        <td>
+                            @apprenticeships.Uln
+                        </td>
+                        <td>
+                            @apprenticeships.Status &nbsp;
+                        </td>
+                        <td>
+                            <div>
+                                @apprenticeships.RecordStatus
+                            </div>
+                            <div>
+                                @apprenticeships.DataLockStatus
+                            </div>
+                            &nbsp;
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Details", new {Model.ProviderId, hashedApprenticeshipId = apprenticeships.HashedApprenticeshipId})"
+                               title="View  @apprenticeships.FirstName @apprenticeships.LastName"
+                               aria-label="View @apprenticeships.FirstName @apprenticeships.LastName">View</a>
+                        </td>
+                    </tr>
+                }
                 </tbody>
             </table>
+
+            if (!Model.Apprenticeships.Any())
+            {
+                <div>There are currently no apprentices that match your search.</div> 
+            }
+
+            @*-- PAGINATION FOR FUTURE IMPROVEMENT --
+                ==================================
+                <nav role="navigation">
+                <ul class="previous-next-navigation">
+                    <li class="next">
+                        <a href="#">
+                            Next <span class="visuallyhidden">page</span>
+                            <span class="page-numbers">1 of 12</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>*@
         }
     </div>
 </div>
 
 
 
+
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="@Url.Action("Index", "Account")" aria-label="Back to account home" class="back-link">Back</a>
-    </div>
-}
+        <div class="breadcrumbs">
+            <a href="@Url.Action("Index", "Account")" aria-label="Back to account home" class="back-link">Back</a>
+        </div>
+    }
+
+

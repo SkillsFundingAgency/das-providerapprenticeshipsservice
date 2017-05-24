@@ -11,6 +11,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenti
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateDataLock;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.ApprenticeshipSearch;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentices;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLock;
@@ -36,10 +37,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IHashingService _hashingService;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly IApprovedApprenticeshipValidator _approvedApprenticeshipValidator;
+        private readonly IApprenticeshipFiltersMapper _apprenticeshipFiltersMapper;
 
         public ManageApprenticesOrchestrator(IMediator mediator, IHashingService hashingService,
             IProviderCommitmentsLogger logger, IApprenticeshipMapper apprenticeshipMapper,
-            IApprovedApprenticeshipValidator approvedApprenticeshipValidator)
+            IApprovedApprenticeshipValidator approvedApprenticeshipValidator, IApprenticeshipFiltersMapper apprenticeshipFiltersMapper)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -51,29 +53,42 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 throw new ArgumentNullException(nameof(apprenticeshipMapper));
             if(approvedApprenticeshipValidator == null)
                 throw new ArgumentNullException(nameof(approvedApprenticeshipValidator));
+            if(apprenticeshipFiltersMapper == null)
+                throw new ArgumentNullException(nameof(IApprenticeshipFiltersMapper));
 
             _mediator = mediator;
             _hashingService = hashingService;
             _logger = logger;
             _apprenticeshipMapper = apprenticeshipMapper;
             _approvedApprenticeshipValidator = approvedApprenticeshipValidator;
+            _apprenticeshipFiltersMapper = apprenticeshipFiltersMapper;
         }
 
-        public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(long providerId)
+        public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(long providerId, ApprenticeshipFiltersViewModel filters)
         {
             _logger.Info($"Getting On-programme apprenticeships for provider: {providerId}", providerId: providerId);
 
-            var data = await _mediator.SendAsync(new GetAllApprenticesRequest { ProviderId = providerId });
-            var apprenticeships = 
-                data.Apprenticeships
+            var searchQuery = _apprenticeshipFiltersMapper.MapToApprenticeshipSearchQuery(filters);
+
+            var searchResponse = await _mediator.SendAsync(new ApprenticeshipSearchQueryRequest
+            {
+                ProviderId = providerId,
+                Query = searchQuery
+            });
+
+            var apprenticeships = searchResponse.Apprenticeships
                 .OrderBy(m => m.ApprenticeshipName)
                 .Select(m => _apprenticeshipMapper.MapApprenticeshipDetails(m))
                 .ToList();
 
+            var filterOptions = _apprenticeshipFiltersMapper.Map(searchResponse.Facets);
+
             return new ManageApprenticeshipsViewModel
             {
                 ProviderId = providerId,
-                Apprenticeships = apprenticeships
+                Apprenticeships = apprenticeships,
+                Filters = filterOptions,
+                TotalApprenticeships = searchResponse.TotalApprenticeships
             };
         }
 
