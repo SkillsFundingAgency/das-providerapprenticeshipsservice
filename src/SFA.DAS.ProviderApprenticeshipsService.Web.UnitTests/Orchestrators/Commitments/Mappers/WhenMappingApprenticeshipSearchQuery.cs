@@ -71,7 +71,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             //Assert
             Assert.AreEqual(1, result.EmployerOrganisationIds.Count);
-            Assert.AreEqual(12345, result.EmployerOrganisationIds[0]);
+            Assert.AreEqual("12345", result.EmployerOrganisationIds[0]);
         }
 
         [Test]
