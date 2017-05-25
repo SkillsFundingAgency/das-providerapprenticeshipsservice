@@ -90,6 +90,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApprenticeshipInfoServiceWrapper.cs" />
+    <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileCommand.cs" />
+    <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileHandler.cs" />
+    <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileValidator.cs" />
     <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommand.cs" />
     <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommand.cs" />
     <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommandHandler.cs" />

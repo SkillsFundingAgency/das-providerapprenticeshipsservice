@@ -27,9 +27,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _logger = logger;
         }
 
-        public BulkUploadResult CreateViewModels(HttpPostedFileBase attachment)
+        public BulkUploadResult CreateViewModels(string fileInput)
         {
-            string fileInput = new StreamReader(attachment.InputStream).ReadToEnd();
             using (TextReader tr = new StringReader(fileInput))
             {
                 var csvReader = new CsvReader(tr);
