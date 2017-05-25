@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _logger = logger;
         }
 
-        public async Task<BulkUploadResult> ValidateFileRows(IEnumerable<ApprenticeshipUploadModel> rows, long providerId)
+        public async Task<BulkUploadResult> ValidateFileRows(IEnumerable<ApprenticeshipUploadModel> rows, long providerId, long bulkUploadId)
         {
             var trainingProgrammes = await GetTrainingProgrammes();
             var validationErrors = _bulkUploadValidator.ValidateRecords(rows, trainingProgrammes).ToList();
@@ -49,7 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             if (validationErrors.Any())
             {
                 var logtext = new StringBuilder();
-                logtext.AppendLine($"Failed validation bulk upload records with {validationErrors.Count} errors");
+                logtext.AppendLine($"Failed validation of bulk upload id {bulkUploadId} with {validationErrors.Count} errors");
 
                 var errorTypes = validationErrors.GroupBy(x => x.ErrorCode);
                 foreach (var errorType in errorTypes)
@@ -97,9 +97,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 return new BulkUploadResult { Errors = fileAttributeErrors };
             }
 
-
-
-            BulkUploadResult uploadResult = _fileParser.CreateViewModels(fileContent);
+            var uploadResult = _fileParser.CreateViewModels(fileContent);
 
             if (uploadResult.HasErrors)
                 return uploadResult;
@@ -107,7 +105,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             var errors = _bulkUploadValidator.ValidateCohortReference(uploadResult.Data, uploadApprenticeshipsViewModel.HashedCommitmentId).ToList();
             errors.AddRange(_bulkUploadValidator.ValidateUlnUniqueness(uploadResult.Data).ToList());
 
-            return new BulkUploadResult { Errors = errors, Data = uploadResult.Data };
+            return new BulkUploadResult
+            {
+                Errors = errors,
+                Data = uploadResult.Data,
+                BulkUploadId = bulkUploadId
+            };
         }
 
         //TODO: These are duplicated in Commitment Orchestrator - needs to be shared

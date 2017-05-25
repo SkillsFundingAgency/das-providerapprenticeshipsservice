@@ -78,8 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             _logger.Info("Uploading file of apprentices.", providerId, commitmentId);
 
-            //todo: pop the file id into here! :-)
-            var rowValidationResult = await _bulkUploader.ValidateFileRows(fileValidationResult.Data, providerId);
+            var rowValidationResult = await _bulkUploader.ValidateFileRows(fileValidationResult.Data, providerId, fileValidationResult.BulkUploadId);
 
             var sw = Stopwatch.StartNew();
             var overlapErrors = await GetOverlapErrors(fileValidationResult.Data.ToList());

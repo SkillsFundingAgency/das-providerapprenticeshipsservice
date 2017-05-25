@@ -11,5 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
         public IEnumerable<ApprenticeshipUploadModel> Data { get; set; }
 
         public bool HasErrors => (Errors != null && Errors.Any());
+
+        public long BulkUploadId { get; set; }
     }
 }
