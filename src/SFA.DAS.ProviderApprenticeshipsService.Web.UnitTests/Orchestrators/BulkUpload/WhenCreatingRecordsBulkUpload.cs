@@ -43,7 +43,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void CreatingViewModels()
         {
-            var records = _sut.CreateViewModels(_file.Object);
+            // ToDo: Move this to where we do the reading of file.
+            //var records = _sut.CreateViewModels(_file.Object);
+            var records = _sut.CreateViewModels(TestData);
             records.Data.Count().Should().Be(8);
             records.Errors.Should().NotBeNull();
             records.Errors.Should().BeEmpty();
