@@ -69,7 +69,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 			await AssertCommitmentStatus(commitmentId, uploadApprenticeshipsViewModel.ProviderId);
             _logger.Info($"Uploading File - Filename:{fileName}", uploadApprenticeshipsViewModel.ProviderId, commitmentId);
 
-            var fileValidationResult = _bulkUploader.ValidateFileStructure(uploadApprenticeshipsViewModel, fileName, commitmentId);
+            var fileValidationResult = await _bulkUploader.ValidateFileStructure(uploadApprenticeshipsViewModel, fileName, commitmentId);
 
             if (fileValidationResult.Errors.Any())
             {

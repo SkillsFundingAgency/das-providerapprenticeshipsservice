@@ -107,6 +107,7 @@
     <Compile Include="Commands\DeleteCommitment\WhenValidatingCommand.cs" />
     <Compile Include="Commands\ReviewApprenticeshipUpdate\WhenReviewingApprenticeshipUpdate.cs" />
     <Compile Include="Commands\ReviewApprenticeshipUpdate\WhenValidatingCommand.cs" />
+    <Compile Include="Commands\SaveBulkUploadFile\WhenSavingBulkUploadFile.cs" />
     <Compile Include="Commands\SendNotification\WhenValidatingCommand.cs" />
     <Compile Include="Commands\SubmitCommitment\WhenApprovingAsSecondApprover.cs" />
     <Compile Include="Commands\SubmitCommitment\WhenApprovingAsFirstApprover.cs" />

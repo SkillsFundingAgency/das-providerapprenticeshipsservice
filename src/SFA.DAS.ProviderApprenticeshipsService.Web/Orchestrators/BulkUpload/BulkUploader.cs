@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MediatR;
+
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SaveBulkUploadFile;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
@@ -63,10 +66,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             return new BulkUploadResult { Errors = new List<UploadError>(), Data = rows };
         }
 
-        public BulkUploadResult ValidateFileStructure(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel, string filename, long commitmentId)
+        public async Task<BulkUploadResult> ValidateFileStructure(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel, string filename, long commitmentId)
         {
             if (uploadApprenticeshipsViewModel.Attachment == null)
                 return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("No file chosen") } };
+
+            var fileContent = new StreamReader(uploadApprenticeshipsViewModel.Attachment.InputStream).ReadToEnd();
+            var fileName = uploadApprenticeshipsViewModel?.Attachment?.FileName ?? "<- NO NAME ->";
+
+            _logger.Trace($"Saving bulk upload file. {fileName}");
+            var bulkUploadId = await _mediator.SendAsync(
+                new SaveBulkUploadFileCommand
+                {
+                    ProviderId = uploadApprenticeshipsViewModel.ProviderId,
+                    CommitmentId = commitmentId,
+                    FileContent = fileContent,
+                    FileName = fileName
+                });
+            _logger.Info($"Saved bulk upload with Id: {bulkUploadId}");
 
             var fileAttributeErrors = _bulkUploadValidator.ValidateFileSize(uploadApprenticeshipsViewModel.Attachment).ToList();
 
@@ -80,7 +97,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 return new BulkUploadResult { Errors = fileAttributeErrors };
             }
 
-            BulkUploadResult uploadResult = _fileParser.CreateViewModels(uploadApprenticeshipsViewModel.Attachment);
+
+
+            BulkUploadResult uploadResult = _fileParser.CreateViewModels(fileContent);
 
             if (uploadResult.HasErrors)
                 return uploadResult;

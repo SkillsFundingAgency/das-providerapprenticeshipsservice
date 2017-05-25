@@ -23,11 +23,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _parser = parser;
         }
 
-        public BulkUploadResult CreateViewModels(HttpPostedFileBase attachment)
+        public BulkUploadResult CreateViewModels(string fileContent)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var result = _parser.CreateViewModels(attachment);
+            var result = _parser.CreateViewModels(fileContent);
 
             _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to create {result.Data?.Count()} viewmodels");
 
