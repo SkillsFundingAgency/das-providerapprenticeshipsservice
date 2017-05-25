@@ -3141,6 +3141,8 @@ table .changed-item {
 .previous-next-navigation li a {
   display: block;
   text-decoration: none;
+  font-size: 24px;
+  line-height: 0.9em;
 }
 
 .previous-next-navigation li a span {
