@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MediatR;
@@ -44,13 +45,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
             if (validationErrors.Any())
             {
-                _logger.Warn($"Failed validation bulk upload records with {validationErrors.Count} errors", providerId);
+                var logtext = new StringBuilder();
+                logtext.AppendLine($"Failed validation bulk upload records with {validationErrors.Count} errors");
 
-                foreach (var error in validationErrors)
+                var errorTypes = validationErrors.GroupBy(x => x.ErrorCode);
+                foreach (var errorType in errorTypes)
                 {
-                    var message = $"Validation failure: {error.ErrorCode} - \"{StripHtml(error.Message)}\"";
-                    _logger.Info(message, providerId);
+                    var errorsOfType = validationErrors.FindAll(x => x.ErrorCode == errorType.Key);
+                    logtext.AppendLine($"{errorsOfType.Count} x {errorType.Key} - \"{StripHtml(errorsOfType.First().Message)}\"");
                 }
+
+                _logger.Warn(logtext.ToString(), providerId);
 
                 return new BulkUploadResult { Errors = validationErrors };
             }
