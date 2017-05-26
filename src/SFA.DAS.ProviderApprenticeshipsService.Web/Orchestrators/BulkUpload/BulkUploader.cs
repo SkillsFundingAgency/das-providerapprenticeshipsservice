@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MediatR;
@@ -40,20 +41,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _logger = logger;
         }
 
-        public async Task<BulkUploadResult> ValidateFileRows(IEnumerable<ApprenticeshipUploadModel> rows, long providerId)
+        public async Task<BulkUploadResult> ValidateFileRows(IEnumerable<ApprenticeshipUploadModel> rows, long providerId, long bulkUploadId)
         {
             var trainingProgrammes = await GetTrainingProgrammes();
             var validationErrors = _bulkUploadValidator.ValidateRecords(rows, trainingProgrammes).ToList();
 
             if (validationErrors.Any())
             {
-                _logger.Warn($"Failed validation bulk upload records with {validationErrors.Count} errors", providerId);
+                var logtext = new StringBuilder();
+                logtext.AppendLine($"Failed validation of bulk upload id {bulkUploadId} with {validationErrors.Count} errors");
 
-                foreach (var error in validationErrors)
+                var errorTypes = validationErrors.GroupBy(x => x.ErrorCode);
+                foreach (var errorType in errorTypes)
                 {
-                    var message = $"Validation failure: {error.ErrorCode} - \"{StripHtml(error.Message)}\"";
-                    _logger.Info(message, providerId);
+                    var errorsOfType = validationErrors.FindAll(x => x.ErrorCode == errorType.Key);
+                    logtext.AppendLine($"{errorsOfType.Count} x {errorType.Key} - \"{StripHtml(errorsOfType.First().Message)}\"");
                 }
+
+                _logger.Warn(logtext.ToString(), providerId);
 
                 return new BulkUploadResult { Errors = validationErrors };
             }
@@ -92,9 +97,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 return new BulkUploadResult { Errors = fileAttributeErrors };
             }
 
-
-
-            BulkUploadResult uploadResult = _fileParser.CreateViewModels(fileContent);
+            var uploadResult = _fileParser.CreateViewModels(fileContent);
 
             if (uploadResult.HasErrors)
                 return uploadResult;
@@ -102,7 +105,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             var errors = _bulkUploadValidator.ValidateCohortReference(uploadResult.Data, uploadApprenticeshipsViewModel.HashedCommitmentId).ToList();
             errors.AddRange(_bulkUploadValidator.ValidateUlnUniqueness(uploadResult.Data).ToList());
 
-            return new BulkUploadResult { Errors = errors, Data = uploadResult.Data };
+            return new BulkUploadResult
+            {
+                Errors = errors,
+                Data = uploadResult.Data,
+                BulkUploadId = bulkUploadId
+            };
         }
 
         //TODO: These are duplicated in Commitment Orchestrator - needs to be shared
