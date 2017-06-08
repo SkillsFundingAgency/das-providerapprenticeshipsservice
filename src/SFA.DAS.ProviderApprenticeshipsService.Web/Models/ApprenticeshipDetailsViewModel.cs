@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
@@ -43,6 +45,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string DataLockStatus { get; set; }
 
         public bool HasRequestedRestart { get; set; }
+        public List<DataLockViewModel> DataLocks { get; set; }
     }
 
     public enum DataLockErrorType

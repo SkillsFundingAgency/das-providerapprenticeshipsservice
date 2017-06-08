@@ -26,7 +26,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         ApprenticeshipDetailsViewModel MapApprenticeshipDetails(Apprenticeship apprenticeship);
 
-        Task<DataLockViewModel> MapFrom(DataLockStatus dataLock);
+        Task<DataLockViewModel> MapDataLockStatus(DataLockStatus dataLock);
+
+        Task<List<DataLockViewModel>> MapDataLockStatusList(List<DataLockStatus> datalocks);
 
         TriageStatus MapTriangeStatus(SubmitStatusViewModel submitStatusViewModel);
     }

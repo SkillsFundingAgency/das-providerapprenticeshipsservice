@@ -282,9 +282,39 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             return DataLockErrorType.None;
         }
 
-        public async Task<DataLockViewModel> MapFrom(DataLockStatus dataLock)
+        public async Task<DataLockViewModel> MapDataLockStatus(DataLockStatus dataLock)
         {
             var training = await GetTrainingProgramme(dataLock.IlrTrainingCourseCode);
+            return MapDataLockStatus(dataLock, training);
+        }
+
+        public async Task<List<DataLockViewModel>> MapDataLockStatusList(List<DataLockStatus> datalocks)
+        {
+            var trainingProgrammes = await GetTrainingProgrammes();
+
+            var result = new List<DataLockViewModel>();
+
+            foreach (var dataLock in datalocks)
+            {
+                var training = trainingProgrammes.Single(x => x.Id == dataLock.IlrTrainingCourseCode);
+                result.Add(MapDataLockStatus(dataLock, training));
+            }
+
+            return result;
+        }
+
+        public TriageStatus MapTriangeStatus(SubmitStatusViewModel submitStatusViewModel)
+        {
+            if (submitStatusViewModel == SubmitStatusViewModel.Confirm)
+                return TriageStatus.Change;
+            if (submitStatusViewModel == SubmitStatusViewModel.UpdateDataInIlr)
+                return TriageStatus.FixIlr;
+
+            return TriageStatus.Unknown;
+        }
+
+        private DataLockViewModel MapDataLockStatus(DataLockStatus dataLock, ITrainingProgramme training)
+        {
             return new DataLockViewModel
             {
                 DataLockEventId = dataLock.DataLockEventId,
@@ -300,16 +330,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 TriageStatusViewModel = (TriageStatusViewModel)dataLock.TriageStatus,
                 DataLockErrorCode = dataLock.ErrorCode
             };
-        }
-
-        public TriageStatus MapTriangeStatus(SubmitStatusViewModel submitStatusViewModel)
-        {
-            if (submitStatusViewModel == SubmitStatusViewModel.Confirm)
-                return TriageStatus.Change;
-            if (submitStatusViewModel == SubmitStatusViewModel.UpdateDataInIlr)
-                return TriageStatus.FixIlr;
-
-            return TriageStatus.Unknown;
         }
 
         private string MapDataLockStatus(TriageStatus? dataLockTriageStatus)
@@ -381,5 +401,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         {
             return (item.HasValue) ? string.Format("{0:#}", item.Value) : "";
         }
+
     }
 }

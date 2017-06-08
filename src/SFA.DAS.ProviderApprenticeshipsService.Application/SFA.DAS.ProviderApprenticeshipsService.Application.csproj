@@ -124,6 +124,9 @@
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryHandler.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryRequest.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryResponse.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLocks.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLocksHandler.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLocksResponse.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLock.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommand.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommandHandler.cs" />

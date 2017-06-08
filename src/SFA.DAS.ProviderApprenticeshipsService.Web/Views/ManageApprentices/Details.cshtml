@@ -1,4 +1,5 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+﻿@using SFA.DAS.Commitments.Api.Types.DataLock.Types
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipDetailsViewModel
 
@@ -49,7 +50,50 @@
                     The apprentice's details are different in your organisation's ILR submission.
                     This may result in a payment failure.
                 </p>
-                @if (Model.PendingChanges == PendingChanges.None)
+                
+                @if (Model.DataLocks.Any())
+                {
+                    var courses = Model.DataLocks.Any(x =>
+                        x.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock03)
+                        || x.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock04)
+                        || x.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock05)
+                        || x.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock06));
+
+                    var prices = Model.DataLocks.Any(x => x.DataLockErrorCode == DataLockErrorCode.Dlock07);
+
+
+                    if (courses && prices)
+                    {
+                        <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View price mismatch</a>
+                        <br />
+                        <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View course mismatch</a>                        
+                    }
+                    else
+                    {
+                        if (courses)
+                        {
+                            <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
+                        }
+                        else if (prices)
+                        {
+                            <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View details</a>
+                        }
+                    }
+
+                    @*if (prices)
+                    {
+                        <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View details</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
+                    }*@
+
+
+
+                }
+
+                @*@if (Model.PendingChanges == PendingChanges.None)
                 {
                     if (Model.ErrorType == DataLockErrorType.RestartRequired)
                     {
@@ -59,7 +103,7 @@
                      {
                          <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View details</a>
                      }
-                }
+                }*@
             </div>
         }
 
