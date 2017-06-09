@@ -18,11 +18,29 @@
         </p>
         
         @{ var i = 0; }
-        @foreach (var datalock in Model.DataLockViewModels)
+        @foreach (var datalock in Model.DataLockViewModels.FindAll(x => x.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock07)))
         {
             i++;
 
+
+            //loop through each datalock
+            // for each, get all the pricehistories that will be wiped out by this update
+            // that is, all price histories that start in the date range of the ilr
+
+            var index = Model.DataLockViewModels.IndexOf(datalock);
+            var next = Model.DataLockViewModels.Count > index+1 ? Model.DataLockViewModels[index+1] : null;
+
+            var priceHistories = Model.PriceHistory.FindAll(x =>
+                x.FromDate >= datalock.IlrEffectiveFromDate.Value
+                && ((next != null) && x.FromDate < next.IlrEffectiveFromDate.Value) || next == null)
+                ;
+
+
             <span class="bold">Change @i</span>
+
+
+            <span>Histories: @priceHistories.Count</span>
+
 
             <table class="edited-changes">
                 <thead>
@@ -33,20 +51,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                @if (datalock.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock07))
-                {
-                    <tr>
-                        <td>From date</td>
-                        <td>TODO: Read from PriceHistory!</td>
-                        <td class="changed-item">@datalock.IlrEffectiveFromDate.Value.ToGdsFormat()</td>
-                    </tr>
 
-                    <tr>
-                        <td>Total apprenticeship training price</td>
-                        <td>TODO: Read from PriceHistory!</td>
-                        <td>@datalock.IlrTotalCost.FormatCost()</td>
-                    </tr>
-                }
+                <tr>
+                    <td>From date</td>
+                    <td>TODO: Read from PriceHistory!</td>
+                    <td class="changed-item">@datalock.IlrEffectiveFromDate.Value.ToGdsFormat()</td>
+                </tr>
+
+                <tr>
+                    <td>Total apprenticeship training price</td>
+                    <td>TODO: Read from PriceHistory!</td>
+                    <td>@datalock.IlrTotalCost.FormatCost()</td>
+                </tr>
+                
 
                 @*@if (datalock.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock09)
                      && Model.DasApprenticeship.StartDate.DateTime.HasValue

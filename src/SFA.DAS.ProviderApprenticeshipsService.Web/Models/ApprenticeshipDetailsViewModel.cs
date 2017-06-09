@@ -45,6 +45,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string DataLockStatus { get; set; }
 
         public bool HasRequestedRestart { get; set; }
+
+        //todo: this is not used in the manage apprentices list, so maybe create a new 
+        //viewmodel for that page?
         public List<DataLockViewModel> DataLocks { get; set; }
     }
 

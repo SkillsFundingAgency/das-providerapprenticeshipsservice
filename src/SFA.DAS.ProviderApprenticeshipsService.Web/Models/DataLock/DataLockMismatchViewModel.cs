@@ -12,6 +12,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
 
         public ApprenticeshipViewModel DasApprenticeship { get; set; }
 
+        public List<PriceHistoryViewModel> PriceHistory { get; set; }
+
         public SubmitStatusViewModel? SubmitStatusViewModel { get; set; }
 
         public long ProviderId { get; set; }

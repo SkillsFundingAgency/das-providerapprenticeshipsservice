@@ -16,6 +16,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentic
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLocks;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipPriceHistory;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetPendingApprenticeshipUpdate;
@@ -104,6 +105,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var dataLocks = await _mediator.SendAsync(new GetApprenticeshipDataLocksRequest { ApprenticeshipId = apprenticeshipId });
 
             var result = _apprenticeshipMapper.MapApprenticeshipDetails(data.Apprenticeship);
+
             result.DataLocks = await _apprenticeshipMapper.MapDataLockStatusList(dataLocks.Data);
 
             return result;
@@ -290,16 +292,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
+            var priceHistory = await _mediator.SendAsync(new GetApprenticeshipPriceHistoryQueryRequest
+            {
+                ApprenticeshipId = apprenticeshipId
+            });
+
             var datalockViewModels = await _apprenticeshipMapper.MapDataLockStatusList(dataLocks.Data);
             var dasRecordViewModel = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
+
             return new DataLockMismatchViewModel
                        {
                             ProviderId = providerId,
                             HashedApprenticeshipId = hashedApprenticeshipId,
                             DasApprenticeship = dasRecordViewModel,
                             DataLockViewModels = datalockViewModels,
-                            EmployerName = data.Apprenticeship.LegalEntityName
-                       };
+                            EmployerName = data.Apprenticeship.LegalEntityName,
+                            PriceHistory = _apprenticeshipMapper.MapPriceHistory(priceHistory.History)
+            };
         }
 
         public async Task<ConfirmRestartViewModel> GetConfirmRestartViewModel(long providerId, string hashedApprenticeshipId)

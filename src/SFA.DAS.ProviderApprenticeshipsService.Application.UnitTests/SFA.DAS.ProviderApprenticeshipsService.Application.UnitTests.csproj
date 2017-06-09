@@ -120,6 +120,7 @@
     <Compile Include="Queries\ApprenticeshipSearch\WhenSubmittingApprenticeshipSearch.cs" />
     <Compile Include="Queries\GetAgreement\WhenIGetAgreement.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLocks\WhenGettingApprenticeshipDataLocks.cs" />
+    <Compile Include="Queries\GetApprenticeshipPriceHistory\WhenGettingApprenticeshipPriceHistory.cs" />
     <Compile Include="Queries\GetPendingApprenticeshipUpdate\WhenIGetPendingApprenticeshipUpdate.cs" />
   </ItemGroup>
   <ItemGroup>

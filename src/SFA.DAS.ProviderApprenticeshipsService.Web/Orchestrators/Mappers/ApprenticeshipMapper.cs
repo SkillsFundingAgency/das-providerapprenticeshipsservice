@@ -402,5 +402,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             return (item.HasValue) ? string.Format("{0:#}", item.Value) : "";
         }
 
+        public List<PriceHistoryViewModel> MapPriceHistory(List<PriceHistory> priceHistory)
+        {
+            var result = new List<PriceHistoryViewModel>();
+
+            foreach (var history in priceHistory)
+            {
+                result.Add(new PriceHistoryViewModel
+                {
+                    ApprenticeshipId = history.ApprenticeshipId,
+                    Cost = history.Cost,
+                    FromDate = history.FromDate,
+                    ToDate = history.ToDate
+                });
+            }
+
+            return result;
+        }
     }
 }

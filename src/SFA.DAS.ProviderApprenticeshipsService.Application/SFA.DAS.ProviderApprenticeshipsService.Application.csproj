@@ -144,6 +144,9 @@
     <Compile Include="Queries\GetAgreement\GetProviderAgreementQueryResponse.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLockHandler.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLockResponse.cs" />
+    <Compile Include="Queries\GetApprenticeshipPriceHistory\GetApprenticeshipPriceHistoryQueryHandler.cs" />
+    <Compile Include="Queries\GetApprenticeshipPriceHistory\GetApprenticeshipPriceHistoryQueryRequest.cs" />
+    <Compile Include="Queries\GetApprenticeshipPriceHistory\GetApprenticeshipPriceHistoryQueryResponse.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryRequest.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryResponse.cs" />
