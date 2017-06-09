@@ -227,14 +227,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return View("ConfirmDataLockChanges", viewModel);
             }
 
-            if (model.SubmitStatusViewModel != null && model.SubmitStatusViewModel.Value == SubmitStatusViewModel.Confirm)
-            {
-                await _orchestrator.UpdateDataLock(
-                    model.DataLockEventId,
-                    model.HashedApprenticeshipId,
-                    model.SubmitStatusViewModel.Value, CurrentUserId);
-                SetInfoMessage($"Changes sent to employer for approval", FlashMessageSeverityLevel.Okay);
-            }
+            //todo: how to triage multiple?
+
+            //if (model.SubmitStatusViewModel != null && model.SubmitStatusViewModel.Value == SubmitStatusViewModel.Confirm)
+            //{
+            //    await _orchestrator.UpdateDataLock(
+            //        model.DataLockEventId,
+            //        model.HashedApprenticeshipId,
+            //        model.SubmitStatusViewModel.Value, CurrentUserId);
+            //    SetInfoMessage($"Changes sent to employer for approval", FlashMessageSeverityLevel.Okay);
+            //}
 
             return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
         }
