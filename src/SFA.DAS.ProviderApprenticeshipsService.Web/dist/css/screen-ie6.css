@@ -3011,7 +3011,7 @@ table .changed-item {
 .filter-option-select .options-container {
   position: relative;
   background-color: #fff;
-  max-height: 200px;
+  height: 200px;
   overflow: auto;
 }
 
