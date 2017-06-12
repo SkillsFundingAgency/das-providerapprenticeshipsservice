@@ -1,7 +1,6 @@
 ﻿@using SFA.DAS.Commitments.Api.Types.DataLock.Types
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @model DataLockMismatchViewModel
 
 @{
@@ -29,99 +28,63 @@
                 <td>@Model.DasApprenticeship.DateOfBirth.DateTime</td>
             </tr>
         </table>
-
+        
         @{
             //Price datalocks ONLY
             var datalocks = Model.DataLockViewModels.FindAll(x => x.DataLockErrorCode == DataLockErrorCode.Dlock07);
 
-            var maxrows = Model.PriceHistory.Count > datalocks.Count
-                ? Model.PriceHistory.Count
-                : datalocks.Count;
+            var change = 0;
+            foreach (var datalock in datalocks)
+            {
+                change++;
+
+                var priceHistory = Model.PriceHistory
+                    .OrderBy(x => x.FromDate)
+                    .FirstOrDefault(x => x.FromDate <= datalock.IlrEffectiveFromDate.Value);
+
+                <h3 class="heading-small">Change @change</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <td></td>
+                            <td>Currently</td>
+                            <td>Change to</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>From date</td>
+                        <td>
+                            @{
+                                if (priceHistory != null)
+                                {
+                                    <span>@priceHistory.FromDate.Date.ToGdsFormat()</span>       
+                                }
+                            }
+                        </td>
+                        <td>@datalock.IlrEffectiveFromDate.Value.Date.ToGdsFormat()</td>
+                    </tr>
+                        <tr>
+                            <td>Total apprenticeship training price</td>
+                            <td>
+                                @{
+                                    if (priceHistory != null)
+                                    {
+                                        <span>@priceHistory.Cost.ToString("C")</span>
+                                    }
+                                }
+                            </td>
+                            <td>@datalock.IlrTotalCost.Value.ToString("C")</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            }
         }
 
-        <table class="edited-changes">
-            <thead>
-                <tr>
-                    <th colspan="2">Apprenticeship service</th>
-                    <th colspan="2">ILR submission</th>
-                </tr>
-                <tr>
-                    <th scope="col">From date</th>
-                    <th scope="col">Total apprenticeship training price</th>
-                    <th scope="col">From date</th>
-                    <th scope="col">Total apprenticeship training price</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                @for (var i = 0; i < maxrows; i++)
-                {
-                    var datalock = i < datalocks.Count
-                        ? datalocks[i]
-                        : null;
-
-                    var priceHistory = i < Model.PriceHistory.Count
-                        ? Model.PriceHistory[i]
-                        : null;
-
-
-                    <tr>
-
-
-                        @if (priceHistory != null)
-                        {
-
-                            <td>
-                                @priceHistory.FromDate.ToGdsFormat()
-                            </td>
-                            <td>
-                                @priceHistory.Cost.ToString("C")
-                            </td>
-                        }
-                        else
-                        {
-                            <td colspan="2">&ndash;</td>
-                        }
-
-                        @if (datalock != null)
-                        {
-                            <td>
-                                @datalock.IlrEffectiveFromDate.Value.ToGdsFormat()
-                            </td>
-                            <td>
-                                @datalock.IlrTotalCost.FormatCost()
-                            </td>
-                        }
-                        else
-                        {
-                            <td colspan="2">&ndash;</td>
-                        }
-
-                    </tr>
-                }
-
-
-
-                @*if (datalock.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock09)
-                         && Model.DasApprenticeship.StartDate.DateTime.HasValue
-                         && datalock.IlrActualStartDate.HasValue)
-                    {
-                        <tr>
-                            <td>@Model.DasApprenticeship.StartDate.DateTime.Value.ToGdsFormat() </td>
-                            <td>@datalock.IlrActualStartDate.Value.ToGdsFormat()</td>
-                        </tr>
-                    }*@
-
-
-
-            </tbody>
-        </table>
-
     </div>
-
 </div>
-
-
 
 <div class="grid-row">
     <div class="column-two-thirds">
