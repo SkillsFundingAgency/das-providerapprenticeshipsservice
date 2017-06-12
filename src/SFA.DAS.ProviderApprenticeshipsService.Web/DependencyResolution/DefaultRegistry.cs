@@ -95,7 +95,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IProviderCommitmentsLogger>().Use(x => GetBaseLogger(x)).AlwaysUnique();
             For<ILog>().Use(x => new NLogLogger(
                 x.ParentType,
-                x.GetInstance<IRequestContext>())).AlwaysUnique();
+                x.GetInstance<IRequestContext>(), null)).AlwaysUnique();
         }
 
         private IProviderCommitmentsLogger GetBaseLogger(IContext x)
