@@ -112,6 +112,8 @@
     <Compile Include="Commands\SubmitCommitment\WhenApprovingAsSecondApprover.cs" />
     <Compile Include="Commands\SubmitCommitment\WhenApprovingAsFirstApprover.cs" />
     <Compile Include="Commands\SubmitCommitment\WhenValidatingCommand.cs" />
+    <Compile Include="Commands\TriageApprenticeshipDataLocks\WhenTriagingApprenticeshipDataLocks.cs" />
+    <Compile Include="Commands\TriageApprenticeshipDataLocks\WhenValidatingCommand.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\WhenUndoingApprenticeshipUpdate.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\WhenValidatingCommand.cs" />
     <Compile Include="Commands\UpdateRelationship\WhenUpdatingARelationship.cs" />

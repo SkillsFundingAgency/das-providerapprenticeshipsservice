@@ -30,7 +30,8 @@
         </table>
         
         @{
-            var datalocks = Model.DataLockViewModels.FindAll(x => x.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock07));
+            //Price datalocks ONLY
+            var datalocks = Model.DataLockViewModels.FindAll(x => x.DataLockErrorCode == DataLockErrorCode.Dlock07);
 
             var maxrows = Model.PriceHistory.Count > datalocks.Count
                 ? Model.PriceHistory.Count

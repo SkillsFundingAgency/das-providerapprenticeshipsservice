@@ -404,5 +404,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 throw new FluentValidation.ValidationException("Unable to review a provider-originated update");
             }
         }
+
+        public async Task TriageMultiplePriceDataLocksAsUpdateInDas(string hashedApprenticeshipId, string currentUserId)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            //user has selected "fix in das" for one or more price only episodes
+
+            //get all datalocks that are price ONLY
+            
+
+            //extract the ids and send over to application command
+
+
+
+        }
     }
 }

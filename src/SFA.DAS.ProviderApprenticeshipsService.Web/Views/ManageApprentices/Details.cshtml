@@ -53,14 +53,8 @@
                 
                 @if (Model.DataLocks.Any())
                 {
-                    var courses = Model.DataLocks.Any(x =>
-                        x.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock03)
-                        || x.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock04)
-                        || x.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock05)
-                        || x.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock06));
-
-                    var prices = Model.DataLocks.Any(x => x.DataLockErrorCode == DataLockErrorCode.Dlock07);
-
+                    var courses = Model.HasCourseDataLockMismatches;
+                    var prices = Model.HasPriceOnlyDataLockMismatches;
 
                     if (courses && prices)
                     {

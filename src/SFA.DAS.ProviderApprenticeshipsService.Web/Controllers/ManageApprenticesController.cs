@@ -228,6 +228,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
 
             //todo: how to triage multiple?
+            if (model.SubmitStatusViewModel != null && model.SubmitStatusViewModel.Value == SubmitStatusViewModel.Confirm)
+            {
+                await _orchestrator.TriageMultiplePriceDataLocksAsUpdateInDas(model.HashedApprenticeshipId, CurrentUserId);
+                SetInfoMessage($"Changes sent to employer for approval", FlashMessageSeverityLevel.Okay);
+            }
+
 
             //if (model.SubmitStatusViewModel != null && model.SubmitStatusViewModel.Value == SubmitStatusViewModel.Confirm)
             //{
@@ -272,7 +278,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 && model.SubmitStatusViewModel.Value == SubmitStatusViewModel.UpdateDataInIlr)
             {
                 // ToDo: Remove in V1?
-                var dataLock = model.DataLockViewModels.First(); //todo: order by ilr effective date
+                var dataLock = model.DataLockViewModels.OrderBy(x => x.IlrEffectiveFromDate).First();
                 await _orchestrator.UpdateDataLock(dataLock.DataLockEventId, model.HashedApprenticeshipId, SubmitStatusViewModel.UpdateDataInIlr, CurrentUserId);
                 return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
             }
