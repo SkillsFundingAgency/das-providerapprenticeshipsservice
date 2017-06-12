@@ -260,6 +260,37 @@
     }
 }
 
+
+//dynamic-class-mobile-views
+.dynamic-cost-display{
+    .bold-xlarge{     
+          line-height: 82px;
+          
+    }
+     @include media(tablet) { 
+     
+      .long {
+            font-size: 26px;
+             line-height: 82px;
+        }
+        .longer {
+            font-size: 19px;
+            line-height: 82px;
+        }
+    }
+    @include media(960px) {       
+        .long {
+            font-size: 45px;
+            line-height: 82px;
+        }
+        .longer {
+            font-size: 32px;
+            line-height: 82px;
+        }
+    }
+}
+
+
 //list of apprentices page
 
 #apprentices-detail{
@@ -509,11 +540,6 @@ table{
     padding: 20px;
 }
 
-.total-cost{
-    .bold-xlarge{
-        font-size:38px;
-    }
-}
 
 //start -- Apprentice Filter Styles
 .filter-option-select 
