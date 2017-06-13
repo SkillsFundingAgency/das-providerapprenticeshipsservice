@@ -337,7 +337,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 HashedApprenticeshipId = hashedApprenticeshipId,
-                DataMismatchModel = dataLock
+                DataMismatchModel = dataLock,
+                DataLockEventId = dataLock.DataLockSummaryViewModel.DataLockWithCourseMismatch
+                    .OrderBy(x => x.IlrEffectiveFromDate)
+                    .First()
+                    .DataLockEventId
             };
         }
 

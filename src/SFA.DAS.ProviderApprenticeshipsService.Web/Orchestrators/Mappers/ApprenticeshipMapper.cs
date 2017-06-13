@@ -422,7 +422,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         public async Task<DataLockSummaryViewModel> MapDataLockSummary(DataLockSummary source)
         {
-            var result = new DataLockSummaryViewModel();
+            var result = new DataLockSummaryViewModel
+            {
+                DataLockWithCourseMismatch = new List<DataLockViewModel>(),
+                DataLockWithOnlyPriceMismatch = new List<DataLockViewModel>()
+            };
 
             var trainingProgrammes = await GetTrainingProgrammes();
          
