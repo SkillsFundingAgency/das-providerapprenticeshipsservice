@@ -10,6 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using System.Security.Claims;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -23,7 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         private readonly CommitmentOrchestrator _commitmentOrchestrator;
         private readonly ILog _logger;
 
-        public CommitmentController(CommitmentOrchestrator commitmentOrchestrator, ILog logger)
+        public CommitmentController(CommitmentOrchestrator commitmentOrchestrator, ILog logger, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
         {
             if (commitmentOrchestrator == null)
                 throw new ArgumentNullException(nameof(commitmentOrchestrator));

@@ -18,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     {
         private readonly ManageApprenticesOrchestrator _orchestrator;
 
-        public ManageApprenticesController(ManageApprenticesOrchestrator orchestrator)
+        public ManageApprenticesController(ManageApprenticesOrchestrator orchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
         {
             if (orchestrator == null)
                 throw new ArgumentNullException(nameof(orchestrator));
