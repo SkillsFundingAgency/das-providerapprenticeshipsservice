@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
@@ -41,6 +42,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Details(long providerid, string hashedApprenticeshipId)
         {
             var model = await _orchestrator.GetApprenticeshipViewModel(providerid, hashedApprenticeshipId);
+
+            var flashMesssage = GetFlashMessageViewModelFromCookie();
+
+            if (flashMesssage != null)
+            {
+                model.FlashMessage = flashMesssage;
+            }
+            
             return View(model);
         }
 
