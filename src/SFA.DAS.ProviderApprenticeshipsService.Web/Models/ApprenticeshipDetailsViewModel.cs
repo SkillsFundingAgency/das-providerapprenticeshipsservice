@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
@@ -38,15 +35,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public bool EnableEdit { get; set; }
 
-        public bool HasDataLockError { get; set; }
-
         public DataLockErrorType ErrorType { get; set; }
 
         public string RecordStatus { get; set; }
 
         public string DataLockStatus { get; set; }
-
-        public bool HasRequestedRestart { get; set; }
 
         //todo: this is not used in the manage apprentices list, so maybe create a new 
         //viewmodel for that page?

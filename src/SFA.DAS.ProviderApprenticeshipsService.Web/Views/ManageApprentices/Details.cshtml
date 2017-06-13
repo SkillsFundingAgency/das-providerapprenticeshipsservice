@@ -1,8 +1,7 @@
-﻿@using SFA.DAS.Commitments.Api.Types.DataLock.Types
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
-@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipDetailsViewModel
+@model ApprenticeshipDetailsViewModel
 
 @{
     ViewBag.Title = "Apprentice detail";
@@ -30,7 +29,7 @@
             </div>
         }
 
-        @if (Model.HasRequestedRestart)
+        @if (Model.DataLockSummaryViewModel.DataLockWithCourseMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.RestartApprenticeship))
         {
             <div class="panel panel-border-wide">
                 <h3>
@@ -42,53 +41,52 @@
                 </p>
             </div>
         }
-        else if (Model.HasDataLockError)
+        
+        @if (Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.ChangeApprenticeship))
         {
-            if (Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.ChangeApprenticeship))
-            {
-                <div class="panel panel-border-wide">
-                    <h3>
-                        Changes pending
-                    </h3>
-                    <p>
-                        There are changes to this apprentice's details that are waiting for approval by the employer. You can continue to edit this apprentice if you need to.
-                    </p>
-                </div>
-            }
+            <div class="panel panel-border-wide">
+                <h3>
+                    Changes pending
+                </h3>
+                <p>
+                    There are changes to this apprentice's details that are waiting for approval by the employer. You can continue to edit this apprentice if you need to.
+                </p>
+            </div>
+        }
 
-                <div class="panel panel-border-wide">
-                    <h3>
-                        ILR data mismatch
-                    </h3>
-                    <p>
-                        The apprentice's details are different in your organisation's ILR submission.
-                        This may result in a payment failure.
-                    </p>
+        <div class="panel panel-border-wide">
+                <h3>
+                    ILR data mismatch
+                </h3>
+                <p>
+                    The apprentice's details are different in your organisation's ILR submission.
+                    This may result in a payment failure.
+                </p>
                     
-                    @{
-                        var courses = Model.DataLockSummaryViewModel.DataLockWithCourseMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
-                        var prices = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
+                @{
+                    var courses = Model.DataLockSummaryViewModel.DataLockWithCourseMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
+                    var prices = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
 
-                        if (courses && prices)
+                    if (courses && prices)
+                    {
+                        <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View price mismatch</a>
+                        <br/>
+                        <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View course mismatch</a>
+                    }
+                    else
+                    {
+                        if (courses)
                         {
-                            <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View price mismatch</a>
-                            <br/>
-                            <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View course mismatch</a>
+                            <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
                         }
-                        else
+                        else if (prices)
                         {
-                            if (courses)
-                            {
-                                <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
-                            }
-                            else if (prices)
-                            {
-                                <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View details</a>
-                            }
+                            <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View details</a>
                         }
                     }
-                </div>
                 }
+            </div>
+                
 
                 <table id="app-status">
                     <thead>
