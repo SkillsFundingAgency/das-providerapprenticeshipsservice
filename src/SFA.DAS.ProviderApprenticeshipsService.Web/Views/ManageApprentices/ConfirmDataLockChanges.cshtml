@@ -25,7 +25,7 @@
             </tr>
             <tr>
                 <td>Date of birth</td>
-                <td>@Model.DasApprenticeship.DateOfBirth.DateTime</td>
+                <td>@Model.DasApprenticeship.DateOfBirth.DateTime.Value.ToGdsFormat()</td>
             </tr>
         </table>
         
@@ -37,9 +37,11 @@
             {
                 change++;
 
+                //needs to get the price history record based on its date range and the ilr effective date
+
                 var priceHistory = Model.PriceHistory
-                    .OrderBy(x => x.FromDate)
-                    .FirstOrDefault(x => x.FromDate <= datalock.IlrEffectiveFromDate.Value);
+                    .OrderByDescending(x => x.FromDate)
+                    .First(x => x.FromDate <= datalock.IlrEffectiveFromDate.Value);
 
                 <h3 class="heading-small">Change @change</h3>
 
