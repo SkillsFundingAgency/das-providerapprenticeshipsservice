@@ -20,8 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         {
             _dataLockApi = new Mock<IDataLockApi>();
             _dataLockApi.Setup(x => x.GetDataLockSummary(It.IsAny<long>()))
-                .ReturnsAsync(new List<DataLockSummary>());
-            //todo: this will not be a list after package update
+                .ReturnsAsync(new DataLockSummary());
 
             _handler = new GetApprenticeshipDataLockSummaryQueryHandler(_dataLockApi.Object);
         }

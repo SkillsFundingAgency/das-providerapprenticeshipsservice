@@ -21,12 +21,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenti
         {
             var response = await _dataLockApi.GetDataLockSummary(command.ApprenticeshipId);
 
-            //todo: this is to be removed after package update
-            var first = response.FirstOrDefault();
-
             return new GetApprenticeshipDataLockSummaryQueryResponse
             {
-                DataLockSummary = first
+                DataLockSummary = response
             };
         }
     }
