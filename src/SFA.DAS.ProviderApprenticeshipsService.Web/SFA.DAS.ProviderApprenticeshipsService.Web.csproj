@@ -404,6 +404,7 @@
     <Compile Include="Models\UploadRowErrorViewModel.cs" />
     <Compile Include="Models\VerificationOfRelationshipViewModel.cs" />
     <Compile Include="Models\VerificationOfEmployerViewModel.cs" />
+    <Compile Include="Models\ViewModelBase.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
     <Compile Include="Orchestrators\ApprovedApprenticeshipValidation\ApprovedApprenticeshipValidator.cs" />
     <Compile Include="Orchestrators\ApprovedApprenticeshipValidation\IApprovedApprenticeshipValidator.cs" />
