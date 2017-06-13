@@ -31,7 +31,7 @@
 
         @if (Model.DataLockSummaryViewModel.DataLockWithCourseMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.RestartApprenticeship))
         {
-            <div class="panel panel-border-wide">
+            <div class="purple-border">
                 <h3>
                     Changes requested
                 </h3>
@@ -44,7 +44,7 @@
         
         @if (Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.ChangeApprenticeship))
         {
-            <div class="panel panel-border-wide">
+            <div class="purple-border">
                 <h3>
                     Changes pending
                 </h3>
@@ -53,8 +53,15 @@
                 </p>
             </div>
         }
+        
+        @{
+            var courses = Model.DataLockSummaryViewModel.DataLockWithCourseMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
+            var prices = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
+        }
 
-        <div class="panel panel-border-wide">
+        @if (courses || prices)
+        {
+            <div class="purple-border">
                 <h3>
                     ILR data mismatch
                 </h3>
@@ -62,31 +69,33 @@
                     The apprentice's details are different in your organisation's ILR submission.
                     This may result in a payment failure.
                 </p>
-                    
-                @{
-                    var courses = Model.DataLockSummaryViewModel.DataLockWithCourseMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
-                    var prices = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
 
-                    if (courses && prices)
+                @{
+                    if (Model.PendingChanges == PendingChanges.None
+                        && Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch.All(x => x.TriageStatusViewModel != TriageStatusViewModel.ChangeApprenticeship)
+                        )
                     {
-                        <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View price mismatch</a>
-                        <br/>
-                        <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View course mismatch</a>
-                    }
-                    else
-                    {
-                        if (courses)
+                        if (courses && prices)
                         {
-                            <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
+                            <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View price mismatch</a>
+                            <br/>
+                            <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View course mismatch</a>
                         }
-                        else if (prices)
+                        else
                         {
-                            <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View details</a>
+                            if (courses)
+                            {
+                                <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
+                            }
+                            else if (prices)
+                            {
+                                <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View details</a>
+                            }
                         }
                     }
                 }
             </div>
-                
+        }    
 
                 <table id="app-status">
                     <thead>
