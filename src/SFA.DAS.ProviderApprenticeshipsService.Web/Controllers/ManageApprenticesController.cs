@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
@@ -189,12 +190,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (model.SubmitStatusViewModel == SubmitStatusViewModel.UpdateDataInIlr)
             {
-                //todo: put this back in and fix:
-                //await _orchestrator.UpdateDataLock(
-                //    model.DataLockEventId,
-                //    model.HashedApprenticeshipId,
-                //    model.SubmitStatusViewModel.Value,
-                //    CurrentUserId);
+                await _orchestrator.TriageMultiplePriceDataLocks(model.HashedApprenticeshipId, CurrentUserId, TriageStatus.FixIlr);
 
                 return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
             }
@@ -227,22 +223,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return View("ConfirmDataLockChanges", viewModel);
             }
 
-            //todo: how to triage multiple?
             if (model.SubmitStatusViewModel != null && model.SubmitStatusViewModel.Value == SubmitStatusViewModel.Confirm)
             {
-                await _orchestrator.TriageMultiplePriceDataLocksAsUpdateInDas(model.HashedApprenticeshipId, CurrentUserId);
+                await _orchestrator.TriageMultiplePriceDataLocks(model.HashedApprenticeshipId, CurrentUserId, TriageStatus.Change);
                 SetInfoMessage($"Changes sent to employer for approval", FlashMessageSeverityLevel.Okay);
             }
-
-
-            //if (model.SubmitStatusViewModel != null && model.SubmitStatusViewModel.Value == SubmitStatusViewModel.Confirm)
-            //{
-            //    await _orchestrator.UpdateDataLock(
-            //        model.DataLockEventId,
-            //        model.HashedApprenticeshipId,
-            //        model.SubmitStatusViewModel.Value, CurrentUserId);
-            //    SetInfoMessage($"Changes sent to employer for approval", FlashMessageSeverityLevel.Okay);
-            //}
 
             return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
         }
@@ -277,8 +262,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (model.SubmitStatusViewModel.HasValue
                 && model.SubmitStatusViewModel.Value == SubmitStatusViewModel.UpdateDataInIlr)
             {
-                // ToDo: Remove in V1?
-                var dataLock = model.DataLockViewModels.OrderBy(x => x.IlrEffectiveFromDate).First();
+                var dataLock = model.DataLockSummaryViewModel.DataLockWithCourseMismatch.OrderBy(x => x.IlrEffectiveFromDate).First();
                 await _orchestrator.UpdateDataLock(dataLock.DataLockEventId, model.HashedApprenticeshipId, SubmitStatusViewModel.UpdateDataInIlr, CurrentUserId);
                 return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
             }

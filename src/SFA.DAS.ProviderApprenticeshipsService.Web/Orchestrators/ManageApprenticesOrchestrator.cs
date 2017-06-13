@@ -9,6 +9,7 @@ using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewApprenticeshipUpdate;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.TriageApprenticeshipDataLocks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateDataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.ApprenticeshipSearch;
@@ -16,6 +17,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentic
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLocks;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLockSummary;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipPriceHistory;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
@@ -102,11 +104,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { ProviderId = providerId, ApprenticeshipId = apprenticeshipId });
 
-            var dataLocks = await _mediator.SendAsync(new GetApprenticeshipDataLocksRequest { ApprenticeshipId = apprenticeshipId });
+            //var dataLocks = await _mediator.SendAsync(new GetApprenticeshipDataLocksRequest { ApprenticeshipId = apprenticeshipId });
+
+            var dataLockSummary = await _mediator.SendAsync(new GetApprenticeshipDataLockSummaryQueryRequest
+            {
+                ApprenticeshipId = apprenticeshipId
+            });
 
             var result = _apprenticeshipMapper.MapApprenticeshipDetails(data.Apprenticeship);
 
-            result.DataLocks = await _apprenticeshipMapper.MapDataLockStatusList(dataLocks.Data);
+            result.DataLockSummaryViewModel = await _apprenticeshipMapper.MapDataLockSummary(dataLockSummary.DataLockSummary);
 
             return result;
 
@@ -281,9 +288,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             _logger.Info($"Getting apprenticeship datalock for provider: {providerId}", providerId: providerId, apprenticeshipId: apprenticeshipId);
 
-            var dataLocks = await _mediator.SendAsync(new GetApprenticeshipDataLocksRequest
+            //var dataLocks = await _mediator.SendAsync(new GetApprenticeshipDataLocksRequest
+            //{
+            //    ApprenticeshipId = apprenticeshipId,
+            //});
+
+            var datalockSummary = await _mediator.SendAsync(new GetApprenticeshipDataLockSummaryQueryRequest
             {
-                ApprenticeshipId = apprenticeshipId,
+                ApprenticeshipId = apprenticeshipId
             });
 
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
@@ -297,7 +309,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
-            var datalockViewModels = await _apprenticeshipMapper.MapDataLockStatusList(dataLocks.Data);
+            var datalockSummaryViewModel =
+                await _apprenticeshipMapper.MapDataLockSummary(datalockSummary.DataLockSummary);
+
+            //var datalockViewModels = await _apprenticeshipMapper.MapDataLockStatusList(dataLocks.Data);
             var dasRecordViewModel = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
 
             return new DataLockMismatchViewModel
@@ -305,7 +320,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                             ProviderId = providerId,
                             HashedApprenticeshipId = hashedApprenticeshipId,
                             DasApprenticeship = dasRecordViewModel,
-                            DataLockViewModels = datalockViewModels,
+                            DataLockSummaryViewModel = datalockSummaryViewModel,
                             EmployerName = data.Apprenticeship.LegalEntityName,
                             PriceHistory = _apprenticeshipMapper.MapPriceHistory(priceHistory.History)
             };
@@ -405,19 +420,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             }
         }
 
-        public async Task TriageMultiplePriceDataLocksAsUpdateInDas(string hashedApprenticeshipId, string currentUserId)
+        public async Task TriageMultiplePriceDataLocks(string hashedApprenticeshipId, string currentUserId, TriageStatus triageStatus)
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
 
-            //user has selected "fix in das" for one or more price only episodes
+            _logger.Info($"Updating price data locks to triage {triageStatus} for apprenticeship: {apprenticeshipId}", apprenticeshipId);
 
-            //get all datalocks that are price ONLY
-            
-
-            //extract the ids and send over to application command
-
-
-
+            await _mediator.SendAsync(new TriageApprenticeshipDataLocksCommand
+            {
+                ApprenticeshipId = apprenticeshipId,
+                TriageStatus = triageStatus,
+                UserId = currentUserId
+            });
         }
     }
 }

@@ -50,24 +50,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         //todo: this is not used in the manage apprentices list, so maybe create a new 
         //viewmodel for that page?
-        public List<DataLockViewModel> DataLocks { get; set; }
-
-        public bool HasCourseDataLockMismatches
-        {
-            get
-            {
-                return DataLocks.Any(x =>
-                        x.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock03)
-                        || x.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock04)
-                        || x.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock05)
-                        || x.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock06));
-            }
-        }
-
-        public bool HasPriceOnlyDataLockMismatches
-        {
-            get { return DataLocks.Any(x => x.DataLockErrorCode == DataLockErrorCode.Dlock07); }
-        }
+        public DataLockSummaryViewModel DataLockSummaryViewModel { get; set; }
     }
 
     public enum DataLockErrorType

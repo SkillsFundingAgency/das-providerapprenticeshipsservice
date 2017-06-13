@@ -8,7 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
     [Validator(typeof(DataLockMismatchViewModelValidator))]
     public class DataLockMismatchViewModel
     {
-        public List<DataLockViewModel> DataLockViewModels { get; set; }
+        public DataLockSummaryViewModel DataLockSummaryViewModel { get; set; }
 
         public ApprenticeshipViewModel DasApprenticeship { get; set; }
 

@@ -419,5 +419,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
             return result;
         }
+
+        public async Task<DataLockSummaryViewModel> MapDataLockSummary(DataLockSummary source)
+        {
+            var result = new DataLockSummaryViewModel();
+
+            var trainingProgrammes = await GetTrainingProgrammes();
+         
+            foreach (var dataLock in source.DataLockWithCourseMismatch)
+            {
+                var training = trainingProgrammes.Single(x => x.Id == dataLock.IlrTrainingCourseCode);
+                result.DataLockWithCourseMismatch.Add(MapDataLockStatus(dataLock, training));
+            }
+
+            foreach (var dataLock in source.DataLockWithOnlyPriceMismatch)
+            {
+                var training = trainingProgrammes.Single(x => x.Id == dataLock.IlrTrainingCourseCode);
+                result.DataLockWithOnlyPriceMismatch.Add(MapDataLockStatus(dataLock, training));
+            }
+
+            return result;
+        }
     }
 }

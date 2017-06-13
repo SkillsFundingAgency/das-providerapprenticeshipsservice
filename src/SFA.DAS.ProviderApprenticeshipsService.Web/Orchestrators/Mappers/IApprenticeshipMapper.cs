@@ -32,5 +32,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         TriageStatus MapTriangeStatus(SubmitStatusViewModel submitStatusViewModel);
         List<PriceHistoryViewModel> MapPriceHistory(List<PriceHistory> priceHistoryHistory);
+        Task<DataLockSummaryViewModel> MapDataLockSummary(DataLockSummary datalockSummary);
     }
 }

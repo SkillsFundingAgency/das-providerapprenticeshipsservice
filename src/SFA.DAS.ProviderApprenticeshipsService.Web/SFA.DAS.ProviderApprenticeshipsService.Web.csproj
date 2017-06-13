@@ -366,6 +366,7 @@
     <Compile Include="Models\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\DataLock\ConfirmRestartViewModel.cs" />
     <Compile Include="Models\DataLock\DataLockMismatchViewModel.cs" />
+    <Compile Include="Models\DataLock\DataLockSummaryViewModel.cs" />
     <Compile Include="Models\DataLock\DataLockViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\ReviewApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\UndoApprenticeshipUpdateViewModel.cs" />
