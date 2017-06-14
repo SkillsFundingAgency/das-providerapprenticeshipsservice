@@ -334,7 +334,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 DataMismatchModel = dataLock,
                 DataLockEventId = dataLock.DataLockSummaryViewModel.DataLockWithCourseMismatch
                     .OrderBy(x => x.IlrEffectiveFromDate)
-                    .First()
+                    .First(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
                     .DataLockEventId
             };
         }

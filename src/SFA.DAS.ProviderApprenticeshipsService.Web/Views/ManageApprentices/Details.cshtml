@@ -55,7 +55,8 @@
         }
         
         @{
-            var courses = Model.DataLockSummaryViewModel.DataLockWithCourseMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
+            var courses = Model.DataLockSummaryViewModel.DataLockWithCourseMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
+                          && Model.DataLockSummaryViewModel.DataLockWithCourseMismatch.All(x => x.TriageStatusViewModel != TriageStatusViewModel.RestartApprenticeship);
             var prices = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
         }
 

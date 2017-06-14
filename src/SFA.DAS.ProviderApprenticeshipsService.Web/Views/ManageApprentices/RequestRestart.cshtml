@@ -7,6 +7,7 @@
     ViewBag.Title = "Request restart";
 
     var datalock = Model.DataLockSummaryViewModel.DataLockWithCourseMismatch
+        .Where(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
         .OrderBy(x => x.IlrEffectiveFromDate)
         .First();
 }
@@ -31,27 +32,22 @@
             </tr>
             </thead>
             <tbody>
-            @if (datalock.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock03)
-                 || datalock.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock04)
-                 || datalock.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock05)
-                 || datalock.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock06))
-            {
-                <tr>
-                    <td>Apprenticeship training course</td>
-                    <td>
-                        @if (datalock.IlrEffectiveFromDate.HasValue)
-                        {
-                            @datalock.IlrEffectiveFromDate.Value.ToGdsFormat()
-                        }
-                        else
-                        {
-                            <span>--</span>
-                        }
-                    </td>
-                    <td>@Model.DasApprenticeship.TrainingName </td>
-                    <td class="changed-item">@datalock.IlrTrainingCourseName </td>
-                </tr>
-            }
+
+            <tr>
+                <td>Apprenticeship training course</td>
+                <td>
+                    @if (datalock.IlrEffectiveFromDate.HasValue)
+                    {
+                        @datalock.IlrEffectiveFromDate.Value.ToGdsFormat()
+                    }
+                    else
+                    {
+                        <span>--</span>
+                    }
+                </td>
+                <td>@Model.DasApprenticeship.TrainingName </td>
+                <td class="changed-item">@datalock.IlrTrainingCourseName </td>
+            </tr>
 
             @if (datalock.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock07))
             {
