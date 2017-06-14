@@ -440,6 +440,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 result.DataLockWithOnlyPriceMismatch.Add(MapDataLockStatus(dataLock, training));
             }
 
+            result.ShowChangesRequested =
+                result.DataLockWithCourseMismatch.Any(
+                    x => x.TriageStatusViewModel == TriageStatusViewModel.RestartApprenticeship);
+
+            result.ShowChangesPending =
+                result.DataLockWithOnlyPriceMismatch.Any(
+                    x => x.TriageStatusViewModel == TriageStatusViewModel.ChangeApprenticeship);
+
             return result;
         }
     }

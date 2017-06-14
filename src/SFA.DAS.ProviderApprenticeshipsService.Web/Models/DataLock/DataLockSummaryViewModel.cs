@@ -6,5 +6,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
     {
         public List<DataLockViewModel> DataLockWithCourseMismatch { get; set; }
         public List<DataLockViewModel> DataLockWithOnlyPriceMismatch { get; set; }
+
+        public bool ShowChangesRequested { get; set; }
+        public bool ShowChangesPending { get; set; }
+
     }
 }

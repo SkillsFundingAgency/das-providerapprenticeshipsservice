@@ -29,7 +29,7 @@
             </div>
         }
 
-        @if (Model.DataLockSummaryViewModel.DataLockWithCourseMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.RestartApprenticeship))
+        @if (Model.DataLockSummaryViewModel.ShowChangesRequested)
         {
             <div class="purple-border">
                 <h3>
@@ -42,7 +42,7 @@
             </div>
         }
         
-        @if (Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.ChangeApprenticeship))
+        @if (Model.DataLockSummaryViewModel.ShowChangesPending)
         {
             <div class="purple-border">
                 <h3>
