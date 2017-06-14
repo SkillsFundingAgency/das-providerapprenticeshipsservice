@@ -12,6 +12,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
         public bool ShowCourseDataLockTriageLink { get; set; }
         public bool ShowPriceDataLockTriageLink { get; set; }
         public bool ShowIlrDataMismatch { get; set; }
-        public bool HasPendingPriceMismatchTriage { get; set; }
     }
 }
