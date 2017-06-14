@@ -33,7 +33,9 @@
         </table>
 
         @{
-            var datalocks = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch;
+            var datalocks = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch
+                .OrderBy(x => x.IlrEffectiveFromDate)
+                .ToList();
 
             var maxrows = Model.PriceHistory.Count > datalocks.Count
                 ? Model.PriceHistory.Count
@@ -62,7 +64,7 @@
                     : null;
 
                 var priceHistory = i < Model.PriceHistory.Count
-                    ? Model.PriceHistory[i]
+                    ? Model.PriceHistory.OrderBy(x => x.FromDate).ToArray()[i]
                     : null;
 
                 <tr>
