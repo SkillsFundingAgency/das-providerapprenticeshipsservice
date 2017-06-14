@@ -455,9 +455,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 && result.DataLockWithCourseMismatch.All(x => x.TriageStatusViewModel != TriageStatusViewModel.RestartApprenticeship);
 
             result.ShowPriceDataLockTriageLink =
-                result.DataLockWithOnlyPriceMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
-                && result.DataLockWithOnlyPriceMismatch.All(
-                    x => x.TriageStatusViewModel != TriageStatusViewModel.ChangeApprenticeship);
+                result.DataLockWithOnlyPriceMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
 
             result.ShowIlrDataMismatch = result.ShowCourseDataLockTriageLink || result.ShowPriceDataLockTriageLink;
 
