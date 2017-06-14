@@ -4,7 +4,7 @@
 @model DataLockMismatchViewModel
 
 @{
-    ViewBag.Title = "Confirm changes to apprenticeship";
+    ViewBag.Title = "Change apprentice details";
     ViewBag.PageID = "datalock-details-change";
 }
 
@@ -12,24 +12,9 @@
     <div class="column-two-thirds">
         @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
-        <h1 class="heading-xlarge">Details of ILR data mismatch</h1>
+        <h1 class="heading-xlarge">Change apprentice details</h1>
 
-        <p>There are mismatches where the data in the apprenticeship service and your ILR submission are different.</p>
-
-        <table>
-            <tr>
-                <td>Name</td>
-                <td>@Model.DasApprenticeship.FirstName @Model.DasApprenticeship.LastName</td>
-            </tr>
-            <tr>
-                <td>Unique learner number</td>
-                <td>@Model.DasApprenticeship.ULN</td>
-            </tr>
-            <tr>
-                <td>Date of birth</td>
-                <td>@Model.DasApprenticeship.DateOfBirth.DateTime.Value.ToGdsFormat()</td>
-            </tr>
-        </table>
+        <p>A request will be sent to @Model.EmployerName to approve the following changes in the apprenticeship service.</p>
 
         @{
             var datalocks = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch;
@@ -72,11 +57,11 @@
                             @{
                                 if (priceHistory != null)
                                 {
-                                    <span>@priceHistory.Cost.ToString("C")</span>
+                                    <span>@priceHistory.Cost.ToString("C0")</span>
                                 }
                             }
                         </td>
-                        <td>@datalock.IlrTotalCost.Value.ToString("C")</td>
+                        <td>@datalock.IlrTotalCost.Value.ToString("C0")</td>
                     </tr>
                     </tbody>
                 </table>
