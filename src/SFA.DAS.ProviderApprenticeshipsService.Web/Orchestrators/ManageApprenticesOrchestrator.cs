@@ -288,11 +288,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             _logger.Info($"Getting apprenticeship datalock for provider: {providerId}", providerId: providerId, apprenticeshipId: apprenticeshipId);
 
-            //var dataLocks = await _mediator.SendAsync(new GetApprenticeshipDataLocksRequest
-            //{
-            //    ApprenticeshipId = apprenticeshipId,
-            //});
-
             var datalockSummary = await _mediator.SendAsync(new GetApprenticeshipDataLockSummaryQueryRequest
             {
                 ApprenticeshipId = apprenticeshipId
@@ -312,7 +307,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var datalockSummaryViewModel =
                 await _apprenticeshipMapper.MapDataLockSummary(datalockSummary.DataLockSummary);
 
-            //var datalockViewModels = await _apprenticeshipMapper.MapDataLockStatusList(dataLocks.Data);
             var dasRecordViewModel = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
 
             return new DataLockMismatchViewModel

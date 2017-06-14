@@ -37,8 +37,6 @@
             {
                 change++;
 
-                //needs to get the price history record based on its date range and the ilr effective date
-
                 var priceHistory = Model.PriceHistory
                     .OrderByDescending(x => x.FromDate)
                     .First(x => x.FromDate <= datalock.IlrEffectiveFromDate.Value);

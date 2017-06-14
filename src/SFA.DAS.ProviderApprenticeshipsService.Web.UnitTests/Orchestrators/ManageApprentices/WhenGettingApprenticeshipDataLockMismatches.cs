@@ -7,8 +7,10 @@ using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLocks;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLockSummary;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipPriceHistory;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
@@ -20,6 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
     {
         private ManageApprenticesOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
+        private Mock<IApprenticeshipMapper> _mapper;
 
         [SetUp]
         public void Arrange()
@@ -43,11 +46,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
                     Apprenticeship = new Apprenticeship()
                 });
 
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipDataLockSummaryQueryRequest>()))
+                .ReturnsAsync(() => new GetApprenticeshipDataLockSummaryQueryResponse
+                {
+                    DataLockSummary = new DataLockSummary()
+                });
+
+            _mapper = new Mock<IApprenticeshipMapper>();
+            _mapper.Setup(x => x.MapDataLockSummary(It.IsAny<DataLockSummary>()))
+                .ReturnsAsync(() => new DataLockSummaryViewModel
+                {
+                    DataLockWithCourseMismatch = new List<DataLockViewModel>(),
+                    DataLockWithOnlyPriceMismatch = new List<DataLockViewModel>()
+                });
+
             _orchestrator = new ManageApprenticesOrchestrator(
                 _mediator.Object,
                 Mock.Of<IHashingService>(),
                 Mock.Of<IProviderCommitmentsLogger>(),
-                Mock.Of<IApprenticeshipMapper>(),
+                _mapper.Object,
                 Mock.Of<IApprovedApprenticeshipValidator>(),
                 Mock.Of<IApprenticeshipFiltersMapper>()
                 );
@@ -62,6 +79,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetApprenticeshipPriceHistoryQueryRequest>()),
                 Times.Once);
+        }
+
+        [Test]
+        public async Task ThenMediatorIsCalledToRetrieveDataLockSummary()
+        {
+            //Act
+            await _orchestrator.GetApprenticeshipMismatchDataLock(1, "TEST");
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.IsAny<GetApprenticeshipDataLockSummaryQueryRequest>()), Times.Once());
+        }
+
+        [Test]
+        public async Task ThenMapperIsCalledToMapDataLockSummaryToViewModel()
+        {
+            //Act
+            await _orchestrator.GetApprenticeshipMismatchDataLock(1, "TEST");
+
+            //Assert
+            _mapper.Verify(x => x.MapDataLockSummary(It.IsAny<DataLockSummary>()), Times.Once);
         }
     }
 }
