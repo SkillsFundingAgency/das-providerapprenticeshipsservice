@@ -54,13 +54,7 @@
             </div>
         }
         
-        @{
-            var courses = Model.DataLockSummaryViewModel.DataLockWithCourseMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
-                          && Model.DataLockSummaryViewModel.DataLockWithCourseMismatch.All(x => x.TriageStatusViewModel != TriageStatusViewModel.RestartApprenticeship);
-            var prices = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
-        }
-
-        @if (courses || prices)
+        @if (Model.DataLockSummaryViewModel.ShowIlrDataMismatch)
         {
             <div class="purple-border">
                 <h3>
@@ -72,11 +66,9 @@
                 </p>
 
                 @{
-                    if (Model.PendingChanges == PendingChanges.None
-                        && Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch.All(x => x.TriageStatusViewModel != TriageStatusViewModel.ChangeApprenticeship)
-                        )
+                    if (Model.PendingChanges == PendingChanges.None && Model.DataLockSummaryViewModel.HasPendingPriceMismatchTriage)
                     {
-                        if (courses && prices)
+                        if (Model.DataLockSummaryViewModel.ShowCourseDataLockTriageLink && Model.DataLockSummaryViewModel.ShowPriceDataLockTriageLink)
                         {
                             <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View price mismatch</a>
                             <br/>
@@ -84,11 +76,11 @@
                         }
                         else
                         {
-                            if (courses)
+                            if (Model.DataLockSummaryViewModel.ShowCourseDataLockTriageLink)
                             {
                                 <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
                             }
-                            else if (prices)
+                            else if (Model.DataLockSummaryViewModel.ShowPriceDataLockTriageLink)
                             {
                                 <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View details</a>
                             }

@@ -448,6 +448,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 result.DataLockWithOnlyPriceMismatch.Any(
                     x => x.TriageStatusViewModel == TriageStatusViewModel.ChangeApprenticeship);
 
+            //Can triage a course datalock if there is one that has not been triaged, and if there isn't one that
+            //has been triaged but is pending approval by employer (dealt with one at a time)
+            result.ShowCourseDataLockTriageLink =
+                result.DataLockWithCourseMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
+                && result.DataLockWithCourseMismatch.All(x => x.TriageStatusViewModel != TriageStatusViewModel.RestartApprenticeship);
+
+            result.ShowPriceDataLockTriageLink =
+                result.DataLockWithOnlyPriceMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
+
+            result.ShowIlrDataMismatch = result.ShowCourseDataLockTriageLink || result.ShowPriceDataLockTriageLink;
+
+            result.HasPendingPriceMismatchTriage =
+                result.DataLockWithOnlyPriceMismatch.Any(
+                    x => x.TriageStatusViewModel == TriageStatusViewModel.ChangeApprenticeship);
+
             return result;
         }
     }
