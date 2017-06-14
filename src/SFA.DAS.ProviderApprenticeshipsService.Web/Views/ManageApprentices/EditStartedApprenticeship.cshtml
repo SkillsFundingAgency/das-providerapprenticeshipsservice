@@ -73,12 +73,35 @@
 
 <div class="form-group @Html.AddClassIfPropertyInError(x => x.Cost, "error")">
     <hr />
-    <label for="@Html.IdFor(m => m.Cost)">
-        <span class="form-label-bold">Total agreed apprenticeship price (excluding VAT)</span>
-        <span class="form-hint">Enter the price, including any end-point assessment costs, in whole pounds. For example, for £1,500 enter 1500.</span>
-        @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
-    </label>
-    <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby = Html.IdFor(m => m.Cost), maxlength = "7" })
+    @if (Model.IsInFirstCalendarMonthOfTraining)
+    {
+        <label for="@Html.IdFor(m => m.Cost)">
+            <span class="form-label-bold">Total agreed apprenticeship price (excluding VAT)</span>
+            <span class="form-hint">Enter the price, including any end-point assessment costs, in whole pounds. For example, for £1,500 enter 1500.</span>
+            @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
+        </label>
+        <span class="heading-small">£ </span>
+        @Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby = Html.IdFor(m => m.Cost), maxlength = "7" })
+        <div>
+            <!-- TODO: Rejesh to style-->
+            You can update the total agreed apprenticeship price until @Model.StartDate.DateTime.Value.GetLastDayOfMonthDate().ToGdsFormat()
+            - after this date you'll need to make any changes through your ILR submission instead.
+        </div>
+    }
+    else
+    {
+        <label for="@Html.IdFor(m => m.Cost)">
+            <span class="form-label-bold">Total agreed apprenticeship price (excluding VAT)</span>
+        </label>
+        <span class="heading-small">£ </span>
+        <span>@Model.Cost</span>
+        <div>
+            <!-- TODO: Rejesh to style-->
+            If you want to change the total agreed apprenticeship price, you'll need to make the price change in your ILR
+            submission first. Once you've submitted your updated ILR you'll see an option to update the price in the 
+            apprenticeship service.
+        </div>
+    }
 </div>
 
 <div class="form-group @Html.AddClassIfPropertyInError(x => x.ProviderRef, "error")">

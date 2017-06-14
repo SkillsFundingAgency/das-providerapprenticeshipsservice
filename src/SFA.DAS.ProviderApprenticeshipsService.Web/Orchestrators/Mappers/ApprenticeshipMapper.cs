@@ -69,8 +69,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 AgreementStatus = apprenticeship.AgreementStatus,
                 ProviderRef = apprenticeship.ProviderRef,
                 EmployerRef = apprenticeship.EmployerRef,
-                HasStarted = !isStartDateInFuture
+                HasStarted = !isStartDateInFuture,
+                IsInFirstCalendarMonthOfTraining = CalculateIfInFirstCalendarMonthOfTraining(apprenticeship.StartDate)
             };
+        }
+
+        private bool CalculateIfInFirstCalendarMonthOfTraining(DateTime? startDate)
+        {
+            if (!startDate.HasValue)
+                throw new ArgumentNullException("Start Date should have a value", nameof(startDate));
+
+            return _currentDateTime.Now.Year == startDate.Value.Year && _currentDateTime.Now.Month == startDate.Value.Month;
         }
 
         public async Task<Apprenticeship> MapApprenticeship(ApprenticeshipViewModel vm)

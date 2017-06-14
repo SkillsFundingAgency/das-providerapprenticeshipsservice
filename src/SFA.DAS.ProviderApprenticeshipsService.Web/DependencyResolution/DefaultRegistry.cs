@@ -78,6 +78,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             ConfigureLogging();
 
             ConfigureInstrumentedTypes();
+
+#if DEBUG
+            For<ICurrentDateTime>().Use<TestDateTime>();
+#endif
+        }
+
+        private class TestDateTime : ICurrentDateTime
+        {
+            public DateTime Now => new DateTime(2017, 7, 22);
         }
 
         private void ConfigureInstrumentedTypes()
