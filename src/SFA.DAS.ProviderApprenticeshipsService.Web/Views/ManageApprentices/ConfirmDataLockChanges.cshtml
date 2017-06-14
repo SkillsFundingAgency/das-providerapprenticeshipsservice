@@ -10,6 +10,8 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
+        @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+
         <h1 class="heading-xlarge">Details of ILR data mismatch</h1>
 
         <p>There are mismatches where the data in the apprenticeship service and your ILR submission are different.</p>
@@ -28,7 +30,7 @@
                 <td>@Model.DasApprenticeship.DateOfBirth.DateTime.Value.ToGdsFormat()</td>
             </tr>
         </table>
-        
+
         @{
             var datalocks = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch;
 
@@ -45,11 +47,11 @@
 
                 <table>
                     <thead>
-                        <tr>
-                            <td></td>
-                            <td>Currently</td>
-                            <td>Change to</td>
-                        </tr>
+                    <tr>
+                        <td></td>
+                        <td>Currently</td>
+                        <td>Change to</td>
+                    </tr>
                     </thead>
                     <tbody>
                     <tr>
@@ -58,24 +60,24 @@
                             @{
                                 if (priceHistory != null)
                                 {
-                                    <span>@priceHistory.FromDate.Date.ToGdsFormat()</span>       
+                                    <span>@priceHistory.FromDate.Date.ToGdsFormat()</span>
                                 }
                             }
                         </td>
                         <td>@datalock.IlrEffectiveFromDate.Value.Date.ToGdsFormat()</td>
                     </tr>
-                        <tr>
-                            <td>Total apprenticeship training price</td>
-                            <td>
-                                @{
-                                    if (priceHistory != null)
-                                    {
-                                        <span>@priceHistory.Cost.ToString("C")</span>
-                                    }
+                    <tr>
+                        <td>Total apprenticeship training price</td>
+                        <td>
+                            @{
+                                if (priceHistory != null)
+                                {
+                                    <span>@priceHistory.Cost.ToString("C")</span>
                                 }
-                            </td>
-                            <td>@datalock.IlrTotalCost.Value.ToString("C")</td>
-                        </tr>
+                            }
+                        </td>
+                        <td>@datalock.IlrTotalCost.Value.ToString("C")</td>
+                    </tr>
                     </tbody>
                 </table>
 
@@ -89,7 +91,7 @@
     <div class="column-two-thirds">
         
         <form method="POST" action="@Url.Action("ConfirmDataLockChangesPost")" novalidate="novalidate">
-            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+            
             @Html.AntiForgeryToken()
 
             <div class="form-group">
@@ -97,14 +99,15 @@
                 <fieldset>
                     <h2 class="heading-medium">Do you want to request these changes?</h2>
                     <legend class="visually-hidden">How do you want to fix the mismatch?</legend>
-                    <div class="form-group">
+                    <div class="form-group @Html.AddClassIfPropertyInError(x => x.SubmitStatusViewModel, "error")">
+                        @Html.ValidationMessageFor(m => m.SubmitStatusViewModel, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SubmitStatusViewModel) })
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.Confirm)">
-                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new { id = RadioButtonId(SubmitStatusViewModel.Confirm) })
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new {id = RadioButtonId(SubmitStatusViewModel.Confirm)})
                             <span>Yes, request this change</span>
                         </label>
 
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
-                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new { id = RadioButtonId(SubmitStatusViewModel.None) })
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new {id = RadioButtonId(SubmitStatusViewModel.None)})
                             <span>No, leave for now</span>
                         </label>
                     </div>
