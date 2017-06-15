@@ -8,7 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
         {
             var lastDay = DateTime.DaysInMonth(date.Year, date.Month);
 
-            return new DateTime(date.Year, date.Month, lastDay, date.Hour, date.Minute, date.Second, date.Millisecond);
+            return new DateTime(date.Year, date.Month, lastDay);
         }
 
         public static string ToGdsFormat(this DateTime date)

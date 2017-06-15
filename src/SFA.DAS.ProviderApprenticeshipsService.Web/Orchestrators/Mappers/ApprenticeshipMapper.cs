@@ -74,14 +74,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             };
         }
 
-        private bool CalculateIfInFirstCalendarMonthOfTraining(DateTime? startDate)
-        {
-            if (!startDate.HasValue)
-                throw new ArgumentNullException("Start Date should have a value", nameof(startDate));
-
-            return _currentDateTime.Now.Year == startDate.Value.Year && _currentDateTime.Now.Month == startDate.Value.Month;
-        }
-
         public async Task<Apprenticeship> MapApprenticeship(ApprenticeshipViewModel vm)
         {
             var id = string.IsNullOrEmpty(vm.HashedApprenticeshipId)
@@ -319,6 +311,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 return TriageStatus.FixIlr;
 
             return TriageStatus.Unknown;
+        }
+
+        private bool CalculateIfInFirstCalendarMonthOfTraining(DateTime? startDate)
+        {
+            if (!startDate.HasValue)
+                throw new ArgumentNullException("Start Date should have a value", nameof(startDate));
+
+            return _currentDateTime.Now.Year == startDate.Value.Year && _currentDateTime.Now.Month == startDate.Value.Month;
         }
 
         private string MapDataLockStatus(TriageStatus? dataLockTriageStatus)
