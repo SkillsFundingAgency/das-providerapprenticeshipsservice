@@ -420,8 +420,10 @@
     <Compile Include="Orchestrators\ICommitmentStatusCalculator.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Orchestrators\ManageApprenticesOrchestrator.cs" />
+    <Compile Include="Orchestrators\Mappers\DataLockMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IApprenticeshipFiltersMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IApprenticeshipMapper.cs" />
+    <Compile Include="Orchestrators\Mappers\IDataLockMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestContext.cs" />
     <Compile Include="Startup.cs" />

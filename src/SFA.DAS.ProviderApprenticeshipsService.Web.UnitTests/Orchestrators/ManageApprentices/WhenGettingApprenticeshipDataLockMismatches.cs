@@ -22,7 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
     {
         private ManageApprenticesOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<IApprenticeshipMapper> _mapper;
+        private Mock<IDataLockMapper> _mapper;
 
         [SetUp]
         public void Arrange()
@@ -52,7 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
                     DataLockSummary = new DataLockSummary()
                 });
 
-            _mapper = new Mock<IApprenticeshipMapper>();
+            _mapper = new Mock<IDataLockMapper>();
             _mapper.Setup(x => x.MapDataLockSummary(It.IsAny<DataLockSummary>()))
                 .ReturnsAsync(() => new DataLockSummaryViewModel
                 {
@@ -64,10 +64,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
                 _mediator.Object,
                 Mock.Of<IHashingService>(),
                 Mock.Of<IProviderCommitmentsLogger>(),
-                _mapper.Object,
+                Mock.Of<IApprenticeshipMapper>(),
                 Mock.Of<IApprovedApprenticeshipValidator>(),
-                Mock.Of<IApprenticeshipFiltersMapper>()
-                );
+                Mock.Of<IApprenticeshipFiltersMapper>(),
+                _mapper.Object);
         }
 
         [Test]

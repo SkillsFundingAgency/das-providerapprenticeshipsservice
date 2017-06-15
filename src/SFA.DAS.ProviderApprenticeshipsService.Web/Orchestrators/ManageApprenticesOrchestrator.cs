@@ -42,10 +42,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly IApprovedApprenticeshipValidator _approvedApprenticeshipValidator;
         private readonly IApprenticeshipFiltersMapper _apprenticeshipFiltersMapper;
+        private readonly IDataLockMapper _dataLockMapper;
 
-        public ManageApprenticesOrchestrator(IMediator mediator, IHashingService hashingService,
-            IProviderCommitmentsLogger logger, IApprenticeshipMapper apprenticeshipMapper,
-            IApprovedApprenticeshipValidator approvedApprenticeshipValidator, IApprenticeshipFiltersMapper apprenticeshipFiltersMapper)
+        public ManageApprenticesOrchestrator(IMediator mediator,
+            IHashingService hashingService,
+            IProviderCommitmentsLogger logger,
+            IApprenticeshipMapper apprenticeshipMapper,
+            IApprovedApprenticeshipValidator approvedApprenticeshipValidator,
+            IApprenticeshipFiltersMapper apprenticeshipFiltersMapper,
+            IDataLockMapper dataLockMapper)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -59,6 +64,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 throw new ArgumentNullException(nameof(approvedApprenticeshipValidator));
             if(apprenticeshipFiltersMapper == null)
                 throw new ArgumentNullException(nameof(IApprenticeshipFiltersMapper));
+            if(dataLockMapper == null)
+                throw new ArgumentNullException(nameof(IDataLockMapper));
 
             _mediator = mediator;
             _hashingService = hashingService;
@@ -66,6 +73,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _apprenticeshipMapper = apprenticeshipMapper;
             _approvedApprenticeshipValidator = approvedApprenticeshipValidator;
             _apprenticeshipFiltersMapper = apprenticeshipFiltersMapper;
+            _dataLockMapper = dataLockMapper;
         }
 
         public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(long providerId, ApprenticeshipFiltersViewModel filters)
@@ -113,7 +121,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var result = _apprenticeshipMapper.MapApprenticeshipDetails(data.Apprenticeship);
 
-            result.DataLockSummaryViewModel = await _apprenticeshipMapper.MapDataLockSummary(dataLockSummary.DataLockSummary);
+            result.DataLockSummaryViewModel = await _dataLockMapper.MapDataLockSummary(dataLockSummary.DataLockSummary);
 
             return result;
 
@@ -305,7 +313,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
 
             var datalockSummaryViewModel =
-                await _apprenticeshipMapper.MapDataLockSummary(datalockSummary.DataLockSummary);
+                await _dataLockMapper.MapDataLockSummary(datalockSummary.DataLockSummary);
 
             var dasRecordViewModel = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
 
