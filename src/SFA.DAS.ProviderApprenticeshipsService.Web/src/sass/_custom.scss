@@ -677,6 +677,26 @@ table{
         }
 }
 //end -- Apprentice Filter Styles
+
+//Datalock styles
+#datalock-details-change{
+    table.app-data{
+       caption{text-align:left;}
+        td.first-child{
+            border-top:1px solid $grey-2;
+        }
+    }
+    table.edited-changes{
+        margin-top:40px;
+        th{
+            border:0;
+        }
+    }
+
+}
+
+//End Datalock styles
+
     
 //all mobile media query breakpoints
 @media only screen and (max-device-width: 640px),

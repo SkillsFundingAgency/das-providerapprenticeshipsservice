@@ -3150,6 +3150,22 @@ table .changed-item {
   content: " ";
 }
 
+#datalock-details-change table.app-data caption {
+  text-align: left;
+}
+
+#datalock-details-change table.app-data td.first-child {
+  border-top: 1px solid #bfc1c3;
+}
+
+#datalock-details-change table.edited-changes {
+  margin-top: 40px;
+}
+
+#datalock-details-change table.edited-changes th {
+  border: 0;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
