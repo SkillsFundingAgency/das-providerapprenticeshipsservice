@@ -59,11 +59,11 @@
                             @{
                                 if (priceHistory != null)
                                 {
-                                    <span>@priceHistory.Cost.ToString("C0")</span>
+                                    <span>@priceHistory.Cost.FormatCost()</span>
                                 }
                             }
                         </td>
-                        <td>@datalock.IlrTotalCost.Value.ToString("C0")</td>
+                        <td>@datalock.IlrTotalCost.FormatCost()</td>
                     </tr>
                     </tbody>
                 </table>
