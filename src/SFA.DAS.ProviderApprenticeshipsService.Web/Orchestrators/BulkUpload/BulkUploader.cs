@@ -66,7 +66,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             return new BulkUploadResult { Errors = new List<UploadError>(), Data = rows };
         }
 
-        public async Task<BulkUploadResult> ValidateFileStructure(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel, string filename, long commitmentId)
+        public async Task<BulkUploadResult> ValidateFileStructure(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel, long providerId, long commitmentId)
         {
             if (uploadApprenticeshipsViewModel.Attachment == null)
                 return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("No file chosen") } };
@@ -97,7 +97,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 return new BulkUploadResult { Errors = fileAttributeErrors };
             }
 
-            var uploadResult = _fileParser.CreateViewModels(fileContent);
+            var uploadResult = _fileParser.CreateViewModels(providerId, commitmentId, fileContent);
 
             if (uploadResult.HasErrors)
                 return uploadResult;

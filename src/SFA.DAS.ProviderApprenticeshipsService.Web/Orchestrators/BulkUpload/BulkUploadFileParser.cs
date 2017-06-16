@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Web;
 using CsvHelper;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
@@ -17,9 +16,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 {
     public sealed class BulkUploadFileParser : IBulkUploadFileParser
     {
-        private readonly ILog _logger;
+        private readonly IProviderCommitmentsLogger _logger;
 
-        public BulkUploadFileParser(ILog logger)
+        public BulkUploadFileParser(IProviderCommitmentsLogger logger)
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
@@ -27,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _logger = logger;
         }
 
-        public BulkUploadResult CreateViewModels(string fileInput)
+        public BulkUploadResult CreateViewModels(long providerId, long commitmentId, string fileInput)
         {
             using (TextReader tr = new StringReader(fileInput))
             {
@@ -49,7 +48,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                     var exceptionData = exception.Data["CsvHelper"];
                     _logger.Error(
                         exception,
-                        $"Failed to create files from bulk upload. {typeof(CsvMissingFieldException)} Data CsvHelper {exceptionData}");
+                        $"Failed to process bulk upload file (missing field). {exceptionData}", providerId: providerId, commitmentId: commitmentId);
                     return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("Cannot read all file") } };
                 }
                 catch (Exception exception)
@@ -57,7 +56,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                     var exceptionData = exception.Data["CsvHelper"];
                     _logger.Error(
                         exception,
-                        $"Failed to create files from bulk upload. Exception Data CsvHelper {exceptionData}");
+                        $"Failed to process bulk upload file. {exceptionData}", providerId: providerId, commitmentId: commitmentId);
                     return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("Failed to create apprentices from file") } };
                 }
             }

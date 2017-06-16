@@ -69,7 +69,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                             }));
 
             var uploadValidator = new BulkUploadValidator(new ProviderApprenticeshipsServiceConfiguration { MaxBulkUploadFileSize = 512 }, Mock.Of<ILog>());
-            var uploadFileParser = new BulkUploadFileParser(Mock.Of<ILog>());
+            var uploadFileParser = new BulkUploadFileParser(Mock.Of<IProviderCommitmentsLogger>());
             var bulkUploader = new BulkUploader(_mockMediator.Object, uploadValidator, uploadFileParser, Mock.Of<IProviderCommitmentsLogger>());
             var bulkUploadMapper = new BulkUploadMapper(_mockMediator.Object);
 

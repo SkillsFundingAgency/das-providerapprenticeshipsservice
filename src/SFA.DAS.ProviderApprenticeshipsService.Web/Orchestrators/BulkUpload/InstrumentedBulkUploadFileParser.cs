@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Web;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 
@@ -23,11 +22,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _parser = parser;
         }
 
-        public BulkUploadResult CreateViewModels(string fileContent)
+        public BulkUploadResult CreateViewModels(long providerId, long commitmentId, string fileContent)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var result = _parser.CreateViewModels(fileContent);
+            var result = _parser.CreateViewModels(providerId, commitmentId, fileContent);
 
             _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to create {result.Data?.Count()} viewmodels");
 

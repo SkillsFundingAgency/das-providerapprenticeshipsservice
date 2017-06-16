@@ -7,6 +7,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.BulkUpload
@@ -37,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var textStream = new MemoryStream(Encoding.UTF8.GetBytes(TestData));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
-            _sut = new BulkUploadFileParser(Mock.Of<ILog>());
+            _sut = new BulkUploadFileParser(Mock.Of<IProviderCommitmentsLogger>());
         }
 
         [Test]
@@ -45,7 +46,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         {
             // ToDo: Move this to where we do the reading of file.
             //var records = _sut.CreateViewModels(_file.Object);
-            var records = _sut.CreateViewModels(TestData);
+            var records = _sut.CreateViewModels(123, 456, TestData);
             records.Data.Count().Should().Be(8);
             records.Errors.Should().NotBeNull();
             records.Errors.Should().BeEmpty();
