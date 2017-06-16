@@ -98,15 +98,16 @@
             </label>
             <span class="heading-small">£ </span>
             <span>@Model.Cost</span>
+            @Html.HiddenFor(m => m.Cost)
             <div class="approve-alert">
                 <div class="panel panel-border-wide alert-blue">
                     If you want to change the total agreed apprenticeship price, you'll need to make the price change in your ILR
                     submission first. Once you've submitted your updated ILR, you'll see an option to update the price in the apprenticeship service.
                 </div>
             </div>
-                <hr />
+            <hr />
         }
-            </div>
+    </div>
 
     <div class="form-group last-child @Html.AddClassIfPropertyInError(x => x.ProviderRef, "error")">
 
