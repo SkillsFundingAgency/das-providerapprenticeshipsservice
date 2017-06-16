@@ -3175,6 +3175,30 @@ table .changed-item {
   font-weight: bold;
 }
 
+#edit-started-apprentice .form-group {
+  margin-bottom: 0;
+}
+
+#edit-started-apprentice .first-child {
+  margin-bottom: 30px;
+}
+
+#edit-started-apprentice .approve-alert {
+  margin-top: 30px;
+}
+
+#edit-started-apprentice .approve-alert .alert-blue {
+  border-color: #2b8cc4;
+}
+
+#edit-started-apprentice .last-child {
+  margin-bottom: 30px;
+}
+
+#edit-started-apprentice strong {
+  font-weight: bold;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;

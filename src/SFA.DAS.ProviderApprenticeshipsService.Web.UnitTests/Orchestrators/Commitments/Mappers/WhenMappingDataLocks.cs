@@ -44,8 +44,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mapper = new DataLockMapper(_mediator.Object);
         }
 
-        [Test(Description = "Show Changes flag set when apprenticeship has a course data lock triaged as Restart")]
-        public async Task ThenSummarySetsShowChangesRequestedCorrectly()
+        [Test]
+        public async Task ThenSummaryShowsChangesRequestedWhenADataLockCourseHasBeenTriaged()
         {
             //Arrange
             var source = new DataLockSummary
@@ -62,6 +62,81 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             //Assert
             Assert.IsTrue(result.ShowChangesRequested);
+        }
+
+        [Test]
+        public async Task ThenSummaryShowsChangesPendingWhenADataLockPricehasBeenTriaged()
+        {
+            //Arrange
+            var source = new DataLockSummary
+            {
+                DataLockWithOnlyPriceMismatch = new List<DataLockStatus>
+                {
+                    new DataLockStatus { IlrTrainingCourseCode = "TEST", TriageStatus = TriageStatus.Change }
+                },
+                DataLockWithCourseMismatch = new List<DataLockStatus>()
+            };
+
+            //Act
+            var result = await _mapper.MapDataLockSummary(source);
+
+            //Assert
+            Assert.IsTrue(result.ShowChangesPending);
+        }
+
+        [TestCase(true, false, true, Description="Course triage available when datalock course mismatch is pending and no other has been triaged")]
+        [TestCase(true, true, false, Description = "Course triage unavailable when another has already been triaged (must be fully resolved one-at-a-time)")]
+        [TestCase(false, false, false, Description = "Course triage unavailable if nothing to triage")]
+        [TestCase(false, true, false, Description = "Course triage unavailable if nothing to triage")]
+        public async Task ThenSummaryShowsDataLockCourseTriage(bool hasUntriagedCourseDataLock, bool hasTriagedCourseDataLock, bool expectEnabled)
+        {
+            //Arrange
+            var courseDataLocks = new List<DataLockStatus>();
+            if (hasUntriagedCourseDataLock)
+            {
+                courseDataLocks.Add(
+                    new DataLockStatus { IlrTrainingCourseCode = "TEST", TriageStatus = TriageStatus.Unknown});
+            }
+
+            if (hasTriagedCourseDataLock)
+            {
+                courseDataLocks.Add(
+                    new DataLockStatus { IlrTrainingCourseCode = "TEST", TriageStatus = TriageStatus.Restart });
+            }
+
+            var source = new DataLockSummary
+            {
+                DataLockWithOnlyPriceMismatch = new List<DataLockStatus>(),
+                DataLockWithCourseMismatch = courseDataLocks
+            };
+
+            //Act
+            var result = await _mapper.MapDataLockSummary(source);
+
+            //Assert
+            Assert.AreEqual(expectEnabled, result.ShowCourseDataLockTriageLink);
+        }
+
+        [TestCase(true, true, Description="Price Triage available when there is a Data Lock Price to triage")]
+        [TestCase(false, false, Description = "Price Triage available when there is a Data Lock Price to triage")]
+        public async Task ThenSummaryShowsDataLockPriceTriage(bool priceTriagePending, bool expectEnabled)
+        {
+            var source = new DataLockSummary
+            {
+                DataLockWithOnlyPriceMismatch = priceTriagePending ? new List<DataLockStatus>
+                {
+                    {
+                        new DataLockStatus { IlrTrainingCourseCode = "TEST", TriageStatus = TriageStatus.Unknown}
+                    }
+                } : new List<DataLockStatus>(),
+                DataLockWithCourseMismatch = new List<DataLockStatus>()
+            };
+
+            //Act
+            var result = await _mapper.MapDataLockSummary(source);
+
+            //Assert
+            Assert.AreEqual(expectEnabled, result.ShowPriceDataLockTriageLink);
         }
     }
 }
