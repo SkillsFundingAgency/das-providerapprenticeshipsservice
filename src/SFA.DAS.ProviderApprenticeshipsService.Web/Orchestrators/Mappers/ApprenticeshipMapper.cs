@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-
+using Microsoft.Ajax.Utilities;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.Commitments.Api.Types.DataLock;
@@ -253,15 +253,50 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 Status = statusText,
                 EmployerName = apprenticeship.LegalEntityName,
                 PendingChanges = pendingChange,
-                RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator),
-                DataLockStatus = MapDataLockStatus(apprenticeship.DataLockTriageStatus),
+                Alerts = MapAlerts(apprenticeship),
                 CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
                 ProviderReference = apprenticeship.ProviderRef,
                 EnableEdit =   pendingChange == PendingChanges.None
-                            && apprenticeship.DataLockTriageStatus == null
-                            && new[] { PaymentStatus.Active, PaymentStatus.Paused, }.Contains(apprenticeship.PaymentStatus),
-                ErrorType = MapErrorType(apprenticeship.DataLockErrorCode)
+                            && !apprenticeship.DataLockCourse
+                            && !apprenticeship.DataLockPrice
+                            && !apprenticeship.DataLockCourseTriaged
+                            && !apprenticeship.DataLockPriceTriaged
+                            && new[] { PaymentStatus.Active, PaymentStatus.Paused, }.Contains(apprenticeship.PaymentStatus)
             };
+        }
+
+        private List<string> MapAlerts(Apprenticeship apprenticeship)
+        {
+            var result = new List<string>();
+
+            if (apprenticeship.DataLockCourse || apprenticeship.DataLockPrice)
+            {
+                result.Add("ILR data mismatch");
+            }
+
+            if (apprenticeship.DataLockPriceTriaged)
+            {
+                result.Add("Changes pending");
+            }
+
+            if (apprenticeship.DataLockCourseTriaged)
+            {
+                result.Add("Changes requested");
+            }
+
+            if (apprenticeship.PendingUpdateOriginator != null)
+            {
+                if (apprenticeship.PendingUpdateOriginator == Originator.Provider)
+                {
+                    result.Add("Changes pending");
+                }
+                else
+                {
+                    result.Add("Changes for review");
+                }
+            }
+
+            return result.Distinct().ToList();
         }
 
         public DataLockErrorType MapErrorType(DataLockErrorCode errorCode)
@@ -290,31 +325,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             return TriageStatus.Unknown;
         }
 
-        private string MapDataLockStatus(TriageStatus? dataLockTriageStatus)
-        {
-            switch (dataLockTriageStatus)
-            {
-                case TriageStatus.Unknown:
-                    return "ILR data mismatch";
-                case TriageStatus.Change:
-                    return "Change requested";
-                case TriageStatus.Restart:
-                    return "Change requested";
-                case TriageStatus.FixIlr:
-                    return "ILR changes pending";
-            }
-            return "";
-        }
-
-        private string MapRecordStatus(Originator? pendingUpdateOriginator)
-        {
-            if (pendingUpdateOriginator == null)
-            {
-                return string.Empty;
-            }
-
-            return pendingUpdateOriginator == Originator.Provider ? "Changes pending" : "Changes for review";
-        }
 
         private string MapPaymentStatus(PaymentStatus paymentStatus, DateTime? startDate)
         {

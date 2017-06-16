@@ -197,30 +197,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         }
 
         [Test]
-        public void ShouldNotHaveRecordStatus()
+        public void ShouldNotHaveAlertForChangesPending()
         {
             _model.PendingUpdateOriginator = null;
             var viewModel = _mapper.MapApprenticeshipDetails(_model);
-
-            viewModel.RecordStatus.Should().Be(string.Empty);
+            Assert.IsFalse(viewModel.Alerts.Contains("Changes pending"));
+            Assert.IsFalse(viewModel.Alerts.Contains("Changes for review"));
         }
 
         [Test]
-        public void ShouldHaveRecordStatusFromEmployer()
+        public void ShouldHaveAlertForChangesPendingFromEmployer()
         {
             _model.PendingUpdateOriginator = Originator.Employer;
             var viewModel = _mapper.MapApprenticeshipDetails(_model);
-
-            viewModel.RecordStatus.Should().Be("Changes for review");
+            Assert.IsTrue(viewModel.Alerts.Contains("Changes for review"));
         }
 
         [Test]
-        public void ShouldHaveRecordStatusFromProvider()
+        public void ShouldHaveAlertForChangesPendingFromProvider()
         {
             _model.PendingUpdateOriginator = Originator.Provider;
             var viewModel = _mapper.MapApprenticeshipDetails(_model);
-
-            viewModel.RecordStatus.Should().Be("Changes pending");
+            Assert.IsTrue(viewModel.Alerts.Contains("Changes pending"));
         }
     }
 }
