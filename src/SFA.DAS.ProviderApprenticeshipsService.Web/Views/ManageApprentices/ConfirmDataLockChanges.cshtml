@@ -5,7 +5,7 @@
 
 @{
     ViewBag.Title = "Change apprentice details";
-    ViewBag.PageID = "datalock-details-change";
+    ViewBag.PageID = "confirm-datalock-changes";
 }
 
 <div class="grid-row">
@@ -30,14 +30,14 @@
                     .OrderByDescending(x => x.FromDate)
                     .First(x => x.FromDate <= datalock.IlrEffectiveFromDate.Value);
 
-                <h3 class="heading-small">Change @change</h3>
+                <h2 class="heading-small">Change @change</h2>
 
                 <table>
                     <thead>
                     <tr>
-                        <td></td>
-                        <td>Currently</td>
-                        <td>Change to</td>
+                        <th></th>
+                        <th>Currently</th>
+                        <th>Change to</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -63,7 +63,7 @@
                                 }
                             }
                         </td>
-                        <td>@datalock.IlrTotalCost.FormatCost()</td>
+                        <td class="bold-font">@datalock.IlrTotalCost.FormatCost()</td>
                     </tr>
                     </tbody>
                 </table>

@@ -3126,6 +3126,10 @@ table .changed-item {
   font-weight: bold;
 }
 
+#confirm-datalock-changes .bold-font {
+  font-weight: bold;
+}
+
 #edit-started-apprentice .form-group {
   margin-bottom: 0;
 }
