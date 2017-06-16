@@ -1,7 +1,7 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipViewModel
 <div id="edit-started-apprentice">
-    <div class="form-group @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
+    <div class="form-group first-child @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
 
         @Html.LabelFor(m => m.FirstName, "First name", new { @class = "form-label form-label-bold" })
         @Html.ValidationMessageFor(m => m.FirstName, null, new { id = "error-message-" + Html.IdFor(m => m.FirstName) })

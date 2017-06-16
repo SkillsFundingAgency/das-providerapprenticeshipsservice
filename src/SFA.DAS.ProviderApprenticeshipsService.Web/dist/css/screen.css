@@ -3552,6 +3552,10 @@ table .changed-item {
   margin-bottom: 0;
 }
 
+#edit-started-apprentice .first-child {
+  margin-bottom: 30px;
+}
+
 #edit-started-apprentice .approve-alert {
   margin-top: 30px;
 }

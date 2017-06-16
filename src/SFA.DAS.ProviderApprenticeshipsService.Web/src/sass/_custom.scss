@@ -682,6 +682,7 @@ table{
 //edit-started-apprentice
 #edit-started-apprentice{
     .form-group{margin-bottom:0;}
+    .first-child{margin-bottom:30px;}
     .approve-alert{   
         margin-top:30px;
             .alert-blue{border-color:$link-hover-colour;}
