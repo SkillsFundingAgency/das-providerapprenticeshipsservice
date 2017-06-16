@@ -116,5 +116,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             //Assert
             Assert.AreEqual(expectEnabled, result.ShowCourseDataLockTriageLink);
         }
+
+        [TestCase(true, true, Description="Price Triage available when there is a Data Lock Price to triage")]
+        [TestCase(false, false, Description = "Price Triage available when there is a Data Lock Price to triage")]
+        public async Task ThenSummaryShowsDataLockPriceTriage(bool priceTriagePending, bool expectEnabled)
+        {
+            var source = new DataLockSummary
+            {
+                DataLockWithOnlyPriceMismatch = priceTriagePending ? new List<DataLockStatus>
+                {
+                    {
+                        new DataLockStatus { IlrTrainingCourseCode = "TEST", TriageStatus = TriageStatus.Unknown}
+                    }
+                } : new List<DataLockStatus>(),
+                DataLockWithCourseMismatch = new List<DataLockStatus>()
+            };
+
+            //Act
+            var result = await _mapper.MapDataLockSummary(source);
+
+            //Assert
+            Assert.AreEqual(expectEnabled, result.ShowPriceDataLockTriageLink);
+        }
     }
 }
