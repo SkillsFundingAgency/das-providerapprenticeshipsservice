@@ -17,7 +17,7 @@
 
         <p>There are mismatches where the data in the apprenticeship service and your ILR submission are different.</p>
 
-        @*<table class="app-data">
+        <table class="app-data">
             <tr>
                 <td class="first-child">Name</td>
                 <td class="first-child">@Model.DasApprenticeship.FirstName @Model.DasApprenticeship.LastName</td>
@@ -31,82 +31,84 @@
                 <td>@Model.DasApprenticeship.DateOfBirth.DateTime.Value.ToGdsFormat()</td>
             </tr>
         </table>
+@*
+    @{
+        var datalocks = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch
+            .OrderBy(x => x.IlrEffectiveFromDate)
+            .ToList();
 
-        @{
-            var datalocks = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch
-                .OrderBy(x => x.IlrEffectiveFromDate)
-                .ToList();
+        var maxrows = Model.PriceHistory.Count > datalocks.Count
+            ? Model.PriceHistory.Count
+            : datalocks.Count;
+    }
 
-            var maxrows = Model.PriceHistory.Count > datalocks.Count
-                ? Model.PriceHistory.Count
-                : datalocks.Count;
+    <table class="edited-changes">
+        <thead>
+        <tr>
+            <th colspan="2">Apprenticeship service</th>
+            <th colspan="2">ILR submission</th>
+        </tr>
+        <tr>
+            <th scope="col">From date</th>
+            <th scope="col" class="numeric">Total apprenticeship training price</th>
+            <th scope="col">From date</th>
+            <th scope="col" class="numeric">Total apprenticeship training price</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        @for (var i = 0; i < maxrows; i++)
+        {
+            var datalock = i < datalocks.Count
+                ? datalocks[i]
+                : null;
+
+            var priceHistory = i < Model.PriceHistory.Count
+                ? Model.PriceHistory.OrderBy(x => x.FromDate).ToArray()[i]
+                : null;
+
+            <tr>
+
+                @if (priceHistory != null)
+                {
+                    <td>
+                        @priceHistory.FromDate.ToGdsFormat()
+                    </td>
+                    <td class="numeric">
+                        @priceHistory.Cost.ToString("C0")
+                    </td>
+                }
+                else
+                {
+                    <td colspan="2">&ndash;</td>
+                }
+
+                @if (datalock != null)
+                {
+                    <td>
+                        @datalock.IlrEffectiveFromDate.Value.ToGdsFormat()
+                    </td>
+                    <td class="numeric">
+                        @datalock.IlrTotalCost.FormatCost()
+                    </td>
+                }
+                else
+                {
+                    <td colspan="2">&ndash;</td>
+                }
+
+            </tr>
         }
 
-        <table class="edited-changes">
-            <thead>
-            <tr>
-                <th colspan="2">Apprenticeship service</th>
-                <th colspan="2">ILR submission</th>
-            </tr>
-            <tr>
-                <th scope="col">From date</th>
-                <th scope="col" class="numeric">Total apprenticeship training price</th>
-                <th scope="col">From date</th>
-                <th scope="col" class="numeric">Total apprenticeship training price</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            @for (var i = 0; i < maxrows; i++)
-            {
-                var datalock = i < datalocks.Count
-                    ? datalocks[i]
-                    : null;
-
-                var priceHistory = i < Model.PriceHistory.Count
-                    ? Model.PriceHistory.OrderBy(x => x.FromDate).ToArray()[i]
-                    : null;
-
-                <tr>
-
-                    @if (priceHistory != null)
-                    {
-                        <td>
-                            @priceHistory.FromDate.ToGdsFormat()
-                        </td>
-                        <td class="numeric">
-                            @priceHistory.Cost.ToString("C0")
-                        </td>
-                    }
-                    else
-                    {
-                        <td colspan="2">&ndash;</td>
-                    }
-
-                    @if (datalock != null)
-                    {
-                        <td>
-                            @datalock.IlrEffectiveFromDate.Value.ToGdsFormat()
-                        </td>
-                        <td class="numeric">
-                            @datalock.IlrTotalCost.FormatCost()
-                        </td>
-                    }
-                    else
-                    {
-                        <td colspan="2">&ndash;</td>
-                    }
-
-                </tr>
-            }
-
-            </tbody>
-        </table>*@
+        </tbody>
+    </table>*@
 
 
-<!--data table as two columns for mobile friendly approach -- move backend code here to fit the design-->
+<!--New markup to use - Chris to move backend code here to fit the design-->
         <div class="grid-row">
             <div class="column-one-half">
+
+                <!-- Table one-->
                 <table class="app-data">
                     <caption class="heading-small">Apprenticeship service</caption>
                     <thead>
@@ -118,12 +120,12 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="row">January</th>
+                            <td scope="row">January</td>
                             <td class="numeric">£165.00</td>
 
                         </tr>
                         <tr>
-                            <th scope="row">February</th>
+                            <td scope="row">February</td>
                             <td class="numeric">£165.00</td>
 
                         </tr>                      
@@ -131,32 +133,34 @@
                 </table>
             </div>
 
+            <!--Table two-->
             <div class="column-one-half">
-                <table class="app-data">
+                <table class="app-data ILR-submission">
                     <caption class="heading-small">ILR submission</caption>
                     <thead>
                         <tr>
-                            <th scope="col">From date</th>
-                            <th class="numeric" scope="col">Total apprenticeship training price</th>
+                            <th scope="col" class="first-child">From date</th>
+                            <th class="numeric first-child" scope="col">Total apprenticeship training price</th>
 
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="row">January</th>
+                            <td scope="row">January</td>
                             <td class="numeric">£165.00</td>
 
                         </tr>
                         <tr>
-                            <th scope="row">February</th>
+                            <td scope="row">February</td>
                             <td class="numeric">£165.00</td>
 
                         </tr>
                     </tbody>
                 </table>
+
             </div>
         </div>
-        <!--data table as two columns for mobile friendly approach -- move backend code here to fit the design-->
+<!--data table as two columns for mobile friendly approach -- move backend code here to fit the design-->
    
 
      </div>

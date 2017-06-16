@@ -3550,6 +3550,11 @@ table .changed-item {
 
 #datalock-details-change table.app-data caption {
   text-align: left;
+  margin: 40px 0 20px 0;
+}
+
+#datalock-details-change table.app-data th.first-child {
+  font-weight: normal;
 }
 
 #datalock-details-change table.app-data td.first-child {
@@ -3562,6 +3567,10 @@ table .changed-item {
 
 #datalock-details-change table.edited-changes th {
   border: 0;
+}
+
+#datalock-details-change table.ILR-submission td.numeric {
+  font-weight: bold;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {

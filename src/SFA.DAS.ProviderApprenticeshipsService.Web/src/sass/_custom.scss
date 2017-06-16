@@ -681,8 +681,12 @@ table{
 //Datalock styles
 #datalock-details-change{
     table.app-data{
-       caption{text-align:left;}
-        td.first-child{
+       caption{
+           text-align:left;
+           margin:40px 0 20px 0;
+       }
+       th.first-child{ font-weight:normal}
+       td.first-child{
             border-top:1px solid $grey-2;
         }
     }
@@ -690,6 +694,11 @@ table{
         margin-top:40px;
         th{
             border:0;
+        }
+    }
+    table.ILR-submission{
+        td.numeric{
+            font-weight:bold;
         }
     }
 
