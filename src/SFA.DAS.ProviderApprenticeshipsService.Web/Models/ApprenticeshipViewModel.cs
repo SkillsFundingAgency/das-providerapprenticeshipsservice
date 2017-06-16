@@ -48,5 +48,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public int? ProgType { get; set; }
 
         public bool HasStarted { get; set; }
+
+        public bool IsInFirstCalendarMonthOfTraining { get; set; }
     }
 }
