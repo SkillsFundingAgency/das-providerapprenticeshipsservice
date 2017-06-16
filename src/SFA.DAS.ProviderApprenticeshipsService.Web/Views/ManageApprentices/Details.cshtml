@@ -31,35 +31,35 @@
 
         @if (Model.DataLockSummaryViewModel.ShowChangesRequested)
         {
-            <div class="purple-border">
-                <h3>
+            <div class="purple-border blue-alerts">
+                <h2 class="heading-medium">
                     Changes requested
-                </h3>
-                <p>
-                    You've sent an automated message to the employer asking them to stop 
-                    this apprentice and create a new record for them.
-                </p>
-            </div>
+                </h2>
+                    <p>
+                        You've sent an automated message to the employer asking them to stop
+                        this apprentice and create a new record for them.
+                    </p>
+</div>
         }
         
         @if (Model.DataLockSummaryViewModel.ShowChangesPending)
         {
-            <div class="purple-border">
-                <h3>
+            <div class="purple-border blue-alerts">
+                <h2 class="heading-medium">
                     Changes pending
-                </h3>
-                <p>
-                    There are changes to this apprentice's details that are waiting for approval by the employer.
-                </p>
-            </div>
+                </h2>
+                    <p>
+                        There are changes to this apprentice's details that are waiting for approval by the employer.
+                    </p>
+</div>
         }
         
         @if (Model.DataLockSummaryViewModel.ShowIlrDataMismatch)
         {
-            <div class="purple-border">
-                <h3>
+            <div class="purple-border blue-alerts">
+                <h2 class="heading-medium">
                     ILR data mismatch
-                </h3>
+                </h2>
                 <p>
                     This apprentice's details are different in your organisation's ILR submission.
                     This may result in a payment failure.
