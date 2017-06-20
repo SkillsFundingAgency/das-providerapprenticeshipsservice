@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
-    public class CohortsViewModel
+    public class CohortsViewModel : ViewModelBase
     {
         public int NewRequestsCount { get; set; }
 

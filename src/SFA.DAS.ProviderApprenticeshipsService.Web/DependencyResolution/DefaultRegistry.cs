@@ -26,6 +26,7 @@ using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.CookieService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
@@ -36,7 +37,9 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Caching;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using StructureMap;
 using StructureMap.Graph;
@@ -73,6 +76,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IConfiguration>().Use(config);
             For<ICache>().Use<InMemoryCache>(); //RedisCache
             For<IAgreementStatusQueryRepository>().Use<ProviderAgreementStatusRepository>();
+
+            For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
+            For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
+            For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
             RegisterMediator();
             ConfigureLogging();
