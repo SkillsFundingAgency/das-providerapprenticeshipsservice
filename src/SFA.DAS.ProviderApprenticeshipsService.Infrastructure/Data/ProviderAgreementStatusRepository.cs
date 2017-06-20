@@ -10,14 +10,15 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.Sql.Client;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
-    public class ProviderAgreementStatusRepository : DbBaseRepository, IProviderAgreementStatusRepository, IAgreementStatusQueryRepository
+    public class ProviderAgreementStatusRepository : BaseRepository, IProviderAgreementStatusRepository, IAgreementStatusQueryRepository
     {
         private readonly ILog _logger;
 
-        public ProviderAgreementStatusRepository(IConfiguration config, ILog logger) : base(config.DatabaseConnectionString)
+        public ProviderAgreementStatusRepository(IConfiguration config, ILog logger) : base(config.DatabaseConnectionString, logger)
         {
             _logger = logger;
         }
