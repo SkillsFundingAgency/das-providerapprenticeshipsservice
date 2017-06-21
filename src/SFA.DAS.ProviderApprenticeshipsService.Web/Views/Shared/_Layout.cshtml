@@ -1,5 +1,5 @@
 ﻿@using Microsoft.ApplicationInsights.Extensibility
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -126,9 +126,10 @@
             </div>
         </div>
 
-        @if (HttpContext.Current.User.Identity.IsAuthenticated)
+        @if (HttpContext.Current.User.Identity.IsAuthenticated && !(ViewBag?.HideNavBar ?? false))
         {
             var controllerName = ViewContext.RouteData.Values["Controller"].ToString(); ;
+            var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
 
             <div class="grid-row">
                 <div class="column-full">
@@ -136,8 +137,8 @@
                         <nav class="header-inner">
                             <ul role="menubar" id="global-nav-links">
                                 <li><a href="@Url.Action("Index", "Account")" role="menuitem" class="@(controllerName == "Account" ? "selected" : "")">Home</a></li>
-                                <li><a href="@Url.Action("Index", "ManageApprentices")" role="menuitem" class="@(controllerName == "ManageApprentices" ? "selected" : "")">Manage your apprentices</a></li>
-                                <li><a href="@Url.Action("Cohorts", "Commitment")" role="menuitem" class="@(controllerName == "Commitment" ? "selected" : "")">Your cohorts</a></li>
+                                <li><a href="@Url.Action("Index", "ManageApprentices", new { providerId = providerId})" role="menuitem" class="@(controllerName == "ManageApprentices" ? "selected" : "")">Manage your apprentices</a></li>
+                                <li><a href="@Url.Action("Cohorts", "Commitment", new { providerId = providerId})" role="menuitem" class="@(controllerName == "Commitment" ? "selected" : "")">Your cohorts</a></li>
                             </ul>
                         </nav>
                     </div>
