@@ -126,19 +126,24 @@
             </div>
         </div>
 
-        <div class="grid-row">
-            <div class="column-full">
-                <div class="header-organisation" role="navigation">
-                    <nav class="header-inner">
-                        <ul role="menubar" id="global-nav-links">
-                            <li><a href="#" class="selected" role="menuitem">Home</a></li>
-                            <li><a href="#" role="menuitem">Manage your apprentices</a></li>
-                            <li><a href="#" role="menuitem">Your cohorts</a></li>
-                        </ul>
-                    </nav>
+        @if (HttpContext.Current.User.Identity.IsAuthenticated)
+        {
+            var controllerName = ViewContext.RouteData.Values["Controller"].ToString(); ;
+
+            <div class="grid-row">
+                <div class="column-full">
+                    <div class="header-organisation" role="navigation">
+                        <nav class="header-inner">
+                            <ul role="menubar" id="global-nav-links">
+                                <li><a href="@Url.Action("Index", "Account")" role="menuitem" class="@(controllerName == "Account" ? "selected" : "")">Home</a></li>
+                                <li><a href="@Url.Action("Index", "ManageApprentices")" role="menuitem" class="@(controllerName == "ManageApprentices" ? "selected" : "")">Manage your apprentices</a></li>
+                                <li><a href="@Url.Action("Cohorts", "Commitment")" role="menuitem" class="@(controllerName == "Commitment" ? "selected" : "")">Your cohorts</a></li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
         @RenderSection("breadcrumb", required: false)
         <div id="content">
             @Html.Partial(@"_ModalMessage")
