@@ -12,6 +12,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
         }
 
+        [Route("~/help", Name = "help")]
+        public ActionResult Help()
+        {
+            return View();
+        }
+
         [Route("~/", Name = "home")]
         public ActionResult Index()
         {
