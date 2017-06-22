@@ -72,10 +72,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>()), Times.Once);
 
-            result.NewRequestsCount.Should().Be(1);
-            result.ReadyForApprovalCount.Should().Be(2);
             result.WithEmployerCount.Should().Be(2);
-            result.ReadyForReviewCount.Should().Be(3);
+            result.ReadyForReviewCount.Should().Be(6);
         }
 
         private static GetCommitmentsQueryResponse TestData()

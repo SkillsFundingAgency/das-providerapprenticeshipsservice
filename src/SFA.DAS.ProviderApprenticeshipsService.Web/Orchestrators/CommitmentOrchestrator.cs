@@ -96,9 +96,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var model = new CohortsViewModel
             {
-                NewRequestsCount = commitmentStatus.Count(m => m == RequestStatus.NewRequest),
-                ReadyForApprovalCount = commitmentStatus.Count(m => m == RequestStatus.ReadyForApproval),
-                ReadyForReviewCount = commitmentStatus.Count(m => m == RequestStatus.ReadyForReview),
+                ReadyForReviewCount = commitmentStatus.Count(m => 
+                m == RequestStatus.ReadyForReview
+                || m == RequestStatus.ReadyForApproval
+                || m == RequestStatus.NewRequest),
 
                 WithEmployerCount = commitmentStatus.Count(m => m == RequestStatus.SentForReview || m == RequestStatus.WithEmployerForApproval),
                 HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed,
@@ -123,23 +124,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageId = "cohorts-with-employers",
                 PageHeading = "Cohorts with employers",
                 PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSuffix(data.ToList().Count)} that are with the employers for review or approval:",
-                HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
-            };
-        }
-
-        public async Task<CommitmentListViewModel> GetAllNewRequests(long providerId)
-        {
-            var data = (await GetAll(providerId, RequestStatus.NewRequest)).ToList();
-            _logger.Info($"Provider getting all new request ({data.Count}) :{providerId}", providerId);
-
-            return new CommitmentListViewModel
-            {
-                ProviderId = providerId,
-                Commitments = MapFrom(data, true),
-                PageTitle = "New cohorts",
-                PageId = "new-cohorts",
-                PageHeading = "New cohorts",
-                PageHeading2 = $"You have <strong>{data.ToList().Count}</strong> new cohort{_addSSuffix(data.ToList().Count)}:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
@@ -204,7 +188,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<CommitmentListViewModel> GetAllReadyForReview(long providerId)
         {
-            var data = (await GetAll(providerId, RequestStatus.ReadyForReview)).ToList();
+            var readyForReview = (await GetAll(providerId, RequestStatus.ReadyForReview)).ToList();
+            var readyForApproval = (await GetAll(providerId, RequestStatus.ReadyForApproval)).ToList();
+            var newFromEmployer = (await GetAll(providerId, RequestStatus.NewRequest)).ToList();
+            var data = readyForReview
+                .Concat(readyForApproval)
+                .Concat(newFromEmployer)
+                .ToList();
+
+            //var data = new List<CommitmentListItem>();
+            //data.AddRange(readyForReview);
+            //data.AddRange(readyForApproval);
+
             _logger.Info($"Provider getting all ready for review ({data.Count}) :{providerId}", providerId);
 
             return new CommitmentListViewModel
@@ -215,23 +210,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageId = "review-cohorts-list",
                 PageHeading = "Cohorts for review",
                 PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSuffix(data.ToList().Count)} ready for review:",
-                HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
-            };
-        }
-
-        public async Task<CommitmentListViewModel> GetAllReadyForApproval(long providerId)
-        {
-            var data = (await GetAll(providerId, RequestStatus.ReadyForApproval)).ToList();
-            _logger.Info($"Provider getting all ready for approval ({data.Count}) :{providerId}", providerId);
-
-            return new CommitmentListViewModel
-            {
-                ProviderId = providerId,
-                Commitments = MapFrom(data, true),
-                PageTitle = "Cohorts for approval",
-                PageId = "approve-cohorts",
-                PageHeading = "Cohorts for approval",
-                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSuffix(data.ToList().Count)} ready for your approval:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
