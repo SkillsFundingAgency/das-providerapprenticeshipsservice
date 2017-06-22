@@ -109,6 +109,30 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return model;
         }
 
+        public async Task<CommitmentListViewModel> GetAllReadyForReview(long providerId)
+        {
+            var readyForReview = (await GetAll(providerId, RequestStatus.ReadyForReview)).ToList();
+            var readyForApproval = (await GetAll(providerId, RequestStatus.ReadyForApproval)).ToList();
+            var newFromEmployer = (await GetAll(providerId, RequestStatus.NewRequest)).ToList();
+            var data = readyForReview
+                .Concat(readyForApproval)
+                .Concat(newFromEmployer)
+                .ToList();
+
+            _logger.Info($"Provider getting all new, ReadyForReview or ReadyForApproval ({data.Count}) :{providerId}", providerId);
+
+            return new CommitmentListViewModel
+            {
+                ProviderId = providerId,
+                Commitments = MapFrom(data, true),
+                PageTitle = "Cohorts to review, update or approve",
+                PageId = "review-cohorts-list",
+                PageHeading = "Cohorts to review, update or approve",
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSuffix(data.ToList().Count)} ready for you to review, update or approve:",
+                HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
+            };
+        }
+
         public async Task<CommitmentListViewModel> GetAllWithEmployer(long providerId)
         {
             var sentForReview = await GetAll(providerId, RequestStatus.SentForReview);
@@ -123,7 +147,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageTitle = "Cohorts with employers",
                 PageId = "cohorts-with-employers",
                 PageHeading = "Cohorts with employers",
-                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSuffix(data.ToList().Count)} that are with the employers for review or approval:",
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSuffix(data.ToList().Count)} with an employer for them to add details, review or approve:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
@@ -184,34 +208,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
 
             return apprenticeship.Apprenticeship.ApprenticeshipName;
-        }
-
-        public async Task<CommitmentListViewModel> GetAllReadyForReview(long providerId)
-        {
-            var readyForReview = (await GetAll(providerId, RequestStatus.ReadyForReview)).ToList();
-            var readyForApproval = (await GetAll(providerId, RequestStatus.ReadyForApproval)).ToList();
-            var newFromEmployer = (await GetAll(providerId, RequestStatus.NewRequest)).ToList();
-            var data = readyForReview
-                .Concat(readyForApproval)
-                .Concat(newFromEmployer)
-                .ToList();
-
-            //var data = new List<CommitmentListItem>();
-            //data.AddRange(readyForReview);
-            //data.AddRange(readyForApproval);
-
-            _logger.Info($"Provider getting all ready for review ({data.Count}) :{providerId}", providerId);
-
-            return new CommitmentListViewModel
-            {
-                ProviderId = providerId,
-                Commitments = MapFrom(data, true),
-                PageTitle = "Cohorts for review",
-                PageId = "review-cohorts-list",
-                PageHeading = "Cohorts for review",
-                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSuffix(data.ToList().Count)} ready for review:",
-                HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
-            };
         }
 
         public async Task<VerificationOfEmployerViewModel> GetVerificationOfEmployer(long providerId, string hashedCommitmentId)
