@@ -101,3 +101,57 @@
         }
     }
 }
+
+.header-organisation {
+    border-bottom: 1px solid $grey-1;
+    font-size: 14px;
+    ul {
+        @extend %contain-floats;
+        margin: 0 -15px;
+        li {
+            list-style:none;
+            @include media(tablet) {
+                float: left;
+              
+                font-size: 16px;
+            }
+            @include media(desktop) {
+                width: auto;
+            }
+            @include media(1000px) {
+                font-size: 19px;
+            }
+            a {
+                padding: 12px 15px 10px;
+                display: block;
+                position: relative;
+                &.selected {
+                    text-decoration: none;
+                    font-weight: 700;
+                    color: $black;
+                    &:after {
+                        background: $govuk-blue;
+                        bottom: -1px;
+                        content: "";
+                        display: block;
+                        left: 0;
+                        top: 0;
+                        width: 5px;
+                        position: absolute;
+                        z-index: 0;
+                        @include media(desktop) {
+                            left: 15px;
+                            right: 15px;
+                            height: 5px;
+                            top: auto;
+                            width: auto;
+                        }
+                    }
+                }
+                &:focus {
+                    outline:0;
+                }
+            }
+        }
+    }
+}
