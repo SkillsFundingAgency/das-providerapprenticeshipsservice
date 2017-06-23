@@ -367,7 +367,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
-            AssertCommitmentStatus(data.Commitment, EditStatus.ProviderOnly);
+            //AssertCommitmentStatus(data.Commitment, EditStatus.ProviderOnly);
             AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
             var relationshipRequest = await _mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
@@ -711,7 +711,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
                 Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.ApprenticeshipCount, listItem.LastAction, listItem.AgreementStatus, listItem.ProviderLastUpdateInfo),
-                ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly,
                 LatestMessage = lastestMessage
             };
         }
@@ -725,7 +724,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
                 Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.LastAction, listItem.AgreementStatus, listItem.ProviderLastUpdateInfo),
-                ShowViewLink = listItem.EditStatus == EditStatus.ProviderOnly,
                 EmployerAccountId = listItem.EmployerAccountId,
                 LatestMessage = latestMessage
             };

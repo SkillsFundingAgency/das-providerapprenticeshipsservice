@@ -46,10 +46,7 @@
                             @commitment.LatestMessage &nbsp;
                         </td>
                         <td>
-                            @if (commitment.ShowViewLink)
-                            {
-                                <a href="@Url.Action("Details", new { Model.ProviderId, commitment.HashedCommitmentId })" title="View  @commitment.LegalEntityName" aria-label="View  @commitment.LegalEntityName">View</a>
-                            }
+                            <a href="@Url.Action("Details", new {Model.ProviderId, commitment.HashedCommitmentId})" title="View  @commitment.LegalEntityName" aria-label="View  @commitment.LegalEntityName">View</a>
                         </td>
                     </tr>
                 }
