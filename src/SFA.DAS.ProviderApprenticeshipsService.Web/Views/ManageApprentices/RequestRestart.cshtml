@@ -54,9 +54,9 @@
                 <tr>
                     <td>Total cost of training</td>
                     <td>
-                        @if (Model.DasApprenticeship.StartDate.DateTime.HasValue)
+                        @if (Model.DataLockViewModel.IlrEffectiveFromDate.HasValue)
                         {
-                            @Model.DasApprenticeship.StartDate.DateTime.Value.ToGdsFormat()
+                            @Model.DataLockViewModel.IlrEffectiveFromDate.Value.ToGdsFormat()
                         }
                         else
                         {
