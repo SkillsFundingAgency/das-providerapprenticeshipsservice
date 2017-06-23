@@ -184,6 +184,9 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Polly, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Polly.5.1.0\lib\net45\Polly.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Apprenticeships.Api.Client, Version=0.10.29.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Client.0.10.29-prerelease\lib\net45\SFA.DAS.Apprenticeships.Api.Client.dll</HintPath>
       <Private>True</Private>
@@ -212,13 +215,15 @@
       <HintPath>..\packages\SFA.DAS.Configuration.FileStorage.1.0.0.6634\lib\net45\SFA.DAS.Configuration.FileStorage.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.17615, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.17615\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
+    <Reference Include="SFA.DAS.CookieService, Version=1.0.0.27423, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.CookieService.1.0.0.27423\lib\net45\SFA.DAS.CookieService.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.NLog.Targets.Redis, Version=1.0.0.16102, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NLog.Targets.Redis.1.0.0.16102\lib\net45\SFA.DAS.NLog.Targets.Redis.dll</HintPath>
-      <Private>True</Private>
+     <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.26805, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.26805\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.NLog.Targets.Redis, Version=1.0.0.26805, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Targets.Redis.1.0.0.26805\lib\net45\SFA.DAS.NLog.Targets.Redis.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Client, Version=1.1.0.12760, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
@@ -231,6 +236,9 @@
     <Reference Include="SFA.DAS.Providers.Api.Client, Version=0.10.29.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Providers.Api.Client.0.10.29-prerelease\lib\net45\SFA.DAS.Providers.Api.Client.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.32930, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Sql.Client.1.0.0.32930\lib\net45\SFA.DAS.Sql.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Web.RedisSessionStateProvider, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Web.RedisSessionStateProvider.1.0.0.0\lib\net40\SFA.DAS.Web.RedisSessionStateProvider.dll</HintPath>
@@ -398,6 +406,7 @@
     <Compile Include="Models\UploadRowErrorViewModel.cs" />
     <Compile Include="Models\VerificationOfRelationshipViewModel.cs" />
     <Compile Include="Models\VerificationOfEmployerViewModel.cs" />
+    <Compile Include="Models\ViewModelBase.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
     <Compile Include="Orchestrators\ApprovedApprenticeshipValidation\ApprovedApprenticeshipValidator.cs" />
     <Compile Include="Orchestrators\ApprovedApprenticeshipValidation\IApprovedApprenticeshipValidator.cs" />

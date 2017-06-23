@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
@@ -20,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     {
         private readonly ManageApprenticesOrchestrator _orchestrator;
 
-        public ManageApprenticesController(ManageApprenticesOrchestrator orchestrator)
+        public ManageApprenticesController(ManageApprenticesOrchestrator orchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
         {
             if (orchestrator == null)
                 throw new ArgumentNullException(nameof(orchestrator));
@@ -43,6 +44,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Details(long providerid, string hashedApprenticeshipId)
         {
             var model = await _orchestrator.GetApprenticeshipViewModel(providerid, hashedApprenticeshipId);
+
+            var flashMesssage = GetFlashMessageViewModelFromCookie();
+
+            if (flashMesssage != null)
+            {
+                model.FlashMessage = flashMesssage;
+            }
+            
             return View(model);
         }
 

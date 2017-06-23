@@ -4,7 +4,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
-    public class ApprenticeshipDetailsViewModel
+    public class ApprenticeshipDetailsViewModel : ViewModelBase
     {
         public string HashedApprenticeshipId { get; set; }
 

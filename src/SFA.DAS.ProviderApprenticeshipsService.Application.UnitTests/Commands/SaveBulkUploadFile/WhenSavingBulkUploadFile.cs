@@ -54,7 +54,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         }
 
         [Test]
-        public async Task ShouldFailValidation()
+        public void ShouldFailValidation()
         {
             _mockValidator.Setup(m => m.Validate(_command))
                 .Returns(

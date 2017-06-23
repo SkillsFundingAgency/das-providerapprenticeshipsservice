@@ -4,9 +4,11 @@ using System.Web.Mvc;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.WsFederation;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
@@ -15,7 +17,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     {
         private readonly AccountOrchestrator _accountOrchestrator;
 
-        public AccountController(AccountOrchestrator accountOrchestrator)
+        public AccountController(AccountOrchestrator accountOrchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
         {
             _accountOrchestrator = accountOrchestrator;
         }

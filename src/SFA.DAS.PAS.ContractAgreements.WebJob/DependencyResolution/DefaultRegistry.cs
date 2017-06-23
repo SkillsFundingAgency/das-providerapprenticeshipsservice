@@ -39,7 +39,8 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution
             // ToDo: Implement overload for NLogLogger without IRequestContext 
             For<ILog>().Use(x => new NLogLogger(
                 x.ParentType,
-                new DummyRequestContext())).AlwaysUnique();
+                new DummyRequestContext(),
+                null)).AlwaysUnique();
         }
 
         private ContractFeedConfiguration GetConfiguration(string serviceName)

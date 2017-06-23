@@ -46,14 +46,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
         protected void Application_Error(object sender, EventArgs e)
         {
             var ex = Server.GetLastError().GetBaseException();
+            var httpEx = ex as HttpException;
 
-            if (ex is HttpException && ((HttpException)ex).GetHttpCode() == (int) HttpStatusCode.Forbidden)
+            if (httpEx != null && httpEx.GetHttpCode() == (int) HttpStatusCode.Forbidden)
             {
                 Logger.Info($"{ex.Message} ({HttpStatusCode.Forbidden})");
             }
-            else if (ex is HttpException)
+            if (httpEx != null && httpEx.GetHttpCode() == (int) HttpStatusCode.NotFound)
             {
-                Logger.Warn(ex, "Http Exception");
+                Logger.Warn($"NotFound (404): {Request.HttpMethod} {Request.Url}");
+            }
+            else if (httpEx != null)
+            {
+                Logger.Warn(ex, $"Http Exception {httpEx.GetHttpCode()}");
             }
             else if (ex is InvalidOperationException && ex.Message.StartsWith("A claim of type"))
             {

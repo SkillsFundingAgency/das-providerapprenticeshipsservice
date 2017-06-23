@@ -28,9 +28,11 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 
         public string FindPageWithBookmark(Guid? latestBookmark)
         {
-            _logger.Info($"Finding page for latest bookmark: {(latestBookmark.HasValue ? latestBookmark.ToString() : "[not set]")}");
+            var latestBookmarkString = latestBookmark.HasValue ? latestBookmark.ToString() : "[not set]";
 
-            string currentPageUrl = _reader.LatestPageUrl;
+            _logger.Info($"Finding page for latest bookmark: {latestBookmarkString}");
+
+            var currentPageUrl = _reader.LatestPageUrl;
             string startPageUrl = null;
 
             // Load page and check if contains bookmark
@@ -51,12 +53,12 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
                 if (PageContainsBookmark(latestBookmark, doc))
                 {
                     startPageUrl = pageUrl;
-                    _logger.Info($"Bookmark {latestBookmark.ToString()} found on page: {startPageUrl}");
+                    _logger.Info($"Bookmark {latestBookmarkString} found on page: {startPageUrl}");
 
                     return false;
                 }
 
-                _logger.Info($"Bookmark not found on {pageUrl}");
+                _logger.Info($"Bookmark {latestBookmarkString} not found on {pageUrl}");
 
                 return true;
             });

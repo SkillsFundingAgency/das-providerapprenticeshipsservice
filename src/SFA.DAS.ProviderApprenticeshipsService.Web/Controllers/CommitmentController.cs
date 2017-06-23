@@ -10,6 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using System.Security.Claims;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -23,7 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         private readonly CommitmentOrchestrator _commitmentOrchestrator;
         private readonly ILog _logger;
 
-        public CommitmentController(CommitmentOrchestrator commitmentOrchestrator, ILog logger)
+        public CommitmentController(CommitmentOrchestrator commitmentOrchestrator, ILog logger, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
         {
             if (commitmentOrchestrator == null)
                 throw new ArgumentNullException(nameof(commitmentOrchestrator));
@@ -40,6 +41,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Cohorts(long providerId)
         {
             var model = await _commitmentOrchestrator.GetCohorts(providerId);
+
+            AddFlashMessageToViewModel(model);
+
             return View(model);
         }
 
@@ -63,6 +67,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var model = await _commitmentOrchestrator.GetAllWithEmployer(providerId);
 
+            AddFlashMessageToViewModel(model);
+
             return View("RequestList", model);
         }
 
@@ -72,6 +78,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var model = await _commitmentOrchestrator.GetAllNewRequests(providerId);
             Session[LastCohortPageSessionKey] = RequestStatus.NewRequest;
+
+            AddFlashMessageToViewModel(model);
 
             return View("RequestList", model);
         }
@@ -83,6 +91,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var model = await _commitmentOrchestrator.GetAllReadyForReview(providerId);
             Session[LastCohortPageSessionKey] = RequestStatus.ReadyForReview;
 
+            AddFlashMessageToViewModel(model);
+
             return View("RequestList", model);
         }
 
@@ -92,6 +102,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var model = await _commitmentOrchestrator.GetAllReadyForApproval(providerId);
             Session[LastCohortPageSessionKey] = RequestStatus.ReadyForApproval;
+
+            AddFlashMessageToViewModel(model);
 
             return View("RequestList", model);
         }
@@ -180,6 +192,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 ModelState.AddModelError($"{groupe.GroupId}", errorMessage);
             }
             model.BackLinkUrl = GetReturnToListUrl(providerId);
+
+            AddFlashMessageToViewModel(model);
+
             return View(model);
         }
 
@@ -371,7 +386,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (viewModel.SaveStatus == SaveStatus.Save)
             {
-                TempData["FlashMessage"] = "Cohort saved but not sent";
+                SetInfoMessage("Cohort saved but not sent" ,FlashMessageSeverityLevel.None );
                 var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(viewModel.ProviderId, GetRequestStatusFromSession());
                 if (currentStatusCohortAny)
                     return Redirect(GetReturnToListUrl(viewModel.ProviderId));
@@ -499,6 +514,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
 
             return View(model.Apprenticeship);
+        }
+
+        private void AddFlashMessageToViewModel(ViewModelBase model)
+        {
+            var flashMessage = GetFlashMessageViewModelFromCookie();
+
+            if (flashMessage != null)
+            {
+                model.FlashMessage = flashMessage;
+            }
         }
     }
 }
