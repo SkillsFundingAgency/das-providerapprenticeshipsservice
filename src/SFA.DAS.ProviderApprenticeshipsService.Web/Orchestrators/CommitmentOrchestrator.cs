@@ -122,7 +122,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PageTitle = "Cohorts with employers",
                 PageId = "cohorts-with-employers",
                 PageHeading = "Cohorts with employers",
-                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSuffix(data.ToList().Count)} that are with the employers for review or approval:",
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSuffix(data.ToList().Count)} with an employer for them to add details, review or approve:",
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
@@ -367,7 +367,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
-            //AssertCommitmentStatus(data.Commitment, EditStatus.ProviderOnly);
             AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
             var relationshipRequest = await _mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
@@ -414,7 +413,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipGroups = apprenticeshipGroups,
                 RelationshipVerified = relationshipRequest.Relationship.Verified.HasValue,
                 HasOverlappingErrors = apprenticeshipGroups.Any(m => m.OverlapErrorCount > 0),
-                FundingCapWarnings = warnings
+                FundingCapWarnings = warnings,
+                IsReadOnly = data.Commitment.EditStatus != EditStatus.ProviderOnly
             };
         }
 
@@ -509,6 +509,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipProgrammes = await GetTrainingProgrammes(),
                 ValidationErrors = _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors)
             };
+        }
+
+        public async Task<ApprenticeshipViewModel> GetApprenticeshipViewModel(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            _logger.Info($"Getting apprenticeship:{apprenticeshipId} for provider:{providerId}", providerId: providerId, commitmentId: commitmentId, apprenticeshipId: apprenticeshipId);
+
+            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                ProviderId = providerId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
+
+            apprenticeship.ProviderId = providerId;
+
+            return apprenticeship;
         }
 
         public async Task<ExtendedApprenticeshipViewModel> GetCreateApprenticeshipViewModel(long providerId, string hashedCommitmentId)

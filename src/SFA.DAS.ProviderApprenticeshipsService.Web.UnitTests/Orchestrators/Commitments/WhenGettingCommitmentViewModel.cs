@@ -76,6 +76,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             result.PendingChanges.ShouldBeEquivalentTo(true);
         }
 
+        [TestCase(EditStatus.EmployerOnly, true)]
+        [TestCase(EditStatus.ProviderOnly, false)]
+        [TestCase(EditStatus.Neither, true)]
+        public void ThenCommitmentReadOnlyFlagIsSet(EditStatus editStatus, bool expectedIsReadOnly)
+        {
+            var commitment = new CommitmentView
+            {
+                AgreementStatus = AgreementStatus.ProviderAgreed,
+                EditStatus = editStatus,
+                Apprenticeships = new List<Apprenticeship>(),
+                Messages = new List<MessageView>()
+            };
+
+            var mockMediator = GetMediator(commitment);
+            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>(), Validator);
+
+            var result = _sut.GetCommitmentDetails(1L, "ABBA213").Result;
+
+            result.IsReadOnly.ShouldBeEquivalentTo(expectedIsReadOnly);
+        }
+
         // --- Helpers ---
 
         private static Mock<IMediator> GetMediator(CommitmentView commitment)
