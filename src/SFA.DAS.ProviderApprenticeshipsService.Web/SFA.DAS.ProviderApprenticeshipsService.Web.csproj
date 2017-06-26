@@ -627,6 +627,7 @@
     <Content Include="Views\ManageApprentices\ConfirmDataLockChanges.cshtml" />
     <Content Include="Views\ManageApprentices\ConfirmRestart.cshtml" />
     <Content Include="Views\Shared\ApprenticeshipFilters.cshtml" />
+    <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Commitment\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
