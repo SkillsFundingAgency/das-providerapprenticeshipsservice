@@ -52,13 +52,14 @@
                     </thead>
                     <tbody>
                     
-                        @foreach (var datalock in datalocks)
+                        @foreach (var priceHistory in Model.PriceHistory)
                         {
                             <tr>
-                                <td scope="row">@datalock.IlrEffectiveFromDate.Value.ToGdsFormat()</td>
-                                <td class="numeric">@datalock.IlrTotalCost.FormatCost()</td>
+                                <td scope="row">@priceHistory.FromDate.ToGdsFormat()</td>
+                                <td class="numeric">@priceHistory.Cost.FormatCost()</td>
                             </tr>
                         }
+
                     </tbody>
                 </table>
             </div>
@@ -75,14 +76,14 @@
                     </thead>
                     <tbody>
                     
-                        @foreach (var priceHistory in Model.PriceHistory)
+                        @foreach (var datalock in datalocks)
                         {
                             <tr>
-                                <td scope="row">@priceHistory.FromDate.ToGdsFormat()</td>
-                                <td class="numeric">@priceHistory.Cost.FormatCost()</td>
+                                <td scope="row">@datalock.IlrEffectiveFromDate.Value.ToGdsFormat()</td>
+                                <td class="numeric">@datalock.IlrTotalCost.FormatCost()</td>
                             </tr>
                         }
-                    
+                   
                     </tbody>
                 </table>
 
