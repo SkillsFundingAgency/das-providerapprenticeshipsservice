@@ -328,7 +328,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 case TriageStatus.Unknown:
                     return "ILR data mismatch";
                 case TriageStatus.Change:
-                    return "Change requested";
+                    return string.Empty;
                 case TriageStatus.Restart:
                     return "Change requested";
                 case TriageStatus.FixIlr:
