@@ -77,7 +77,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> ReadyForReview(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAllReadyForReview(providerId);
-            // When used the session key?
             Session[LastCohortPageSessionKey] = RequestStatus.ReadyForReview;
 
             AddFlashMessageToViewModel(model);
