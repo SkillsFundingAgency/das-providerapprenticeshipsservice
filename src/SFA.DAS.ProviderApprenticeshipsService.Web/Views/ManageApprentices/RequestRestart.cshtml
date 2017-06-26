@@ -49,37 +49,6 @@
                 </tr>
             }
 
-            @if (Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock07))
-            {
-                <tr>
-                    <td>Total cost of training</td>
-                    <td>
-                        @if (Model.DasApprenticeship.StartDate.DateTime.HasValue)
-                        {
-                            @Model.DasApprenticeship.StartDate.DateTime.Value.ToGdsFormat()
-                        }
-                        else
-                        {
-                            <span>--</span>
-                        }
-                    </td>
-                    <td>@Model.DasApprenticeship.Cost.AsNullableDecimal().FormatCost() </td>
-                    <td class="changed-item">@Model.DataLockViewModel.IlrTotalCost.FormatCost()</td>
-                </tr>
-            }
-
-            @if (Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock09))
-            {
-                <tr>
-                    <td>Planned training start date</td>
-                    <td>--</td>
-                    <td>
-                        @Model.DasApprenticeship.StartDate.DateTime.Value.ToGdsFormat()
-                    </td>
-                    <td class="changed-item">@Model.DataLockViewModel.IlrActualStartDate.Value.ToGdsFormat()</td>
-                </tr>
-            }
-
             </tbody>
         </table>
     </div>
