@@ -2826,6 +2826,12 @@ span.helpText {
   padding-top: 20px;
 }
 
+#apprentices-detail .list-apprentice .blue-alerts .heading-medium {
+  border: 0;
+  margin-top: 0;
+  padding-top: 0;
+}
+
 #agreement-not-signed .notice {
   margin: 60px 0;
 }
@@ -3190,6 +3196,35 @@ table .changed-item {
   width: 30px;
   height: 38px;
   content: " ";
+}
+
+#datalock-details-change table.app-data caption {
+  text-align: left;
+  margin: 40px 0 20px 0;
+}
+
+#datalock-details-change table.app-data th.first-child {
+  font-weight: normal;
+}
+
+#datalock-details-change table.app-data td.first-child {
+  border-top: 1px solid #bfc1c3;
+}
+
+#datalock-details-change table.edited-changes {
+  margin-top: 40px;
+}
+
+#datalock-details-change table.edited-changes th {
+  border: 0;
+}
+
+#datalock-details-change table.ILR-submission td.numeric {
+  font-weight: bold;
+}
+
+#confirm-datalock-changes .bold-font {
+  font-weight: bold;
 }
 
 #edit-started-apprentice .form-group {

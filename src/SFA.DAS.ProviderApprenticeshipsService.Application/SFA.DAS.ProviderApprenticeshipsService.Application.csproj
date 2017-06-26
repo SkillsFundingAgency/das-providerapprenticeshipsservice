@@ -55,12 +55,12 @@
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.10.29\lib\net45\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.60.0.31347, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.60.0.31347\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.66.0.33236, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.66.0.33236\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.60.0.31347, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.60.0.31347\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.66.0.33236, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.66.0.33236\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.26805, Culture=neutral, processorArchitecture=MSIL">
@@ -92,6 +92,9 @@
     <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileCommand.cs" />
     <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileHandler.cs" />
     <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileValidator.cs" />
+    <Compile Include="Commands\TriageApprenticeshipDataLocks\TriageApprenticeshipDataLocksCommand.cs" />
+    <Compile Include="Commands\TriageApprenticeshipDataLocks\TriageApprenticeshipDataLocksCommandHandler.cs" />
+    <Compile Include="Commands\TriageApprenticeshipDataLocks\TriageApprenticeshipDataLocksCommandValidator.cs" />
     <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommand.cs" />
     <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommand.cs" />
     <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommandHandler.cs" />
@@ -123,6 +126,12 @@
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryHandler.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryRequest.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryResponse.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLockSummary\GetApprenticeshipDataLockSummaryQueryHandler.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLockSummary\GetApprenticeshipDataLockSummaryQueryRequest.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLockSummary\GetApprenticeshipDataLockSummaryQueryResponse.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLocks.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLocksHandler.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLocksResponse.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLock.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommand.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommandHandler.cs" />
@@ -140,6 +149,9 @@
     <Compile Include="Queries\GetAgreement\GetProviderAgreementQueryResponse.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLockHandler.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLockResponse.cs" />
+    <Compile Include="Queries\GetApprenticeshipPriceHistory\GetApprenticeshipPriceHistoryQueryHandler.cs" />
+    <Compile Include="Queries\GetApprenticeshipPriceHistory\GetApprenticeshipPriceHistoryQueryRequest.cs" />
+    <Compile Include="Queries\GetApprenticeshipPriceHistory\GetApprenticeshipPriceHistoryQueryResponse.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryRequest.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryResponse.cs" />
