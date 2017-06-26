@@ -112,8 +112,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { ProviderId = providerId, ApprenticeshipId = apprenticeshipId });
 
-            //var dataLocks = await _mediator.SendAsync(new GetApprenticeshipDataLocksRequest { ApprenticeshipId = apprenticeshipId });
-
             var dataLockSummary = await _mediator.SendAsync(new GetApprenticeshipDataLockSummaryQueryRequest
             {
                 ApprenticeshipId = apprenticeshipId
