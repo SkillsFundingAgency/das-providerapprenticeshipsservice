@@ -2799,6 +2799,7 @@ span.helpText {
 
 .dynamic-cost-display .bold-xlarge {
   line-height: 82px;
+  font-size: 80px;
 }
 
 .dynamic-cost-display .long {
@@ -2811,13 +2812,17 @@ span.helpText {
   line-height: 82px;
 }
 
+.dynamic-cost-display .short {
+  font-size: 67px;
+}
+
 .dynamic-cost-display .long {
-  font-size: 45px;
+  font-size: 48px;
   line-height: 82px;
 }
 
 .dynamic-cost-display .longer {
-  font-size: 32px;
+  font-size: 38px;
   line-height: 82px;
 }
 

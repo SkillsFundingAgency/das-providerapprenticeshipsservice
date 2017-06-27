@@ -3195,6 +3195,12 @@ span.helpText {
 }
 
 @media (min-width: 641px) {
+  .dynamic-cost-display .bold-xlarge {
+    font-size: 80px;
+  }
+}
+
+@media (min-width: 641px) {
   .dynamic-cost-display .long {
     font-size: 26px;
     line-height: 82px;
@@ -3205,13 +3211,16 @@ span.helpText {
   }
 }
 
-@media (min-width: 960px) {
+@media (min-width: 641px) {
+  .dynamic-cost-display .short {
+    font-size: 67px;
+  }
   .dynamic-cost-display .long {
-    font-size: 45px;
+    font-size: 48px;
     line-height: 82px;
   }
   .dynamic-cost-display .longer {
-    font-size: 32px;
+    font-size: 38px;
     line-height: 82px;
   }
 }
