@@ -294,9 +294,15 @@
 //list of apprentices page
 
 #apprentices-detail{
-    .list-apprentice{
-        
+    .list-apprentice{        
         .heading-medium{border-top:10px solid $govuk-blue; padding-top:20px;}
+        .blue-alerts{
+            .heading-medium{
+                border:0;
+                margin-top: 0;
+                padding-top: 0;
+            }
+        }
   }
 }
 
@@ -677,7 +683,42 @@ table{
         }
 }
 //end -- Apprentice Filter Styles
-  
+
+
+//Datalock styles
+#datalock-details-change{
+    table.app-data{
+       caption{
+           text-align:left;
+           margin:40px 0 20px 0;
+       }
+       th.first-child{ font-weight:normal}
+       td.first-child{
+            border-top:1px solid $grey-2;
+        }
+    }
+    table.edited-changes{
+        margin-top:40px;
+        th{
+            border:0;
+        }
+    }
+    table.ILR-submission{
+        td.numeric{
+            font-weight:bold;
+        }
+    }
+
+}
+
+
+#confirm-datalock-changes{
+    .bold-font{
+        font-weight:bold;
+    }
+}
+//End Datalock styles
+
 
 //edit-started-apprentice
 #edit-started-apprentice{
@@ -702,9 +743,6 @@ table{
 }
 
 
-
-
-  
 //all mobile media query breakpoints
 @media only screen and (max-device-width: 640px),
 only screen and (max-device-width: 667px),

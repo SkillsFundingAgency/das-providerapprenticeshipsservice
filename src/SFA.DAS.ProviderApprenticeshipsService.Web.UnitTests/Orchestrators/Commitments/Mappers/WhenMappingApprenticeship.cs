@@ -144,19 +144,48 @@ _mapper = new ApprenticeshipMapper(_hashingService.Object, mockMediator.Object, 
             model.Cost.Should().Be(null);
         }
 
-        [TestCase(TriageStatus.Change)]
-        [TestCase(TriageStatus.FixIlr)]
-        [TestCase(TriageStatus.Restart)]
-        [TestCase(TriageStatus.Unknown)]
-        [TestCase(null, true)]
-        public void ShouldDisableEditIfDataLock(TriageStatus? triageStatus, bool expectedEnabled = false)
+        [Test]
+        public void ShouldDisableEditIfDataLockCourse()
         {
             _model.PendingUpdateOriginator = null;
             _model.PaymentStatus = PaymentStatus.Active;
-            _model.DataLockTriageStatus = triageStatus;
+            _model.DataLockCourse = true;
 
             var viewModel = _mapper.MapApprenticeshipDetails(_model);
-            viewModel.EnableEdit.Should().Be(expectedEnabled);
+            viewModel.EnableEdit.Should().Be(false);
+        }
+
+        [Test]
+        public void ShouldDisableEditIfDataLockCourseTriaged()
+        {
+            _model.PendingUpdateOriginator = null;
+            _model.PaymentStatus = PaymentStatus.Active;
+            _model.DataLockCourseTriaged = true;
+
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
+            viewModel.EnableEdit.Should().Be(false);
+        }
+
+        [Test]
+        public void ShouldDisableEditIfDataLockPrice()
+        {
+            _model.PendingUpdateOriginator = null;
+            _model.PaymentStatus = PaymentStatus.Active;
+            _model.DataLockPrice = true;
+
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
+            viewModel.EnableEdit.Should().Be(false);
+        }
+
+        [Test]
+        public void ShouldDisableEditIfDataLockPriceTriaged()
+        {
+            _model.PendingUpdateOriginator = null;
+            _model.PaymentStatus = PaymentStatus.Active;
+            _model.DataLockPriceTriaged = true;
+
+            var viewModel = _mapper.MapApprenticeshipDetails(_model);
+            viewModel.EnableEdit.Should().Be(false);
         }
 
         [TestCase(4)]

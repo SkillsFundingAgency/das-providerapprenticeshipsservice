@@ -5,6 +5,11 @@
 
 @{
     ViewBag.Title = "Request restart";
+
+    var datalock = Model.DataLockSummaryViewModel.DataLockWithCourseMismatch
+        .Where(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
+        .OrderBy(x => x.IlrEffectiveFromDate)
+        .First();
 }
 
 
@@ -27,29 +32,24 @@
             </tr>
             </thead>
             <tbody>
-            @if (Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock03)
-                 || Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock04)
-                 || Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock05)
-                 || Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock06))
-            {
-                <tr>
-                    <td>Apprenticeship training course</td>
-                    <td>
-                        @if (Model.DataLockViewModel.IlrEffectiveFromDate.HasValue)
-                        {
-                            @Model.DataLockViewModel.IlrEffectiveFromDate.Value.ToGdsFormat()
-                        }
-                        else
-                        {
-                            <span>--</span>
-                        }
-                    </td>
-                    <td>@Model.DasApprenticeship.TrainingName </td>
-                    <td class="changed-item">@Model.DataLockViewModel.IlrTrainingCourseName </td>
-                </tr>
-            }
 
-            @if (Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock07))
+            <tr>
+                <td>Apprenticeship training course</td>
+                <td>
+                    @if (datalock.IlrEffectiveFromDate.HasValue)
+                    {
+                        @datalock.IlrEffectiveFromDate.Value.ToGdsFormat()
+                    }
+                    else
+                    {
+                        <span>--</span>
+                    }
+                </td>
+                <td>@Model.DasApprenticeship.TrainingName </td>
+                <td class="changed-item">@datalock.IlrTrainingCourseName </td>
+            </tr>
+
+            @if (datalock.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock07))
             {
                 <tr>
                     <td>Total cost of training</td>
@@ -64,11 +64,11 @@
                         }
                     </td>
                     <td>@Model.DasApprenticeship.Cost.AsNullableDecimal().FormatCost() </td>
-                    <td class="changed-item">@Model.DataLockViewModel.IlrTotalCost.FormatCost()</td>
+                    <td class="changed-item">@datalock.IlrTotalCost.FormatCost()</td>
                 </tr>
             }
 
-            @if (Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock09))
+            @if (datalock.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock09))
             {
                 <tr>
                     <td>Planned training start date</td>
@@ -76,7 +76,7 @@
                     <td>
                         @Model.DasApprenticeship.StartDate.DateTime.Value.ToGdsFormat()
                     </td>
-                    <td class="changed-item">@Model.DataLockViewModel.IlrActualStartDate.Value.ToGdsFormat()</td>
+                    <td class="changed-item">@datalock.IlrActualStartDate.Value.ToGdsFormat()</td>
                 </tr>
             }
 
@@ -115,7 +115,7 @@
                         </label>
 
                     </div>
-                    @Html.HiddenFor(m => m.DataLockEventId)
+                    @Html.HiddenFor(m => datalock.DataLockEventId)
                     <input type="submit" class="button" id="fix-mismatch" value="Continue" />
                 </fieldset>
             </div>

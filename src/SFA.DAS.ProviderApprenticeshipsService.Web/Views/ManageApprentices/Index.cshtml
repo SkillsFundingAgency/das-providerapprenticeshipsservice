@@ -62,12 +62,10 @@
                             @apprenticeships.Status &nbsp;
                         </td>
                         <td>
-                            <div>
-                                @apprenticeships.RecordStatus
-                            </div>
-                            <div>
-                                @apprenticeships.DataLockStatus
-                            </div>
+                            @foreach (var alert in @apprenticeships.Alerts)
+                            {
+                                <div>@alert</div>
+                            }
                             &nbsp;
                         </td>
                         <td>
