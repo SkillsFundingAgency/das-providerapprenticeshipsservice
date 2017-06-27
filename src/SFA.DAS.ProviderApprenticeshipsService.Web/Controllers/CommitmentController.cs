@@ -73,35 +73,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("cohorts/new")]
-        public async Task<ActionResult> NewRequests(long providerId)
-        {
-            var model = await _commitmentOrchestrator.GetAllNewRequests(providerId);
-            Session[LastCohortPageSessionKey] = RequestStatus.NewRequest;
-
-            AddFlashMessageToViewModel(model);
-
-            return View("RequestList", model);
-        }
-
-        [HttpGet]
         [Route("cohorts/review")]
         public async Task<ActionResult> ReadyForReview(long providerId)
         {
             var model = await _commitmentOrchestrator.GetAllReadyForReview(providerId);
             Session[LastCohortPageSessionKey] = RequestStatus.ReadyForReview;
-
-            AddFlashMessageToViewModel(model);
-
-            return View("RequestList", model);
-        }
-
-        [HttpGet]
-        [Route("cohorts/approve")]
-        public async Task<ActionResult> ReadyForApproval(long providerId)
-        {
-            var model = await _commitmentOrchestrator.GetAllReadyForApproval(providerId);
-            Session[LastCohortPageSessionKey] = RequestStatus.ReadyForApproval;
 
             AddFlashMessageToViewModel(model);
 
@@ -405,7 +381,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var linkText = "Return to Approve cohorts";
             if (currentStatusCohortAny)
             {
-                url = Url.Action("ReadyForApproval", new { ProviderId = providerId });
+                url = Url.Action("ReadyForReview", new { ProviderId = providerId });
             }
             else
             {
@@ -475,11 +451,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 case RequestStatus.SentForReview:
                     return Url.Action("WithEmployer", new { providerId });
                 case RequestStatus.NewRequest:
-                    return Url.Action("NewRequests", new { providerId });
                 case RequestStatus.ReadyForReview:
-                    return Url.Action("ReadyForReview", new { providerId });
                 case RequestStatus.ReadyForApproval:
-                    return Url.Action("ReadyForApproval", new { providerId });
+                    return Url.Action("ReadyForReview", new { providerId });
                 default:
                     return Url.Action("Cohorts", new { providerId });
             }
