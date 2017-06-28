@@ -25,19 +25,19 @@
             <label for="@Html.IdFor(m => m.DateOfBirth.Day)">
                 Day
             </label>
-            @Html.TextBoxFor(m => m.DateOfBirth.Day, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Day) })
+            @Html.TextBoxFor(m => m.DateOfBirth.Day, new { @class = "form-control length-limit", type = "number", maxlength="2", min="1", max="31", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Day) })
         </div>
         <div class="form-group form-group-month">
             <label for="@Html.IdFor(m => m.DateOfBirth.Month)">
                 Month
             </label>
-            @Html.TextBoxFor(m => m.DateOfBirth.Month, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Month) })
+            @Html.TextBoxFor(m => m.DateOfBirth.Month, new { @class = "form-control length-limit", type = "number", maxlength = "2", min = "1", max = "12", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Month) })
         </div>
         <div class="form-group form-group-year">
             <label for="@Html.IdFor(m => m.DateOfBirth.Year)">
                 Year
             </label>
-            <input aria-labelledby="@Html.IdFor(m => m.DateOfBirth.Year)" class="form-control" data-val="true" data-val-number="The field Year must be a number." id="@Html.IdFor(m => m.DateOfBirth.Year)" name="DateOfBirth.Year" type="number" value="@Model.DateOfBirth.Year">
+            <input aria-labelledby="@Html.IdFor(m => m.DateOfBirth.Year)" class="form-control length-limit" type="number" maxlength="4" min="1900" max="9999" data-val="true" data-val-number="The field Year must be a number." id="@Html.IdFor(m => m.DateOfBirth.Year)" name="DateOfBirth.Year", value="@Model.DateOfBirth.Year">
         </div>
     </div>
 </div>
@@ -84,13 +84,13 @@
                 <label for="@Html.IdFor(m => m.StartDate.Month)">
                     <span class="form-label-bold">Month</span>
                 </label>
-                @Html.TextBoxFor(m => m.StartDate.Month, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.StartDate.Month) })
+                @Html.TextBoxFor(m => m.StartDate.Month, new { @class = "form-control length-limit", type = "number", maxlength="2", min="1", max="12", aria_labelledby = Html.IdFor(m => m.StartDate.Month) })
             </div>
             <div class="form-group form-group-month">
                 <label for="@Html.IdFor(m => m.StartDate)">
                     <span class="form-label-bold">Year</span>
                 </label>
-                <input aria-labelledby="StartDate" class="form-control" data-val="true" data-val-number="The field Year must be a number." id="@Html.IdFor(m => m.StartDate.Year)" name="@Html.NameFor(m => m.StartDate.Year)" type="number" value="@Model.StartDate.Year">
+                <input aria-labelledby="StartDate" class="form-control length-limit" maxlength="4" min="1900" max="9999" data-val="true" data-val-number="The field Year must be a number." id="@Html.IdFor(m => m.StartDate.Year)" name="@Html.NameFor(m => m.StartDate.Year)" type="number" value="@Model.StartDate.Year">
             </div>
         </div>
     </fieldset>
@@ -112,14 +112,14 @@
                 <label for="@Html.IdFor(m => m.EndDate.Month)">
                     <span class="form-label-bold">Month</span>
                 </label>
-                @Html.TextBoxFor(m => m.EndDate.Month, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.EndDate.Month) })
+                @Html.TextBoxFor(m => m.EndDate.Month, new { @class = "form-control length-limit", type = "number", maxlength="2", min="1", max="12", aria_labelledby = Html.IdFor(m => m.EndDate.Month) })
             </div>
 
             <div class="form-group form-group-month">
                 <label for="@Html.IdFor(m => m.EndDate.Year)">
                     <span class="form-label-bold">Year</span>
                 </label>
-                <input aria-labelledby="EndDate" class="form-control" data-val="true" data-val-number="The field Year must be a number." id="@Html.IdFor(m => m.EndDate.Year)" name="@Html.NameFor(m => m.EndDate.Year)" type="number" value="@Model.EndDate.Year">
+                <input aria-labelledby="EndDate" class="form-control length-limit" data-val="true" data-val-number="The field Year must be a number." id="@Html.IdFor(m => m.EndDate.Year)" name="@Html.NameFor(m => m.EndDate.Year)" type="number" maxlength="4" min="1900" max="9999" value="@Model.EndDate.Year">
             </div>
         </div>
     </fieldset>
@@ -145,4 +145,5 @@
     <p id="charCount-noJS">Enter up to a maximum of 20 characters</p>
     <p id="charCount" style="display:none;"><span name="countchars" id="countchars"></span> characters remaining</p>
 </div>
+
 
