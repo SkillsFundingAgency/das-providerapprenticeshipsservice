@@ -119,7 +119,18 @@
             @if (!Model.HasApprenticeships)
             {
                 <div class="panel panel-border-wide alert-default">
-                    <p>You haven’t added any apprentices yet - <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })">add an apprentice</a>.</p>
+                    
+                    @if (Model.IsReadOnly)
+                    {
+                        <p>Apprentices will appear here when the employer adds them to your cohort.</p>
+                    }
+                    else
+                    {
+                        <p>
+                            You haven’t added any apprentices yet - <a href="@Url.Action("Create", new {Model.ProviderId, Model.HashedCommitmentId})">add an apprentice</a>.
+                        </p>
+                    }
+
                 </div>
             }
         </div>
