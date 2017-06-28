@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
-    public class ApprenticeshipDetailsViewModel
+    public class ApprenticeshipDetailsViewModel : ViewModelBase
     {
         public string HashedApprenticeshipId { get; set; }
 
@@ -34,15 +36,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public bool EnableEdit { get; set; }
 
-        public bool HasDataLockError { get; set; }
+        public List<string> Alerts { get; set; }
 
-        public DataLockErrorType ErrorType { get; set; }
-
-        public string RecordStatus { get; set; }
-
-        public string DataLockStatus { get; set; }
-
-        public bool HasRequestedRestart { get; set; }
+        //todo: this is not used in the manage apprentices list, so maybe create a new 
+        //viewmodel for that page?
+        public DataLockSummaryViewModel DataLockSummaryViewModel { get; set; }
     }
 
     public enum DataLockErrorType

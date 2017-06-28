@@ -1,21 +1,16 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
 @model dynamic
 
-@{ var model = FlashMessageViewModel.GetViewModel((string)TempData["InfoMessage"]); }
+@{ var model = Model as ViewModelBase; }
 
-
-@if (model.Severity == FlashMessageSeverityLevel.Info)
+@if (model?.FlashMessage != null)
 {
     <div class="panel panel-border-wide alert-default flash-alert">
-        @Html.Raw(model.Message)
-    </div>
-}
-
-
-@if (model.Severity == FlashMessageSeverityLevel.Okay)
-{
-    <div class="panel panel-border-wide alert-default flash-alert">
-        <i class="icon-green-tick"></i>
-        @Html.Raw(model.Message)
+        @if (model.FlashMessage.Severity == FlashMessageSeverityLevel.Okay)
+        {
+            <i class="icon-green-tick"></i>
+        }
+        @Html.Raw(model.FlashMessage.Message)
     </div>
 }

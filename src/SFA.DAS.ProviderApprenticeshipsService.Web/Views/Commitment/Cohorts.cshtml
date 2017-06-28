@@ -19,67 +19,7 @@
             </div>
         }
 
-        @if (TempData["FlashMessage"] != null)
-        {
-            <div class="panel panel-border-wide alert-default">
-                <p>
-                    @TempData["FlashMessage"]
-                </p>
-            </div>
-        }
-
         <h1 class="heading-xlarge">Your cohorts</h1>
-
-        <div class="column-one-half bingo-background block-one @GetClickableClass(Model.NewRequestsCount)">
-            <h2 class="bold-xxlarge">
-                @if (Model.NewRequestsCount > 0)
-                {
-                    if (Model.HasSignedTheAgreement)
-                     {
-                         <a href="@Url.Action("NewRequests")" title="@Model.NewRequestsCount new from employer" aria-label="View all new requests from employer">
-                             @Model.NewRequestsCount
-                         </a>
-                    }
-                    else
-                    {
-                        <a href="@Url.Action("AgreementNotSigned", new { redirectTo = "NewRequests" } )" title="@Model.NewRequestsCount new from employer" aria-label="View all new requests from employer">
-                            @Model.NewRequestsCount
-                        </a>
-                    }
-                }
-                else
-                {
-                    <span>0</span>
-                }
-            </h2>
-            <p class="heading-small">New from employer</p>
-        </div>
-
-        <div class="column-one-half bingo-background block-two @GetClickableClass(Model.ReadyForApprovalCount)">
-            <h2 class="bold-xxlarge">
-                @if (Model.ReadyForApprovalCount > 0)
-                {
-                     if (Model.HasSignedTheAgreement)
-                     {
-                        <a href="@Url.Action("ReadyForApproval")" title="@Model.ReadyForApprovalCount ready for approval" aria-label="View all new requests that are ready for approval">
-                            @Model.ReadyForApprovalCount
-                        </a>
-                     }
-                     else
-                     {
-                        <a href="@Url.Action("AgreementNotSigned", new { redirectTo = "ReadyForApproval" } )" title="@Model.ReadyForApprovalCount ready for approval" aria-label="View all new requests that are ready for approval">
-                            @Model.ReadyForApprovalCount
-                        </a>
-                     }
-                }
-                else
-                {
-                    <span>0</span>
-                }
-            </h2>
-            <p class="heading-small">Ready for approval</p>
-        </div>
-
 
         <div class="column-one-half bingo-background block-three @GetClickableClass(Model.ReadyForReviewCount)">
             <h2 class="bold-xxlarge">

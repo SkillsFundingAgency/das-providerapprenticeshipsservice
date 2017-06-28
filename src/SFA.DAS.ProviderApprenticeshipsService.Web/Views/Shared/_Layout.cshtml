@@ -1,5 +1,5 @@
 ﻿@using Microsoft.ApplicationInsights.Extensibility
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -125,6 +125,26 @@
                 }
             </div>
         </div>
+
+        @if (HttpContext.Current.User.Identity.IsAuthenticated && !(ViewBag?.HideNavBar ?? false))
+        {
+            var controllerName = ViewContext.RouteData.Values["Controller"].ToString(); ;
+            var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
+
+            <div class="grid-row">
+                <div class="column-full">
+                    <div class="header-organisation" role="navigation">
+                        <nav class="header-inner">
+                            <ul role="menubar" id="global-nav-links">
+                                <li><a href="@Url.Action("Index", "Account")" role="menuitem" class="@(controllerName == "Account" ? "selected" : "")">Home</a></li>
+                                <li><a href="@Url.Action("Index", "ManageApprentices", new { providerId = providerId})" role="menuitem" class="@(controllerName == "ManageApprentices" ? "selected" : "")">Manage your apprentices</a></li>
+                                <li><a href="@Url.Action("Cohorts", "Commitment", new { providerId = providerId})" role="menuitem" class="@(controllerName == "Commitment" ? "selected" : "")">Your cohorts</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        }
         @RenderSection("breadcrumb", required: false)
         <div id="content">
             @Html.Partial(@"_ModalMessage")
@@ -137,10 +157,8 @@
             <div class="footer-meta">
                 <div class="footer-meta-inner">
                     <ul class="platform-help-links">
-                        <li><a href="mailto:DASPrivateBeta@apprenticeships.gov.uk?subject=Digital Apprenticeship Service beta query" aria-label="Contact us" class="heading-medium">Contact us</a></li>
-                        <li><a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank" aria-label="Give feedback" class="heading-medium">Give feedback</a></li>
-                    </ul>
-                    <ul class="platform-help-links">
+                        <li><a href="@Url.Action("Help", "Home")">Help</a></li>
+                        <li><a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank" aria-label="Give feedback">Feedback </a></li>
                         <li><a href="@Url.RouteUrl("privacy")">Privacy and cookies</a></li>
                         <li><a href="@Url.RouteUrl("terms")">Terms and conditions</a></li>
                         <li>Built by the <a href="http://gov.uk/sfa" target="_blank">Education and Skills Funding Agency</a></li>

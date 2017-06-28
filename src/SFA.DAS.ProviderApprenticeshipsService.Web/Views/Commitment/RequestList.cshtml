@@ -8,15 +8,6 @@
 <div class="grid-row">
     <div class="column-full">
         
-        @if (TempData["FlashMessage"] != null)
-        {
-            <div class="panel panel-border-wide alert-default">
-                <p>
-                    @TempData["FlashMessage"]
-                </p>
-            </div>
-        }
-
         <h1 class="heading-xlarge">@Model.PageHeading</h1>
 
         <p class="dynamic-heading">@Html.Raw(Model.PageHeading2)</p>

@@ -5,6 +5,11 @@
 
 @{
     ViewBag.Title = "Request restart";
+
+    var datalock = Model.DataLockSummaryViewModel.DataLockWithCourseMismatch
+        .Where(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
+        .OrderBy(x => x.IlrEffectiveFromDate)
+        .First();
 }
 
 
@@ -27,27 +32,21 @@
             </tr>
             </thead>
             <tbody>
-            @if (Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock03)
-                 || Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock04)
-                 || Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock05)
-                 || Model.DataLockViewModel.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock06))
-            {
-                <tr>
-                    <td>Apprenticeship training course</td>
-                    <td>
-                        @if (Model.DataLockViewModel.IlrEffectiveFromDate.HasValue)
-                        {
-                            @Model.DataLockViewModel.IlrEffectiveFromDate.Value.ToGdsFormat()
-                        }
-                        else
-                        {
-                            <span>--</span>
-                        }
-                    </td>
-                    <td>@Model.DasApprenticeship.TrainingName </td>
-                    <td class="changed-item">@Model.DataLockViewModel.IlrTrainingCourseName </td>
-                </tr>
-            }
+            <tr>
+                <td>Apprenticeship training course</td>
+                <td>
+                    @if (datalock.IlrEffectiveFromDate.HasValue)
+                    {
+                        @datalock.IlrEffectiveFromDate.Value.ToGdsFormat()
+                    }
+                    else
+                    {
+                        <span>--</span>
+                    }
+                </td>
+                <td>@Model.DasApprenticeship.TrainingName </td>
+                <td class="changed-item">@datalock.IlrTrainingCourseName </td>
+            </tr>
 
             </tbody>
         </table>
@@ -84,7 +83,7 @@
                         </label>
 
                     </div>
-                    @Html.HiddenFor(m => m.DataLockEventId)
+                    @Html.HiddenFor(m => datalock.DataLockEventId)
                     <input type="submit" class="button" id="fix-mismatch" value="Continue" />
                 </fieldset>
             </div>

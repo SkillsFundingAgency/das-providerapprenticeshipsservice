@@ -52,7 +52,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
                 Mock.Of<IProviderCommitmentsLogger>(),
                 _mockApprenticeshipMapper.Object,
                 Mock.Of<IApprovedApprenticeshipValidator>(),
-                _mockApprenticeshipFiltersMapper.Object);
+                _mockApprenticeshipFiltersMapper.Object,
+                Mock.Of<IDataLockMapper>());
         }
 
         [Test]

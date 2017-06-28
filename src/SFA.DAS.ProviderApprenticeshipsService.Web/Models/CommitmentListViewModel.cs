@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
-    public sealed class CommitmentListViewModel
+    public sealed class CommitmentListViewModel : ViewModelBase
     {
         public long ProviderId { get; set; }
 
