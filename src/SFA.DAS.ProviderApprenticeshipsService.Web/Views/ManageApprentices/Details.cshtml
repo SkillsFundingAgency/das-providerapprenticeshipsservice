@@ -66,7 +66,7 @@
                 </p>
 
                 @{
-                    if (Model.PendingChanges == PendingChanges.None)
+                    if (Model.PendingChanges == PendingChanges.None && !Model.DataLockSummaryViewModel.ShowChangesPending && !Model.DataLockSummaryViewModel.ShowChangesRequested)
                     {
                         if (Model.DataLockSummaryViewModel.ShowCourseDataLockTriageLink && Model.DataLockSummaryViewModel.ShowPriceDataLockTriageLink)
                         {
