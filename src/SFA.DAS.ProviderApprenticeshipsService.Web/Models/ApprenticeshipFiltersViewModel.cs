@@ -6,6 +6,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
     {
         public ApprenticeshipFiltersViewModel()
         {
+            PageNumber = 1;
+
             Status = new List<string>();
             RecordStatus = new List<string>();
             Employer = new List<string>();
@@ -16,6 +18,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
             RecordStatusOptions = new List<KeyValuePair<string, string>>();
             EmployerOrganisationOptions = new List<KeyValuePair<string, string>>();   
         }
+
+        public int PageNumber { get; set; }
 
         public List<KeyValuePair<string, string>> ApprenticeshipStatusOptions { get; set; }
         public List<KeyValuePair<string, string>> TrainingCourseOptions { get; set; }

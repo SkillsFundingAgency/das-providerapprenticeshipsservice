@@ -51,5 +51,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.A
                     Times.Once);
         }
 
+        [Test]
+        public async Task ThenCommitmentsApiIsCalledWithCorrectPageNumber()
+        {
+            //Arrange
+            var request = new ApprenticeshipSearchQueryRequest
+            {
+                ProviderId = 1,
+                Query = new ApprenticeshipSearchQuery { PageNumber = 5 }
+            };
+
+            //Act
+            await _handler.Handle(request);
+
+            //Assert
+            _commitmentsApi.Verify(
+                x => x.GetProviderApprenticeships(
+                    It.IsAny<long>(),
+                    It.Is<ApprenticeshipSearchQuery>(a => a.PageNumber == 5)),
+                    Times.Once);
+            }
+        }
     }
-}
