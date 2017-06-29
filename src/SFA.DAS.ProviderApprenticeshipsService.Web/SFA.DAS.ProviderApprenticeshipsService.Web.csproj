@@ -391,6 +391,7 @@
     <Compile Include="Models\FinishEditingViewModel.cs" />
     <Compile Include="Models\AccountHomeViewModel.cs" />
     <Compile Include="Models\ManageApprenticesViewModel.cs" />
+    <Compile Include="Models\IPaginationViewModel.cs" />
     <Compile Include="Models\PriceHistoryViewModel.cs" />
     <Compile Include="Models\RequestStatus.cs" />
     <Compile Include="Models\Types\DateTimeViewModel.cs" />
@@ -630,6 +631,7 @@
     <Content Include="Views\ManageApprentices\ConfirmRestart.cshtml" />
     <Content Include="Views\Shared\ApprenticeshipFilters.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
+    <Content Include="Views\Shared\Pagination.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

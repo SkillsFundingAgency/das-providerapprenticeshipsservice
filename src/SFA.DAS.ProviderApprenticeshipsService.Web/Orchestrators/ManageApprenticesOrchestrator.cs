@@ -100,7 +100,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderId = providerId,
                 Apprenticeships = apprenticeships,
                 Filters = filterOptions,
-                TotalApprenticeships = searchResponse.TotalApprenticeships,
+                TotalResults = searchResponse.TotalApprenticeships,
                 PageNumber = searchResponse.PageNumber,
                 TotalPages = searchResponse.TotalPages,
                 PageSize = searchResponse.PageSize

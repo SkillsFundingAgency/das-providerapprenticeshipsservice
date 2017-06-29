@@ -2,13 +2,13 @@
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
-    public class ManageApprenticeshipsViewModel
+    public class ManageApprenticeshipsViewModel : IPaginationViewModel
     {
         public IEnumerable<ApprenticeshipDetailsViewModel> Apprenticeships { get; set; } 
 
         public ApprenticeshipFiltersViewModel Filters { get; set; }
 
-        public int TotalApprenticeships { get; set; }
+        public int TotalResults { get; set; }
 
         public long ProviderId { get; set; }
 
