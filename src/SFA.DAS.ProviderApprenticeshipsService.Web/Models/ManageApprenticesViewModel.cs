@@ -11,5 +11,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public int TotalApprenticeships { get; set; }
 
         public long ProviderId { get; set; }
+
+        public int PageNumber { get; internal set; }
+
+        public int TotalPages { get; internal set; }
+        public int PageSize { get; internal set; }
     }
 }

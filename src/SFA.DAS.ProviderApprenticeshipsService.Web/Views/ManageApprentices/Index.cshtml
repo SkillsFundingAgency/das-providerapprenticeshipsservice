@@ -6,6 +6,49 @@
     ViewBag.PageId = "manage-apprentices";
 }
 
+@functions
+            {
+    public string GetLinkForPage(int pageNumber)
+    {
+        var queryStringValues = HttpUtility.ParseQueryString(Request.QueryString.ToString());
+
+        queryStringValues.Set("pageNumber", pageNumber.ToString());
+
+        return $"{Request.Url.AbsolutePath}?{queryStringValues}";
+    }
+
+    public Tuple<int, int> GetPreviousLinkApprenticeshipCounts()
+    {
+        var lowerValue = (Model.PageNumber - 2) * Model.PageSize + 1;
+        int upperValue = (Model.PageNumber - 1) * Model.PageSize;
+
+        return new Tuple<int, int>(lowerValue, upperValue);
+    }
+
+    public Tuple<int, int> GetNextLinkApprenticeshipCounts()
+    {
+        var lowerValue = ((Model.PageNumber) * Model.PageSize) + 1;
+        int upperValue;
+
+        if (Model.PageNumber == Model.TotalPages - 1)
+        {
+            var remainder = Model.TotalApprenticeships % Model.PageSize;
+            upperValue = remainder == 0 ? Model.TotalApprenticeships * Model.PageSize : (Model.PageSize * (Model.TotalPages - 1)) + remainder;
+        }
+        else
+        {
+            upperValue = (Model.PageNumber + 1) * Model.PageSize;
+        }
+
+        return new Tuple<int, int>(lowerValue, upperValue);
+    }
+}
+
+@{ 
+    var pagePreviousLinkValues = GetPreviousLinkApprenticeshipCounts();
+    var pageNextLinkValues = GetNextLinkApprenticeshipCounts();
+}
+
 <h1 class="heading-xlarge">Manage your apprentices</h1>
 
 <div class="grid-row"> 
@@ -83,23 +126,32 @@
                 <div>There are currently no apprentices that match your search.</div> 
             }
 
-          
-           <nav role="navigation">
-                <ul class="previous-next-navigation">
-                    <li class="previous">
-                        <a href="#">
-                           Previous <span class="visuallyhidden">page</span>
-                            <span class="page-numbers">Apprentices 1 of 12</span>
-                        </a>
-                    </li>
-                    <li class="next">
-                        <a href="#">
-                            Next <span class="visuallyhidden">page</span>
-                            <span class="page-numbers">Apprentices 1 of 12</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            if (Model.Apprenticeships.Any())
+            {
+                <nav role="navigation">
+                    <ul class="previous-next-navigation">
+                        @if (Model.PageNumber != 1)
+                        {
+                            <li class="previous">
+                                <a href="@GetLinkForPage(Model.PageNumber - 1)">
+                                    Previous <span class="visuallyhidden">page</span>
+                                    <span class="page-numbers">Apprentices @pagePreviousLinkValues.Item1 to @pagePreviousLinkValues.Item2</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (Model.PageNumber < Model.TotalPages)
+                        {
+                            <li class="next">
+                                <a href="@GetLinkForPage(Model.PageNumber + 1)">
+                                    Next <span class="visuallyhidden">page</span>
+                                    <span class="page-numbers">Apprentices @pageNextLinkValues.Item1 to @pageNextLinkValues.Item2</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
         }
     </div>
 </div>
