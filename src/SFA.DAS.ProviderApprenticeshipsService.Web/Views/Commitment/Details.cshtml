@@ -33,7 +33,16 @@
                     </ul>
                 </div>
             }
-            <h1 class="heading-xlarge">Review your cohort</h1>
+            
+            @if (Model.IsReadOnly)
+            {
+                <h1 class="heading-xlarge">View your cohort</h1>
+            }
+            else
+            {
+                <h1 class="heading-xlarge">Review your cohort</h1>
+            }
+
         </div>
     </div>
 
@@ -87,37 +96,54 @@
     </div>
 
     <div class="grid-row">
-        <div class="column-one-half employer-details">
+        <div class="column-one-third employer-details">
             <p><span class="strong">Employer: </span>@Model.LegalEntityName</p>
             <p><span class="strong">Cohort reference: </span>@Model.Reference</p>
             <p><span class="strong">Status: </span>@Model.Status.GetDescription()</p>
         </div>
 
-        <div class="column-one-half employer-details">
+        <div class="column-two-thirds employer-details">
             <p class="strong">Message:</p>
             <p>@(string.IsNullOrWhiteSpace(Model.LatestMessage) ? "No message added" : Model.LatestMessage)</p>
-        </div>
+        </div>        
     </div>
 
-    <div class="grid-row">
-        <div class="column-full bulk-upload-buttons">
-            <hr class="hr-top">
+    <hr class="hr-bottom">
 
-            @{ var finishEditingText = Model.PendingChanges ? "Save and continue" : "Continue to approval"; }
-            <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
-            <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary add-app-btn" aria-label="Add an apprentice">Add an apprentice</a>
-            <a href="@Url.Action("UploadApprenticeships", "BulkUpload", new { Model.ProviderId, Model.HashedCommitmentId })" class="button button-secondary upload-btn" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
+    @if (!Model.IsReadOnly)
+    {
 
-            <hr class="hr-bottom">
+        <div class="grid-row">
+            <div class="column-full bulk-upload-buttons">
+
+                @{ var finishEditingText = Model.PendingChanges ? "Save and continue" : "Continue to approval"; }
+                <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
+                <a href="@Url.Action("Create", new {Model.ProviderId, Model.HashedCommitmentId})" class="button button-secondary add-app-btn" aria-label="Add an apprentice">Add an apprentice</a>
+                <a href="@Url.Action("UploadApprenticeships", "BulkUpload", new {Model.ProviderId, Model.HashedCommitmentId})" class="button button-secondary upload-btn" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
+
+                <hr class="hr-bottom">
+            </div>
         </div>
-    </div>
+
+    }
 
     <div class="grid-row">
         <div class="column-full">
             @if (!Model.HasApprenticeships)
             {
                 <div class="panel panel-border-wide alert-default">
-                    <p>You haven’t added any apprentices yet - <a href="@Url.Action("Create", new { Model.ProviderId, Model.HashedCommitmentId })">add an apprentice</a>.</p>
+                    
+                    @if (Model.IsReadOnly)
+                    {
+                        <p>Apprentices will appear here when the employer adds them to your cohort.</p>
+                    }
+                    else
+                    {
+                        <p>
+                            You haven’t added any apprentices yet - <a href="@Url.Action("Create", new {Model.ProviderId, Model.HashedCommitmentId})">add an apprentice</a>.
+                        </p>
+                    }
+
                 </div>
             }
         </div>
@@ -237,8 +263,16 @@
                                     }
 
                                     <td>
-                                        <a href="@Url.Action("Edit", new { Model.HashedCommitmentId, apprenticeship.HashedApprenticeshipId })"
-                                           title="Edit @apprenticeship.ApprenticeshipName" aria-label="Edit @apprenticeship.ApprenticeshipName">Edit</a>
+                                        @if (Model.IsReadOnly)
+                                        {
+                                            <a href="@Url.Action("View", new {Model.HashedCommitmentId, apprenticeship.HashedApprenticeshipId})"
+                                               title="Edit @apprenticeship.ApprenticeshipName" aria-label="Edit @apprenticeship.ApprenticeshipName">View</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("Edit", new {Model.HashedCommitmentId, apprenticeship.HashedApprenticeshipId})"
+                                               title="Edit @apprenticeship.ApprenticeshipName" aria-label="Edit @apprenticeship.ApprenticeshipName">Edit</a>
+                                        }                                        
                                     </td>
                                 </tr>
                             }
@@ -250,8 +284,11 @@
             </div>
         </div>
     }
-
-    <a class="button delete-button" href="@Url.Action("DeleteCohort", new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Delete">Delete cohort</a>
+    
+    @if (!Model.IsReadOnly)
+    {
+        <a class="button delete-button" href="@Url.Action("DeleteCohort", new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Delete">Delete cohort</a>
+    }
 
     @section breadcrumb {
         <div class="breadcrumbs">

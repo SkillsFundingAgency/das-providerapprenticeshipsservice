@@ -18,5 +18,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool RelationshipVerified { get; set; }
         public bool HasOverlappingErrors { get; set; }
         public Dictionary<string, string> FundingCapWarnings { get; set; }
+        public bool IsReadOnly { get; set; }
     }
 }
