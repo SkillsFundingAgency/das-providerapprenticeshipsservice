@@ -1,9 +1,8 @@
-﻿using MediatR;
-
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegisteredUser
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain
 {
-    public class UpsertRegisteredUserCommand : IAsyncRequest
+    public class User
     {
+        public long Id { get; set; }
         public string UserRef { get; set; }
         public string DisplayName { get; set; }
         public string Ukprn { get; set; }

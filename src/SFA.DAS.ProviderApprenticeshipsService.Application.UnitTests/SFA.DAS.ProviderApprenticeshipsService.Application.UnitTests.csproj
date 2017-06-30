@@ -117,8 +117,8 @@
     <Compile Include="Commands\UndoApprenticeshipUpdate\WhenValidatingCommand.cs" />
     <Compile Include="Commands\UpdateRelationship\WhenUpdatingARelationship.cs" />
     <Compile Include="Commands\UpdateRelationship\WhenValidatingCommand.cs" />
-    <Compile Include="Commands\UpsertRegisteredUserCommandHandler\WhenUpsertingRegisteredUser.cs" />
-    <Compile Include="Commands\UpsertRegisteredUserCommandHandler\WhenValidatingCommand.cs" />
+    <Compile Include="Commands\UpsertRegisteredUser\WhenUpsertingRegisteredUser.cs" />
+    <Compile Include="Commands\UpsertRegisteredUser\WhenValidatingCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\WhenSubmittingApprenticeshipSearch.cs" />
     <Compile Include="Queries\GetAgreement\WhenIGetAgreement.cs" />

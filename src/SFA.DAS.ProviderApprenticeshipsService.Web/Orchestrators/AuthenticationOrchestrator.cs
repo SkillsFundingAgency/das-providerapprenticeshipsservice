@@ -28,7 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             await _mediator.SendAsync(new UpsertRegisteredUserCommand
             {
-                UserId = userId,
+                UserRef = userId,
                 DisplayName = displayName,
                 Ukprn = ukprn,
                 Email = email

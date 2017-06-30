@@ -28,7 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Aut
         public async Task TheMediatorIsCalled()
         {
             //Act
-            await _orchestrator.SaveIdentityAttributes("UserId", "UkPrn", "DisplayName", "Email");
+            await _orchestrator.SaveIdentityAttributes("UserRef", "UkPrn", "DisplayName", "Email");
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<UpsertRegisteredUserCommand>()));

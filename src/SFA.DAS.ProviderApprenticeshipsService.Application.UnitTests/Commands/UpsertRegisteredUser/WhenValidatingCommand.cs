@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegisteredUser;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.UpsertRegisteredUserCommandHandler
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.UpsertRegisteredUser
 {
     [TestFixture]
     public class WhenValidatingCommand
@@ -21,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             //Arrange
             var command = new UpsertRegisteredUserCommand
             {
-                UserId = "UserId",
+                UserRef = "UserRef",
                 DisplayName = "Displayname",
                 Email = "Email",
                 Ukprn = "Ukprn"
@@ -35,7 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         }
 
         [Test]
-        public void ThenUserIdIsMandatory()
+        public void ThenUserRefIsMandatory()
         {
             //Arrange
             var command = new UpsertRegisteredUserCommand
@@ -50,7 +50,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
 
             //Assert
             Assert.IsFalse(result.IsValid);
-            Assert.IsTrue(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.UserId))));
+            Assert.IsTrue(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.UserRef))));
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             //Arrange
             var command = new UpsertRegisteredUserCommand
             {
-                UserId = "UserId",
+                UserRef = "UserRef",
                 DisplayName = "Displayname",
                 Ukprn = "Ukprn"
             };
@@ -78,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             //Arrange
             var command = new UpsertRegisteredUserCommand
             {
-                UserId = "UserId",
+                UserRef = "UserRef",
                 DisplayName = "Displayname",
                 Email = "Email"
             };
@@ -97,7 +97,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             //Arrange
             var command = new UpsertRegisteredUserCommand
             {
-                UserId = "UserId",
+                UserRef = "UserRef",
                 Email = "Email",
                 Ukprn = "Ukprn"
             };
