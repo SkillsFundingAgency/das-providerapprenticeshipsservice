@@ -25,19 +25,19 @@
                 <label for="@Html.IdFor(m => m.DateOfBirth.Day)">
                     Day
                 </label>
-                @Html.TextBoxFor(m => m.DateOfBirth.Day, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Day) })
+                @Html.TextBoxFor(m => m.DateOfBirth.Day, new { @class = "form-control length-limit", type = "number", maxlength="2", min="1", max="31", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Day) })
             </div>
             <div class="form-group form-group-month">
                 <label for="@Html.IdFor(m => m.DateOfBirth.Month)">
                     Month
                 </label>
-                @Html.TextBoxFor(m => m.DateOfBirth.Month, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Month) })
+                @Html.TextBoxFor(m => m.DateOfBirth.Month, new { @class = "form-control length-limit", type = "number", maxlength="2", min="1", max="12", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Month) })
             </div>
             <div class="form-group form-group-year">
                 <label for="@Html.IdFor(m => m.DateOfBirth.Year)">
                     Year
                 </label>
-                <input aria-labelledby="@Html.IdFor(m => m.DateOfBirth.Year)" class="form-control" data-val="true" data-val-number="The field Year must be a number." id="@Html.IdFor(m => m.DateOfBirth.Year)" name="DateOfBirth.Year" type="number" value="@Model.DateOfBirth.Year">
+                <input aria-labelledby="@Html.IdFor(m => m.DateOfBirth.Year)" class="form-control length-limit" data-val="true" data-val-number="The field Year must be a number." id="@Html.IdFor(m => m.DateOfBirth.Year)" name="DateOfBirth.Year" type="number" maxlength="4" min="1900" max="9999" value="@Model.DateOfBirth.Year">
             </div>
         </div>
     </div>
