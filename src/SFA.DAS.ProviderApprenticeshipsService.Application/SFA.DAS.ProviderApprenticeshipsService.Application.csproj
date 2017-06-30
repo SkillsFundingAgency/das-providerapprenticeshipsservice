@@ -123,6 +123,9 @@
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandValidator.cs" />
     <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommandHandler.cs" />
     <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommandValidator.cs" />
+    <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommand.cs" />
+    <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandHandler.cs" />
+    <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandValidator.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryHandler.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryRequest.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryResponse.cs" />
