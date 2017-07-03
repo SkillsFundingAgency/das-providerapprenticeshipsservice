@@ -21,7 +21,7 @@
 
 
     <div class="column-two-thirds">   
-        @if (Model.TotalApprenticeships == 0 )
+        @if (Model.TotalResults == 0 )
         {
             <div class="panel panel-border-wide alert-default">
                 <p>Once you and the employer have approved a cohort, the apprentices from that cohort will appear here.</p>
@@ -83,18 +83,10 @@
                 <div>There are currently no apprentices that match your search.</div> 
             }
 
-            @*-- PAGINATION FOR FUTURE IMPROVEMENT --
-                ==================================
-                <nav role="navigation">
-                <ul class="previous-next-navigation">
-                    <li class="next">
-                        <a href="#">
-                            Next <span class="visuallyhidden">page</span>
-                            <span class="page-numbers">1 of 12</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>*@
+            if (Model.Apprenticeships.Any())
+            {
+                Html.RenderPartial("Pagination", Model);
+            }
         }
     </div>
 </div>

@@ -1,0 +1,157 @@
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
+
+@model ApprenticeshipViewModel
+
+@{
+    ViewBag.Title = "View apprentice details";
+    ViewBag.PageId = "view-apprentice";
+}
+
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+        <h1 class="heading-xlarge">View apprentice details</h1>
+
+
+        <table id="apprentice-section">
+            <tbody>
+                <tr>
+                    <td>Firstname</td>
+                    <td>@Model.FirstName</td>
+                </tr>
+                
+                <tr>
+                    <td>Last name</td>
+                    <td>@Model.LastName</td>
+                </tr>
+                
+                <tr>
+                    <td>Unique learner number</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(Model.ULN))
+                        {
+                            <span>@Model.ULN</span>
+                        }
+                        else
+                        {
+                            <span class="missing">&ndash;&ndash;</span>
+                        }
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>Date of birth</td>
+                    <td>
+                        @if (Model.DateOfBirth.DateTime.HasValue)
+                        {
+                            <span>@Model.DateOfBirth.DateTime.Value.ToGdsFormatWithoutDay()</span>
+                        }
+                        else
+                        {
+                            <span class="missing">&ndash;&ndash;</span>
+                        }
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>Apprenticeship training course</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(Model.TrainingName))
+                        {
+                            <span>@Model.TrainingName</span>
+                        }
+                        else
+                        {
+                            <span class="missing">&ndash;&ndash;</span>
+                        }
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Planned training start date</td>
+                    <td>
+                        @if (Model.StartDate.DateTime.HasValue)
+                        {
+                            <span>@Model.StartDate.DateTime.Value.ToGdsFormatLongMonthNameWithoutDay()</span>
+                        }
+                        else
+                        {
+                            <span class="missing">&ndash;&ndash;</span>
+                        }
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Planned training end date</td>
+                    <td>
+                        @if (Model.EndDate.DateTime.HasValue)
+                        {
+                            <span>@Model.EndDate.DateTime.Value.ToGdsFormatLongMonthNameWithoutDay()</span>
+                        }
+                        else
+                        {
+                            <span class="missing">&ndash;&ndash;</span>
+                        }
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Total agreed apprenticeship price</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(Model.Cost))
+                        {
+                            <span>@FormatCost(Model.Cost)</span>
+                        }
+                        else
+                        {
+                            <span class="missing">&ndash;&ndash;</span>
+                        }
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Reference</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(Model.ProviderRef))
+                        {
+                            <span>@Model.ProviderRef</span>
+                        }
+                        else
+                        {
+                            <span class="missing">&ndash;&ndash;</span>
+                        }
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+
+<a href="@Url.Action("Details", new { Model.HashedCommitmentId })" aria-label="Back">Return to cohort view</a>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Details", new { Model.HashedCommitmentId })" aria-label="Back" class="back-link">Back</a>
+    </div>
+}
+
+@functions {
+    public string FormatCost(string value)
+    {
+        decimal cost;
+        if (Decimal.TryParse(value, out cost))
+        {
+            return $"£{cost:n0}";
+        }
+
+        return string.Empty;
+    }
+}

@@ -60,7 +60,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         [TestCase("22", "30", "10", null)]
         [TestCase("23", "30", "10", null)]
         [TestCase("25", null, null, "42")]
-        [TestCase("25", null, null, "42")]
         public void ProgTypeValidationSuccess(string progType, string frameworkCode, string pathwayCode, string standardCode)
         {
             _validModel.CsvRecord.ProgType = progType;
