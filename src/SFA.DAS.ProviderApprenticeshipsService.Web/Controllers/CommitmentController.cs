@@ -224,6 +224,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return Redirect(GetReturnToListUrl(viewModel.ProviderId));
         }
 
+        [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("{hashedCommitmentId}/View/{hashedApprenticeshipId}", Name = "ViewApprenticeship")]
+        public async Task<ActionResult> View(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            var model = await _commitmentOrchestrator.GetApprenticeshipViewModel(providerId, hashedCommitmentId, hashedApprenticeshipId);
+            return View(model);
+        }
+
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]

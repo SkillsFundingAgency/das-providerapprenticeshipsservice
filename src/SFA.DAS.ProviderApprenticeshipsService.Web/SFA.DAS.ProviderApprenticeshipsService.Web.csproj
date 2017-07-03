@@ -217,11 +217,11 @@
       <HintPath>..\packages\SFA.DAS.CookieService.1.0.0.27423\lib\net45\SFA.DAS.CookieService.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.26805, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.26805\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
+    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.34273, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.34273\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NLog.Targets.Redis, Version=1.0.0.26805, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NLog.Targets.Redis.1.0.0.26805\lib\net45\SFA.DAS.NLog.Targets.Redis.dll</HintPath>
+    <Reference Include="SFA.DAS.NLog.Targets.Redis, Version=1.0.0.34273, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Targets.Redis.1.0.0.34273\lib\net45\SFA.DAS.NLog.Targets.Redis.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Client, Version=1.1.0.12760, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
@@ -536,6 +536,7 @@
     <Content Include="dist\images\separator.png" />
     <Content Include="dist\javascripts\app.js" />
     <Content Include="dist\javascripts\apprentice\dropdown.js" />
+    <Content Include="dist\javascripts\length-limit.js" />
     <Content Include="dist\javascripts\govuk-template.js" />
     <Content Include="dist\javascripts\ie.js" />
     <Content Include="dist\javascripts\apprentice\select2.min.js" />
@@ -632,6 +633,7 @@
     <Content Include="Views\Shared\ApprenticeshipFilters.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Shared\Pagination.cshtml" />
+    <Content Include="Views\Commitment\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
