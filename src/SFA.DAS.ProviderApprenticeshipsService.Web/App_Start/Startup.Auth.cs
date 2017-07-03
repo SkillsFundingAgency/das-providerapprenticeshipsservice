@@ -61,9 +61,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             var ukprn = identity.Claims.FirstOrDefault(claim => claim.Type == (DasClaimTypes.Ukprn))?.Value;
             var email = identity.Claims.FirstOrDefault(claim => claim.Type == (DasClaimTypes.Email))?.Value;
 
-            logger.Info($"Captured claims for \"{id}\" - ukprn:\"{ukprn}\", displayname:\"{displayName}\", email: \"{email}\"");
+            long parsedUkprn;
+            if (!long.TryParse(ukprn, out parsedUkprn))
+            {
+                logger.Info($"Unable to parse Ukprn \"{ukprn}\" from claims for user \"{id}\"");
+                return;
+            }
 
-            await orchestrator.SaveIdentityAttributes(id, ukprn, displayName, email);
+            logger.Info($"Captured claims for \"{id}\" - ukprn:\"{parsedUkprn}\", displayname:\"{displayName}\", email: \"{email}\"");
+
+            await orchestrator.SaveIdentityAttributes(id, parsedUkprn, displayName, email);
         }
     }
 }

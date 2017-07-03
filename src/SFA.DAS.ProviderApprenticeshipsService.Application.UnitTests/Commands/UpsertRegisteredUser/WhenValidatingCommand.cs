@@ -24,7 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 UserRef = "UserRef",
                 DisplayName = "Displayname",
                 Email = "Email",
-                Ukprn = "Ukprn"
+                Ukprn = 12345
             };
 
             //Act
@@ -42,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             {
                 DisplayName = "Displayname",
                 Email = "Email",
-                Ukprn = "Ukprn"
+                Ukprn = 12345
             };
 
             //Act
@@ -61,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             {
                 UserRef = "UserRef",
                 DisplayName = "Displayname",
-                Ukprn = "Ukprn"
+                Ukprn = 12345
             };
 
             //Act
@@ -99,7 +99,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             {
                 UserRef = "UserRef",
                 Email = "Email",
-                Ukprn = "Ukprn"
+                Ukprn = 12345
             };
 
             //Act

@@ -73,7 +73,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 UserRef = "UserRef",
                 DisplayName = "DisplayName",
                 Email = "Email",
-                Ukprn = "Ukprn"
+                Ukprn = 12345
             };
 
             //Act

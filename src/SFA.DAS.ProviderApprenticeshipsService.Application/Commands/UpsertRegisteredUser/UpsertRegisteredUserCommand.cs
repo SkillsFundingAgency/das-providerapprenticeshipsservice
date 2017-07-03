@@ -6,7 +6,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegi
     {
         public string UserRef { get; set; }
         public string DisplayName { get; set; }
-        public string Ukprn { get; set; }
+        public long Ukprn { get; set; }
         public string Email { get; set; }
     }
 }

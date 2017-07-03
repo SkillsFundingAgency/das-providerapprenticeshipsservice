@@ -22,7 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _logger = logger;
         }
 
-        public async Task SaveIdentityAttributes(string userId, string ukprn, string displayName, string email)
+        public async Task SaveIdentityAttributes(string userId, long ukprn, string displayName, string email)
         {
             _logger.Info($"Updating \"{userId}\" attributes - ukprn:\"{ukprn}\", displayname:\"{displayName}\", email:\"{email}\"");
 
