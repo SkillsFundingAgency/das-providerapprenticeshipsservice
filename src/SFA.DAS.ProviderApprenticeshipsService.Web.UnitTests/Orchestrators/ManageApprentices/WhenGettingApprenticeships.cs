@@ -39,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
 
             _mockApprenticeshipFiltersMapper.Setup(
                 x => x.MapToApprenticeshipSearchQuery(It.IsAny<ApprenticeshipFiltersViewModel>()))
-                .Returns(new ApprenticeshipSearchQuery());
+                .Returns(new ApprenticeshipSearchQuery { PageNumber = 5 });
 
             _mockApprenticeshipFiltersMapper.Setup(
                 x => x.Map(It.IsAny<Facets>()))
