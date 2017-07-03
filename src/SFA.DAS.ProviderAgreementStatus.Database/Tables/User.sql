@@ -6,3 +6,7 @@
 	[Ukprn] BIGINT NOT NULL,
 	[Email] varchar(255) NOT NULL
 )
+GO
+
+CREATE UNIQUE INDEX [IX_User_UserRef] ON [dbo].[User] ([UserRef])
+GO
