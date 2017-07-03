@@ -68,8 +68,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                 return;
             }
 
-            logger.Info($"Captured claims for \"{id}\" - ukprn:\"{parsedUkprn}\", displayname:\"{displayName}\", email: \"{email}\"");
-
             await orchestrator.SaveIdentityAttributes(id, parsedUkprn, displayName, email);
         }
     }
