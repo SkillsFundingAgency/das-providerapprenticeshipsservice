@@ -19,20 +19,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     [RoutePrefix("{providerId}/apprentices")]
     public class CommitmentController : BaseController
     {
-        private const string LastCohortPageSessionKey = "lastCohortPageSessionKey";
+        private const string LastCohortPageCookieKey = "sfa-das-providerapprenticeshipsservice-lastCohortPage";
+        private readonly ICookieStorageService<string> _lastCohortCookieStorageService;
 
         private readonly CommitmentOrchestrator _commitmentOrchestrator;
         private readonly ILog _logger;
 
-        public CommitmentController(CommitmentOrchestrator commitmentOrchestrator, ILog logger, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
+        public CommitmentController(CommitmentOrchestrator commitmentOrchestrator, ILog logger, ICookieStorageService<FlashMessageViewModel> flashMessage, ICookieStorageService<string> lastCohortCookieStorageService) : base(flashMessage)
         {
             if (commitmentOrchestrator == null)
                 throw new ArgumentNullException(nameof(commitmentOrchestrator));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
+            if(lastCohortCookieStorageService == null)
+                throw new ArgumentNullException(nameof(lastCohortCookieStorageService));
 
             _commitmentOrchestrator = commitmentOrchestrator;
             _logger = logger;
+            _lastCohortCookieStorageService = lastCohortCookieStorageService;
         }
 
         [HttpGet]
@@ -65,6 +69,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("cohorts/employer")]
         public async Task<ActionResult> WithEmployer(long providerId)
         {
+            SaveRequestStatusInCookie(RequestStatus.WithEmployerForApproval);
+
             var model = await _commitmentOrchestrator.GetAllWithEmployer(providerId);
 
             AddFlashMessageToViewModel(model);
@@ -75,9 +81,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpGet]
         [Route("cohorts/review")]
         public async Task<ActionResult> ReadyForReview(long providerId)
-        {
+        {           
+            SaveRequestStatusInCookie(RequestStatus.ReadyForReview);
+
             var model = await _commitmentOrchestrator.GetAllReadyForReview(providerId);
-            Session[LastCohortPageSessionKey] = RequestStatus.ReadyForReview;
 
             AddFlashMessageToViewModel(model);
 
@@ -216,7 +223,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             SetInfoMessage("Cohort deleted", FlashMessageSeverityLevel.Okay);
 
             var currentStatusCohortAny = 
-                await _commitmentOrchestrator.GetCohortsForCurrentStatus(viewModel.ProviderId, GetRequestStatusFromSession());
+                await _commitmentOrchestrator.GetCohortsForCurrentStatus(viewModel.ProviderId, GetRequestStatusFromCookie());
 
             if (!currentStatusCohortAny)
                 return RedirectToAction("Cohorts", new { providerId = viewModel.ProviderId });
@@ -372,7 +379,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (viewModel.SaveStatus == SaveStatus.Save)
             {
                 SetInfoMessage("Cohort saved but not sent" ,FlashMessageSeverityLevel.None );
-                var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(viewModel.ProviderId, GetRequestStatusFromSession());
+                var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(viewModel.ProviderId, GetRequestStatusFromCookie());
                 if (currentStatusCohortAny)
                     return Redirect(GetReturnToListUrl(viewModel.ProviderId));
             }
@@ -437,7 +444,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var viewModel = await _commitmentOrchestrator.GetAcknowledgementViewModel(providerId, hashedCommitmentId, saveStatus);
 
-            var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(providerId, GetRequestStatusFromSession());
+            var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(providerId, GetRequestStatusFromCookie());
             var url = GetReturnToListUrl(providerId);
             var linkText = "Go back to view cohorts";
             if (!currentStatusCohortAny)
@@ -454,7 +461,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         private string GetReturnToListUrl(long providerId)
         {
-            switch (GetRequestStatusFromSession())
+            switch (GetRequestStatusFromCookie())
             {
                 case RequestStatus.WithEmployerForApproval:
                 case RequestStatus.SentForReview:
@@ -468,10 +475,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
         }
 
-        private RequestStatus GetRequestStatusFromSession()
+        private RequestStatus GetRequestStatusFromCookie()
         {
-            var status = (RequestStatus?)Session[LastCohortPageSessionKey] ?? RequestStatus.None;
-            return status;
+            var status = _lastCohortCookieStorageService.Get(LastCohortPageCookieKey);
+
+            if (string.IsNullOrWhiteSpace(status))
+            {
+                return RequestStatus.None;
+            }
+
+            return (RequestStatus)Enum.Parse(typeof(RequestStatus), status);
+        }
+
+        private void SaveRequestStatusInCookie(RequestStatus status)
+        {
+            _lastCohortCookieStorageService.Delete(LastCohortPageCookieKey);
+            _lastCohortCookieStorageService.Create(status.ToString(), LastCohortPageCookieKey);
         }
 
         private void AddErrorsToModelState(InvalidRequestException ex)
