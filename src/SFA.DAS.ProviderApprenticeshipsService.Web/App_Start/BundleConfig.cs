@@ -25,6 +25,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                    "~/dist/javascripts/character-limit.js"
                    ));
 
+            bundles.Add(new ScriptBundle("~/bundles/lengthLimitation").Include(
+                   "~/dist/javascripts/length-limit.js"
+                   ));
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryvalcustom").Include(
                       "~/Scripts/jquery.validate.js", "~/Scripts/jquery.validate.unobtrusive.custom.js"));
 
