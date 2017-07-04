@@ -55,26 +55,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (result.HasRowLevelErrors)
             {
-                TempData[uploadErrorsTempDataKey] = result.RowLevelErrors;
-                return RedirectToAction("UploadApprenticeshipsUnsuccessful", new { model.ProviderId, model.HashedCommitmentId });
+                return RedirectToAction("UploadApprenticeshipsUnsuccessful", new { model.ProviderId, model.HashedCommitmentId, result.BulkUploadId });
             }
                 
             // ToDo: Flash message, or other feedback to customer
             return RedirectToAction("Details", "Commitment", new { model.ProviderId, model.HashedCommitmentId });
         }
 
-
         [Route("{hashedCommitmentId}/UploadApprenticeships/Unsuccessful")]
-        public async Task<ActionResult> UploadApprenticeshipsUnsuccessful(long providerId, string hashedCommitmentId)
+        public async Task<ActionResult> UploadApprenticeshipsUnsuccessful(long providerId, string hashedCommitmentId, long bulkUploadId)
         {
-            var errors = ((IEnumerable<UploadError>)TempData[uploadErrorsTempDataKey])?.ToList()
-                ?? new List<UploadError>();
-
-            if (!errors.Any())
-                return RedirectToAction("UploadApprenticeships", new { providerId, hashedCommitmentId });
-
-            var model = await _bulkUploadOrchestrator.GetUnsuccessfulUpload(errors, providerId, hashedCommitmentId);
-
+            var model = await _bulkUploadOrchestrator.GetUnsuccessfulUpload(providerId, hashedCommitmentId, bulkUploadId);
             return View(model);
         }
     }

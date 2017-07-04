@@ -153,6 +153,9 @@
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryRequest.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryResponse.cs" />
+    <Compile Include="Queries\GetBulkUploadFile\GetBulkUploadFileQueryHandler.cs" />
+    <Compile Include="Queries\GetBulkUploadFile\GetBulkUploadFileQueryRequest.cs" />
+    <Compile Include="Queries\GetBulkUploadFile\GetBulkUploadFileQueryResponse.cs" />
     <Compile Include="Queries\GetCommitments\GetCommitmentsQueryHandler.cs" />
     <Compile Include="Queries\GetCommitments\GetCommitmentsQueryRequest.cs" />
     <Compile Include="Queries\GetCommitments\GetCommitmentsQueryResponse.cs" />

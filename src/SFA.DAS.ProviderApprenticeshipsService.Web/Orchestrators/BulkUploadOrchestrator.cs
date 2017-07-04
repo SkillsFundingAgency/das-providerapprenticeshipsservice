@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Validation;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetBulkUploadFile;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
@@ -30,6 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IHashingService _hashingService;
 
         private readonly BulkUploadMapper _mapper;
+        private readonly IBulkUploadFileParser _fileParser;
 
         private readonly IProviderCommitmentsLogger _logger;
 
@@ -38,7 +41,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             BulkUploader bulkUploader, 
             IHashingService hashingService,
             BulkUploadMapper mapper,
-            IProviderCommitmentsLogger logger) : base(mediator)
+            IProviderCommitmentsLogger logger,
+            IBulkUploadFileParser fileParser) : base(mediator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -56,6 +60,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _hashingService = hashingService;
             _mapper = mapper;
             _logger = logger;
+            _fileParser = fileParser;
         }
 
         public async Task<BulkUploadResultViewModel> UploadFile(string userId, UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel, SignInUserModel signInUser)
@@ -73,7 +78,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             if (fileValidationResult.Errors.Any())
             {
-                return new BulkUploadResultViewModel { HasFileLevelErrors = true, FileLevelErrors = fileValidationResult.Errors };
+                return new BulkUploadResultViewModel
+                {
+                    BulkUploadId = fileValidationResult.BulkUploadId,
+                    HasFileLevelErrors = true,
+                    FileLevelErrors = fileValidationResult.Errors
+                };
             }
 
             _logger.Info("Uploading file of apprentices.", providerId, commitmentId);
@@ -90,7 +100,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             if (rowErrors.Any())
             {
                 _logger.Info($"{rowErrors.Count} Upload errors", providerId, commitmentId);
-                return new BulkUploadResultViewModel { HasRowLevelErrors = true, RowLevelErrors = rowErrors };
+                return new BulkUploadResultViewModel
+                {
+                    BulkUploadId = fileValidationResult.BulkUploadId,
+                    HasRowLevelErrors = true,
+                    RowLevelErrors = rowErrors
+                };
             }
 
             try
@@ -113,6 +128,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 {
                     return new BulkUploadResultViewModel
                     {
+                        BulkUploadId = fileValidationResult.BulkUploadId,
                         HasRowLevelErrors = true,
                         RowLevelErrors = overlaps
                     };
@@ -123,7 +139,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 }
             }
 
-            return new BulkUploadResultViewModel();
+            return new BulkUploadResultViewModel { BulkUploadId = fileValidationResult.BulkUploadId };
         }
 
         private async Task<IEnumerable<UploadError>> GetOverlapErrors(IList<ApprenticeshipUploadModel> uploadedApprenticeships)
@@ -247,13 +263,31 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return model;
         }
 
-        public async Task<UploadApprenticeshipsViewModel> GetUnsuccessfulUpload(List<UploadError> errors, long providerId, string hashedCommitmentId)
+        public async Task<UploadApprenticeshipsViewModel> GetUnsuccessfulUpload(long providerId, string hashedCommitmentId, long bulkUploadId)
         {
-
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             await AssertCommitmentStatus(commitmentId, providerId);
+
+            var fileContentResult = await _mediator.SendAsync(new GetBulkUploadFileQueryRequest
+            {
+                ProviderId = providerId,
+                BulkUploadId = bulkUploadId
+            });
+
+            ////todo: hack!.....
+            //var content = fileContentResult.FileContent.Replace("\\r\\n", "\r\n");
+            //content = content.Replace("\"", "");
+            ////................
+
+            var uploadResult = _fileParser.CreateViewModels(providerId, commitmentId, fileContentResult.FileContent);
+
+            var validationResult = await _bulkUploader.ValidateFileRows(uploadResult.Data, providerId, bulkUploadId);
+            var overlaps = await GetOverlapErrors(uploadResult.Data.ToList());
+
+            var errors = validationResult.Errors.ToList();
+            errors.AddRange(overlaps);
+
             var result = _mapper.MapErrors(errors);
-            var fileErrors = errors.Where(m => m.IsGeneralError);
 
             return new UploadApprenticeshipsViewModel
             {
@@ -262,7 +296,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ErrorCount = errors.Count,
                 RowCount = result.Count,
                 Errors = result,
-                FileErrors = fileErrors
+                FileErrors = new List<UploadError>()
             };
         }
 
