@@ -265,6 +265,7 @@
 .dynamic-cost-display{
     .bold-xlarge{     
           line-height: 82px;
+          @include media(tablet) { font-size:80px;}
           
     }
      @include media(tablet) { 
@@ -278,16 +279,22 @@
             line-height: 82px;
         }
     }
-    @include media(960px) {       
-        .long {
-            font-size: 45px;
+
+ @include media(tablet) { 
+       
+       .short{
+             font-size:67px;
+       }
+      .long {
+            font-size: 48px;
             line-height: 82px;
         }
         .longer {
-            font-size: 32px;
+            font-size: 38px;
             line-height: 82px;
         }
     }
+
 }
 
 
