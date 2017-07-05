@@ -59,10 +59,13 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Tables" />
+    <Folder Include="StoredProcedures" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ContractFeedEvent.sql" />
     <Build Include="Tables\ContractFeedEventRun.sql" />
+    <Build Include="Tables\User.sql" />
+    <Build Include="StoredProcedures\UpsertUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SFA.DAS.ProviderAgreementStatus.Database.publish.xml" />

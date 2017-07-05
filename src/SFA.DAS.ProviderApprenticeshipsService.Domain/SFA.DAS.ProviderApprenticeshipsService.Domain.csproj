@@ -52,6 +52,7 @@
     <Compile Include="Interfaces\IProviderCommitmentsLogger.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\IHashingService.cs" />
+    <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="ITrainingProgramme.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provider.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="StandardsView.cs" />
     <Compile Include="Training.cs" />
     <Compile Include="TrainingType.cs" />
+    <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

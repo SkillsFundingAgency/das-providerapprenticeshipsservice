@@ -327,6 +327,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\DasClaimTypes.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\SystemWebCookieManager.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -409,6 +410,7 @@
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
     <Compile Include="Orchestrators\ApprovedApprenticeshipValidation\ApprovedApprenticeshipValidator.cs" />
     <Compile Include="Orchestrators\ApprovedApprenticeshipValidation\IApprovedApprenticeshipValidator.cs" />
+    <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipFiltersMapper.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipMapper.cs" />
     <Compile Include="Orchestrators\Mappers\BulkUploadMapper.cs" />

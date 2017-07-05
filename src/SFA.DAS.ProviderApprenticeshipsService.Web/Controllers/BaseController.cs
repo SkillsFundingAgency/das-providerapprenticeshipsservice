@@ -55,7 +55,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             if (HttpContext.User.Identity.IsAuthenticated)
             {
-                CurrentUserId = filterContext.HttpContext.GetClaimValue(ClaimTypes.Upn);
+                CurrentUserId = filterContext.HttpContext.GetClaimValue(DasClaimTypes.Upn);
             }
         }
 
@@ -63,8 +63,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             return new SignInUserModel
             {
-                DisplayName = HttpContext.GetClaimValue("http://schemas.portal.com/displayname"),
-                Email = HttpContext.GetClaimValue("http://schemas.portal.com/mail")
+                DisplayName = HttpContext.GetClaimValue(DasClaimTypes.DisplayName),
+                Email = HttpContext.GetClaimValue(DasClaimTypes.Email)
             };
         }
     }
