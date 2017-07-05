@@ -274,11 +274,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 BulkUploadId = bulkUploadId
             });
 
-            ////todo: hack!.....
-            //var content = fileContentResult.FileContent.Replace("\\r\\n", "\r\n");
-            //content = content.Replace("\"", "");
-            ////................
-
             var uploadResult = _fileParser.CreateViewModels(providerId, commitmentId, fileContentResult.FileContent);
 
             var validationResult = await _bulkUploader.ValidateFileRows(uploadResult.Data, providerId, bulkUploadId);
