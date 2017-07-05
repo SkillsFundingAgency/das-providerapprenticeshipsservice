@@ -16,15 +16,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     public class WhenTriagingApprenticeshipDataLocks
     {
         private TriageApprenticeshipDataLocksCommandHandler _handler;
-        private Mock<IDataLockApi> _dataLockApi;
+        private Mock<IProviderCommitmentsApi> _commitmentsApi;
         private Mock<ILog> _logger;
         private Mock<AbstractValidator<TriageApprenticeshipDataLocksCommand>> _validator;
 
         [SetUp]
         public void Arrange()
         {
-            _dataLockApi = new Mock<IDataLockApi>();
-            _dataLockApi.Setup(x => x.PatchDataLocks(It.IsAny<long>(),
+            _commitmentsApi = new Mock<IProviderCommitmentsApi>();
+            _commitmentsApi.Setup(x => x.PatchDataLocks(It.IsAny<long>(), It.IsAny<long>(),
                 It.IsAny<DataLockTriageSubmission>()))
                 .Returns(() => Task.FromResult(new Unit()));
 
@@ -34,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
 
             _logger = new Mock<ILog>();
 
-            _handler = new TriageApprenticeshipDataLocksCommandHandler(_dataLockApi.Object, _logger.Object, _validator.Object);
+            _handler = new TriageApprenticeshipDataLocksCommandHandler(_commitmentsApi.Object, _logger.Object, _validator.Object);
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             await _handler.Handle(command);
 
             //Assert
-            _dataLockApi.Verify(x => x.PatchDataLocks(It.IsAny<long>(),
+            _commitmentsApi.Verify(x => x.PatchDataLocks(It.IsAny<long>(), It.IsAny<long>(),
                 It.IsAny<DataLockTriageSubmission>()), Times.Once());
         }
 

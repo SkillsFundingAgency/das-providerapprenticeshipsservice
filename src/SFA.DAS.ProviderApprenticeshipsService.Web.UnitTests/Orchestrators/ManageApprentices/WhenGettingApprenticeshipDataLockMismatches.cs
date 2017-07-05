@@ -6,7 +6,6 @@ using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLocks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLockSummary;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipPriceHistory;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -32,12 +31,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
                 .ReturnsAsync(() => new GetApprenticeshipPriceHistoryQueryResponse
                 {
                     History = new List<PriceHistory>()
-                });
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipDataLocksRequest>()))
-                .ReturnsAsync(() => new GetApprenticeshipDataLocksResponse
-                {
-                    Data = new List<DataLockStatus>()
                 });
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))

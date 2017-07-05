@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 
@@ -10,16 +6,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenti
 {
     public class GetApprenticeshipDataLockSummaryQueryHandler : IAsyncRequestHandler<GetApprenticeshipDataLockSummaryQueryRequest,GetApprenticeshipDataLockSummaryQueryResponse>
     {
-        private readonly IDataLockApi _dataLockApi;
+        private readonly IProviderCommitmentsApi _commitmentsApi;
 
-        public GetApprenticeshipDataLockSummaryQueryHandler(IDataLockApi dataLockApi)
+        public GetApprenticeshipDataLockSummaryQueryHandler(IProviderCommitmentsApi commitmentsApi)
         {
-            _dataLockApi = dataLockApi;
+            _commitmentsApi = commitmentsApi;
         }
 
         public async Task<GetApprenticeshipDataLockSummaryQueryResponse> Handle(GetApprenticeshipDataLockSummaryQueryRequest command)
         {
-            var response = await _dataLockApi.GetDataLockSummary(command.ApprenticeshipId);
+            var response = await _commitmentsApi.GetDataLockSummary(command.ProviderId, command.ApprenticeshipId);
 
             return new GetApprenticeshipDataLockSummaryQueryResponse
             {

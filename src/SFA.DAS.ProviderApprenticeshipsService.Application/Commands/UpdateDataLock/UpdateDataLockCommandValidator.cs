@@ -9,6 +9,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateData
         public UpdateDataLockCommandValidator()
         {
             RuleFor(x => x.ApprenticeshipId).NotEmpty();
+            RuleFor(x => x.ProviderId).NotEmpty();
             RuleFor(x => x.DataLockEventId).NotEmpty();
             RuleFor(x => x.UserId).NotEmpty();
             RuleFor(x => x.TriageStatus)

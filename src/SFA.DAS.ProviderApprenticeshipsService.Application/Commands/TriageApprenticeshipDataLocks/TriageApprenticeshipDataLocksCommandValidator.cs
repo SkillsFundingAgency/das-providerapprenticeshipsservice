@@ -9,6 +9,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.TriageAppr
             RuleFor(x => x.ApprenticeshipId).NotEmpty();
             RuleFor(x => x.TriageStatus).IsInEnum();
             RuleFor(x => x.UserId).NotEmpty();
+            RuleFor(x => x.ProviderId).NotEmpty();
         }
     }
 }
