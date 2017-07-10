@@ -10,13 +10,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.TriageAppr
 {
     public class TriageApprenticeshipDataLocksCommandHandler : AsyncRequestHandler<TriageApprenticeshipDataLocksCommand>
     {
-        private readonly IDataLockApi _dataLockApi;
+        private IProviderCommitmentsApi _commitmentsApi;
         private readonly AbstractValidator<TriageApprenticeshipDataLocksCommand> _validator;
         private readonly ILog _logger;
 
-        public TriageApprenticeshipDataLocksCommandHandler(IDataLockApi dataLockApi, ILog logger, AbstractValidator<TriageApprenticeshipDataLocksCommand> validator)
+
+        public TriageApprenticeshipDataLocksCommandHandler(
+            IProviderCommitmentsApi commitmentsApi, 
+            ILog logger, 
+            AbstractValidator<TriageApprenticeshipDataLocksCommand> validator)
         {
-            _dataLockApi = dataLockApi;
+            _commitmentsApi = commitmentsApi;
             _logger = logger;
             _validator = validator;
         }
@@ -37,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.TriageAppr
 
             try
             {
-                await _dataLockApi.PatchDataLocks(command.ApprenticeshipId, triageSubmission);
+                await _commitmentsApi.PatchDataLocks(command.ProviderId, command.ApprenticeshipId, triageSubmission);
             }
             catch (Exception ex)
             {

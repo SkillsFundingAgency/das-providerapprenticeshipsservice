@@ -6,7 +6,6 @@ using MediatR;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.DataLock;
-using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateDataLock
@@ -15,24 +14,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateData
     {
         private readonly AbstractValidator<UpdateDataLockCommand> _validator;
 
-        private readonly IDataLockApi _dataLockApi;
+        private readonly IProviderCommitmentsApi _commitmentsApi;
 
         private readonly ILog _logger;
 
         public UpdateDataLockCommandHandler(
             AbstractValidator<UpdateDataLockCommand> validator,
-            IDataLockApi dataLockApi,
+            IProviderCommitmentsApi commitmentsApi,
             ILog logger)
         {
             if (validator == null)
                 throw new ArgumentNullException(nameof(validator));
-            if (dataLockApi == null)
-                throw new ArgumentNullException(nameof(dataLockApi));
+            if (commitmentsApi == null)
+                throw new ArgumentNullException(nameof(commitmentsApi));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
             _validator = validator;
-            _dataLockApi = dataLockApi;
+            _commitmentsApi = commitmentsApi;
             _logger = logger;
         }
 
@@ -47,7 +46,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateData
                             UserId = command.UserId
                         };
 
-                await _dataLockApi.PatchDataLock(command.ApprenticeshipId, command.DataLockEventId, submission);
+                await _commitmentsApi.PatchDataLock(command.ProviderId, command.ApprenticeshipId, command.DataLockEventId, submission);
             }
             catch (Exception ex)
             {

@@ -8,5 +8,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.TriageAppr
         public long ApprenticeshipId { get; set; }
         public TriageStatus TriageStatus { get; set; }
         public string UserId { get; set; }
+        public long ProviderId { get; set; }
     }
 }

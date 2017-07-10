@@ -199,7 +199,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (model.SubmitStatusViewModel == SubmitStatusViewModel.UpdateDataInIlr)
             {
-                await _orchestrator.TriageMultiplePriceDataLocks(model.HashedApprenticeshipId, CurrentUserId, TriageStatus.FixIlr);
+                await _orchestrator.TriageMultiplePriceDataLocks(model.ProviderId, model.HashedApprenticeshipId, CurrentUserId, TriageStatus.FixIlr);
 
                 return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
             }
@@ -234,7 +234,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (model.SubmitStatusViewModel != null && model.SubmitStatusViewModel.Value == SubmitStatusViewModel.Confirm)
             {
-                await _orchestrator.TriageMultiplePriceDataLocks(model.HashedApprenticeshipId, CurrentUserId, TriageStatus.Change);
+                await _orchestrator.TriageMultiplePriceDataLocks(model.ProviderId, model.HashedApprenticeshipId, CurrentUserId, TriageStatus.Change);
                 SetInfoMessage($"Changes sent to employer for approval", FlashMessageSeverityLevel.Okay);
             }
 
@@ -272,7 +272,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 && model.SubmitStatusViewModel.Value == SubmitStatusViewModel.UpdateDataInIlr)
             {
                 var dataLock = model.DataLockSummaryViewModel.DataLockWithCourseMismatch.OrderBy(x => x.IlrEffectiveFromDate).First();
-                await _orchestrator.UpdateDataLock(dataLock.DataLockEventId, model.HashedApprenticeshipId, SubmitStatusViewModel.UpdateDataInIlr, CurrentUserId);
+                await _orchestrator.UpdateDataLock(model.ProviderId, dataLock.DataLockEventId, model.HashedApprenticeshipId, SubmitStatusViewModel.UpdateDataInIlr, CurrentUserId);
                 return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
             }
 
@@ -300,7 +300,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
             if (model.SendRequestToEmployer.HasValue && model.SendRequestToEmployer.Value)
             {
-                await _orchestrator.RequestRestart(model.DataLockEventId, model.HashedApprenticeshipId, CurrentUserId);
+                await _orchestrator.RequestRestart(model.ProviderId, model.DataLockEventId, model.HashedApprenticeshipId, CurrentUserId);
                 SetInfoMessage($"Status changed", FlashMessageSeverityLevel.Okay);
             }
 

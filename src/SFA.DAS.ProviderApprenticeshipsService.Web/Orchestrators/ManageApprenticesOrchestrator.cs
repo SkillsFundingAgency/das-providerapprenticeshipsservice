@@ -13,10 +13,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.TriageApprenti
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateDataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.ApprenticeshipSearch;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAllApprentices;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLock;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLocks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLockSummary;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipPriceHistory;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
@@ -117,6 +114,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var dataLockSummary = await _mediator.SendAsync(new GetApprenticeshipDataLockSummaryQueryRequest
             {
+                ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId
             });
 
@@ -299,6 +297,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var datalockSummary = await _mediator.SendAsync(new GetApprenticeshipDataLockSummaryQueryRequest
             {
+                ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId
             });
 
@@ -310,6 +309,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var priceHistory = await _mediator.SendAsync(new GetApprenticeshipPriceHistoryQueryRequest
             {
+                ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId
             });
 
@@ -348,12 +348,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task RequestRestart(long dataLockEventId, string hashedApprenticeshipId, string userId)
+        public async Task RequestRestart(long providerId, long dataLockEventId, string hashedApprenticeshipId, string userId)
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
 
             await _mediator.SendAsync(new UpdateDataLockCommand
             {
+                ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId,
                 DataLockEventId = dataLockEventId,
                 TriageStatus = TriageStatus.Restart,
@@ -361,7 +362,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
         }
 
-        public async Task UpdateDataLock(long dataLockEventId, string hashedApprenticeshipId, SubmitStatusViewModel submitStatusViewModel, string userId)
+        public async Task UpdateDataLock(long providerId, long dataLockEventId, string hashedApprenticeshipId, SubmitStatusViewModel submitStatusViewModel, string userId)
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
             var triage = _apprenticeshipMapper.MapTriangeStatus(submitStatusViewModel);
@@ -370,6 +371,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             await _mediator.SendAsync(new UpdateDataLockCommand
             {
+                ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId,
                 DataLockEventId = dataLockEventId,
                 TriageStatus = triage,
@@ -427,7 +429,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             }
         }
 
-        public async Task TriageMultiplePriceDataLocks(string hashedApprenticeshipId, string currentUserId, TriageStatus triageStatus)
+        public async Task TriageMultiplePriceDataLocks(long providerId, string hashedApprenticeshipId, string currentUserId, TriageStatus triageStatus)
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
 
@@ -435,6 +437,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             await _mediator.SendAsync(new TriageApprenticeshipDataLocksCommand
             {
+                ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId,
                 TriageStatus = triageStatus,
                 UserId = currentUserId
