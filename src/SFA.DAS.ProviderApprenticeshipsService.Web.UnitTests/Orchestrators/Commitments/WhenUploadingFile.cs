@@ -73,7 +73,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var bulkUploader = new BulkUploader(_mockMediator.Object, uploadValidator, uploadFileParser, Mock.Of<IProviderCommitmentsLogger>());
             var bulkUploadMapper = new BulkUploadMapper(_mockMediator.Object);
 
-            _sut = new BulkUploadOrchestrator(_mockMediator.Object, bulkUploader, mockHashingService.Object, bulkUploadMapper, Mock.Of<IProviderCommitmentsLogger>());
+            _sut = new BulkUploadOrchestrator(_mockMediator.Object, bulkUploader, mockHashingService.Object,
+                bulkUploadMapper, Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<IBulkUploadFileParser>());
         }
 
         [Test]

@@ -75,6 +75,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             var command = new TriageApprenticeshipDataLocksCommand
             {
                 ApprenticeshipId = 1,
+                ProviderId = 666,
                 TriageStatus = TriageStatus.Change,
                 UserId = "TEST"
             };
