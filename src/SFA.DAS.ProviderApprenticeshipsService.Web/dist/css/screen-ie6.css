@@ -3242,10 +3242,6 @@ table .changed-item {
   border: 0;
 }
 
-#datalock-details-change table.ILR-submission td.numeric {
-  font-weight: bold;
-}
-
 #confirm-datalock-changes .bold-font {
   font-weight: bold;
 }
