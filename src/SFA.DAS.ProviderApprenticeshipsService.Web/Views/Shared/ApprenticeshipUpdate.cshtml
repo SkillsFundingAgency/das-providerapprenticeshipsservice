@@ -22,7 +22,7 @@
         <tr>
             <td>Name</td>
             <td>@Model.OriginalApprenticeship.FirstName @Model.OriginalApprenticeship.LastName</td>
-            <td class="changed-item">@GetNameChange(Model.OriginalApprenticeship, Model)</td>
+            <td>@GetNameChange(Model.OriginalApprenticeship, Model)</td>
             @Html.Hidden("FirstName", Model.FirstName)
             @Html.Hidden("Lastname", Model.LastName)
         </tr>
@@ -33,7 +33,7 @@
         <tr>
             <td>Date of birth</td>
             <td>@Model.OriginalApprenticeship.DateOfBirth.Value.ToGdsFormat() </td>
-            <td class="changed-item">@Model.DateOfBirth.DateTime.Value.ToGdsFormat()</td>
+            <td>@Model.DateOfBirth.DateTime.Value.ToGdsFormat()</td>
             @Html.Hidden("DateOfBirth.Day", Model.DateOfBirth.Day)
             @Html.Hidden("DateOfBirth.Month", Model.DateOfBirth.Month)
             @Html.Hidden("DateOfBirth.Year", Model.DateOfBirth.Year)
@@ -45,7 +45,7 @@
         <tr>
             <td>Unique learner number</td>
             <td>@Model.OriginalApprenticeship.ULN </td>
-            <td class="changed-item">@Model.ULN</td>
+            <td>@Model.ULN</td>
             @Html.Hidden("ULN", Model.ULN)
         </tr>
     }
@@ -55,7 +55,7 @@
         <tr>
             <td>Apprenticeship training course</td>
             <td>@Model.OriginalApprenticeship.TrainingName </td>
-            <td class="changed-item">@Model.TrainingName</td>
+            <td>@Model.TrainingName</td>
             @Html.Hidden("TrainingCode", Model.TrainingCode)
             @Html.Hidden("TrainingName", Model.TrainingName)
             @Html.Hidden("TrainingType", Model.TrainingType)
@@ -67,7 +67,7 @@
         <tr>
             <td>Planned training start date</td>
             <td>@Model.OriginalApprenticeship.StartDate.Value.ToGdsFormat() </td>
-            <td class="changed-item">@Model.StartDate.DateTime.Value.ToGdsFormat()</td>
+            <td>@Model.StartDate.DateTime.Value.ToGdsFormat()</td>
             @Html.Hidden("StartDate.Month", Model.StartDate.Month)
             @Html.Hidden("StartDate.Year", Model.StartDate.Year)
         </tr>
@@ -78,7 +78,7 @@
         <tr>
             <td>Planned training end date</td>
             <td>@Model.OriginalApprenticeship.EndDate.Value.ToGdsFormat() </td>
-            <td class="changed-item">@Model.EndDate.DateTime.Value.ToGdsFormat()</td>
+            <td>@Model.EndDate.DateTime.Value.ToGdsFormat()</td>
             @Html.Hidden("EndDate.Month", Model.EndDate.Month)
             @Html.Hidden("EndDate.Year", Model.EndDate.Year)
         </tr>
@@ -89,7 +89,7 @@
         <tr>
             <td>Cost</td>
             <td>@Model.OriginalApprenticeship.Cost.FormatCost() </td>
-            <td class="changed-item">@Model.Cost.AsNullableDecimal().FormatCost()</td>
+            <td>@Model.Cost.AsNullableDecimal().FormatCost()</td>
             @Html.Hidden("Cost", Model.Cost)
         </tr>
     }
@@ -99,7 +99,7 @@
         <tr>
             <td>Reference</td>
             <td>@Model.OriginalApprenticeship.ProviderRef</td>
-            <td class="changed-item">@Model.ProviderRef</td>
+            <td>@Model.ProviderRef</td>
             @Html.Hidden("ProviderRef", Model.ProviderRef)
         </tr>
     }
