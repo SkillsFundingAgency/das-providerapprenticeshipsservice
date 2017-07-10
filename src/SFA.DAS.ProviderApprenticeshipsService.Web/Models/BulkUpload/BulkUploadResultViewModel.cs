@@ -11,5 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
 
         public bool HasRowLevelErrors { get; set; }
         public IEnumerable<UploadError> RowLevelErrors { get; set; }
+
+        public string BulkUploadReference { get; set; }
     }
 }

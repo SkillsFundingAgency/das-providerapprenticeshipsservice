@@ -65,8 +65,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<BulkUploadResultViewModel> UploadFile(string userId, UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel, SignInUserModel signInUser)
         {
-            var result = new BulkUploadResultViewModel();
-
             var commitmentId = _hashingService.DecodeValue(uploadApprenticeshipsViewModel.HashedCommitmentId);
             var providerId = uploadApprenticeshipsViewModel.ProviderId;
             var fileName = uploadApprenticeshipsViewModel?.Attachment?.FileName ?? "<unknown>";
@@ -96,13 +94,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var rowErrors = rowValidationResult.Errors.ToList();
             rowErrors.AddRange(overlapErrors);
-            
+            var hashedBulkUploadId = _hashingService.HashValue(fileValidationResult.BulkUploadId);
             if (rowErrors.Any())
             {
                 _logger.Info($"{rowErrors.Count} Upload errors", providerId, commitmentId);
                 return new BulkUploadResultViewModel
                 {
                     BulkUploadId = fileValidationResult.BulkUploadId,
+                    BulkUploadReference = hashedBulkUploadId,
                     HasRowLevelErrors = true,
                     RowLevelErrors = rowErrors
                 };
@@ -263,9 +262,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return model;
         }
 
-        public async Task<UploadApprenticeshipsViewModel> GetUnsuccessfulUpload(long providerId, string hashedCommitmentId, long bulkUploadId)
+        public async Task<UploadApprenticeshipsViewModel> GetUnsuccessfulUpload(long providerId, string hashedCommitmentId, string bulkUploadReference)
         {
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            var bulkUploadId = _hashingService.DecodeValue(bulkUploadReference);
+
             await AssertCommitmentStatus(commitmentId, providerId);
 
             var fileContentResult = await _mediator.SendAsync(new GetBulkUploadFileQueryRequest
