@@ -40,5 +40,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
 
             errors.Count().Should().Be(0);
         }
+
+        [Test]
+        public void FileTooBig()
+        {
+            _file.Setup(m => m.ContentLength).Returns(2000000);
+            var errors = _sut.ValidateFileSize(_file.Object);
+
+            errors.Count().Should().Be(1);
+            errors.First().Message.Should().Be("File size cannot be larger then 512 kb");
+        }
     }
 }

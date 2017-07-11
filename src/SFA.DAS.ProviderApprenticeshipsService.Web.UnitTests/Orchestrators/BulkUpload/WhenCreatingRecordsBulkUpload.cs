@@ -51,5 +51,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             records.Errors.Should().NotBeNull();
             records.Errors.Should().BeEmpty();
         }
+
+        [Test]
+        public void WhenFileIsEmpty()
+        {
+            var records = _sut.CreateViewModels(123, 456, "");
+            records.Data.Should().BeNull();
+            records.Errors.Should().NotBeNull();
+            records.Errors.First().Message.Should().Be("Upload failed. Please check your file and try again.");
+        }
     }
 }

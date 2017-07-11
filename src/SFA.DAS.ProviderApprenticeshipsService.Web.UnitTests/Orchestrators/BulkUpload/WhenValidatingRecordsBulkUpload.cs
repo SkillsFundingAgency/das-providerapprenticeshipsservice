@@ -40,7 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         {
             var errors = _sut.ValidateCohortReference(new ApprenticeshipUploadModel[0], "ABBA123").ToList();
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("File contains no records");
+            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("No apprentice details found. Please check your file and upload again.");
         }
 
         [Test]
@@ -93,6 +93,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var messages = errors.Select(m => m.ToString()).ToList();
             messages.Should().NotContain("The cohort reference must be the same for all apprentices in your upload file");
             messages.Should().Contain("The cohort reference does not match your current cohort");
+        }
+
+        [Test]
+        public void FailingValidationCohortNotUniqueUlns()
+        {
+            var testData = GetFailingTestData().ToList();
+            var first = testData[0];
+            var second = testData[1];
+            first.ApprenticeshipViewModel.ULN = "1112220001";
+            second.ApprenticeshipViewModel.ULN = "1112220001";
+
+            var errors = _sut.ValidateCohortReference(new List<ApprenticeshipUploadModel> { first, second }, "ABBA123").ToList();
+
+            var messages = errors.Select(m => m.ToString()).ToList();
+            messages.Should().NotContain("The cohort reference must be the same for all apprentices in your upload file");
+            messages.Should().Contain("The unique learner number must be unique within the cohort");
         }
 
         private List<ITrainingProgramme> TrainingProgrammes()
