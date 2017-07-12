@@ -8,7 +8,9 @@
         public static ValidationMessage FilenameFormatDate =>
             new ValidationMessage("The file date/time must be on or before today's date/time", "Filename_02");
 
-        public static string NoRecords => "File contains no records";
+        public static string NoRecords => "No apprentice details found. Please check your file and upload again.";
+
+        public static string OnlyCsvFile => "You can only upload comma separated value (CSV) files.";
 
         public static string MaxFileSizeMessage(int maxFileSize) => $"File size cannot be larger then {maxFileSize / 1024} kb";
     }

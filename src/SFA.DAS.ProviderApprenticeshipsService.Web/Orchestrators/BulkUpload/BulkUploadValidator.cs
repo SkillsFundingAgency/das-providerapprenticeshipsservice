@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+
+using Microsoft.Ajax.Utilities;
+
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -48,6 +51,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             if (attachment.ContentLength > maxFileSize)
                 errors.Add(new UploadError(ApprenticeshipFileValidationText.MaxFileSizeMessage(maxFileSize)));
 
+            if(!attachment.FileName.EndsWith(".csv"))
+                errors.Add(new UploadError(ApprenticeshipFileValidationText.OnlyCsvFile));
+
             return errors;
         }
 
@@ -65,6 +71,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
             if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != cohortReference))
                 errors.Add(new UploadError(_validationText.CohortRef02.Text.RemoveHtmlTags(), _validationText.CohortRef02.ErrorCode));
+
+            if (apprenticeshipUploadModels.Length != apprenticeshipUploadModels.DistinctBy(m => m.ApprenticeshipViewModel.ULN).Count())
+                errors.Add(new UploadError(_validationText.Uln04.Text.RemoveHtmlTags(), _validationText.Uln04.ErrorCode));
 
             return errors;
         }
