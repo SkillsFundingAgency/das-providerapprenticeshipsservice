@@ -12,6 +12,6 @@
 
         public static string OnlyCsvFile => "You can only upload comma separated value (CSV) files.";
 
-        public static string MaxFileSizeMessage(int maxFileSize) => $"File size cannot be larger then {maxFileSize / 1024} kb";
+        public static string MaxFileSizeMessage(int maxFileSize) => $"File size cannot be larger than {maxFileSize / 1024} kb";
     }
 }
