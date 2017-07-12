@@ -48,7 +48,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var errors = _sut.ValidateFileSize(_file.Object);
 
             errors.Count().Should().Be(1);
-            errors.First().Message.Should().Be("File size cannot be larger then 512 kb");
+            errors.First().Message.Should().Be("File size cannot be larger than 512 kb");
         }
     }
 }
