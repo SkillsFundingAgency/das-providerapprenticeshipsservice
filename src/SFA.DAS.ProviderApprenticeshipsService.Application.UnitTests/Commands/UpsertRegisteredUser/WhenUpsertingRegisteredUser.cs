@@ -19,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         private Mock<IUserRepository> _repository;
 
         [SetUp]
-        public async Task Arrange()
+        public void Arrange()
         {
             _validator = new Mock<UpsertRegisteredUserCommandValidator>();
             _validator.Setup(x => x.Validate(It.IsAny<UpsertRegisteredUserCommand>()))

@@ -32,7 +32,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 
     public class NotificationsApiClientConfiguration : INotificationsApiClientConfiguration
     {
-        public string BaseUrl { get; set; }
+        public string ApiBaseUrl { get; set; }
         public string ClientToken { get; set; }
+
+
+        public string ClientId { get; set; }
+        public string ClientSecret { get; }
+        public string IdentifierUri { get; }
+        public string Tenant { get; }
     }
 }
