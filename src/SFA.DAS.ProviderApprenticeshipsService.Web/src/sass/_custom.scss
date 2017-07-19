@@ -1,299 +1,299 @@
 ﻿// custom to overwrite the GDS defaults
 
 .hr-double {
-    border-bottom: 4px solid $grey-2;
-    margin-bottom: 20px;
+  border-bottom: 4px solid $grey-2;
+  margin-bottom: 20px;
 }
 .hr-top {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 .hr-bottom {
-    margin-top: 23px;
+  margin-top: 23px;
 }
 .float-right{
-    float:right;
+  float:right;
 }
 .float-left{
-    float:left;
+  float:left;
 }
 // add apprentice entry
 #add-apprentice-entry,
 #edit-apprentice {
-    hr {
-        margin-top: 0;
-        margin-bottom: 22px;
-    }
+  hr {
+      margin-top: 0;
+      margin-bottom: 22px;
+  }
 }
 .button.text-link {
-    background-color: transparent;
-    border: medium none;
-    box-shadow: none;
-    color: #005ea5;
-    text-decoration: underline;
+  background-color: transparent;
+  border: medium none;
+  box-shadow: none;
+  color: #005ea5;
+  text-decoration: underline;
 }
 .alert-default {
-    background-color: #eaf4f9;
-    border-color: #2b8cc4;
+  background-color: #eaf4f9;
+  border-color: #2b8cc4;
 }
 
 .field-validation-error{
-    display:block;
+  display:block;
 }
 
 #finish-editing{
-    .heading-xlarge{
-         margin-top: 0.625em;
-    }
-    .alert-default{
-        border-color:$purple;
-        .heading-medium{
-            font-size:24px;
-        }
-    }
+  .heading-xlarge{
+       margin-top: 0.625em;
+  }
+  .alert-default{
+      border-color:$purple;
+      .heading-medium{
+          font-size:24px;
+      }
+  }
 
 }
 
 .add-edit-desc{
-    .list-bullet{
-        font-size:16px;
-    }
+  .list-bullet{
+      font-size:16px;
+  }
 }
 
 
 //bulk upload styles
 
 #apprentice-details,#approve-cohorts{
-    .alert-default{margin-top:25px;}
-    .bulk-upload-buttons{      
-        .upload-btn{
-              @include media(tablet) {margin:auto;}
-            margin-top:20px;
-            margin-bottom:20px;
-        }
-        .add-app-btn{margin-right:10px;}
-    }
-  .group-title{
-      margin-bottom:0;
+  .alert-default{margin-top:25px;}
+  .bulk-upload-buttons{      
+      .upload-btn{
+            @include media(tablet) {margin:auto;}
+          margin-top:20px;
+          margin-bottom:20px;
+      }
+      .add-app-btn{margin-right:10px;}
   }
-  .finishEditingBtn{
-      float:none;
-      margin-right:10px;
-  }
+.group-title{
+    margin-bottom:0;
+}
+.finishEditingBtn{
+    float:none;
+    margin-right:10px;
+}
 }
 
 #content{
-    .green-box-alert{
-        border: 5px solid $turquoise;
-        margin-top: 30px;
-        margin-bottom:0;
-        padding: 20px 15px 15px;
-        .strong{
-            font-weight:bold;
-            margin-bottom:10px;
-        }
-        
-    }
-     .flash-alert{
-        border-color:$turquoise;
-         .icon-green-tick{
-            background:url(../../dist/images/icon-green-tick.png) no-repeat 0 0;
-            padding-left:50px;
-        }
-    }
+  .green-box-alert{
+      border: 5px solid $turquoise;
+      margin-top: 30px;
+      margin-bottom:0;
+      padding: 20px 15px 15px;
+      .strong{
+          font-weight:bold;
+          margin-bottom:10px;
+      }
+      
+  }
+   .flash-alert{
+      border-color:$turquoise;
+       .icon-green-tick{
+          background:url(../../dist/images/icon-green-tick.png) no-repeat 0 0;
+          padding-left:50px;
+      }
+  }
 }
 
 
 
 #finish-editing {
-    .error-summary{
-         margin-bottom: 60px;
-         margin-top:0;
-    }
+  .error-summary{
+       margin-bottom: 60px;
+       margin-top:0;
+  }
 }
 
 .cant-approve{ 
-    
-    .panel{
-	    border-color:$error-colour;
-	    color:$error-colour;
-        
-        p{
-            font-weight:bold;
-            font-size:19px;
-        }
+  
+  .panel{
+    border-color:$error-colour;
+    color:$error-colour;
+      
+      p{
+          font-weight:bold;
+          font-size:19px;
+      }
 
-        }
- }
- 
+      }
+}
+
 #upload-apprenticeships,
 #upload-error{
-      .upload-file-btn{
-        display:block;
-        margin-top:35px;      
-    }
+    .upload-file-btn{
+      display:block;
+      margin-top:35px;      
+  }
 }
 
 .form-group {
-    #StartDate_Month,
-    #EndDate_Month{
-        width:40px;
-    }
-    
-    #StartDate_Year,
-    #EndDate_Year{
-        width:60px;
-    }
-    
+  #StartDate_Month,
+  #EndDate_Month{
+      width:40px;
+  }
+  
+  #StartDate_Year,
+  #EndDate_Year{
+      width:60px;
+  }
+  
 }
 
 
 .breadcrumbs{
-    a{
-        font-size:16px;
-    }
+  a{
+      font-size:16px;
+  }
 }
 
 // bulk upload error screen
 
 .error-grid{
-    .alert-default{
-        background-color:#ecc3c7;
-        border-color:$red;
-    }
+  .alert-default{
+      background-color:#ecc3c7;
+      border-color:$red;
+  }
 }
 
 .warning-grid{
-    .alert-default{
-        background-color:#fcddcd;
-        border-color:#f47738;
-    }
+  .alert-default{
+      background-color:#fcddcd;
+      border-color:#f47738;
+  }
 }
 
 .tableResponsive{
-    td{
-        font-size:16px;
-    }
+  td{
+      font-size:16px;
+  }
 }
 
 //cohors summary block styles
 .js-enabled{
-    .clickable{cursor:pointer;}
+  .clickable{cursor:pointer;}
 }
 
 #cohorts-landing-page{
-  .bingo-background{
-            background:$purple;
-            color:#fff; 
-            margin-bottom: 20px;
-            padding: 10px 15px;
-            
-              @include media(tablet) {
-                    min-height:160px;
-                    width:48%;
-                    padding: 0 15px;
-              }
-              h2{margin-top:20px;
-                 a{
-                     text-decoration:none;
-                     color:#fff;
-                 }
-              }
-              .heading-small{margin-bottom:20px;font-size:24px;}
-        }
- 
-  .block-one, .block-two{
-       @include media(tablet) {
-            margin-bottom:30px;
+.bingo-background{
+          background:$purple;
+          color:#fff; 
+          margin-bottom: 20px;
+          padding: 10px 15px;
+          
+            @include media(tablet) {
+                  min-height:160px;
+                  width:48%;
+                  padding: 0 15px;
             }
-  }
+            h2{margin-top:20px;
+               a{
+                   text-decoration:none;
+                   color:#fff;
+               }
+            }
+            .heading-small{margin-bottom:20px;font-size:24px;}
+      }
 
-  .block-one,.block-three{
-       @include media(tablet) {
-      margin-right:2%;
-      }
-  }
-  .block-two, .block-four{
+.block-one, .block-two{
      @include media(tablet) {
-      margin-left:2%;
-      }
-  }
+          margin-bottom:30px;
+          }
+}
+
+.block-one,.block-three{
+     @include media(tablet) {
+    margin-right:2%;
+    }
+}
+.block-two, .block-four{
+   @include media(tablet) {
+    margin-left:2%;
+    }
+}
 }
 
 
 //review cohorts page styles
 
 #review-cohorts{
-    color:#fff;
-    .all-apps{
-        background:#2e3391;
-        padding:20px;
-        margin:20px 0;
-         @include media(tablet) {
-            margin:auto;
-            }
-    }
-    .incomplete-apps{
-        background:#8e2a8d;
-        padding:20px;
-        margin-bottom:20px;
-        @include media(tablet) {
-            margin:auto;
-            }
-    }
-    .total-cost{
-        background:#d03a84;
-        padding:20px;
-        margin-bottom:30px;
-        @include media(tablet) {
-            margin:auto;
-            }
-    }
-   .heading-small{
-             font-size:24px;
-         }
+  color:#fff;
+  .all-apps{
+      background:#2e3391;
+      padding:20px;
+      margin:20px 0;
+       @include media(tablet) {
+          margin:auto;
+          }
+  }
+  .incomplete-apps{
+      background:#8e2a8d;
+      padding:20px;
+      margin-bottom:20px;
+      @include media(tablet) {
+          margin:auto;
+          }
+  }
+  .total-cost{
+      background:#d03a84;
+      padding:20px;
+      margin-bottom:30px;
+      @include media(tablet) {
+          margin:auto;
+          }
+  }
+ .heading-small{
+           font-size:24px;
+       }
 
 }
 
 .dynamic-heading, #bulk-upload-errors{
-    strong{
-        font-weight:bold;
-    }
+  strong{
+      font-weight:bold;
+  }
 }
 
 
 //dynamic-class-mobile-views
 .dynamic-cost-display{
-    .bold-xlarge{     
+  .bold-xlarge{     
+        line-height: 82px;
+        @include media(tablet) { font-size:80px;}
+        
+  }
+   @include media(tablet) { 
+   
+    .long {
+          font-size: 26px;
+           line-height: 82px;
+      }
+      .longer {
+          font-size: 19px;
           line-height: 82px;
-          @include media(tablet) { font-size:80px;}
-          
-    }
-     @include media(tablet) { 
-     
-      .long {
-            font-size: 26px;
-             line-height: 82px;
-        }
-        .longer {
-            font-size: 19px;
-            line-height: 82px;
-        }
-    }
+      }
+  }
 
- @include media(tablet) { 
-       
-       .short{
-             font-size:67px;
-       }
-      .long {
-            font-size: 48px;
-            line-height: 82px;
-        }
-        .longer {
-            font-size: 38px;
-            line-height: 82px;
-        }
-    }
+@include media(tablet) { 
+     
+     .short{
+           font-size:67px;
+     }
+    .long {
+          font-size: 48px;
+          line-height: 82px;
+      }
+      .longer {
+          font-size: 38px;
+          line-height: 82px;
+      }
+  }
 
 }
 
@@ -301,453 +301,470 @@
 //list of apprentices page
 
 #apprentices-detail{
-    .list-apprentice{        
-        .heading-medium{border-top:10px solid $govuk-blue; padding-top:20px;}
-        .blue-alerts{
-            .heading-medium{
-                border:0;
-                margin-top: 0;
-                padding-top: 0;
-            }
-        }
-  }
+  .list-apprentice{        
+      .heading-medium{border-top:10px solid $govuk-blue; padding-top:20px;}
+      .blue-alerts{
+          .heading-medium{
+              border:0;
+              margin-top: 0;
+              padding-top: 0;
+          }
+      }
+}
 }
 
 #agreement-not-signed{
-    .notice{
-        margin:60px 0;
-        .icon-important{background-image: url('/dist/images/icon-important.png');}
-    }
+  .notice{
+      margin:60px 0;
+      .icon-important{background-image: url('/dist/images/icon-important.png');}
+  }
 }
 
 #edit-apprentice, #apprentice-details{
-    .delete-button{
-        background-color:$error-colour;
-        float:right;
-        margin:15px 0;
-        @include media(tablet){
-            margin:auto;
-        }
-    }
-    }
+  .delete-button{
+      background-color:$error-colour;
+      float:right;
+      margin:15px 0;
+      @include media(tablet){
+          margin:auto;
+      }
+  }
+  }
 
 #confirm-delete{
-    .heading-large{margin-bottom:0;}
-    .heading-small{margin-top:0;}
-    .secondary-text{
-        color:$grey-1;
-    }
+  .heading-large{margin-bottom:0;}
+  .heading-small{margin-top:0;}
+  .secondary-text{
+      color:$grey-1;
+  }
 
 }
 
 //review cohorts page styles
 
 #review-cohorts{
-    color:#fff;
-    margin:30px 0;
-    .all-apps{
-        background:#2e3391;
-        padding:20px;
-        margin:20px 0;
-       
-        
-         @include media(tablet) {
-            margin:auto;
-            width:31%;
-            
-            }
-    }
-    .incomplete-apps{
-        background:#8e2a8d;
-        padding:20px;
-        margin-bottom:20px;
-        
-        @include media(tablet) {
-            margin:auto;            
-            margin-left:3.3333%;
-            width:31%;
-            }
-    }
-    .total-cost{
-        background:#d03a84;
-        padding:20px;
-        margin-bottom:30px;
-       
-        @include media(tablet) {
-            margin:auto;
-            margin-left:3.3333%;
-             width:31%;
-            }
-    }
+  color:#fff;
+  margin:30px 0;
+  .all-apps{
+      background:#2e3391;
+      padding:20px;
+      margin:20px 0;
+     
+      
+       @include media(tablet) {
+          margin:auto;
+          width:31%;
+          
+          }
+  }
+  .incomplete-apps{
+      background:#8e2a8d;
+      padding:20px;
+      margin-bottom:20px;
+      
+      @include media(tablet) {
+          margin:auto;            
+          margin-left:3.3333%;
+          width:31%;
+          }
+  }
+  .total-cost{
+      background:#d03a84;
+      padding:20px;
+      margin-bottom:30px;
+     
+      @include media(tablet) {
+          margin:auto;
+          margin-left:3.3333%;
+           width:31%;
+          }
+  }
 
 }
 
 .error-details {
-    p{
-        margin-bottom:0;
-    }
+  p{
+      margin-bottom:0;
+  }
 }
 
 .grey-background,
 .funding-cap-notification{
-    background:$panel-colour;
-    padding:20px 20px 10px;
-    border-left:10px solid $govuk-blue;
-    .heading-medium{margin-top:10px;}  
+  background:$panel-colour;
+  padding:20px 20px 10px;
+  border-left:10px solid $govuk-blue;
+  .heading-medium{margin-top:10px;}  
 }
 .bubble-arrow{    
-    border-left: 25px solid transparent;
-    border-right: 25px solid transparent;
-    border-top: 25px solid $panel-colour;
-    content: "";
-    float: right;
-    margin-right: 75px;
-    }
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-top: 25px solid $panel-colour;
+  content: "";
+  float: right;
+  margin-right: 75px;
+  }
 .overlap-arrow{    
-    border-left: 25px solid transparent;
-    border-right: 25px solid transparent;
-    border-top: 25px solid $panel-colour;
-    content: "";
-    float: right;
-    margin-right:150px;
-    @include media(tablet) {margin-right: 290px;} 
-    }
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-top: 25px solid $panel-colour;
+  content: "";
+  float: right;
+  margin-right:150px;
+  @include media(tablet) {margin-right: 290px;} 
+  }
 .funding-cap-alert{
-    border-bottom:5px solid $govuk-blue;
-          a{
-                text-decoration:none;
-                color:$text-colour;
-            }    
+  border-bottom:5px solid $govuk-blue;
+        a{
+              text-decoration:none;
+              color:$text-colour;
+          }    
 }
 
 #company-info{
-    strong{font-weight:bold;}
+  strong{font-weight:bold;}
 }
 
 #expand-collapse{
-    margin-bottom:20px;
-    .panel{
-        p{
-            font-size:inherit;
-        }
-    }
-    ul{
-        list-style-type: disc;
-        margin-left: 20px;
-    }
+  margin-bottom:20px;
+  .panel{
+      p{
+          font-size:inherit;
+      }
+  }
+  ul{
+      list-style-type: disc;
+      margin-left: 20px;
+  }
 }
 
 #confirm-employer{
-    #continue{
-        margin:30px 0;
-    }
+  #continue{
+      margin:30px 0;
+  }
 }
 
 // safari on mac icon bug on input fields fix
 body {
-    input::-webkit-contacts-auto-fill-button {
-  visibility: hidden;
-  display: none !important;
-  pointer-events: none;
-  position: absolute;
-  right: 0;
-  }
+  input::-webkit-contacts-auto-fill-button {
+visibility: hidden;
+display: none !important;
+pointer-events: none;
+position: absolute;
+right: 0;
+}
 }
 
 #apprentice-details{
-    .overlap-notification{
-        border-left:10px solid $red;
-    }
-    .training-level{
-        margin-bottom:0;
-    }
+  .overlap-notification{
+      border-left:10px solid $red;
+  }
+  .training-level{
+      margin-bottom:0;
+  }
 }
 
 .overlap-alert{
-      border-bottom: 5px solid $red;
-    a{
-        text-decoration:none;
-        color:$text-colour;
-    }
+    border-bottom: 5px solid $red;
+  a{
+      text-decoration:none;
+      color:$text-colour;
+  }
 }
 .validation-summary-max-funding{
-    border-color:$purple;
-    #warning-summary{
-        margin-top:0;
-    }
- }
+  border-color:$purple;
+  #warning-summary{
+      margin-top:0;
+  }
+}
 
 
 //character count error
 .form-group {
-    .limit-reached{
-        color:$error-colour;
-        font-weight:bold;}
-    }
-      
+  .limit-reached{
+      color:$error-colour;
+      font-weight:bold;}
+  }
+    
 
 #confirm-employer{
-    .alert-default{margin-top:20px;}
-    #confirm-organisation{margin-top:20px;}
+  .alert-default{margin-top:20px;}
+  #confirm-organisation{margin-top:20px;}
 }
 
 
 table{
 .changed-item{
-    font-weight:bold;
-    }
+  font-weight:bold;
+  }
 }
 
 
 #confirm-edited-changes{
-    fieldset{
-        margin-bottom:40px;
-    }
+  fieldset{
+      margin-bottom:40px;
+  }
 }
 
 #app-status,
 #overview-section,
 #apprentice-section{
-    th{
-        a{
-          font-weight:normal;
-            }
-        }
-    td{
-        width:50%;
-    }
+  th{
+      a{
+        font-weight:normal;
+          }
+      }
+  td{
+      width:50%;
+  }
 }
 
 .link-left-aligned,
 .button-left-align{
-   display:block;
-   float:left;
+ display:block;
+ float:left;
 }
 
 .link-left-aligned{
-    margin:7px 0 0 20px;
+  margin:7px 0 0 20px;
 }
 #charCount{
-    margin-bottom:0;
+  margin-bottom:0;
 }
 
 #review-cohorts{ 
-    .column-one-third{
-         @include media(tablet) {height:190px;}
-    }
-    .all-apps{
-        h2.bold-xlarge{
-             @include media(tablet) {font-size:80px;}
-        }
-    }
-    .incomplete-apps{
-        h2.bold-xlarge{
-             @include media(tablet) {font-size:80px;}
-        }
-     }
+  .column-one-third{
+       @include media(tablet) {height:190px;}
+  }
+  .all-apps{
+      h2.bold-xlarge{
+           @include media(tablet) {font-size:80px;}
+      }
+  }
+  .incomplete-apps{
+      h2.bold-xlarge{
+           @include media(tablet) {font-size:80px;}
+      }
+   }
 }
 
 .purple-border{
-    border:5px solid $purple;
-    margin-bottom: 20px;
-    padding: 20px;
+  border:5px solid $purple;
+  margin-bottom: 20px;
+  padding: 20px;
 }
 
 
 //start -- Apprentice Filter Styles
 .filter-option-select 
 { 
-    margin-bottom: 30px;
-    background-color:$panel-colour;
-    padding: 5px;
-        .container-head {
-            padding-left: 5px;
-            background: url(/dist/css/images/option-select-toggle-sprite.png) no-repeat right 5px;
-            cursor: pointer;
-            display: block;
-            position: relative;
-            }
-        .option-select-label{
-            margin-right: 40px;
-            font-weight: bold;
-            padding: 5px;
-            text-transform:none;
-            display: block;
-            margin-top: 0;
-            }
-        .options-container {
-            position: relative;
-            background-color: #fff;          
-            height:200px; //container height
-            overflow:auto;
-                .item{ border-bottom: 1px solid #bfc1c3; } //// wrap labels per item for borders
-                label{
-                    font-size: 16px;
-                    line-height: 1.25; 
-                    padding-right: 10px;
-                    display:block;  
-                    font-weight: 400;
-                    text-transform: none;  
-                    padding: 7px 0 7px 2px;                    
-                    cursor: pointer;
-                    margin-left:20px; // wrap labels
-                 
-                    }
-                input{
-                    margin-left:-16px; // wrap labels
-                }
-            }
-          .showHide {
-             background: url(/dist/css/images/option-select-toggle-sprite.png) no-repeat;
-             background-position: right -77px;
-             cursor: pointer;
-             display: block;
-             position: relative; 
+  margin-bottom: 30px;
+  background-color:$panel-colour;
+  padding: 5px;
+      .container-head {
+          padding-left: 5px;
+          background: url(/dist/css/images/option-select-toggle-sprite.png) no-repeat right 5px;
+          cursor: pointer;
+          display: block;
+          position: relative;
+          }
+      .option-select-label{
+          margin-right: 40px;
+          font-weight: bold;
+          padding: 5px;
+          text-transform:none;
+          display: block;
+          margin-top: 0;
+          }
+      .options-container {
+          position: relative;
+          background-color: #fff;          
+          height:200px; //container height
+          overflow:auto;
+              .item{ border-bottom: 1px solid #bfc1c3; } //// wrap labels per item for borders
+              label{
+                  font-size: 16px;
+                  line-height: 1.25; 
+                  padding-right: 10px;
+                  display:block;  
+                  font-weight: 400;
+                  text-transform: none;  
+                  padding: 7px 0 7px 2px;                    
+                  cursor: pointer;
+                  margin-left:20px; // wrap labels
+               
+                  }
+              input{
+                  margin-left:-16px; // wrap labels
+              }
+          }
+        .showHide {
+           background: url(/dist/css/images/option-select-toggle-sprite.png) no-repeat;
+           background-position: right -77px;
+           cursor: pointer;
+           display: block;
+           position: relative; 
 
-            }
-            .hideOptions {
-                display: none; 
-            }
+          }
+          .hideOptions {
+              display: none; 
+          }
 }
 
 #manage-apprentices{
-    th{
-        font-size:16px;
-    }
-    .reset-link{
-        padding-left:0;
-        margin-top:10px;
-    }
+  th{
+      font-size:16px;
+  }
+  .reset-link{
+      padding-left:0;
+      margin-top:10px;
+  }
 }
 
 
 // pagination
 .previous-next-navigation {
-  padding-left: 0;
-  position: relative;
-  overflow: hidden;
-  margin: 60px 0 0;
-  width: 100%; 
-    li 
+padding-left: 0;
+position: relative;
+overflow: hidden;
+margin: 60px 0 0;
+width: 100%; 
+  li 
+  {
+    font-family: "nta", Arial, sans-serif;
+    font-size: 20px;
+    line-height: 1.11111;
+    font-weight: 400;
+    text-transform: none;
+    font-size-adjust: 0.5;
+    display: block;
+    padding: 0;
+    margin: 0;
+    width: 50%;
+    float: left; 
+    a 
     {
-      font-family: "nta", Arial, sans-serif;
-      font-size: 20px;
-      line-height: 1.11111;
-      font-weight: 400;
-      text-transform: none;
-      font-size-adjust: 0.5;
-      display: block;
-      padding: 0;
-      margin: 0;
-      width: 50%;
-      float: left; 
-      a 
+    display: block;
+    text-decoration: none; 
+    font-size: 24px;
+    line-height: 0.9em;
+        span {
+        display: block;
+        font-family: "nta", Arial, sans-serif;
+        font-size: 12px;
+        line-height: 1.25;
+        font-weight: 400;
+        text-transform: none;
+        font-size-adjust: 0.5; 
+        }
+        &:hover {
+             background:$highlight-colour;
+            .page-numbers {text-decoration: underline;}
+        }
+        &:focus{
+             .page-numbers {text-decoration: underline;}
+        }
+    }
+    
+ }
+  li.next 
+  {
+    float: right;
+    text-align: right; 
+        a {padding: 15px 35px 15px 0;}
+        a:before {
+        background: transparent url("/dist/css/images/pagination-arrow-sprite.png") no-repeat -102px -11px;
+        margin: -4px -32px 0 0;
+        display: block;
+        float: right;
+        width: 30px;
+        height: 38px;
+        content: " "; }
+    }
+  li.previous
+      { 
+      a{padding: 15px 0 15px 35px; }
+      a:before 
       {
-      display: block;
-      text-decoration: none; 
-      font-size: 24px;
-      line-height: 0.9em;
-          span {
-          display: block;
-          font-family: "nta", Arial, sans-serif;
-          font-size: 12px;
-          line-height: 1.25;
-          font-weight: 400;
-          text-transform: none;
-          font-size-adjust: 0.5; 
-          }
-          &:hover {
-               background:$highlight-colour;
-              .page-numbers {text-decoration: underline;}
-          }
-          &:focus{
-               .page-numbers {text-decoration: underline;}
-          }
+        background: transparent url("/dist/css/images/pagination-arrow-sprite.png") no-repeat -20px -11px;
+        margin: -4px 0 0 -32px;
+        display: block;
+        float: left;
+        width: 30px;
+        height: 38px;
+        content: " "; 
       }
-      
-   }
-    li.next 
-    {
-      float: right;
-      text-align: right; 
-          a {padding: 15px 35px 15px 0;}
-          a:before {
-          background: transparent url("/dist/css/images/pagination-arrow-sprite.png") no-repeat -102px -11px;
-          margin: -4px -32px 0 0;
-          display: block;
-          float: right;
-          width: 30px;
-          height: 38px;
-          content: " "; }
       }
-    li.previous
-        { 
-        a{padding: 15px 0 15px 35px; }
-        a:before 
-        {
-          background: transparent url("/dist/css/images/pagination-arrow-sprite.png") no-repeat -20px -11px;
-          margin: -4px 0 0 -32px;
-          display: block;
-          float: left;
-          width: 30px;
-          height: 38px;
-          content: " "; 
-        }
-        }
 }
 //end -- Apprentice Filter Styles
 
 
 //Datalock styles
 #datalock-details-change{
-    table.app-data{
-       caption{
-           text-align:left;
-           margin:40px 0 20px 0;
-       }
-       th.first-child{ font-weight:normal}
-       td.first-child{
-            border-top:1px solid $grey-2;
-        }
-    }
-    table.edited-changes{
-        margin-top:40px;
-        th{
-            border:0;
-        }
-    }
+  table.app-data{
+     caption{
+         text-align:left;
+         margin:40px 0 20px 0;
+     }
+     th.first-child{ font-weight:normal}
+     td.first-child{
+          border-top:1px solid $grey-2;
+      }
+  }
+  table.edited-changes{
+      margin-top:40px;
+      th{
+          border:0;
+      }
+  }
 }
 
 
 #confirm-datalock-changes{
-    .bold-font{
-        font-weight:bold;
-    }
+  .bold-font{
+      font-weight:bold;
+  }
 }
 //End Datalock styles
 
 
 //edit-started-apprentice
 #edit-started-apprentice{
-    .form-group{margin-bottom:0;}
-    .first-child{margin-bottom:30px;}
-    .approve-alert{   
-        margin-top:30px;
-            .alert-blue{border-color:$link-hover-colour;}
-    }
-    .last-child{
-        margin-bottom:30px;
-    }
-    strong{
-        font-weight:bold;
-    }
+  .form-group{margin-bottom:0;}
+  .first-child{margin-bottom:30px;}
+  .approve-alert{   
+      margin-top:30px;
+          .alert-blue{border-color:$link-hover-colour;}
+  }
+  .last-child{
+      margin-bottom:30px;
+  }
+  strong{
+      font-weight:bold;
+  }
 }
 
 #page-help{
-    strong{
-        font-weight:bold;
-    }
+  strong{
+      font-weight:bold;
+  }
 }
+
+#account-home{
+  .panel{
+      background:$grey-3;
+      border-color:$purple;
+      margin-top:40px;
+  }
+  .list li{
+      font-size:16px;
+  }
+}
+
+
+
+
+
+
 
 
 //all mobile media query breakpoints
@@ -756,118 +773,118 @@ only screen and (max-device-width: 667px),
 only screen and (max-width: 480px) { 
 
 #apprentice-details {
-    .tableResponsive
-    {
-        margin-top:30px;
-        .funding-cap-alert
-        {
-            border-left:10px solid $govuk-blue;
-            background:#fff;
-              a{
-                text-decoration:none;
-                color:$text-colour;
-                cursor:pointer;
-                }          
-         }
-         .overlap-alert
-         {
-            border-left:10px solid $error-colour;
-            background:#fff;
-              a{
-                text-decoration:none;
-                color:$text-colour;
-                cursor:pointer;
-            }          
-          }
-    }  
+  .tableResponsive
+  {
+      margin-top:30px;
+      .funding-cap-alert
+      {
+          border-left:10px solid $govuk-blue;
+          background:#fff;
+            a{
+              text-decoration:none;
+              color:$text-colour;
+              cursor:pointer;
+              }          
+       }
+       .overlap-alert
+       {
+          border-left:10px solid $error-colour;
+          background:#fff;
+            a{
+              text-decoration:none;
+              color:$text-colour;
+              cursor:pointer;
+          }          
+        }
+  }  
 }
 
 
 .bubble-arrow, .overlap-arrow {display:none;}    
-    
-    
-    
-       
+  
+  
+  
+     
 .employerListing { 
-        td:nth-of-type(1):before {
-        content: "Employer";
-        font-weight: normal;
-        margin-top: 5px;
-        min-height: 30px;
-        }
-        td:nth-of-type(2):before {
-        content: "Cohort reference";
-        font-weight: normal;
-        margin-top: 5px;
-        }
-        td:nth-of-type(3):before {
-        content: "Last message";
-        font-weight: normal;
-        margin-top: 5px;
-        } 
-    }
+      td:nth-of-type(1):before {
+      content: "Employer";
+      font-weight: normal;
+      margin-top: 5px;
+      min-height: 30px;
+      }
+      td:nth-of-type(2):before {
+      content: "Cohort reference";
+      font-weight: normal;
+      margin-top: 5px;
+      }
+      td:nth-of-type(3):before {
+      content: "Last message";
+      font-weight: normal;
+      margin-top: 5px;
+      } 
+  }
 .provider-list-view { 
-        td:nth-of-type(1):before {
-        content: "Name";
-        font-weight: normal;
-        margin-top: 5px;
-        min-height: 30px;
-        }
-        td:nth-of-type(2):before {
-        content: "Date of birth";
-        font-weight: normal;
-        margin-top: 5px;
-        }
-        td:nth-of-type(3):before {
-        content: "ULN";
-        font-weight: normal;
-        margin-top: 5px;
-        word-wrap:break-word;
-        } 
-        td:nth-of-type(4):before {
-        content: "Status";
-        font-weight: normal;
-        margin-top: 5px;
-        } 
-        td:nth-of-type(5):before {
-        content: "Alerts";
-        font-weight: normal;
-        margin-top: 5px;
-        } 
+      td:nth-of-type(1):before {
+      content: "Name";
+      font-weight: normal;
+      margin-top: 5px;
+      min-height: 30px;
+      }
+      td:nth-of-type(2):before {
+      content: "Date of birth";
+      font-weight: normal;
+      margin-top: 5px;
+      }
+      td:nth-of-type(3):before {
+      content: "ULN";
+      font-weight: normal;
+      margin-top: 5px;
+      word-wrap:break-word;
+      } 
+      td:nth-of-type(4):before {
+      content: "Status";
+      font-weight: normal;
+      margin-top: 5px;
+      } 
+      td:nth-of-type(5):before {
+      content: "Alerts";
+      font-weight: normal;
+      margin-top: 5px;
+      } 
 }
 
 
 
 #bulk-upload-errors{
-    
-     td:nth-of-type(1):before {
-        content: "Row";
-        font-weight: normal;
-        margin-top: 5px;
-        min-height: 30px;
-        }
-        td:nth-of-type(2):before {
-        content: "ULN";
-        font-weight: normal;
-        margin-top: 5px;
-        }
-        td:nth-of-type(3):before {
-        content: "Name";
-        font-weight: normal;
-        margin-top: 5px;
-        word-wrap:break-word;
-        } 
-        td:nth-of-type(4):before {
-        content: "Date of Birth";
-        font-weight: normal;
-        margin-top: 5px;
-        } 
-        td:nth-of-type(5):before {
-        content: "Error(s)";
-        font-weight: normal;
-        margin-top: 5px;
-        } 
-    }
+  
+   td:nth-of-type(1):before {
+      content: "Row";
+      font-weight: normal;
+      margin-top: 5px;
+      min-height: 30px;
+      }
+      td:nth-of-type(2):before {
+      content: "ULN";
+      font-weight: normal;
+      margin-top: 5px;
+      }
+      td:nth-of-type(3):before {
+      content: "Name";
+      font-weight: normal;
+      margin-top: 5px;
+      word-wrap:break-word;
+      } 
+      td:nth-of-type(4):before {
+      content: "Date of Birth";
+      font-weight: normal;
+      margin-top: 5px;
+      } 
+      td:nth-of-type(5):before {
+      content: "Error(s)";
+      font-weight: normal;
+      margin-top: 5px;
+      } 
+  }
 
 
 }
