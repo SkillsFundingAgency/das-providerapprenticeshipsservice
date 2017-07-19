@@ -3696,6 +3696,16 @@ table .changed-item {
   font-weight: bold;
 }
 
+#account-home .panel {
+  background: #dee0e2;
+  border-color: #2e358b;
+  margin-top: 40px;
+}
+
+#account-home .list li {
+  font-size: 16px;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
