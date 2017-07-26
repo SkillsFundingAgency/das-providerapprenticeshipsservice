@@ -3229,6 +3229,11 @@ table .changed-item {
   font-size: 16px;
 }
 
+#manage-apprentices .panel {
+  background: #dee0e2;
+  border-color: #2e358b;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;

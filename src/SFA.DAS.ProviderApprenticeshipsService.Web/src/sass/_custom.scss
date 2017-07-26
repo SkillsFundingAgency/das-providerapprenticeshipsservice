@@ -1,5 +1,4 @@
 ﻿// custom to overwrite the GDS defaults
-
 .hr-double {
   border-bottom: 4px solid $grey-2;
   margin-bottom: 20px;
@@ -760,8 +759,12 @@ width: 100%;
   }
 }
 
-
-
+#manage-apprentices{
+   .panel{
+      background:$grey-3;
+      border-color:$purple;
+  }
+}
 
 
 
