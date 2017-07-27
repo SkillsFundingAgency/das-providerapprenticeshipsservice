@@ -69,17 +69,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IProviderCommitmentsApi>().Use<ProviderCommitmentsApi>()
                 .Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
 
-            For<HttpClient>().Use(
-                new Http.HttpClientBuilder()
-                .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config.NotificationApi))
-                .Build());
-            
+            ConfigureNotificationsApi(config);
+           
             For<IRelationshipApi>().Use<RelationshipApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<IValidationApi>().Use<ValidationApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<IApprenticeshipApi>().Use<ApprenticeshipApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
 
-            For<INotificationsApi>().Use<NotificationsApi>()
-                .Ctor<INotificationsApiClientConfiguration>().Is(config.NotificationApi);
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
             For<IConfiguration>().Use(config);
             For<ICache>().Use<InMemoryCache>(); //RedisCache
@@ -93,6 +88,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             ConfigureLogging();
 
             ConfigureInstrumentedTypes();
+        }
+
+        private void ConfigureNotificationsApi(ProviderApprenticeshipsServiceConfiguration config)
+        {
+            HttpClient httpClient;
+
+            if (string.IsNullOrWhiteSpace(config.NotificationApi.ClientId))
+            {
+                httpClient = new Http.HttpClientBuilder()
+                .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config.NotificationApi))
+                .Build();
+            }
+            else
+            {
+                httpClient = new Http.HttpClientBuilder()
+                .WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config.NotificationApi))
+                .Build();
+            }
+
+            For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(httpClient);
+
+            For<INotificationsApiClientConfiguration>().Use(config.NotificationApi);
+
         }
 
         private void ConfigureInstrumentedTypes()
