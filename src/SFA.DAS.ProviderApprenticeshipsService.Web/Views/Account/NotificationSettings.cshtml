@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "NotificationSettings";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+        <h1 class="heading-xlarge">Notification Settings</h1>
+        <p>Choose which accounts you want to receive cohort and apprentice updates from.</p>
+
+        <input name="__RequestVerificationToken" type="hidden" value="DKVW4qP8Q1AvewG4gJ0e-VjTvvOn4U6yVZqApQg0paMqJO2iQOJyM-iiWkjBMvZi_tbZBwASW-OR74I1n8Pj-jShGCbkydpeUuCcur6tYwno25yrTfIKvGZSaX9KT1XRD90yIw2">
+
+        <input type="hidden" value="11c9f2c0-78ea-4aa4-88f7-1896b5deb83f" name="HashedId">
+
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Account name</th>
+                    <th scope="col">Emails</th>
+                    <th scope="col">No emails</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td class="notification-row">
+                        VALTECH LIMITED
+
+                        <input id="NotificationSettings_0__HashedAccountId" name="NotificationSettings[0].HashedAccountId" type="hidden" value="V6PLYY">
+                        <input id="NotificationSettings_0__Name" name="NotificationSettings[0].Name" type="hidden" value="VALTECH LIMITED">
+                        <input id="NotificationSettings_0__Id" name="NotificationSettings[0].Id" type="hidden" value="2026">
+                    </td>
+
+                    <td class="notification-row">
+
+
+
+                        <label for="NotificationSettings-true-0" class="block-label selection-button-radio selected" aria-label="Send emails">
+                            <input checked="checked" id="NotificationSettings-true-0" name="NotificationSettings[0].ReceiveNotifications" type="radio" value="True">
+                        </label>
+
+                    </td>
+
+                    <td class="notification-row">
+                        <label for="NotificationSettings-false-0" class="block-label selection-button-radio" aria-label="Stop emails">
+                            <input id="NotificationSettings-false-0" name="NotificationSettings[0].ReceiveNotifications" type="radio" value="False">
+                        </label>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+        </table>
+
+        <div class="panel panel-border-wide alert-default">
+            <p>Changes to these settings won't affect service emails, such as password resets.</p>
+        </div>
+
+        <button type="submit" class="button">Update</button>
+
+
+        <a href="/" class="button text-link">Cancel</a>
+
+    </div>
+</div>
+

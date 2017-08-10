@@ -81,5 +81,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                     return View(model);
             }
         }
+
+        [Authorize]
+        [Route("~/notification-settings")]
+        public async Task<ActionResult> NotificationSettings()
+        {
+            return View();
+        }
     }
 }
