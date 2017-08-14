@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = "Unsubscribe";
-    ViewBag.PageId = "account-noagreement";
+    ViewBag.PageId = "unsubscribe-alets";
 }
 
 <div class="grid-row">
@@ -13,18 +13,18 @@
         {
             <h1 class="heading-xlarge">You've already unsubscribed</h1>
 
-            <p>You've already unsubscribed from notifications for @Model.AccountName</p>
+            <p>You've already unsubscribed from email notifications for @Model.AccountName</p>
 
-            <p>You'll continue to receive important service email, such as password resets.</p>
+            <p>You'll continue to receive important service emails, such as password resets.</p>
         }
         else
         {
             <h1 class="heading-xlarge">Unsubscribe successful</h1>
-            <p>You've unsubscribed from any further email notification for @Model.AccountName</p>
+            <p>You've unsubscribed from any further email notifications for @Model.AccountName</p>
 
             <p>You'll receive one final email to confirm that we've unsubscribed you.</p>
 
-            <p>You'll continue to receive important service email, such as password resets.</p>
+            <p>You'll continue to receive important service emails, such as password resets.</p>
         }
 
         @*ToDo: Add like when merging with settings page. *@
