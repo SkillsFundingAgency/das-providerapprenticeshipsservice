@@ -1,0 +1,35 @@
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.SummaryUnsubscribeViewModel
+
+
+@{
+    ViewBag.Title = "Unsubscribe";
+    ViewBag.PageId = "account-noagreement";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+        @if (Model.AlreadyUnsubscribed)
+        {
+            <h1 class="heading-xlarge">You've already unsubscribed</h1>
+
+            <p>You've already unsubscribed from notifications for @Model.AccountName</p>
+
+            <p>You'll continue to receive important service email, such as password resets.</p>
+        }
+        else
+        {
+            <h1 class="heading-xlarge">Unsubscribe successful</h1>
+            <p>You've unsubscribed from any further email notification for @Model.AccountName</p>
+
+            <p>You'll receive one final email to confirm that we've unsubscribed you.</p>
+
+            <p>You'll continue to receive important service email, such as password resets.</p>
+        }
+
+        @*ToDo: Add like when merging with settings page. *@
+        @*@Html.ActionLink("View notification settings", "NotificationSettings", null, new { @class = "button" })*@
+        <a href="http://www.settings.page/settins" class="button" >View notification settings</a>
+
+    </div>
+</div>
