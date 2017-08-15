@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Apprenticeships.Api.Types.Exceptions;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -43,6 +46,48 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
                 return new AccountHomeViewModel {AccountStatus = AccountStatus.NoAgreement};
             }
+        }
+
+        public async Task<NotificationSettingsViewModel> GetNotificationSettings(string userRef)
+        {
+            _logger.Info($"Getting setting for user {userRef}");
+
+            var response = await _mediator.SendAsync(new GetUserNotificationSettingsQuery
+            {
+                UserRef = userRef
+            });
+
+            var model = new NotificationSettingsViewModel
+                            {
+                                HashedId = "ABBA12",
+                                NotificationSettings = Map(response.NotificationSettings)
+                            };
+            _logger.Trace($"Found {response.NotificationSettings.Count} settings for user {userRef}");
+
+            return model;
+        }
+
+        public void UpdateNotificationSettings(NotificationSettingsViewModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IList<UserNotificationSetting> Map(IEnumerable<Domain.Models.Settings.UserNotificationSetting> notificationSettings)
+        {
+            if(notificationSettings == null)
+                return new List<UserNotificationSetting>(0);
+
+            return notificationSettings.Select(m => 
+                new UserNotificationSetting
+                    {
+                        AccountId = m.AccountId,
+                        HashedAccountId = m.HashedAccountId,
+                        Id = m.Id,
+                        Name = m.Name,
+                        ReceiveNotifications = m.ReceiveNotifications,
+                        UserId = m.UserId
+                    })
+                    .ToList();
         }
     }
 }

@@ -8,6 +8,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
@@ -86,7 +87,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("~/notification-settings")]
         public async Task<ActionResult> NotificationSettings()
         {
-            return View();
+            var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
+            var u = User.Identity.GetClaim(DasClaimTypes.Upn);
+            // ToDo: Test providerId parse 
+            var model = await _accountOrchestrator.GetNotificationSettings(u);
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("~/notification-settings")]
+        public async Task<ActionResult> NotificationSettings(NotificationSettingsViewModel model)
+        {
+            _accountOrchestrator.UpdateNotificationSettings(model);
+            return RedirectToAction("NotificationSettings");
         }
     }
 }

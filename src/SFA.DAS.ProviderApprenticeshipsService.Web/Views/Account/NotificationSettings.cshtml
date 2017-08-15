@@ -1,44 +1,69 @@
-﻿
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings.NotificationSettingsViewModel
 @{
     ViewBag.Title = "NotificationSettings";
     ViewBag.PageId = "notification-settings";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Notification Settings</h1>
-        <p>Choose which accounts you want to receive cohort and apprentice updates from.</p>
-        <p>Changes to these settings won't affect service emails, such as password resets.</p>
+<form method="post">
 
-        <table>
-            <thead>
+    @Html.AntiForgeryToken()
+
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <h1 class="heading-xlarge">Notification Settings</h1>
+            <p>Choose which accounts you want to receive cohort and apprentice updates from.</p>
+            <p>Changes to these settings won't affect service emails, such as password resets.</p>
+
+            <table>
+                <thead>
                 <tr>
                     <th scope="col">Account name</th>
                     <th scope="col">Emails</th>
                     <th scope="col">No emails</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
+                @for (var i = 0; i < Model.NotificationSettings.Count ; i++)
+                {
+                    var setting = Model.NotificationSettings[i];
 
-                <tr>
-                    <td class="notification-row">
-                        VALTECH LIMITED
-                    </td>
-                    <td class="notification-row">
-                        <label for="NotificationSettings-true-0" class="block-label selection-button-radio" aria-label="Send emails">    <input id="NotificationSettings-true-0" type="radio" name="radio-inline-group" value="True">          
-                      </label>
-                    </td>
-                    <td class="notification-row">
-                        <label for="NotificationSettings-false-0" class="block-label selection-button-radio" aria-label="Stop emails">   <input id="NotificationSettings-false-0" type="radio" name="radio-inline-group" value="False">
-                        </label>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    <tr>
+                        <td class="notification-row">
+                            @setting.Name
 
-        <button type="submit" class="button">Update</button>
-        <a href="/" class="button text-link">Cancel</a>
+                            @Html.Hidden($"NotificationSettings[{i}].HashedAccountId", setting.HashedAccountId)
+                            @Html.Hidden($"NotificationSettings[{i}].Name", setting.Name)
+                            @Html.Hidden($"NotificationSettings[{i}].Id", setting.Id)
+                        </td>
 
+                        <td class="notification-row">
+
+                            @{  var trueId = $"NotificationSettings-true-{i}";
+                                var falseId = $"NotificationSettings-false-{i}";
+
+                            }
+
+                            <label for="@trueId" class="block-label selection-button-radio" aria-label="Send emails">
+                                @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", true, setting.ReceiveNotifications, new { id = trueId })
+                            </label>
+
+                        </td>
+
+                        <td class="notification-row">
+                            <label for="@falseId" class="block-label selection-button-radio" aria-label="Stop emails">
+                                @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", false, !setting.ReceiveNotifications, new { id = falseId })
+                            </label>
+
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+            <button type="submit" class="button">Update</button>
+            <a href="/" class="button text-link">Cancel</a>
+
+        </div>
     </div>
-</div>
 
+</form>

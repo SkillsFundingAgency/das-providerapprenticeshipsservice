@@ -194,6 +194,9 @@
     <Compile Include="Queries\GetAllApprentices\GetAllApprenticesHandler.cs" />
     <Compile Include="Queries\GetAllApprentices\GetAllApprenticesRequest.cs" />
     <Compile Include="Queries\GetAllApprentices\GetAllApprenticesResponse.cs" />
+    <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsHandler.cs" />
+    <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsQuery.cs" />
+    <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

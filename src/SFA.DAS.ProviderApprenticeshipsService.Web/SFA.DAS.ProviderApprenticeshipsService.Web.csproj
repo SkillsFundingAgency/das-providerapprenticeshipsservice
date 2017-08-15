@@ -408,8 +408,10 @@
     <Compile Include="Models\AccountHomeViewModel.cs" />
     <Compile Include="Models\ManageApprenticesViewModel.cs" />
     <Compile Include="Models\IPaginationViewModel.cs" />
+    <Compile Include="Models\Settings\NotificationSettingsViewModel.cs" />
     <Compile Include="Models\PriceHistoryViewModel.cs" />
     <Compile Include="Models\RequestStatus.cs" />
+    <Compile Include="Models\Settings\UserNotificationSetting.cs" />
     <Compile Include="Models\Types\DateTimeViewModel.cs" />
     <Compile Include="Models\Types\FlashMessageSeverityLevel.cs" />
     <Compile Include="Models\Types\FlashMessageViewModel.cs" />
