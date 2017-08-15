@@ -34,5 +34,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
         }
+
+        public async Task AddSettings(string userRef)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@userRef", userRef, DbType.String);
+
+                return await c.ExecuteAsync(
+                    sql: "INSERT INTO [dbo].[UserSettings] (UserId, UserRef) "
+                         + "SELECT[Id] as UserId,[UserRef] FROM[dbo].[User] "
+                         + "WHERE UserRef = @userRef",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+        }
     }
 }

@@ -6,5 +6,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
     public interface IUserSettingsRepository
     {
         Task<IEnumerable<UserSetting>> GetUserSetting(string userRef);
+
+        Task AddSettings(string userRef);
     }
 }

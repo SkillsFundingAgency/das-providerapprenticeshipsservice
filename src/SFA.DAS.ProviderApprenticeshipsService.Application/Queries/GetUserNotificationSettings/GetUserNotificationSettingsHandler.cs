@@ -12,29 +12,38 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNoti
     {
         private readonly IUserSettingsRepository _userRepository;
 
-        public GetUserNotificationSettingsHandler(IUserSettingsRepository userRepository)
+        private readonly IProviderCommitmentsLogger _logger;
+
+        public GetUserNotificationSettingsHandler(
+            IUserSettingsRepository userRepository,
+            IProviderCommitmentsLogger logger)
         {
             _userRepository = userRepository;
+            _logger = logger;
         }
 
         public async Task<GetUserNotificationSettingsResponse> Handle(GetUserNotificationSettingsQuery message)
         {
-            var users = await _userRepository.GetUserSetting(message.UserRef);
+            var userSettings = (await _userRepository.GetUserSetting(message.UserRef)).ToList();
+
+            if (!userSettings.Any())
+            {
+                _logger.Info($"No settings found for user {message.UserRef}");
+                await _userRepository.AddSettings(message.UserRef);
+                userSettings = (await _userRepository.GetUserSetting(message.UserRef)).ToList();
+                _logger.Info($"Created default settings for user {message.UserRef}");
+            }
 
             return new GetUserNotificationSettingsResponse
                 {
                     NotificationSettings =
-                        users.Select(
+                        userSettings.Select(
                             m =>
                             new UserNotificationSetting
                                 {
-                                    AccountId = 1,
-                                    HashedAccountId = "ABBA12",
-                                    Id = 800,
-                                    Name = m.UserRef,
+                                    UserRef = m.UserRef,
                                     ReceiveNotifications =
                                         m.ReceiveNotifications,
-                                    UserId = 999
                                 }).ToList()
                 };
         }

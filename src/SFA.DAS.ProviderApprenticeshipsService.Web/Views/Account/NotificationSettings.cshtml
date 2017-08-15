@@ -29,18 +29,15 @@
 
                     <tr>
                         <td class="notification-row">
-                            @setting.Name
+                            @setting.UserRef
 
-                            @Html.Hidden($"NotificationSettings[{i}].HashedAccountId", setting.HashedAccountId)
-                            @Html.Hidden($"NotificationSettings[{i}].Name", setting.Name)
-                            @Html.Hidden($"NotificationSettings[{i}].Id", setting.Id)
+                            @Html.Hidden($"NotificationSettings[{i}].UserRef", setting.UserRef)
                         </td>
 
                         <td class="notification-row">
 
                             @{  var trueId = $"NotificationSettings-true-{i}";
                                 var falseId = $"NotificationSettings-false-{i}";
-
                             }
 
                             <label for="@trueId" class="block-label selection-button-radio" aria-label="Send emails">

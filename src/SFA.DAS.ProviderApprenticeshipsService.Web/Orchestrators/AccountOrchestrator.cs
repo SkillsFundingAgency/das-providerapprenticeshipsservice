@@ -80,12 +80,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return notificationSettings.Select(m => 
                 new UserNotificationSetting
                     {
-                        AccountId = m.AccountId,
-                        HashedAccountId = m.HashedAccountId,
-                        Id = m.Id,
-                        Name = m.Name,
-                        ReceiveNotifications = m.ReceiveNotifications,
-                        UserId = m.UserId
+                        UserRef = m.UserRef,
+                        ReceiveNotifications = m.ReceiveNotifications
                     })
                     .ToList();
         }

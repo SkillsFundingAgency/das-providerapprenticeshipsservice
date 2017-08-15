@@ -138,6 +138,7 @@
     <Compile Include="Queries\GetApprenticeshipPriceHistory\WhenGettingApprenticeshipPriceHistory.cs" />
     <Compile Include="Queries\GetBulkUploadFile\WhenIGetBulkUploadFile.cs" />
     <Compile Include="Queries\GetPendingApprenticeshipUpdate\WhenIGetPendingApprenticeshipUpdate.cs" />
+    <Compile Include="Queries\GetUserNotificationSettings\WhenGettingUserSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
