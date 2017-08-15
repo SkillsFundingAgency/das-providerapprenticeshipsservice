@@ -99,7 +99,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("~/notification-settings")]
         public async Task<ActionResult> NotificationSettings(NotificationSettingsViewModel model)
         {
-            _accountOrchestrator.UpdateNotificationSettings(model);
+            await _accountOrchestrator.UpdateNotificationSettings(model);
             return RedirectToAction("NotificationSettings");
         }
     }

@@ -135,6 +135,9 @@
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandValidator.cs" />
     <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommandHandler.cs" />
     <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommandValidator.cs" />
+    <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsCommand.cs" />
+    <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsHandler.cs" />
+    <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsValidator.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandHandler.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandValidator.cs" />

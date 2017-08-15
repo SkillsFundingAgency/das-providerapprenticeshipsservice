@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Apprenticeships.Api.Types.Exceptions;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -62,14 +63,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                                 HashedId = "ABBA12",
                                 NotificationSettings = Map(response.NotificationSettings)
                             };
+
             _logger.Trace($"Found {response.NotificationSettings.Count} settings for user {userRef}");
 
             return model;
         }
 
-        public void UpdateNotificationSettings(NotificationSettingsViewModel model)
+        public async Task UpdateNotificationSettings(NotificationSettingsViewModel model)
         {
-            throw new NotImplementedException();
+            var setting = model.NotificationSettings.First();
+            _logger.Info($"Uppdating setting for user {setting.UserRef}");
+
+            await _mediator.SendAsync(new UpdateUserNotificationSettingsCommand
+            {
+                UserRef = setting.UserRef,
+                ReceiveNotifications = setting.ReceiveNotifications
+            });
+
+            _logger.Trace($"Updated receive notification to {setting.ReceiveNotifications} for user {setting.UserRef}");
         }
 
         private IList<UserNotificationSetting> Map(IEnumerable<Domain.Models.Settings.UserNotificationSetting> notificationSettings)

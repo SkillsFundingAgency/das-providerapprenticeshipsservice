@@ -8,5 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
         Task<IEnumerable<UserSetting>> GetUserSetting(string userRef);
 
         Task AddSettings(string userRef);
+
+        Task UpdateUserSettings(string userRef, bool receiveNotifications);
     }
 }

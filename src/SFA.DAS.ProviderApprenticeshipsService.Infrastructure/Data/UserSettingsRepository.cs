@@ -50,5 +50,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
         }
+
+        public async Task UpdateUserSettings(string userRef, bool receiveNotifications)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@userRef", userRef, DbType.String);
+                parameters.Add("@receiveNotifications", receiveNotifications, DbType.Boolean);
+
+                return await c.ExecuteAsync(
+                    sql: "UPDATE [dbo].[UserSettings] "
+                         + "SET ReceiveNotifications = @receiveNotifications "
+                         + "WHERE UserRef = @userRef",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+        }
     }
 }
