@@ -200,6 +200,9 @@
     <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsHandler.cs" />
     <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsQuery.cs" />
     <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsResponse.cs" />
+    <Compile Include="Queries\GetUser\GetUserHandler.cs" />
+    <Compile Include="Queries\GetUser\GetUserResponse.cs" />
+    <Compile Include="Queries\GetUser\GetUserRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
