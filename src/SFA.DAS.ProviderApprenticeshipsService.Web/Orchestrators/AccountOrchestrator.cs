@@ -44,5 +44,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 return new AccountHomeViewModel {AccountStatus = AccountStatus.NoAgreement};
             }
         }
+
+        public SummaryUnsubscribeViewModel Unsubscribe(string hashedAccountId, bool alreadyUnsubscribed, string urlSettingsPage)
+        {
+            return new SummaryUnsubscribeViewModel
+                       {
+                           AlreadyUnsubscribed = alreadyUnsubscribed,
+                           AccountName = "Fake name"
+                       };
+        }
     }
 }
