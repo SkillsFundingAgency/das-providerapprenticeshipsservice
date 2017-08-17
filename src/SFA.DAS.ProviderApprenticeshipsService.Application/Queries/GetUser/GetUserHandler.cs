@@ -1,35 +1,36 @@
-﻿using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using FluentValidation.Results;
 using MediatR;
 
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser
 {
-    public class GetUserHandler : IAsyncRequestHandler<GetUserRequest, GetUserResponse>
+    public class GetUserHandler : IAsyncRequestHandler<GetUserQuery, GetUserResponse>
     {
-        private readonly IUserSettingsRepository _userSettingsRepository;
+        private readonly IUserRepository _userRepository;
 
-        public GetUserHandler(IUserSettingsRepository userSettingsRepository)
+        public GetUserHandler(IUserRepository userRepository)
         {
-            _userSettingsRepository = userSettingsRepository;
+            _userRepository = userRepository;
         }
 
-        public async Task<GetUserResponse> Handle(GetUserRequest request)
+        public async Task<GetUserResponse> Handle(GetUserQuery request)
         {
-            var userSetting = await _userSettingsRepository.GetUserSetting(request.UserRef);
-            var setting = userSetting.FirstOrDefault();
-            if (setting != null)
+            if (string.IsNullOrEmpty(request.UserRef))
             {
-                return new GetUserResponse
-                           {
-                               UserRef = setting.UserRef,
-                               ReceiveNotifications = setting.ReceiveNotifications
-                           };
+                throw new InvalidRequestException(
+                    new List<ValidationFailure>{ new ValidationFailure("UserRef", "UserRef is null or empty") });
             }
+            var user = await _userRepository.GetUser(request.UserRef);
 
-            return null;
+            return new GetUserResponse
+                       {
+                           Name = user.DisplayName,
+                           EmailAddress = user.Email
+                       };
         }
     }
 }

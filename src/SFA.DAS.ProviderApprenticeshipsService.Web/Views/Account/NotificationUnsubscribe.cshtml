@@ -13,23 +13,20 @@
         {
             <h1 class="heading-xlarge">You've already unsubscribed</h1>
 
-            <p>You've already unsubscribed from email notifications for @Model.AccountName</p>
+            <p>You've already unsubscribed from email notifications.</p>
 
             <p>You'll continue to receive important service emails, such as password resets.</p>
         }
         else
         {
             <h1 class="heading-xlarge">Unsubscribe successful</h1>
-            <p>You've unsubscribed from any further email notifications for @Model.AccountName</p>
+            <p>You've unsubscribed from any further email notifications.</p>
 
             <p>You'll receive one final email to confirm that we've unsubscribed you.</p>
 
             <p>You'll continue to receive important service emails, such as password resets.</p>
         }
 
-        @*ToDo: Add like when merging with settings page. *@
-        @*@Html.ActionLink("View notification settings", "NotificationSettings", null, new { @class = "button" })*@
-        <a href="http://www.settings.page/settins" class="button" >View notification settings</a>
-
+        @Html.ActionLink("View notification settings", "NotificationSettings", null, new { @class = "button" })
     </div>
 </div>

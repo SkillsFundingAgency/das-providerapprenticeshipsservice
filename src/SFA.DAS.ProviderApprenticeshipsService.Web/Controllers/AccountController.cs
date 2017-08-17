@@ -94,8 +94,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
-        [Authorize]
         [HttpPost]
+        [Authorize]
         [Route("~/notification-settings")]
         public async Task<ActionResult> NotificationSettings(NotificationSettingsViewModel model)
         {
@@ -104,15 +104,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("~/notifications/unsubscribe/{hashedAccountId}/{alreadyUnsubscribed}")]
-        public async Task<ActionResult> NotificationUnsubscribe(string hashedAccountId, bool alreadyUnsubscribed)
+        [Authorize]
+        [Route("~/notifications/unsubscribe")]
+        public async Task<ActionResult> NotificationUnsubscribe()
         {
-            //var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+            var userRef = User.Identity.GetClaim(DasClaimTypes.Upn);
 
-            // ToDo: Add auth check
-            // ToDo: Add URL to settings page
-            // var url = Url.Action("NotificationSettings");
-            var model = _accountOrchestrator.Unsubscribe(hashedAccountId, alreadyUnsubscribed, "http://url.to.notificationpage/settings");
+            var url = Url.Action("NotificationSettings");
+            var model = await _accountOrchestrator.Unsubscribe(userRef, url);
 
             return View(model);
         }

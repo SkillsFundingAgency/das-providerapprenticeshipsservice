@@ -4,9 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Apprenticeships.Api.Types.Exceptions;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Notifications.Api.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UnsubscribeNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
@@ -83,25 +88,50 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _logger.Trace($"Updated receive notification to {setting.ReceiveNotifications} for user {setting.UserRef}");
         }
 
+        public async Task<SummaryUnsubscribeViewModel> Unsubscribe(string userRef, string urlSettingsPage)
+        {
+            var userSettings = await _mediator.SendAsync(new GetUserNotificationSettingsQuery { UserRef = userRef });
+            var user = await _mediator.SendAsync(new GetUserQuery { UserRef = userRef });
+
+            var alreadyUnsubscribed = !userSettings.NotificationSettings.FirstOrDefault()?.ReceiveNotifications == true;
+            if (userSettings.NotificationSettings.FirstOrDefault()?.ReceiveNotifications == true)
+            {
+                await _mediator.SendAsync(new UnsubscribeNotificationRequest { UserRef = userRef });
+                await _mediator.SendAsync(BuildNotificationCommand(user.EmailAddress, user.Name, urlSettingsPage));
+            }
+
+            return new SummaryUnsubscribeViewModel { AlreadyUnsubscribed = alreadyUnsubscribed };
+        }
+
         private IList<UserNotificationSetting> Map(
-            IEnumerable<Domain.Models.Settings.UserNotificationSetting> notificationSettings)
+       IEnumerable<Domain.Models.Settings.UserNotificationSetting> notificationSettings)
         {
             if (notificationSettings == null) return new List<UserNotificationSetting>(0);
 
             return
-                notificationSettings.Select(
-                    m =>
+                notificationSettings.Select( m =>
                     new UserNotificationSetting { UserRef = m.UserRef, ReceiveNotifications = m.ReceiveNotifications })
                     .ToList();
         }
 
-        public SummaryUnsubscribeViewModel Unsubscribe(string hashedAccountId, bool alreadyUnsubscribed, string urlSettingsPage)
+        private SendNotificationCommand BuildNotificationCommand(string emailAddress, string userDisplayName, string urlToSettingsPage)
         {
-            return new SummaryUnsubscribeViewModel
-                       {
-                           AlreadyUnsubscribed = alreadyUnsubscribed,
-                           AccountName = "Fake name"
-                       };
+            return new SendNotificationCommand
+            {
+                Email = new Email
+                {
+                    RecipientsAddress = emailAddress,
+                    ReplyToAddress = "noreply@sfa.gov.uk",
+                    Subject = "<Test Employer Notification>", // Replaced by Notify Service
+                    SystemId = "x", // Don't need to populate
+                    TemplateId = "ProviderUnsubscribeAlertSummaryNotification",
+                    Tokens = new Dictionary<string, string>
+                    {
+                        { "name", userDisplayName },
+                        { "link_to_notify_settings", urlToSettingsPage }
+                    }
+                }
+            };
         }
     }
 }

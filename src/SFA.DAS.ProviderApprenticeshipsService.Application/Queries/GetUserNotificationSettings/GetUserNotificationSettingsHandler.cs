@@ -25,7 +25,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNoti
         public async Task<GetUserNotificationSettingsResponse> Handle(GetUserNotificationSettingsQuery message)
         {
             var userSettings = (await _userRepository.GetUserSetting(message.UserRef)).ToList();
-
             if (!userSettings.Any())
             {
                 _logger.Info($"No settings found for user {message.UserRef}");

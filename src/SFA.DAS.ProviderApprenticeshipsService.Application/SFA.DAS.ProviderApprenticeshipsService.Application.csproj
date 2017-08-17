@@ -107,6 +107,8 @@
     <Compile Include="Commands\TriageApprenticeshipDataLocks\TriageApprenticeshipDataLocksCommand.cs" />
     <Compile Include="Commands\TriageApprenticeshipDataLocks\TriageApprenticeshipDataLocksCommandHandler.cs" />
     <Compile Include="Commands\TriageApprenticeshipDataLocks\TriageApprenticeshipDataLocksCommandValidator.cs" />
+    <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationHandler.cs" />
+    <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationRequest.cs" />
     <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommand.cs" />
     <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommand.cs" />
     <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommandHandler.cs" />
@@ -201,8 +203,8 @@
     <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsQuery.cs" />
     <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsResponse.cs" />
     <Compile Include="Queries\GetUser\GetUserHandler.cs" />
+    <Compile Include="Queries\GetUser\GetUserQuery.cs" />
     <Compile Include="Queries\GetUser\GetUserResponse.cs" />
-    <Compile Include="Queries\GetUser\GetUserRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

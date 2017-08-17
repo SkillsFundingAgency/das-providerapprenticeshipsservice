@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.NLog.Logger;
@@ -33,6 +31,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                     sql: "[dbo].[UpsertUser]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
+            });
+        }
+
+        public async Task<User> GetUser(string userRef)
+        {
+            return await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@userRef", userRef, DbType.String);
+
+                var results =
+                    await
+                    c.QueryAsync<User>(
+                        sql: "SELECT TOP 1 * FROM [dbo].[User] WHERE UserRef = @userRef",
+                        param: parameters,
+                        commandType: CommandType.Text);
+
+                return results.Single();
             });
         }
     }
