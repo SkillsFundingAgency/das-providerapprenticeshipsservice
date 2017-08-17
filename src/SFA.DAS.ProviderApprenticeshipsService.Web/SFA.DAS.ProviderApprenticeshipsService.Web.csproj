@@ -412,6 +412,7 @@
     <Compile Include="Models\PriceHistoryViewModel.cs" />
     <Compile Include="Models\RequestStatus.cs" />
     <Compile Include="Models\Settings\UserNotificationSetting.cs" />
+    <Compile Include="Models\SummaryUnsubscribeViewModel.cs" />
     <Compile Include="Models\Types\DateTimeViewModel.cs" />
     <Compile Include="Models\Types\FlashMessageSeverityLevel.cs" />
     <Compile Include="Models\Types\FlashMessageViewModel.cs" />
@@ -654,6 +655,7 @@
     <Content Include="Views\Shared\Pagination.cshtml" />
     <Content Include="Views\Commitment\View.cshtml" />
     <Content Include="Views\Account\NotificationSettings.cshtml" />
+    <Content Include="Views\Account\NotificationUnsubscribe.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

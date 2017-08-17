@@ -83,18 +83,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _logger.Trace($"Updated receive notification to {setting.ReceiveNotifications} for user {setting.UserRef}");
         }
 
-        private IList<UserNotificationSetting> Map(IEnumerable<Domain.Models.Settings.UserNotificationSetting> notificationSettings)
+        private IList<UserNotificationSetting> Map(
+            IEnumerable<Domain.Models.Settings.UserNotificationSetting> notificationSettings)
         {
-            if(notificationSettings == null)
-                return new List<UserNotificationSetting>(0);
+            if (notificationSettings == null) return new List<UserNotificationSetting>(0);
 
-            return notificationSettings.Select(m => 
-                new UserNotificationSetting
-                    {
-                        UserRef = m.UserRef,
-                        ReceiveNotifications = m.ReceiveNotifications
-                    })
+            return
+                notificationSettings.Select(
+                    m =>
+                    new UserNotificationSetting { UserRef = m.UserRef, ReceiveNotifications = m.ReceiveNotifications })
                     .ToList();
+        }
+
+        public SummaryUnsubscribeViewModel Unsubscribe(string hashedAccountId, bool alreadyUnsubscribed, string urlSettingsPage)
+        {
+            return new SummaryUnsubscribeViewModel
+                       {
+                           AlreadyUnsubscribed = alreadyUnsubscribed,
+                           AccountName = "Fake name"
+                       };
         }
     }
 }

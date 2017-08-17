@@ -102,5 +102,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             await _accountOrchestrator.UpdateNotificationSettings(model);
             return RedirectToAction("NotificationSettings");
         }
+
+        [HttpGet]
+        [Route("~/notifications/unsubscribe/{hashedAccountId}/{alreadyUnsubscribed}")]
+        public async Task<ActionResult> NotificationUnsubscribe(string hashedAccountId, bool alreadyUnsubscribed)
+        {
+            //var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+
+            // ToDo: Add auth check
+            // ToDo: Add URL to settings page
+            // var url = Url.Action("NotificationSettings");
+            var model = _accountOrchestrator.Unsubscribe(hashedAccountId, alreadyUnsubscribed, "http://url.to.notificationpage/settings");
+
+            return View(model);
+        }
     }
 }
