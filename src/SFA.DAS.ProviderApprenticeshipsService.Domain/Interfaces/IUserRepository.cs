@@ -5,5 +5,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
     public interface IUserRepository
     {
         Task Upsert(User user);
+
+        Task<User> GetUser(string userRef);
     }
 }

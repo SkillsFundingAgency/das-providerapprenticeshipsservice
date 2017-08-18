@@ -8,6 +8,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
@@ -80,6 +81,39 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 default:
                     return View(model);
             }
+        }
+
+        [Authorize]
+        [Route("~/notification-settings")]
+        public async Task<ActionResult> NotificationSettings()
+        {
+            var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
+            var u = User.Identity.GetClaim(DasClaimTypes.Upn);
+            // ToDo: Test providerId parse 
+            var model = await _accountOrchestrator.GetNotificationSettings(u);
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("~/notification-settings")]
+        public async Task<ActionResult> NotificationSettings(NotificationSettingsViewModel model)
+        {
+            await _accountOrchestrator.UpdateNotificationSettings(model);
+            return RedirectToAction("NotificationSettings");
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("~/notifications/unsubscribe")]
+        public async Task<ActionResult> NotificationUnsubscribe()
+        {
+            var userRef = User.Identity.GetClaim(DasClaimTypes.Upn);
+
+            var url = Url.Action("NotificationSettings");
+            var model = await _accountOrchestrator.Unsubscribe(userRef, url);
+
+            return View(model);
         }
     }
 }

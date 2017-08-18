@@ -75,8 +75,8 @@
       <HintPath>..\packages\SFA.DAS.Http.1.0.0.35788\lib\net45\SFA.DAS.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.34273, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.34273\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
+    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.37051, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.37051\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Client, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.2.0.0.35919\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
@@ -107,6 +107,8 @@
     <Compile Include="Commands\TriageApprenticeshipDataLocks\TriageApprenticeshipDataLocksCommand.cs" />
     <Compile Include="Commands\TriageApprenticeshipDataLocks\TriageApprenticeshipDataLocksCommandHandler.cs" />
     <Compile Include="Commands\TriageApprenticeshipDataLocks\TriageApprenticeshipDataLocksCommandValidator.cs" />
+    <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationHandler.cs" />
+    <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationRequest.cs" />
     <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommand.cs" />
     <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommand.cs" />
     <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommandHandler.cs" />
@@ -135,6 +137,9 @@
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandValidator.cs" />
     <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommandHandler.cs" />
     <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommandValidator.cs" />
+    <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsCommand.cs" />
+    <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsHandler.cs" />
+    <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsValidator.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandHandler.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandValidator.cs" />
@@ -194,6 +199,12 @@
     <Compile Include="Queries\GetAllApprentices\GetAllApprenticesHandler.cs" />
     <Compile Include="Queries\GetAllApprentices\GetAllApprenticesRequest.cs" />
     <Compile Include="Queries\GetAllApprentices\GetAllApprenticesResponse.cs" />
+    <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsHandler.cs" />
+    <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsQuery.cs" />
+    <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsResponse.cs" />
+    <Compile Include="Queries\GetUser\GetUserHandler.cs" />
+    <Compile Include="Queries\GetUser\GetUserQuery.cs" />
+    <Compile Include="Queries\GetUser\GetUserResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
