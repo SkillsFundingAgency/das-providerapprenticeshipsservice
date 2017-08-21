@@ -51,7 +51,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             if (attachment.ContentLength > maxFileSize)
                 errors.Add(new UploadError(ApprenticeshipFileValidationText.MaxFileSizeMessage(maxFileSize)));
 
-            if(!attachment.FileName.EndsWith(".csv"))
+            if(!attachment.FileName.ToLower().EndsWith(".csv"))
                 errors.Add(new UploadError(ApprenticeshipFileValidationText.OnlyCsvFile));
 
             return errors;
