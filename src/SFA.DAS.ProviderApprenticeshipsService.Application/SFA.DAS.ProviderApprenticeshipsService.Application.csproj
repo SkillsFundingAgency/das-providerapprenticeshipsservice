@@ -146,6 +146,8 @@
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryHandler.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryRequest.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryResponse.cs" />
+    <Compile Include="Queries\GetAccountUsers\GetAccountUsersHandler.cs" />
+    <Compile Include="Queries\GetAccountUsers\GetAccountUsersResponse.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLockSummary\GetApprenticeshipDataLockSummaryQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLockSummary\GetApprenticeshipDataLockSummaryQueryRequest.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLockSummary\GetApprenticeshipDataLockSummaryQueryResponse.cs" />
@@ -199,6 +201,7 @@
     <Compile Include="Queries\GetAllApprentices\GetAllApprenticesHandler.cs" />
     <Compile Include="Queries\GetAllApprentices\GetAllApprenticesRequest.cs" />
     <Compile Include="Queries\GetAllApprentices\GetAllApprenticesResponse.cs" />
+    <Compile Include="Queries\GetAccountUsers\GetAccountUsersQuery.cs" />
     <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsHandler.cs" />
     <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsQuery.cs" />
     <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsResponse.cs" />
