@@ -98,6 +98,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             {
                 httpClient = new Http.HttpClientBuilder()
                 .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config.NotificationApi))
+                .WithHandler(new NLog.Logger.Web.MessageHandlers.RequestIdMessageRequestHandler())
                 .Build();
             }
             else
