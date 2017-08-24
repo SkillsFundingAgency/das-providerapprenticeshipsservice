@@ -21,7 +21,7 @@ namespace SFA.DAS.PAS.Account.Api.Client
         public async Task<User> GetUser(string userRef)
         {
             var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/user/";
+            var url = $"{baseUrl}api/user/{userRef}";
 
             var json = await _httpClient.GetAsync(url);
             return JsonConvert.DeserializeObject<User>(json);
