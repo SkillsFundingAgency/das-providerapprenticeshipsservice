@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 
@@ -24,6 +25,15 @@ namespace SFA.DAS.PAS.Account.Api.Client
 
             var json = await _httpClient.GetAsync(url);
             return JsonConvert.DeserializeObject<User>(json);
+        }
+
+        public async Task<IEnumerable<User>> GetAccountUsers(long ukprn)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{ukprn}/users";
+
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<IEnumerable<User>>(json);
         }
 
         private string GetBaseUrl()
