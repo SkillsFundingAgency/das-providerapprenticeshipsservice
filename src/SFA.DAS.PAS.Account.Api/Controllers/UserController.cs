@@ -21,7 +21,6 @@ namespace SFA.DAS.PAS.Account.Api.Controllers
         {
             var result = await _orchestrator.GetUser(userRef);
 
-
             return Ok(result);
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -49,6 +50,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                         commandType: CommandType.Text);
 
                 return results.Single();
+            });
+        }
+
+        public async Task<IEnumerable<User>> GetUsers(long ukprn)
+        {
+            return await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@ukprn", ukprn, DbType.Int64);
+
+                var results =
+                    await
+                    c.QueryAsync<User>(
+                        sql: "SELECT * FROM [dbo].[User] WHERE Ukprn = @ukprn",
+                        param: parameters,
+                        commandType: CommandType.Text);
+
+                return results;
             });
         }
     }
