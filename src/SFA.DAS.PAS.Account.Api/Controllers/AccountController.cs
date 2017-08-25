@@ -17,6 +17,7 @@ namespace SFA.DAS.PAS.Account.Api.Controllers
 
         [Route("{ukprn}/users")]
         [HttpGet]
+        // [Authorize(Roles = "PASReader")]
         public async Task<IHttpActionResult> GetAccountUsers(long ukprn)
         {
             var result = await _orchestrator.GetAccountUsers(ukprn);
