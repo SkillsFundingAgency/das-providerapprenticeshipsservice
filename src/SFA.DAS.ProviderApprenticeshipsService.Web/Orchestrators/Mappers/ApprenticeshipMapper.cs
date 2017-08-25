@@ -337,7 +337,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         private string MapPaymentStatus(PaymentStatus paymentStatus, DateTime? startDate)
         {
-            var isStartDateInFuture = startDate.HasValue && startDate.Value > new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            var isStartDateInFuture = startDate.HasValue && startDate.Value > new DateTime(_currentDateTime.Now.Year, _currentDateTime.Now.Month, 1);
 
             switch (paymentStatus)
             {

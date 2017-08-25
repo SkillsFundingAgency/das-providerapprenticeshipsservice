@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.Azure;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -6,7 +7,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using StructureMap;
 using StructureMap.Pipeline;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
+namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 {
     public class CurrentDatePolicy : ConfiguredInstancePolicy
     {
@@ -14,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         {
             var constructorParameter =
                 instance?.Constructor?.GetParameters().FirstOrDefault(x => x.ParameterType == typeof(ICurrentDateTime));
-
+            
             if (constructorParameter != null)
             {
                 var param = new CurrentDateTime(GetCurrentTimeFromConfiguration());

@@ -9,8 +9,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 
         public DateTime Now => _time ?? DateTime.UtcNow;
 
-        //todo: remove this constructor
-        public CurrentDateTime() : this(null)
+        public CurrentDateTime()
         {
         }
 
