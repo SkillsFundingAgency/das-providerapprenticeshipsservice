@@ -1,38 +1,37 @@
 ﻿using FluentAssertions;
+using Moq;
 using NUnit.Framework;
+using SFA.DAS.Learners.Validators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.ApprenticeshipCreateOrEdit
 {
     [TestFixture]
     public class WhenValidatingUln : ApprenticeshipValidationTestBase
     {
-        [TestCase("abc123")]
-        [TestCase("123456789")]
-        [TestCase(" ")]
-        [TestCase("9999999999")]
-        public void ULNThatIsNotNumericOr10DigitsInLengthIsInvalid(string uln)
-        {
-            ValidModel.ULN = uln;
 
-            var result = Validator.Validate(ValidModel);
-
-            result.IsValid.Should().BeFalse();
-        }
-        
         [Test]
-        public void ULN9999999999IsNotValid()
+        public void ShouldCallUlnValidatorService()
         {
-            ValidModel.ULN = "9999999999";
+            ValidModel.ULN = "123456789";
 
-            var result = Validator.Validate(ValidModel);
+            MockUlnValidator
+                .Setup(m => m.Validate(ValidModel.ULN))
+                .Returns(UlnValidationResult.IsInValidTenDigitUlnNumber);
 
-            result.IsValid.Should().BeFalse();
+            Validator.Validate(ValidModel);
+
+            MockUlnValidator
+               .Verify(m => m.Validate(ValidModel.ULN), Times.AtLeastOnce);
         }
 
         [Test]
-        public void ULNThatStartsWithAZeroIsInvalid()
+        public void ShouldBeInvalidIfResultIsNotSuccess()
         {
-            ValidModel.ULN = "0123456789";
+            ValidModel.ULN = "123456789";
+
+            MockUlnValidator
+                .Setup(m => m.Validate(ValidModel.ULN))
+                .Returns(UlnValidationResult.IsInValidTenDigitUlnNumber);
 
             var result = Validator.Validate(ValidModel);
 
@@ -40,13 +39,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         }
 
         [Test]
-        public void ULNWithValidValueIsValid()
+        public void ShouldBeValidIfResultIsSuccess()
         {
-            ValidModel.ULN = "1234567898";
+            ValidModel.ULN = "1748529632";
+
+            MockUlnValidator
+             .Setup(m => m.Validate(ValidModel.ULN))
+             .Returns(UlnValidationResult.Success);
 
             var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeTrue();
         }
+
     }
 }

@@ -45,6 +45,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using StructureMap;
 using StructureMap.Graph;
+using SFA.DAS.Learners.Validators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -134,7 +135,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
         private void ConfigureInstrumentedTypes()
         {
-            For<IBulkUploadValidator>().Use(x => new InstrumentedBulkUploadValidator(x.GetInstance<ILog>(), x.GetInstance<BulkUploadValidator>()));
+            For<IBulkUploadValidator>().Use(x => new InstrumentedBulkUploadValidator(x.GetInstance<ILog>(), x.GetInstance<BulkUploadValidator>(), new UlnValidator()));
             For<IBulkUploadFileParser>().Use(x => new InstrumentedBulkUploadFileParser(x.GetInstance<ILog>(), x.GetInstance<BulkUploadFileParser>()));
 
             For<IAsyncRequestHandler<BulkUploadApprenticeshipsCommand, Unit>>()

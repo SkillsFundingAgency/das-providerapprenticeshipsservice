@@ -9,20 +9,23 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
+using SFA.DAS.Learners.Validators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.ApprenticeshipBulkUpload
 {
     public abstract class ApprenticeshipBulkUploadValidationTestBase
     {
-        protected ApprenticeshipUploadModelValidator Validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(), new CurrentDateTime());
+        protected ApprenticeshipUploadModelValidator Validator;
         protected ApprenticeshipUploadModel ValidModel;
         protected Mock<ICurrentDateTime> MockCurrentDateTime;
+        protected Mock<IUlnValidator> MockUlnValidator;
 
         [SetUp]
         public void BaseSetup()
         {
             MockCurrentDateTime = new Mock<ICurrentDateTime>();
-            Validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(), MockCurrentDateTime.Object);
+            MockUlnValidator = new Mock<IUlnValidator>();
+            Validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(), MockCurrentDateTime.Object, MockUlnValidator.Object);
 
             ValidModel = new ApprenticeshipUploadModel
             {
