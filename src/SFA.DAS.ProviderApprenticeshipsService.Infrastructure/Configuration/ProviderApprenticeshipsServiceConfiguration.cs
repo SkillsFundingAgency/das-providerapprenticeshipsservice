@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Commitments.Api.Client.Configuration;
+using SFA.DAS.Http;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
@@ -19,7 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public bool EnableEmailNotifications { get; set; }
     }
 
-    public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
+    public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration, IJwtClientConfiguration
     {
         public string BaseUrl { get; set; }
         public string ClientToken { get; set; }
