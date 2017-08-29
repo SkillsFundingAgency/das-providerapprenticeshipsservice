@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
 
+using SFA.DAS.PAS.Account.Api.Attributes;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 
 namespace SFA.DAS.PAS.Account.Api.Controllers
@@ -17,7 +18,7 @@ namespace SFA.DAS.PAS.Account.Api.Controllers
 
         [Route("{ukprn}/users")]
         [HttpGet]
-        // [Authorize(Roles = "PASReader")]
+        [ApiAuthorize(Roles = "PASReader")]
         public async Task<IHttpActionResult> GetAccountUsers(long ukprn)
         {
             var result = await _orchestrator.GetAccountUsers(ukprn);
