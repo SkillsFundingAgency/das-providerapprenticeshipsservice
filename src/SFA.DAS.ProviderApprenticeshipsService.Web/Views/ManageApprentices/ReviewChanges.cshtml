@@ -31,7 +31,7 @@
                 </div>
             </fieldset>
 
-            <button type="submit" class="button button-left-align" aria-label="Finish">Continue</button>
+            <button type="submit" class="button button-left-align" aria-label="Finish" id="submit-review-changes">Continue</button>
             @Html.ActionLink("Cancel and return", "Details",  new { providerId = Model.OriginalApprenticeship.ProviderId,  hashedApprenticeshipId = Model.HashedApprenticeshipId }, new { @class = "link-left-aligned" })
         </div>  
     </div>
