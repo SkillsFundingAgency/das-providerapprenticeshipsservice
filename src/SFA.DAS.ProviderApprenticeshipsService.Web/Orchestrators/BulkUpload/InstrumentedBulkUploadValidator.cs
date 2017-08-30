@@ -9,6 +9,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
+using SFA.DAS.Learners.Validators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 {
@@ -16,9 +17,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
     {
         private readonly ILog _logger;
         private readonly IBulkUploadValidator _validator;
-        private readonly ApprenticeshipUploadModelValidator _viewModelValidator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(), new CurrentDateTime());
+        private readonly ApprenticeshipUploadModelValidator _viewModelValidator;
         
-        public InstrumentedBulkUploadValidator(ILog logger, IBulkUploadValidator validator)
+        public InstrumentedBulkUploadValidator(ILog logger, IBulkUploadValidator validator, IUlnValidator ulnValidator)
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
@@ -27,7 +28,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
             _logger = logger;
             _validator = validator;
-        }
+            _viewModelValidator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(), new CurrentDateTime(), ulnValidator);
+    }
 
         public IEnumerable<UploadError> ValidateCohortReference(IEnumerable<ApprenticeshipUploadModel> records, string cohortReference)
         {

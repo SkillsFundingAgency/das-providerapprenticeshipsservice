@@ -13,6 +13,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 
 using BulkUploadValidator = SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload.BulkUploadValidator;
+using SFA.DAS.Learners.Validators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.BulkUpload
 {
@@ -25,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [SetUp]
         public void SetUp()
         {
-            _sut = new BulkUploadValidator(new ProviderApprenticeshipsServiceConfiguration(), Mock.Of<ILog>());
+            _sut = new BulkUploadValidator(new ProviderApprenticeshipsServiceConfiguration(), Mock.Of<ILog>(), Mock.Of<IUlnValidator>());
         }
 
         [Test]
