@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SFA.DAS.Learners.Validators;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
@@ -8,7 +9,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 {
     public abstract class ApprenticeshipValidationTestBase
     {
-        protected readonly ApprenticeshipViewModelValidator Validator = new ApprenticeshipViewModelValidator(new WebApprenticeshipValidationText(), new CurrentDateTime(), new Infrastructure.Services.AcademicYear(new CurrentDateTime()));
+        protected readonly ApprenticeshipViewModelValidator Validator = new ApprenticeshipViewModelValidator(new WebApprenticeshipValidationText(), new CurrentDateTime(), new Infrastructure.Services.AcademicYear(new CurrentDateTime()),new UlnValidator());
         protected ApprenticeshipViewModel ValidModel;
 
         [SetUp]

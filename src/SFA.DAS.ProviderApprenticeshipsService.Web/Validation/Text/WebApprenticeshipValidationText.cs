@@ -11,6 +11,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
             new ValidationMessage("You must enter a 10-digit unique learner number", "ULN_01");
         public ValidationMessage Uln02 =>
             new ValidationMessage("The unique learner number of 9999999999 isn't valid", "ULN_02");
+        public ValidationMessage Uln03 =>
+                 new ValidationMessage("You must enter a valid unique learner number", "ULN_03");
 
         public ValidationMessage FamilyName01 =>
             new ValidationMessage("Last name must be entered", "FamilyName_01");

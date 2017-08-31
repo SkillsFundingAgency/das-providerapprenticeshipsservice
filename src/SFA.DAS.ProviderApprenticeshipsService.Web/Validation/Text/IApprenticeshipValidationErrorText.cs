@@ -36,5 +36,6 @@
         ValidationMessage TrainingPrice02 { get; }
         ValidationMessage Uln01 { get; }
         ValidationMessage Uln02 { get; }
+        ValidationMessage Uln03 { get; }
     }
 }
