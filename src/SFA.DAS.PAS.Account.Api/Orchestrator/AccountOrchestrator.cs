@@ -28,7 +28,7 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
 
             return result.UserSettings.Select(
                 m =>
-                new User { EmailAddress = m.User.Email, ReceiveNotifications = m.Setting.ReceiveNotifications, UserRef = m.User.UserRef });
+                new User { EmailAddress = m.User.Email, ReceiveNotifications = m.Setting?.ReceiveNotifications ?? true, UserRef = m.User.UserRef });
         }
     }
 }

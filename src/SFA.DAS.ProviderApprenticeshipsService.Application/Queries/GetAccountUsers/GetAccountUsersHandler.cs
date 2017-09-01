@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 
+using FluentValidation;
 using MediatR;
 
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -20,6 +21,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAccountU
 
         public async  Task<GetAccountUsersResponse> Handle(GetAccountUsersQuery request)
         {
+            if(request.Ukprn < 1)
+                throw new ValidationException($"Ukprn must be more than 0 when getting account users.");
+
             var response = new GetAccountUsersResponse();
             var providerUsers = await _userRepository.GetUsers(request.Ukprn);
             foreach (var user in providerUsers)
