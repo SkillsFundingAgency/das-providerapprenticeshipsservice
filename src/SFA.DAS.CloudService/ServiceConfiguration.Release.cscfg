@@ -13,6 +13,7 @@
       <Setting name="IdamsADFSMetadata" value="__IdamsADFSMetadata__" />
       <Setting name="InstrumentationKey" value="__InstrumentationKey__" />
       <Setting name="RedisSessionProviderConnectionString" value="__RedisSessionProviderConnectionString__" />
+      <Setting name="CurrentTime" value="" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="7306D453BBE292DF1283A268FD3B9B7E7815C7F5" thumbprintAlgorithm="sha1" />
