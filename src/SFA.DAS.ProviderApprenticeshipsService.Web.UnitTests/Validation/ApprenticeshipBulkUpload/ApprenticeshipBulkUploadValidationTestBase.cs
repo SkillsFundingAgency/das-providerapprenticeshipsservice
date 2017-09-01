@@ -19,13 +19,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         protected ApprenticeshipUploadModel ValidModel;
         protected Mock<ICurrentDateTime> MockCurrentDateTime;
         protected Mock<IUlnValidator> MockUlnValidator;
+        protected Mock<IAcademicYear> MockAcademicYear;
 
         [SetUp]
         public void BaseSetup()
         {
             MockCurrentDateTime = new Mock<ICurrentDateTime>();
             MockUlnValidator = new Mock<IUlnValidator>();
-            Validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(), MockCurrentDateTime.Object, MockUlnValidator.Object);
+            MockAcademicYear = new Mock<IAcademicYear>();
+
+            Validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(MockAcademicYear.Object), MockCurrentDateTime.Object, MockUlnValidator.Object);
 
             ValidModel = new ApprenticeshipUploadModel
             {

@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
-    public interface IAcademicYear
+    public interface IAcademicYearValidator
     {
-        DateTime CurrentAcademicYearStartDate { get; }
-        DateTime CurrentAcademicYearEndDate { get; }
-
-        DateTime CurrentAcademicYearFundingPeriod { get; }
+        AcademicYearValidationResult Validate(DateTime startDate);
     }
 }

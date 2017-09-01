@@ -6,6 +6,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.Learners.Validators;
+using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
@@ -18,16 +19,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IAcademicYear _academicYear;
         private readonly IUlnValidator _ulnValidator;
+        private readonly IAcademicYearValidator _academicYearValidator;
 
         public ApprenticeshipCoreValidator(IApprenticeshipValidationErrorText validationText, 
                                             ICurrentDateTime currentDateTime, 
                                             IAcademicYear academicYear,
-                                            IUlnValidator ulnValidator)
+                                            IUlnValidator ulnValidator,
+                                            IAcademicYearValidator academicYearValidator)
         {
             _validationText = validationText;
             _currentDateTime = currentDateTime;
             _academicYear = academicYear;
             _ulnValidator = ulnValidator;
+            _academicYearValidator = academicYearValidator;
 
             ValidateFirstName();
 
@@ -46,6 +50,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             ValidateCost();
 
             ValidateProviderReference();
+
+            ValidateAcademicYearStartDate();
         }
 
         private void ValidateFirstName()
@@ -128,6 +134,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Must(m => decimal.TryParse(m, out parsed) && parsed <= 100000).WithMessage(_validationText.TrainingPrice02.Text).WithErrorCode(_validationText.TrainingPrice02.ErrorCode);
         }
 
+        protected virtual void ValidateAcademicYearStartDate()
+        {
+            RuleFor(x => x.StartDate)
+              .Cascade(CascadeMode.StopOnFirstFailure)
+              .Must(BeWithinAcademicYearFundingPeriod).WithMessage(_validationText.AcademicYearStartDate01.Text).WithErrorCode(_validationText.AcademicYearStartDate01.ErrorCode);
+        }
+
         private void ValidateProviderReference()
         {
             RuleFor(x => x.ProviderRef)
@@ -199,6 +212,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         private bool BeValidUlnNumber(string uln)
         {
             if (_ulnValidator.Validate(uln) == UlnValidationResult.IsInvalidUln)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool BeWithinAcademicYearFundingPeriod(DateTimeViewModel startDate)
+        {
+            var result = _academicYearValidator.Validate(startDate.DateTime.Value);
+
+            if (result == AcademicYearValidationResult.NotWithinFundingPeriod)
             {
                 return false;
             }

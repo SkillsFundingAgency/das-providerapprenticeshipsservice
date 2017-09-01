@@ -18,6 +18,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 using WebGrease.Css.Extensions;
 using SFA.DAS.Learners.Validators;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 {
@@ -30,14 +31,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
         private readonly BulkUploadApprenticeshipValidationText _validationText;
         private readonly ApprenticeshipUploadModelValidator _viewModelValidator;
         
-        public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, ILog logger, IUlnValidator ulnValidator)
+        public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, ILog logger, IUlnValidator ulnValidator, IAcademicYear academicYear)
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
             if (config == null)
                 throw new ArgumentNullException(nameof(config));
 
-            _validationText = new BulkUploadApprenticeshipValidationText();
+            _validationText = new BulkUploadApprenticeshipValidationText(academicYear);
             _viewModelValidator = new ApprenticeshipUploadModelValidator(_validationText, new CurrentDateTime(), ulnValidator);
             
             _logger = logger;
