@@ -10,7 +10,7 @@
       <Setting name="LogLevel" value="Debug" />
       <Setting name="LoggingRedisKey" value="" />
       <Setting name="LoggingRedisConnectionString" value="" />
-      <Setting name="idaAudience" value="https://citizenazuresfabisgov.onmicrosoft.com/eas-api" />
+      <Setting name="idaAudience" value="https://citizenazuresfabisgov.onmicrosoft.com/prap-api" />
       <Setting name="idaTenant" value="citizenazuresfabisgov.onmicrosoft.com" />
       <Setting name="InstrumentationKey" value=""/>
     </ConfigurationSettings>
