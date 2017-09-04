@@ -10,6 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.Learners.Validators;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
 {
@@ -18,6 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         private  ApprenticeshipUploadModelValidator _validator;
         private ApprenticeshipUploadModel _validModel;
         private Moq.Mock<IUlnValidator> _mockUlnValidator;
+        private Moq.Mock<IAcademicYear> _mockAcademicYear;
 
         [SetUp]
         public void Setup()
@@ -39,10 +41,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             };
 
             _mockUlnValidator = new Moq.Mock<IUlnValidator>();
+            _mockAcademicYear = new Moq.Mock<IAcademicYear>();
             _mockUlnValidator.Setup(m => m.Validate(_validModel.ApprenticeshipViewModel.ULN)).Returns(UlnValidationResult.Success);
-            _validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(), new CurrentDateTime(), _mockUlnValidator.Object);
-
-
+            _validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(_mockAcademicYear.Object), new CurrentDateTime(), _mockUlnValidator.Object);
         }
 
         [TestCase("1", "The <strong>Programme type</strong> you've added isn't valid", "ProgType_02")]

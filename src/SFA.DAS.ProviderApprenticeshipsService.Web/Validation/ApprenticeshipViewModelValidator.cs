@@ -65,14 +65,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             });
         }
 
-        protected override void ValidateAcademicYearStartDate()
-        {
-            When(x => HasYearOrMonthValueSet(x.StartDate), () =>
-            {
-                base.ValidateAcademicYearStartDate();
-            });
-        }
-
         private bool HasYearOrMonthValueSet(DateTimeViewModel date)
         {
             if (date == null) return false;

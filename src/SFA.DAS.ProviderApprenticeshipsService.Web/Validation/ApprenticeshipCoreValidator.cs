@@ -50,8 +50,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             ValidateCost();
 
             ValidateProviderReference();
-
-            ValidateAcademicYearStartDate();
         }
 
         private void ValidateFirstName()
@@ -110,7 +108,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Must((startDate) =>
                 {
                     return StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear(startDate);
-                }).WithMessage(_validationText.LearnStartDate05.Text).WithErrorCode(_validationText.LearnStartDate05.ErrorCode);
+                }).WithMessage(_validationText.LearnStartDate05.Text).WithErrorCode(_validationText.LearnStartDate05.ErrorCode)
+               .Must(BeWithinAcademicYearFundingPeriod).WithMessage(_validationText.AcademicYearStartDate01.Text).WithErrorCode(_validationText.AcademicYearStartDate01.ErrorCode);
         }
 
         protected virtual void ValidateEndDate()
@@ -132,13 +131,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .NotEmpty().WithMessage(_validationText.TrainingPrice01.Text).WithErrorCode(_validationText.TrainingPrice01.ErrorCode)
                 .Matches("^([1-9]{1}([0-9]{1,2})?)+(,[0-9]{3})*$|^[1-9]{1}[0-9]*$").WithMessage(_validationText.TrainingPrice01.Text).WithErrorCode(_validationText.TrainingPrice01.ErrorCode)
                 .Must(m => decimal.TryParse(m, out parsed) && parsed <= 100000).WithMessage(_validationText.TrainingPrice02.Text).WithErrorCode(_validationText.TrainingPrice02.ErrorCode);
-        }
-
-        protected virtual void ValidateAcademicYearStartDate()
-        {
-            RuleFor(x => x.StartDate)
-              .Cascade(CascadeMode.StopOnFirstFailure)
-              .Must(BeWithinAcademicYearFundingPeriod).WithMessage(_validationText.AcademicYearStartDate01.Text).WithErrorCode(_validationText.AcademicYearStartDate01.ErrorCode);
         }
 
         private void ValidateProviderReference()

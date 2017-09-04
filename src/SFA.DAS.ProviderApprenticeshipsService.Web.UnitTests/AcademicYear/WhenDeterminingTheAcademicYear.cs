@@ -18,11 +18,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.AcademicYear
             _currentDateTime = new Mock<ICurrentDateTime>();
         }
 
-        [TestCase("2017-08-01", "2017-08-01", "2018-07-31")]
-        [TestCase("2018-03-01", "2017-08-01", "2018-07-31")]
-        [TestCase("2018-07-31", "2017-08-01", "2018-07-31")]
-        [TestCase("2018-10-01", "2018-08-01", "2019-07-31")]
-        public void ThenAcademicYearRunsAugustToJuly(DateTime currentDate, DateTime expectedYearStart, DateTime expectedYearEnd)
+        [TestCase("2017-08-01", "2017-08-01", "2018-07-31", "2018-10-19")]
+        [TestCase("2018-03-01", "2017-08-01", "2018-07-31", "2018-10-19")]
+        [TestCase("2018-07-31", "2017-08-01", "2018-07-31", "2018-10-19")]
+        [TestCase("2018-10-01", "2018-08-01", "2019-07-31", "2019-10-19")]
+        public void ThenAcademicYearRunsAugustToJuly(DateTime currentDate, DateTime expectedYearStart, DateTime expectedYearEnd, DateTime expectedYearFundingPeriod)
         {
             //Arrange
             _currentDateTime.Setup(x => x.Now).Returns(currentDate);
