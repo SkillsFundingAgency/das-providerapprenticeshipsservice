@@ -40,11 +40,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
             }
         }
 
-        public bool ShowOverlapError {
+        public bool ShowOverlapError
+        {
             get
             {
                 return Apprenticeships.SelectMany(m => m.OverlappingApprenticeships).Any();
             }
         }
+
+        public int AcademicFundingPeriodErrorCount { get; set; }
+
+
+        public bool ShowAcademicYearFundingPeriodWarning { get; set; }
+
+        public DateTime EarliestAcademicYearDate { get; set; }
+
+
     }
 }

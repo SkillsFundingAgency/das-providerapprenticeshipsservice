@@ -14,26 +14,51 @@
             {
                 @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             }
-            else if (Model.FundingCapWarnings.Any())
+            else
             {
-                <div class="validation-summary-max-funding error-summary">
-                    <h1 id="warning-summary" class="heading-medium warning-summary-heading">
-                        Warnings for your attention
-                    </h1>
-                    <p>Review the following details:</p>
-                    <ul class="max-funding-summary-list">
-                        @foreach (var warning in Model.FundingCapWarnings)
+                if (Model.FundingCapWarnings.Any())
                 {
-                            <li>
-                                <a href="#max-funding-group-@warning.Key" data-focuses="max-funding-group-@warning.Key">
-                                    @warning.Value
-                                </a>
-                            </li>
-                        }
-                    </ul>
-                </div>
+                    <div class="validation-summary-max-funding error-summary">
+                        <h1 id="warning-summary" class="heading-medium warning-summary-heading">
+                            Warnings for your attention
+                        </h1>
+                        <p>Review the following details:</p>
+                        <ul class="max-funding-summary-list">
+                            @foreach (var warning in Model.FundingCapWarnings)
+                            {
+                                <li>
+                                    <a href="#max-funding-group-@warning.Key" data-focuses="max-funding-group-@warning.Key">
+                                        @warning.Value
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+                if (Model.AcademicFundingPeriodWarning.Any())
+                {
+                    <div class="validation-summary-max-funding error-summary">
+                        <h1 id="warning-summary" class="heading-medium warning-summary-heading">
+                            Problem with start dates
+                        </h1>
+                        <p>Start dates can't be in the previoud academic year.</p>
+                        <ul class="max-funding-summary-list">
+                            @foreach (var warning in Model.AcademicFundingPeriodWarning)
+                            {
+                                <li>
+                                    <a href="#max-funding-group-@warning.Key" data-focuses="max-funding-group-@warning.Key">
+                                        @warning.Value
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+
             }
-            
+
             @if (Model.IsReadOnly)
             {
                 <h1 class="heading-xlarge">View your cohort</h1>
@@ -96,7 +121,7 @@
         <div class="column-two-thirds employer-details">
             <p class="strong">Message:</p>
             <p>@(string.IsNullOrWhiteSpace(Model.LatestMessage) ? "No message added" : Model.LatestMessage)</p>
-        </div>        
+        </div>
     </div>
 
     <hr class="hr-bottom">
@@ -116,14 +141,14 @@
             </div>
         </div>
 
-    }
+                    }
 
     <div class="grid-row">
         <div class="column-full">
             @if (!Model.HasApprenticeships)
             {
                 <div class="panel panel-border-wide alert-default">
-                    
+
                     @if (Model.IsReadOnly)
                     {
                         <p>Apprentices will appear here when the employer adds them to your cohort.</p>
@@ -172,17 +197,38 @@
                             </div>
                             <i class="overlap-arrow"></i>
                         }
-                        else if (group.ShowFundingLimitWarning && !Model.HasOverlappingErrors)
+                        else if (!Model.HasOverlappingErrors)
                         {
-                            <div class="funding-cap-notification" id="max-funding-group-@group.GroupId">
-                                <p class="heading-small">
-                                    @($"{group.ApprenticeshipsOverFundingLimit} {_addS("apprenticeship", group.ApprenticeshipsOverFundingLimit)} above funding band maximum")
-                                </p>
-                                <p>
-                                    The costs are above the £@group.TrainingProgramme.MaxFunding.ToString("N0") <a target="_blank" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">maximum value of the funding band</a> for this apprenticeship. You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.
-                                </p>
-                            </div>
-                            <i class="bubble-arrow"></i>
+
+                            if (group.ShowAcademicYearFundingPeriodWarning)
+                            {
+                                <div class="funding-cap-notification" id="max-funding-group-@group.GroupId">
+                                    <p class="heading-small">
+                                        Start dates can't be in the previoud academic year
+                                    </p>
+                                    <p>
+                                        The earliest date you can use is @group.EarliestAcademicYearDate.ToString("MM yyyy");
+                                    </p>
+                                </div>
+                            }
+
+                            if (group.ShowFundingLimitWarning)
+                            {
+                                <div class="funding-cap-notification" id="max-funding-group-@group.GroupId">
+                                    <p class="heading-small">
+                                        @($"{group.ApprenticeshipsOverFundingLimit} {_addS("apprenticeship", group.ApprenticeshipsOverFundingLimit)} above funding band maximum")
+                                    </p>
+                                    <p>
+                                        The costs are above the £@group.TrainingProgramme.MaxFunding.ToString("N0") <a target="_blank" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">maximum value of the funding band</a> for this apprenticeship. You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.
+                                    </p>
+
+                                </div>
+
+                                <i class="bubble-arrow"></i>
+                            }
+
+
+
                         }
                     </div>
 
@@ -263,7 +309,7 @@
                                         {
                                             <a href="@Url.Action("Edit", new {Model.HashedCommitmentId, apprenticeship.HashedApprenticeshipId})"
                                                title="Edit @apprenticeship.ApprenticeshipName" aria-label="Edit @apprenticeship.ApprenticeshipName">Edit</a>
-                                        }                                        
+                                        }
                                     </td>
                                 </tr>
                             }
@@ -275,7 +321,7 @@
             </div>
         </div>
     }
-    
+
     @if (!Model.IsReadOnly)
     {
         <a class="button delete-button" href="@Url.Action("DeleteCohort", new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Delete">Delete cohort</a>
@@ -303,12 +349,12 @@
 
 @helper GetValueOrDefault(string property)
 {
-    if (!string.IsNullOrEmpty(property))
-    {
-            <span>@property &nbsp;</span>
-    }
-    else
-    {
-            <span class="missing">@Html.Raw("&ndash;")</span>
-    }
+if (!string.IsNullOrEmpty(property))
+{
+        <span>@property &nbsp;</span>
+}
+else
+{
+        <span class="missing">@Html.Raw("&ndash;")</span>
+}
 }

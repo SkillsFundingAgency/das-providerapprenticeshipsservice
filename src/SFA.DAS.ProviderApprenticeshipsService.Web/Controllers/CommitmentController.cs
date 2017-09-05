@@ -174,6 +174,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
                 ModelState.AddModelError($"{groupe.GroupId}", errorMessage);
             }
+                        
             model.BackLinkUrl = GetReturnToListUrl(providerId);
 
             AddFlashMessageToViewModel(model);
