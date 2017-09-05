@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
 
+using SFA.DAS.PAS.Account.Api.Attributes;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
@@ -21,6 +22,7 @@ namespace SFA.DAS.PAS.Account.Api.Controllers
 
         [Route("{userRef}")]
         [HttpGet]
+        [ApiAuthorize]
         public async Task<IHttpActionResult> GetUserSettings(string userRef)
         {
             _logger.Info($"Getting users settings for user: {userRef}");
