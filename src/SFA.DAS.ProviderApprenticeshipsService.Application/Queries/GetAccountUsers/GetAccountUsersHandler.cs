@@ -13,10 +13,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAccountU
         private readonly IUserSettingsRepository _userSettingsRepository;
         private readonly IUserRepository _userRepository;
 
-        public GetAccountUsersHandler(IUserSettingsRepository userSettingsRepository, IUserRepository userRepository)
+        private readonly IProviderCommitmentsLogger _logger;
+
+        public GetAccountUsersHandler(
+            IUserSettingsRepository userSettingsRepository, 
+            IUserRepository userRepository,
+            IProviderCommitmentsLogger logger)
         {
             _userSettingsRepository = userSettingsRepository;
             _userRepository = userRepository;
+            _logger = logger;
         }
 
         public async  Task<GetAccountUsersResponse> Handle(GetAccountUsersQuery request)
@@ -25,12 +31,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAccountU
                 throw new ValidationException($"Ukprn must be more than 0 when getting account users.");
 
             var response = new GetAccountUsersResponse();
+            _logger.Info($"Getting users from reposotory for {request.Ukprn}", providerId:request.Ukprn);
             var providerUsers = await _userRepository.GetUsers(request.Ukprn);
             foreach (var user in providerUsers)
             {
                 var settings = await _userSettingsRepository.GetUserSetting(user.UserRef);
                 response.Add(user, settings.FirstOrDefault());
             }
+
+            _logger.Info($"Found {providerUsers.Count()} users from reposotory for {request.Ukprn}", providerId: request.Ukprn);
 
             return response;
         }
