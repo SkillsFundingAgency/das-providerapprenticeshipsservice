@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ManageApprenticeshipsViewModel
 
 @{
@@ -24,11 +25,12 @@ else
                 <div class="column-one-third">
                     <!--Search bar-->
                     <div id="search-app">
-                        <form id="search-form" method="get" action="http://www.google.com">
+                        <form id="search-form" method="get" action="@Url.Action("Index")">
                             <fieldset class="inline">
                                 <legend><h2 class="heading-medium">Search for an apprentice</h2></legend>
-                                <input type="text" id="search-input" class="search-text form-control" />
-                                <input type="submit" class="submit-search form-control" />
+                                <input type="text" id="search-input" name="SearchInput" class="search-text form-control" value="@Model.Filters.SearchInput"/>
+                                <input type="submit" class="submit-search form-control"/>
+                                <input name="ResetFilter" type="hidden" value="True">
                             </fieldset>
                         </form>
                     </div>
@@ -40,6 +42,8 @@ else
                         <p>
                             <a href="@Url.Action("Index")" title="Reset" class="button text-link reset-link">Reset</a>
                         </p>
+                        @Html.Hidden("SearchInput", Model.Filters.SearchInput)
+                        <input name="ResetFilter" type="hidden" value="False">
                     </form>
                 </div>
 

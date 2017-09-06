@@ -30,5 +30,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public List<string> RecordStatus { get; set; }
         public List<string> Employer { get; set; }
         public List<string> Course { get; set; }
+
+        public string SearchInput { get; set; }
+
+        public bool ResetFilter { get; set; }
     }
 }
