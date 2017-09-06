@@ -34,25 +34,42 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public void BaseSetup()
         {
             ValidModel = new ApprenticeshipViewModel { ULN = "1001234567", FirstName = "TestFirstName", LastName = "TestLastName" };
-
-            _orchestrator = new CommitmentOrchestrator(
-                        _mockMediator.Object,
-                        _mockCalculator.Object,
-                        _mockHashingService.Object,
-                        Mock.Of<IProviderCommitmentsLogger>(),
-                        Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
-                        Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
-                        _mockMapper.Object,
-                        Validator,
-                        Mock.Of<IAcademicYearValidator>(),
-                        Mock.Of<IAcademicYear>());
-
             SetUp();
+            SetUpOrchestrator();
         }
 
         protected virtual void SetUp()
         {
         }
 
+        protected void SetUpOrchestrator()
+        {
+            _orchestrator = new CommitmentOrchestrator(
+                       _mockMediator.Object,
+                       _mockCalculator.Object,
+                       _mockHashingService.Object,
+                       Mock.Of<IProviderCommitmentsLogger>(),
+                       Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
+                       Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
+                       _mockMapper.Object,
+                       Validator,
+                       Mock.Of<IAcademicYearValidator>(),
+                       Mock.Of<IAcademicYear>());
+        }
+
+        protected void SetUpOrchestrator(ICommitmentStatusCalculator commitmentStatusCalculator)
+        {
+            _orchestrator = new CommitmentOrchestrator(
+                       _mockMediator.Object,
+                       commitmentStatusCalculator,
+                       _mockHashingService.Object,
+                       Mock.Of<IProviderCommitmentsLogger>(),
+                       Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
+                       Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
+                       _mockMapper.Object,
+                       Validator,
+                       Mock.Of<IAcademicYearValidator>(),
+                       Mock.Of<IAcademicYear>());
+        }
     }
 }

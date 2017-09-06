@@ -26,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     [TestFixture]
     public class WhenGetCohorts : ApprenticeshipValidationTestBase
     {
-        Task<GetCommitmentsQueryResponse> _commitments;
+       public Task<GetCommitmentsQueryResponse> _commitments;
 
 
         protected override void SetUp()
@@ -42,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             await _orchestrator.GetCohorts(1234567);
 
-            _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>()), Times.Once);
+            _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>()), Times.AtLeastOnce);
             _mockCalculator.Verify(m => m.GetStatus(It.IsAny<EditStatus>(), It.IsAny<int>(), It.IsAny<LastAction>(), It.IsAny<AgreementStatus>(), It.IsAny<LastUpdateInfo>()), Times.Exactly(_commitments.Result.Commitments.Count));
         }
         
@@ -50,6 +50,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task TestFilter()
         {
+            SetUpOrchestrator(new CommitmentStatusCalculator());
 
             var result = await _orchestrator.GetCohorts(1234567);
 

@@ -51,7 +51,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mockMediator = GetMediator(_testCommitment);
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetProviderAgreementQueryRequest>()))
                 .Returns(Task.FromResult(new GetProviderAgreementQueryResponse { HasAgreement = ProviderAgreementStatus.Agreed }));
-
+            SetUpOrchestrator();
             var result = _orchestrator.GetFinishEditing(1L, "ABBA123").Result;
 
             result.ReadyForApproval.Should().BeFalse();
@@ -86,7 +86,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 };
 
             _mockMediator = GetMediator(_testCommitment);
-
+            SetUpOrchestrator();
             var result = _orchestrator.GetFinishEditing(1L, "ABBA123").Result;
 
             result.IsApproveAndSend.Should().BeTrue();
@@ -104,6 +104,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 };
 
             _mockMediator = GetMediator(_testCommitment);
+            SetUpOrchestrator();
             var result = _orchestrator.GetFinishEditing(1L, "ABBA123").Result;
 
             result.IsApproveAndSend.Should().BeFalse();

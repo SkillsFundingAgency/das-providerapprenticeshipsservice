@@ -44,8 +44,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Messages = new List<MessageView>()
             };
 
-            var mockMediator = GetMediator(commitment);
-
+            _mockMediator = GetMediator(commitment);
+            SetUpOrchestrator();
             var result = _orchestrator.GetCommitmentDetails(1L, "ABBA123").Result;
 
             result.PendingChanges.ShouldBeEquivalentTo(false);
@@ -67,7 +67,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             };
 
             _mockMediator = GetMediator(commitment);
-
+            SetUpOrchestrator();
             var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
 
             result.PendingChanges.ShouldBeEquivalentTo(true);
@@ -87,7 +87,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             };
 
             _mockMediator = GetMediator(commitment);
-
+            SetUpOrchestrator();
             var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
 
             result.IsReadOnly.ShouldBeEquivalentTo(expectedIsReadOnly);
