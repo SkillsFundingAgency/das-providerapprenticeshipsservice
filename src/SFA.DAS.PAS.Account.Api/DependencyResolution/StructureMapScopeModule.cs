@@ -1,6 +1,4 @@
-﻿using SFA.DAS.PAS.Account.Api.App_Start;
-
-namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
+﻿namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
     using System.Web;
     using StructureMap.Web.Pipeline;
 
