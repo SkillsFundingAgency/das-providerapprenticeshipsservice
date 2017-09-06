@@ -69,7 +69,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                                 Overlaps = new List<ApprenticeshipOverlapValidationResult>()
                             }));
 
-            var uploadValidator = new BulkUploadValidator(new ProviderApprenticeshipsServiceConfiguration { MaxBulkUploadFileSize = 512 }, Mock.Of<ILog>(), Mock.Of<IUlnValidator>(), Mock.Of<IAcademicYear>());
+            var uploadValidator = new BulkUploadValidator(new ProviderApprenticeshipsServiceConfiguration { MaxBulkUploadFileSize = 512 }, Mock.Of<ILog>(), Mock.Of<IUlnValidator>(), Mock.Of<IAcademicYear>(), Mock.Of<IAcademicYearValidator>());
             var uploadFileParser = new BulkUploadFileParser(Mock.Of<IProviderCommitmentsLogger>());
             var bulkUploader = new BulkUploader(_mockMediator.Object, uploadValidator, uploadFileParser, Mock.Of<IProviderCommitmentsLogger>());
             var bulkUploadMapper = new BulkUploadMapper(_mockMediator.Object);

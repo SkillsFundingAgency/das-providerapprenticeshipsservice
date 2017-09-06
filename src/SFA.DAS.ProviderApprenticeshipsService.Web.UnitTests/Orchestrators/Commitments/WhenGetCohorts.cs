@@ -26,15 +26,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     [TestFixture]
     public class WhenGetCohorts : ApprenticeshipValidationTestBase
     {
-        Mock<IMediator> _mockMediator;
-        Mock<ICommitmentStatusCalculator> _mockCalculator;
         Task<GetCommitmentsQueryResponse> _commitments;
-        [SetUp]
-        public void SetUp()
+
+
+        protected override void SetUp()
         {
-            _mockMediator = new Mock<IMediator>();
-            _mockCalculator = new Mock<ICommitmentStatusCalculator>();
-            
             _commitments = Task.FromResult(TestData());
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>())).Returns(_commitments);
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetProviderAgreementQueryRequest>()))
@@ -44,14 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task TestHappyPath()
         {
-            var sut = new CommitmentOrchestrator(_mockMediator.Object, _mockCalculator.Object, 
-                Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(),
-                Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
-                Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
-                Mock.Of<IApprenticeshipMapper>(), 
-                Validator);
-
-            await sut.GetCohorts(1234567);
+            await _orchestrator.GetCohorts(1234567);
 
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>()), Times.Once);
             _mockCalculator.Verify(m => m.GetStatus(It.IsAny<EditStatus>(), It.IsAny<int>(), It.IsAny<LastAction>(), It.IsAny<AgreementStatus>(), It.IsAny<LastUpdateInfo>()), Times.Exactly(_commitments.Result.Commitments.Count));
@@ -61,14 +50,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task TestFilter()
         {
-            var sut = new CommitmentOrchestrator(_mockMediator.Object, new CommitmentStatusCalculator(), 
-                Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(),
-                Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
-                Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
-                Mock.Of<IApprenticeshipMapper>(), 
-                Validator);
 
-            var result = await sut.GetCohorts(1234567);
+            var result = await _orchestrator.GetCohorts(1234567);
 
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>()), Times.Once);
 

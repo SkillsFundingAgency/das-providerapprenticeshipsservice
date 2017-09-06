@@ -21,28 +21,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     [TestFixture]
     public sealed class WhenDeletingApprenticeship : ApprenticeshipValidationTestBase
     {
-        private CommitmentOrchestrator _orchestrator;
-        private Mock<IMediator> _mockMediator;
-        
 
-        [SetUp]
-        public void Setup()
+        protected override void SetUp()
         {
-            _mockMediator = new Mock<IMediator>();
-
-            var mockHashingService = new Mock<IHashingService>();
-            mockHashingService.Setup(m => m.DecodeValue("ABBA99")).Returns(123L);
-            mockHashingService.Setup(m => m.DecodeValue("ABBA66")).Returns(321L);
-
-            _orchestrator = new CommitmentOrchestrator(
-                _mockMediator.Object, 
-                Mock.Of<ICommitmentStatusCalculator>(), 
-                mockHashingService.Object,
-                Mock.Of<IProviderCommitmentsLogger>(),
-                Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
-                Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
-                Mock.Of<IApprenticeshipMapper>(),
-                Validator);
+            _mockHashingService.Setup(m => m.DecodeValue("ABBA99")).Returns(123L);
+            _mockHashingService.Setup(m => m.DecodeValue("ABBA66")).Returns(321L);
         }
 
         [Test]

@@ -27,8 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     {
         private CommitmentView _testCommitment;
 
-        [SetUp]
-        public void Setup()
+        protected override void SetUp()
         {
             _testCommitment = new CommitmentView
             {
@@ -49,13 +48,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed, CanBeApproved = true }
                 };
 
-            var mockMediator = GetMediator(_testCommitment);
-            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetProviderAgreementQueryRequest>()))
+            _mockMediator = GetMediator(_testCommitment);
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetProviderAgreementQueryRequest>()))
                 .Returns(Task.FromResult(new GetProviderAgreementQueryResponse { HasAgreement = ProviderAgreementStatus.Agreed }));
 
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>(), Validator);
-
-            var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
+            var result = _orchestrator.GetFinishEditing(1L, "ABBA123").Result;
 
             result.ReadyForApproval.Should().BeFalse();
         }
@@ -71,10 +68,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     new Apprenticeship { AgreementStatus = AgreementStatus.ProviderAgreed }
                 };
 
-            var mockMediator = GetMediator(_testCommitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>(), Validator);
-
-            var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
+            _mockMediator = GetMediator(_testCommitment);
+            var result = _orchestrator.GetFinishEditing(1L, "ABBA123").Result;
 
             result.IsApproveAndSend.Should().BeTrue();
         }
@@ -89,11 +84,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     new Apprenticeship { AgreementStatus = AgreementStatus.EmployerAgreed },
                     new Apprenticeship { AgreementStatus = AgreementStatus.NotAgreed }
                 };
-           
-            var mockMediator = GetMediator(_testCommitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>(), Validator);
 
-            var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
+            _mockMediator = GetMediator(_testCommitment);
+
+            var result = _orchestrator.GetFinishEditing(1L, "ABBA123").Result;
 
             result.IsApproveAndSend.Should().BeTrue();
         }
@@ -109,17 +103,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     new Apprenticeship { AgreementStatus = AgreementStatus.EmployerAgreed }
                 };
 
-            var mockMediator = GetMediator(_testCommitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>(), Validator);
-
-            var result = _sut.GetFinishEditing(1L, "ABBA123").Result;
+            _mockMediator = GetMediator(_testCommitment);
+            var result = _orchestrator.GetFinishEditing(1L, "ABBA123").Result;
 
             result.IsApproveAndSend.Should().BeFalse();
         }
 
         // --- Helpers ---
 
-        private static Mock<IMediator> GetMediator(CommitmentView commitment)
+        private Mock<IMediator> GetMediator(CommitmentView commitment)
         {
             var respons = new GetCommitmentQueryResponse
             {

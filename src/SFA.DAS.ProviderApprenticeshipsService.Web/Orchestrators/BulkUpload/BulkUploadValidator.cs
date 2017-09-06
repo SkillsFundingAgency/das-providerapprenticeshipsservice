@@ -25,21 +25,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
     public sealed class BulkUploadValidator : IBulkUploadValidator
     {
         private readonly ILog _logger;
+        private readonly IAcademicYearValidator _academicYearValidator;
         private readonly ProviderApprenticeshipsServiceConfiguration _config;
 
         // TODO: LWA - Can these be injected in?
         private readonly BulkUploadApprenticeshipValidationText _validationText;
         private readonly ApprenticeshipUploadModelValidator _viewModelValidator;
-        
-        public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, ILog logger, IUlnValidator ulnValidator, IAcademicYear academicYear)
+       
+        public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, ILog logger, IUlnValidator ulnValidator, IAcademicYear academicYear, IAcademicYearValidator academicYearValidator)
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
             if (config == null)
                 throw new ArgumentNullException(nameof(config));
 
+            _academicYearValidator = academicYearValidator;
+
             _validationText = new BulkUploadApprenticeshipValidationText(academicYear);
-            _viewModelValidator = new ApprenticeshipUploadModelValidator(_validationText, new CurrentDateTime(), ulnValidator);
+            _viewModelValidator = new ApprenticeshipUploadModelValidator(_validationText, new CurrentDateTime(), ulnValidator, _academicYearValidator);
             
             _logger = logger;
             _config = config;

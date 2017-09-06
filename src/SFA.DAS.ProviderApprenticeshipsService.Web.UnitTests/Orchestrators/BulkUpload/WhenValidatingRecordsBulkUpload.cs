@@ -27,7 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [SetUp]
         public void SetUp()
         {
-            _sut = new BulkUploadValidator(new ProviderApprenticeshipsServiceConfiguration(), Mock.Of<ILog>(), Mock.Of<IUlnValidator>(), Mock.Of<IAcademicYear>());
+            _sut = new BulkUploadValidator(new ProviderApprenticeshipsServiceConfiguration(), Mock.Of<ILog>(), Mock.Of<IUlnValidator>(), Mock.Of<IAcademicYear>(), Mock.Of<IAcademicYearValidator>());
         }
 
         [Test]

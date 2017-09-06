@@ -5,6 +5,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 {
     public sealed class CurrentDateTime : ICurrentDateTime
     {
-        public DateTime Now => DateTime.UtcNow;
+       public DateTime Now => DateTime.UtcNow;
     }
 }

@@ -31,7 +31,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var textStream = new MemoryStream(Encoding.UTF8.GetBytes("hello world"));
 
             _file.Setup(m => m.InputStream).Returns(textStream);
-            _sut = new BulkUploadValidator(new ProviderApprenticeshipsServiceConfiguration { MaxBulkUploadFileSize = 512 }, Mock.Of<ILog>(), Mock.Of<IUlnValidator>(), Mock.Of<IAcademicYear>());
+            _sut = new BulkUploadValidator(new ProviderApprenticeshipsServiceConfiguration { MaxBulkUploadFileSize = 512 }, Mock.Of<ILog>(), Mock.Of<IUlnValidator>(), Mock.Of<IAcademicYear>(), Mock.Of<IAcademicYearValidator>());
         }
 
         [Test]

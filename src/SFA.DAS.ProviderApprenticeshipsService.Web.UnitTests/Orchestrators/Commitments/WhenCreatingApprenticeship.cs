@@ -20,29 +20,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     [TestFixture]
     public sealed class WhenCreatingApprenticeship : ApprenticeshipValidationTestBase
     {
-        private CommitmentOrchestrator _orchestrator;
-        private Mock<IMediator> _mockMediator;
-        private Mock<IHashingService> _mockHashingService;
-
-        private Mock<IApprenticeshipMapper> _mockMapper;
-
-        [SetUp]
-        public void Setup()
-        {
-            _mockMediator = new Mock<IMediator>();
-            _mockHashingService = new Mock<IHashingService>();
-            _mockMapper = new Mock<IApprenticeshipMapper>();
-
-            _orchestrator = new CommitmentOrchestrator(
-                _mockMediator.Object, 
-                Mock.Of<ICommitmentStatusCalculator>(), 
-                _mockHashingService.Object,
-                Mock.Of<IProviderCommitmentsLogger>(),
-                Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
-                Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
-                _mockMapper.Object,
-                Validator);
-        }
 
         [Test]
         public async Task ShouldCallMediatorToCreate()
