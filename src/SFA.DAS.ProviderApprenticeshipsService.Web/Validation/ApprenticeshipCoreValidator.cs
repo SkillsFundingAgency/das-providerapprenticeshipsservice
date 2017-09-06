@@ -5,6 +5,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
+using SFA.DAS.Learners.Validators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
@@ -16,13 +17,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         private readonly IApprenticeshipValidationErrorText _validationText;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IAcademicYear _academicYear;
+        private readonly IUlnValidator _ulnValidator;
 
-        public ApprenticeshipCoreValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime, 
-            IAcademicYear academicYear)
+        public ApprenticeshipCoreValidator(IApprenticeshipValidationErrorText validationText, 
+                                            ICurrentDateTime currentDateTime, 
+                                            IAcademicYear academicYear,
+                                            IUlnValidator ulnValidator)
         {
             _validationText = validationText;
             _currentDateTime = currentDateTime;
             _academicYear = academicYear;
+            _ulnValidator = ulnValidator;
 
             ValidateFirstName();
 
@@ -62,9 +67,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         protected virtual void ValidateUln()
         {
             RuleFor(x => x.ULN)
-                .NotNull().WithMessage(_validationText.Uln01.Text).WithErrorCode(_validationText.Uln01.ErrorCode)
-                .Matches("^[1-9]{1}[0-9]{9}$").WithMessage(_validationText.Uln01.Text).WithErrorCode(_validationText.Uln01.ErrorCode)
-                .Must(m => m != "9999999999").WithMessage(_validationText.Uln02.Text).WithErrorCode(_validationText.Uln02.ErrorCode);
+                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Must(BeValidTenDigitUlnNumber).WithMessage(_validationText.Uln01.Text).WithErrorCode(_validationText.Uln01.ErrorCode)
+                .Must(BeValidUlnNumber).WithMessage(_validationText.Uln03.Text).WithErrorCode(_validationText.Uln03.ErrorCode);
         }
 
         protected virtual void ValidateTraining()
@@ -175,6 +180,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         {
             // Check the day has value as the view model supports just month and year entry
             if (date.DateTime == null || !date.Day.HasValue) return false;
+
+            return true;
+        }
+
+        private bool BeValidTenDigitUlnNumber(string uln)
+        {
+            var result = _ulnValidator.Validate(uln);
+
+            if (result == UlnValidationResult.IsInValidTenDigitUlnNumber || result == UlnValidationResult.IsEmptyUlnNumber)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool BeValidUlnNumber(string uln)
+        {
+            if (_ulnValidator.Validate(uln) == UlnValidationResult.IsInvalidUln)
+            {
+                return false;
+            }
 
             return true;
         }

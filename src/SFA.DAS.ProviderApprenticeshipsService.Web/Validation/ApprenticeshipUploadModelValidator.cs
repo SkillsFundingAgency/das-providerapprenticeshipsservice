@@ -10,6 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
+using SFA.DAS.Learners.Validators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
@@ -17,13 +18,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
     {
         private readonly IApprenticeshipValidationErrorText _validationText;
         private readonly ICurrentDateTime _currentDateTime;
+        private readonly IUlnValidator _ulnValidator;
 
         private static Func<string, IEnumerable<string>, bool> _inList = (v, l) => string.IsNullOrWhiteSpace(v) || l.Contains(v);
 
-        public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime)
+        public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime, IUlnValidator ulnValidator)
         {
             _validationText = validationText;
             _currentDateTime = currentDateTime;
+            _ulnValidator = ulnValidator;
         }
 
         public ValidationResult Validate(ApprenticeshipUploadModel model)
@@ -76,19 +79,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
         private ValidationFailure ValidateULN(ApprenticeshipUploadModel model)
         {
-            if (model.ApprenticeshipViewModel.ULN == null)
-            {
-                return CreateValidationFailure("ULN", _validationText.Uln01);
-            }
+            var result = _ulnValidator.Validate(model.ApprenticeshipViewModel.ULN);
 
-            if (!Regex.Match(model.ApprenticeshipViewModel.ULN, "^[1-9]{1}[0-9]{9}$").Success)
+            switch (result)
             {
-                return CreateValidationFailure("ULN", _validationText.Uln01);
-            }
-
-            if (model.ApprenticeshipViewModel.ULN == "9999999999")
-            {
-                return CreateValidationFailure("ULN", _validationText.Uln02);
+                case UlnValidationResult.IsEmptyUlnNumber:
+                case UlnValidationResult.IsInValidTenDigitUlnNumber:
+                    return CreateValidationFailure("ULN", _validationText.Uln01);
+                case UlnValidationResult.IsInvalidUln:
+                    return CreateValidationFailure("ULN", _validationText.Uln03);
             }
 
             return null;

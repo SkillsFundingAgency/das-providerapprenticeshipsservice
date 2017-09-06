@@ -33,7 +33,7 @@
             @Html.HiddenFor(m => m.ProviderId)
             @Html.HiddenFor(m => m.AgreementStatus)
             @Html.HiddenFor(m => m.EmployerRef)
-            <button type="submit" class="button button-left-align">Update details</button>
+            <button type="submit" class="button button-left-align" id="submit-edit-details">Update details</button>
             <a class="link-left-aligned" href="@Url.Action("Details", new { Model.HashedApprenticeshipId })" aria-label="Cancel">Cancel and return</a>
         </form>
     </div>

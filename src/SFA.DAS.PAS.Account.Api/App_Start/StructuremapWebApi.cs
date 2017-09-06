@@ -18,7 +18,6 @@
 using System.Web.Http;
 
 using SFA.DAS.PAS.Account.Api;
-using SFA.DAS.PAS.Account.Api.App_Start;
 using SFA.DAS.PAS.Account.Api.DependencyResolution;
 
 [assembly: WebActivatorEx.PostApplicationStartMethod(typeof(StructuremapWebApi), "Start")]
