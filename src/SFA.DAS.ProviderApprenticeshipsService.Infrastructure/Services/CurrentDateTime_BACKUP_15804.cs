@@ -5,6 +5,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 {
     public sealed class CurrentDateTime : ICurrentDateTime
     {
+<<<<<<< HEAD
+       public DateTime Now => DateTime.UtcNow;
+=======
         private readonly DateTime? _time;
 
         public DateTime Now => _time ?? DateTime.UtcNow;
@@ -17,5 +20,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
         {
             _time = time;
         }
+>>>>>>> master
     }
 }

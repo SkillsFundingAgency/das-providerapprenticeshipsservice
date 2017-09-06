@@ -8,11 +8,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
     public sealed class ApprenticeshipViewModelValidator : ApprenticeshipCoreValidator
     {
-        public ApprenticeshipViewModelValidator() : this(new WebApprenticeshipValidationText(new AcademicYear(new CurrentDateTime())), new CurrentDateTime(), new AcademicYear(new CurrentDateTime()), new UlnValidator(), new AcademicYearValidator(new CurrentDateTime(), new AcademicYear(new CurrentDateTime())))
-        { } // The default is used by the MVC model binding
 
-        public ApprenticeshipViewModelValidator(WebApprenticeshipValidationText validationText, ICurrentDateTime currentDateTime, IAcademicYear academicYear, IUlnValidator ulnValidator, IAcademicYearValidator academicYearValidator)
-            : base(validationText, currentDateTime, academicYear, ulnValidator, academicYearValidator)
+
+        public ApprenticeshipViewModelValidator(WebApprenticeshipValidationText validationText, ICurrentDateTime currentDateTime, IAcademicYear academicYear, IUlnValidator ulnValidator) : base(validationText, currentDateTime, academicYear, ulnValidator)
         {
         }
 

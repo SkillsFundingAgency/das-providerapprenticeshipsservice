@@ -12,6 +12,7 @@ using Microsoft.Azure;
 using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 using System.Linq;
 using System.Net;
+using SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
@@ -30,7 +31,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = DasClaimTypes.Name;
 
-            FluentValidationModelValidatorProvider.Configure();
+            var container = StructuremapMvc.StructureMapDependencyScope.Container;
+            FluentValidationModelValidatorProvider.Configure(x => x.ValidatorFactory = new StructureMapValidatorFactory(container));
 
             TelemetryConfiguration.Active.InstrumentationKey = CloudConfigurationManager.GetSetting("InstrumentationKey");
 
