@@ -1,5 +1,6 @@
 ﻿using System;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
 {
@@ -13,7 +14,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
         }
 
        public ValidationMessage AcademicYearStartDate01 =>
-            new ValidationMessage($"The <strong>Start dates</strong> can't be in the previous academic year. The earliest date you can use is { _academicYear.CurrentAcademicYearStartDate.ToString("dd MM yyyy")}", "AcademicYear_01");
+            new ValidationMessage($"The <strong>Start dates</strong> can't be in the previous academic year. The earliest date you can use is { _academicYear.CurrentAcademicYearStartDate.ToGdsFormatShortMonthWithoutDay()}", "AcademicYear_01");
 
         public ValidationMessage CohortRef01 =>
             new ValidationMessage("The <strong>cohort reference</strong> must be the same for all apprentices in your upload file", "CohortRef_01");

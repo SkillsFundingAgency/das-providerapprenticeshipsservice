@@ -14,7 +14,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
         }
 
         public ValidationMessage AcademicYearStartDate01 =>
-             new ValidationMessage($"Start dates can't be in the previous academic year. The earliest date you can use is { _academicYear.CurrentAcademicYearStartDate.ToGdsFormat()}", "AcademicYear_01");
+             new ValidationMessage($"The earliest start date you can use is { _academicYear.CurrentAcademicYearStartDate.ToGdsFormatShortMonthWithoutDay()}", "AcademicYear_01");
 
         public ValidationMessage CohortRef01 { get { throw new NotImplementedException(); } }
         public ValidationMessage CohortRef02 { get { throw new NotImplementedException(); } }
