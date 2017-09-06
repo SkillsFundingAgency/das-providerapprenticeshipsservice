@@ -3333,7 +3333,7 @@ table .changed-item {
 
 #floating-menu-prov {
   width: 100%;
-  background: #85994b;
+  background: #28a197;
   float: left;
   padding: 10px 0;
 }
@@ -3366,7 +3366,7 @@ table .changed-item {
 #floating-menu {
   clear: both;
   width: 100%;
-  background: #85994b;
+  background: #28a197;
   color: #fff;
   z-index: 1000;
   max-width: 960px;
