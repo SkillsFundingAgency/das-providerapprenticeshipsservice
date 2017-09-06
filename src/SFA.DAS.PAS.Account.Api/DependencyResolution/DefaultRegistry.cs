@@ -16,11 +16,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Linq;
-using System.Reflection;
 using System.Web;
 
-using AutoMapper;
 using MediatR;
 
 using Microsoft.Azure;
@@ -28,18 +25,15 @@ using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
 
 using StructureMap;
-using WebGrease.Css.Extensions;
+
 using IConfiguration = SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.IConfiguration;
 
 namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
-    using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
 
 
@@ -52,6 +46,10 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
                 scan => {
                     scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
+                    scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
+                    scan.ConnectImplementationsToTypesClosing(typeof(IAsyncRequestHandler<,>));
+                    scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
+                    scan.ConnectImplementationsToTypesClosing(typeof(IAsyncNotificationHandler<>));
                 });
 
             var config = GetConfiguration();
