@@ -69,7 +69,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 throw new ArgumentNullException(nameof(configuration));
             if(uniqueUlnValidator == null)
                 throw new ArgumentNullException(nameof(uniqueUlnValidator));
- 			if (apprenticeshipMapper == null)
+            if (apprenticeshipMapper == null)
                 throw new ArgumentNullException(nameof(apprenticeshipMapper));
 
 
