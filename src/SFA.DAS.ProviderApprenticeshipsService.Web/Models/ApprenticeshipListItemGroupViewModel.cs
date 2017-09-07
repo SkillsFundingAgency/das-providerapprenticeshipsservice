@@ -51,10 +51,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public int AcademicFundingPeriodErrorCount { get; set; }
 
 
-        public bool ShowAcademicYearFundingPeriodWarning { get; set; }
+        public bool ShowAcademicYearFundingPeriodError { get; set; }
 
         public DateTime EarliestAcademicYearDate { get; set; }
-
 
     }
 }

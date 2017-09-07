@@ -375,7 +375,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     Apprenticeships = group.OrderBy(x => x.CanBeApprove).ToList(),
                     TrainingProgramme = trainingProgrammes.FirstOrDefault(x => x.Id == group.Key),
                     AcademicFundingPeriodErrorCount = academicYearErrorCount,
-                    ShowAcademicYearFundingPeriodWarning = academicYearErrorCount > 0,
+                    ShowAcademicYearFundingPeriodError = academicYearErrorCount > 0,
                     EarliestAcademicYearDate = _academicYear.CurrentAcademicYearStartDate
                 });
             }
@@ -385,10 +385,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 .Where(m => m.ShowFundingLimitWarning)
                 .ForEach(group => warnings.Add(group.GroupId, $"Cost for {group.TrainingProgramme.Title}"));
 
-            var academicFundingPeriodwarnings = new Dictionary<string, string>();
+            var academicFundingPeriodErrors = new Dictionary<string, string>();
             apprenticeshipGroups
-                .Where(m => m.ShowAcademicYearFundingPeriodWarning)
-                .ForEach(group => academicFundingPeriodwarnings.Add(group.GroupId, $"{group.TrainingProgramme?.Title ?? string.Empty}"));
+                .Where(m => m.ShowAcademicYearFundingPeriodError)
+                .ForEach(group => academicFundingPeriodErrors.Add(group.GroupId, $"{group.TrainingProgramme?.Title ?? string.Empty}"));
 
             return new CommitmentDetailsViewModel
             {
@@ -404,7 +404,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipGroups = apprenticeshipGroups,
                 RelationshipVerified = relationshipRequest.Relationship.Verified.HasValue,
                 HasOverlappingErrors = apprenticeshipGroups.Any(m => m.OverlapErrorCount > 0),
-                AcademicFundingPeriodWarning = academicFundingPeriodwarnings,
+                AcademicFundingPeriodErrors = academicFundingPeriodErrors,
                 FundingCapWarnings = warnings,
                 IsReadOnly = data.Commitment.EditStatus != EditStatus.ProviderOnly
             };

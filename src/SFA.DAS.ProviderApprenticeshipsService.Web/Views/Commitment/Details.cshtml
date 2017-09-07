@@ -14,49 +14,43 @@
             {
                 @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             }
-            else
+            else if (Model.AcademicFundingPeriodErrors.Any())
             {
-                if (Model.FundingCapWarnings.Any())
-                {
-                    <div class="validation-summary-max-funding error-summary">
-                        <h1 id="warning-summary" class="heading-medium warning-summary-heading">
-                            Warnings for your attention
-                        </h1>
-                        <p>Review the following details:</p>
-                        <ul class="max-funding-summary-list">
-                            @foreach (var warning in Model.FundingCapWarnings)
-                            {
-                                <li>
-                                    <a href="#max-funding-group-@warning.Key" data-focuses="max-funding-group-@warning.Key">
-                                        @warning.Value
-                                    </a>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                }
-
-                if (Model.AcademicFundingPeriodWarning.Any())
-                {
-                    <div class="validation-summary-max-funding error-summary">
-                        <h1 id="warning-summary" class="heading-medium warning-summary-heading">
-                            Problem with start dates
-                        </h1>
-                        <p>Start dates can't be in the previous academic year.</p>
-                        <ul class="max-funding-summary-list">
-                            @foreach (var warning in Model.AcademicFundingPeriodWarning)
-                            {
-                                <li>
-                                    <a href="#max-funding-group-@warning.Key" data-focuses="max-funding-group-@warning.Key">
-                                        @warning.Value
-                                    </a>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                }
-
-
+            <div class="validation-summary-errors error-summary">
+                <h1 id="warning-summary" class="heading-medium warning-summary-heading">
+                    Problem with start dates
+                </h1>
+                <p>Start dates can't be in the previous academic year.</p>
+                <ul class="error-summary-list">
+                    @foreach (var warning in Model.AcademicFundingPeriodErrors)
+                    {
+                        <li>
+                            <a href="#max-funding-group-@warning.Key" data-focuses="max-funding-group-@warning.Key">
+                                @warning.Value
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            }
+            else if (Model.FundingCapWarnings.Any())
+            {
+                <div class="validation-summary-max-funding error-summary">
+                    <h1 id="warning-summary" class="heading-medium warning-summary-heading">
+                        Warnings for your attention
+                    </h1>
+                    <p>Review the following details:</p>
+                    <ul class="max-funding-summary-list">
+                        @foreach (var warning in Model.FundingCapWarnings)
+                         {
+                            <li>
+                                <a href="#max-funding-group-@warning.Key" data-focuses="max-funding-group-@warning.Key">
+                                    @warning.Value
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
             }
 
             @if (Model.IsReadOnly)
@@ -197,38 +191,28 @@
                             </div>
                             <i class="overlap-arrow"></i>
                         }
-                        else if (!Model.HasOverlappingErrors)
+                        else if (group.ShowAcademicYearFundingPeriodError)
                         {
-
-                            if (group.ShowAcademicYearFundingPeriodWarning)
-                            {
-                                <div class="funding-cap-notification" id="max-funding-group-@group.GroupId">
-                                    <p class="heading-small">
-                                        Start dates can't be in the previous academic year
-                                    </p>
-                                    <p>
-                                        The earliest date you can use is @group.EarliestAcademicYearDate.ToGdsFormatShortMonthWithoutDay();
-                                    </p>
-                                </div>
-                            }
-
-                            if (group.ShowFundingLimitWarning)
-                            {
-                                <div class="funding-cap-notification" id="max-funding-group-@group.GroupId">
-                                    <p class="heading-small">
-                                        @($"{group.ApprenticeshipsOverFundingLimit} {_addS("apprenticeship", group.ApprenticeshipsOverFundingLimit)} above funding band maximum")
-                                    </p>
-                                    <p>
-                                        The costs are above the £@group.TrainingProgramme.MaxFunding.ToString("N0") <a target="_blank" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">maximum value of the funding band</a> for this apprenticeship. You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.
-                                    </p>
-
-                                </div>
-
-                                <i class="bubble-arrow"></i>
-                            }
-
-
-
+                            <div class="overlap-notification" id="max-funding-group-@group.GroupId">
+                                <p class="heading-small">
+                                    Start dates can't be in the previous academic year
+                                </p>
+                                <p>
+                                    The earliest date you can use is @group.EarliestAcademicYearDate.ToGdsFormatShortMonthWithoutDay();
+                                </p>
+                            </div>
+                        }
+                        else if (group.ShowFundingLimitWarning)
+                        {
+                            <div class="funding-cap-notification" id="max-funding-group-@group.GroupId">
+                                <p class="heading-small">
+                                    @($"{group.ApprenticeshipsOverFundingLimit} {_addS("apprenticeship", group.ApprenticeshipsOverFundingLimit)} above funding band maximum")
+                                </p>
+                                <p>
+                                    The costs are above the £@group.TrainingProgramme.MaxFunding.ToString("N0") <a target="_blank" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">maximum value of the funding band</a> for this apprenticeship. You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.
+                                </p>
+                            </div>
+                            <i class="bubble-arrow"></i>
                         }
                     </div>
 
@@ -273,14 +257,14 @@
                                                 </a>
                                             </td>
                                         }
-                                        else if (group.ShowAcademicYearFundingPeriodWarning  && !Model.HasOverlappingErrors)
+                                        else if (group.ShowAcademicYearFundingPeriodError)
                                         {
-                                            <td class="funding-cap-alert">
-                                                <a href="#max-funding-group-@group.GroupId" 
-                                                   aria-label="Start date can’t be in the previous academic year." 
-                                                   aria-describedby="max-funding-group-@group.GroupId" 
+                                            <td class="overlap-alert">
+                                                <a href="#max-funding-group-@group.GroupId"
+                                                   aria-label="Start date can’t be in the previous academic year."
+                                                   aria-describedby="max-funding-group-@group.GroupId"
                                                    title="Start date can’t be in the previous academic year.">
-                                                     @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay() &nbsp;
+                                                    @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay() &nbsp;
                                                 </a>
                                             </td>
                                         }
@@ -297,7 +281,6 @@
                                             <span class="missing">&ndash;</span>
                                         </td>
                                     }
-
                                     @if (group.TrainingProgramme != null && apprenticeship.Cost.HasValue && apprenticeship.Cost > group.TrainingProgramme.MaxFunding && !Model.HasOverlappingErrors)
                                     {
                                         <td class="funding-cap-alert">

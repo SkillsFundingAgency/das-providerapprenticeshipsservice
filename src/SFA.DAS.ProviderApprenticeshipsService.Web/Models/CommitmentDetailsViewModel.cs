@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
@@ -18,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool RelationshipVerified { get; set; }
         public bool HasOverlappingErrors { get; set; }
         public Dictionary<string, string> FundingCapWarnings { get; set; }
-        public Dictionary<string, string> AcademicFundingPeriodWarning { get; set; }
+        public Dictionary<string, string> AcademicFundingPeriodErrors { get; set; }
         
         public bool IsReadOnly { get; set; }
     }
