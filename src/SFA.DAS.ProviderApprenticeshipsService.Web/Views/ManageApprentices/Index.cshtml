@@ -9,7 +9,7 @@
 
 <h1 class="heading-xlarge">Manage your apprentices</h1>
 
-@if (Model.TotalResults == 0)
+@if (Model.TotalApprenticeshipsBeforeFilter == 0)
 {
     <div class="grid-row">
         <div class="column-full">
@@ -48,67 +48,77 @@ else
                 </div>
 
                 <div class="column-two-thirds">
+                    @if (Model.TotalResults == 0)
+                    {
+                        <h3>No results found.</h3>
+                        <div>
+                            <p>
+                                You can search again or <a href="@Url.Action("Index")" title="see all apprentices" class="button text-link reset-link">see all apprentices</a>
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                            <table class="tableResponsive provider-list-view">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Date of birth</th>
+                                        <th>Unique learner number</th>
+                                        <th>Status</th>
+                                        <th>Alerts</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                    <table class="tableResponsive provider-list-view">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Date of birth</th>
-                                <th>Unique learner number</th>
-                                <th>Status</th>
-                                <th>Alerts</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                                    @foreach (var apprenticeships in Model.Apprenticeships)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @apprenticeships.FirstName @apprenticeships.LastName
+                                            </td>
 
-                            @foreach (var apprenticeships in Model.Apprenticeships)
-                {
-                                <tr>
-                                    <td>
-                                        @apprenticeships.FirstName @apprenticeships.LastName
-                                    </td>
+                                            <td>
+                                                @if (apprenticeships.DateOfBirth != null)
+                                                {
+                                                    @apprenticeships.DateOfBirth.Value.ToGdsFormat()
+                                                }
+                                            </td>
+                                            <td>
+                                                @apprenticeships.Uln
+                                            </td>
+                                            <td>
+                                                @apprenticeships.Status &nbsp;
+                                            </td>
+                                            <td>
+                                                @foreach (var alert in @apprenticeships.Alerts)
+                                                {
+                                                    <div>@alert</div>
+                                                }
+                                                &nbsp;
+                                            </td>
+                                            <td>
+                                                <a href="@Url.Action("Details", new {Model.ProviderId, hashedApprenticeshipId = apprenticeships.HashedApprenticeshipId})"
+                                                   title="View  @apprenticeships.FirstName @apprenticeships.LastName"
+                                                   aria-label="View @apprenticeships.FirstName @apprenticeships.LastName">View</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
 
-                                    <td>
-                                        @if (apprenticeships.DateOfBirth != null)
-                                        {
-                                            @apprenticeships.DateOfBirth.Value.ToGdsFormat()
-                                        }
-                                    </td>
-                                    <td>
-                                        @apprenticeships.Uln
-                                    </td>
-                                    <td>
-                                        @apprenticeships.Status &nbsp;
-                                    </td>
-                                    <td>
-                                        @foreach (var alert in @apprenticeships.Alerts)
-                                        {
-                                            <div>@alert</div>
-                                        }
-                                        &nbsp;
-                                    </td>
-                                    <td>
-                                        <a href="@Url.Action("Details", new {Model.ProviderId, hashedApprenticeshipId = apprenticeships.HashedApprenticeshipId})"
-                                           title="View  @apprenticeships.FirstName @apprenticeships.LastName"
-                                           aria-label="View @apprenticeships.FirstName @apprenticeships.LastName">View</a>
-                                    </td>
-                                </tr>
+                            if (!Model.Apprenticeships.Any())
+                            {
+                            <div>There are currently no apprentices that match your search.</div>
                             }
-                        </tbody>
-                    </table>
 
-                    @if (!Model.Apprenticeships.Any())
-                    {
-                        <div>There are currently no apprentices that match your search.</div>
-                    }
-
-                    @if (Model.Apprenticeships.Any())
-                    {
-                        Html.RenderPartial("Pagination", Model);
-                    }
-
-                </div>
+                            if (Model.Apprenticeships.Any())
+                            {
+                            Html.RenderPartial("Pagination", Model);
+                            }
+                            }
+                        </div>
             </div>
             }
 

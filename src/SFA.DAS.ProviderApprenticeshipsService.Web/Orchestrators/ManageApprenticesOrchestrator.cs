@@ -91,7 +91,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 .ToList();
 
             var filterOptions = _apprenticeshipFiltersMapper.Map(searchResponse.Facets);
-            filterOptions.SearchInput = filters.SearchInput;
+            filterOptions.SearchInput = searchResponse.SearchKeyword;
             filterOptions.ResetFilter = false;
 
             return new ManageApprenticeshipsViewModel
@@ -100,6 +100,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Apprenticeships = apprenticeships,
                 Filters = filterOptions,
                 TotalResults = searchResponse.TotalApprenticeships,
+                TotalApprenticeshipsBeforeFilter = searchResponse.TotalApprenticeshipsBeforeFilter,
                 PageNumber = searchResponse.PageNumber,
                 TotalPages = searchResponse.TotalPages,
                 PageSize = searchResponse.PageSize
