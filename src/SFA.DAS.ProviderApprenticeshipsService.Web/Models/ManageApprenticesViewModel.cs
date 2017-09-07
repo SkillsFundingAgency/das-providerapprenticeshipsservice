@@ -20,5 +20,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public int PageSize { get; internal set; }
 
+        public string SearchInputPlaceholder { get; set; }
     }
 }
