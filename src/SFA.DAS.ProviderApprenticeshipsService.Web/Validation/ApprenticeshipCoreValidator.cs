@@ -17,13 +17,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         protected static readonly Func<string, int, bool> HaveNumberOfDigitsFewerThan = (str, length) => { return (str?.Count(char.IsDigit) ?? 0) < length; };
         private readonly IApprenticeshipValidationErrorText _validationText;
         private readonly ICurrentDateTime _currentDateTime;
-        private readonly IAcademicYear _academicYear;
+        private readonly IAcademicYearDateProvider _academicYear;
         private readonly IUlnValidator _ulnValidator;
         private readonly IAcademicYearValidator _academicYearValidator;
 
         public ApprenticeshipCoreValidator(IApprenticeshipValidationErrorText validationText, 
                                             ICurrentDateTime currentDateTime, 
-                                            IAcademicYear academicYear,
+                                            IAcademicYearDateProvider academicYear,
                                             IUlnValidator ulnValidator,
                                             IAcademicYearValidator academicYearValidator)
         {

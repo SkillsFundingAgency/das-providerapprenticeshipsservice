@@ -15,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.AcademicYear
     public class WhenValidatingAcademicYear
     {
         private Mock<ICurrentDateTime> _mockCurrentDateTime;
-        private IAcademicYear _academicYear;
+        private IAcademicYearDateProvider _academicYear;
         private IAcademicYearValidator _academicYearValidator;
 
         [SetUp]
@@ -38,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.AcademicYear
             var fundingPeriodDate = new DateTime(2017, 10, 19);
 
             _mockCurrentDateTime.Setup(x => x.Now).Returns(currentDate);
-            _academicYear = new Infrastructure.Services.AcademicYear(_mockCurrentDateTime.Object);
+            _academicYear = new Infrastructure.Services.AcademicYearDateProvider(_mockCurrentDateTime.Object);
 
             _academicYearValidator = new AcademicYearValidator(_mockCurrentDateTime.Object, _academicYear);
             //Act

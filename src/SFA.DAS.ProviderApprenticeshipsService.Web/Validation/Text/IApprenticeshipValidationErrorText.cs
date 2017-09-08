@@ -38,5 +38,6 @@
         ValidationMessage Uln01 { get; }
         ValidationMessage Uln02 { get; }
         ValidationMessage Uln03 { get; }
+        ValidationMessage Uln04 { get; }
     }
 }

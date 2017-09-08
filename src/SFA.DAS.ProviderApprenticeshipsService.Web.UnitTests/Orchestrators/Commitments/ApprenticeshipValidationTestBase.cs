@@ -16,11 +16,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     public abstract class ApprenticeshipValidationTestBase
     {
         protected readonly ApprenticeshipViewModelValidator Validator = new ApprenticeshipViewModelValidator(
-                                                                        new WebApprenticeshipValidationText(new Infrastructure.Services.AcademicYear(new CurrentDateTime())),
+                                                                        new WebApprenticeshipValidationText(new Infrastructure.Services.AcademicYearDateProvider(new CurrentDateTime())),
                                                                         new CurrentDateTime(),
-                                                                        new Infrastructure.Services.AcademicYear(new CurrentDateTime()),
+                                                                        new Infrastructure.Services.AcademicYearDateProvider(new CurrentDateTime()),
                                                                         new UlnValidator(),
-                                                                        new AcademicYearValidator(new CurrentDateTime(), new Infrastructure.Services.AcademicYear(new CurrentDateTime())));
+                                                                        new AcademicYearValidator(new CurrentDateTime(), new Infrastructure.Services.AcademicYearDateProvider(new CurrentDateTime())));
 
         protected ApprenticeshipViewModel ValidModel;
         protected CommitmentOrchestrator _orchestrator;
@@ -54,7 +54,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                        _mockMapper.Object,
                        Validator,
                        Mock.Of<IAcademicYearValidator>(),
-                       Mock.Of<IAcademicYear>());
+                       Mock.Of<IAcademicYearDateProvider>());
         }
 
         protected void SetUpOrchestrator(ICommitmentStatusCalculator commitmentStatusCalculator)
@@ -69,7 +69,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                        _mockMapper.Object,
                        Validator,
                        Mock.Of<IAcademicYearValidator>(),
-                       Mock.Of<IAcademicYear>());
+                       Mock.Of<IAcademicYearDateProvider>());
         }
     }
 }

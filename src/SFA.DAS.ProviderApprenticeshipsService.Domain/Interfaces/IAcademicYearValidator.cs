@@ -8,6 +8,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
     public interface IAcademicYearValidator
     {
-        AcademicYearValidationResult Validate(DateTime startDate);
+        AcademicYearValidationResult Validate(DateTime trainingStartDate);
     }
 }

@@ -6,9 +6,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
 {
     public class WebApprenticeshipValidationText : IApprenticeshipValidationErrorText
     {
-        private readonly IAcademicYear _academicYear;
+        private readonly IAcademicYearDateProvider _academicYear;
 
-        public WebApprenticeshipValidationText(IAcademicYear academicYear)
+        public WebApprenticeshipValidationText(IAcademicYearDateProvider academicYear)
         {
             _academicYear = academicYear;
         }
@@ -25,6 +25,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
             new ValidationMessage("The unique learner number of 9999999999 isn't valid", "ULN_02");
         public ValidationMessage Uln03 =>
                  new ValidationMessage("You must enter a valid unique learner number", "ULN_03");
+        public ValidationMessage Uln04 =>
+           new ValidationMessage("The unique learner number must be unique within the cohort", "ULN_04");
 
         public ValidationMessage FamilyName01 =>
             new ValidationMessage("Last name must be entered", "FamilyName_01");

@@ -19,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         private ApprenticeshipUploadModelValidator _validator;
         private ApprenticeshipUploadModel _validModel;
         private Moq.Mock<IUlnValidator> _mockUlnValidator;
-        private Moq.Mock<IAcademicYear> _mockAcademicYear;
+        private Moq.Mock<IAcademicYearDateProvider> _mockAcademicYear;
         private Moq.Mock<IAcademicYearValidator> _mockAcademicYearValidator;
 
         [SetUp]
@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
                 CsvRecord = new CsvRecord { CohortRef = "abba123" }
             };
 
-            _mockAcademicYear = new Moq.Mock<IAcademicYear>();
+            _mockAcademicYear = new Moq.Mock<IAcademicYearDateProvider>();
             _mockUlnValidator = new Moq.Mock<IUlnValidator>();
             _mockUlnValidator.Setup(m => m.Validate(_validModel.ApprenticeshipViewModel.ULN)).Returns(UlnValidationResult.Success);
             _mockAcademicYearValidator = new Moq.Mock<IAcademicYearValidator>();

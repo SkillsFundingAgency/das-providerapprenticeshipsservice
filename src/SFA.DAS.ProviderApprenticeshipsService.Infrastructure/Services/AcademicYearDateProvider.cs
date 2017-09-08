@@ -7,11 +7,11 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 {
-    public class AcademicYear : IAcademicYear
+    public class AcademicYearDateProvider : IAcademicYearDateProvider
     {
         private readonly ICurrentDateTime _currentDateTime;
 
-        public AcademicYear(ICurrentDateTime currentDateTime)
+        public AcademicYearDateProvider(ICurrentDateTime currentDateTime)
         {
             _currentDateTime = currentDateTime;
         }
@@ -30,7 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 
         public DateTime CurrentAcademicYearEndDate => CurrentAcademicYearStartDate.AddYears(1).AddDays(-1);
 
-        public DateTime CurrentAcademicYearFundingPeriod
+        public DateTime LastAcademicYearFundingPeriod
         {
             get
             {

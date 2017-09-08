@@ -45,7 +45,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IProviderCommitmentsLogger _logger;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly IAcademicYearValidator _academicYearValidator;
-        private readonly IAcademicYear _academicYear;
+        private readonly IAcademicYearDateProvider _academicYear;
         private readonly ApprenticeshipViewModelUniqueUlnValidator _uniqueUlnValidator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
         private readonly ApprenticeshipViewModelValidator _apprenticeshipValidator;
@@ -58,7 +58,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             IApprenticeshipMapper apprenticeshipMapper,
             ApprenticeshipViewModelValidator apprenticeshipValidator,
             IAcademicYearValidator academicYearValidator,
-            IAcademicYear academicYear)
+            IAcademicYearDateProvider academicYear)
             : base(mediator)
         {
             if (mediator == null)
