@@ -31,6 +31,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool HasOverlappingErrors { get; set; }
 
         public bool HasAcademicFundingPeriodErrors { get; set; }
+
+        public bool CanApprove
+        {
+            get
+            {
+                return ReadyForApproval &&
+                    HasSignedTheAgreement &&
+                    !HasOverlappingErrors &&
+                    !HasAcademicFundingPeriodErrors;
+            }
+
+        }
     }
 
     public enum ApprovalState

@@ -11,7 +11,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-        @if (!Model.ReadyForApproval || !Model.HasSignedTheAgreement || Model.HasOverlappingErrors)
+        @if (!Model.CanApprove)
         {
             <div class="panel panel-border-wide alert-default">
                 <p class="heading-medium">You can't approve this cohort yet </p>
@@ -57,7 +57,7 @@
                 <div>
                     @Html.ValidationMessageFor(m => m.SaveStatus, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SaveStatus) })
                 </div>
-                @if (Model.ReadyForApproval && Model.HasSignedTheAgreement && !Model.HasOverlappingErrors)
+                @if (Model.CanApprove)
                 {
                     if (Model.IsApproveAndSend)
                     {
