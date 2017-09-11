@@ -32,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
         private readonly BulkUploadApprenticeshipValidationText _validationText;
         private readonly ApprenticeshipUploadModelValidator _viewModelValidator;
        
-        public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, ILog logger, IUlnValidator ulnValidator, IAcademicYear academicYear, IAcademicYearValidator academicYearValidator)
+        public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, ILog logger, IUlnValidator ulnValidator, IAcademicYearDateProvider academicYear, IAcademicYearValidator academicYearValidator)
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));

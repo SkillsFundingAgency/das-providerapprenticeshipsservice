@@ -10,7 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
     {
 
 
-        public ApprenticeshipViewModelValidator(WebApprenticeshipValidationText validationText, ICurrentDateTime currentDateTime, IAcademicYear academicYear, IUlnValidator ulnValidator, IAcademicYearValidator academicYearValidator) : base(validationText, currentDateTime, academicYear, ulnValidator, academicYearValidator)
+        public ApprenticeshipViewModelValidator(WebApprenticeshipValidationText validationText, ICurrentDateTime currentDateTime, IAcademicYearDateProvider academicYear, IUlnValidator ulnValidator, IAcademicYearValidator academicYearValidator) : base(validationText, currentDateTime, academicYear, ulnValidator, academicYearValidator)
         {
         }
 

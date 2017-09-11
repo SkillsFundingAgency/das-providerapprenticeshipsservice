@@ -6,9 +6,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
 {
     public class BulkUploadApprenticeshipValidationText : IApprenticeshipValidationErrorText
     {
-        private readonly IAcademicYear _academicYear;
+        private readonly IAcademicYearDateProvider _academicYear;
 
-        public BulkUploadApprenticeshipValidationText(IAcademicYear academicYear)
+        public BulkUploadApprenticeshipValidationText(IAcademicYearDateProvider academicYear)
         {
             _academicYear = academicYear;
         }

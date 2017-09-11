@@ -22,7 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
         private readonly ApprenticeshipUploadModelValidator _viewModelValidator;
         
-        public InstrumentedBulkUploadValidator(ILog logger, IBulkUploadValidator validator, IUlnValidator ulnValidator, IAcademicYear academicYear, IAcademicYearValidator academicYearValidator)
+        public InstrumentedBulkUploadValidator(ILog logger, IBulkUploadValidator validator, IUlnValidator ulnValidator, IAcademicYearDateProvider academicYear, IAcademicYearValidator academicYearValidator)
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));

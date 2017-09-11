@@ -11,7 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedAppre
     {
         private readonly IApprenticeshipValidationErrorText _errorText;
 
-        public ApprovedApprenticeshipValidator(IAcademicYear academicYear)
+        public ApprovedApprenticeshipValidator(IAcademicYearDateProvider academicYear)
         {
             _errorText = new WebApprenticeshipValidationText(academicYear);
         }

@@ -43,7 +43,7 @@
     <Compile Include="Data\IStandardsRepository.cs" />
     <Compile Include="Framework.cs" />
     <Compile Include="FrameworksView.cs" />
-    <Compile Include="Interfaces\IAcademicYear.cs" />
+    <Compile Include="Interfaces\IAcademicYearDateProvider.cs" />
     <Compile Include="Interfaces\IAcademicYearValidator.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceConfiguration.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />

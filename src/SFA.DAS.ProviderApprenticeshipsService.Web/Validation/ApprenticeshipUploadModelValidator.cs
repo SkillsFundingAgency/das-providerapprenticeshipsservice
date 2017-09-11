@@ -15,7 +15,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
-    public sealed class ApprenticeshipUploadModelValidator
+    public sealed class ApprenticeshipUploadModelValidator : IApprenticeshipUploadModelValidator
     {
         private readonly IApprenticeshipValidationErrorText _validationText;
         private readonly ICurrentDateTime _currentDateTime;
@@ -285,7 +285,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             }
         }
 
-        public ValidationFailure CreateValidationFailure(string propertyName, ValidationMessage validationMessage)
+        private ValidationFailure CreateValidationFailure(string propertyName, ValidationMessage validationMessage)
         {
             var validationFailure = new ValidationFailure(propertyName, validationMessage.Text);
             validationFailure.ErrorCode = validationMessage.ErrorCode;
