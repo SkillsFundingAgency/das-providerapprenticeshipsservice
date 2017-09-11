@@ -7,8 +7,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
     {
         private readonly DateTime? _time;
 
-        public DateTime Now => _time ?? DateTime.UtcNow;
-
+        //public DateTime Now => _time ?? DateTime.UtcNow;
+        public DateTime Now => DateTime.Parse("20 OCT 2017");
         public CurrentDateTime()
         {
         }

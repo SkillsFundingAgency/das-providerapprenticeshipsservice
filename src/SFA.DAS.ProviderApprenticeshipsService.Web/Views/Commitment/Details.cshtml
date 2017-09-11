@@ -180,8 +180,8 @@
 
                         @if (group.ShowOverlapError)
                         {
-                            <div class="overlap-notification grey-background" id="error-message-@group.GroupId">
-                                <p class="heading-medium">
+                            <div class="overlap-notification" id="error-message-@group.GroupId">
+                                <p class="heading-small">
                                     @group.OverlapErrorCount @_addS("Apprenticeship", group.OverlapErrorCount) with overlapping training dates
                                 </p>
                                 <p>
@@ -189,21 +189,23 @@
                                     Please check the details are correct. If you're unsure, contact the employer in the first instance.
                                 </p>
                             </div>
-                            <i class="overlap-arrow"></i>
                         }
                         else if (group.ShowAcademicYearFundingPeriodError)
                         {
-                            <div class="overlap-notification" id="max-funding-group-@group.GroupId">
-                                <p class="heading-small">
-                                    Start dates can't be in the previous academic year
-                                </p>
-                                <p>
-                                    The earliest date you can use is @group.EarliestAcademicYearDate.ToGdsFormatShortMonthWithoutDay();
-                                </p>
-                            </div>
+
+                                    <div class="overlap-notification" id="max-funding-group-@group.GroupId">
+                                        <p class="heading-small">
+                                            Start dates can't be in the previous academic year
+                                        </p>
+                                        <p>
+                                            The earliest date you can use is @group.EarliestAcademicYearDate.ToGdsFormatShortMonthWithoutDay();
+                                        </p>
+                                    </div>
+
                         }
                         else if (group.ShowFundingLimitWarning)
                         {
+
                             <div class="funding-cap-notification" id="max-funding-group-@group.GroupId">
                                 <p class="heading-small">
                                     @($"{group.ApprenticeshipsOverFundingLimit} {_addS("apprenticeship", group.ApprenticeshipsOverFundingLimit)} above funding band maximum")
@@ -212,9 +214,10 @@
                                     The costs are above the £@group.TrainingProgramme.MaxFunding.ToString("N0") <a target="_blank" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">maximum value of the funding band</a> for this apprenticeship. You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.
                                 </p>
                             </div>
-                            <i class="bubble-arrow"></i>
+
+
                         }
-                    </div>
+                            </div>
 
                     <table class="tableResponsive providerList">
                         <thead>
