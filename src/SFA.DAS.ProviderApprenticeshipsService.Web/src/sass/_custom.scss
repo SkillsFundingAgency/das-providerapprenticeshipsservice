@@ -786,6 +786,74 @@ width: 100%;
 }
 
 
+  .service-info{
+      margin-bottom:0;
+      max-width: 960px;
+      margin:0 auto;
+ }
+
+
+.user-menu{
+    li{margin-bottom:0;}
+}  
+/* Floating menu styles*/
+#global-header-bar{max-width:100%;}
+.header-organisation ul li a.selected:after{
+        background:none;
+       @include media(tablet) { background:#F47738;} 
+}
+
+#floating-menu-prov{
+    width: 100%;
+    background: #F47738;
+    float: left;
+    padding:10px 0;
+    .user-menu.logged-in{
+        border:0;
+    }
+    .fixed-header {
+      position: fixed;
+      top:0; left:0;
+      max-width: 100%; 
+      padding:10px 0;
+       #service-info-list{display:none;}
+        p{float:none;}
+    }
+    .width-adjust{
+        max-width: 960px;
+        margin: 0 auto;
+    }
+}
+
+#floating-menu{  
+    clear: both;
+    width: 100%; 
+    background: #F47738;
+    color: #fff;
+    z-index: 1000;
+    max-width: 960px;
+    margin: 0 auto;
+    a{color:#fff;}
+    p{
+    float:left; 
+    margin:0;
+    font-weight:bold;
+    font-size:19px;  
+    max-width: 960px;
+    margin:0 auto;
+    }
+    #service-info-list{
+        float:right;     
+        #service-info-list li{
+	        float: left;
+            margin-right: 20px;
+	    }
+    }
+}
+
+
+
+
 
 //all mobile media query breakpoints
 @media only screen and (max-device-width: 640px),
