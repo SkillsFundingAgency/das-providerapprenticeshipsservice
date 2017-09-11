@@ -3754,13 +3754,13 @@ table .changed-item {
 
 @media (min-width: 641px) {
   .header-organisation ul li a.selected:after {
-    background: #005ea5;
+    background: #F47738;
   }
 }
 
 #floating-menu-prov {
   width: 100%;
-  background: #28a197;
+  background: #F47738;
   float: left;
   padding: 10px 0;
 }
@@ -3793,7 +3793,7 @@ table .changed-item {
 #floating-menu {
   clear: both;
   width: 100%;
-  background: #28a197;
+  background: #F47738;
   color: #fff;
   z-index: 1000;
   max-width: 960px;
