@@ -17,10 +17,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
     public class ProviderAgreementStatusRepository : BaseRepository, IProviderAgreementStatusRepository, IAgreementStatusQueryRepository
     {
         private readonly ILog _logger;
+        private readonly ICurrentDateTime _currentDateTime;
 
-        public ProviderAgreementStatusRepository(IConfiguration config, ILog logger) : base(config.DatabaseConnectionString, logger)
+        public ProviderAgreementStatusRepository(IConfiguration config, ILog logger, ICurrentDateTime currentDateTime) : base(config.DatabaseConnectionString, logger)
         {
             _logger = logger;
+            _currentDateTime = currentDateTime;
         }
 
         public async Task<IEnumerable<ContractFeedEvent>> GetContractEvents(long providerId)
@@ -84,13 +86,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             });
         }
 
-        private static async Task UpdateLatestBookmark(IDbConnection conn, IDbTransaction tran, Guid newLatestBookmark)
+        private async Task UpdateLatestBookmark(IDbConnection conn, IDbTransaction tran, Guid newLatestBookmark)
         {
             var previousBookmark = await GetLatestBookmark(conn, tran);
 
             var parameters = new DynamicParameters();
             parameters.Add("@latestBookmark", newLatestBookmark, DbType.Guid);
-            parameters.Add("@updatedDate", DateTime.UtcNow, DbType.DateTime);
+            parameters.Add("@updatedDate", _currentDateTime.Now, DbType.DateTime);
 
             if (previousBookmark == null)
             {
@@ -115,7 +117,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             }
         }
 
-        private static async Task InsertContract(IDbConnection conn, IDbTransaction tran, ContractFeedEvent contract)
+        private async Task InsertContract(IDbConnection conn, IDbTransaction tran, ContractFeedEvent contract)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@id", contract.Id, DbType.Guid);
@@ -125,7 +127,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             parameters.Add("@status", contract.Status, DbType.String);
             parameters.Add("@parentStatus", contract.ParentStatus, DbType.String);
             parameters.Add("@updatedInFeed", contract.Updated, DbType.DateTime);
-            parameters.Add("@createdDate", DateTime.UtcNow, DbType.DateTime);
+            parameters.Add("@createdDate", _currentDateTime.Now, DbType.DateTime);
 
             await conn.ExecuteAsync(
                     sql:
