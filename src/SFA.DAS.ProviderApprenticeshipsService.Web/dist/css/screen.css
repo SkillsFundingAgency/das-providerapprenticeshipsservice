@@ -3744,6 +3744,10 @@ table .changed-item {
 }
 
 /* Floating menu styles*/
+.phase-banner-beta {
+  border-bottom: 0;
+}
+
 #global-header-bar {
   max-width: 100%;
 }
