@@ -52,3 +52,13 @@ $('.container-head').on('click touchstart',(function () {
     $(this).next().toggleClass("hideOptions");
 
 }));
+
+//floating menu
+$(window).scroll(function () {
+    if ($(window).scrollTop() >= 140) {
+        $('#floating-menu').addClass('fixed-header');
+    }
+    else {
+        $('#floating-menu').removeClass('fixed-header');
+    }
+});
