@@ -87,10 +87,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("~/notification-settings")]
         public async Task<ActionResult> NotificationSettings()
         {
-            var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
             var u = User.Identity.GetClaim(DasClaimTypes.Upn);
-            // ToDo: Test providerId parse 
             var model = await _accountOrchestrator.GetNotificationSettings(u);
+            var flashMesssage = GetFlashMessageViewModelFromCookie();
+            if (flashMesssage != null)
+            {
+                model.FlashMessage = flashMesssage;
+            }
             return View(model);
         }
 
@@ -100,6 +103,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> NotificationSettings(NotificationSettingsViewModel model)
         {
             await _accountOrchestrator.UpdateNotificationSettings(model);
+            SetInfoMessage("Settings updated", FlashMessageSeverityLevel.Info);
             return RedirectToAction("NotificationSettings");
         }
 
