@@ -4,63 +4,61 @@
     ViewBag.PageId = "notification-settings";
 }
 
-<form method="post">
 
-    @Html.AntiForgeryToken()
-
-    <div class="grid-row">
-        <div class="column-two-thirds">
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <form method="post">
+            @Html.AntiForgeryToken()
             <h1 class="heading-xlarge">Notification Settings</h1>
             <p>Choose which accounts you want to receive cohort and apprentice updates from.</p>
             <p>Changes to these settings won't affect service emails, such as password resets.</p>
 
             <table>
                 <thead>
-                <tr>
-                    <th scope="col">Account name</th>
-                    <th scope="col">Emails</th>
-                    <th scope="col">No emails</th>
-                </tr>
+                    <tr>
+                        <th scope="col">Account name</th>
+                        <th scope="col">Emails</th>
+                        <th scope="col">No emails</th>
+                    </tr>
                 </thead>
                 <tbody>
-                @for (var i = 0; i < Model.NotificationSettings.Count ; i++)
-                {
-                    var setting = Model.NotificationSettings[i];
+                    @for (var i = 0; i < Model.NotificationSettings.Count; i++)
+                    {
+                        var setting = Model.NotificationSettings[i];
 
-                    <tr>
-                        <td class="notification-row">
-                            @setting.UserRef
+                        <tr>
+                            <td class="notification-row">
+                                @setting.UserRef
 
-                            @Html.Hidden($"NotificationSettings[{i}].UserRef", setting.UserRef)
-                        </td>
+                                @Html.Hidden($"NotificationSettings[{i}].UserRef", setting.UserRef)
+                            </td>
 
-                        <td class="notification-row">
+                            <td class="notification-row">
 
-                            @{  var trueId = $"NotificationSettings-true-{i}";
-                                var falseId = $"NotificationSettings-false-{i}";
-                            }
+                                @{
+                                    var trueId = $"NotificationSettings-true-{i}";
+                                    var falseId = $"NotificationSettings-false-{i}";
+                                }
 
-                            <label for="@trueId" class="block-label selection-button-radio" aria-label="Send emails">
-                                @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", true, setting.ReceiveNotifications, new { id = trueId })
-                            </label>
+                                <label for="@trueId" class="block-label selection-button-radio" aria-label="Send emails">
+                                    @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", true, setting.ReceiveNotifications, new { id = trueId })
+                                </label>
 
-                        </td>
+                            </td>
 
-                        <td class="notification-row">
-                            <label for="@falseId" class="block-label selection-button-radio" aria-label="Stop emails">
-                                @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", false, !setting.ReceiveNotifications, new { id = falseId })
-                            </label>
+                            <td class="notification-row">
+                                <label for="@falseId" class="block-label selection-button-radio" aria-label="Stop emails">
+                                    @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", false, !setting.ReceiveNotifications, new { id = falseId })
+                                </label>
 
-                        </td>
-                    </tr>
-                }
+                            </td>
+                        </tr>
+                      }
                 </tbody>
             </table>
 
             <button type="submit" class="button" id="submit-email-alerts">Update</button>
             <a href="/" class="button text-link">Cancel</a>
-
-        </div>
+        </form>
     </div>
-
-</form>
+</div>
