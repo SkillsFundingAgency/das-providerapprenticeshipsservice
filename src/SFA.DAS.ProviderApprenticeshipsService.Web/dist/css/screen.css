@@ -3744,8 +3744,16 @@ table .changed-item {
 }
 
 /* Floating menu styles*/
+.phase-banner-beta {
+  border-bottom: 0;
+}
+
 #global-header-bar {
   max-width: 100%;
+}
+
+.header-organisation ul {
+  clear: both;
 }
 
 .header-organisation ul li a.selected:after {
@@ -3754,7 +3762,7 @@ table .changed-item {
 
 @media (min-width: 641px) {
   .header-organisation ul li a.selected:after {
-    background: #F47738;
+    background: #005ea5;
   }
 }
 
@@ -3806,15 +3814,28 @@ table .changed-item {
 
 #floating-menu p {
   float: left;
-  margin: 0;
+  margin: 0 0 0 15px;
   font-weight: bold;
   font-size: 19px;
   max-width: 960px;
-  margin: 0 auto;
+}
+
+@media (min-width: 641px) {
+  #floating-menu p {
+    margin: 0 auto;
+  }
 }
 
 #floating-menu #service-info-list {
-  float: right;
+  float: left;
+  margin-left: 15px;
+}
+
+@media (min-width: 641px) {
+  #floating-menu #service-info-list {
+    float: right;
+    margin-left: 0;
+  }
 }
 
 #floating-menu #service-info-list #service-info-list li {

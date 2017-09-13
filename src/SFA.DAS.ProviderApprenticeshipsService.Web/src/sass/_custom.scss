@@ -797,10 +797,16 @@ width: 100%;
     li{margin-bottom:0;}
 }  
 /* Floating menu styles*/
+
+.phase-banner-beta{border-bottom:0;}
 #global-header-bar{max-width:100%;}
+.header-organisation ul{
+    clear:both;
+}
+
 .header-organisation ul li a.selected:after{
         background:none;
-       @include media(tablet) { background:#F47738;} 
+       @include media(tablet) { background:#005ea5;}
 }
 
 #floating-menu-prov{
@@ -835,15 +841,21 @@ width: 100%;
     margin: 0 auto;
     a{color:#fff;}
     p{
+          @include media(tablet){margin:0 auto;}
     float:left; 
-    margin:0;
+    margin:0 0 0 15px;
     font-weight:bold;
     font-size:19px;  
     max-width: 960px;
-    margin:0 auto;
     }
+
     #service-info-list{
-        float:right;     
+        float:left;  
+        margin-left:15px; 
+          @include media(tablet){
+             float:right;  
+             margin-left:0; 
+          }  
         #service-info-list li{
 	        float: left;
             margin-right: 20px;
