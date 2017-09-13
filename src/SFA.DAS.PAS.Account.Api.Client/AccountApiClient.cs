@@ -30,7 +30,7 @@ namespace SFA.DAS.PAS.Account.Api.Client
         public async Task<IEnumerable<User>> GetAccountUsers(long ukprn)
         {
             var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/accounts/{ukprn}/users";
+            var url = $"{baseUrl}api/account/{ukprn}/users";
 
             var json = await _httpClient.GetAsync(url);
             return JsonConvert.DeserializeObject<IEnumerable<User>>(json);
