@@ -73,12 +73,13 @@
     </div>
 
     <div id="global-cookie-message">
-        <p>GOV.UK uses cookies to make the site simpler. <a href="@Url.RouteUrl("privacy")"> Find out more about cookies</a>
+        <p>
+            GOV.UK uses cookies to make the site simpler. <a href="@Url.RouteUrl("privacy")"> Find out more about cookies</a>
         </p>
     </div>
 
     <header role="banner" id="global-header" class="">
-    
+
         <div class="header-wrapper">
             <div class="header-global">
 
@@ -93,30 +94,38 @@
     </header>
 
     <div id="global-header-bar"></div>
-    <main role="main">
-        <div class="service-info ">
-            <div class="phase-banner-beta">
-                <p>
-                    <strong class="phase-tag">BETA</strong>
-                    <span>This is a new service – your <a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank">feedback</a> will help us to improve it. </span>
-                </p>
+
+ 
+            <div class="service-info">
+                <div class="phase-banner-beta">
+                    <p>
+                        <strong class="phase-tag">BETA</strong>
+                        <span>This is a new service – your <a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank">feedback</a> will help us to improve it. </span>
+                    </p>
+                </div>
             </div>
-        </div>
-        <div class="grid-row">
-            <div class="column-full">
+     
+ 
                 @if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
-                    <div class="user-menu logged-in">
-                        <ul id="service-info-list" role="navigation">
-                            <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
-                            <li><a href="/notification-settings" class="link-user-profile">Notification settings</a></li>
-                            <li><a href="@Url.RouteUrl("signout")">Sign out</a></li>
-                        </ul>
+                    <div id="floating-menu-prov">
+                        <div id="floating-menu">
+                            <div class="js-float">
+                                <p>Your training provider account</p>
+                                <div class="user-menu logged-in">
+                                    <ul id="service-info-list" role="navigation">
+                                        <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
+                                        <li><a href="/notification-settings" class="link-user-profile">Notification settings</a></li>
+                                        <li><a href="@Url.RouteUrl("signout")">Sign out</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 }
                 else
                 {
-                    <div class="user-menu logged-in">
+                    <div class="user-menu logged-out">
                         <ul id="service-info-list" role="navigation">
                             <li>
                                 <a href="@Url.RouteUrl("signin")" aria-label="Sign in">Sign in</a>
@@ -124,67 +133,69 @@
                         </ul>
                     </div>
                 }
-            </div>
-        </div>
+    
 
-        @if (HttpContext.Current.User.Identity.IsAuthenticated && !(ViewBag?.HideNavBar ?? false))
-        {
-            var controllerName = ViewContext.RouteData.Values["Controller"].ToString(); ;
-            var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
+        <main role="main">
+            @if (HttpContext.Current.User.Identity.IsAuthenticated && !(ViewBag?.HideNavBar ?? false))
+            {
+                var controllerName = ViewContext.RouteData.Values["Controller"].ToString(); ;
+                var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
 
-            <div class="grid-row">
-                <div class="column-full">
-                    <div class="header-organisation" role="navigation">
-                        <nav class="header-inner">
-                            <ul role="menubar" id="global-nav-links">
-                                <li><a href="@Url.Action("Index", "Account")" role="menuitem" class="@(controllerName == "Account" ? "selected" : "")">Home</a></li>
-                                <li><a href="@Url.Action("Index", "ManageApprentices", new { providerId = providerId})" role="menuitem" class="@(controllerName == "ManageApprentices" ? "selected" : "")">Manage your apprentices</a></li>
-                                <li><a href="@Url.Action("Cohorts", "Commitment", new { providerId = providerId})" role="menuitem" class="@(controllerName == "Commitment" ? "selected" : "")">Your cohorts</a></li>
-                            </ul>
-                        </nav>
+                <div class="grid-row">
+                    <div class="column-full">
+                        <div class="header-organisation" role="navigation">
+                            <nav class="header-inner">
+                                <ul role="menubar" id="global-nav-links">
+                                    <li><a href="@Url.Action("Index", "Account")" role="menuitem" class="@(controllerName == "Account" ? "selected" : "")">Home</a></li>
+                                    <li><a href="@Url.Action("Index", "ManageApprentices", new { providerId = providerId})" role="menuitem" class="@(controllerName == "ManageApprentices" ? "selected" : "")">Manage your apprentices</a></li>
+                                    <li><a href="@Url.Action("Cohorts", "Commitment", new { providerId = providerId})" role="menuitem" class="@(controllerName == "Commitment" ? "selected" : "")">Your cohorts</a></li>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
                 </div>
+            }
+            @RenderSection("breadcrumb", required: false)
+            <div id="content">
+                @Html.Partial(@"_ModalMessage")
+                @RenderBody()
             </div>
-        }
-        @RenderSection("breadcrumb", required: false)
-        <div id="content">
-            @Html.Partial(@"_ModalMessage")
-            @RenderBody()
-        </div>
-    </main>
+        </main>
 
-    <footer class="group js-footer" id="footer" role="contentinfo">
-        <div class="footer-wrapper">
-            <div class="footer-meta">
-                <div class="footer-meta-inner">
-                    <ul class="platform-help-links">
-                        <li><a href="@Url.Action("Help", "Home")">Help</a></li>
-                        <li><a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank" aria-label="Give feedback">Feedback </a></li>
-                        <li><a href="@Url.RouteUrl("privacy")">Privacy and cookies</a></li>
-                        <li><a href="@Url.RouteUrl("terms")">Terms and conditions</a></li>
-                        <li>Built by the <a href="http://gov.uk/sfa" target="_blank">Education and Skills Funding Agency</a></li>
-                    </ul>
-                    <div class="open-government-licence">
-                        <p class="logo">
-                            <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence</a>
-                        </p>
 
-                        <p>
-                            All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
-                        </p>
 
+        <footer class="group js-footer" id="footer" role="contentinfo">
+            <div class="footer-wrapper">
+                <div class="footer-meta">
+                    <div class="footer-meta-inner">
+                        <ul class="platform-help-links">
+                            <li><a href="@Url.Action("Help", "Home")">Help</a></li>
+                            <li><a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank" aria-label="Give feedback">Feedback </a></li>
+                            <li><a href="@Url.RouteUrl("privacy")">Privacy and cookies</a></li>
+                            <li><a href="@Url.RouteUrl("terms")">Terms and conditions</a></li>
+                            <li>Built by the <a href="http://gov.uk/sfa" target="_blank">Education and Skills Funding Agency</a></li>
+                        </ul>
+                        <div class="open-government-licence">
+                            <p class="logo">
+                                <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence</a>
+                            </p>
+
+                            <p>
+                                All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
+                            </p>
+
+                        </div>
                     </div>
+
                 </div>
-
             </div>
-        </div>
-    </footer>
-    <div id="global-app-error" class="app-error hidden"></div>
+        </footer>
+        <div id="global-app-error" class="app-error hidden"></div>
 
-    @Scripts.Render("~/bundles/sfajs")
+        @Scripts.Render("~/bundles/sfajs")
 
-    @RenderSection("pageSpecificJS", required: false)
+        @RenderSection("pageSpecificJS", required: false)
 
 
-    </body>
+</body>
 </html>

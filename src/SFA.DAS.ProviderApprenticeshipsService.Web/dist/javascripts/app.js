@@ -53,6 +53,7 @@ $('.container-head').on('click touchstart',(function () {
 
 }));
 
+
 var placeholderText = $('.js-enabled #search-input').data('default-value');
 
 //clear search box text
@@ -75,3 +76,14 @@ $("#search-input").on("blur", (function () {
         $(this).val(placeholderText);
     }
 }));
+
+//floating menu
+$(window).scroll(function () {
+    if ($(window).scrollTop() >= 140) {
+        $('#floating-menu').addClass('fixed-header');
+    }
+    else {
+        $('#floating-menu').removeClass('fixed-header');
+    }
+});
+
