@@ -17,10 +17,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool PendingChanges { get; set; }
         public string BackLinkUrl { get; set; }
         public bool RelationshipVerified { get; set; }
-        public bool HasOverlappingErrors { get; set; }
-        public Dictionary<string, string> FundingCapWarnings { get; set; }
-        public Dictionary<string, string> AcademicFundingPeriodErrors { get; set; }
-        
+
         public bool IsReadOnly { get; set; }
+
+        public Dictionary<string, string> Errors { get; set; }
+        public Dictionary<string, string> Warnings { get; set; }
     }
 }

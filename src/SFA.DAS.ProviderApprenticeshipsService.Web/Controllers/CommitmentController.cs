@@ -164,19 +164,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             {
                 return RedirectToAction("VerificationOfEmployer", new { providerId, hashedCommitmentId });
             }
-
-            var groupes = model.ApprenticeshipGroups.Where(m => m.ShowOverlapError);
-            foreach (var groupe in groupes)
-            {
-                var errorMessage = groupe.TrainingProgramme?.Title != null
-                    ? $"{groupe.TrainingProgramme?.Title ?? ""} apprentices training dates"
-                    : "Apprentices training dates";
-
-                ModelState.AddModelError($"{groupe.GroupId}", errorMessage);
-            }
-                        
+               
             model.BackLinkUrl = GetReturnToListUrl(providerId);
-
+             
             AddFlashMessageToViewModel(model);
 
             return View(model);

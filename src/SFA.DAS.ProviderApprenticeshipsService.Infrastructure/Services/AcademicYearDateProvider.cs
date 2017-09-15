@@ -35,7 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
             get
             {
                 // TODO GET DATE FROM SOURCE
-                return CurrentAcademicYearStartDate.AddDays(79);
+                return new DateTime(_currentDateTime.Now.Year, 10, 19, 18, 0, 0);
             }
         }
 

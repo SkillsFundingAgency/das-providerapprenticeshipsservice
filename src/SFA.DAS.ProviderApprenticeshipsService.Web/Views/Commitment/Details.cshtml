@@ -10,39 +10,34 @@
 <div id="cohort-details">
     <div class="grid-row">
         <div class="column-full">
-            @if (Model.HasOverlappingErrors)
+
+            @if (Model.Errors.Any())
             {
-                @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+                <div class="validation-summary-errors error-summary">
+                    <h1 id="warning-summary" class="heading-medium warning-summary-heading">
+                        There are errors on this page that need your attention
+                    </h1>
+                    <ul class="max-funding-summary-list">
+                        @foreach (var errorMsg in Model.Errors)
+                        {
+                            <li>
+                                <a href="#error-message-@errorMsg.Key" data-focuses="error-message-@errorMsg.Key">
+                                    @errorMsg.Value
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
             }
-            else if (Model.AcademicFundingPeriodErrors.Any())
-            {
-            <div class="validation-summary-errors error-summary">
-                <h1 id="warning-summary" class="heading-medium warning-summary-heading">
-                    Problem with start dates
-                </h1>
-                <p>Start dates can't be in the previous academic year.</p>
-                <ul class="error-summary-list">
-                    @foreach (var warning in Model.AcademicFundingPeriodErrors)
-                    {
-                        <li>
-                            <a href="#max-funding-group-@warning.Key" data-focuses="max-funding-group-@warning.Key">
-                                @warning.Value
-                            </a>
-                        </li>
-                    }
-                </ul>
-            </div>
-            }
-            else if (Model.FundingCapWarnings.Any())
+            else if (Model.Warnings.Any())
             {
                 <div class="validation-summary-max-funding error-summary">
                     <h1 id="warning-summary" class="heading-medium warning-summary-heading">
-                        Warnings for your attention
+                        There are items on this page that need your attention
                     </h1>
-                    <p>Review the following details:</p>
                     <ul class="max-funding-summary-list">
-                        @foreach (var warning in Model.FundingCapWarnings)
-                         {
+                        @foreach (var warning in Model.Warnings)
+                        {
                             <li>
                                 <a href="#max-funding-group-@warning.Key" data-focuses="max-funding-group-@warning.Key">
                                     @warning.Value
@@ -52,6 +47,8 @@
                     </ul>
                 </div>
             }
+
+        
 
             @if (Model.IsReadOnly)
             {
@@ -168,8 +165,6 @@
                 {
                     var groupTitle = String.Format($"{group.Apprenticeships.Count} x {group.GroupName}");
 
-
-
                     <div class="group-header">
 
                         <h3 class="heading-medium group-title">@groupTitle</h3>
@@ -178,45 +173,43 @@
                             <p>Training code: @group.TrainingProgramme.Id</p>
                         }
 
-                        @if (group.ShowOverlapError)
+                        @if (group.OverlapErrorCount > 0 )
                         {
                             <div class="overlap-notification" id="error-message-@group.GroupId">
                                 <p class="heading-small">
-                                    @group.OverlapErrorCount @_addS("Apprenticeship", group.OverlapErrorCount) with overlapping training dates
+                                    @_addS("Apprenticeship", group.OverlapErrorCount) can't hane overlapping training dates
                                 </p>
                                 <p>
-                                    These apprentices already have records with overlapping training dates in the apprenticeship service.
-                                    Please check the details are correct. If you're unsure, contact the employer in the first instance.
+                                   Please update training dates to ensure they do not overlap.
                                 </p>
                             </div>
                         }
-                        else if (group.ShowAcademicYearFundingPeriodError)
+                        else if (group.ApprenticeshipsNotWithinFundingPeriod > 0)
                         {
 
-                                    <div class="overlap-notification" id="max-funding-group-@group.GroupId">
-                                        <p class="heading-small">
-                                            Start dates can't be in the previous academic year
-                                        </p>
-                                        <p>
-                                            The earliest date you can use is @group.EarliestAcademicYearDate.ToGdsFormatShortMonthWithoutDay()
-                                        </p>
-                                    </div>
+                            <div class="overlap-notification" id="error-message-@group.GroupId">
+                                <p class="heading-small">
+                                    Start @_addS("date", group.ApprenticeshipsNotWithinFundingPeriod) can't be in the previous academic year
+                                </p>
+                                <p>
+                                    The earliest date you can use is @group.EarliestAcademicYearDate.ToGdsFormatShortMonthWithoutDay()
+                                </p>
+                            </div>
 
                         }
-                        else if (group.ShowFundingLimitWarning)
+                        else if (group.ApprenticeshipsOverFundingLimit > 0 && !Model.Errors.Any())
                         {
 
                             <div class="funding-cap-notification" id="max-funding-group-@group.GroupId">
                                 <p class="heading-small">
-                                    @($"{group.ApprenticeshipsOverFundingLimit} {_addS("apprenticeship", group.ApprenticeshipsOverFundingLimit)} above funding band maximum")
+                                    @($"{group.ApprenticeshipsOverFundingLimit} {_addS("apprenticeship", group.ApprenticeshipsOverFundingLimit)} {_pluraliseIs(group.ApprenticeshipsOverFundingLimit)} above funding band maximum")
                                 </p>
                                 <p>
-                                    The costs are above the £@group.TrainingProgramme.MaxFunding.ToString("N0") <a target="_blank" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">maximum value of the funding band</a> for this apprenticeship. You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.
+                                   The maximum amount of <a target="_blank" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">levy funds you can use on this training</a>is  £@group.TrainingProgramme.MaxFunding.ToString("N0") for this apprenticeship. You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.
                                 </p>
                             </div>
 
-
-                        }
+                          }
                             </div>
 
                     <table class="tableResponsive providerList">
@@ -260,10 +253,10 @@
                                                 </a>
                                             </td>
                                         }
-                                        else if (group.ShowAcademicYearFundingPeriodError)
+                                        else if (!apprenticeship.IsWithinAcademicYearFundingPeriod && !apprenticeship.OverlappingApprenticeships.Any())
                                         {
                                             <td class="overlap-alert">
-                                                <a href="#max-funding-group-@group.GroupId"
+                                                <a href="#error-message-@group.GroupId"
                                                    aria-label="Start date can’t be in the previous academic year."
                                                    aria-describedby="max-funding-group-@group.GroupId"
                                                    title="Start date can’t be in the previous academic year.">
@@ -284,7 +277,7 @@
                                             <span class="missing">&ndash;</span>
                                         </td>
                                     }
-                                    @if (group.TrainingProgramme != null && apprenticeship.Cost.HasValue && apprenticeship.Cost > group.TrainingProgramme.MaxFunding && !Model.HasOverlappingErrors)
+                                    @if (group.TrainingProgramme != null && apprenticeship.Cost.HasValue && apprenticeship.Cost > group.TrainingProgramme.MaxFunding && !Model.Errors.Any())
                                     {
                                         <td class="funding-cap-alert">
                                             <a href="#max-funding-group-@group.GroupId" aria-label="Cost is above the maximum funding band" aria-describedby="max-funding-group-@group.GroupId" title="Cost is above the maximum funding band">@FormatCost(apprenticeship.Cost)</a>
@@ -343,6 +336,8 @@
     }
 
     readonly Func<string, int, string> _addS = (word, count) => count == 1 ? word : $"{word}s";
+
+    readonly Func<int, string> _pluraliseIs = (count) => count == 1 ? "is" : "are";
 }
 
 @helper GetValueOrDefault(string property)

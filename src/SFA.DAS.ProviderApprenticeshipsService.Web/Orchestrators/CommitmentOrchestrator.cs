@@ -366,29 +366,41 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var apprenticeshipGroups = new List<ApprenticeshipListItemGroupViewModel>();
 
+            var errors = new Dictionary<string, string>();
+            var warnings = new Dictionary<string, string>();
+
             foreach (var group in apprenticeships.OrderBy(x => x.TrainingName).GroupBy(x => x.TrainingCode))
             {
-                var academicYearErrorCount = group.Count(x => HasAcademicFundingPeriodError(x.StartDate));
-
-                apprenticeshipGroups.Add(new ApprenticeshipListItemGroupViewModel
+                var apprenticeshipListGroup = new ApprenticeshipListItemGroupViewModel
                 {
                     Apprenticeships = group.OrderBy(x => x.CanBeApprove).ToList(),
                     TrainingProgramme = trainingProgrammes.FirstOrDefault(x => x.Id == group.Key),
-                    AcademicFundingPeriodErrorCount = academicYearErrorCount,
-                    ShowAcademicYearFundingPeriodError = academicYearErrorCount > 0,
                     EarliestAcademicYearDate = _academicYear.CurrentAcademicYearStartDate
-                });
+                };
+
+                apprenticeshipGroups.Add(apprenticeshipListGroup);
+
+                var trainingDetails = string.Empty;
+
+                if (apprenticeshipListGroup.TrainingProgramme != null && !string.IsNullOrEmpty(apprenticeshipListGroup.TrainingProgramme.Title))
+                {
+                    trainingDetails = $":{apprenticeshipListGroup.TrainingProgramme.Title}";
+                }
+
+                if (apprenticeshipListGroup.OverlapErrorCount > 0)
+                {
+                    errors.Add($"{apprenticeshipListGroup.GroupId}", $"Overlapping training dates{trainingDetails}");
+                }
+                else if (apprenticeshipListGroup.ApprenticeshipsNotWithinFundingPeriod > 0)
+                {
+                    errors.Add($"{apprenticeshipListGroup.GroupId}", $"Start date in previous year{trainingDetails}");
+                }
+
+                if (apprenticeshipListGroup.ApprenticeshipsOverFundingLimit > 0)
+                {
+                    warnings.Add(apprenticeshipListGroup.GroupId, $"Cost exceeds funcding band{trainingDetails}");
+                }
             }
-
-            var warnings = new Dictionary<string, string>();
-            apprenticeshipGroups
-                .Where(m => m.ShowFundingLimitWarning)
-                .ForEach(group => warnings.Add(group.GroupId, $"Cost for {group.TrainingProgramme.Title}"));
-
-            var academicFundingPeriodErrors = new Dictionary<string, string>();
-            apprenticeshipGroups
-                .Where(m => m.ShowAcademicYearFundingPeriodError)
-                .ForEach(group => academicFundingPeriodErrors.Add(group.GroupId, $"{group.TrainingProgramme?.Title ?? string.Empty}"));
 
             return new CommitmentDetailsViewModel
             {
@@ -403,10 +415,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed,
                 ApprenticeshipGroups = apprenticeshipGroups,
                 RelationshipVerified = relationshipRequest.Relationship.Verified.HasValue,
-                HasOverlappingErrors = apprenticeshipGroups.Any(m => m.OverlapErrorCount > 0),
-                AcademicFundingPeriodErrors = academicFundingPeriodErrors,
-                FundingCapWarnings = warnings,
-                IsReadOnly = data.Commitment.EditStatus != EditStatus.ProviderOnly
+                IsReadOnly = data.Commitment.EditStatus != EditStatus.ProviderOnly,
+                Errors = errors,
+                Warnings = warnings
             };
         }
 
@@ -658,7 +669,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var academicFundingPeriodErrorCount = 0;
             if (data.Commitment.Apprenticeships != null)
             {
-                academicFundingPeriodErrorCount = data.Commitment.Apprenticeships.Count(x => HasAcademicFundingPeriodError(x.StartDate));
+                academicFundingPeriodErrorCount = data.Commitment.Apprenticeships.Count(x => !IsWithinAcademicFundingPeriod(x.StartDate));
             }
 
             return new FinishEditingViewModel
@@ -672,7 +683,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed,
                 SignAgreementUrl = _configuration.ContractAgreementsUrl,
                 HasOverlappingErrors = overlaps.Overlaps.Any(),
-                HasAcademicFundingPeriodErrors = academicFundingPeriodErrorCount> 0
+                HasAcademicFundingPeriodErrors = academicFundingPeriodErrorCount > 0
             };
         }
 
@@ -701,8 +712,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     EndDate = x.EndDate,
                     Cost = x.Cost,
                     CanBeApprove = x.CanBeApproved,
-                    OverlappingApprenticeships =
-                        overlaps?.GetOverlappingApprenticeships(x.Id)
+                    OverlappingApprenticeships = overlaps?.GetOverlappingApprenticeships(x.Id),
+                    IsWithinAcademicYearFundingPeriod = IsWithinAcademicFundingPeriod(x.StartDate)
                 }).ToList();
 
             return apprenticeViewModels;
@@ -812,14 +823,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return result;
         }
 
-        private bool HasAcademicFundingPeriodError(DateTime? startDate)
+        private bool IsWithinAcademicFundingPeriod(DateTime? startDate)
         {
             if (!startDate.HasValue)
             {
                 return true;
             }
 
-            return _academicYearValidator.Validate(startDate.Value) != AcademicYearValidationResult.Success;
+            return _academicYearValidator.Validate(startDate.Value) == AcademicYearValidationResult.Success;
         }
+
     }
 }

@@ -14,35 +14,35 @@
         @if (!Model.CanApprove)
         {
             <div class="panel panel-border-wide alert-default">
-                <p class="heading-medium">You can't approve this cohort yet </p>
-                <p >To approve this cohort you need to: </p>
+                <p class="heading-medium">You can't approve this cohort until: </p>
+
                 <ul class="list list-bullet">
                     @if (!Model.HasSignedTheAgreement)
                     {
                         <li>
-                           Signed your<a href="@Model.SignAgreementUrl" target="_blank"> agreement</a>
+                            You've signed an <a href="@Model.SignAgreementUrl" target="_blank">apprenticeship agreement</a> with the Education and Skills Funding Agency
                         </li>
                     }
                     @if (!Model.ReadyForApproval)
                     {
                         <li>
-                            Complete <a href="@Url.Action("Details", new {Model.ProviderId, Model.HashedCommitmentId})">all apprentice details</a>
+                            All <a href="@Url.Action("Details", new {Model.ProviderId, Model.HashedCommitmentId})">apprentice records</a> are complete
                         </li>
                     }
                     @if (Model.HasOverlappingErrors)
                     {
                         <li>
-                            Make sure no <a href="@Url.Action("Details", new {Model.ProviderId, Model.HashedCommitmentId})">apprentices</a>  are on miltiple courses at the same time
+                            There are no <a href="@Url.Action("Details", new {Model.ProviderId, Model.HashedCommitmentId})">overlapping training dates</a> for your apprentices
                         </li>
                     }
                     @if (Model.HasAcademicFundingPeriodErrors)
                     {
                         <li>
-                            Make sure <a href="@Url.Action("Details", new {Model.ProviderId, Model.HashedCommitmentId})">start dates </a> are not in the previous academic year
+                           There are no <a href="@Url.Action("Details", new {Model.ProviderId, Model.HashedCommitmentId})">start dates </a> in the previous academic year
                         </li>
                     }
-
                 </ul>
+
             </div>
         }
 
