@@ -3329,7 +3329,7 @@ table .changed-item {
   width: 100%;
   background: #F47738;
   color: #fff;
-  z-index: 1000;
+  z-index: 1;
   max-width: 960px;
   margin: 0 auto;
 }
