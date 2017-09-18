@@ -53,6 +53,7 @@ $('.container-head').on('click touchstart',(function () {
 
 }));
 
+<<<<<<< HEAD
 
 var placeholderText = $('.js-enabled #search-input').data('default-value');
 
@@ -87,3 +88,5 @@ $(window).scroll(function () {
     }
 });
 
+=======
+>>>>>>> 90cb32fdf1e1b3c11846a0695240bdbdd99bdb32
