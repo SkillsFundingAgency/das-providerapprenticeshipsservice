@@ -380,26 +380,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
                 apprenticeshipGroups.Add(apprenticeshipListGroup);
 
-                var trainingDetails = string.Empty;
+                if (!string.IsNullOrEmpty(apprenticeshipListGroup.TrainingProgramme?.Title))
+                {
+                    if (apprenticeshipListGroup.OverlapErrorCount > 0)
+                    {
+                        errors.Add($"{apprenticeshipListGroup.GroupId}", $"Overlapping training dates:{apprenticeshipListGroup.TrainingProgramme.Title}");
+                    }
+                    else if (apprenticeshipListGroup.ApprenticeshipsNotWithinFundingPeriod > 0)
+                    {
+                        errors.Add($"{apprenticeshipListGroup.GroupId}", $"Start date in previous year:{apprenticeshipListGroup.TrainingProgramme.Title}");
+                    }
 
-                if (apprenticeshipListGroup.TrainingProgramme != null && !string.IsNullOrEmpty(apprenticeshipListGroup.TrainingProgramme.Title))
-                {
-                    trainingDetails = $":{apprenticeshipListGroup.TrainingProgramme.Title}";
+                    if (apprenticeshipListGroup.ApprenticeshipsOverFundingLimit > 0)
+                    {
+                        warnings.Add(apprenticeshipListGroup.GroupId, $"Cost for {apprenticeshipListGroup.TrainingProgramme.Title}");
+                    }
                 }
 
-                if (apprenticeshipListGroup.OverlapErrorCount > 0)
-                {
-                    errors.Add($"{apprenticeshipListGroup.GroupId}", $"Overlapping training dates{trainingDetails}");
-                }
-                else if (apprenticeshipListGroup.ApprenticeshipsNotWithinFundingPeriod > 0)
-                {
-                    errors.Add($"{apprenticeshipListGroup.GroupId}", $"Start date in previous year{trainingDetails}");
-                }
-
-                if (apprenticeshipListGroup.ApprenticeshipsOverFundingLimit > 0)
-                {
-                    warnings.Add(apprenticeshipListGroup.GroupId, $"Cost exceeds funcding band{trainingDetails}");
-                }
             }
 
             return new CommitmentDetailsViewModel
