@@ -72,7 +72,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _approvedApprenticeshipValidator = approvedApprenticeshipValidator;
             _apprenticeshipFiltersMapper = apprenticeshipFiltersMapper;
             _dataLockMapper = dataLockMapper;
-            _searchPlaceholderText = "Search for their name";
+            _searchPlaceholderText = "Enter a name or ULN";
         }
 
         public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(long providerId, ApprenticeshipFiltersViewModel filters)

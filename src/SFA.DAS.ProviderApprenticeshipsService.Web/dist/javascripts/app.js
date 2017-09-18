@@ -53,12 +53,16 @@ $('.container-head').on('click touchstart',(function () {
 
 }));
 
-<<<<<<< HEAD
+
+
+
+
+//clear search box text
 
 var placeholderText = $('.js-enabled #search-input').data('default-value');
 
-//clear search box text
 window.onload = function () {
+
     if ($('.js-enabled #search-input').val() === "") {
         $('.js-enabled #search-input').addClass('placeholder-text');
         $('.js-enabled #search-input').val(placeholderText);
@@ -78,15 +82,4 @@ $("#search-input").on("blur", (function () {
     }
 }));
 
-//floating menu
-$(window).scroll(function () {
-    if ($(window).scrollTop() >= 140) {
-        $('#floating-menu').addClass('fixed-header');
-    }
-    else {
-        $('#floating-menu').removeClass('fixed-header');
-    }
-});
 
-=======
->>>>>>> 90cb32fdf1e1b3c11846a0695240bdbdd99bdb32
