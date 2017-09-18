@@ -336,8 +336,6 @@
     }
 
     readonly Func<string, int, string> _addS = (word, count) => count == 1 ? word : $"{word}s";
-
-    readonly Func<int, string> _pluraliseIs = (count) => count == 1 ? "is" : "are";
 }
 
 @helper GetValueOrDefault(string property)
