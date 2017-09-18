@@ -31,14 +31,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [TestCase(SaveStatus.Save, LastAction.None, false)]
         public async Task CheckStatusUpdate(SaveStatus input, LastAction expectedLastAction, bool expectedCreateTaskBool)
         {
-
-            var mockMediator = new Mock<IMediator>();
-            var mockHashingService = new Mock<IHashingService>();
-            mockHashingService.Setup(m => m.DecodeValue("ABBA99")).Returns(2L);
-            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetProviderAgreementQueryRequest>()))
+            _mockHashingService.Setup(m => m.DecodeValue("ABBA99")).Returns(2L);
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetProviderAgreementQueryRequest>()))
                 .Returns(Task.FromResult(new GetProviderAgreementQueryResponse { HasAgreement = ProviderAgreementStatus.Agreed }));
 
-            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
                 .Returns(Task.FromResult(new GetCommitmentQueryResponse
                 {
                     Commitment = new CommitmentView
@@ -48,16 +45,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     }
                 }));
 
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), mockHashingService.Object, Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>(), Validator);
-            await _sut.SubmitCommitment("UserId", 1L, "ABBA99", input, string.Empty, new SignInUserModel());
+            await _orchestrator.SubmitCommitment("UserId", 1L, "ABBA99", input, string.Empty, new SignInUserModel());
 
-            mockMediator.Verify(m => m
+           _mockMediator.Verify(m => m
                 .SendAsync(It.Is<SubmitCommitmentCommand>(
                     p => p.ProviderId == 1L &&
                     p.CommitmentId == 2L &&
                     p.Message == string.Empty &&
                     p.LastAction == expectedLastAction &&
-                    p.CreateTask == expectedCreateTaskBool )));
+                    p.CreateTask == expectedCreateTaskBool)));
         }
     }
 }

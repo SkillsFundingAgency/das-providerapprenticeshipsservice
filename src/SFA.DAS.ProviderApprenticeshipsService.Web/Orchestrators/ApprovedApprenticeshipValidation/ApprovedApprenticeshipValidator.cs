@@ -3,6 +3,7 @@ using System.Linq;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation
 {
@@ -10,9 +11,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedAppre
     {
         private readonly IApprenticeshipValidationErrorText _errorText;
 
-        public ApprovedApprenticeshipValidator()
+        public ApprovedApprenticeshipValidator(IAcademicYearDateProvider academicYear)
         {
-            _errorText = new WebApprenticeshipValidationText();
+            _errorText = new WebApprenticeshipValidationText(academicYear);
         }
 
         public Dictionary<string, string> Validate(ApprenticeshipViewModel model)

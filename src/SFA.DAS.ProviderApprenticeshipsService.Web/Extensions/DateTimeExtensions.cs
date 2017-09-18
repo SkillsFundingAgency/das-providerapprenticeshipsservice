@@ -21,6 +21,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
             return date.ToString("MMM yyyy");
         }
 
+        public static string ToGdsFormatShortMonthWithoutDay(this DateTime date)
+        {
+            return date.ToString("MM yyyy");
+        }
+
         public static string ToGdsFormatLongMonthNameWithoutDay(this DateTime date)
         {
             return date.ToString("MMMM yyyy");

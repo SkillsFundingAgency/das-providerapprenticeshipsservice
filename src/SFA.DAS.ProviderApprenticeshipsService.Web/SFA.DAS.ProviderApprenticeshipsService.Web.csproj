@@ -479,6 +479,7 @@
     <Compile Include="Validation\DeleteCohortConfirmationViewModelValidator.cs" />
     <Compile Include="Validation\DeleteConfirmationViewModelValidator.cs" />
     <Compile Include="Validation\FinishEditingViewModelValidator.cs" />
+    <Compile Include="Validation\Interface\IApprenticeshipUploadModelValidator.cs" />
     <Compile Include="Validation\Text\ApprenticeshipFileValidationText.cs" />
     <Compile Include="Validation\Text\BulkUploadApprenticeshipValidationText.cs" />
     <Compile Include="Validation\Text\WebApprenticeshipValidationText.cs" />

@@ -29,6 +29,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string SignAgreementUrl { get; set; }
 
         public bool HasOverlappingErrors { get; set; }
+
+        public bool HasAcademicFundingPeriodErrors { get; set; }
+
+        public bool CanApprove
+        {
+            get
+            {
+                return ReadyForApproval &&
+                    HasSignedTheAgreement &&
+                    !HasOverlappingErrors &&
+                    !HasAcademicFundingPeriodErrors;
+            }
+
+        }
     }
 
     public enum ApprovalState

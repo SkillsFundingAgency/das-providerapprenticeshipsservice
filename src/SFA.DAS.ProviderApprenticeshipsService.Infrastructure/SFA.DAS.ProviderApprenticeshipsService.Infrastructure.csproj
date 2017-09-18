@@ -179,7 +179,8 @@
     <Compile Include="Data\UserSettingsRepository.cs" />
     <Compile Include="Logging\ProviderCommitmentsLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\AcademicYear.cs" />
+    <Compile Include="Services\AcademicYearDateProvider.cs" />
+    <Compile Include="Services\AcademicYearValidator.cs" />
     <Compile Include="Services\CookieStorageService.cs" />
     <Compile Include="Services\CurrentDateTime.cs" />
     <Compile Include="Services\HashingService.cs" />
