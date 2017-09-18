@@ -20,9 +20,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
             _academicYear = academicYear;
         }
 
-        public AcademicYearValidationResult Validate(DateTime startDate)
+        public AcademicYearValidationResult Validate(DateTime trainingStartDate)
         {
-           if (startDate < _academicYear.CurrentAcademicYearStartDate &&
+           if (trainingStartDate < _academicYear.CurrentAcademicYearStartDate &&
                 _currentDateTime.Now > _academicYear.LastAcademicYearFundingPeriod)
             {
                 return AcademicYearValidationResult.NotWithinFundingPeriod;
