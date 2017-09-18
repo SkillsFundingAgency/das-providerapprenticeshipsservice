@@ -10,6 +10,7 @@ using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
 using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 
 using StructureMap;
@@ -31,6 +32,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution
             var config = GetConfiguration("SFA.DAS.ContractAgreements");
             For<IConfiguration>().Use(config);
             For<ContractFeedConfiguration>().Use(config);
+            For<ICurrentDateTime>().Use(x => new CurrentDateTime());
             For<IContractFeedProcessorHttpClient>().Use<ContractFeedProcessorHttpClient>();
             For<IContractDataProvider>().Use<ContractFeedProcessor>();
             For<IProviderAgreementStatusRepository>().Use<ProviderAgreementStatusRepository>();

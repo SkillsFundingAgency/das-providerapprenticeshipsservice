@@ -2524,6 +2524,14 @@ span.helpText {
   }
 }
 
+.logged-out #service-info-list {
+  max-width: 960px;
+  margin: 0 auto;
+  border-top: 1px solid #bfc1c3;
+  border-bottom: 1px solid #bfc1c3;
+  padding: 10px 0;
+}
+
 .hr-double {
   border-bottom: 4px solid #bfc1c3;
   margin-bottom: 20px;
@@ -3270,78 +3278,15 @@ table .changed-item {
   margin-bottom: 0;
 }
 
-/* Floating menu styles*/
-#global-header-bar {
-  max-width: 100%;
-}
-
-.header-organisation ul li a.selected:after {
-  background: none;
-  background: #F47738;
-}
-
 #floating-menu-prov {
-  width: 100%;
-  background: #F47738;
-  float: left;
-  padding: 10px 0;
-}
-
-#floating-menu-prov .user-menu.logged-in {
-  border: 0;
-}
-
-#floating-menu-prov .fixed-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  max-width: 100%;
-  padding: 10px 0;
-}
-
-#floating-menu-prov .fixed-header #service-info-list {
-  display: none;
-}
-
-#floating-menu-prov .fixed-header p {
-  float: none;
-}
-
-#floating-menu-prov .width-adjust {
   max-width: 960px;
   margin: 0 auto;
 }
 
-#floating-menu {
-  clear: both;
-  width: 100%;
-  background: #F47738;
-  color: #fff;
-  z-index: 1000;
-  max-width: 960px;
-  margin: 0 auto;
-}
-
-#floating-menu a {
-  color: #fff;
-}
-
-#floating-menu p {
-  float: left;
-  margin: 0;
-  font-weight: bold;
-  font-size: 19px;
-  max-width: 960px;
-  margin: 0 auto;
-}
-
-#floating-menu #service-info-list {
-  float: right;
-}
-
-#floating-menu #service-info-list #service-info-list li {
-  float: left;
-  margin-right: 20px;
+#floating-menu-prov #service-info-list {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {

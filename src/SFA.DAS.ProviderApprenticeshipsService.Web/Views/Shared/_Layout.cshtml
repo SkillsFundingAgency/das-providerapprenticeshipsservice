@@ -111,7 +111,7 @@
                     <div id="floating-menu-prov">
                         <div id="floating-menu">
                             <div class="js-float">
-                                <p>Your training provider account</p>
+                                @*<p>Your training provider account</p>*@
                                 <div class="user-menu logged-in">
                                     <ul id="service-info-list" role="navigation">
                                         <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
@@ -125,7 +125,7 @@
                 }
                 else
                 {
-                    <div class="user-menu logged-in">
+                    <div class="user-menu logged-out">
                         <ul id="service-info-list" role="navigation">
                             <li>
                                 <a href="@Url.RouteUrl("signin")" aria-label="Sign in">Sign in</a>
