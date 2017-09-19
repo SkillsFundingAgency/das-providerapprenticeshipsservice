@@ -6,6 +6,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.Learners.Validators;
+using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
@@ -16,18 +17,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         protected static readonly Func<string, int, bool> HaveNumberOfDigitsFewerThan = (str, length) => { return (str?.Count(char.IsDigit) ?? 0) < length; };
         private readonly IApprenticeshipValidationErrorText _validationText;
         private readonly ICurrentDateTime _currentDateTime;
-        private readonly IAcademicYear _academicYear;
+        private readonly IAcademicYearDateProvider _academicYear;
         private readonly IUlnValidator _ulnValidator;
+        private readonly IAcademicYearValidator _academicYearValidator;
 
         public ApprenticeshipCoreValidator(IApprenticeshipValidationErrorText validationText, 
                                             ICurrentDateTime currentDateTime, 
-                                            IAcademicYear academicYear,
-                                            IUlnValidator ulnValidator)
+                                            IAcademicYearDateProvider academicYear,
+                                            IUlnValidator ulnValidator,
+                                            IAcademicYearValidator academicYearValidator)
         {
             _validationText = validationText;
             _currentDateTime = currentDateTime;
             _academicYear = academicYear;
             _ulnValidator = ulnValidator;
+            _academicYearValidator = academicYearValidator;
 
             ValidateFirstName();
 
@@ -104,7 +108,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Must((startDate) =>
                 {
                     return StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear(startDate);
-                }).WithMessage(_validationText.LearnStartDate05.Text).WithErrorCode(_validationText.LearnStartDate05.ErrorCode);
+                }).WithMessage(_validationText.LearnStartDate05.Text).WithErrorCode(_validationText.LearnStartDate05.ErrorCode)
+               .Must(BeWithinAcademicYearFundingPeriod).WithMessage(_validationText.AcademicYearStartDate01.Text).WithErrorCode(_validationText.AcademicYearStartDate01.ErrorCode);
         }
 
         protected virtual void ValidateEndDate()
@@ -199,6 +204,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         private bool BeValidUlnNumber(string uln)
         {
             if (_ulnValidator.Validate(uln) == UlnValidationResult.IsInvalidUln)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool BeWithinAcademicYearFundingPeriod(DateTimeViewModel startDate)
+        {
+            var result = _academicYearValidator.Validate(startDate.DateTime.Value);
+
+            if (result == AcademicYearValidationResult.NotWithinFundingPeriod)
             {
                 return false;
             }

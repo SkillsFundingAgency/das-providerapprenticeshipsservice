@@ -11,22 +11,25 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.Learners.Validators;
+using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
-    public sealed class ApprenticeshipUploadModelValidator
+    public sealed class ApprenticeshipUploadModelValidator : IApprenticeshipUploadModelValidator
     {
         private readonly IApprenticeshipValidationErrorText _validationText;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IUlnValidator _ulnValidator;
+        private readonly IAcademicYearValidator _academicYearValidator;
 
         private static Func<string, IEnumerable<string>, bool> _inList = (v, l) => string.IsNullOrWhiteSpace(v) || l.Contains(v);
 
-        public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime, IUlnValidator ulnValidator)
+        public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime, IUlnValidator ulnValidator, IAcademicYearValidator academicYearValidator)
         {
             _validationText = validationText;
             _currentDateTime = currentDateTime;
             _ulnValidator = ulnValidator;
+            _academicYearValidator = academicYearValidator;
         }
 
         public ValidationResult Validate(ApprenticeshipUploadModel model)
@@ -128,6 +131,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             if (model.ApprenticeshipViewModel.StartDate.DateTime < new DateTime(2017, 5, 1))
             {
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate02);
+            }
+            else if (_academicYearValidator.Validate(model.ApprenticeshipViewModel.StartDate.DateTime.Value) != AcademicYearValidationResult.Success)
+            {
+                return CreateValidationFailure("StartDate", _validationText.AcademicYearStartDate01);
             }
 
             return null;
@@ -278,7 +285,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             }
         }
 
-        public ValidationFailure CreateValidationFailure(string propertyName, ValidationMessage validationMessage)
+        private ValidationFailure CreateValidationFailure(string propertyName, ValidationMessage validationMessage)
         {
             var validationFailure = new ValidationFailure(propertyName, validationMessage.Text);
             validationFailure.ErrorCode = validationMessage.ErrorCode;
@@ -297,5 +304,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
             return age >= 15;
         }
+
     }
 }

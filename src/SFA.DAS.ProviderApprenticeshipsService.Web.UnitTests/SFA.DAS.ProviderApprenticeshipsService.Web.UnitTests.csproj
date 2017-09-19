@@ -113,7 +113,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AcademicYear\WhenDeterminingTheAcademicYear.cs" />
+    <Compile Include="AcademicYear\WhenValidatingAcademicYear.cs" />
     <Compile Include="Orchestrators\Authentication\WhenSavingIdentityAttributes.cs" />
+    <Compile Include="Orchestrators\BulkUpload\BulkUploadTestHelper.cs" />
     <Compile Include="Orchestrators\Commitments\ApprenticeshipValidationTestBase.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeshipDetails.cs" />

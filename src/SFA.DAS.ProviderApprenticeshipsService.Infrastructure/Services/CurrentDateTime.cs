@@ -8,7 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
         private readonly DateTime? _time;
 
         public DateTime Now => _time ?? DateTime.UtcNow;
-
+    
         public CurrentDateTime()
         {
         }
