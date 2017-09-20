@@ -34,8 +34,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.Apprentices
             return new ApprenticeshipSearchQueryResponse
             {
                 Apprenticeships = data.Apprenticeships.ToList(),
+                SearchKeyword = data.SearchKeyword,
                 Facets = data.Facets,
                 TotalApprenticeships = data.TotalApprenticeships,
+                TotalApprenticeshipsBeforeFilter  = data.TotalApprenticeshipsBeforeFilter,
                 PageNumber = data.PageNumber,
                 TotalPages = data.TotalPages,
                 PageSize = data.PageSize

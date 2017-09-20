@@ -197,12 +197,12 @@
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.10.29\lib\net45\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=2.0.0.39334, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.2.0.0.39334\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=2.0.0.40058, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.2.0.0.40058\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.0.0.39334, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.0.0.39334\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.0.0.40058, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.0.0.40058\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Configuration, Version=1.0.0.6634, Culture=neutral, processorArchitecture=MSIL">
@@ -520,6 +520,7 @@
     <Content Include="assets\stylesheets\images\govuk-crest.png" />
     <Content Include="assets\stylesheets\images\open-government-licence.png" />
     <Content Include="assets\stylesheets\images\open-government-licence_2x.png" />
+    <Content Include="dist\images\search-glass.png" />
     <Content Include="dist\javascripts\character-limit.js" />
     <Content Include="dist\css\external-links\external-link-24x24.png" />
     <Content Include="dist\css\external-links\external-link-black-12x12.png" />
