@@ -380,23 +380,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
                 apprenticeshipGroups.Add(apprenticeshipListGroup);
 
+                var trainingTitle = string.Empty;
                 if (!string.IsNullOrEmpty(apprenticeshipListGroup.TrainingProgramme?.Title))
                 {
-                    if (apprenticeshipListGroup.OverlapErrorCount > 0)
-                    {
-                        errors.Add($"{apprenticeshipListGroup.GroupId}", $"Overlapping training dates:{apprenticeshipListGroup.TrainingProgramme.Title}");
-                    }
-                    else if (apprenticeshipListGroup.ApprenticeshipsNotWithinFundingPeriod > 0)
-                    {
-                        errors.Add($"{apprenticeshipListGroup.GroupId}", $"Start date in previous year:{apprenticeshipListGroup.TrainingProgramme.Title}");
-                    }
-
-                    if (apprenticeshipListGroup.ApprenticeshipsOverFundingLimit > 0)
-                    {
-                        warnings.Add(apprenticeshipListGroup.GroupId, $"Cost for {apprenticeshipListGroup.TrainingProgramme.Title}");
-                    }
+                    trainingTitle = $":{apprenticeshipListGroup.TrainingProgramme.Title}";
                 }
 
+                if (apprenticeshipListGroup.OverlapErrorCount > 0)
+                {
+                    errors.Add($"{apprenticeshipListGroup.GroupId}", $"Overlapping training dates{trainingTitle}");
+                }
+                else if (apprenticeshipListGroup.ApprenticeshipsNotWithinFundingPeriod > 0)
+                {
+                    errors.Add($"{apprenticeshipListGroup.GroupId}", $"Start date in previous year{trainingTitle}");
+                }
+
+                if (apprenticeshipListGroup.ApprenticeshipsOverFundingLimit > 0)
+                {
+                    warnings.Add(apprenticeshipListGroup.GroupId, $"Cost for {apprenticeshipListGroup.TrainingProgramme.Title}");
+                }
             }
 
             return new CommitmentDetailsViewModel

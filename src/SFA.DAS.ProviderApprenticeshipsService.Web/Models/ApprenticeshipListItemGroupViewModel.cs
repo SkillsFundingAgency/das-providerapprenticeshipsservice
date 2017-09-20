@@ -34,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         {
             get
             {
-                return TrainingProgramme == null ? 0 : Apprenticeships.Count(x => !x.IsWithinAcademicYearFundingPeriod);
+                return Apprenticeships.Count(x => !x.IsWithinAcademicYearFundingPeriod);
             }
         }
 
