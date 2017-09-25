@@ -35,7 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var commitment = new CommitmentView
             {
                 AgreementStatus = AgreementStatus.EmployerAgreed,
-                EditStatus  = EditStatus.ProviderOnly,
+                EditStatus = EditStatus.ProviderOnly,
                 Apprenticeships = new List<Apprenticeship>
                 {
                     new Apprenticeship (),
@@ -44,11 +44,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Messages = new List<MessageView>()
             };
 
-            var mockMediator = GetMediator(commitment);
-
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>(), Validator);
-
-            var result = _sut.GetCommitmentDetails(1L, "ABBA123").Result;
+            _mockMediator = GetMediator(commitment);
+            SetUpOrchestrator();
+            var result = _orchestrator.GetCommitmentDetails(1L, "ABBA123").Result;
 
             result.PendingChanges.ShouldBeEquivalentTo(false);
         }
@@ -68,10 +66,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Messages = new List<MessageView>()
             };
 
-            var mockMediator = GetMediator(commitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>(), Validator);
-
-            var result = _sut.GetCommitmentDetails(1L, "ABBA213").Result;
+            _mockMediator = GetMediator(commitment);
+            SetUpOrchestrator();
+            var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
 
             result.PendingChanges.ShouldBeEquivalentTo(true);
         }
@@ -89,10 +86,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Messages = new List<MessageView>()
             };
 
-            var mockMediator = GetMediator(commitment);
-            var _sut = new CommitmentOrchestrator(mockMediator.Object, Mock.Of<ICommitmentStatusCalculator>(), Mock.Of<IHashingService>(), Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(), Mock.Of<ProviderApprenticeshipsServiceConfiguration>(), Mock.Of<IApprenticeshipMapper>(), Validator);
-
-            var result = _sut.GetCommitmentDetails(1L, "ABBA213").Result;
+            _mockMediator = GetMediator(commitment);
+            SetUpOrchestrator();
+            var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
 
             result.IsReadOnly.ShouldBeEquivalentTo(expectedIsReadOnly);
         }

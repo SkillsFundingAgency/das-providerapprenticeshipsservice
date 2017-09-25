@@ -15,20 +15,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string GroupId => TrainingProgramme == null ? "0" : TrainingProgramme.Id;
 
         public string GroupName => TrainingProgramme == null ? "No training course" : TrainingProgramme.Title;
-
         public int ApprenticeshipsOverFundingLimit
         {
             get
             {
                 return TrainingProgramme == null ? 0 : Apprenticeships.Count(x => x.Cost > TrainingProgramme.MaxFunding);
-            }
-        }
-
-        public bool ShowFundingLimitWarning
-        {
-            get
-            {
-                return TrainingProgramme != null && Apprenticeships.Any(x => x.Cost > TrainingProgramme.MaxFunding);
             }
         }
 
@@ -39,12 +30,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
                 return Apprenticeships.Count(x => x.OverlappingApprenticeships.Any());
             }
         }
-
-        public bool ShowOverlapError {
+        public int ApprenticeshipsNotWithinFundingPeriod
+        {
             get
             {
-                return Apprenticeships.SelectMany(m => m.OverlappingApprenticeships).Any();
+                return Apprenticeships.Count(x => !x.IsWithinAcademicYearFundingPeriod);
             }
         }
+
+        public DateTime EarliestAcademicYearDate { get; set; }
+
     }
 }

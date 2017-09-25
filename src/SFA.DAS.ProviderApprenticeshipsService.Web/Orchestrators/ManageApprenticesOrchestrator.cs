@@ -40,6 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IApprovedApprenticeshipValidator _approvedApprenticeshipValidator;
         private readonly IApprenticeshipFiltersMapper _apprenticeshipFiltersMapper;
         private readonly IDataLockMapper _dataLockMapper;
+        private string _searchPlaceholderText;
 
         public ManageApprenticesOrchestrator(IMediator mediator,
             IHashingService hashingService,
@@ -71,11 +72,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _approvedApprenticeshipValidator = approvedApprenticeshipValidator;
             _apprenticeshipFiltersMapper = apprenticeshipFiltersMapper;
             _dataLockMapper = dataLockMapper;
+            _searchPlaceholderText = "Enter a name or ULN";
         }
 
         public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(long providerId, ApprenticeshipFiltersViewModel filters)
         {
             _logger.Info($"Getting On-programme apprenticeships for provider: {providerId}", providerId: providerId);
+
+            if (filters.SearchInput?.Trim() == _searchPlaceholderText.Trim())
+                filters.SearchInput = string.Empty;
 
             var searchQuery = _apprenticeshipFiltersMapper.MapToApprenticeshipSearchQuery(filters);
 
@@ -91,6 +96,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 .ToList();
 
             var filterOptions = _apprenticeshipFiltersMapper.Map(searchResponse.Facets);
+            filterOptions.SearchInput = searchResponse.SearchKeyword;
+            filterOptions.ResetFilter = false;
 
             return new ManageApprenticeshipsViewModel
             {
@@ -98,9 +105,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Apprenticeships = apprenticeships,
                 Filters = filterOptions,
                 TotalResults = searchResponse.TotalApprenticeships,
+                TotalApprenticeshipsBeforeFilter = searchResponse.TotalApprenticeshipsBeforeFilter,
                 PageNumber = searchResponse.PageNumber,
                 TotalPages = searchResponse.TotalPages,
-                PageSize = searchResponse.PageSize
+                PageSize = searchResponse.PageSize,
+                SearchInputPlaceholder = _searchPlaceholderText
             };
         }
 

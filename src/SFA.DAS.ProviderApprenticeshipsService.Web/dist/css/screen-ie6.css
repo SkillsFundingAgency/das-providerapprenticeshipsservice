@@ -2917,8 +2917,7 @@ span.helpText {
 
 .grey-background,
 .funding-cap-notification {
-  background: #dee0e2;
-  padding: 20px 20px 10px;
+  padding-left: 10px;
   border-left: 10px solid #005ea5;
 }
 
@@ -2986,10 +2985,15 @@ body input::-webkit-contacts-auto-fill-button {
 
 #apprentice-details .overlap-notification {
   border-left: 10px solid #b10e1e;
+  padding-left: 10px;
 }
 
 #apprentice-details .training-level {
   margin-bottom: 0;
+}
+
+#apprentice-details .validation-summary-errors h1 {
+  margin-top: 0;
 }
 
 .overlap-alert {
@@ -3319,6 +3323,51 @@ table .changed-item {
   padding: 20px 0 30px 0;
 }
 
+#manage-apprentices hr.black {
+  background: #0b0c0c;
+  height: 2px;
+  margin: 10px 0 20px 0;
+}
+
+#manage-apprentices .filter-app-head {
+  margin-top: 0;
+}
+
+#search-form {
+  margin: 7px 0 15px 0;
+}
+
+#search-form .heading-medium {
+  margin-top: 0;
+}
+
+#search-form .search-text {
+  width: 262px;
+  height: 39px;
+  height: 38px;
+  width: 85%;
+  margin: 0;
+  padding: 6px 15px;
+  border: 1px solid #6f777b;
+}
+
+#search-form .submit-search {
+  margin: 0 0 0 -4px;
+  height: 39px;
+  margin-left: -4px;
+  padding: 0;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  border: 1px solid #6f777b;
+  background: url(/dist/images/search-glass.png) no-repeat 5px 5px;
+  color: transparent;
+}
+
+#search-form .placeholder-text {
+  color: #bfc1c3;
+}
+
 .service-info {
   margin-bottom: 0;
   max-width: 960px;
@@ -3412,6 +3461,10 @@ table .changed-item {
 #floating-menu #service-info-list #service-info-list li {
   float: left;
   margin-right: 20px;
+}
+
+#no-search-results {
+  text-align: center;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {

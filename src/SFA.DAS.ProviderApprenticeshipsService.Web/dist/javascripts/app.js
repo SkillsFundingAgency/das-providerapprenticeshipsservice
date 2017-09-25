@@ -62,3 +62,30 @@ $(window).scroll(function () {
         $('#floating-menu').removeClass('fixed-header');
     }
 });
+
+
+//clear search box text
+
+var placeholderText = $('.js-enabled #search-input').data('default-value');
+
+window.onload = function () {
+
+    if ($('.js-enabled #search-input').val() === "") {
+        $('.js-enabled #search-input').addClass('placeholder-text');
+        $('.js-enabled #search-input').val(placeholderText);
+    }
+};
+
+$("#search-input").on("focus click touchstart", (function () {
+    $('.js-enabled #search-input').removeClass('placeholder-text');
+    if ($(this).val() === placeholderText)
+        $(this).val("");
+}));
+
+$("#search-input").on("blur", (function () {
+    if ($(this).val() === "") {
+        $('.js-enabled #search-input').addClass('placeholder-text');
+        $(this).val(placeholderText);
+    }
+}));
+

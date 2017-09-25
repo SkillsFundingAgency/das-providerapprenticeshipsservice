@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ManageApprenticeshipsViewModel
 
 @{
@@ -8,7 +9,7 @@
 
 <h1 class="heading-xlarge">Manage your apprentices</h1>
 
-@if (Model.TotalResults == 0)
+@if (Model.TotalApprenticeshipsBeforeFilter == 0)
 {
     <div class="grid-row">
         <div class="column-full">
@@ -20,86 +21,102 @@
 }
 else
 {
-            <div class="grid-row">
-                <div class="column-one-third">
-                    <form method="GET" action="@Url.Action("Index")" novalidate="novalidate">
-                        @Html.Partial("ApprenticeshipFilters", Model.Filters)
-                        <button type="submit" class="button" value="Filter" id="submit-filter-apprentices">Filter apprentices</button>
-                        <p>
-                            <a href="@Url.Action("Index")" title="Reset" class="button text-link reset-link">Reset</a>
-                        </p>
-                    </form>
-                </div>
-
-                <div class="column-two-thirds">
-
-                    <table class="tableResponsive provider-list-view">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Date of birth</th>
-                                <th>Unique learner number</th>
-                                <th>Status</th>
-                                <th>Alerts</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            @foreach (var apprenticeships in Model.Apprenticeships)
-                {
-                                <tr>
-                                    <td>
-                                        @apprenticeships.FirstName @apprenticeships.LastName
-                                    </td>
-
-                                    <td>
-                                        @if (apprenticeships.DateOfBirth != null)
-                                        {
-                                            @apprenticeships.DateOfBirth.Value.ToGdsFormat()
-                                        }
-                                    </td>
-                                    <td>
-                                        @apprenticeships.Uln
-                                    </td>
-                                    <td>
-                                        @apprenticeships.Status &nbsp;
-                                    </td>
-                                    <td>
-                                        @foreach (var alert in @apprenticeships.Alerts)
-                                        {
-                                            <div>@alert</div>
-                                        }
-                                        &nbsp;
-                                    </td>
-                                    <td>
-                                        <a href="@Url.Action("Details", new {Model.ProviderId, hashedApprenticeshipId = apprenticeships.HashedApprenticeshipId})"
-                                           title="View  @apprenticeships.FirstName @apprenticeships.LastName"
-                                           aria-label="View @apprenticeships.FirstName @apprenticeships.LastName">View</a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-
-                    @if (!Model.Apprenticeships.Any())
-                    {
-                        <div>There are currently no apprentices that match your search.</div>
-                    }
-
-                    @if (Model.Apprenticeships.Any())
-                    {
-                        Html.RenderPartial("Pagination", Model);
-                    }
-
-                </div>
+    <div class="grid-row">
+        <div class="column-one-third">
+            <!--Search bar-->
+            <div id="search-app">
+                <form id="search-form" method="get" action="@Url.Action("Index")">
+                    <fieldset class="inline">
+                        <legend><h2 class="heading-medium">Search for an apprentice</h2></legend>
+                        <input type="text" id="search-input" name="SearchInput" class="search-text form-control" data-default-value="@Model.SearchInputPlaceholder" value="@Model.Filters.SearchInput" />
+                        <input type="submit" class="submit-search form-control" />
+                        <input name="ResetFilter" type="hidden" value="True">
+                    </fieldset>
+                </form>
             </div>
-            }
+            <hr class="black" />
+            <h2 class="heading-medium filter-app-head">Filter apprentices</h2>
+            <form method="GET" action="@Url.Action("Index")" novalidate="novalidate">
+                @Html.Partial("ApprenticeshipFilters", Model.Filters)
+                <button type="submit" class="button" value="Filter" id="submit-filter-apprentices">Filter apprentices</button>
+                <p>
+                    <a href="@Url.Action("Index")" title="Reset" class="button text-link reset-link">Reset</a>
+                </p>
+                @Html.Hidden("SearchInput", Model.Filters.SearchInput)
+                <input name="ResetFilter" type="hidden" value="False">
+            </form>
+        </div>
 
-            @section breadcrumb {
-                <div class="breadcrumbs">
-                    <a href="@Url.Action("Index", "Account")" aria-label="Back to account home" class="back-link">Back</a>
+        <div class="column-two-thirds">
+            @if (Model.TotalResults == 0)
+            {
+                <div id="no-search-results">
+                    <h3 class="heading-small">No results found.</h3>
+                        <p>
+                            You can search again or <a href="@Url.Action("Index")" title="see all apprentices" class="text-link">see all apprentices</a>
+                        </p>                   
                 </div>
             }
+            else
+            {
+                <table class="tableResponsive provider-list-view">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Date of birth</th>
+                            <th>Unique learner number</th>
+                            <th>Status</th>
+                            <th>Alerts</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var apprenticeships in Model.Apprenticeships)
+                        {
+                            <tr>
+                                <td>
+                                    @apprenticeships.FirstName @apprenticeships.LastName
+                                </td>
+
+                                <td>
+                                    @if (apprenticeships.DateOfBirth != null)
+                                    {
+                                        @apprenticeships.DateOfBirth.Value.ToGdsFormat()
+                                    }
+                                </td>
+                                <td>
+                                    @apprenticeships.Uln
+                                </td>
+                                <td>
+                                    @apprenticeships.Status &nbsp;
+                                </td>
+                                <td>
+                                    @foreach (var alert in @apprenticeships.Alerts)
+                                    {
+                                        <div>@alert</div>
+                                    }
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("Details", new { Model.ProviderId, hashedApprenticeshipId = apprenticeships.HashedApprenticeshipId })"
+                                       title="View  @apprenticeships.FirstName @apprenticeships.LastName"
+                                       aria-label="View @apprenticeships.FirstName @apprenticeships.LastName">View</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                Html.RenderPartial("Pagination", Model);
+            }
+        </div>
+    </div>
+}
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Index", "Account")" aria-label="Back to account home" class="back-link">Back</a>
+    </div>
+}
 
 
