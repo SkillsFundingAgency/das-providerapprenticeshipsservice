@@ -870,6 +870,9 @@ width: 100%;
 
 }
 
+.error-summary{
+     .error-summary-heading{margin-bottom:0;}
+}
 //all mobile media query breakpoints
 @media only screen and (max-device-width: 640px),
 only screen and (max-device-width: 667px),
