@@ -3342,6 +3342,20 @@ table .changed-item {
   margin-bottom: 0;
 }
 
+#finish-editing .alert-blue {
+  border: 5px solid #005ea5;
+  padding: 20px 15px 15px;
+  margin-top: 30px;
+}
+
+#finish-editing .alert-blue p.heading-medium {
+  margin-top: 0;
+}
+
+#finish-editing .alert-blue ul.list-bullet {
+  margin-bottom: 0;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
