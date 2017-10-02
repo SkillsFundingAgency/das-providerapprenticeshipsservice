@@ -483,7 +483,7 @@ right: 0;
   }
 }
 .validation-summary-max-funding{
-  border-color:$purple;
+  border-color: $govuk-blue;
   #warning-summary{
       margin-top:0;
   }
@@ -928,6 +928,19 @@ width: 100%;
 .error-summary{
      .error-summary-heading{margin-bottom:0;}
 }
+
+#finish-editing{
+      .alert-blue{
+          border:5px solid $govuk-blue;
+          padding: 20px 15px 15px;
+          margin-top:30px;
+          p.heading-medium{margin-top:0;}
+          ul.list-bullet{
+              margin-bottom:0;
+        }
+      }
+}
+
 
 //all mobile media query breakpoints
 @media only screen and (max-device-width: 640px),

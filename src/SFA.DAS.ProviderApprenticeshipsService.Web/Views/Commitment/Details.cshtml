@@ -253,7 +253,7 @@
                                                 </a>
                                             </td>
                                         }
-                                        else if (!apprenticeship.IsWithinAcademicYearFundingPeriod && !apprenticeship.OverlappingApprenticeships.Any())
+                                        else if (!apprenticeship.IsWithinAcademicYearFundingPeriod && group.OverlapErrorCount == 0)
                                         {
                                             <td class="overlap-alert">
                                                 <a href="#error-message-@group.GroupId"
