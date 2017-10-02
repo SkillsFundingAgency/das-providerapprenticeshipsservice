@@ -31,6 +31,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotifi
         {
             _validator.ValidateAndThrow(message);
 
+            _logger.Info($"Sending email to {message.Email.RecipientsAddress}. Template: {message.Email.TemplateId}");
+
             try
             {
                 await _notificationsApi.SendEmail(message.Email);
