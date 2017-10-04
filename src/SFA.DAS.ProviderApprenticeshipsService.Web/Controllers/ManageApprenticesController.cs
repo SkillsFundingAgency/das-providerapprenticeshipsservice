@@ -76,6 +76,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             foreach (var error in validationErrors)
             {
+                if(ModelState.ContainsKey(error.Key)) continue;
                 ModelState.AddModelError(error.Key, error.Value);
             }
             

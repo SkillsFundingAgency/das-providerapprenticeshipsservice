@@ -796,11 +796,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<Dictionary<string, string>> ValidateApprenticeship(ApprenticeshipViewModel viewModel)
         {
-            var validationResult = await _apprenticeshipValidator.ValidateAsync(viewModel);
-            if (!validationResult.IsValid)
-            {
-                return new Dictionary<string, string>();
-            }
 
             var overlappingErrors = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
