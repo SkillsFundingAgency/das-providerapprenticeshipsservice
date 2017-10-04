@@ -24,6 +24,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 
 using TrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments.Mappers
 {
@@ -87,7 +88,7 @@ mockMediator.Setup(m => m.SendAsync(It.IsAny<GetStandardsQueryRequest>()))
 mockMediator.Setup(m => m.SendAsync(It.IsAny<GetFrameworksQueryRequest>()))
     .ReturnsAsync(new GetFrameworksQueryResponse { Frameworks = new List<Framework>() });
 
-_mapper = new ApprenticeshipMapper(_hashingService.Object, mockMediator.Object, new CurrentDateTime());
+_mapper = new ApprenticeshipMapper(_hashingService.Object, mockMediator.Object, new CurrentDateTime(), Mock.Of<ILog>());
         }
 
         [Test]

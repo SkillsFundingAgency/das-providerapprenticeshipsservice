@@ -22,6 +22,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using TrainingType = SFA.DAS.ProviderApprenticeshipsService.Domain.TrainingType;
 using TriageStatus = SFA.DAS.Commitments.Api.Types.DataLock.Types.TriageStatus;
 using CommitmentTrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
@@ -30,8 +31,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         private readonly IHashingService _hashingService;
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
+        private readonly ILog _logger;
 
-        public ApprenticeshipMapper(IHashingService hashingService, IMediator mediator, ICurrentDateTime currentDateTime)
+        public ApprenticeshipMapper(IHashingService hashingService, IMediator mediator, ICurrentDateTime currentDateTime, ILog logger)
         {
             if (hashingService == null)
                 throw new ArgumentNullException(nameof(hashingService));
@@ -43,6 +45,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             _hashingService = hashingService;
             _mediator = mediator;
             _currentDateTime = currentDateTime;
+            _logger = logger;
         }
 
         public ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship)
@@ -115,7 +118,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                     apprenticeship.TrainingType = vm.TrainingType;
                     apprenticeship.TrainingCode = vm.TrainingCode;
                     apprenticeship.TrainingName = vm.TrainingName;
+
+                    _logger.Warn($"Apprentice training course has expired. TrainingName: {apprenticeship.TrainingName}, TrainingCode: {apprenticeship.TrainingCode}, Employer Ref: {apprenticeship.EmployerRef}, ApprenticeshipId: {apprenticeship.Id}, Apprenticeship ULN: {apprenticeship.ULN}");
                 }
+
 
             }
 
@@ -246,6 +252,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                     model.TrainingType = edited.TrainingType == CommitmentTrainingType.Standard ? TrainingType.Standard : TrainingType.Framework; 
                     model.TrainingCode = edited.TrainingCode;
                     model.TrainingName = edited.TrainingName;
+
+                    _logger.Warn($"Apprentice training course has expired. TrainingName: {edited.TrainingName}, TrainingCode: {edited.TrainingCode}, Employer Ref: {edited.EmployerRef}, Apprenticeship ULN: {edited.ULN}");
                 }
 
             }
