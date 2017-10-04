@@ -30,7 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         private Mock<ApprenticeshipViewModelUniqueUlnValidator> _ulnValidator;
 
         [SetUp]
-        protected virtual void SetUp()
+        public virtual void SetUp()
         {
             ValidModel = new ApprenticeshipViewModel { ULN = "1001234567", FirstName = "TestFirstName", LastName = "TestLastName" };
             _currentDateTime = _currentDateTime ?? new CurrentDateTime();

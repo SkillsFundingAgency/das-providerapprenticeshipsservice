@@ -23,7 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         private CommitmentView _testCommitment;
 
         [Test]
-        protected override void SetUp()
+        public override void SetUp()
         {
             _testCommitment = new CommitmentView
             {
