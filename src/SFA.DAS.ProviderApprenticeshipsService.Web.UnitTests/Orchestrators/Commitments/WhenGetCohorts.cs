@@ -2,11 +2,7 @@
 using System.Threading.Tasks;
 
 using FluentAssertions;
-
-using MediatR;
-
 using Moq;
-
 using NUnit.Framework;
 
 using SFA.DAS.Commitments.Api.Types;
@@ -15,26 +11,24 @@ using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
     [TestFixture]
     public class WhenGetCohorts : ApprenticeshipValidationTestBase
     {
-       public Task<GetCommitmentsQueryResponse> _commitments;
+        public Task<GetCommitmentsQueryResponse> _commitments; 
 
-
-        protected override void SetUp()
+        [SetUp]
+        protected virtual void SetUp()
         {
             _commitments = Task.FromResult(TestData());
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>())).Returns(_commitments);
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetProviderAgreementQueryRequest>()))
                 .Returns(Task.FromResult(new GetProviderAgreementQueryResponse { HasAgreement = ProviderAgreementStatus.Agreed }));
+
+            base.SetUp();
         }
 
         [Test]
