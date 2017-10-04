@@ -1,3 +1,5 @@
+using FluentValidation.Results;
+
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -15,12 +17,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 {
     public abstract class ApprenticeshipValidationTestBase
     {
-        protected readonly ApprenticeshipViewModelValidator Validator = new ApprenticeshipViewModelValidator(
-                                                                        new WebApprenticeshipValidationText(new Infrastructure.Services.AcademicYearDateProvider(new CurrentDateTime())),
-                                                                        new CurrentDateTime(),
-                                                                        new Infrastructure.Services.AcademicYearDateProvider(new CurrentDateTime()),
-                                                                        new UlnValidator(),
-                                                                        new AcademicYearValidator(new CurrentDateTime(), new Infrastructure.Services.AcademicYearDateProvider(new CurrentDateTime())));
+        protected ICurrentDateTime _currentDateTime;
 
         protected ApprenticeshipViewModel ValidModel;
         protected CommitmentOrchestrator _orchestrator;
@@ -29,17 +26,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         protected Mock<IApprenticeshipMapper> _mockMapper = new Mock<IApprenticeshipMapper>();
         protected Mock<ICommitmentStatusCalculator> _mockCalculator = new Mock<ICommitmentStatusCalculator>();
 
+        private ApprenticeshipViewModelValidator _validator;
+        private Mock<ApprenticeshipViewModelUniqueUlnValidator> _ulnValidator;
 
         [SetUp]
-        public void BaseSetup()
-        {
-            ValidModel = new ApprenticeshipViewModel { ULN = "1001234567", FirstName = "TestFirstName", LastName = "TestLastName" };
-            SetUp();
-            SetUpOrchestrator();
-        }
-
         protected virtual void SetUp()
         {
+            ValidModel = new ApprenticeshipViewModel { ULN = "1001234567", FirstName = "TestFirstName", LastName = "TestLastName" };
+            _currentDateTime = _currentDateTime ?? new CurrentDateTime();
+
+            _validator = new ApprenticeshipViewModelValidator(
+                new WebApprenticeshipValidationText(new AcademicYearDateProvider(_currentDateTime)),
+                _currentDateTime,
+                new AcademicYearDateProvider(_currentDateTime),
+                new UlnValidator(),
+                new AcademicYearValidator(_currentDateTime, new AcademicYearDateProvider(_currentDateTime)));
+
+            _ulnValidator = new Mock<ApprenticeshipViewModelUniqueUlnValidator>();
+            _ulnValidator
+                .Setup(m => m.ValidateAsyncOverride(It.IsAny<ApprenticeshipViewModel>()))
+                .ReturnsAsync(new ValidationResult());
+
+            SetUpOrchestrator();
         }
 
         protected void SetUpOrchestrator()
@@ -49,10 +57,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                        _mockCalculator.Object,
                        _mockHashingService.Object,
                        Mock.Of<IProviderCommitmentsLogger>(),
-                       Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
+                       _ulnValidator.Object,
                        Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
                        _mockMapper.Object,
-                       Validator,
+                       _validator,
                        Mock.Of<IAcademicYearValidator>(),
                        Mock.Of<IAcademicYearDateProvider>());
         }
@@ -67,7 +75,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                        Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
                        Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
                        _mockMapper.Object,
-                       Validator,
+                       _validator,
                        Mock.Of<IAcademicYearValidator>(),
                        Mock.Of<IAcademicYearDateProvider>());
         }

@@ -70,10 +70,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedApprenticeshipId}/confirm")]
         public async Task<ActionResult> ConfirmChanges(long providerId, ApprenticeshipViewModel model)
         {
-            var validationErrors = await _orchestrator.ValidateEditApprenticeship(model);
+            var updateViewModel = await _orchestrator.GetConfirmChangesModel(providerId, model.HashedApprenticeshipId, model);
+
+            var validationErrors = await _orchestrator.ValidateEditApprenticeship(model, updateViewModel);
 
             foreach (var error in validationErrors)
             {
+                if(ModelState.ContainsKey(error.Key)) continue;
                 ModelState.AddModelError(error.Key, error.Value);
             }
             
@@ -82,7 +85,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return await RedisplayEditApprenticeshipView(model);
             }
 
-            var updateViewModel = await _orchestrator.GetConfirmChangesModel(providerId, model.HashedApprenticeshipId, model);
 
             if (!AnyChanges(updateViewModel))
             {

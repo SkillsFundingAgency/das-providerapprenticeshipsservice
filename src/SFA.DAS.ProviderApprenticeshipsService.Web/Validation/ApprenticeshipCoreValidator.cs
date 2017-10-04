@@ -105,11 +105,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .NotNull().WithMessage(_validationText.LearnStartDate01.Text).WithErrorCode(_validationText.LearnStartDate01.ErrorCode)
                 .Must(ValidateDateWithoutDay).WithMessage(_validationText.LearnStartDate01.Text).WithErrorCode(_validationText.LearnStartDate01.ErrorCode)
                 .Must(NotBeBeforeMay2017).WithMessage(_validationText.LearnStartDate02.Text).WithErrorCode(_validationText.LearnStartDate02.ErrorCode)
-                .Must((startDate) =>
-                {
-                    return StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear(startDate);
-                }).WithMessage(_validationText.LearnStartDate05.Text).WithErrorCode(_validationText.LearnStartDate05.ErrorCode)
-               .Must(BeWithinAcademicYearFundingPeriod).WithMessage(_validationText.AcademicYearStartDate01.Text).WithErrorCode(_validationText.AcademicYearStartDate01.ErrorCode);
+                .Must(StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear).WithMessage(_validationText.LearnStartDate05.Text).WithErrorCode(_validationText.LearnStartDate05.ErrorCode);
+                //.Must(BeWithinAcademicYearFundingPeriod).WithMessage(_validationText.AcademicYearStartDate01.Text).WithErrorCode(_validationText.AcademicYearStartDate01.ErrorCode);
         }
 
         protected virtual void ValidateEndDate()
@@ -204,18 +201,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         private bool BeValidUlnNumber(string uln)
         {
             if (_ulnValidator.Validate(uln) == UlnValidationResult.IsInvalidUln)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool BeWithinAcademicYearFundingPeriod(DateTimeViewModel startDate)
-        {
-            var result = _academicYearValidator.Validate(startDate.DateTime.Value);
-
-            if (result == AcademicYearValidationResult.NotWithinFundingPeriod)
             {
                 return false;
             }
