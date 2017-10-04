@@ -1,6 +1,9 @@
-﻿using SFA.DAS.Learners.Validators;
+﻿using System.Collections.Generic;
+
+using SFA.DAS.Learners.Validators;
+using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
@@ -8,10 +11,31 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
     public sealed class ApprenticeshipViewModelValidator : ApprenticeshipCoreValidator
     {
+        private readonly WebApprenticeshipValidationText _validationText;
+        private readonly IAcademicYearValidator _academicYearValidator;
 
-
-        public ApprenticeshipViewModelValidator(WebApprenticeshipValidationText validationText, ICurrentDateTime currentDateTime, IAcademicYearDateProvider academicYear, IUlnValidator ulnValidator, IAcademicYearValidator academicYearValidator) : base(validationText, currentDateTime, academicYear, ulnValidator, academicYearValidator)
+        public ApprenticeshipViewModelValidator(
+            WebApprenticeshipValidationText validationText, 
+            ICurrentDateTime currentDateTime, 
+            IAcademicYearDateProvider academicYear, 
+            IUlnValidator ulnValidator, 
+            IAcademicYearValidator academicYearValidator) : base(validationText, currentDateTime, academicYear, ulnValidator, academicYearValidator)
         {
+            _validationText = validationText;
+            _academicYearValidator = academicYearValidator;
+        }
+
+        public Dictionary<string, string> ValidateAcademicYear(ApprenticeshipViewModel model)
+        {
+            var dict = new Dictionary<string, string>();
+
+            if (model.StartDate?.DateTime != null &&
+                _academicYearValidator.Validate(model.StartDate.DateTime.Value) == AcademicYearValidationResult.NotWithinFundingPeriod)
+            {
+                dict.Add($"{nameof(model.StartDate)}", _validationText.AcademicYearStartDate01.Text);
+            }
+
+            return dict;
         }
 
         protected override void ValidateUln()
@@ -40,7 +64,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
         protected override void ValidateStartDate()
         {
-            When(x => HasYearOrMonthValueSet(x.StartDate), () =>
+            When(x => HasYearOrMonthValueSet(x.StartDate)
+             , () =>
             {
                 base.ValidateStartDate();
             });

@@ -122,6 +122,7 @@
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeshipFilters.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeshipSearchQuery.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingDataLocks.cs" />
+    <Compile Include="Orchestrators\Commitments\WhenValidatingApprenticeshipViewModel.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenCreatingApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\Commitments\WhenCreatingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingDeleteApprenticeshipConfirmation.cs" />

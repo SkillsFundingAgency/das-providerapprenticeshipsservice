@@ -810,13 +810,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var result = _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors);
 
-            var uniqueUlnValidationResult = await _uniqueUlnValidator.ValidateAsync(viewModel);
+            var uniqueUlnValidationResult = await _uniqueUlnValidator.ValidateAsyncOverride(viewModel);
             if (!uniqueUlnValidationResult.IsValid)
             {
                 foreach (var error in uniqueUlnValidationResult.Errors)
                 {
                     result.Add(error.PropertyName, error.ErrorMessage);
                 }
+            }
+
+            foreach (var error in _apprenticeshipValidator.ValidateAcademicYear(viewModel))
+            {
+                result.AddIfNotExists(error.Key, error.Value);
             }
 
             return result;
