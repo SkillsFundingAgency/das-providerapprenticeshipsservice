@@ -40,6 +40,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .WithMessage("The unique learner number has already been used for an apprentice in this cohort");
         }
 
+        public virtual async Task<ValidationResult> ValidateAsyncOverride(ApprenticeshipViewModel context)
+        {
+            return await base.ValidateAsync(context);
+        }
+
         private async Task<bool> UniqueUln(ApprenticeshipViewModel viewModel, string uln, PropertyValidatorContext arg3, CancellationToken arg4)
         {
             var id = viewModel.HashedApprenticeshipId == null ? 0 : _hashingService.DecodeValue(viewModel.HashedApprenticeshipId);

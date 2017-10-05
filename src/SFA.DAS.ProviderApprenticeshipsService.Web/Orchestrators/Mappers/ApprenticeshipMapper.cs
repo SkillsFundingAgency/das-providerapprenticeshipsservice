@@ -21,6 +21,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using TrainingType = SFA.DAS.ProviderApprenticeshipsService.Domain.TrainingType;
 using TriageStatus = SFA.DAS.Commitments.Api.Types.DataLock.Types.TriageStatus;
+using CommitmentTrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
@@ -29,12 +31,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         private readonly IHashingService _hashingService;
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
+        private readonly ILog _logger;
 
-        public ApprenticeshipMapper(IHashingService hashingService, IMediator mediator, ICurrentDateTime currentDateTime)
+        public ApprenticeshipMapper(IHashingService hashingService, IMediator mediator, ICurrentDateTime currentDateTime, ILog logger)
         {
             if (hashingService == null)
                 throw new ArgumentNullException(nameof(hashingService));
-            if(mediator==null)
+            if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             if (currentDateTime == null)
                 throw new ArgumentNullException(nameof(currentDateTime));
@@ -42,6 +45,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             _hashingService = hashingService;
             _mediator = mediator;
             _currentDateTime = currentDateTime;
+            _logger = logger;
         }
 
         public ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship)
@@ -102,9 +106,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             if (!string.IsNullOrWhiteSpace(vm.TrainingCode))
             {
                 var training = await GetTrainingProgramme(vm.TrainingCode);
-                apprenticeship.TrainingType = (Commitments.Api.Types.Apprenticeship.Types.TrainingType)(training is Standard ? TrainingType.Standard : TrainingType.Framework);
-                apprenticeship.TrainingCode = vm.TrainingCode;
-                apprenticeship.TrainingName = training.Title;
+
+                if (training != null)
+                {
+                    apprenticeship.TrainingType = (CommitmentTrainingType)(training is Standard ? TrainingType.Standard : TrainingType.Framework);
+                    apprenticeship.TrainingCode = vm.TrainingCode;
+                    apprenticeship.TrainingName = training.Title;
+                }
+                else
+                {
+                    apprenticeship.TrainingType = vm.TrainingType;
+                    apprenticeship.TrainingCode = vm.TrainingCode;
+                    apprenticeship.TrainingName = vm.TrainingName;
+
+                    _logger.Warn($"Apprentice training course has expired. TrainingName: {apprenticeship.TrainingName}, TrainingCode: {apprenticeship.TrainingCode}, Employer Ref: {apprenticeship.EmployerRef}, ApprenticeshipId: {apprenticeship.Id}, Apprenticeship ULN: {apprenticeship.ULN}");
+                }
+
+
             }
 
             return apprenticeship;
@@ -159,7 +177,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 Status = ApprenticeshipUpdateStatus.Pending,
                 TrainingName = viewModel.TrainingName,
                 TrainingCode = viewModel.TrainingCode,
-                TrainingType = (Commitments.Api.Types.Apprenticeship.Types.TrainingType?) viewModel.TrainingType,
+                TrainingType = (Commitments.Api.Types.Apprenticeship.Types.TrainingType?)viewModel.TrainingType,
                 ProviderRef = viewModel.ProviderRef
             };
         }
@@ -174,7 +192,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 DateOfBirth = new DateTimeViewModel(update.DateOfBirth),
                 ULN = update.ULN,
                 TrainingType = update.TrainingType.HasValue
-                    ? (TrainingType) update.TrainingType.Value
+                    ? (TrainingType)update.TrainingType.Value
                     : default(TrainingType?),
                 TrainingCode = update.TrainingCode,
                 TrainingName = update.TrainingName,
@@ -222,9 +240,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             if (!string.IsNullOrWhiteSpace(edited.TrainingCode) && original.TrainingCode != edited.TrainingCode)
             {
                 var training = await GetTrainingProgramme(edited.TrainingCode);
-                model.TrainingType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
-                model.TrainingCode = edited.TrainingCode;
-                model.TrainingName = training.Title;
+
+                if (training != null)
+                {
+                    model.TrainingType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
+                    model.TrainingCode = edited.TrainingCode;
+                    model.TrainingName = training.Title;
+                }
+                else
+                {
+                    model.TrainingType = edited.TrainingType == CommitmentTrainingType.Standard ? TrainingType.Standard : TrainingType.Framework; 
+                    model.TrainingCode = edited.TrainingCode;
+                    model.TrainingName = edited.TrainingName;
+
+                    _logger.Warn($"Apprentice training course has expired. TrainingName: {edited.TrainingName}, TrainingCode: {edited.TrainingCode}, Employer Ref: {edited.EmployerRef}, Apprenticeship ULN: {edited.ULN}");
+                }
+
             }
 
             return model;
@@ -239,7 +270,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 pendingChange = PendingChanges.ReadyForApproval;
             if (apprenticeship.PendingUpdateOriginator == Originator.Provider)
                 pendingChange = PendingChanges.WaitingForEmployer;
-            
+
             return new ApprenticeshipDetailsViewModel
             {
                 HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
@@ -257,7 +288,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 Alerts = MapAlerts(apprenticeship),
                 CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
                 ProviderReference = apprenticeship.ProviderRef,
-                EnableEdit =   pendingChange == PendingChanges.None
+                EnableEdit = pendingChange == PendingChanges.None
                             && !apprenticeship.DataLockCourse
                             && !apprenticeship.DataLockPrice
                             && !apprenticeship.DataLockCourseTriaged
@@ -302,7 +333,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         public DataLockErrorType MapErrorType(DataLockErrorCode errorCode)
         {
-            if (   errorCode.HasFlag(DataLockErrorCode.Dlock03)
+            if (errorCode.HasFlag(DataLockErrorCode.Dlock03)
                 || errorCode.HasFlag(DataLockErrorCode.Dlock04)
                 || errorCode.HasFlag(DataLockErrorCode.Dlock05)
                 || errorCode.HasFlag(DataLockErrorCode.Dlock06)
@@ -361,7 +392,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
         {
-            return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
+            return (await GetTrainingProgrammes()).FirstOrDefault(x => x.Id == trainingCode);
         }
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()

@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
-using MediatR;
+
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
     [TestFixture]
     public sealed class WhenGettingDeleteApprenticeshipConfirmation : ApprenticeshipValidationTestBase
     {
-        protected override void SetUp()
+        [Test]
+        public override void SetUp()
         {
             _mockHashingService.Setup(m => m.DecodeValue("ABBA99")).Returns(123L);
             _mockHashingService.Setup(m => m.DecodeValue("ABBA66")).Returns(321L);
+
+            base.SetUp();
         }
 
         [Test]

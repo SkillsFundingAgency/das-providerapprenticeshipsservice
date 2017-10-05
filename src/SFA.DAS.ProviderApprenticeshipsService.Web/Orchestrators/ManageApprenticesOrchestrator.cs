@@ -23,6 +23,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
@@ -175,7 +176,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<Dictionary<string,string>> ValidateEditApprenticeship(ApprenticeshipViewModel model)
+        public async Task<Dictionary<string, string>> ValidateEditApprenticeship(ApprenticeshipViewModel model, CreateApprenticeshipUpdateViewModel updateViewModel)
         {
             var result = new Dictionary<string, string>();
 
@@ -193,6 +194,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             foreach (var error in _approvedApprenticeshipValidator.Validate(model))
             {
                 result.Add(error.Key, error.Value);
+            }
+
+            foreach (var error in _approvedApprenticeshipValidator.ValidateAcademicYear(updateViewModel))
+            {
+                result.AddIfNotExists(error.Key, error.Value);
             }
 
             return result;
