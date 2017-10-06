@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.Ajax.Utilities;
+
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.Commitments.Api.Types.DataLock;
@@ -19,10 +19,11 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+using SFA.DAS.NLog.Logger;
+
 using TrainingType = SFA.DAS.ProviderApprenticeshipsService.Domain.TrainingType;
 using TriageStatus = SFA.DAS.Commitments.Api.Types.DataLock.Types.TriageStatus;
 using CommitmentTrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
@@ -32,8 +33,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly ILog _logger;
+        private readonly IAcademicYearValidator _academicYearValidator;
 
-        public ApprenticeshipMapper(IHashingService hashingService, IMediator mediator, ICurrentDateTime currentDateTime, ILog logger)
+        public ApprenticeshipMapper(
+            IHashingService hashingService, 
+            IMediator mediator, 
+            ICurrentDateTime currentDateTime, 
+            ILog logger,
+            IAcademicYearValidator academicYearValidator)
         {
             if (hashingService == null)
                 throw new ArgumentNullException(nameof(hashingService));
@@ -41,11 +48,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 throw new ArgumentNullException(nameof(mediator));
             if (currentDateTime == null)
                 throw new ArgumentNullException(nameof(currentDateTime));
+            if (academicYearValidator == null)
+                throw new ArgumentNullException(nameof(academicYearValidator));
 
             _hashingService = hashingService;
             _mediator = mediator;
             _currentDateTime = currentDateTime;
             _logger = logger;
+            _academicYearValidator = academicYearValidator;
+        }
+
+        public ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship, IEnumerable<DataLockStatus> dataLocks)
+        {
+            var a = MapApprenticeship(apprenticeship);
+            a.IsLockedForUpdated = dataLocks.Any(m => m.ErrorCode == DataLockErrorCode.None);
+
+            if (_academicYearValidator.IsAfterLastAcademicYearFundingPeriod &&
+                 a.StartDate.DateTime.HasValue &&
+                 _academicYearValidator.Validate(a.StartDate.DateTime.Value) == AcademicYearValidationResult.NotWithinFundingPeriod)
+            {
+                a.IsLockedForUpdated = true;
+            }
+
+            return a;
         }
 
         public ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship)
@@ -74,7 +99,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 ProviderRef = apprenticeship.ProviderRef,
                 EmployerRef = apprenticeship.EmployerRef,
                 HasStarted = !isStartDateInFuture,
-                IsInFirstCalendarMonthOfTraining = CalculateIfInFirstCalendarMonthOfTraining(apprenticeship.StartDate)
+                IsLockedForUpdated = false
             };
         }
 
@@ -356,15 +381,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
             return TriageStatus.Unknown;
         }
-
-        private bool CalculateIfInFirstCalendarMonthOfTraining(DateTime? startDate)
-        {
-            if (!startDate.HasValue)
-                return false;
-
-            return _currentDateTime.Now.Year == startDate.Value.Year && _currentDateTime.Now.Month == startDate.Value.Month;
-        }
-
 
         private string MapPaymentStatus(PaymentStatus paymentStatus, DateTime? startDate)
         {

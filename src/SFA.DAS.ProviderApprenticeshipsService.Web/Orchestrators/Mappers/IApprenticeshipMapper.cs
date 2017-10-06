@@ -12,6 +12,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
     public interface IApprenticeshipMapper
     {
+        ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship, IEnumerable<DataLockStatus> dataLocks);
+
         ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship);
 
         Task<Apprenticeship> MapApprenticeship(ApprenticeshipViewModel vm);

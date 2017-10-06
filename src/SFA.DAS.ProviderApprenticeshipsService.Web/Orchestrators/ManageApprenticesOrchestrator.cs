@@ -14,6 +14,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoApprentice
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateDataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.ApprenticeshipSearch;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLocks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLockSummary;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipPriceHistory;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
@@ -166,7 +167,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     Apprenticeship = new List<Apprenticeship> { data.Apprenticeship }
                 });
 
-            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
+            var dataLocks = await _mediator.SendAsync(
+                    new GetApprenticeshipDataLocksQueryRequest
+                        {
+                            ApprenticeshipId = apprenticeshipId,
+                            ProviderId = providerId
+                        });
+
+            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship, dataLocks.DataLockSummary);
 
             return new ExtendedApprenticeshipViewModel
             {
