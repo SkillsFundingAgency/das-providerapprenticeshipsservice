@@ -61,7 +61,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                        Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
                        _mockMapper.Object,
                        _validator,
-                       Mock.Of<IAcademicYearValidator>(),
                        Mock.Of<IAcademicYearDateProvider>());
         }
 
@@ -76,7 +75,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                        Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
                        _mockMapper.Object,
                        _validator,
-                       Mock.Of<IAcademicYearValidator>(),
                        Mock.Of<IAcademicYearDateProvider>());
         }
     }
