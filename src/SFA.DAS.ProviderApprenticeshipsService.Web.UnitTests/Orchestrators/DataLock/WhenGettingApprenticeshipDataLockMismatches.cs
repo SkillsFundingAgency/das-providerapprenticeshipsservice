@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using MediatR;
 using Moq;
 using NUnit.Framework;
+
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
@@ -14,12 +16,12 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.ManageApprentices
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.DataLock
 {
     [TestFixture]
     public class WhenGettingApprenticeshipDataLockMismatches
     {
-        private ManageApprenticesOrchestrator _orchestrator;
+        private DataLockOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<IDataLockMapper> _mapper;
 
@@ -53,13 +55,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
                     DataLockWithOnlyPriceMismatch = new List<DataLockViewModel>()
                 });
 
-            _orchestrator = new ManageApprenticesOrchestrator(
+            _orchestrator = new DataLockOrchestrator(
                 _mediator.Object,
                 Mock.Of<IHashingService>(),
                 Mock.Of<IProviderCommitmentsLogger>(),
                 Mock.Of<IApprenticeshipMapper>(),
-                Mock.Of<IApprovedApprenticeshipValidator>(),
-                Mock.Of<IApprenticeshipFiltersMapper>(),
                 _mapper.Object);
         }
 

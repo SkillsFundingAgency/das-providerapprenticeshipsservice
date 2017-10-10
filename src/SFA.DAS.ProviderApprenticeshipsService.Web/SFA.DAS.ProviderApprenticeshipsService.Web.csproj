@@ -367,6 +367,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BulkUploadController.cs" />
     <Compile Include="Controllers\CommitmentController.cs" />
+    <Compile Include="Controllers\DataLockController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageApprenticesController.cs" />
@@ -440,6 +441,7 @@
     <Compile Include="Orchestrators\ApprovedApprenticeshipValidation\ApprovedApprenticeshipValidator.cs" />
     <Compile Include="Orchestrators\ApprovedApprenticeshipValidation\IApprovedApprenticeshipValidator.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
+    <Compile Include="Orchestrators\DataLockOrchestrator.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipFiltersMapper.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipMapper.cs" />
     <Compile Include="Orchestrators\Mappers\BulkUploadMapper.cs" />
@@ -659,16 +661,16 @@
     <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
     <Content Include="Views\ManageApprentices\UndoChanges.cshtml" />
     <Content Include="Views\ManageApprentices\EditStartedApprenticeship.cshtml" />
-    <Content Include="Views\ManageApprentices\RequestRestart.cshtml" />
-    <Content Include="Views\ManageApprentices\UpdateDataLock.cshtml" />
-    <Content Include="Views\ManageApprentices\ConfirmDataLockChanges.cshtml" />
-    <Content Include="Views\ManageApprentices\ConfirmRestart.cshtml" />
     <Content Include="Views\Shared\ApprenticeshipFilters.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Shared\Pagination.cshtml" />
     <Content Include="Views\Commitment\View.cshtml" />
     <Content Include="Views\Account\NotificationSettings.cshtml" />
     <Content Include="Views\Account\NotificationUnsubscribe.cshtml" />
+    <Content Include="Views\DataLock\UpdateDataLock.cshtml" />
+    <Content Include="Views\DataLock\ConfirmDataLockChanges.cshtml" />
+    <Content Include="Views\DataLock\RequestRestart.cshtml" />
+    <Content Include="Views\DataLock\ConfirmRestart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

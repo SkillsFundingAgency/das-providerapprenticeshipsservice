@@ -1,10 +1,8 @@
-﻿@using SFA.DAS.Commitments.Api.Types.Apprenticeship
-@using SFA.DAS.Commitments.Api.Types.DataLock.Types
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
 @model DataLockMismatchViewModel
-            
+
 @{
     ViewBag.Title = "Apprenticeship data mismatch";
     ViewBag.PageID = "datalock-details-change";
@@ -12,7 +10,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        
+
         @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
         <h1 class="heading-xlarge">Details of ILR data mismatch</h1>
@@ -33,7 +31,7 @@
                 <td>@Model.DasApprenticeship.DateOfBirth.DateTime.Value.ToGdsFormat()</td>
             </tr>
         </table>
-        
+
         @{
             var datalocks = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch
                 .OrderBy(x => x.IlrEffectiveFromDate)
@@ -51,7 +49,7 @@
                 priceHistories.Add(priceHistory);
             }
         }
-   
+
         <div class="grid-row">
             <div class="column-one-half">
 
@@ -65,7 +63,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    
+
                         @foreach (var priceHistory in priceHistories)
                         {
                             <tr>
@@ -89,7 +87,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    
+
                         @foreach (var datalock in datalocks)
                         {
                             <tr>
@@ -97,13 +95,13 @@
                                 <td class="numeric">@datalock.IlrTotalCost.FormatCost()</td>
                             </tr>
                         }
-                   
+
                     </tbody>
                 </table>
 
             </div>
-        </div> 
-     </div>
+        </div>
+    </div>
 </div>
 
 
@@ -118,21 +116,21 @@
                     <div class="form-group @Html.AddClassIfPropertyInError(x => x.SubmitStatusViewModel, "error")">
                         @Html.ValidationMessageFor(m => m.SubmitStatusViewModel, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SubmitStatusViewModel) })
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.Confirm)">
-                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new {id = RadioButtonId(SubmitStatusViewModel.Confirm)})
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new { id = RadioButtonId(SubmitStatusViewModel.Confirm) })
                             <span>Start to update the details in the apprenticeship service</span>
                         </label>
 
                         @*<label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr)">
-                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.UpdateDataInIlr, new { id = RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr) })
-                            <span>Update the details through the ILR instead</span>
-                        </label>*@
+                                @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.UpdateDataInIlr, new { id = RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr) })
+                                <span>Update the details through the ILR instead</span>
+                            </label>*@
 
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
-                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new {id = RadioButtonId(SubmitStatusViewModel.None)})
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new { id = RadioButtonId(SubmitStatusViewModel.None) })
                             <span>Leave for now</span>
                         </label>
                     </div>
-                    
+
                     <input type="submit" class="button" id="fix-mismatch" value="Continue" />
                 </fieldset>
             </div>
@@ -151,6 +149,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("Details")" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
+        <a href="@Url.Action("Details", "ManageApprentices")" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
     </div>
 }

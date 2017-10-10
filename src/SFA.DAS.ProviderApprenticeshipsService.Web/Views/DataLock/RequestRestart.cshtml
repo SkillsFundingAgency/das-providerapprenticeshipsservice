@@ -24,29 +24,29 @@
 
         <table class="edited-changes">
             <thead>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col">Period</th>
-                <th scope="col">Apprenticeship service</th>
-                <th scope="col">ILR submission</th>
-            </tr>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Period</th>
+                    <th scope="col">Apprenticeship service</th>
+                    <th scope="col">ILR submission</th>
+                </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>Apprenticeship training course</td>
-                <td>
-                    @if (datalock.IlrEffectiveFromDate.HasValue)
-                    {
-                        @datalock.IlrEffectiveFromDate.Value.ToGdsFormat()
-                    }
-                    else
-                    {
-                        <span>--</span>
-                    }
-                </td>
-                <td>@Model.DasApprenticeship.TrainingName </td>
-                <td>@datalock.IlrTrainingCourseName </td>
-            </tr>
+                <tr>
+                    <td>Apprenticeship training course</td>
+                    <td>
+                        @if (datalock.IlrEffectiveFromDate.HasValue)
+                        {
+                            @datalock.IlrEffectiveFromDate.Value.ToGdsFormat()
+                        }
+                        else
+                        {
+                            <span>--</span>
+                        }
+                    </td>
+                    <td>@Model.DasApprenticeship.TrainingName </td>
+                    <td>@datalock.IlrTrainingCourseName </td>
+                </tr>
 
             </tbody>
         </table>
@@ -57,7 +57,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("RequestRestart")" novalidate="novalidate">
-           
+
             @Html.AntiForgeryToken()
             <div class="form-group">
                 <fieldset>
@@ -73,9 +73,9 @@
                         </label>
 
                         @*<label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr)">
-                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.UpdateDataInIlr, new { id = RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr) })
-                            <span>Update the details through the ILR instead</span>
-                        </label>*@
+                                @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.UpdateDataInIlr, new { id = RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr) })
+                                <span>Update the details through the ILR instead</span>
+                            </label>*@
 
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new { id = RadioButtonId(SubmitStatusViewModel.None) })
@@ -104,6 +104,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("Details")" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
+        <a href="@Url.Action("Details", "ManageApprentices")" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
     </div>
 }
