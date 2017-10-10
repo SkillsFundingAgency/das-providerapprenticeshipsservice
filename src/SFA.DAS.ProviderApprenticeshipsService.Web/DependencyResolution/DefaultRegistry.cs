@@ -46,6 +46,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using StructureMap;
 using StructureMap.Graph;
 using SFA.DAS.Learners.Validators;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -67,8 +68,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             var config = GetConfiguration();
 
+            ConfigureHashingService(config);
             ConfigureCommitmentsApi(config);
-
             ConfigureNotificationsApi(config);
 
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
@@ -150,6 +151,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 x.ParentType,
                 x.GetInstance<IRequestContext>(),
                 null)).AlwaysUnique();
+        }
+
+        private void ConfigureHashingService(ProviderApprenticeshipsServiceConfiguration config)
+        {
+            For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
         }
 
         private IProviderCommitmentsLogger GetBaseLogger(IContext x)

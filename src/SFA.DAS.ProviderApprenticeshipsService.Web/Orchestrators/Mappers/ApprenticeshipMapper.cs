@@ -23,6 +23,7 @@ using TrainingType = SFA.DAS.ProviderApprenticeshipsService.Domain.TrainingType;
 using TriageStatus = SFA.DAS.Commitments.Api.Types.DataLock.Types.TriageStatus;
 using CommitmentTrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
