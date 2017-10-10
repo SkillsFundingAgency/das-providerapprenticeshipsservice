@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Newtonsoft.Json;
+
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Commitment;
@@ -30,8 +30,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
-using WebGrease.Css.Extensions;
-using TrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
 

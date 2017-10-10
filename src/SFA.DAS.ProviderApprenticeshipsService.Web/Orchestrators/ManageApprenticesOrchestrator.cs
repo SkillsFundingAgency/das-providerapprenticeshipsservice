@@ -174,7 +174,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                             ProviderId = providerId
                         });
 
-            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship, dataLocks.DataLockSummary);
+            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
 
             return new ExtendedApprenticeshipViewModel
             {

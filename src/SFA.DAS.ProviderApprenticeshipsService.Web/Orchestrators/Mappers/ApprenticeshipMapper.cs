@@ -6,7 +6,6 @@ using MediatR;
 
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
-using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
@@ -58,25 +57,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             _academicYearValidator = academicYearValidator;
         }
 
-        public ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship, IEnumerable<DataLockStatus> dataLocks)
-        {
-            var a = MapApprenticeship(apprenticeship);
-            a.IsLockedForUpdated = dataLocks.Any(m => m.ErrorCode == DataLockErrorCode.None);
-
-            if (_academicYearValidator.IsAfterLastAcademicYearFundingPeriod &&
-                 a.StartDate.DateTime.HasValue &&
-                 _academicYearValidator.Validate(a.StartDate.DateTime.Value) == AcademicYearValidationResult.NotWithinFundingPeriod)
-            {
-                a.IsLockedForUpdated = true;
-            }
-
-            return a;
-        }
-
         public ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship)
         {
             var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
                                       new DateTime(_currentDateTime.Now.Year, _currentDateTime.Now.Month, 1);
+
+            var isLockedForUpdated = apprenticeship.HasHadDataLockSuccess;
+
+            if (_academicYearValidator.IsAfterLastAcademicYearFundingPeriod &&
+                 apprenticeship.StartDate.HasValue &&
+                 _academicYearValidator.Validate(apprenticeship.StartDate.Value) == AcademicYearValidationResult.NotWithinFundingPeriod)
+            {
+                isLockedForUpdated = true;
+            }
 
             var dateOfBirth = apprenticeship.DateOfBirth;
             return new ApprenticeshipViewModel
@@ -99,7 +92,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 ProviderRef = apprenticeship.ProviderRef,
                 EmployerRef = apprenticeship.EmployerRef,
                 HasStarted = !isStartDateInFuture,
-                IsLockedForUpdated = false
+                IsLockedForUpdated = isLockedForUpdated
             };
         }
 
