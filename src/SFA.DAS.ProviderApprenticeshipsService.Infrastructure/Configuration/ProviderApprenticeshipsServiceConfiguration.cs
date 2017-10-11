@@ -18,6 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public bool CheckForContractAgreements { get; set; }
         public string ContractAgreementsUrl { get; set; }
         public bool EnableEmailNotifications { get; set; }
+        public string AllowedHashstringCharacters { get; set; }
     }
 
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration, IJwtClientConfiguration

@@ -25,6 +25,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 
 using TrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments.Mappers
 {

@@ -183,7 +183,6 @@
     <Compile Include="Services\AcademicYearValidator.cs" />
     <Compile Include="Services\CookieStorageService.cs" />
     <Compile Include="Services\CurrentDateTime.cs" />
-    <Compile Include="Services\HashingService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj">

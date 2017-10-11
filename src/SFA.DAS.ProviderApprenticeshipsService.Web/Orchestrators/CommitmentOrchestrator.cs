@@ -34,6 +34,7 @@ using WebGrease.Css.Extensions;
 using TrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
