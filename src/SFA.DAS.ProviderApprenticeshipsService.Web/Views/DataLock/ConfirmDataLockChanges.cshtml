@@ -13,61 +13,78 @@
 
         <h1 class="heading-xlarge">Change apprentice details</h1>
 
-        <p>A request will be sent to @Model.EmployerName to approve the following changes in the apprenticeship service.</p>
+        <p>A request will be sent to @Model.EmployerName to approve the following @PluraliseString(Model.TotalChanges, "change") in the apprenticeship service.</p>
 
-        @{
-            var datalocks = Model.DataLockSummaryViewModel.DataLockWithCourseMismatch
-                .OrderBy(x => x.IlrEffectiveFromDate)
-                .ToList();
+        @{ var count = 0; }
 
-            var change = 0;
-            foreach (var datalock in datalocks)
+        @foreach (var dl in Model.CourseDataLocks)
+        {
+            count++;
+            if (Model.TotalChanges > 1)
             {
-                change++;
+                <h2 class="heading-small">Change @count</h2>
+            }
 
-                var priceHistory = Model.DataLockPriceHistory
-                    .OrderByDescending(x => x.FromDate)
-                    .First(x => x.FromDate <= datalock.IlrEffectiveFromDate.Value);
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Currently</th>
+                        <th>Change to</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>From date</td>
+                        <td>
+                            @dl.ApprenticeshipStartDate.DateTime.Value.ToGdsFormat()
+                        </td>
+                        <td>@dl.IlrEffectiveFromDate.Value.Date.ToGdsFormat()</td>
+                    </tr>
+                    <tr>
+                        <td>Apprenticeship training course</td>
+                        <td>
+                            @dl.TrainingName
+                        </td>
+                        <td>@dl.IlrTrainingName</td>
+                    </tr>
+                </tbody>
+            </table>
+         }
 
-                <h2 class="heading-small">Change @change</h2>
+        @foreach (var dl in Model.PriceDataLocks)
+        {
+            count++;
+            if (Model.TotalChanges > 1)
+            {
+                <h2 class="heading-small">Change @count</h2>
+            }
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Currently</th>
-                            <th>Change to</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>From date</td>
-                            <td>
-                                @{
-                                    if (priceHistory != null)
-                                    {
-                                        <span>@priceHistory.FromDate.Date.ToGdsFormat()</span>
-                                    }
-                                }
-                            </td>
-                            <td>@datalock.IlrEffectiveFromDate.Value.Date.ToGdsFormat()</td>
-                        </tr>
-                        <tr>
-                            <td>Total apprenticeship training price</td>
-                            <td>
-                                @{
-                                    if (priceHistory != null)
-                                    {
-                                        <span>@priceHistory.Cost.FormatCost()</span>
-                                    }
-                                }
-                            </td>
-                            <td>@datalock.IlrTotalCost.FormatCost()</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                                    }
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Currently</th>
+                        <th>Change to</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>From date</td>
+                        <td>
+                            @dl.FromDate.ToGdsFormat()
+                        </td>
+                        <td>@dl.IlrEffectiveFromDate.Value.Date.ToGdsFormat()</td>
+                    </tr>
+                    <tr>
+                        <td>Total apprenticeship training price</td>
+                        <td>
+                            @dl.Cost.FormatCost()
+                        </td>
+                        <td>@dl.IlrTotalCost.Value.FormatCost()</td>
+                    </tr>
+                </tbody>
+            </table>
         }
 
     </div>
@@ -83,13 +100,13 @@
             <div class="form-group">
 
                 <fieldset>
-                    <h2 class="heading-medium">Do you want to request these changes?</h2>
+                    <h2 class="heading-medium">Do you want to request @GetThisChangeText(Model.TotalChanges)?</h2>
                     <legend class="visually-hidden">How do you want to fix the mismatch?</legend>
                     <div class="form-group @Html.AddClassIfPropertyInError(x => x.SubmitStatusViewModel, "error")">
                         @Html.ValidationMessageFor(m => m.SubmitStatusViewModel, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SubmitStatusViewModel) })
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.Confirm)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new { id = RadioButtonId(SubmitStatusViewModel.Confirm) })
-                            <span>Yes, request this change</span>
+                            <span>Yes, request @GetThisChangeText(Model.TotalChanges)</span>
                         </label>
 
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
@@ -114,6 +131,17 @@
     {
         return $"{Html.IdFor(m => m.SubmitStatusViewModel)}-{statusViewModel}";
     }
+
+    public string GetThisChangeText(int count)
+    {
+        return count > 1 ? "these changes" : "this change";
+    }
+
+    string PluraliseString(int errorCount, string str)
+    {
+        return errorCount > 1 ? $"{str}s" : str;
+    }
+
 }
 
 @section breadcrumb {

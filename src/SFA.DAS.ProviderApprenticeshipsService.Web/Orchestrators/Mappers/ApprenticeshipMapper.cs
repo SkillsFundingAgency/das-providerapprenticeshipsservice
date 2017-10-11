@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.Ajax.Utilities;
+
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
-using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
@@ -410,29 +409,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         {
             return (item.HasValue) ? string.Format("{0:#}", item.Value) : "";
         }
-
-        // TBD?
-        public IEnumerable<PriceHistoryViewModel> MapDataLockPriceHistory(IEnumerable<PriceHistory> apprenticeshipPriceHistory, IEnumerable<DataLockViewModel> dataLockWithOnlyPriceMismatch)
-        {
-            var priceHistorViewModels = apprenticeshipPriceHistory
-                .Select(history => new PriceHistoryViewModel
-                {
-                    ApprenticeshipId = history.ApprenticeshipId,
-                    Cost = history.Cost,
-                    FromDate = history.FromDate,
-                    ToDate = history.ToDate
-                });
-
-            var datalocks = dataLockWithOnlyPriceMismatch
-               .OrderBy(x => x.IlrEffectiveFromDate)
-               .ToList();
-
-
-            return datalocks.Select(datalock => 
-                priceHistorViewModels
-                .OrderByDescending(x => x.FromDate)
-                .First(x => x.FromDate <= datalock.IlrEffectiveFromDate.Value));
-        }
-
     }
 }

@@ -26,8 +26,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         ApprenticeshipDetailsViewModel MapApprenticeshipDetails(Apprenticeship apprenticeship);
 
         TriageStatus MapTriangeStatus(SubmitStatusViewModel submitStatusViewModel);
-
-        IEnumerable<PriceHistoryViewModel> MapDataLockPriceHistory(IEnumerable<PriceHistory> priceHistory, IEnumerable<DataLockViewModel> dataLockWithOnlyPriceMismatch);
-
     }
 }

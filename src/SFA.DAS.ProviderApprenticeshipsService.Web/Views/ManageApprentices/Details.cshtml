@@ -70,15 +70,13 @@
                     {
                         if (Model.DataLockSummaryViewModel.ShowCourseDataLockTriageLink && Model.DataLockSummaryViewModel.ShowPriceDataLockTriageLink)
                         {
-                            <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View price mismatch</a>
-                            <br/>
                             if (Model.HasHadDataLockSuccess)
                             {
-                                <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View course mismatch</a>
+                                <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
                             }
                             else
                             {
-                                <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View course mismatch</a>
+                                <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View details</a>
                             }
                         }
                         else

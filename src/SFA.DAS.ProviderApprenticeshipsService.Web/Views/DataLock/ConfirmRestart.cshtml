@@ -32,7 +32,7 @@
                         @Html.ValidationMessageFor(m => m.SendRequestToEmployer, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SendRequestToEmployer) })
                         <label class="block-label selection-button-radio" for="undo-changes-true">
                             @Html.RadioButtonFor(m => m.SendRequestToEmployer, true, new { id = "undo-changes-true" })
-                            Yes, send an automated request to the employer
+                            Yes, request this change
                         </label>
                         <label class="block-label selection-button-radio" for="undo-changes-false">
                             @Html.RadioButtonFor(m => m.SendRequestToEmployer, false, new { id = "undo-changes-false" })

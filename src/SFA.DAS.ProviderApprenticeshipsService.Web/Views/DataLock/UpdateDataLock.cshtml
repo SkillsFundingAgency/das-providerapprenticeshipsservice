@@ -36,7 +36,10 @@
         @foreach (var dl in Model.CourseDataLocks)
         {
             count = count + 1;
-            <h3>Mismatch @count </h3>
+            if (Model.TotalChanges > 1)
+            {
+                <h2 class="heading-small">Mismatch @count </h2>
+            }
             <div class="grid-row">
                 <div class="column-one-half">
 
@@ -79,54 +82,57 @@
             </div>
         }
 
-        @foreach (var dl in Model.PriceDataLocks)
-        {
-            count = count + 1;
-            <h3>Mismatch @count </h3>
-            <div class="grid-row">
-                <div class="column-one-half">
+                @foreach (var dl in Model.PriceDataLocks)
+                {
+                    count = count + 1;
+                    if (Model.TotalChanges > 1)
+                    {
+                        <h2 class="heading-small">Mismatch @count </h2>
+                    }
+                        <div class="grid-row">
+                            <div class="column-one-half">
 
-                    <table class="app-data">
-                        <caption class="heading-small">Apprenticeship service</caption>
-                        <thead>
-                            <tr>
-                                <th scope="col" class="first-child">From date</th>
-                                <th class="numeric first-child" scope="col">Total apprenticeship training price</th>
+                                <table class="app-data">
+                                    <caption class="heading-small">Apprenticeship service</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="first-child">From date</th>
+                                            <th class="numeric first-child" scope="col">Total apprenticeship training price</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td scope="row">@dl.FromDate.ToGdsFormat()</td>
-                                <td class="numeric">@dl.Cost.FormatCost()</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td scope="row">@dl.FromDate.ToGdsFormat()</td>
+                                            <td class="numeric">@dl.Cost.FormatCost()</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-                <div class="column-one-half">
-                    <table class="app-data ILR-submission">
-                        <caption class="heading-small">ILR submission</caption>
-                        <thead>
-                            <tr>
-                                <th scope="col" class="first-child">From date</th>
-                                <th class="numeric first-child" scope="col">Total apprenticeship training price</th>
+                            <div class="column-one-half">
+                                <table class="app-data ILR-submission">
+                                    <caption class="heading-small">ILR submission</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="first-child">From date</th>
+                                            <th class="numeric first-child" scope="col">Total apprenticeship training price</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td scope="row">@dl.IlrEffectiveFromDate.Value.ToGdsFormat()</td>
-                                <td class="numeric">@dl.IlrTotalCost.FormatCost()</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td scope="row">@dl.IlrEffectiveFromDate.Value.ToGdsFormat()</td>
+                                            <td class="numeric">@dl.IlrTotalCost.FormatCost()</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
-                </div>
-            </div>
-        }
+                            </div>
+                        </div>
+                }
 
-    </div>
+</div>
 </div>
 
 

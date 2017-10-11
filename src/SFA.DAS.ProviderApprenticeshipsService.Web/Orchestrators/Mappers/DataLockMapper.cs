@@ -55,13 +55,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 });
 
             var datalocks = dataLockWithOnlyPriceMismatch
-               .OrderBy(x => x.IlrEffectiveFromDate)
-               .ToList();
+                .OrderBy(x => x.IlrEffectiveFromDate);
 
             return datalocks.Select(
                 datalock =>
                     {
-                        var s = priceHistorViewModels.OrderByDescending(x => x.FromDate)
+                        var s = priceHistorViewModels
+                            .OrderByDescending(x => x.FromDate)
                             .First(x => x.FromDate <= datalock.IlrEffectiveFromDate.Value);
                         s.IlrEffectiveFromDate = datalock.IlrEffectiveFromDate;
                         s.IlrTotalCost = datalock.IlrTotalCost;
