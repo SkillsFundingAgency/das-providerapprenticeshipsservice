@@ -1,5 +1,4 @@
-﻿@using SFA.DAS.Commitments.Api.Types.DataLock.Types
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
 @model DataLockMismatchViewModel
 
@@ -17,7 +16,7 @@
         <p>A request will be sent to @Model.EmployerName to approve the following changes in the apprenticeship service.</p>
 
         @{
-            var datalocks = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch
+            var datalocks = Model.DataLockSummaryViewModel.DataLockWithCourseMismatch
                 .OrderBy(x => x.IlrEffectiveFromDate)
                 .ToList();
 
@@ -26,7 +25,7 @@
             {
                 change++;
 
-                var priceHistory = Model.PriceHistory
+                var priceHistory = Model.DataLockPriceHistory
                     .OrderByDescending(x => x.FromDate)
                     .First(x => x.FromDate <= datalock.IlrEffectiveFromDate.Value);
 

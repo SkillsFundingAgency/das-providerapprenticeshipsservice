@@ -288,6 +288,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 Alerts = MapAlerts(apprenticeship),
                 CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
                 ProviderReference = apprenticeship.ProviderRef,
+                HasHadDataLockSuccess = apprenticeship.HasHadDataLockSuccess,
                 EnableEdit = pendingChange == PendingChanges.None
                             && !apprenticeship.DataLockCourse
                             && !apprenticeship.DataLockPrice
@@ -410,22 +411,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             return (item.HasValue) ? string.Format("{0:#}", item.Value) : "";
         }
 
-        public List<PriceHistoryViewModel> MapPriceHistory(List<PriceHistory> priceHistory)
+        public IEnumerable<PriceHistoryViewModel> MapDataLockPriceHistory(IEnumerable<PriceHistory> apprenticeshipPriceHistory, IEnumerable<DataLockViewModel> dataLockWithOnlyPriceMismatch)
         {
-            var result = new List<PriceHistoryViewModel>();
-
-            foreach (var history in priceHistory)
-            {
-                result.Add(new PriceHistoryViewModel
+            var priceHistorViewModels = apprenticeshipPriceHistory
+                .Select(history => new PriceHistoryViewModel
                 {
                     ApprenticeshipId = history.ApprenticeshipId,
                     Cost = history.Cost,
                     FromDate = history.FromDate,
                     ToDate = history.ToDate
                 });
-            }
 
-            return result;
+            var datalocks = dataLockWithOnlyPriceMismatch
+               .OrderBy(x => x.IlrEffectiveFromDate)
+               .ToList();
+
+
+            return datalocks.Select(datalock => 
+                priceHistorViewModels
+                .OrderByDescending(x => x.FromDate)
+                .First(x => x.FromDate <= datalock.IlrEffectiveFromDate.Value));
         }
 
     }

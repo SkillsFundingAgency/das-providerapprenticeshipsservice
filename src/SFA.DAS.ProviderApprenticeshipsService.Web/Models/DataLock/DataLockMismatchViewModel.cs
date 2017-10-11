@@ -1,5 +1,6 @@
 using FluentValidation.Attributes;
 using System.Collections.Generic;
+using System.Linq;
 
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.DataLock;
 
@@ -12,7 +13,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
 
         public ApprenticeshipViewModel DasApprenticeship { get; set; }
 
-        public List<PriceHistoryViewModel> PriceHistory { get; set; }
+        public IEnumerable<PriceHistoryViewModel> DataLockPriceHistory { get; set; }
 
         public SubmitStatusViewModel? SubmitStatusViewModel { get; set; }
 
@@ -21,5 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
         public string HashedApprenticeshipId { get; set; }
 
         public string EmployerName { get; set; }
+
+        public IOrderedEnumerable<DataLockViewModel> PriceOnlyDataLocks { get; set; }
     }
 }

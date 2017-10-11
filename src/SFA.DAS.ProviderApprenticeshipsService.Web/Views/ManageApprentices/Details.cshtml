@@ -72,13 +72,27 @@
                         {
                             <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View price mismatch</a>
                             <br/>
-                            <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View course mismatch</a>
+                            if (Model.HasHadDataLockSuccess)
+                            {
+                                <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View course mismatch</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View course mismatch</a>
+                            }
                         }
                         else
                         {
                             if (Model.DataLockSummaryViewModel.ShowCourseDataLockTriageLink)
                             {
-                                <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
+                                if (Model.HasHadDataLockSuccess)
+                                {
+                                    <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View details</a>
+                                }
                             }
                             else if (Model.DataLockSummaryViewModel.ShowPriceDataLockTriageLink)
                             {

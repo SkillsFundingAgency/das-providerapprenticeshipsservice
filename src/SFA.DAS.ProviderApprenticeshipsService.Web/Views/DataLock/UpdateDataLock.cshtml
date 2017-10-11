@@ -1,5 +1,4 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
 @model DataLockMismatchViewModel
 
@@ -32,24 +31,6 @@
             </tr>
         </table>
 
-        @{
-            var datalocks = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch
-                .OrderBy(x => x.IlrEffectiveFromDate)
-                .ToList();
-
-            //Get corresponding price history
-            var priceHistories = new List<PriceHistoryViewModel>();
-
-            foreach (var datalock in datalocks)
-            {
-                var priceHistory = Model.PriceHistory
-                    .OrderByDescending(x => x.FromDate)
-                    .First(x => x.FromDate <= datalock.IlrEffectiveFromDate.Value);
-
-                priceHistories.Add(priceHistory);
-            }
-        }
-
         <div class="grid-row">
             <div class="column-one-half">
 
@@ -64,7 +45,7 @@
                     </thead>
                     <tbody>
 
-                        @foreach (var priceHistory in priceHistories)
+                        @foreach (var priceHistory in Model.DataLockPriceHistory)
                         {
                             <tr>
                                 <td scope="row">@priceHistory.FromDate.ToGdsFormat()</td>
@@ -88,7 +69,7 @@
                     </thead>
                     <tbody>
 
-                        @foreach (var datalock in datalocks)
+                        @foreach (var datalock in Model.PriceOnlyDataLocks)
                         {
                             <tr>
                                 <td scope="row">@datalock.IlrEffectiveFromDate.Value.ToGdsFormat()</td>
