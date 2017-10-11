@@ -770,6 +770,13 @@ width: 100%;
   .list li{
       font-size:16px;
   }
+  .academic-banner{
+    .alert-default{
+        background-color: $light-blue-25;
+        border-color: $light-blue;
+        strong{font-weight:bold;}
+        }
+    }
 }
 
 #manage-apprentices{
@@ -885,6 +892,8 @@ width: 100%;
         }
       }
 }
+
+
 
 
 
