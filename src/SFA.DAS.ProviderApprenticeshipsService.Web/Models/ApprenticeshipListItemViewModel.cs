@@ -20,6 +20,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool CanBeApprove { get; internal set; }
 
         public IEnumerable<OverlappingApprenticeship> OverlappingApprenticeships { get; set; }
-        public bool IsWithinAcademicYearFundingPeriod { get; set; }
     }
 }
