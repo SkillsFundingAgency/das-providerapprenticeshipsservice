@@ -23,6 +23,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
 
         public string EmployerName { get; set; }
 
-        public IOrderedEnumerable<DataLockViewModel> PriceOnlyDataLocks { get; set; }
+        public IEnumerable<DataLockViewModel> DataLockCourseHistory { get; set; }
+
+        public IEnumerable<PriceHistoryViewModel> PriceDataLocks { get; set; }
+
+        public IEnumerable<CourseDataLockViewModel> CourseDataLocks { get; set; }
     }
 }

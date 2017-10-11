@@ -72,8 +72,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 DasApprenticeship = dasRecordViewModel,
                 DataLockSummaryViewModel = datalockSummaryViewModel,
                 EmployerName = data.Apprenticeship.LegalEntityName,
-                PriceOnlyDataLocks = priceOnlyDataLocks,
-                DataLockPriceHistory = _apprenticeshipMapper.MapDataLockPriceHistory(priceHistory.History, priceOnlyDataLocks)
+                DataLockPriceHistory = _apprenticeshipMapper.MapDataLockPriceHistory(priceHistory.History, priceOnlyDataLocks), // TBD?
+                PriceDataLocks = _dataLockMapper.MapPriceDataLock(priceHistory.History, priceOnlyDataLocks),
+                CourseDataLocks = _dataLockMapper.MapCourseDataLock(dasRecordViewModel, datalockSummaryViewModel.DataLockWithCourseMismatch),
+                DataLockCourseHistory = datalockSummaryViewModel.DataLockWithCourseMismatch.AsEnumerable()
             };
         }
 

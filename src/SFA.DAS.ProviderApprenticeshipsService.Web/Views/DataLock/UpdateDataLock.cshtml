@@ -31,57 +31,101 @@
             </tr>
         </table>
 
-        <div class="grid-row">
-            <div class="column-one-half">
+        @{ var count = 0; }
 
-                <table class="app-data">
-                    <caption class="heading-small">Apprenticeship service</caption>
-                    <thead>
-                        <tr>
-                            <th scope="col" class="first-child">From date</th>
-                            <th class="numeric first-child" scope="col">Total apprenticeship training price</th>
+        @foreach (var dl in Model.CourseDataLocks)
+        {
+            count = count + 1;
+            <h3>Mismatch @count </h3>
+            <div class="grid-row">
+                <div class="column-one-half">
 
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        @foreach (var priceHistory in Model.DataLockPriceHistory)
-                        {
+                    <table class="app-data">
+                        <caption class="heading-small">Apprenticeship service</caption>
+                        <thead>
                             <tr>
-                                <td scope="row">@priceHistory.FromDate.ToGdsFormat()</td>
-                                <td class="numeric">@priceHistory.Cost.FormatCost()</td>
+                                <th scope="col" class="first-child">From date</th>
+                                <th class="numeric first-child" scope="col">Apprenticeship training course</th>
+
                             </tr>
-                        }
-
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="column-one-half">
-                <table class="app-data ILR-submission">
-                    <caption class="heading-small">ILR submission</caption>
-                    <thead>
-                        <tr>
-                            <th scope="col" class="first-child">From date</th>
-                            <th class="numeric first-child" scope="col">Total apprenticeship training price</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        @foreach (var datalock in Model.PriceOnlyDataLocks)
-                        {
+                        </thead>
+                        <tbody>
                             <tr>
-                                <td scope="row">@datalock.IlrEffectiveFromDate.Value.ToGdsFormat()</td>
-                                <td class="numeric">@datalock.IlrTotalCost.FormatCost()</td>
+                                <td scope="row">@dl.ApprenticeshipStartDate.DateTime.Value.ToGdsFormat()</td>
+                                <td class="numeric">@dl.TrainingName</td>
                             </tr>
-                        }
+                        </tbody>
+                    </table>
+                </div>
 
-                    </tbody>
-                </table>
+                <div class="column-one-half">
+                    <table class="app-data ILR-submission">
+                        <caption class="heading-small">ILR submission</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col" class="first-child">From date</th>
+                                <th class="numeric first-child" scope="col">Apprenticeship training course</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td scope="row">@dl.IlrEffectiveFromDate.Value.ToGdsFormat()</td>
+                                <td class="numeric">@dl.IlrTrainingName</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
+                </div>
             </div>
-        </div>
+        }
+
+        @foreach (var dl in Model.PriceDataLocks)
+        {
+            count = count + 1;
+            <h3>Mismatch @count </h3>
+            <div class="grid-row">
+                <div class="column-one-half">
+
+                    <table class="app-data">
+                        <caption class="heading-small">Apprenticeship service</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col" class="first-child">From date</th>
+                                <th class="numeric first-child" scope="col">Total apprenticeship training price</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td scope="row">@dl.FromDate.ToGdsFormat()</td>
+                                <td class="numeric">@dl.Cost.FormatCost()</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="column-one-half">
+                    <table class="app-data ILR-submission">
+                        <caption class="heading-small">ILR submission</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col" class="first-child">From date</th>
+                                <th class="numeric first-child" scope="col">Total apprenticeship training price</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td scope="row">@dl.IlrEffectiveFromDate.Value.ToGdsFormat()</td>
+                                <td class="numeric">@dl.IlrTotalCost.FormatCost()</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        }
+
     </div>
 </div>
 
@@ -100,11 +144,6 @@
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new { id = RadioButtonId(SubmitStatusViewModel.Confirm) })
                             <span>Start to update the details in the apprenticeship service</span>
                         </label>
-
-                        @*<label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr)">
-                                @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.UpdateDataInIlr, new { id = RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr) })
-                                <span>Update the details through the ILR instead</span>
-                            </label>*@
 
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new { id = RadioButtonId(SubmitStatusViewModel.None) })

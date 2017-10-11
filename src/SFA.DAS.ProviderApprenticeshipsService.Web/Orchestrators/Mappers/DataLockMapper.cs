@@ -2,11 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.DataLock;
-using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
@@ -41,6 +43,45 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             return result;
         }
 
+        public IEnumerable<PriceHistoryViewModel> MapPriceDataLock(IEnumerable<PriceHistory> apprenticeshipPriceHistory, IOrderedEnumerable<DataLockViewModel> dataLockWithOnlyPriceMismatch)
+        {
+            var priceHistorViewModels = apprenticeshipPriceHistory
+                .Select(history => new PriceHistoryViewModel
+                {
+                    ApprenticeshipId = history.ApprenticeshipId,
+                    Cost = history.Cost,
+                    FromDate = history.FromDate,
+                    ToDate = history.ToDate
+                });
+
+            var datalocks = dataLockWithOnlyPriceMismatch
+               .OrderBy(x => x.IlrEffectiveFromDate)
+               .ToList();
+
+            return datalocks.Select(
+                datalock =>
+                    {
+                        var s = priceHistorViewModels.OrderByDescending(x => x.FromDate)
+                            .First(x => x.FromDate <= datalock.IlrEffectiveFromDate.Value);
+                        s.IlrEffectiveFromDate = datalock.IlrEffectiveFromDate;
+                        s.IlrTotalCost = datalock.IlrTotalCost;
+                        return s;
+                    }
+               
+            );
+        }
+
+        public IEnumerable<CourseDataLockViewModel> MapCourseDataLock(ApprenticeshipViewModel dasRecordViewModel, IEnumerable<DataLockViewModel> dataLockWithCourseMismatch)
+        {
+            return dataLockWithCourseMismatch.Select(el => 
+                new CourseDataLockViewModel
+                {
+                    TrainingName = dasRecordViewModel.TrainingName,
+                    ApprenticeshipStartDate = dasRecordViewModel.StartDate,
+                    IlrTrainingName = el.IlrTrainingCourseName,
+                    IlrEffectiveFromDate = el.IlrEffectiveFromDate
+                });
+        }
 
         public async Task<DataLockSummaryViewModel> MapDataLockSummary(DataLockSummary source)
         {
