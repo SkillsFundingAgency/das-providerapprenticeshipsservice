@@ -22,6 +22,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 using ApiTrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {

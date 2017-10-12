@@ -30,6 +30,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
