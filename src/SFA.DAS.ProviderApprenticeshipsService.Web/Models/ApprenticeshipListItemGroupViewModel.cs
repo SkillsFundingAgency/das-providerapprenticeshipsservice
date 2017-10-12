@@ -30,15 +30,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
                 return Apprenticeships.Count(x => x.OverlappingApprenticeships.Any());
             }
         }
-        public int ApprenticeshipsNotWithinFundingPeriod
-        {
-            get
-            {
-                return Apprenticeships.Count(x => !x.IsWithinAcademicYearFundingPeriod);
-            }
-        }
-
-        public DateTime EarliestAcademicYearDate { get; set; }
-
+     
     }
 }

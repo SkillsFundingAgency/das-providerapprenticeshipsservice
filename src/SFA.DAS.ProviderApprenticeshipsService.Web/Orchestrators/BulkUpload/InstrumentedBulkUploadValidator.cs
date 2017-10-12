@@ -33,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _validator = validator;
             _academicYearValidator = academicYearValidator;
 
-            _viewModelValidator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(academicYear), new CurrentDateTime(), ulnValidator, _academicYearValidator);
+            _viewModelValidator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(academicYear), new CurrentDateTime(), ulnValidator);
     }
 
         public IEnumerable<UploadError> ValidateCohortReference(IEnumerable<ApprenticeshipUploadModel> records, string cohortReference)
