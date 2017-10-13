@@ -39,7 +39,7 @@
                         You've sent an automated message to the employer asking them to stop
                         this apprentice and create a new record for them.
                     </p>
-</div>
+            </div>
         }
         
         @if (Model.DataLockSummaryViewModel.ShowChangesPending)
@@ -51,7 +51,7 @@
                     <p>
                         There are changes to this apprentice's details that are waiting for approval by the employer.
                     </p>
-</div>
+            </div>
         }
         
         @if (Model.DataLockSummaryViewModel.ShowIlrDataMismatch)
@@ -65,40 +65,27 @@
                     This may result in a payment failure.
                 </p>
 
-                @{
-                    if (Model.PendingChanges == PendingChanges.None && !Model.DataLockSummaryViewModel.ShowChangesPending && !Model.DataLockSummaryViewModel.ShowChangesRequested)
+                @if (Model.PendingChanges == PendingChanges.None && !Model.DataLockSummaryViewModel.AnyTriagedDatalocks)
+                {
+                    if (Model.DataLockSummaryViewModel.ShowCourseDataLockTriageLink)
                     {
-                        if (Model.DataLockSummaryViewModel.ShowCourseDataLockTriageLink && Model.DataLockSummaryViewModel.ShowPriceDataLockTriageLink)
+                        if (Model.HasHadDataLockSuccess)
                         {
-                            if (Model.HasHadDataLockSuccess)
-                            {
-                                <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
-                            }
-                            else
-                            {
-                                <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View details</a>
-                            }
+                            <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details A</a>
                         }
-                        else
+
+                        if (  Model.DataLockSummaryViewModel.ShowPriceDataLockTriageLink ||
+                            ( Model.DataLockSummaryViewModel.ShowCourseDataLockTriageLink && !Model.HasHadDataLockSuccess))
                         {
-                            if (Model.DataLockSummaryViewModel.ShowCourseDataLockTriageLink)
-                            {
-                                if (Model.HasHadDataLockSuccess)
-                                {
-                                    <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
-                                }
-                                else
-                                {
-                                    <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View details</a>
-                                }
-                            }
-                            else if (Model.DataLockSummaryViewModel.ShowPriceDataLockTriageLink)
-                            {
-                                <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View details</a>
-                            }
+                            <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View details B</a>
                         }
                     }
+                    else
+                    {
+                        <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View details C</a>
+                    }
                 }
+
             </div>
         }    
 

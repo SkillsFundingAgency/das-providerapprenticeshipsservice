@@ -64,7 +64,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var datalockSummaryViewModel = await _dataLockMapper.MapDataLockSummary(datalockSummary.DataLockSummary);
 
             var dasRecordViewModel = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
-            var priceOnlyDataLocks = datalockSummaryViewModel.DataLockWithOnlyPriceMismatch.OrderBy(x => x.IlrEffectiveFromDate);
+            var priceOnlyDataLocks = datalockSummaryViewModel
+                .DataLockWithOnlyPriceMismatch.OrderBy(x => x.IlrEffectiveFromDate);
             return new DataLockMismatchViewModel
             {
                 ProviderId = providerId,
@@ -73,7 +74,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 DataLockSummaryViewModel = datalockSummaryViewModel,
                 EmployerName = data.Apprenticeship.LegalEntityName,
                 PriceDataLocks = _dataLockMapper.MapPriceDataLock(priceHistory.History, priceOnlyDataLocks),
-                CourseDataLocks = _dataLockMapper.MapCourseDataLock(dasRecordViewModel, datalockSummaryViewModel.DataLockWithCourseMismatch),
+                CourseDataLocks = _dataLockMapper.MapCourseDataLock(dasRecordViewModel, datalockSummaryViewModel.DataLockWithCourseMismatch, data.Apprenticeship)
             };
         }
 

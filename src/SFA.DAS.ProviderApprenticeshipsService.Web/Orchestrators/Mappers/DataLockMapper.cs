@@ -71,8 +71,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             );
         }
 
-        public IEnumerable<CourseDataLockViewModel> MapCourseDataLock(ApprenticeshipViewModel dasRecordViewModel, IEnumerable<DataLockViewModel> dataLockWithCourseMismatch)
+        public IEnumerable<CourseDataLockViewModel> MapCourseDataLock(ApprenticeshipViewModel dasRecordViewModel, IEnumerable<DataLockViewModel> dataLockWithCourseMismatch, Apprenticeship apprenticeship)
         {
+            if (apprenticeship.HasHadDataLockSuccess)
+                return new CourseDataLockViewModel[0];
+
             return dataLockWithCourseMismatch.Select(el => 
                 new CourseDataLockViewModel
                 {
@@ -121,8 +124,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
             result.ShowPriceDataLockTriageLink =
                 result.DataLockWithOnlyPriceMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
-
-            result.ShowIlrDataMismatch = result.ShowCourseDataLockTriageLink || result.ShowPriceDataLockTriageLink;
 
             return result;
         }
