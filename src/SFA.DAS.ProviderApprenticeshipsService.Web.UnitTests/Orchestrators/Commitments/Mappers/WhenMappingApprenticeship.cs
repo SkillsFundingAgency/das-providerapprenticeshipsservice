@@ -243,7 +243,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(-1), HasHadDataLockSuccess = false};
             var viewModel = _mapper.MapApprenticeship(apprenticeship);
 
-            viewModel.IsLockedForUpdated.Should().BeFalse();
+            viewModel.IsLockedForUpdate.Should().BeFalse();
             viewModel.HasStarted.Should().BeTrue();
         }
 
@@ -253,7 +253,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(-1), HasHadDataLockSuccess = true };
             var viewModel = _mapper.MapApprenticeship(apprenticeship);
 
-            viewModel.IsLockedForUpdated.Should().BeTrue();
+            viewModel.IsLockedForUpdate.Should().BeTrue();
             viewModel.HasStarted.Should().BeTrue();
         }
 
@@ -266,7 +266,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(-5), HasHadDataLockSuccess = false };
             var viewModel = _mapper.MapApprenticeship(apprenticeship);
 
-            viewModel.IsLockedForUpdated.Should().BeTrue();
+            viewModel.IsLockedForUpdate.Should().BeTrue();
             viewModel.HasStarted.Should().BeTrue();
         }
     }

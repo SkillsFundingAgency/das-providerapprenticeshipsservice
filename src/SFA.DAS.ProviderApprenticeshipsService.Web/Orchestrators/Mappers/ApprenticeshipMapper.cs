@@ -64,13 +64,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
                                       new DateTime(_currentDateTime.Now.Year, _currentDateTime.Now.Month, 1);
 
-            var isLockedForUpdated = apprenticeship.HasHadDataLockSuccess;
+            var isLockedForUpdate = apprenticeship.HasHadDataLockSuccess;
 
             if (_academicYearValidator.IsAfterLastAcademicYearFundingPeriod &&
                  apprenticeship.StartDate.HasValue &&
                  _academicYearValidator.Validate(apprenticeship.StartDate.Value) == AcademicYearValidationResult.NotWithinFundingPeriod)
             {
-                isLockedForUpdated = true;
+                isLockedForUpdate = true;
             }
 
             var dateOfBirth = apprenticeship.DateOfBirth;
@@ -94,7 +94,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 ProviderRef = apprenticeship.ProviderRef,
                 EmployerRef = apprenticeship.EmployerRef,
                 HasStarted = !isStartDateInFuture,
-                IsLockedForUpdated = isLockedForUpdated
+                IsLockedForUpdate = isLockedForUpdate
             };
         }
 
