@@ -23,6 +23,8 @@
             }
         </p>
 
+        <br />
+
         <table class="app-data">
             <tr>
                 <td class="first-child">Name</td>
@@ -74,7 +76,7 @@
                     <caption class="heading-small">Apprenticeship service</caption>
                     <thead>
                         <tr>
-                            <th scope="col" class="first-child">From date</th>
+                            <th scope="col" class="first-child">Price Period</th>
                             <th class="numeric first-child" scope="col">Total apprenticeship training price</th>
 
                         </tr>
@@ -84,7 +86,7 @@
                         @foreach (var priceHistory in priceHistories)
                         {
                             <tr>
-                                <td scope="row">@priceHistory.FromDate.ToGdsFormat()</td>
+                                <td scope="row">From @priceHistory.FromDate.ToGdsFormat()</td>
                                 <td class="numeric funding-cap-alert">@priceHistory.Cost.FormatCost()</td>
                             </tr>
                         }
@@ -98,7 +100,7 @@
                     <caption class="heading-small">ILR submission</caption>
                     <thead>
                         <tr>
-                            <th scope="col" class="first-child">From date</th>
+                            <th scope="col" class="first-child">Price Period</th>
                             <th class="numeric first-child" scope="col">Total apprenticeship training price</th>
 
                         </tr>
@@ -107,8 +109,11 @@
                     
                         @foreach (var datalock in datalocks)
                         {
+                            var effectiveToDate= datalock.IlrEffectiveToDate.HasValue ? datalock.IlrEffectiveToDate.Value.ToGdsFormat() : "onwards";
+                            var priceDateChange = $"{datalock.IlrEffectiveFromDate.Value.ToGdsFormat()} to {effectiveToDate}";
+
                             <tr>
-                                <td scope="row">@datalock.IlrEffectiveFromDate.Value.ToGdsFormat()</td>
+                                <td scope="row">@priceDateChange</td>
                                 <td class="numeric funding-cap-alert">@datalock.IlrTotalCost.FormatCost()</td>
                             </tr>
                         }
@@ -134,16 +139,23 @@
                         @Html.ValidationMessageFor(m => m.SubmitStatusViewModel, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SubmitStatusViewModel) })
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.Confirm)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new {id = RadioButtonId(SubmitStatusViewModel.Confirm)})
-                            <span>Start to update the details in the apprenticeship service</span>
+                            <span>Change apprenticeship service records to match the ILR</span>
                         </label>
 
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new {id = RadioButtonId(SubmitStatusViewModel.None)})
-                            <span>Leave for now</span>
+                            <span>I'll update the ILR later</span>
                         </label>
                     </div>
                     
-                    <input type="submit" class="button" id="fix-mismatch" value="Continue" />
+                    <div class="grid-row">
+                        <div class="column-one-half">
+                            <input type="submit" class="button" id="fix-mismatch" value="Continue" />
+                        </div>
+                        <div class="column-one-half">
+                            <a href="@Url.Action("Details")" aria-label="Cancel"> Cancel</a>
+                        </div>
+                    </div>
                 </fieldset>
             </div>
         </form>

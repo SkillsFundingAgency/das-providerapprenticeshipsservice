@@ -10,8 +10,7 @@
 
 <div class="grid-row list-apprentice">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">@Model.FirstName @Model.LastName</h1>
-
+       
         @if (Model.PendingChanges == PendingChanges.ReadyForApproval)
             {
             <div class="purple-border">
@@ -33,11 +32,10 @@
         {
             <div class="purple-border blue-alerts">
                 <h2 class="heading-medium">
-                    Changes requested
+                    Price changes request sent
                 </h2>
                 <p>
-                    You've sent an automated message to the employer asking them to stop
-                    this apprentice and create a new record for them.
+                    @DataLockMessage(Model.FirstName, Model.LastName)
                 </p>
             </div>
         }
@@ -46,10 +44,10 @@
         {
             <div class="purple-border blue-alerts">
                 <h2 class="heading-medium">
-                    Changes pending
+                    Price change request pending
                 </h2>
                 <p>
-                    There are changes to this apprentice's details that are waiting for approval by the employer.
+                    @DataLockMessage(Model.FirstName, Model.LastName)
                 </p>
             </div>
         }
@@ -61,11 +59,7 @@
                     @Model.DataLockSummaryViewModel.DataLockSummaryTitle
                 </h2>
                 <p>
-                    @{
-                        var details = $"Payment for {Model.FirstName} {Model.LastName} can't be made until this is resolved.";
-                        @details
-                    }
-
+                  @DataLockMessage(Model.FirstName,Model.LastName)
                 </p>
 
                 @{
@@ -91,7 +85,9 @@
                     }
                 }
             </div>
-                    }
+        }
+
+        <h1 class="heading-xlarge">@Model.FirstName @Model.LastName</h1>
 
         <table id="app-status">
             <thead>
@@ -215,4 +211,10 @@
 
         return $"£{cost.Value:n0}";
     }
+    private string DataLockMessage(string firstName , string lastname)
+    {
+        return $"Payment for{firstName} {lastname} can't be made until this is resolved.";
+    }
+
 }
+
