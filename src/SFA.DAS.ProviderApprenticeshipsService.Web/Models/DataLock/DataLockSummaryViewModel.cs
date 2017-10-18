@@ -24,18 +24,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
                 {
                     summary = "ILR data mismatch";
 
-                    if (DataLockWithOnlyPriceMismatch != null && DataLockWithOnlyPriceMismatch.Any() )
+                    
+                    if ((DataLockWithOnlyPriceMismatch != null && DataLockWithOnlyPriceMismatch.Any()) &&
+                            (DataLockWithCourseMismatch != null && DataLockWithCourseMismatch.Any()))
+                    {
+                        summary = "Price and course mismatch";
+                    }
+                    else if (DataLockWithOnlyPriceMismatch != null && DataLockWithOnlyPriceMismatch.Any())
                     {
                         summary = "Price mismatch";
                     }
                     else if (DataLockWithCourseMismatch != null && DataLockWithCourseMismatch.Any())
                     {
                         summary = "Course mismatch";
-                    }
-                    else if ((DataLockWithOnlyPriceMismatch != null && DataLockWithOnlyPriceMismatch.Any()) &&
-                            (DataLockWithCourseMismatch != null && DataLockWithCourseMismatch.Any()))
-                    {
-                        summary = "Price and course mismatch";
                     }
                 }
 

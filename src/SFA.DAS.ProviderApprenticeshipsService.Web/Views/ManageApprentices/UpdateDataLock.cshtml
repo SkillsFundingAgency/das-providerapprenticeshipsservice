@@ -15,7 +15,7 @@
         
         @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
-        <h1 class="heading-xlarge"> @Model.DataLockSummaryViewModel.DataLockSummaryTitle</h1>
+        <h1 class="heading-xlarge"> Price mismatch</h1>
         <p>
             @{
                 var details = $"Payment for {Model.DasApprenticeship.FirstName} {Model.DasApprenticeship.LastName} can't be made until the price in the ILR submission matches the price in the apprenticeship service.";
@@ -109,8 +109,13 @@
                     
                         @foreach (var datalock in datalocks)
                         {
-                            var effectiveToDate= datalock.IlrEffectiveToDate.HasValue ? datalock.IlrEffectiveToDate.Value.ToGdsFormat() : "onwards";
-                            var priceDateChange = $"{datalock.IlrEffectiveFromDate.Value.ToGdsFormat()} to {effectiveToDate}";
+                            var priceDateChange = $"From {datalock.IlrEffectiveFromDate.Value.ToGdsFormat()}";
+
+                            if (datalock.IlrEffectiveToDate.HasValue)
+                            {
+                                priceDateChange = $"{datalock.IlrEffectiveFromDate.Value.ToGdsFormat()} to {datalock.IlrEffectiveToDate.Value.ToGdsFormat()}";
+                            }
+
 
                             <tr>
                                 <td scope="row">@priceDateChange</td>
