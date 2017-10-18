@@ -15,9 +15,13 @@
         
         @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
-        <h1 class="heading-xlarge">Details of ILR data mismatch</h1>
-
-        <p>There are mismatches where the data in the apprenticeship service and your ILR submission are different.</p>
+        <h1 class="heading-xlarge"> @Model.DataLockSummaryViewModel.DataLockSummaryTitle</h1>
+        <p>
+            @{
+                var details = $"Payment for {Model.DasApprenticeship.FirstName} {Model.DasApprenticeship.LastName} can't be made until the price in the ILR submission matches the price in the apprenticeship service.";
+                @details
+            }
+        </p>
 
         <table class="app-data">
             <tr>
@@ -29,10 +33,21 @@
                 <td>@Model.DasApprenticeship.ULN</td>
             </tr>
             <tr>
-                <td>Date of birth</td>
-                <td>@Model.DasApprenticeship.DateOfBirth.DateTime.Value.ToGdsFormat()</td>
+                <td>Apprenticeship training course</td>
+                <td>@Model.DasApprenticeship.TrainingName</td>
             </tr>
         </table>
+        
+        <br />
+
+        <div class="funding-cap-notification" id="yyuyu6778">
+            <p class="heading-small">
+                Price Mismatch
+            </p>
+            <p>
+                Payments can't be made until this is resolved. 
+            </p>
+        </div>
         
         @{
             var datalocks = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch
@@ -70,7 +85,7 @@
                         {
                             <tr>
                                 <td scope="row">@priceHistory.FromDate.ToGdsFormat()</td>
-                                <td class="numeric">@priceHistory.Cost.FormatCost()</td>
+                                <td class="numeric funding-cap-alert">@priceHistory.Cost.FormatCost()</td>
                             </tr>
                         }
 
@@ -94,7 +109,7 @@
                         {
                             <tr>
                                 <td scope="row">@datalock.IlrEffectiveFromDate.Value.ToGdsFormat()</td>
-                                <td class="numeric">@datalock.IlrTotalCost.FormatCost()</td>
+                                <td class="numeric funding-cap-alert">@datalock.IlrTotalCost.FormatCost()</td>
                             </tr>
                         }
                    
@@ -121,11 +136,6 @@
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new {id = RadioButtonId(SubmitStatusViewModel.Confirm)})
                             <span>Start to update the details in the apprenticeship service</span>
                         </label>
-
-                        @*<label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr)">
-                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.UpdateDataInIlr, new { id = RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr) })
-                            <span>Update the details through the ILR instead</span>
-                        </label>*@
 
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new {id = RadioButtonId(SubmitStatusViewModel.None)})
