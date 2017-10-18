@@ -237,7 +237,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (model.SubmitStatusViewModel != null && model.SubmitStatusViewModel.Value == SubmitStatusViewModel.Confirm)
             {
                 await _orchestrator.TriageMultiplePriceDataLocks(model.ProviderId, model.HashedApprenticeshipId, CurrentUserId, TriageStatus.Change);
-                SetInfoMessage($"Changes sent to employer for approval", FlashMessageSeverityLevel.Okay);
+               /// SetInfoMessage($"Changes sent to employer for approval", FlashMessageSeverityLevel.Okay);
             }
 
             return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
