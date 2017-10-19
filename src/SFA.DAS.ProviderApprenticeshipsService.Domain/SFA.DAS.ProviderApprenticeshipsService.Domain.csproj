@@ -53,7 +53,6 @@
     <Compile Include="Interfaces\IProviderAgreementStatusRepository.cs" />
     <Compile Include="Interfaces\IProviderCommitmentsLogger.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
-    <Compile Include="Interfaces\IHashingService.cs" />
     <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Interfaces\IUserSettingsRepository.cs" />
     <Compile Include="ITrainingProgramme.cs" />

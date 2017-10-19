@@ -15,6 +15,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 using TrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments.Mappers
 {
@@ -61,7 +62,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                              ULN = "1112223301"
                          };
 
-            _mapper = new ApprenticeshipMapper(_hashingService.Object, Mock.Of<IMediator>(), new CurrentDateTime(), Mock.Of<ILog>());
+            _mapper = new ApprenticeshipMapper(_hashingService.Object, Mock.Of<IMediator>(), new CurrentDateTime(), Mock.Of<ILog>(), Mock.Of<IAcademicYearValidator>());
         }
 
         [Test]

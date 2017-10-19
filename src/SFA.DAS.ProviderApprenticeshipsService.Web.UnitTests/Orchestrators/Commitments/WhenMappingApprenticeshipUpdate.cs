@@ -10,6 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
@@ -30,7 +31,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                _hashingService.Object,
                 Mock.Of<IMediator>(),
                 new CurrentDateTime(),
-                 Mock.Of<ILog>());
+                 Mock.Of<ILog>(),
+                 Mock.Of<IAcademicYearValidator>());
         }
 
         [Test]
