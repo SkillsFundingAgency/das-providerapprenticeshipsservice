@@ -173,18 +173,12 @@
 
     public string GetPriceDetails(DateTime fromDate, DateTime? toDate)
     {
-        var priceDetails = string.Empty;
-
+        var dateDetails = $"From {fromDate.ToGdsFormat()}";
         if (toDate.HasValue)
         {
-            priceDetails = $"{fromDate.ToGdsFormat()} to {toDate.Value.ToGdsFormat()}";
+            dateDetails = $"{fromDate.ToGdsFormat()} to {toDate.Value.ToGdsFormat()}";
         }
-        else
-        {
-            priceDetails = $"From {fromDate.ToGdsFormat()}";
-        }
-
-        return priceDetails;
+        return dateDetails;
     }
 
 
