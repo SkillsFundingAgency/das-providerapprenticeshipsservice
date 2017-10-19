@@ -13,6 +13,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUserNoti
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 
@@ -22,16 +23,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ILog _logger;
+        private readonly ICurrentDateTime _currentDateTime;
 
-        public AccountOrchestrator(IMediator mediator, ILog logger)
+        public AccountOrchestrator(IMediator mediator, ILog logger, ICurrentDateTime currentDateTime)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
+            if(currentDateTime == null)
+                throw new ArgumentNullException(nameof(currentDateTime));
 
             _mediator = mediator;
             _logger = logger;
+            _currentDateTime = currentDateTime;
         }
 
         public async Task<AccountHomeViewModel> GetProvider(int providerId)
@@ -42,9 +47,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
                 var providers = await _mediator.SendAsync(new GetProviderQueryRequest { UKPRN = providerId });
 
-                var provider = providers.ProvidersView.Provider;
+                var result = new AccountHomeViewModel
+                {
+                    AccountStatus = AccountStatus.Active,
+                    ProviderName = providers.ProvidersView.Provider.ProviderName,
+                    ProviderId = providerId,
+                    ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017,10,20)
+                };
 
-                return new AccountHomeViewModel {AccountStatus = AccountStatus.Active, ProviderName = provider.ProviderName, ProviderId = providerId};
+                return result;
             }
             catch (EntityNotFoundException)
             {
