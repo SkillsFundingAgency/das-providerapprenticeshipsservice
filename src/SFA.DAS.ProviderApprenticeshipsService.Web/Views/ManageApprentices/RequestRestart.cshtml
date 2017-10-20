@@ -48,12 +48,7 @@
                 <td>
                     @if (datalock.IlrEffectiveFromDate.HasValue)
                     {
-                        var dateDetails = $"From {datalock.IlrEffectiveFromDate.Value.ToGdsFormat()}";
-                        if (datalock.IlrEffectiveToDate.HasValue)
-                        {
-                            dateDetails = $"{datalock.IlrEffectiveFromDate.Value.ToGdsFormat()} to {datalock.IlrEffectiveToDate.Value.ToGdsFormat()}";
-                        }
-
+                        var dateDetails = $"From {datalock.IlrEffectiveFromDate.Value.ToGdsFormat()} onwards";
                        @dateDetails
                     }
                     else
