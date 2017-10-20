@@ -61,11 +61,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
-            var datalockSummaryViewModel = await _dataLockMapper.MapDataLockSummary(datalockSummary.DataLockSummary);
+            var datalockSummaryViewModel = await _dataLockMapper.MapDataLockSummary(datalockSummary.DataLockSummary, data.Apprenticeship.HasHadDataLockSuccess);
 
             var dasRecordViewModel = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
-            var priceOnlyDataLocks = datalockSummaryViewModel
-                .DataLockWithOnlyPriceMismatch.OrderBy(x => x.IlrEffectiveFromDate);
+            var priceDataLocks = datalockSummaryViewModel
+                .DataLockWithCourseMismatch
+                .Concat(datalockSummaryViewModel.DataLockWithOnlyPriceMismatch)
+                .Where(m => m.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock07))
+                .OrderBy(x => x.IlrEffectiveFromDate);
+
             return new DataLockMismatchViewModel
             {
                 ProviderId = providerId,
@@ -73,7 +77,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 DasApprenticeship = dasRecordViewModel,
                 DataLockSummaryViewModel = datalockSummaryViewModel,
                 EmployerName = data.Apprenticeship.LegalEntityName,
-                PriceDataLocks = _dataLockMapper.MapPriceDataLock(priceHistory.History, priceOnlyDataLocks),
+                PriceDataLocks = _dataLockMapper.MapPriceDataLock(priceHistory.History, priceDataLocks),
                 CourseDataLocks = _dataLockMapper.MapCourseDataLock(dasRecordViewModel, datalockSummaryViewModel.DataLockWithCourseMismatch, data.Apprenticeship)
             };
         }
@@ -123,7 +127,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId,
-                DataLockEventId = dataLockEventId,
                 TriageStatus = triage,
                 UserId = userId
             });
@@ -137,7 +140,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId,
-                DataLockEventId = dataLockEventId,
                 TriageStatus = TriageStatus.Restart,
                 UserId = userId
             });

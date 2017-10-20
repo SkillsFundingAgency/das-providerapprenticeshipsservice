@@ -292,6 +292,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                             && !apprenticeship.DataLockCourse
                             && !apprenticeship.DataLockPrice
                             && !apprenticeship.DataLockCourseTriaged
+                            && !apprenticeship.DataLockCourseChangeTriaged
                             && !apprenticeship.DataLockPriceTriaged
                             && new[] { PaymentStatus.Active, PaymentStatus.Paused, }.Contains(apprenticeship.PaymentStatus)
             };

@@ -11,7 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
     public interface IDataLockMapper
     {
-        Task<DataLockSummaryViewModel> MapDataLockSummary(DataLockSummary datalockSummary);
+        Task<DataLockSummaryViewModel> MapDataLockSummary(DataLockSummary datalockSummary, bool hasHadDataLockSuccess);
 
         Task<DataLockViewModel> MapDataLockStatus(DataLockStatus dataLock);
 

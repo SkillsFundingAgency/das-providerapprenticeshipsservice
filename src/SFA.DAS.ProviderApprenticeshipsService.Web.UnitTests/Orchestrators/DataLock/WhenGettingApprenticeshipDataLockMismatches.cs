@@ -48,7 +48,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Dat
                 });
 
             _mapper = new Mock<IDataLockMapper>();
-            _mapper.Setup(x => x.MapDataLockSummary(It.IsAny<DataLockSummary>()))
+            _mapper.Setup(x => x.MapDataLockSummary(It.IsAny<DataLockSummary>(), It.IsAny<bool>()))
                 .ReturnsAsync(() => new DataLockSummaryViewModel
                 {
                     DataLockWithCourseMismatch = new List<DataLockViewModel>(),
@@ -91,7 +91,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Dat
             await _orchestrator.GetApprenticeshipMismatchDataLock(1, "TEST");
 
             //Assert
-            _mapper.Verify(x => x.MapDataLockSummary(It.IsAny<DataLockSummary>()), Times.Once);
+            _mapper.Verify(x => x.MapDataLockSummary(It.IsAny<DataLockSummary>(), It.IsAny<bool>()), Times.Once);
         }
     }
 }

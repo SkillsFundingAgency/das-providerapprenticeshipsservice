@@ -126,7 +126,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var result = _apprenticeshipMapper.MapApprenticeshipDetails(data.Apprenticeship);
 
-            result.DataLockSummaryViewModel = await _dataLockMapper.MapDataLockSummary(dataLockSummary.DataLockSummary);
+            result.DataLockSummaryViewModel = await _dataLockMapper.MapDataLockSummary(dataLockSummary.DataLockSummary, data.Apprenticeship.HasHadDataLockSuccess);
 
             return result;
 

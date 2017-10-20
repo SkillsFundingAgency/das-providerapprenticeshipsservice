@@ -5,6 +5,7 @@ using MediatR;
 
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.DataLock;
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
@@ -86,7 +87,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 });
         }
 
-        public async Task<DataLockSummaryViewModel> MapDataLockSummary(DataLockSummary source)
+        public async Task<DataLockSummaryViewModel> MapDataLockSummary(DataLockSummary source, bool hasHadDataLockSuccess)
         {
             var result = new DataLockSummaryViewModel
             {
@@ -122,8 +123,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 result.DataLockWithCourseMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
                 && result.DataLockWithCourseMismatch.All(x => x.TriageStatusViewModel != TriageStatusViewModel.RestartApprenticeship);
 
+            // Show ChangeLink if any not triaged PriceOnly AND NO Course+Price DL
             result.ShowPriceDataLockTriageLink =
                 result.DataLockWithOnlyPriceMismatch.Any(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
+
+            if (result.DataLockWithCourseMismatch.Any(m => m.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock07)))
+            {
+                result.ShowPriceDataLockTriageLink = false;
+            }
+            result.ShowPriceDataLockTriageLink = result.ShowPriceDataLockTriageLink || result.ShowCourseDataLockTriageLink && !hasHadDataLockSuccess;
 
             return result;
         }
