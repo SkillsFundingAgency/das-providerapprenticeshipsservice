@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
+using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.TriageApprenticeshipDataLocks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateDataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;

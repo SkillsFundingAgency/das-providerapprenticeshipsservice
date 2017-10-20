@@ -157,6 +157,9 @@
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryResponse.cs" />
     <Compile Include="Queries\GetAccountUsers\GetAccountUsersHandler.cs" />
     <Compile Include="Queries\GetAccountUsers\GetAccountUsersResponse.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLockSummaryQueryHandler.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLockQueryRequest.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLocksQueryResponse.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLockSummary\GetApprenticeshipDataLockSummaryQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLockSummary\GetApprenticeshipDataLockSummaryQueryRequest.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLockSummary\GetApprenticeshipDataLockSummaryQueryResponse.cs" />

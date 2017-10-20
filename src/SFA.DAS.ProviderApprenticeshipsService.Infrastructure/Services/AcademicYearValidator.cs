@@ -1,9 +1,6 @@
 ﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
@@ -30,5 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 
             return AcademicYearValidationResult.Success;
         }
+
+        public bool IsAfterLastAcademicYearFundingPeriod => _currentDateTime.Now > _academicYear.LastAcademicYearFundingPeriod;
     }
 }

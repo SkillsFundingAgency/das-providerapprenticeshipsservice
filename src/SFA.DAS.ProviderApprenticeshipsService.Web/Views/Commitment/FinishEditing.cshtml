@@ -35,12 +35,6 @@
                             There are no <a href="@Url.Action("Details", new {Model.ProviderId, Model.HashedCommitmentId})">overlapping training dates</a> for your apprentices
                         </li>
                     }
-                    @if (Model.HasAcademicFundingPeriodErrors)
-                    {
-                        <li>
-                           There are no <a href="@Url.Action("Details", new {Model.ProviderId, Model.HashedCommitmentId})">start dates </a> in the previous academic year
-                        </li>
-                    }
                 </ul>
 
             </div>

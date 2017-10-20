@@ -53,8 +53,15 @@ $('.container-head').on('click touchstart',(function () {
 
 }));
 
-
-
+//floating menu
+$(window).scroll(function () {
+    if ($(window).scrollTop() >= 140) {
+        $('#floating-menu').addClass('fixed-header');
+    }
+    else {
+        $('#floating-menu').removeClass('fixed-header');
+    }
+});
 
 
 //clear search box text
@@ -81,5 +88,4 @@ $("#search-input").on("blur", (function () {
         $(this).val(placeholderText);
     }
 }));
-
 

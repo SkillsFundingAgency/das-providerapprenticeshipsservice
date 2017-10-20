@@ -3,6 +3,7 @@ using FluentValidation.Results;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.HashingService;
 using SFA.DAS.Learners.Validators;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -61,7 +62,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                        Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
                        _mockMapper.Object,
                        _validator,
-                       Mock.Of<IAcademicYearValidator>(),
                        Mock.Of<IAcademicYearDateProvider>());
         }
 
@@ -76,7 +76,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                        Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
                        _mockMapper.Object,
                        _validator,
-                       Mock.Of<IAcademicYearValidator>(),
                        Mock.Of<IAcademicYearDateProvider>());
         }
     }

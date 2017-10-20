@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using FluentAssertions;
-
 using MediatR;
-
 using Moq;
-
 using NUnit.Framework;
 
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
@@ -25,6 +23,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 
 using TrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments.Mappers
 {
@@ -32,63 +31,76 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     public class WhenMappingApprenticeship
     {
         private Mock<IHashingService> _hashingService;
-
         private Apprenticeship _model;
-
         private ApprenticeshipMapper _mapper;
+        private Mock<IAcademicYearValidator> _mockAcademicYearValidator;
+
+        private DateTime _now;
 
         [SetUp]
         public void Arrange()
         {
+            _now = new DateTime(DateTime.Now.Year, 11, 01);
             _hashingService = new Mock<IHashingService>();
+            var mockMediator = new Mock<IMediator>();
+            _mockAcademicYearValidator = new Mock<IAcademicYearValidator>();
+
             _hashingService.Setup(x => x.HashValue(It.IsAny<long>())).Returns("hashed");
             _hashingService.Setup(x => x.DecodeValue("hashed")).Returns(1998);
-
+            
             _model = new Apprenticeship
 
-              {
-    AgreementStatus = AgreementStatus.BothAgreed,
-    CanBeApproved = false,
-    CommitmentId = 222,
-    Cost = 1700,
-    DateOfBirth = new DateTime(1998, 12, 08),
-    EmployerAccountId = 555,
-    EmployerRef = "",
-    FirstName = "First name",
-    Id = 1,
-    LastName = "Last name",
-    LegalEntityName = "LegalEntityName",
-    NINumber = "SE4445566O",
-    PaymentStatus = PaymentStatus.Active,
-    PendingUpdateOriginator = Originator.Provider,
-    ProviderId = 666,
-    ProviderName = "Provider name",
-    ProviderRef = "Provider ref",
-    Reference = "ABBA12",
-    StartDate = DateTime.Now.AddMonths(2),
-    EndDate = DateTime.Now.AddMonths(26),
-    TrainingCode = "code-training",
-    TrainingName = "Training name",
-    TrainingType = TrainingType.Framework,
-    ULN = "1112223301"
-};
+            {
+                AgreementStatus = AgreementStatus.BothAgreed,
+                CanBeApproved = false,
+                CommitmentId = 222,
+                Cost = 1700,
+                DateOfBirth = new DateTime(1998, 12, 08),
+                EmployerAccountId = 555,
+                EmployerRef = "",
+                FirstName = "First name",
+                Id = 1,
+                LastName = "Last name",
+                LegalEntityName = "LegalEntityName",
+                NINumber = "SE4445566O",
+                PaymentStatus = PaymentStatus.Active,
+                PendingUpdateOriginator = Originator.Provider,
+                ProviderId = 666,
+                ProviderName = "Provider name",
+                ProviderRef = "Provider ref",
+                Reference = "ABBA12",
+                StartDate = DateTime.Now.AddMonths(2),
+                EndDate = DateTime.Now.AddMonths(26),
+                TrainingCode = "code-training",
+                TrainingName = "Training name",
+                TrainingType = TrainingType.Framework,
+                ULN = "1112223301"
+            };
 
-var mockMediator = new Mock<IMediator>();
-mockMediator.Setup(m => m.SendAsync(It.IsAny<GetStandardsQueryRequest>()))
-    .ReturnsAsync(new GetStandardsQueryResponse { Standards = new List<Standard>
-                                                                  {
-                                                                      new Standard
-                                                                          {
-                                                                              Duration = 12,
-                                                                              Id = "code-training",
-                                                                              Level = 3, 
-                                                                              Title = "Fake training"
-                                                                          }
-                                                                  } });
-mockMediator.Setup(m => m.SendAsync(It.IsAny<GetFrameworksQueryRequest>()))
-    .ReturnsAsync(new GetFrameworksQueryResponse { Frameworks = new List<Framework>() });
+            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetStandardsQueryRequest>()))
+                .ReturnsAsync(new GetStandardsQueryResponse
+                {
+                    Standards = new List<Standard>
+                    {
+                        new Standard
+                            {
+                                Duration = 12,
+                                Id = "code-training",
+                                Level = 3,
+                                Title = "Fake training"
+                            }
+                    }
+                });
+            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetFrameworksQueryRequest>()))
+                .ReturnsAsync(new GetFrameworksQueryResponse { Frameworks = new List<Framework>() });
 
-_mapper = new ApprenticeshipMapper(_hashingService.Object, mockMediator.Object, new CurrentDateTime(), Mock.Of<ILog>());
+            _mapper = new ApprenticeshipMapper(
+                _hashingService.Object, 
+                mockMediator.Object,
+                new CurrentDateTime(_now),
+                Mock.Of<ILog>(),
+                _mockAcademicYearValidator.Object
+                );
         }
 
         [Test]
@@ -216,10 +228,46 @@ _mapper = new ApprenticeshipMapper(_hashingService.Object, mockMediator.Object, 
             result.Should().Be(DataLockErrorType.RestartRequired);
         }
 
+        [Test]
         public void ShouldMapErrorCodeToNoneIfEmppty()
         {
             var result = _mapper.MapErrorType(0);
             result.Should().Be(DataLockErrorType.None);
+        }
+
+        // ---------
+
+        [Test]
+        public void ShouldNotHaveLockedStatusIfNoDataLockSuccessFound()
+        {
+            var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(-1), HasHadDataLockSuccess = false};
+            var viewModel = _mapper.MapApprenticeship(apprenticeship);
+
+            viewModel.IsLockedForUpdate.Should().BeFalse();
+            viewModel.HasStarted.Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldHaveLockedStatusIfDataLocksSuccesFound()
+        {
+            var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(-1), HasHadDataLockSuccess = true };
+            var viewModel = _mapper.MapApprenticeship(apprenticeship);
+
+            viewModel.IsLockedForUpdate.Should().BeTrue();
+            viewModel.HasStarted.Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldHaveLockedStatusIfPastCutOffDate()
+        {
+            _mockAcademicYearValidator.Setup(m => m.IsAfterLastAcademicYearFundingPeriod).Returns(true);
+            _mockAcademicYearValidator.Setup(m => m.Validate(It.IsAny<DateTime>())).Returns(AcademicYearValidationResult.NotWithinFundingPeriod);
+
+            var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(-5), HasHadDataLockSuccess = false };
+            var viewModel = _mapper.MapApprenticeship(apprenticeship);
+
+            viewModel.IsLockedForUpdate.Should().BeTrue();
+            viewModel.HasStarted.Should().BeTrue();
         }
     }
 }

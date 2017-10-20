@@ -26,17 +26,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         }
 
         [Test]
-        public async Task ShouldPreventUpdateOfApprenticeshipWithStartDateInLastAcademicYear()
-        {
-            ValidModel.StartDate = new DateTimeViewModel(1, 07, DateTime.Now.Year);
-            ValidModel.EndDate = new DateTimeViewModel(1, 12, DateTime.Now.Year);
-            ValidModel.ULN = "1238894231";
-            var result = await _orchestrator.ValidateApprenticeship(ValidModel);
-
-            result.Keys.Should().Contain($"{nameof(ValidModel.StartDate)}");
-        }
-
-        [Test]
         public async Task ShouldAllowUpdateOfApprenticeshipWithStartDateInLastAcademicYear()
         {
             ValidModel.StartDate = new DateTimeViewModel(1, 08, DateTime.Now.Year);

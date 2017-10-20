@@ -58,6 +58,9 @@
       <HintPath>..\packages\FluentValidation.MVC5.6.2.1.0\lib\Net45\FluentValidation.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Hashids.net, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hashids.net.1.2.2\lib\net45\Hashids.net.dll</HintPath>
+    </Reference>
     <Reference Include="IdentityServer3, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\IdentityServer3.2.5.1\lib\net45\IdentityServer3.dll</HintPath>
       <Private>True</Private>
@@ -220,6 +223,9 @@
     <Reference Include="SFA.DAS.CookieService, Version=1.0.0.27423, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.CookieService.1.0.0.27423\lib\net45\SFA.DAS.CookieService.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.HashingService, Version=1.0.0.42526, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.HashingService.1.0.0.42526\lib\net45\SFA.DAS.HashingService.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Http, Version=1.0.0.39136, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Http.1.0.0.39136\lib\net45\SFA.DAS.Http.dll</HintPath>

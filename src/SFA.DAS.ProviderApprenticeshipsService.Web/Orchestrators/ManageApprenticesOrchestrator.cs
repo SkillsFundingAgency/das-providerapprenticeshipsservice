@@ -11,6 +11,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewApprenti
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.ApprenticeshipSearch;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLocks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLockSummary;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
@@ -24,6 +25,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -161,6 +163,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 {
                     Apprenticeship = new List<Apprenticeship> { data.Apprenticeship }
                 });
+
+            var dataLocks = await _mediator.SendAsync(
+                    new GetApprenticeshipDataLocksQueryRequest
+                        {
+                            ApprenticeshipId = apprenticeshipId,
+                            ProviderId = providerId
+                        });
 
             var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
 
