@@ -303,7 +303,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (model.SendRequestToEmployer.HasValue && model.SendRequestToEmployer.Value)
             {
                 await _orchestrator.RequestRestart(model.ProviderId, model.DataLockEventId, model.HashedApprenticeshipId, CurrentUserId);
-                SetInfoMessage($"Status changed", FlashMessageSeverityLevel.Okay);
+               
             }
 
             return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
