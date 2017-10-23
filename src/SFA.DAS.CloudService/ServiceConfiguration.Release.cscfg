@@ -16,7 +16,7 @@
       <Setting name="CurrentTime" value="" />
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="WebSslCert" thumbprint="7306D453BBE292DF1283A268FD3B9B7E7815C7F5" thumbprintAlgorithm="sha1" />
+      <Certificate name="WebSslCert" thumbprint="E0112F15C27A0302B65B7A74A4C1546625E6B5DA" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
   <NetworkConfiguration>
