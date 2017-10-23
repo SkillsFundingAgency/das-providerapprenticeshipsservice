@@ -5,11 +5,12 @@
 
 @{
     ViewBag.Title = "Request restart";
+    ViewBag.PageId = "course-mismatch";
 
     var datalock = Model.DataLockSummaryViewModel.DataLockWithCourseMismatch
-        .Where(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
-        .OrderBy(x => x.IlrEffectiveFromDate)
-        .First();
+.Where(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
+.OrderBy(x => x.IlrEffectiveFromDate)
+.First();
 }
 
 
@@ -98,12 +99,10 @@
                     @Html.HiddenFor(m => datalock.DataLockEventId)
                     
 
-                    <div class="grid-row">
-                        <div class="column-one-half">
-                            <input type="submit" class="button" id="fix-mismatch" value="Continue" />
-                        </div>
-                        <div class="column-one-half">
-                            <a href="@Url.Action("Details")" aria-label="Cancel"> Cancel</a>
+                    <div class="grid-row" id="cont-cancel">
+                        <div class="column-full">
+                            <input type="submit" class="button continue" id="fix-mismatch" value="Continue" />
+                            <a href="@Url.Action("Details")" aria-label="Cancel" class="cancel"> Cancel</a>
                         </div>
                     </div>
 
