@@ -101,6 +101,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 IlrTrainingCourseName = training.Title,
                 IlrActualStartDate = dataLock.IlrActualStartDate,
                 IlrEffectiveFromDate = dataLock.IlrEffectiveFromDate,
+                IlrEffectiveToDate = dataLock.IlrEffectiveToDate,
                 IlrTotalCost = dataLock.IlrTotalCost,
                 TriageStatusViewModel = (TriageStatusViewModel)dataLock.TriageStatus,
                 DataLockErrorCode = dataLock.ErrorCode

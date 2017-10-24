@@ -237,7 +237,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (model.SubmitStatusViewModel != null && model.SubmitStatusViewModel.Value == SubmitStatusViewModel.Confirm)
             {
                 await _orchestrator.TriageMultiplePriceDataLocks(model.ProviderId, model.HashedApprenticeshipId, CurrentUserId, TriageStatus.Change);
-                SetInfoMessage($"Changes sent to employer for approval", FlashMessageSeverityLevel.Okay);
+               /// SetInfoMessage($"Changes sent to employer for approval", FlashMessageSeverityLevel.Okay);
             }
 
             return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });
@@ -303,7 +303,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (model.SendRequestToEmployer.HasValue && model.SendRequestToEmployer.Value)
             {
                 await _orchestrator.RequestRestart(model.ProviderId, model.DataLockEventId, model.HashedApprenticeshipId, CurrentUserId);
-                SetInfoMessage($"Status changed", FlashMessageSeverityLevel.Okay);
+               
             }
 
             return RedirectToAction("Details", new { model.ProviderId, model.HashedApprenticeshipId });

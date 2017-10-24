@@ -10,8 +10,7 @@
 
 <div class="grid-row list-apprentice">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">@Model.FirstName @Model.LastName</h1>
-        
+       
         @if (Model.PendingChanges == PendingChanges.ReadyForApproval)
             {
             <div class="purple-border">
@@ -25,7 +24,7 @@
                 <p>
                     There are changes to this apprentice's details that are waiting for approval by the employer.
                 </p>
-                <a href="@Url.RouteUrl("UndoApprovedApprenticeChange")" aria-label="View changes" class="">View changes</a>                
+                <a href="@Url.RouteUrl("UndoApprovedApprenticeChange")" aria-label="View changes" class="">View changes</a>
             </div>
         }
 
@@ -33,36 +32,34 @@
         {
             <div class="purple-border blue-alerts">
                 <h2 class="heading-medium">
-                    Changes requested
+                    Change request sent
                 </h2>
-                    <p>
-                        You've sent an automated message to the employer asking them to stop
-                        this apprentice and create a new record for them.
-                    </p>
-</div>
+                <p>
+                    @DataLockMessage(Model.FirstName, Model.LastName)
+                </p>
+            </div>
         }
-        
+
         @if (Model.DataLockSummaryViewModel.ShowChangesPending)
         {
             <div class="purple-border blue-alerts">
                 <h2 class="heading-medium">
-                    Changes pending
+                    Change request pending
                 </h2>
-                    <p>
-                        There are changes to this apprentice's details that are waiting for approval by the employer.
-                    </p>
-</div>
+                <p>
+                    @DataLockMessage(Model.FirstName, Model.LastName)
+                </p>
+            </div>
         }
-        
+
         @if (Model.DataLockSummaryViewModel.ShowIlrDataMismatch)
         {
             <div class="purple-border blue-alerts">
                 <h2 class="heading-medium">
-                    ILR data mismatch
+                    @Model.DataLockSummaryViewModel.DataLockSummaryTitle
                 </h2>
                 <p>
-                    This apprentice's details are different in your organisation's ILR submission.
-                    This may result in a payment failure.
+                  @DataLockMessage(Model.FirstName,Model.LastName)
                 </p>
 
                 @{
@@ -71,7 +68,7 @@
                         if (Model.DataLockSummaryViewModel.ShowCourseDataLockTriageLink && Model.DataLockSummaryViewModel.ShowPriceDataLockTriageLink)
                         {
                             <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View price mismatch</a>
-                            <br/>
+                            <br />
                             <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View course mismatch</a>
                         }
                         else
@@ -88,107 +85,109 @@
                     }
                 }
             </div>
-        }    
+        }
 
-                <table id="app-status">
-                    <thead>
-                        <tr>
-                            <th colspan="2">Apprentice status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Status</td>
-                            <td>@Model.Status</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <h1 class="heading-xlarge">@Model.FirstName @Model.LastName</h1>
 
-                <table id="overview-section">
-                    <thead>
-                        <tr>
-                            <th colspan="2">Overview</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Employer</td>
-                            <td>@Model.EmployerName</td>
-                        </tr>
-                        <tr>
-                            <td>Cohort reference</td>
-                            <td>@Model.CohortReference</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <table id="app-status">
+            <thead>
+                <tr>
+                    <th colspan="2">Apprentice status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Status</td>
+                    <td>@Model.Status</td>
+                </tr>
+            </tbody>
+        </table>
 
-                <table id="apprentice-section">
-                    <thead>
-                        <tr>
-                            <th colspan="2">
-                                Apprentice
-                                @if (Model.EnableEdit)
-                                {
-                                    <a href="@Url.RouteUrl("EditApprovedApprentice")" class="float-right">Edit apprentice</a>
-                                }
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Name</td>
-                            <td>@Model.FirstName @Model.LastName</td>
-                        </tr>                    
-                        <tr>
-                            <td>Date of birth</td>
-                            <td>
-                                @if (Model.DateOfBirth.HasValue)
-                                {
-                                    @Model.DateOfBirth.Value.ToGdsFormat()
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Unique learner number</td>
-                            <td>@Model.Uln</td>
-                        </tr>
-                        <tr>
-                            <td>Apprenticeship training course</td>
-                            <td>@Model.TrainingName</td>
-                        </tr>
-                        <tr>
-                            <td>Training start date</td>
-                            <td>
-                                @if (Model.StartDate.HasValue)
-                                {
-                                    @Model.StartDate.Value.ToGdsFormat()
-                                }
-                            </td>
+        <table id="overview-section">
+            <thead>
+                <tr>
+                    <th colspan="2">Overview</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Employer</td>
+                    <td>@Model.EmployerName</td>
+                </tr>
+                <tr>
+                    <td>Cohort reference</td>
+                    <td>@Model.CohortReference</td>
+                </tr>
+            </tbody>
+        </table>
 
-                        </tr>
-                        <tr>
-                            <td>Training end date</td>
-                            <td>
-                                @if (Model.EndDate.HasValue)
-                    {
-                                    @Model.EndDate.Value.ToGdsFormat()
-                                }
-                            </td>
+        <table id="apprentice-section">
+            <thead>
+                <tr>
+                    <th colspan="2">
+                        Apprentice
+                        @if (Model.EnableEdit)
+                        {
+                            <a href="@Url.RouteUrl("EditApprovedApprentice")" class="float-right">Edit apprentice</a>
+                        }
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Name</td>
+                    <td>@Model.FirstName @Model.LastName</td>
+                </tr>
+                <tr>
+                    <td>Date of birth</td>
+                    <td>
+                        @if (Model.DateOfBirth.HasValue)
+                        {
+                            @Model.DateOfBirth.Value.ToGdsFormat()
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>Unique learner number</td>
+                    <td>@Model.Uln</td>
+                </tr>
+                <tr>
+                    <td>Apprenticeship training course</td>
+                    <td>@Model.TrainingName</td>
+                </tr>
+                <tr>
+                    <td>Training start date</td>
+                    <td>
+                        @if (Model.StartDate.HasValue)
+                        {
+                            @Model.StartDate.Value.ToGdsFormat()
+                        }
+                    </td>
 
-                        </tr>
-                        <tr>
-                            <td>Total agreed apprenticeship price</td>
-                            <td>@FormatCost(Model.Cost) </td>
-                        </tr>
-                        <tr>
-                            <td>Reference </td>
-                            <td>@Model.ProviderReference</td>
-                        </tr>
+                </tr>
+                <tr>
+                    <td>Training end date</td>
+                    <td>
+                        @if (Model.EndDate.HasValue)
+                        {
+                            @Model.EndDate.Value.ToGdsFormat()
+                        }
+                    </td>
 
-                    </tbody>
-                </table>
+                </tr>
+                <tr>
+                    <td>Total agreed apprenticeship price</td>
+                    <td>@FormatCost(Model.Cost) </td>
+                </tr>
+                <tr>
+                    <td>Reference </td>
+                    <td>@Model.ProviderReference</td>
+                </tr>
 
-            </div>
+            </tbody>
+        </table>
+
+    </div>
     <div class="column-one-third">
         <!--
             enhancement
@@ -212,4 +211,10 @@
 
         return $"£{cost.Value:n0}";
     }
+    private string DataLockMessage(string firstName , string lastname)
+    {
+        return $"Payment for {firstName} {lastname} can't be made until this is resolved.";
+    }
+
 }
+
