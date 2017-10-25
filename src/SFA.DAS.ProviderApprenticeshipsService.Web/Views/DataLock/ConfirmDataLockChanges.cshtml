@@ -1,5 +1,4 @@
-﻿@using SFA.DAS.Commitments.Api.Types.DataLock.Types
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
 @model DataLockMismatchViewModel
 
@@ -12,9 +11,9 @@
     <div class="column-two-thirds">
         @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
-        <h1 class="heading-xlarge">Request Price change to match the ILR</h1>
+        <h1 class="heading-xlarge">Change apprentice details</h1>
 
-        <p>A request will be sent to @Model.EmployerName to approve the following changes in the apprenticeship service.</p>
+        <p>A request will be sent to @Model.EmployerName to approve the following @PluraliseString(Model.TotalChanges, "change") in the apprenticeship service.</p>
 
         <table class="app-data">
             <tbody>
@@ -35,26 +34,81 @@
 
         <br />
 
-        @{
-            var datalocks = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch
-                .OrderBy(x => x.IlrEffectiveFromDate)
-                .ToList();
+        @{ var count = 0; }
 
-            var change = 0;
-            foreach (var datalock in datalocks)
+        @foreach (var dl in Model.CourseDataLocks)
+        {
+            count++;
+            if (Model.TotalChanges > 1)
             {
-                change++;
+                <h2 class="heading-small">Change @count</h2>
+            }
 
-                var priceHistory = Model.PriceHistory
-                    .OrderByDescending(x => x.FromDate)
-                    .First(x => x.FromDate <= datalock.IlrEffectiveFromDate.Value);
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Currently</th>
+                        <th>Change to</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>From date</td>
+                        <td>
+                            @dl.ApprenticeshipStartDate.DateTime.Value.ToGdsFormat()
+                        </td>
+                        <td>@dl.IlrEffectiveFromDate.Value.Date.ToGdsFormat()</td>
+                    </tr>
+                    <tr>
+                        <td>Apprenticeship training course</td>
+                        <td>
+                            @dl.TrainingName
+                        </td>
+                        <td>@dl.IlrTrainingName</td>
+                    </tr>
+                </tbody>
+            </table>
+         }
 
-                <h2 class="heading-small">Change @change</h2>
+        @foreach (var dl in Model.PriceDataLocks)
+        {
+            count++;
+            if (Model.TotalChanges > 1)
+            {
+                <h2 class="heading-small">Change @count</h2>
+            }
+
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Currently</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Price Period</td>
+                        <td>
+                            @dl.FromDate.ToGdsFormat()
+                        </td>
+                        <td>@dl.IlrEffectiveFromDate.Value.Date.ToGdsFormat()</td>
+                    </tr>
+                    <tr>
+                        <td>Total apprenticeship training price</td>
+                        <td>
+                            @dl.Cost.FormatCost()
+                        </td>
+                        <td>@dl.IlrTotalCost.Value.FormatCost()</td>
+                    </tr>
+                </tbody>
+            </table>
+            //=======
 
 
 
-
-                <div class="grid-row">
+                @*<div class="grid-row">
                     <div class="column-one-half">
 
                         <table>
@@ -114,7 +168,8 @@
                     </div>
                 </div>
 
-               }
+               }*@
+
         }
 
     </div>
@@ -130,13 +185,13 @@
             <div class="form-group">
 
                 <fieldset>
-                    <h2 class="heading-medium">Send change request?</h2>
+                    <h2 class="heading-medium">Do you want to request @GetThisChangeText(Model.TotalChanges)?</h2>
                     <legend class="visually-hidden">How do you want to fix the mismatch?</legend>
                     <div class="form-group @Html.AddClassIfPropertyInError(x => x.SubmitStatusViewModel, "error")">
                         @Html.ValidationMessageFor(m => m.SubmitStatusViewModel, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SubmitStatusViewModel) })
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.Confirm)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new { id = RadioButtonId(SubmitStatusViewModel.Confirm) })
-                            <span>Yes, send request now</span>
+                            <span>Yes, request @GetThisChangeText(Model.TotalChanges)</span>
                         </label>
 
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
@@ -150,7 +205,7 @@
                     <div class="grid-row" id="cont-cancel">
                         <div class="column-full">
                             <input type="submit" class="button continue" id="fix-mismatch" value="Continue" />
-                            <a href="@Url.Action("Details")" aria-label="Cancel" class="cancel"> Cancel</a>
+                            <a href="@Url.Action("Details", "ManageApprentices")" aria-label="Cancel" class="cancel"> Cancel</a>
                         </div>
                     </div>
 
@@ -169,6 +224,16 @@
         return $"{Html.IdFor(m => m.SubmitStatusViewModel)}-{statusViewModel}";
     }
 
+    public string GetThisChangeText(int count)
+    {
+        return count > 1 ? "these changes" : "this change";
+    }
+
+    string PluraliseString(int errorCount, string str)
+    {
+        return errorCount > 1 ? $"{str}s" : str;
+    }
+
     public string GetPriceDetails(DateTime fromDate, DateTime? toDate)
     {
         var dateDetails = $"From {fromDate.ToGdsFormat()}";
@@ -179,11 +244,10 @@
         return dateDetails;
     }
 
-
 }
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("Details")" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
+        <a href="@Url.Action("Details", "ManageApprentices")" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
     </div>
 }

@@ -70,7 +70,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("RequestRestart")" novalidate="novalidate">
-           
+
             @Html.AntiForgeryToken()
             <div class="form-group">
                 <fieldset>
@@ -86,9 +86,9 @@
                         </label>
 
                         @*<label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr)">
-                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.UpdateDataInIlr, new { id = RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr) })
-                            <span>Update the details through the ILR instead</span>
-                        </label>*@
+                                @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.UpdateDataInIlr, new { id = RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr) })
+                                <span>Update the details through the ILR instead</span>
+                            </label>*@
 
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new { id = RadioButtonId(SubmitStatusViewModel.None) })
@@ -102,7 +102,7 @@
                     <div class="grid-row" id="cont-cancel">
                         <div class="column-full">
                             <input type="submit" class="button continue" id="fix-mismatch" value="Continue" />
-                            <a href="@Url.Action("Details")" aria-label="Cancel" class="cancel"> Cancel</a>
+                            <a href="@Url.Action("Details", "ManageApprentices")" aria-label="Cancel" class="cancel"> Cancel</a>
                         </div>
                     </div>
 
@@ -125,6 +125,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("Details")" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
+        <a href="@Url.Action("Details", "ManageApprentices")" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
     </div>
 }

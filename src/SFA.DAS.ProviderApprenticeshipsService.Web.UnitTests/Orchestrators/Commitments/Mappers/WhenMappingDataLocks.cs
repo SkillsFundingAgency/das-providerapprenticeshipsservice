@@ -58,7 +58,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             };
 
             //Act
-            var result = await _mapper.MapDataLockSummary(source);
+            var result = await _mapper.MapDataLockSummary(source, false);
 
             //Assert
             Assert.IsTrue(result.ShowChangesRequested);
@@ -78,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             };
 
             //Act
-            var result = await _mapper.MapDataLockSummary(source);
+            var result = await _mapper.MapDataLockSummary(source, false);
 
             //Assert
             Assert.IsTrue(result.ShowChangesPending);
@@ -111,7 +111,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             };
 
             //Act
-            var result = await _mapper.MapDataLockSummary(source);
+            var result = await _mapper.MapDataLockSummary(source, false);
 
             //Assert
             Assert.AreEqual(expectEnabled, result.ShowCourseDataLockTriageLink);
@@ -133,7 +133,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             };
 
             //Act
-            var result = await _mapper.MapDataLockSummary(source);
+            var result = await _mapper.MapDataLockSummary(source, false);
 
             //Assert
             Assert.AreEqual(expectEnabled, result.ShowPriceDataLockTriageLink);
