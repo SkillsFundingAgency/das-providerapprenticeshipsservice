@@ -1,0 +1,181 @@
+﻿@using SFA.DAS.Commitments.Api.Types.Apprenticeship
+@using SFA.DAS.Commitments.Api.Types.DataLock.Types
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
+@model DataLockMismatchViewModel
+            
+@{
+    ViewBag.Title = "Apprenticeship data mismatch";
+    ViewBag.PageID = "datalock-details-change";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        
+        @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+
+        <h1 class="heading-xlarge"> Price mismatch</h1>
+        <p>
+            @{
+                var details = $"Payment for {Model.DasApprenticeship.FirstName} {Model.DasApprenticeship.LastName} can't be made until the price in the ILR submission matches the price in the apprenticeship service.";
+                @details
+            }
+        </p>
+
+        <br />
+
+        <table class="app-data">
+            <tr>
+                <td class="first-child">Name</td>
+                <td class="first-child">@Model.DasApprenticeship.FirstName @Model.DasApprenticeship.LastName</td>
+            </tr>
+            <tr>
+                <td>Unique learner number</td>
+                <td>@Model.DasApprenticeship.ULN</td>
+            </tr>
+            <tr>
+                <td>Apprenticeship training course</td>
+                <td>@Model.DasApprenticeship.TrainingName</td>
+            </tr>
+        </table>
+        
+        <br />
+
+        <div class="funding-cap-notification" id="yyuyu6778">
+            <p class="heading-small">
+                Price Mismatch
+            </p>
+            <p>
+                Payments can't be made until this is resolved. 
+            </p>
+        </div>
+        
+        @{
+            var datalocks = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch
+                .OrderBy(x => x.IlrEffectiveFromDate)
+                .ToList();
+
+            //Get corresponding price history
+            var priceHistories = new List<PriceHistoryViewModel>();
+
+            foreach (var datalock in datalocks)
+            {
+                var priceHistory = Model.PriceHistory
+                    .OrderByDescending(x => x.FromDate)
+                    .First(x => x.FromDate <= datalock.IlrEffectiveFromDate.Value);
+
+                priceHistories.Add(priceHistory);
+            }
+        }
+   
+        <div class="grid-row">
+            <div class="column-one-half">
+
+                <table class="app-data">
+                    <caption class="heading-small">Apprenticeship service</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col" class="first-child">Price<br/> Period</th>
+                            <th class="numeric first-child" scope="col">Total <br />apprenticeship training price</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    
+                        @foreach (var priceHistory in priceHistories)
+                        {
+                            <tr>
+                                <td scope="row">From @priceHistory.FromDate.ToGdsFormat()</td>
+                                <td class="numeric funding-cap-alert">@priceHistory.Cost.FormatCost()</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="column-one-half">
+                <table class="app-data ILR-submission">
+                    <caption class="heading-small">ILR submission</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col" class="first-child">Price <br/>Period</th>
+                            <th class="numeric first-child" scope="col">Total<br/> apprenticeship training price</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    
+                        @foreach (var datalock in datalocks)
+                        {
+                            var priceDateChange = $"From {datalock.IlrEffectiveFromDate.Value.ToGdsFormat()}";
+
+                            if (datalock.IlrEffectiveToDate.HasValue)
+                            {
+                                priceDateChange = $"{datalock.IlrEffectiveFromDate.Value.ToGdsFormat()} to {datalock.IlrEffectiveToDate.Value.ToGdsFormat()}";
+                            }
+
+
+                            <tr>
+                                <td scope="row">@priceDateChange</td>
+                                <td class="numeric funding-cap-alert">@datalock.IlrTotalCost.FormatCost()</td>
+                            </tr>
+                        }
+                   
+                    </tbody>
+                </table>
+
+            </div>
+        </div> 
+     </div>
+</div>
+
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <form method="POST" action="@Url.Action("UpdateDataLock")" novalidate="novalidate">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <fieldset>
+                    <h2 class="heading-medium">How do you want to fix the mismatch?</h2>
+                    <legend class="visually-hidden">How do you want to fix the mismatch?</legend>
+                    <div class="form-group @Html.AddClassIfPropertyInError(x => x.SubmitStatusViewModel, "error")">
+                        @Html.ValidationMessageFor(m => m.SubmitStatusViewModel, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SubmitStatusViewModel) })
+                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.Confirm)">
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new {id = RadioButtonId(SubmitStatusViewModel.Confirm)})
+                            <span>Change apprenticeship service records to match the ILR</span>
+                        </label>
+
+                        <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
+                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new {id = RadioButtonId(SubmitStatusViewModel.None)})
+                            <span>I'll update the ILR later</span>
+                        </label>
+                    </div>
+                    
+                    <div class="grid-row" id="cont-cancel">
+                        <div class="column-full">
+                            <input type="submit" class="button continue" id="fix-mismatch" value="Continue" />
+                            <a href="@Url.Action("Details")" aria-label="Cancel" class="cancel"> Cancel</a>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@functions
+{
+    public string RadioButtonId(SubmitStatusViewModel statusViewModel)
+    {
+        return $"{Html.IdFor(m => m.SubmitStatusViewModel)}-{statusViewModel}";
+    }
+}
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Details")" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
+    </div>
+}

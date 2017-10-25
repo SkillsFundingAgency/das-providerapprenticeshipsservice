@@ -24,7 +24,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
         public DateTime? IlrActualStartDate { get; set; }
 
         public DateTime? IlrEffectiveFromDate { get; set; }
-
+        public DateTime? IlrEffectiveToDate { get; set; }
+                
         public decimal? IlrTotalCost { get; set; }
 
         public TriageStatusViewModel TriageStatusViewModel { get; set; }

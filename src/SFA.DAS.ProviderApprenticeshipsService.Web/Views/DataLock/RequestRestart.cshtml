@@ -5,11 +5,12 @@
 
 @{
     ViewBag.Title = "Request restart";
+    ViewBag.PageId = "course-mismatch";
 
     var datalock = Model.DataLockSummaryViewModel.DataLockWithCourseMismatch
-        .Where(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
-        .OrderBy(x => x.IlrEffectiveFromDate)
-        .First();
+.Where(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
+.OrderBy(x => x.IlrEffectiveFromDate)
+.First();
 }
 
 
@@ -17,36 +18,48 @@
     <div class="column-two-thirds">
         @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
-        <h1 class="heading-xlarge">Details of ILR data mismatch</h1>
+        <h1 class="heading-xlarge">Course mismatch</h1>
 
         <p>Details for this apprentice are different in your organisation's ILR submission. </p>
+
+        <table class="app-data">
+            <tbody>
+                <tr>
+                    <td class="first-child">Name</td>
+                    <td class="first-child"> @Model.DasApprenticeship.FirstName @Model.DasApprenticeship.LastName</td>
+                </tr>
+                <tr>
+                    <td>Unique learner number</td>
+                    <td>@Model.DasApprenticeship.ULN</td>
+                </tr>
+            </tbody>
+        </table>
 
 
         <table class="edited-changes">
             <thead>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Period</th>
-                    <th scope="col">Apprenticeship service</th>
-                    <th scope="col">ILR submission</th>
-                </tr>
+            <tr>
+                <th scope="col">Period</th>
+                <th scope="col">Apprenticeship service</th>
+                <th scope="col">ILR submission</th>
+            </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Apprenticeship training course</td>
-                    <td>
-                        @if (datalock.IlrEffectiveFromDate.HasValue)
-                        {
-                            @datalock.IlrEffectiveFromDate.Value.ToGdsFormat()
-                        }
-                        else
-                        {
-                            <span>--</span>
-                        }
-                    </td>
-                    <td>@Model.DasApprenticeship.TrainingName </td>
-                    <td>@datalock.IlrTrainingCourseName </td>
-                </tr>
+            <tr>
+                <td>
+                    @if (datalock.IlrEffectiveFromDate.HasValue)
+                    {
+                        var dateDetails = $"From {datalock.IlrEffectiveFromDate.Value.ToGdsFormat()} onwards";
+                       @dateDetails
+                    }
+                    else
+                    {
+                        <span>--</span>
+                    }
+                </td>
+                <td>@Model.DasApprenticeship.TrainingName </td>
+                <td>@datalock.IlrTrainingCourseName </td>
+            </tr>
 
             </tbody>
         </table>
@@ -68,7 +81,7 @@
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.Confirm)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new { id = RadioButtonId(SubmitStatusViewModel.Confirm) })
                             <span>
-                                Ask the employer to fix the mismatch
+                                Change apprenticeship service records to match the ILR
                             </span>
                         </label>
 
@@ -79,12 +92,20 @@
 
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new { id = RadioButtonId(SubmitStatusViewModel.None) })
-                            <span>Leave for now</span>
+                            <span> I'll update the ILR later </span>
                         </label>
 
                     </div>
                     @Html.HiddenFor(m => datalock.DataLockEventId)
-                    <input type="submit" class="button" id="fix-mismatch" value="Continue" />
+                    
+
+                    <div class="grid-row" id="cont-cancel">
+                        <div class="column-full">
+                            <input type="submit" class="button continue" id="fix-mismatch" value="Continue" />
+                            <a href="@Url.Action("Details", "ManageApprentices")" aria-label="Cancel" class="cancel"> Cancel</a>
+                        </div>
+                    </div>
+
                 </fieldset>
             </div>
         </form>

@@ -15,6 +15,25 @@
 
         <p>A request will be sent to @Model.EmployerName to approve the following @PluraliseString(Model.TotalChanges, "change") in the apprenticeship service.</p>
 
+        <table class="app-data">
+            <tbody>
+                <tr>
+                    <td class="first-child">Name</td>
+                    <td class="first-child"> @Model.DasApprenticeship.FirstName @Model.DasApprenticeship.LastName</td>
+                </tr>
+                <tr>
+                    <td>Unique learner number</td>
+                    <td>@Model.DasApprenticeship.ULN</td>
+                </tr>
+                <tr>
+                    <td>Apprenticeship training course</td>
+                    <td>@Model.DasApprenticeship.TrainingName</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br />
+
         @{ var count = 0; }
 
         @foreach (var dl in Model.CourseDataLocks)
@@ -65,12 +84,12 @@
                     <tr>
                         <th></th>
                         <th>Currently</th>
-                        <th>Change to</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>From date</td>
+                        <td>Price Period</td>
                         <td>
                             @dl.FromDate.ToGdsFormat()
                         </td>
@@ -85,6 +104,72 @@
                     </tr>
                 </tbody>
             </table>
+            //=======
+
+
+
+                @*<div class="grid-row">
+                    <div class="column-one-half">
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Currently</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Price Period</td>
+                                    <td>
+                                        @{
+                                            if (priceHistory != null)
+                                            {
+                                                <span>From @priceHistory.FromDate.Date.ToGdsFormat()</span>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Total apprenticeship training price</td>
+                                    <td>
+                                        @{
+                                            if (priceHistory != null)
+                                            {
+                                                <span>@priceHistory.Cost.FormatCost()</span>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="column-one-half">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Change to</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Price Period</td>
+                                    <td>@GetPriceDetails(datalock.IlrEffectiveFromDate.Value, datalock.IlrEffectiveToDate)</td>
+                                </tr>
+                                <tr>
+                                    <td>Total apprenticeship training price</td>
+                                    <td>@datalock.IlrTotalCost.FormatCost()</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+               }*@
+
         }
 
     </div>
@@ -111,12 +196,19 @@
 
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new { id = RadioButtonId(SubmitStatusViewModel.None) })
-                            <span>No, leave for now</span>
+                            <span>No, don't send</span>
                         </label>
                     </div>
 
                     @*@Html.HiddenFor(m => m.DataLockEventId)*@
-                    <input type="submit" class="button" id="fix-mismatch" value="Finish" />
+
+                    <div class="grid-row" id="cont-cancel">
+                        <div class="column-full">
+                            <input type="submit" class="button continue" id="fix-mismatch" value="Continue" />
+                            <a href="@Url.Action("Details", "ManageApprentices")" aria-label="Cancel" class="cancel"> Cancel</a>
+                        </div>
+                    </div>
+
                 </fieldset>
             </div>
         </form>
@@ -140,6 +232,16 @@
     string PluraliseString(int errorCount, string str)
     {
         return errorCount > 1 ? $"{str}s" : str;
+    }
+
+    public string GetPriceDetails(DateTime fromDate, DateTime? toDate)
+    {
+        var dateDetails = $"From {fromDate.ToGdsFormat()}";
+        if (toDate.HasValue)
+        {
+            dateDetails = $"{fromDate.ToGdsFormat()} to {toDate.Value.ToGdsFormat()}";
+        }
+        return dateDetails;
     }
 
 }

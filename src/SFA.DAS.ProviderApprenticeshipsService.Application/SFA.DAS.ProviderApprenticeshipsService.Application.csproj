@@ -157,9 +157,6 @@
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryResponse.cs" />
     <Compile Include="Queries\GetAccountUsers\GetAccountUsersHandler.cs" />
     <Compile Include="Queries\GetAccountUsers\GetAccountUsersResponse.cs" />
-    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLockSummaryQueryHandler.cs" />
-    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLockQueryRequest.cs" />
-    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLocksQueryResponse.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLockSummary\GetApprenticeshipDataLockSummaryQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLockSummary\GetApprenticeshipDataLockSummaryQueryRequest.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLockSummary\GetApprenticeshipDataLockSummaryQueryResponse.cs" />
@@ -177,6 +174,9 @@
     <Compile Include="Queries\GetAgreement\GetProviderAgreementQueryHandler.cs" />
     <Compile Include="Queries\GetAgreement\GetProviderAgreementQueryRequest.cs" />
     <Compile Include="Queries\GetAgreement\GetProviderAgreementQueryResponse.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLockQueryRequest.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLocksQueryResponse.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLockSummaryQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeshipPriceHistory\GetApprenticeshipPriceHistoryQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeshipPriceHistory\GetApprenticeshipPriceHistoryQueryRequest.cs" />
     <Compile Include="Queries\GetApprenticeshipPriceHistory\GetApprenticeshipPriceHistoryQueryResponse.cs" />

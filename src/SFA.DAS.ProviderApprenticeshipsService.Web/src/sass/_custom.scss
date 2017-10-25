@@ -711,7 +711,7 @@ width: 100%;
 
 
 //Datalock styles
-#datalock-details-change{
+#datalock-details-change,#course-mismatch{
   table.app-data{
      caption{
          text-align:left;
@@ -941,6 +941,15 @@ width: 100%;
       }
 }
 
+#cont-cancel{
+    .continue{
+        float:left;
+    }
+    .cancel{
+        float:left;
+        margin: 10px 0 0 30px;
+    }
+}
 
 //all mobile media query breakpoints
 @media only screen and (max-device-width: 640px),
