@@ -84,16 +84,16 @@
                     <tr>
                         <th></th>
                         <th>Currently</th>
-                        <th></th>
+                        <th>Change to</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Price Period</td>
+                        <td>Price period</td>
                         <td>
                             @dl.FromDate.ToGdsFormat()
                         </td>
-                        <td>@dl.IlrEffectiveFromDate.Value.Date.ToGdsFormat()</td>
+                        <td>@GetPriceDetails(dl.IlrEffectiveFromDate.Value, dl.IlrEffectiveToDate)</td>
                     </tr>
                     <tr>
                         <td>Total apprenticeship training price</td>
@@ -104,74 +104,7 @@
                     </tr>
                 </tbody>
             </table>
-            //=======
-
-
-
-                @*<div class="grid-row">
-                    <div class="column-one-half">
-
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Currently</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Price Period</td>
-                                    <td>
-                                        @{
-                                            if (priceHistory != null)
-                                            {
-                                                <span>From @priceHistory.FromDate.Date.ToGdsFormat()</span>
-                                            }
-                                        }
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Total apprenticeship training price</td>
-                                    <td>
-                                        @{
-                                            if (priceHistory != null)
-                                            {
-                                                <span>@priceHistory.Cost.FormatCost()</span>
-                                            }
-                                        }
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="column-one-half">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Change to</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Price Period</td>
-                                    <td>@GetPriceDetails(datalock.IlrEffectiveFromDate.Value, datalock.IlrEffectiveToDate)</td>
-                                </tr>
-                                <tr>
-                                    <td>Total apprenticeship training price</td>
-                                    <td>@datalock.IlrTotalCost.FormatCost()</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                    </div>
-                </div>
-
-               }*@
-
         }
-
     </div>
 </div>
 
@@ -196,15 +129,13 @@
 
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new { id = RadioButtonId(SubmitStatusViewModel.None) })
-                            <span>No, don't send</span>
+                            <span>No, leave for now</span>
                         </label>
                     </div>
 
-                    @*@Html.HiddenFor(m => m.DataLockEventId)*@
-
                     <div class="grid-row" id="cont-cancel">
                         <div class="column-full">
-                            <input type="submit" class="button continue" id="fix-mismatch" value="Continue" />
+                            <input type="submit" class="button continue" id="fix-mismatch" value="Finish" />
                             <a href="@Url.Action("Details", "ManageApprentices")" aria-label="Cancel" class="cancel"> Cancel</a>
                         </div>
                     </div>

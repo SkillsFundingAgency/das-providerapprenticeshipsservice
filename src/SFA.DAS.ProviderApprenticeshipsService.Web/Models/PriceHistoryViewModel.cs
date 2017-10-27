@@ -14,6 +14,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public DateTime? IlrEffectiveFromDate { get; set; }
 
+        public DateTime? IlrEffectiveToDate { get; set; }
+
         public decimal? IlrTotalCost { get; set; }
+
     }
 }

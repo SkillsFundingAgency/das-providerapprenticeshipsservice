@@ -65,6 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                             .OrderByDescending(x => x.FromDate)
                             .First(x => x.FromDate <= datalock.IlrEffectiveFromDate.Value);
                         s.IlrEffectiveFromDate = datalock.IlrEffectiveFromDate;
+                        s.IlrEffectiveToDate = datalock.IlrEffectiveToDate;
                         s.IlrTotalCost = datalock.IlrTotalCost;
                         return s;
                     }
