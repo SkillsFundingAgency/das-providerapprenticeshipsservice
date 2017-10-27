@@ -39,12 +39,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             Logger.Info("Starting up");
         }
 
-        //protected void Application_BeginRequest(object sender, EventArgs e)
-        //{
-        //    var application = sender as HttpApplication;
-        //    application?.Context?.Response.Headers.Remove("Server");
-        //}
-
         protected void Application_Error(object sender, EventArgs e)
         {
             var ex = Server.GetLastError().GetBaseException();
@@ -79,16 +73,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
         {
-            var headersToRemove = new string[] {
-                "X-Powered-By",
-                "X-AspNet-Version",
-                "X-AspNetMvc-Version",
-                "Server"
-            };
-            foreach (var s in headersToRemove)
-            {
-                HttpContext.Current.Response.Headers.Remove(s);
-            }
+            //TODO: Add to defaultRegistry adnd resolve, or, instantiate locally
+            //var  httpContextPolicyProvider = DependencyResolver.Current.GetService<HttpContextPolicyProvider>()
+            //var httpContextPolicyProvider = new HttpContextPolicyProvider(new List<IHttpContextPolicy>()
+            //{
+            //    new ResponseHeaderRestrictionPolicy()
+            //});
+            //httpContextPolicyProvider.Apply(
+            //    new System.Web.HttpContextWrapper(HttpContext.Current), PolicyConcerns.HttpResponse);
         }
     }
 }
