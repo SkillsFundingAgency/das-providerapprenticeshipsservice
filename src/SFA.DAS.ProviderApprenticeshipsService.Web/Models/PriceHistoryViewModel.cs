@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
@@ -14,5 +11,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public DateTime FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }
+
+        public DateTime? IlrEffectiveFromDate { get; set; }
+
+        public DateTime? IlrEffectiveToDate { get; set; }
+
+        public decimal? IlrTotalCost { get; set; }
+
     }
 }

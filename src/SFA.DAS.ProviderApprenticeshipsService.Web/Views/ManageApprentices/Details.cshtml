@@ -62,28 +62,37 @@
                   @DataLockMessage(Model.FirstName,Model.LastName)
                 </p>
 
-                @{
-                    if (Model.PendingChanges == PendingChanges.None && !Model.DataLockSummaryViewModel.ShowChangesPending && !Model.DataLockSummaryViewModel.ShowChangesRequested)
-                    {
-                        if (Model.DataLockSummaryViewModel.ShowCourseDataLockTriageLink && Model.DataLockSummaryViewModel.ShowPriceDataLockTriageLink)
+                @if (Model.PendingChanges == PendingChanges.None && !Model.DataLockSummaryViewModel.AnyTriagedDatalocks)
+                {
+                    <ul>
+                        @if (Model.DataLockSummaryViewModel.ShowCourseDataLockTriageLink)
                         {
-                            <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View price mismatch</a>
-                            <br />
-                            <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View course mismatch</a>
+                            if (Model.HasHadDataLockSuccess)
+                            {
+                                var linkText = Model.DataLockSummaryViewModel.ShowPriceDataLockTriageLink ? "View course mismatch" : "View details";
+                                <li>
+                                    <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">@linkText</a>
+                                </li>
+                            }
+
+                            if (Model.DataLockSummaryViewModel.ShowPriceDataLockTriageLink)
+                            {
+                                var linkText = Model.HasHadDataLockSuccess ? "View price mismatch" : "View details";
+                                <li>
+                                    <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">@linkText</a>
+                                </li>
+                            }
                         }
                         else
                         {
-                            if (Model.DataLockSummaryViewModel.ShowCourseDataLockTriageLink)
-                            {
-                                <a href="@Url.RouteUrl("RequestRestart")" aria-label="View details" class="">View details</a>
-                            }
-                            else if (Model.DataLockSummaryViewModel.ShowPriceDataLockTriageLink)
-                            {
+                            @* Only Price DataLock **@
+                            <li>
                                 <a href="@Url.RouteUrl("UpdateDataLock")" aria-label="View details" class="">View details</a>
-                            }
+                            </li>
                         }
-                    }
+                    </ul>
                 }
+
             </div>
         }
 

@@ -77,11 +77,13 @@
       <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=2.0.0.43313, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.2.0.0.43313\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=2.0.0.43512, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.2.0.0.43512\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.0.0.43313, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.0.0.43313\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.0.0.43512, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.0.0.43512\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.HashingService, Version=1.0.0.42526, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.HashingService.1.0.0.42526\lib\net45\SFA.DAS.HashingService.dll</HintPath>
@@ -132,7 +134,7 @@
     <Compile Include="Orchestrators\Commitments\WhenGettingDeleteApprenticeshipConfirmation.cs" />
     <Compile Include="Orchestrators\Commitments\WhenDeletingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGetCohorts.cs" />
-    <Compile Include="Orchestrators\ManageApprentices\WhenGettingApprenticeshipDataLockMismatches.cs" />
+    <Compile Include="Orchestrators\DataLock\WhenGettingApprenticeshipDataLockMismatches.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenGettingApprenticeships.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenGettingReviewApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenGettingUndoApprenticeshipUpdate.cs" />

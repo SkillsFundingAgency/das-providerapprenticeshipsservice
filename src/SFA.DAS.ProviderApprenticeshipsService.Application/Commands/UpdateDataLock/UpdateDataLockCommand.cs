@@ -6,7 +6,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateData
 {
     public sealed class UpdateDataLockCommand : IAsyncRequest
     {
-        public long DataLockEventId { get; set; }
         public long ApprenticeshipId { get; set; }
         public TriageStatus TriageStatus { get; set; }
         public string UserId { get; set; }

@@ -308,10 +308,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 Alerts = MapAlerts(apprenticeship),
                 CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
                 ProviderReference = apprenticeship.ProviderRef,
+                HasHadDataLockSuccess = apprenticeship.HasHadDataLockSuccess,
                 EnableEdit = pendingChange == PendingChanges.None
                             && !apprenticeship.DataLockCourse
                             && !apprenticeship.DataLockPrice
                             && !apprenticeship.DataLockCourseTriaged
+                            && !apprenticeship.DataLockCourseChangeTriaged
                             && !apprenticeship.DataLockPriceTriaged
                             && new[] { PaymentStatus.Active, PaymentStatus.Paused, }.Contains(apprenticeship.PaymentStatus)
             };
@@ -420,24 +422,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         {
             return (item.HasValue) ? string.Format("{0:#}", item.Value) : "";
         }
-
-        public List<PriceHistoryViewModel> MapPriceHistory(List<PriceHistory> priceHistory)
-        {
-            var result = new List<PriceHistoryViewModel>();
-
-            foreach (var history in priceHistory)
-            {
-                result.Add(new PriceHistoryViewModel
-                {
-                    ApprenticeshipId = history.ApprenticeshipId,
-                    Cost = history.Cost,
-                    FromDate = history.FromDate,
-                    ToDate = history.ToDate
-                });
-            }
-
-            return result;
-        }
-
     }
 }
