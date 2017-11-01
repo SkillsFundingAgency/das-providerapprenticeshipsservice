@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
+
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
 {
     public class DataLockSummaryViewModel
@@ -27,25 +29,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
                 if (ShowIlrDataMismatch)
                 {
                     summary = "ILR data mismatch";
+                    var courseAndPriceDataLockInOneDataLock = DataLockWithCourseMismatch?.Any(m => m.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock07) ) ?? false;
+                    var courseAndPriceIn2DataLocks =    
+                           (DataLockWithOnlyPriceMismatch?.Any() ?? false)
+                        && (DataLockWithCourseMismatch?.Any()    ?? false);
 
-                    
-                    if ((DataLockWithOnlyPriceMismatch != null && DataLockWithOnlyPriceMismatch.Any()) &&
-                            (DataLockWithCourseMismatch != null && DataLockWithCourseMismatch.Any()))
+                    if (courseAndPriceIn2DataLocks || courseAndPriceDataLockInOneDataLock)
                     {
                         summary = "Price and course mismatch";
                     }
-                    else if (DataLockWithOnlyPriceMismatch != null && DataLockWithOnlyPriceMismatch.Any())
+                    else if (DataLockWithOnlyPriceMismatch?.Any() ?? false)
                     {
                         summary = "Price mismatch";
                     }
-                    else if (DataLockWithCourseMismatch != null && DataLockWithCourseMismatch.Any())
+                    else if (DataLockWithCourseMismatch?.Any() ?? false)
                     {
                         summary = "Course mismatch";
                     }
                 }
 
                 return summary;
-
             }
         }
     }
