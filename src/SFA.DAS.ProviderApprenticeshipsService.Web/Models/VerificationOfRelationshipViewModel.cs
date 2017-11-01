@@ -12,7 +12,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string LegalEntityId { get; set; }
         public string LegalEntityName { get; set; }
         public string LegalEntityAddress { get; set; }
-        public OrganisationType LegalEntityOrganisationType { get; set; }
+        public SFA.DAS.Common.Domain.Types.OrganisationType LegalEntityOrganisationType { get; set; }
         public bool? OrganisationIsSameOrConnected { get; set; }
     }
 }
