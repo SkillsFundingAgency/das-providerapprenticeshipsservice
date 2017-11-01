@@ -328,7 +328,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 result.Add("ILR data mismatch");
             }
 
-            if (apprenticeship.DataLockPriceTriaged)
+            if (apprenticeship.DataLockPriceTriaged || apprenticeship.DataLockCourseChangeTriaged)
             {
                 result.Add("Changes pending");
             }

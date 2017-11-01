@@ -116,6 +116,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
             result.ShowChangesPending =
                 result.DataLockWithOnlyPriceMismatch.Any(
+                    x => x.TriageStatusViewModel == TriageStatusViewModel.ChangeApprenticeship)
+                ||
+                    result.DataLockWithCourseMismatch.Any(
                     x => x.TriageStatusViewModel == TriageStatusViewModel.ChangeApprenticeship);
 
             //Can triage a course datalock if there is one that has not been triaged, and if there isn't one that
