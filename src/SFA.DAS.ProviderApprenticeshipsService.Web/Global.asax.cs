@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Helpers;
@@ -13,6 +14,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 using System.Linq;
 using System.Net;
 using SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution;
+using SFA.DAS.Web.Policy;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
@@ -73,14 +75,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
         {
-            //TODO: Add to defaultRegistry adnd resolve, or, instantiate locally
-            //var  httpContextPolicyProvider = DependencyResolver.Current.GetService<HttpContextPolicyProvider>()
-            //var httpContextPolicyProvider = new HttpContextPolicyProvider(new List<IHttpContextPolicy>()
-            //{
-            //    new ResponseHeaderRestrictionPolicy()
-            //});
-            //httpContextPolicyProvider.Apply(
-            //    new System.Web.HttpContextWrapper(HttpContext.Current), PolicyConcerns.HttpResponse);
+            new HttpContextPolicyProvider(
+                new List<IHttpContextPolicy>()
+                {
+                    new ResponseHeaderRestrictionPolicy()
+                }
+            ).Apply(new HttpContextWrapper(HttpContext.Current), PolicyConcern.HttpResponse);
         }
     }
 }
