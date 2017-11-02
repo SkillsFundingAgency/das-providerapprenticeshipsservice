@@ -2682,6 +2682,10 @@ span.helpText {
   margin-bottom: 10px;
 }
 
+#content .green-box-alert .remove-space {
+  margin-top: 0;
+}
+
 #content .flash-alert {
   border-color: #28a197;
 }

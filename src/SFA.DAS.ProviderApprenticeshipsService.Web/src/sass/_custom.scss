@@ -99,6 +99,9 @@
           font-weight:bold;
           margin-bottom:10px;
       }
+      .remove-space{
+        margin-top:0;
+    }
       
   }
    .flash-alert{
@@ -952,11 +955,6 @@ width: 100%;
     }
 }
 
-#content{
-    .remove-space{
-        margin-top:0;
-    }
-}
 
 
 //all mobile media query breakpoints
