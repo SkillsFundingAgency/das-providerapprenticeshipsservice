@@ -41,6 +41,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         //todo: this is not used in the manage apprentices list, so maybe create a new 
         //viewmodel for that page?
         public DataLockSummaryViewModel DataLockSummaryViewModel { get; set; }
+
+        public bool HasHadDataLockSuccess { get; set; }
     }
 
     public enum DataLockErrorType

@@ -49,6 +49,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public bool HasStarted { get; set; }
 
-        public bool IsInFirstCalendarMonthOfTraining { get; set; }
+        public bool IsLockedForUpdate { get; set; }
     }
 }

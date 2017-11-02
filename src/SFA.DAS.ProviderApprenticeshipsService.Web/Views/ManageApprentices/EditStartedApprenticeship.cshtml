@@ -52,11 +52,33 @@
         </span>
     </div>
 
-    <div class="form-group">
-        <hr />
-        <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
-        <span>@Model.TrainingName</span>
-    </div>
+    @if (Model.IsLockedForUpdate)
+    {
+        <div class="form-group">
+            <hr/>
+            <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
+            <span>@Model.TrainingName</span>
+        </div>
+        @Html.HiddenFor(m => m.TrainingCode)
+    }
+    else
+    {
+        <div class="form-group @Html.AddClassIfPropertyInError(x => x.TrainingCode, "error")">
+            <hr />
+            <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
+            <span class="form-hint">Start typing in the name of the course or choose an option from the list</span>
+            @Html.ValidationMessageFor(m => m.TrainingCode, "Choose a training course for this apprentice", new { id = "error-message-" + Html.IdFor(m => m.TrainingCode), @class = "error-message" })
+            <select name="TrainingCode" id="TrainingCode" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
+                <option value="">Please select</option>
+                @foreach (var programme in ViewBag.ApprenticeshipProgrammes)
+                {
+                    <option value="@programme.Id" @if (programme.Id.ToString() == Model.TrainingCode) { @Html.Raw("selected") }>
+                        @programme.Title
+                    </option>
+                }
+            </select>
+        </div>
+    }
 
     <div class="form-error-group form-group">
         <hr />
@@ -73,25 +95,7 @@
 
     <div class="form-group @Html.AddClassIfPropertyInError(x => x.Cost, "error")">
         <hr />
-        @if (Model.IsInFirstCalendarMonthOfTraining)
-        {
-            <label for="@Html.IdFor(m => m.Cost)">
-                <span class="form-label-bold">Total agreed apprenticeship price (excluding VAT)</span>
-                <span class="form-hint">Enter the price, including any end-point assessment costs, in whole pounds. For example, for £1,500 enter 1500.</span>
-                @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
-            </label>
-            <span class="heading-small">£ </span>
-            @Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby = Html.IdFor(m => m.Cost), maxlength = "7" })
-            <div class="approve-alert">
-                <div class="panel panel-border-wide alert-blue">
-                    You can update the total agreed apprenticeship price until <strong>@Model.StartDate.DateTime.Value.GetLastDayOfMonthDate().ToGdsFormat()</strong>
-                    - after this date you'll need to make any changes through your ILR submission instead.
-                </div>
-            </div>
-            <hr />
-
-        }
-        else
+        @if (Model.IsLockedForUpdate)
         {
             <label for="@Html.IdFor(m => m.Cost)">
                 <span class="form-label-bold">Total agreed apprenticeship price (excluding VAT)</span>
@@ -105,6 +109,17 @@
                     submission first. Once you've submitted your updated ILR, you'll see an option to update the price in the apprenticeship service.
                 </div>
             </div>
+            <hr/>
+        }
+        else
+        {
+            <label for="@Html.IdFor(m => m.Cost)">
+                <span class="form-label-bold">Total agreed apprenticeship price (excluding VAT)</span>
+                <span class="form-hint">Enter the price, including any end-point assessment costs, in whole pounds. For example, for £1,500 enter 1500.</span>
+                @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
+            </label>
+            <span class="heading-small">£ </span>
+            @Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby = Html.IdFor(m => m.Cost), maxlength = "7" })
             <hr />
         }
     </div>
@@ -118,7 +133,6 @@
     </div>
 </div>
 @Html.HiddenFor(m => m.ULN)
-@Html.HiddenFor(m => m.TrainingCode)
 @Html.HiddenFor(m => m.TrainingType)
 @Html.HiddenFor(m => m.TrainingName)
 @Html.HiddenFor(m => m.HasStarted)

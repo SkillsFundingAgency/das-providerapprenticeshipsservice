@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.Ajax.Utilities;
+
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
-using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
@@ -19,6 +18,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+using SFA.DAS.NLog.Logger;
+
 using TrainingType = SFA.DAS.ProviderApprenticeshipsService.Domain.TrainingType;
 using TriageStatus = SFA.DAS.Commitments.Api.Types.DataLock.Types.TriageStatus;
 using CommitmentTrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
@@ -33,8 +34,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly ILog _logger;
+        private readonly IAcademicYearValidator _academicYearValidator;
 
-        public ApprenticeshipMapper(IHashingService hashingService, IMediator mediator, ICurrentDateTime currentDateTime, ILog logger)
+        public ApprenticeshipMapper(
+            IHashingService hashingService, 
+            IMediator mediator, 
+            ICurrentDateTime currentDateTime, 
+            ILog logger,
+            IAcademicYearValidator academicYearValidator)
         {
             if (hashingService == null)
                 throw new ArgumentNullException(nameof(hashingService));
@@ -42,17 +49,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 throw new ArgumentNullException(nameof(mediator));
             if (currentDateTime == null)
                 throw new ArgumentNullException(nameof(currentDateTime));
+            if (academicYearValidator == null)
+                throw new ArgumentNullException(nameof(academicYearValidator));
 
             _hashingService = hashingService;
             _mediator = mediator;
             _currentDateTime = currentDateTime;
             _logger = logger;
+            _academicYearValidator = academicYearValidator;
         }
 
         public ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship)
         {
             var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
                                       new DateTime(_currentDateTime.Now.Year, _currentDateTime.Now.Month, 1);
+
+            var isLockedForUpdate = apprenticeship.HasHadDataLockSuccess;
+
+            if (_academicYearValidator.IsAfterLastAcademicYearFundingPeriod &&
+                 apprenticeship.StartDate.HasValue &&
+                 _academicYearValidator.Validate(apprenticeship.StartDate.Value) == AcademicYearValidationResult.NotWithinFundingPeriod)
+            {
+                isLockedForUpdate = true;
+            }
 
             var dateOfBirth = apprenticeship.DateOfBirth;
             return new ApprenticeshipViewModel
@@ -75,7 +94,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 ProviderRef = apprenticeship.ProviderRef,
                 EmployerRef = apprenticeship.EmployerRef,
                 HasStarted = !isStartDateInFuture,
-                IsInFirstCalendarMonthOfTraining = CalculateIfInFirstCalendarMonthOfTraining(apprenticeship.StartDate)
+                IsLockedForUpdate = isLockedForUpdate
             };
         }
 
@@ -289,10 +308,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 Alerts = MapAlerts(apprenticeship),
                 CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
                 ProviderReference = apprenticeship.ProviderRef,
+                HasHadDataLockSuccess = apprenticeship.HasHadDataLockSuccess,
                 EnableEdit = pendingChange == PendingChanges.None
                             && !apprenticeship.DataLockCourse
                             && !apprenticeship.DataLockPrice
                             && !apprenticeship.DataLockCourseTriaged
+                            && !apprenticeship.DataLockCourseChangeTriaged
                             && !apprenticeship.DataLockPriceTriaged
                             && new[] { PaymentStatus.Active, PaymentStatus.Paused, }.Contains(apprenticeship.PaymentStatus)
             };
@@ -307,7 +328,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 result.Add("ILR data mismatch");
             }
 
-            if (apprenticeship.DataLockPriceTriaged)
+            if (apprenticeship.DataLockPriceTriaged || apprenticeship.DataLockCourseChangeTriaged)
             {
                 result.Add("Changes pending");
             }
@@ -358,15 +379,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             return TriageStatus.Unknown;
         }
 
-        private bool CalculateIfInFirstCalendarMonthOfTraining(DateTime? startDate)
-        {
-            if (!startDate.HasValue)
-                return false;
-
-            return _currentDateTime.Now.Year == startDate.Value.Year && _currentDateTime.Now.Month == startDate.Value.Month;
-        }
-
-
         private string MapPaymentStatus(PaymentStatus paymentStatus, DateTime? startDate)
         {
             var isStartDateInFuture = startDate.HasValue && startDate.Value > new DateTime(_currentDateTime.Now.Year, _currentDateTime.Now.Month, 1);
@@ -410,24 +422,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         {
             return (item.HasValue) ? string.Format("{0:#}", item.Value) : "";
         }
-
-        public List<PriceHistoryViewModel> MapPriceHistory(List<PriceHistory> priceHistory)
-        {
-            var result = new List<PriceHistoryViewModel>();
-
-            foreach (var history in priceHistory)
-            {
-                result.Add(new PriceHistoryViewModel
-                {
-                    ApprenticeshipId = history.ApprenticeshipId,
-                    Cost = history.Cost,
-                    FromDate = history.FromDate,
-                    ToDate = history.ToDate
-                });
-            }
-
-            return result;
-        }
-
     }
 }

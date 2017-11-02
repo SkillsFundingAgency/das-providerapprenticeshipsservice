@@ -20,16 +20,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         private readonly IApprenticeshipValidationErrorText _validationText;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IUlnValidator _ulnValidator;
-        private readonly IAcademicYearValidator _academicYearValidator;
 
         private static Func<string, IEnumerable<string>, bool> _inList = (v, l) => string.IsNullOrWhiteSpace(v) || l.Contains(v);
 
-        public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime, IUlnValidator ulnValidator, IAcademicYearValidator academicYearValidator)
+        public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime, IUlnValidator ulnValidator)
         {
             _validationText = validationText;
             _currentDateTime = currentDateTime;
             _ulnValidator = ulnValidator;
-            _academicYearValidator = academicYearValidator;
         }
 
         public ValidationResult Validate(ApprenticeshipUploadModel model)
@@ -132,10 +130,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             {
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate02);
             }
-            else if (_academicYearValidator.Validate(model.ApprenticeshipViewModel.StartDate.DateTime.Value) != AcademicYearValidationResult.Success)
-            {
-                return CreateValidationFailure("StartDate", _validationText.AcademicYearStartDate01);
-            }
+            
 
             return null;
         }

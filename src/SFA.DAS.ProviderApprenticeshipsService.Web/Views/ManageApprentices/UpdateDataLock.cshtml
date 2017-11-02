@@ -15,9 +15,15 @@
         
         @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
-        <h1 class="heading-xlarge">Details of ILR data mismatch</h1>
+        <h1 class="heading-xlarge"> Price mismatch</h1>
+        <p>
+            @{
+                var details = $"Payment for {Model.DasApprenticeship.FirstName} {Model.DasApprenticeship.LastName} can't be made until the price in the ILR submission matches the price in the apprenticeship service.";
+                @details
+            }
+        </p>
 
-        <p>There are mismatches where the data in the apprenticeship service and your ILR submission are different.</p>
+        <br />
 
         <table class="app-data">
             <tr>
@@ -29,10 +35,21 @@
                 <td>@Model.DasApprenticeship.ULN</td>
             </tr>
             <tr>
-                <td>Date of birth</td>
-                <td>@Model.DasApprenticeship.DateOfBirth.DateTime.Value.ToGdsFormat()</td>
+                <td>Apprenticeship training course</td>
+                <td>@Model.DasApprenticeship.TrainingName</td>
             </tr>
         </table>
+        
+        <br />
+
+        <div class="funding-cap-notification" id="yyuyu6778">
+            <p class="heading-small">
+                Price Mismatch
+            </p>
+            <p>
+                Payments can't be made until this is resolved. 
+            </p>
+        </div>
         
         @{
             var datalocks = Model.DataLockSummaryViewModel.DataLockWithOnlyPriceMismatch
@@ -59,8 +76,8 @@
                     <caption class="heading-small">Apprenticeship service</caption>
                     <thead>
                         <tr>
-                            <th scope="col" class="first-child">From date</th>
-                            <th class="numeric first-child" scope="col">Total apprenticeship training price</th>
+                            <th scope="col" class="first-child">Price<br/> Period</th>
+                            <th class="numeric first-child" scope="col">Total <br />apprenticeship training price</th>
 
                         </tr>
                     </thead>
@@ -69,8 +86,8 @@
                         @foreach (var priceHistory in priceHistories)
                         {
                             <tr>
-                                <td scope="row">@priceHistory.FromDate.ToGdsFormat()</td>
-                                <td class="numeric">@priceHistory.Cost.FormatCost()</td>
+                                <td scope="row">From @priceHistory.FromDate.ToGdsFormat()</td>
+                                <td class="numeric funding-cap-alert">@priceHistory.Cost.FormatCost()</td>
                             </tr>
                         }
 
@@ -83,8 +100,8 @@
                     <caption class="heading-small">ILR submission</caption>
                     <thead>
                         <tr>
-                            <th scope="col" class="first-child">From date</th>
-                            <th class="numeric first-child" scope="col">Total apprenticeship training price</th>
+                            <th scope="col" class="first-child">Price <br/>Period</th>
+                            <th class="numeric first-child" scope="col">Total<br/> apprenticeship training price</th>
 
                         </tr>
                     </thead>
@@ -92,9 +109,17 @@
                     
                         @foreach (var datalock in datalocks)
                         {
+                            var priceDateChange = $"From {datalock.IlrEffectiveFromDate.Value.ToGdsFormat()}";
+
+                            if (datalock.IlrEffectiveToDate.HasValue)
+                            {
+                                priceDateChange = $"{datalock.IlrEffectiveFromDate.Value.ToGdsFormat()} to {datalock.IlrEffectiveToDate.Value.ToGdsFormat()}";
+                            }
+
+
                             <tr>
-                                <td scope="row">@datalock.IlrEffectiveFromDate.Value.ToGdsFormat()</td>
-                                <td class="numeric">@datalock.IlrTotalCost.FormatCost()</td>
+                                <td scope="row">@priceDateChange</td>
+                                <td class="numeric funding-cap-alert">@datalock.IlrTotalCost.FormatCost()</td>
                             </tr>
                         }
                    
@@ -119,21 +144,21 @@
                         @Html.ValidationMessageFor(m => m.SubmitStatusViewModel, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SubmitStatusViewModel) })
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.Confirm)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new {id = RadioButtonId(SubmitStatusViewModel.Confirm)})
-                            <span>Start to update the details in the apprenticeship service</span>
+                            <span>Change apprenticeship service records to match the ILR</span>
                         </label>
-
-                        @*<label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr)">
-                            @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.UpdateDataInIlr, new { id = RadioButtonId(SubmitStatusViewModel.UpdateDataInIlr) })
-                            <span>Update the details through the ILR instead</span>
-                        </label>*@
 
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.None)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.None, new {id = RadioButtonId(SubmitStatusViewModel.None)})
-                            <span>Leave for now</span>
+                            <span>I'll update the ILR later</span>
                         </label>
                     </div>
                     
-                    <input type="submit" class="button" id="fix-mismatch" value="Continue" />
+                    <div class="grid-row" id="cont-cancel">
+                        <div class="column-full">
+                            <input type="submit" class="button continue" id="fix-mismatch" value="Continue" />
+                            <a href="@Url.Action("Details")" aria-label="Cancel" class="cancel"> Cancel</a>
+                        </div>
+                    </div>
                 </fieldset>
             </div>
         </form>

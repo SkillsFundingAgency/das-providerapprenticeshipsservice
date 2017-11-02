@@ -46,11 +46,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateData
                             UserId = command.UserId
                         };
 
-                await _commitmentsApi.PatchDataLock(command.ProviderId, command.ApprenticeshipId, command.DataLockEventId, submission);
+                await _commitmentsApi.PatchDataLocks(command.ProviderId, command.ApprenticeshipId, submission);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Error calling commitment API when updating data lock to status {command.TriageStatus} for apprenticeship {command.ApprenticeshipId} and data lock with ID: {command.DataLockEventId}");
+                _logger.Error(ex, $"Error calling commitment API when updating data lock to status {command.TriageStatus} for apprenticeship {command.ApprenticeshipId}");
                 throw;
             }
         }
