@@ -2674,10 +2674,6 @@ span.helpText {
   margin-bottom: 10px;
 }
 
-#content .green-box-alert .remove-space {
-  margin-top: 0;
-}
-
 #content .flash-alert {
   border-color: #28a197;
 }
@@ -2685,6 +2681,10 @@ span.helpText {
 #content .flash-alert .icon-green-tick {
   background: url(../../dist/images/icon-green-tick.png) no-repeat 0 0;
   padding-left: 50px;
+}
+
+#content .remove-space {
+  margin-top: 0;
 }
 
 #finish-editing .error-summary {
