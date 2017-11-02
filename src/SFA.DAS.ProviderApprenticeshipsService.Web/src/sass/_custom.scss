@@ -108,6 +108,9 @@
           padding-left:50px;
       }
   }
+    .remove-space{
+        margin-top:0;
+    }
 }
 
 
@@ -951,6 +954,8 @@ width: 100%;
         margin: 10px 0 0 30px;
     }
 }
+
+
 
 //all mobile media query breakpoints
 @media only screen and (max-device-width: 640px),

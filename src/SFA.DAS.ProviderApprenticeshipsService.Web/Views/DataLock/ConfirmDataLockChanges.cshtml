@@ -32,6 +32,7 @@
             </tbody>
         </table>
 
+
         <br />
 
         @{ var count = 0; }
@@ -69,6 +70,7 @@
                     </tr>
                 </tbody>
             </table>
+            <br />
          }
 
         @foreach (var dl in Model.PriceDataLocks)
@@ -91,7 +93,7 @@
                     <tr>
                         <td>Price period</td>
                         <td>
-                            @dl.FromDate.ToGdsFormat()
+                           From @dl.FromDate.ToGdsFormat()
                         </td>
                         <td>@GetPriceDetails(dl.IlrEffectiveFromDate.Value, dl.IlrEffectiveToDate)</td>
                     </tr>
@@ -104,6 +106,7 @@
                     </tr>
                 </tbody>
             </table>
+            <br />
         }
     </div>
 </div>

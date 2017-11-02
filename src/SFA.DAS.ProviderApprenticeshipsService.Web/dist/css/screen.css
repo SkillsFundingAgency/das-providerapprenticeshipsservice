@@ -3050,6 +3050,10 @@ span.helpText {
   padding-left: 50px;
 }
 
+#content .remove-space {
+  margin-top: 0;
+}
+
 #finish-editing .error-summary {
   margin-bottom: 60px;
   margin-top: 0;
