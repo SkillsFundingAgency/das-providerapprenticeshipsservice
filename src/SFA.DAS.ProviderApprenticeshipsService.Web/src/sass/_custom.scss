@@ -951,6 +951,13 @@ width: 100%;
     }
 }
 
+#content{
+    .remove-space{
+        margin-top:0;
+    }
+}
+
+
 //all mobile media query breakpoints
 @media only screen and (max-device-width: 640px),
 only screen and (max-device-width: 667px),

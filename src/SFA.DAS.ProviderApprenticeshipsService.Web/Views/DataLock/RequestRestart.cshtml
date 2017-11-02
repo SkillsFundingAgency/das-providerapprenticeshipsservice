@@ -18,7 +18,7 @@
     <div class="column-two-thirds">
         @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
-        <h1 class="heading-xlarge">Course mismatch</h1>
+        <h1 class="heading-xlarge"> Details of ILR data mismatch </h1>
 
         <p>Details for this apprentice are different in your organisation's ILR submission. </p>
 
@@ -81,7 +81,7 @@
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SubmitStatusViewModel.Confirm)">
                             @Html.RadioButtonFor(m => m.SubmitStatusViewModel, SubmitStatusViewModel.Confirm, new { id = RadioButtonId(SubmitStatusViewModel.Confirm) })
                             <span>
-                                Change apprenticeship service records to match the ILR
+                                Ask the employer to fix the mismatch
                             </span>
                         </label>
 
