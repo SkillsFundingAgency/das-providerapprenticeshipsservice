@@ -3237,9 +3237,13 @@ table .changed-item {
   content: " ";
 }
 
+#datalock-details-change table.app-data, #course-mismatch table.app-data {
+  margin-bottom: 40px;
+}
+
 #datalock-details-change table.app-data caption, #course-mismatch table.app-data caption {
   text-align: left;
-  margin: 40px 0 20px 0;
+  margin: 5px 0 20px 0;
 }
 
 #datalock-details-change table.app-data th.first-child, #course-mismatch table.app-data th.first-child {
@@ -3248,6 +3252,10 @@ table .changed-item {
 
 #datalock-details-change table.app-data td.first-child, #course-mismatch table.app-data td.first-child {
   border-top: 1px solid #bfc1c3;
+}
+
+#datalock-details-change table.app-data .numeric, #course-mismatch table.app-data .numeric {
+  font-size: 19px;
 }
 
 #datalock-details-change table.edited-changes, #course-mismatch table.edited-changes {
@@ -3260,6 +3268,14 @@ table .changed-item {
 
 #confirm-datalock-changes .bold-font {
   font-weight: bold;
+}
+
+#confirm-datalock-changes .mismatch-desc {
+  margin-bottom: 60px;
+}
+
+#datalock-details-change .mismatch-desc {
+  margin-bottom: 60px;
 }
 
 #edit-started-apprentice .form-group {

@@ -8,12 +8,12 @@
 }
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
 
         @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
         <h1 class="heading-xlarge">Details of ILR data mismatch</h1>
-        <table class="app-data">
+        <table class="mismatch-desc">
             <tr>
                 <td class="first-child">Name</td>
                 <td class="first-child">@Model.DasApprenticeship.FirstName @Model.DasApprenticeship.LastName</td>
@@ -45,7 +45,7 @@
                         <thead>
                             <tr>
                                 <th scope="col" class="first-child">From date</th>
-                                <th class="numeric first-child" scope="col">Apprenticeship<br />training course</th>
+                                <th class="numeric first-child" scope="col">Apprenticeship <br />training course</th>
 
                             </tr>
                         </thead>
@@ -64,7 +64,7 @@
                         <thead>
                             <tr>
                                 <th scope="col" class="first-child">From date</th>
-                                <th class="numeric first-child" scope="col">Apprenticeship<br />training course</th>
+                                <th class="numeric first-child" scope="col">Apprenticeship <br />training course</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -100,7 +100,7 @@
                                     <thead>
                                         <tr>
                                             <th scope="col" class="first-child">Price period</th>
-                                            <th class="numeric first-child" scope="col">Total<br />apprenticeship <br />training price</th>
+                                            <th class="numeric first-child" scope="col">Total apprenticeship <br />training price</th>
 
                                         </tr>
                                     </thead>
@@ -119,7 +119,7 @@
                                     <thead>
                                         <tr>
                                             <th scope="col" class="first-child">Price period</th>
-                                            <th class="numeric first-child" scope="col">Total<br />apprenticeship <br />training price</th>
+                                            <th class="numeric first-child" scope="col">Total apprenticeship <br />training price</th>
                                         </tr>
                                     </thead>
                                     <tbody>
