@@ -716,14 +716,18 @@ width: 100%;
 //Datalock styles
 #datalock-details-change,#course-mismatch{
   table.app-data{
+      margin-bottom:40px;
      caption{
          text-align:left;
-         margin:40px 0 20px 0;
+         margin:5px 0 20px 0;
      }
      th.first-child{ font-weight:normal}
      td.first-child{
           border-top:1px solid $grey-2;
       }
+     .numeric{
+         font-size:19px;
+     }
   }
   table.edited-changes{
       margin-top:40px;
@@ -738,6 +742,15 @@ width: 100%;
   .bold-font{
       font-weight:bold;
   }
+  .mismatch-desc{
+      margin-bottom:60px;
+    }
+}
+
+#datalock-details-change {
+    .mismatch-desc{
+        margin-bottom:60px;
+    }
 }
 //End Datalock styles
 

@@ -8,14 +8,14 @@
 }
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
         @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
         <h1 class="heading-xlarge">Change apprentice details</h1>
 
         <p>A request will be sent to @Model.EmployerName to approve the following @PluraliseString(Model.TotalChanges, "change") in the apprenticeship service.</p>
 
-        <table class="app-data">
+        <table class="mismatch-desc">
             <tbody>
                 <tr>
                     <td class="first-child">Name</td>
@@ -32,9 +32,6 @@
             </tbody>
         </table>
 
-
-        <br />
-
         @{ var count = 0; }
 
         @foreach (var dl in Model.CourseDataLocks)
@@ -44,7 +41,6 @@
             {
                 <h2 class="heading-small">Change @count</h2>
             }
-
             <table>
                 <thead>
                     <tr>

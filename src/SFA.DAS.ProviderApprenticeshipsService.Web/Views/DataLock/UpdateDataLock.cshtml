@@ -8,15 +8,12 @@
 }
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
 
         @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
         <h1 class="heading-xlarge">Details of ILR data mismatch</h1>
-
-        <p>There are mismatches where the data in the apprenticeship service and your ILR submission are different.</p>
-
-        <table class="app-data">
+        <table class="mismatch-desc">
             <tr>
                 <td class="first-child">Name</td>
                 <td class="first-child">@Model.DasApprenticeship.FirstName @Model.DasApprenticeship.LastName</td>
@@ -48,7 +45,7 @@
                         <thead>
                             <tr>
                                 <th scope="col" class="first-child">From date</th>
-                                <th class="numeric first-child" scope="col">Apprenticeship training course</th>
+                                <th class="numeric first-child" scope="col">Apprenticeship <br />training course</th>
 
                             </tr>
                         </thead>
@@ -67,7 +64,7 @@
                         <thead>
                             <tr>
                                 <th scope="col" class="first-child">From date</th>
-                                <th class="numeric first-child" scope="col">Apprenticeship training course</th>
+                                <th class="numeric first-child" scope="col">Apprenticeship <br />training course</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -85,7 +82,7 @@
                 @foreach (var dl in Model.PriceDataLocks)
                 {
                     count = count + 1;
-                    var priceDateChange = $"From {dl.IlrEffectiveFromDate.Value.ToGdsFormat()}";
+                    var priceDateChange = $"{dl.IlrEffectiveFromDate.Value.ToGdsFormat()}";
  
                     if (dl.IlrEffectiveToDate.HasValue)
                     {
@@ -103,13 +100,13 @@
                                     <thead>
                                         <tr>
                                             <th scope="col" class="first-child">Price period</th>
-                                            <th class="numeric first-child" scope="col">Total apprenticeship training price</th>
+                                            <th class="numeric first-child" scope="col">Total apprenticeship <br />training price</th>
 
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td scope="row">From @dl.FromDate.ToGdsFormat()</td>
+                                            <td scope="row">From<br/> @dl.FromDate.ToGdsFormat()</td>
                                             <td class="numeric">@dl.Cost.FormatCost()</td>
                                         </tr>
                                     </tbody>
@@ -122,12 +119,12 @@
                                     <thead>
                                         <tr>
                                             <th scope="col" class="first-child">Price period</th>
-                                            <th class="numeric first-child" scope="col">Total apprenticeship training price</th>
+                                            <th class="numeric first-child" scope="col">Total apprenticeship <br />training price</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td scope="row">@priceDateChange</td>
+                                            <td scope="row">From<br/>@priceDateChange</td>
                                             <td class="numeric">@dl.IlrTotalCost.FormatCost()</td>
                                         </tr>
                                     </tbody>
