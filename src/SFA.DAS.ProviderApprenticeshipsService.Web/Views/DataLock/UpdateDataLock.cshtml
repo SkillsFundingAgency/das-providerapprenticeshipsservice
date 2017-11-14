@@ -33,6 +33,7 @@
         @foreach (var dl in Model.CourseDataLocks)
         {
             count = count + 1;
+
             if (Model.TotalChanges > 1)
             {
                 <h2 class="heading-small">Mismatch @count </h2>
@@ -82,12 +83,15 @@
                 @foreach (var dl in Model.PriceDataLocks)
                 {
                     count = count + 1;
-                    var priceDateChange = $"{dl.IlrEffectiveFromDate.Value.ToGdsFormat()}";
- 
-                    if (dl.IlrEffectiveToDate.HasValue)
-                    {
-                        priceDateChange = $"{dl.IlrEffectiveFromDate.Value.ToGdsFormat()} to {dl.IlrEffectiveToDate.Value.ToGdsFormat()}";
-                    }
+
+                    var ilrPricePeriod = dl.IlrEffectiveToDate.HasValue
+                        ? $"{dl.IlrEffectiveFromDate.Value.ToGdsFormat()} to {dl.IlrEffectiveToDate.Value.ToGdsFormat()}"
+                        : $"{dl.IlrEffectiveFromDate.Value.ToGdsFormat()} onwards";
+
+                    var dasPricePeriod = dl.ToDate.HasValue
+                        ? $"{dl.FromDate.ToGdsFormat()} to {dl.ToDate.Value.ToGdsFormat()}"
+                        : $"{dl.FromDate.ToGdsFormat()} onwards";
+
                     if (Model.TotalChanges > 1)
                     {
                         <h2 class="heading-small">Mismatch @count </h2>
@@ -106,7 +110,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td scope="row">From<br/> @dl.FromDate.ToGdsFormat()</td>
+                                            <td scope="row">From<br/> @dasPricePeriod</td>
                                             <td class="numeric">@dl.Cost.FormatCost()</td>
                                         </tr>
                                     </tbody>
@@ -124,7 +128,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td scope="row">From<br/>@priceDateChange</td>
+                                            <td scope="row">From<br/>@ilrPricePeriod</td>
                                             <td class="numeric">@dl.IlrTotalCost.FormatCost()</td>
                                         </tr>
                                     </tbody>
