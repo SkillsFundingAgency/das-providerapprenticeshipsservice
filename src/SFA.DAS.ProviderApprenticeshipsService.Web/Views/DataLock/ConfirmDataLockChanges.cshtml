@@ -37,6 +37,15 @@
         @foreach (var dl in Model.CourseDataLocks)
         {
             count++;
+
+            var ilrPricePeriod = dl.IlrEffectiveToDate.HasValue
+                ? $"{dl.IlrEffectiveFromDate.Value.ToGdsFormat()} to {dl.IlrEffectiveToDate.Value.ToGdsFormat()}"
+                : $"{dl.IlrEffectiveFromDate.Value.ToGdsFormat()} onwards";
+
+            var dasPricePeriod = dl.ToDate.HasValue
+                ? $"{dl.FromDate.ToGdsFormat()} to {dl.ToDate.Value.ToGdsFormat()}"
+                : $"{dl.FromDate.ToGdsFormat()} onwards";
+
             if (Model.TotalChanges > 1)
             {
                 <h2 class="heading-small">Change @count</h2>
@@ -51,11 +60,11 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>From date</td>
+                        <td>Period</td>
                         <td>
-                            @dl.ApprenticeshipStartDate.DateTime.Value.ToGdsFormat()
+                            From @dasPricePeriod
                         </td>
-                        <td>@dl.IlrEffectiveFromDate.Value.Date.ToGdsFormat()</td>
+                        <td>From @ilrPricePeriod</td>
                     </tr>
                     <tr>
                         <td>Apprenticeship training course</td>

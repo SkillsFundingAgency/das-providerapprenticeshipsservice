@@ -73,19 +73,41 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             );
         }
 
-        public IEnumerable<CourseDataLockViewModel> MapCourseDataLock(ApprenticeshipViewModel dasRecordViewModel, IEnumerable<DataLockViewModel> dataLockWithCourseMismatch, Apprenticeship apprenticeship)
+        public IEnumerable<CourseDataLockViewModel> MapCourseDataLock(ApprenticeshipViewModel dasRecordViewModel, IEnumerable<DataLockViewModel> dataLockWithCourseMismatch, Apprenticeship apprenticeship, IEnumerable<PriceHistory> apprenticeshipPriceHistory)
         {
             if (apprenticeship.HasHadDataLockSuccess)
                 return new CourseDataLockViewModel[0];
 
-            return dataLockWithCourseMismatch.Select(el => 
-                new CourseDataLockViewModel
+            var priceHistorViewModels = apprenticeshipPriceHistory
+                .Select(history => new PriceHistoryViewModel
                 {
+                    ApprenticeshipId = history.ApprenticeshipId,
+                    Cost = history.Cost,
+                    FromDate = history.FromDate,
+                    ToDate = history.ToDate
+                });
+
+            var result = new List<CourseDataLockViewModel>();
+
+            foreach (var datalock in dataLockWithCourseMismatch)
+            {
+                var s = priceHistorViewModels
+                    .OrderByDescending(x => x.FromDate)
+                    .First(x => x.FromDate <= datalock.IlrEffectiveFromDate.Value);
+
+                result.Add(new CourseDataLockViewModel
+                {
+                    FromDate = s.FromDate,
+                    ToDate = s.ToDate,
                     TrainingName = dasRecordViewModel.TrainingName,
                     ApprenticeshipStartDate = dasRecordViewModel.StartDate,
-                    IlrTrainingName = el.IlrTrainingCourseName,
-                    IlrEffectiveFromDate = el.IlrEffectiveFromDate
+                    IlrTrainingName = datalock.IlrTrainingCourseName,
+                    IlrEffectiveFromDate = datalock.IlrEffectiveFromDate,
+                    IlrEffectiveToDate = datalock.IlrEffectiveToDate
                 });
+            }
+
+            return result;
         }
 
         public async Task<DataLockSummaryViewModel> MapDataLockSummary(DataLockSummary source, bool hasHadDataLockSuccess)
