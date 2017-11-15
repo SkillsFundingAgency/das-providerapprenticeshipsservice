@@ -19,6 +19,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         IEnumerable<PriceHistoryViewModel> MapPriceDataLock(IEnumerable<PriceHistory> apprenticeshipPriceHistory, IOrderedEnumerable<DataLockViewModel> priceOnlyDataLocks);
 
-        IEnumerable<CourseDataLockViewModel> MapCourseDataLock(ApprenticeshipViewModel dasRecordViewModel, IEnumerable<DataLockViewModel> dataLockWithCourseMismatch, Apprenticeship apprenticeship);
+        IEnumerable<CourseDataLockViewModel> MapCourseDataLock(ApprenticeshipViewModel dasRecordViewModel, IEnumerable<DataLockViewModel> dataLockWithCourseMismatch, Apprenticeship apprenticeship, IEnumerable<PriceHistory> apprenticeshipPriceHistory);
     }
 }
