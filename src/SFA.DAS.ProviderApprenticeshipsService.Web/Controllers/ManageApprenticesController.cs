@@ -89,6 +89,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return await RedisplayEditApprenticeshipView(model);
             }
 
+            ModelState.Clear();
             return View(updateViewModel);
         }
 
