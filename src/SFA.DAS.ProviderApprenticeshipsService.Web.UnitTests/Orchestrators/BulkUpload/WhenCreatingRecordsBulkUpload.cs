@@ -14,9 +14,9 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.BulkUpload
 {
     [TestFixture]
-    public class WhenCreatingRecordsBulkUpload
+    public class WhenCreatingRecordsBulkUpload : BulkUploadTestBase
     {
-        private static List<string> headers = new List<string>
+        private static readonly List<string> Headers = new List<string>
         {
             "CohortRef",
             "ULN",
@@ -45,7 +45,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         public WhenCreatingRecordsBulkUpload()
         {
             var builder = new StringBuilder();
-            builder.AppendLine(string.Join(",", headers));
+            builder.AppendLine(string.Join(",", Headers));
             builder.Append(@"Abba123,1113335559,Froberg,Chris,1998-12-08,SE123321C,25,,,2,2120-08,2125-08,1500,,Employer ref,Provider ref
  Abba123,1113335559,Froberg1,Chris1,1998-12-08,SE123321C,25,,,3,2120-08,2125-08,1500,,Employer ref,Provider ref
  ABBA123,1113335559,Froberg2,Chris2,1998-12-08,SE123321C,25,,,3,2120-08,2125-08,1500,,Employer ref,Provider ref
@@ -74,8 +74,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void CreatingViewModels()
         {
-            // ToDo: Move this to where we do the reading of file.
-            //var records = _sut.CreateViewModels(_file.Object);
             var records = _sut.CreateViewModels(123, 456, _testData);
             records.Data.Count().Should().Be(8);
             records.Errors.Should().NotBeNull();
@@ -156,24 +154,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
 
             logger.Verify(x => x.Info(It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>()), Times.Once);
             logger.Verify(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>()), Times.Never);
-        }
-
-        private static IEnumerable<string> GetInvalidColumnHeaders()
-        {
-            yield return "ULN,FamilyName,GivenNames,DateOfBirth,ProgType,FworkCode,PwayCode,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,ProviderRef";
-            yield return "CohortRef,FamilyName,GivenNames,DateOfBirth,ProgType,FworkCode,PwayCode,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,ProviderRef";
-            yield return "CohortRef,ULN,GivenNames,DateOfBirth,ProgType,FworkCode,PwayCode,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,ProviderRef";
-            yield return "CohortRef,ULN,FamilyName,DateOfBirth,ProgType,FworkCode,PwayCode,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,ProviderRef";
-            yield return "CohortRef,ULN,FamilyName,GivenNames,ProgType,FworkCode,PwayCode,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,ProviderRef";
-            yield return "CohortRef,ULN,FamilyName,GivenNames,DateOfBirth,FworkCode,PwayCode,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,ProviderRef";
-            yield return "CohortRef,ULN,FamilyName,GivenNames,DateOfBirth,ProgType,PwayCode,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,ProviderRef";
-            yield return "CohortRef,ULN,FamilyName,GivenNames,DateOfBirth,ProgType,FworkCode,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,ProviderRef";
-            yield return "CohortRef,ULN,FamilyName,GivenNames,DateOfBirth,ProgType,FworkCode,PwayCode,StartDate,EndDate,TotalPrice,EPAOrgId,ProviderRef";
-            yield return "CohortRef,ULN,FamilyName,GivenNames,DateOfBirth,ProgType,FworkCode,PwayCode,StdCode,EndDate,TotalPrice,EPAOrgId,ProviderRef";
-            yield return "CohortRef,ULN,FamilyName,GivenNames,DateOfBirth,ProgType,FworkCode,PwayCode,StdCode,StartDate,TotalPrice,EPAOrgId,ProviderRef";
-            yield return "CohortRef,ULN,FamilyName,GivenNames,DateOfBirth,ProgType,FworkCode,PwayCode,StdCode,StartDate,EndDate,EPAOrgId,ProviderRef";
-            yield return "CohortRef,ULN,FamilyName,GivenNames,DateOfBirth,ProgType,FworkCode,PwayCode,StdCode,StartDate,EndDate,TotalPrice,ProviderRef";
-            yield return "CohortRef,ULN,FamilyName,GivenNames,DateOfBirth,ProgType,FworkCode,PwayCode,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId";
         }
     }
 }
