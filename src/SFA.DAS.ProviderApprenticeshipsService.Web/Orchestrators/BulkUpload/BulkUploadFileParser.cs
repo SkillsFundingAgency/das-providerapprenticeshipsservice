@@ -28,36 +28,38 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
         public BulkUploadResult CreateViewModels(long providerId, long commitmentId, string fileInput)
         {
-            using (TextReader tr = new StringReader(fileInput))
-            {
-                var csvReader = new CsvReader(tr);
-                csvReader.Configuration.HasHeaderRecord = true;
-                csvReader.Configuration.IsHeaderCaseSensitive = false;
+            const string errorMessage = "Upload failed. Please check your file and try again.";
 
+            using (var tr = new StringReader(fileInput))
+            {
                 try
                 {
+                    var csvReader = new CsvReader(tr);
+                    csvReader.Configuration.HasHeaderRecord = true;
+                    csvReader.Configuration.IsHeaderCaseSensitive = false;
+                    csvReader.Configuration.ThrowOnBadData = true;
+                    csvReader.Configuration.RegisterClassMap<CsvRecordMap>();
+
                     return new BulkUploadResult
                     {
                         Data = csvReader.GetRecords<CsvRecord>()
-                                    .ToList()
-                                    .Select(MapTo)
+                            .ToList()
+                            .Select(MapTo)
                     };
                 }
-                catch (CsvMissingFieldException exception)
+                 catch (CsvMissingFieldException exception)
                 {
                     var exceptionData = exception.Data["CsvHelper"];
-                    _logger.Error(
-                        exception,
-                        $"Failed to process bulk upload file (missing field). {exceptionData}", providerId: providerId, commitmentId: commitmentId);
+                    _logger.Info($"Failed to process bulk upload file (missing field). {exceptionData}", providerId, commitmentId);
                     return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("Some mandatory fields are incomplete. Please check your file and upload again.") } };
                 }
                 catch (Exception exception)
                 {
-                    var errorMessage = "Upload failed. Please check your file and try again.";
                     var exceptionData = exception.Data["CsvHelper"];
+
                     _logger.Error(
                         exception,
-                        $"Failed to process bulk upload file. {exceptionData}", providerId: providerId, commitmentId: commitmentId);
+                        $"Failed to process bulk upload file. {exceptionData}", providerId, commitmentId);
 
                     return new BulkUploadResult { Errors = new List<UploadError> { new UploadError(errorMessage) } };
                 }
