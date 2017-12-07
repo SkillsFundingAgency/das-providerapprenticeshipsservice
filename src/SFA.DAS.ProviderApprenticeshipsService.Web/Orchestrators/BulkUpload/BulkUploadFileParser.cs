@@ -47,19 +47,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                             .Select(MapTo)
                     };
                 }
-                 catch (CsvMissingFieldException exception)
+                 catch (CsvMissingFieldException)
                 {
-                    var exceptionData = exception.Data["CsvHelper"];
-                    _logger.Info($"Failed to process bulk upload file (missing field). {exceptionData}", providerId, commitmentId);
+                    _logger.Info("Failed to process bulk upload file (missing field).", providerId, commitmentId);
                     return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("Some mandatory fields are incomplete. Please check your file and upload again.") } };
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
-                    var exceptionData = exception.Data["CsvHelper"];
-
-                    _logger.Error(
-                        exception,
-                        $"Failed to process bulk upload file. {exceptionData}", providerId, commitmentId);
+                    _logger.Info("Failed to process bulk upload file.", providerId, commitmentId);
 
                     return new BulkUploadResult { Errors = new List<UploadError> { new UploadError(errorMessage) } };
                 }
