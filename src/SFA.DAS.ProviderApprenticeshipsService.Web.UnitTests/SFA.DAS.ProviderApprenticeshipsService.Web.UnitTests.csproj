@@ -122,6 +122,7 @@
     <Compile Include="AcademicYear\WhenValidatingAcademicYear.cs" />
     <Compile Include="Models\DataLockSummaryViewModelTests.cs" />
     <Compile Include="Orchestrators\Authentication\WhenSavingIdentityAttributes.cs" />
+    <Compile Include="Orchestrators\BulkUpload\BulkUploadTestBase.cs" />
     <Compile Include="Orchestrators\BulkUpload\BulkUploadTestHelper.cs" />
     <Compile Include="Orchestrators\Commitments\ApprenticeshipValidationTestBase.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeship.cs" />
