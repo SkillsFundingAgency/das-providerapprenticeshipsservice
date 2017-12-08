@@ -11,6 +11,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticesh
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLockSummary;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipPriceHistory;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
@@ -71,12 +72,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 .Where(m => m.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock07))
                 .OrderBy(x => x.IlrEffectiveFromDate);
 
+            var dataLockEvent = datalockSummaryViewModel.DataLockWithCourseMismatch
+                .OrderBy(x => x.IlrEffectiveFromDate)
+                .FirstOrDefault(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
+
+            if (dataLockEvent == null)
+            {
+                throw new InvalidStateException("Attempted to triage an already triaged data lock");
+            }
+
             return new DataLockMismatchViewModel
             {
                 ProviderId = providerId,
                 HashedApprenticeshipId = hashedApprenticeshipId,
                 DasApprenticeship = dasRecordViewModel,
                 DataLockSummaryViewModel = datalockSummaryViewModel,
+                DataLockEvent = dataLockEvent,
                 EmployerName = data.Apprenticeship.LegalEntityName,
                 PriceDataLocks = _dataLockMapper.MapPriceDataLock(priceHistory.History, priceDataLocks),
                 CourseDataLocks = _dataLockMapper.MapCourseDataLock(dasRecordViewModel, datalockSummaryViewModel.DataLockWithCourseMismatch, data.Apprenticeship, priceHistory.History)
@@ -90,15 +101,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _logger.Info($"Getting apprenticeship restart request for provider: {providerId}, apprenticeship: {apprenticeshipId}", providerId, apprenticeshipId);
 
             var dataLock = await GetApprenticeshipMismatchDataLock(providerId, hashedApprenticeshipId);
+
             return new ConfirmRestartViewModel
             {
                 ProviderId = providerId,
                 HashedApprenticeshipId = hashedApprenticeshipId,
                 DataMismatchModel = dataLock,
-                DataLockEventId = dataLock.DataLockSummaryViewModel.DataLockWithCourseMismatch
-                    .OrderBy(x => x.IlrEffectiveFromDate)
-                    .First(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
-                    .DataLockEventId
+                DataLockEventId = dataLock.DataLockEvent.DataLockEventId
             };
         }
 
