@@ -26,5 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
         public IEnumerable<CourseDataLockViewModel> CourseDataLocks { get; set; }
 
         public int TotalChanges => (PriceDataLocks?.Count() ?? 0) + (CourseDataLocks?.Count() ?? 0);
+
+        public DataLockViewModel DataLockEvent { get; set; }
     }
 }

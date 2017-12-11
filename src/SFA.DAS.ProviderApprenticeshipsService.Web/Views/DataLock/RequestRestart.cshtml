@@ -1,16 +1,12 @@
-﻿@using SFA.DAS.Commitments.Api.Types.DataLock.Types
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock
-@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock.DataLockMismatchViewModel
+@model DataLockMismatchViewModel
 
 @{
     ViewBag.Title = "Request restart";
     ViewBag.PageId = "course-mismatch";
 
-    var datalock = Model.DataLockSummaryViewModel.DataLockWithCourseMismatch
-.Where(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
-.OrderBy(x => x.IlrEffectiveFromDate)
-.First();
+    var datalock = Model.DataLockEvent;
 }
 
 
