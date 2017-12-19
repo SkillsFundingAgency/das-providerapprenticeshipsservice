@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Helpers;
@@ -13,6 +14,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 using System.Linq;
 using System.Net;
 using SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution;
+using SFA.DAS.Web.Policy;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
@@ -39,22 +41,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             Logger.Info("Starting up");
         }
 
-        protected void Application_BeginRequest(object sender, EventArgs e)
-        {
-            var application = sender as HttpApplication;
-            application?.Context?.Response.Headers.Remove("Server");
-        }
-
         protected void Application_Error(object sender, EventArgs e)
         {
             var ex = Server.GetLastError().GetBaseException();
             var httpEx = ex as HttpException;
 
-            if (httpEx != null && httpEx.GetHttpCode() == (int) HttpStatusCode.Forbidden)
+            if (httpEx != null && httpEx.GetHttpCode() == (int)HttpStatusCode.Forbidden)
             {
                 Logger.Info($"{ex.Message} ({HttpStatusCode.Forbidden})");
             }
-            if (httpEx != null && httpEx.GetHttpCode() == (int) HttpStatusCode.NotFound)
+            if (httpEx != null && httpEx.GetHttpCode() == (int)HttpStatusCode.NotFound)
             {
                 Logger.Warn($"NotFound (404): {Request.HttpMethod} {Request.Url}");
             }
@@ -75,6 +71,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             {
                 Logger.Error(ex, "Unhandled Exception");
             }
+        }
+
+        protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
+        {
+            new HttpContextPolicyProvider(
+                new List<IHttpContextPolicy>()
+                {
+                    new ResponseHeaderRestrictionPolicy()
+                }
+            ).Apply(new HttpContextWrapper(HttpContext.Current), PolicyConcern.HttpResponse);
         }
     }
 }

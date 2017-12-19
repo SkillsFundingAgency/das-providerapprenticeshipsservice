@@ -258,6 +258,9 @@
     <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.32930, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Sql.Client.1.0.0.32930\lib\net45\SFA.DAS.Sql.Client.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.Web.Policy, Version=1.1.0.44309, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Web.Policy.1.1.0.44309\lib\net45\SFA.DAS.Web.Policy.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Web.RedisSessionStateProvider, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Web.RedisSessionStateProvider.1.0.0.0\lib\net40\SFA.DAS.Web.RedisSessionStateProvider.dll</HintPath>
       <Private>True</Private>
