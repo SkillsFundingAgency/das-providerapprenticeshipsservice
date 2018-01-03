@@ -17,7 +17,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.HashingService;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.DataLock
 {
@@ -112,23 +111,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Dat
 
             // Assert
             Assert.AreEqual(EventId, result.DataLockEventId);
-        }
-
-        [Test]
-        public void ThenConfirmRestartThrowsWhenNoDataLockExists()
-        {
-            // Arrange
-            _mapper.Setup(x => x.MapDataLockSummary(It.IsAny<DataLockSummary>(), It.IsAny<bool>()))
-                .ReturnsAsync(() => new DataLockSummaryViewModel
-                {
-                    DataLockWithCourseMismatch = new List<DataLockViewModel>(),
-                    DataLockWithOnlyPriceMismatch = new List<DataLockViewModel>()
-                });
-
-            Assert.ThrowsAsync<InvalidStateException>(async () =>
-            {
-                await _orchestrator.GetConfirmRestartViewModel(1, "TEST");
-            });
         }
     }
 }
