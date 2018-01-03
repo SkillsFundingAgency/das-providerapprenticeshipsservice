@@ -72,22 +72,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 .Where(m => m.DataLockErrorCode.HasFlag(DataLockErrorCode.Dlock07))
                 .OrderBy(x => x.IlrEffectiveFromDate);
 
-            var dataLockEvent = datalockSummaryViewModel.DataLockWithCourseMismatch
-                .OrderBy(x => x.IlrEffectiveFromDate)
-                .FirstOrDefault(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown);
-
-            if (dataLockEvent == null)
-            {
-                throw new InvalidStateException("Attempted to triage an already triaged data lock");
-            }
-
             return new DataLockMismatchViewModel
             {
                 ProviderId = providerId,
                 HashedApprenticeshipId = hashedApprenticeshipId,
                 DasApprenticeship = dasRecordViewModel,
                 DataLockSummaryViewModel = datalockSummaryViewModel,
-                DataLockEvent = dataLockEvent,
                 EmployerName = data.Apprenticeship.LegalEntityName,
                 PriceDataLocks = _dataLockMapper.MapPriceDataLock(priceHistory.History, priceDataLocks),
                 CourseDataLocks = _dataLockMapper.MapCourseDataLock(dasRecordViewModel, datalockSummaryViewModel.DataLockWithCourseMismatch, data.Apprenticeship, priceHistory.History)
@@ -107,7 +97,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderId = providerId,
                 HashedApprenticeshipId = hashedApprenticeshipId,
                 DataMismatchModel = dataLock,
-                DataLockEventId = dataLock.DataLockEvent.DataLockEventId
+                DataLockEventId = dataLock.DataLockSummaryViewModel.DataLockWithCourseMismatch
+                    .OrderBy(x => x.IlrEffectiveFromDate)
+                    .First(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
+                    .DataLockEventId
             };
         }
 
