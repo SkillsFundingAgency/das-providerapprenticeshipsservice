@@ -6,7 +6,10 @@
     ViewBag.Title = "Request restart";
     ViewBag.PageId = "course-mismatch";
 
-    var datalock = Model.DataLockEvent;
+    var datalock = Model.DataLockSummaryViewModel.DataLockWithCourseMismatch
+        .Where(x => x.TriageStatusViewModel == TriageStatusViewModel.Unknown)
+        .OrderBy(x => x.IlrEffectiveFromDate)
+        .First();
 }
 
 
