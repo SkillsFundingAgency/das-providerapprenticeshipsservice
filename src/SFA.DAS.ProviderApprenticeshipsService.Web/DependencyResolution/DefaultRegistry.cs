@@ -109,10 +109,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IValidationApi>().Use<ValidationApi>()
                 .Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi)
                 .Ctor<HttpClient>().Is(httpClient);
-
-            For<IApprenticeshipApi>().Use<ApprenticeshipApi>()
-                .Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi)
-                .Ctor<HttpClient>().Is(httpClient);
         }
 
         private void ConfigureNotificationsApi(ProviderApprenticeshipsServiceConfiguration config)
