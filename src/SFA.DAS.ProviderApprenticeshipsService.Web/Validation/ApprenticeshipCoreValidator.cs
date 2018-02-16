@@ -6,7 +6,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.Learners.Validators;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
@@ -104,6 +103,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .NotNull().WithMessage(_validationText.LearnStartDate01.Text).WithErrorCode(_validationText.LearnStartDate01.ErrorCode)
                 .Must(ValidateDateWithoutDay).WithMessage(_validationText.LearnStartDate01.Text).WithErrorCode(_validationText.LearnStartDate01.ErrorCode)
+                .Must(StartDateForTransferNotBeforeMay2018).WithMessage(_validationText.LearnStartDate06.Text).WithErrorCode(_validationText.LearnStartDate06.ErrorCode)
                 .Must(NotBeBeforeMay2017).WithMessage(_validationText.LearnStartDate02.Text).WithErrorCode(_validationText.LearnStartDate02.ErrorCode)
                 .Must(StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear).WithMessage(_validationText.LearnStartDate05.Text).WithErrorCode(_validationText.LearnStartDate05.ErrorCode);
                 //.Must(BeWithinAcademicYearFundingPeriod).WithMessage(_validationText.AcademicYearStartDate01.Text).WithErrorCode(_validationText.AcademicYearStartDate01.ErrorCode);
@@ -160,7 +160,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         {
             return startDate.DateTime.Value <= _academicYear.CurrentAcademicYearEndDate.AddYears(1);
         }
-
+        private bool StartDateForTransferNotBeforeMay2018(ApprenticeshipViewModel viewModel, DateTimeViewModel date)
+        {
+            return (!viewModel.IsPaidForByTransfer || date.DateTime >= new DateTime(2018, 5, 1));
+        }
         private bool BeGreaterThenStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel date)
         {
             if (viewModel.StartDate?.DateTime == null || viewModel.EndDate?.DateTime == null) return true;
