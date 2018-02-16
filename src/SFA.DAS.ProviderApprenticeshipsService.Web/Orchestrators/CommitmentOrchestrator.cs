@@ -486,13 +486,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
+            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
             var overlappingErrors = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
                     Apprenticeship = new List<Apprenticeship> { data.Apprenticeship }
                 });
 
-            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
+            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship, commitmentData.Commitment);
 
             apprenticeship.ProviderId = providerId;
 
@@ -517,7 +523,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
-            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
+            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
+            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship, commitmentData.Commitment);
 
             apprenticeship.ProviderId = providerId;
 
