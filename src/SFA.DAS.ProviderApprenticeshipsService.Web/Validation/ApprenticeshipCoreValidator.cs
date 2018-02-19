@@ -162,7 +162,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         }
         private bool StartDateForTransferNotBeforeMay2018(ApprenticeshipViewModel viewModel, DateTimeViewModel date)
         {
-            return (!viewModel.IsPaidForByTransfer || date.DateTime >= new DateTime(2018, 5, 1));
+            if (!viewModel.IsPaidForByTransfer || date.DateTime >= new DateTime(2018, 5, 1))
+            {
+                return true;
+            }
+
+            //Add alternative detail error message to dummy property
+            viewModel.StartDateTransfersMinDateAltDetailMessage = "The start date can't be earlier than May 2018";
+            return false;
         }
         private bool BeGreaterThenStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel date)
         {
