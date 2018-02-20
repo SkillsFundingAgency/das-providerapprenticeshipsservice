@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using FluentAssertions;
 using MediatR;
@@ -16,11 +15,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingA
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetRelationshipByCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
@@ -91,6 +85,46 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
 
             result.IsReadOnly.ShouldBeEquivalentTo(expectedIsReadOnly);
+        }
+
+        [Test]
+        public void ThenFrameworksAreNotRetrievedForCohortsFundedByTransfer()
+        {
+            var commitment = new CommitmentView
+            {
+                AgreementStatus = AgreementStatus.ProviderAgreed,
+                EditStatus = EditStatus.ProviderOnly,
+                Apprenticeships = new List<Apprenticeship>(),
+                Messages = new List<MessageView>(),
+                TransferSenderId = 99,
+                TransferSenderName = "Transfer Sender Org"
+            };
+
+            _mockMediator = GetMediator(commitment);
+            SetUpOrchestrator();
+            var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
+
+           _mockMediator.Verify(x => x.SendAsync(It.IsAny<GetFrameworksQueryRequest>()), Times.Never);
+        }
+
+        [Test]
+        public void ThenFrameworksAreRetrievedForCohortsNotFundedByTransfer()
+        {
+            var commitment = new CommitmentView
+            {
+                AgreementStatus = AgreementStatus.ProviderAgreed,
+                EditStatus = EditStatus.ProviderOnly,
+                Apprenticeships = new List<Apprenticeship>(),
+                Messages = new List<MessageView>(),
+                TransferSenderId = default(long?),
+                TransferSenderName = string.Empty
+            };
+
+            _mockMediator = GetMediator(commitment);
+            SetUpOrchestrator();
+            var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
+
+            _mockMediator.Verify(x => x.SendAsync(It.IsAny<GetFrameworksQueryRequest>()), Times.Once);
         }
 
         // --- Helpers ---

@@ -359,7 +359,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 });
 
             var apprenticeships = MapFrom(data.Commitment.Apprenticeships, overlapping);
-            var trainingProgrammes = await GetTrainingProgrammes();
+            var trainingProgrammes = await GetTrainingProgrammes(!data.Commitment.TransferSenderId.HasValue);
 
             var apprenticeshipGroups = new List<ApprenticeshipListItemGroupViewModel>();
 
@@ -506,7 +506,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes(),
+                ApprenticeshipProgrammes = await GetTrainingProgrammes(!commitmentData.Commitment.TransferSenderId.HasValue),
                 ValidationErrors = _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors)
             };
         }
@@ -560,7 +560,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes()
+                ApprenticeshipProgrammes = await GetTrainingProgrammes(!commitmentData.Commitment.TransferSenderId.HasValue)
             };
         }
 
@@ -761,10 +761,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
+        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes(bool includeFrameworks)
         {
             var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
-            var frameworksTask = _mediator.SendAsync(new GetFrameworksQueryRequest());
+            var frameworksTask = includeFrameworks ? _mediator.SendAsync(new GetFrameworksQueryRequest())
+                : Task.FromResult(new GetFrameworksQueryResponse { Frameworks = new List<Framework>() });
 
             await Task.WhenAll(standardsTask, frameworksTask);
 
