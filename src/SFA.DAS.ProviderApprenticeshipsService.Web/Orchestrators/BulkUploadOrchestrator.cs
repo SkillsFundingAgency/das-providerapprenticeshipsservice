@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Validation;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
@@ -253,6 +254,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                                                   CommitmentId = commitmentId
                                               });
 
+            AssertCohortNotPaidForByTransfer(result.Commitment);
+
             var model = new UploadApprenticeshipsViewModel
             {
                 ProviderId = providerid,
@@ -317,6 +320,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                                };
             }
             return Enumerable.Empty<UploadError>();
+        }
+
+        private void AssertCohortNotPaidForByTransfer(CommitmentView commitment)
+        {
+            if (commitment.TransferSenderId.HasValue)
+            {
+                throw new InvalidOperationException("Bulk upload disabled for commitment paid for by a transfer");
+            }
         }
     }
 }
