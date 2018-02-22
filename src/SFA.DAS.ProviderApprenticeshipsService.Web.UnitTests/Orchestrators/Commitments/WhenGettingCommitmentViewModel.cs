@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using FluentAssertions;
 using MediatR;
@@ -125,6 +126,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
 
             _mockMediator.Verify(x => x.SendAsync(It.IsAny<GetFrameworksQueryRequest>()), Times.Once);
+        }
+
+        [TestCase(123L, true)]
+        [TestCase(null, false)]
+        public void ThenTheCommitmentIsMarkedAsFundedByTransferIfItHasATransferSenderId(long? transferSenderId, bool expectedTransferFlag)
+        {
+            var commitment = new CommitmentView
+            {
+                AgreementStatus = AgreementStatus.ProviderAgreed,
+                EditStatus = EditStatus.ProviderOnly,
+                Apprenticeships = new List<Apprenticeship>(),
+                Messages = new List<MessageView>(),
+                TransferSenderId = transferSenderId
+            };
+
+            _mockMediator = GetMediator(commitment);
+            SetUpOrchestrator();
+            var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
+
+            Assert.AreEqual(expectedTransferFlag, result.IsFundedByTransfer);
         }
 
         // --- Helpers ---
