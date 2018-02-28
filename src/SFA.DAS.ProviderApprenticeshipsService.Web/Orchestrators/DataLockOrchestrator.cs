@@ -10,6 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateDataLock
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLockSummary;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipPriceHistory;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
@@ -57,6 +58,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
+            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = data.Apprenticeship.CommitmentId
+            });
+
             var priceHistory = await _mediator.SendAsync(new GetApprenticeshipPriceHistoryQueryRequest
             {
                 ProviderId = providerId,
@@ -65,7 +72,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var datalockSummaryViewModel = await _dataLockMapper.MapDataLockSummary(datalockSummary.DataLockSummary, data.Apprenticeship.HasHadDataLockSuccess);
 
-            var dasRecordViewModel = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
+            var dasRecordViewModel = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship, commitmentData.Commitment);
             var priceDataLocks = datalockSummaryViewModel
                 .DataLockWithCourseMismatch
                 .Concat(datalockSummaryViewModel.DataLockWithOnlyPriceMismatch)

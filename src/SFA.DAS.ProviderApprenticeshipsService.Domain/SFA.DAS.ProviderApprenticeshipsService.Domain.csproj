@@ -38,7 +38,6 @@
     <Compile Include="AcademicYearValidationResult.cs" />
     <Compile Include="ApprenticeshipStatus.cs" />
     <Compile Include="ContractFeed\ContractFeedEvent.cs" />
-    <Compile Include="CommitmentView.cs" />
     <Compile Include="Data\IAgreementStatusQueryRepository.cs" />
     <Compile Include="Data\IStandardsRepository.cs" />
     <Compile Include="Framework.cs" />
