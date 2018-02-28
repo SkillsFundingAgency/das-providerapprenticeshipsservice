@@ -33,6 +33,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
 using SFA.DAS.HashingService;
+using GetCommitmentQueryRequest = SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment.GetCommitmentQueryRequest;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -486,13 +487,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
+            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
             var overlappingErrors = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
                     Apprenticeship = new List<Apprenticeship> { data.Apprenticeship }
                 });
 
-            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
+            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship, commitmentData.Commitment);
 
             apprenticeship.ProviderId = providerId;
 
@@ -517,7 +524,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
-            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
+            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
+            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship, commitmentData.Commitment);
 
             apprenticeship.ProviderId = providerId;
 
@@ -529,10 +542,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             _logger.Info($"Getting info for creating apprenticeship for provider:{providerId} commitment:{commitmentId}", providerId: providerId, commitmentId: commitmentId);
 
+            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
             var apprenticeship = new ApprenticeshipViewModel
             {
                 ProviderId = providerId,
-                HashedCommitmentId = hashedCommitmentId
+                HashedCommitmentId = hashedCommitmentId,
+                IsPaidForByTransfer = commitmentData.Commitment.TransferSenderId.HasValue
             };
 
             await AssertCommitmentStatus(commitmentId, providerId);

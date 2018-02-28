@@ -10,6 +10,7 @@ using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
@@ -32,6 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     {
         private Mock<IHashingService> _hashingService;
         private Apprenticeship _model;
+        private CommitmentView _commitment;
         private ApprenticeshipMapper _mapper;
         private Mock<IAcademicYearValidator> _mockAcademicYearValidator;
 
@@ -47,7 +49,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _hashingService.Setup(x => x.HashValue(It.IsAny<long>())).Returns("hashed");
             _hashingService.Setup(x => x.DecodeValue("hashed")).Returns(1998);
-            
+
+            _commitment = new CommitmentView();
+
             _model = new Apprenticeship
 
             {
@@ -106,7 +110,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public void ShouldMapToApprenticeshipViewModel()
         {
-            var viewModel = _mapper.MapApprenticeship(_model);
+            var viewModel = _mapper.MapApprenticeship(_model, _commitment);
 
             viewModel.HashedApprenticeshipId.Should().Be("hashed");
             viewModel.FirstName.Should().Be("First name");
@@ -126,7 +130,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task ShouldMapToApprenticeship()
         {
-            var viewModel = _mapper.MapApprenticeship(_model);
+            var viewModel = _mapper.MapApprenticeship(_model, _commitment);
             var model = await _mapper.MapApprenticeship(viewModel);
 
             model.Id.Should().Be(1998);
@@ -150,7 +154,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [TestCase("79228162514264337593543950336", Description = "Decimal max val + 1")]
         public async Task ShouldMapToApprenticeshipCostToNullIfNullOrEmpty(string cost)
         {
-            var viewModel = _mapper.MapApprenticeship(_model);
+            var viewModel = _mapper.MapApprenticeship(_model, new CommitmentView());
             viewModel.Cost = cost;
             var model = await _mapper.MapApprenticeship(viewModel);
 
@@ -241,7 +245,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public void ShouldNotHaveLockedStatusIfNoDataLockSuccessFound()
         {
             var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(-1), HasHadDataLockSuccess = false};
-            var viewModel = _mapper.MapApprenticeship(apprenticeship);
+            var viewModel = _mapper.MapApprenticeship(apprenticeship, _commitment);
 
             viewModel.IsLockedForUpdate.Should().BeFalse();
             viewModel.HasStarted.Should().BeTrue();
@@ -251,7 +255,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public void ShouldHaveLockedStatusIfDataLocksSuccesFound()
         {
             var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(-1), HasHadDataLockSuccess = true };
-            var viewModel = _mapper.MapApprenticeship(apprenticeship);
+            var viewModel = _mapper.MapApprenticeship(apprenticeship, _commitment);
 
             viewModel.IsLockedForUpdate.Should().BeTrue();
             viewModel.HasStarted.Should().BeTrue();
@@ -264,10 +268,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mockAcademicYearValidator.Setup(m => m.Validate(It.IsAny<DateTime>())).Returns(AcademicYearValidationResult.NotWithinFundingPeriod);
 
             var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(-5), HasHadDataLockSuccess = false };
-            var viewModel = _mapper.MapApprenticeship(apprenticeship);
+            var viewModel = _mapper.MapApprenticeship(apprenticeship, _commitment);
 
             viewModel.IsLockedForUpdate.Should().BeTrue();
             viewModel.HasStarted.Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldHaveTransferFlagSetIfCommitmentHasTransferSender()
+        {
+            var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(-5), HasHadDataLockSuccess = false };
+            _commitment.TransferSenderId = 123L;
+
+            var viewModel = _mapper.MapApprenticeship(apprenticeship, _commitment);
+
+            viewModel.IsPaidForByTransfer.Should().BeTrue();
         }
     }
 }

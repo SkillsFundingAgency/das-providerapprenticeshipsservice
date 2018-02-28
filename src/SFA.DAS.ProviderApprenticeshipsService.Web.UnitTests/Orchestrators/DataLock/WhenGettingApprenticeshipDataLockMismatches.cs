@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
@@ -17,6 +18,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.HashingService;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.DataLock
 {
@@ -43,6 +45,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Dat
                 .ReturnsAsync(() => new GetApprenticeshipQueryResponse
                 {
                     Apprenticeship = new Apprenticeship()
+                });
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+                .ReturnsAsync(() => new GetCommitmentQueryResponse
+                {
+                    Commitment = new CommitmentView()
                 });
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipDataLockSummaryQueryRequest>()))

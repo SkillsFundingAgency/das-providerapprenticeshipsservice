@@ -33,6 +33,8 @@
             <hr />
 
             @Html.Partial("EditApprenticeship", Model)
+            
+            @Html.HiddenFor(m => m.IsPaidForByTransfer)
 
         
             <div class="form-group">
