@@ -58,6 +58,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         }
 
         [Test]
+        public async Task ShouldApproveTheCohort()
+        {
+            await _handler.Handle(_validCommand);
+
+            _mockCommitmentsApi.Verify(x => x.ApproveCohort(_validCommand.ProviderId, _validCommand.CommitmentId,
+                It.Is<CommitmentSubmission>(y =>
+                    y.Message == _validCommand.Message && y.UserId == _validCommand.UserId && y.LastUpdatedByInfo.EmailAddress == _validCommand.UserEmailAddress &&
+                    y.LastUpdatedByInfo.Name == _validCommand.UserDisplayName)));
+        }
+
+        [Test]
         public async Task ShouldSendRequestToApproveToEmployer()
         {
             SendNotificationCommand arg = null;
