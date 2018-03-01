@@ -46,6 +46,7 @@
             @Html.HiddenFor(m => m.ProviderId)
             @Html.HiddenFor(m => m.AgreementStatus)
             @Html.HiddenFor(m => m.EmployerRef)
+            @Html.HiddenFor(m => m.IsPaidForByTransfer)
 
             <button type="submit" class="button" aria-label="Add" id="submit-create-apprentice">Add</button>
             <a class="links" href="@Url.Action("Details", new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Cancel">Cancel</a>
