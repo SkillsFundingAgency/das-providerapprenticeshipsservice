@@ -125,6 +125,7 @@
     <Compile Include="Orchestrators\Authentication\WhenSavingIdentityAttributes.cs" />
     <Compile Include="Orchestrators\BulkUpload\BulkUploadTestBase.cs" />
     <Compile Include="Orchestrators\BulkUpload\BulkUploadTestHelper.cs" />
+    <Compile Include="Orchestrators\BulkUpload\WhenGettingUploadModel.cs" />
     <Compile Include="Orchestrators\Commitments\ApprenticeshipValidationTestBase.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeshipDetails.cs" />
