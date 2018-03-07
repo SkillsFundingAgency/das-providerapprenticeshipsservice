@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -62,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void ThenIfCohortIsNotPaidForByATransferThenAnExceptionIsNotThrown()
         {
-            _commitmentView.TransferSenderId = default(long?);
+            _commitmentView.TransferSenderId = null;
             Assert.DoesNotThrowAsync(() => _bulkUploadOrchestrator.GetUploadModel(123L, "HashedCmtId"));
         }
 
