@@ -396,7 +396,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 linkText = "Return to your cohorts";
             }
 
-            var model = new AcknowledgementViewModel { CommitmentReference = commitment.Reference, EmployerName = commitment.LegalEntityName, ProviderName = commitment.ProviderName, Message = string.Empty, RedirectUrl = url, RedirectLinkText = linkText };
+            var model = new ApprovedViewModel { CommitmentReference = commitment.Reference, EmployerName = commitment.LegalEntityName, ProviderName = commitment.ProviderName, Message = string.Empty, RedirectUrl = url, RedirectLinkText = linkText };
 
             return View("RequestApproved", model);
         }
