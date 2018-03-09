@@ -382,7 +382,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedCommitmentId}/RequestApproved")]
         public async Task<ActionResult> Approved(long providerId, string hashedCommitmentId)
         {
-            var commitment = await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId);
+            var model = await _commitmentOrchestrator.GetApprovedViewModel(providerId, hashedCommitmentId);
+
+            //var commitment = await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId);
             var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(providerId, RequestStatus.ReadyForApproval);
             string url;
             var linkText = "Return to Approve cohorts";
@@ -396,8 +398,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 linkText = "Return to your cohorts";
             }
 
-            var model = new ApprovedViewModel { CommitmentReference = commitment.Reference, EmployerName = commitment.LegalEntityName, ProviderName = commitment.ProviderName, Message = string.Empty, RedirectUrl = url, RedirectLinkText = linkText };
-
+        
             return View("RequestApproved", model);
         }
 
@@ -435,6 +436,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var viewModel = await _commitmentOrchestrator.GetAcknowledgementViewModel(providerId, hashedCommitmentId, saveStatus);
 
+            //this is coming out and going into orch call.
             var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(providerId, GetRequestStatusFromCookie());
             var url = GetReturnToListUrl(providerId);
             var linkText = "Go back to view cohorts";

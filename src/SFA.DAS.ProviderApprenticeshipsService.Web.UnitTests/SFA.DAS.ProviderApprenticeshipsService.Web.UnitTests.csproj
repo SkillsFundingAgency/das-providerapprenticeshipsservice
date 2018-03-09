@@ -134,6 +134,7 @@
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingDataLocks.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingAcknowledgementViewModel.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingApprenticeship.cs" />
+    <Compile Include="Orchestrators\Commitments\WhenGettingApprovedViewModel.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingCreateApprenticeshipViewModel.cs" />
     <Compile Include="Orchestrators\Commitments\WhenValidatingApprenticeshipViewModel.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenCreatingApprenticeshipUpdate.cs" />

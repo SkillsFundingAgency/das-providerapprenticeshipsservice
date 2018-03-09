@@ -799,6 +799,35 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return result;
         }
 
+        public async Task<ApprovedViewModel> GetApprovedViewModel(long providerId, string hashedCommitmentId)
+        {
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            _logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}", providerId, commitmentId);
+
+            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
+            var commitment = commitmentData.Commitment;
+
+            var result = new ApprovedViewModel
+            {
+                Headline = commitment.TransferSenderId.HasValue
+                    ? "Cohort approved and transfer request sent"
+                    : "Cohort approved",
+                CommitmentReference = commitment.Reference,
+                EmployerName = commitment.LegalEntityName,
+                ProviderName = commitment.ProviderName,
+                IsTransfer = commitment.TransferSenderId.HasValue,
+                HasOtherCohortsAwaitingApproval = await GetCohortsForCurrentStatus(providerId, RequestStatus.ReadyForApproval)
+            };
+
+            return result;
+        }
+
         public async Task<Dictionary<string, string>> ValidateApprenticeship(ApprenticeshipViewModel viewModel)
         {
 
