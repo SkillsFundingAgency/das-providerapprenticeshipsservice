@@ -59,7 +59,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                     UserId = message.UserId
                 };
 
-            await _commitmentsApi.PatchProviderCommitment(message.ProviderId, message.CommitmentId, submission);
+            if (message.LastAction != LastAction.Approve)
+            {
+                await _commitmentsApi.PatchProviderCommitment(message.ProviderId, message.CommitmentId, submission);
+            }
+            else
+            {
+                await _commitmentsApi.ApproveCohort(message.ProviderId, message.CommitmentId, submission);
+            }
 
             if (_configuration.EnableEmailNotifications && message.LastAction != LastAction.None)
             {

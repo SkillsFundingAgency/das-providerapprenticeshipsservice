@@ -407,6 +407,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipGroups = apprenticeshipGroups,
                 RelationshipVerified = relationshipRequest.Relationship.Verified.HasValue,
                 IsReadOnly = data.Commitment.EditStatus != EditStatus.ProviderOnly,
+                IsFundedByTransfer = data.Commitment.TransferSenderId.HasValue,
                 Errors = errors,
                 Warnings = warnings
             };
