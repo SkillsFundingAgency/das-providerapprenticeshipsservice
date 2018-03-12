@@ -5,8 +5,10 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
@@ -57,12 +59,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 ApprenticeshipCount = 10,
                 AgreementStatus = AgreementStatus.EmployerAgreed,
                 CanBeApproved = true,
-                EditStatus = DAS.Commitments.Api.Types.Commitment.Types.EditStatus.ProviderOnly,
-                LastAction = DAS.Commitments.Api.Types.Commitment.Types.LastAction.Approve
+                EditStatus = EditStatus.ProviderOnly,
+                LastAction = LastAction.Approve
             });
 
-            //this mock shoulkd return ReadyForApproval for all calls to GetStatus
-            //_statusCalculator 
+            _mockCalculator.Setup(x => x.GetStatus(
+                    It.IsAny<EditStatus>(),
+                    It.IsAny<int>(),
+                    It.IsAny<LastAction>(),
+                    It.IsAny<AgreementStatus>(),
+                    It.IsAny<LastUpdateInfo>()))
+                .Returns(RequestStatus.ReadyForApproval);
 
             var result = await _orchestrator.GetApprovedViewModel(1, "Hashed-Id");
 
