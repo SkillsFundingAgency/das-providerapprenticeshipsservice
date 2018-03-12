@@ -383,22 +383,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Approved(long providerId, string hashedCommitmentId)
         {
             var model = await _commitmentOrchestrator.GetApprovedViewModel(providerId, hashedCommitmentId);
-
-            //var commitment = await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId);
-            var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(providerId, RequestStatus.ReadyForApproval);
-            string url;
-            var linkText = "Return to Approve cohorts";
-            if (currentStatusCohortAny)
-            {
-                url = Url.Action("ReadyForReview", new { ProviderId = providerId });
-            }
-            else
-            {
-                url = Url.Action("Cohorts", "Commitment", new { ProviderId = providerId });
-                linkText = "Return to your cohorts";
-            }
-
-        
             return View("RequestApproved", model);
         }
 
