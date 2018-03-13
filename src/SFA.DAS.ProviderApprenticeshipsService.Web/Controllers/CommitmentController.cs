@@ -420,7 +420,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var viewModel = await _commitmentOrchestrator.GetAcknowledgementViewModel(providerId, hashedCommitmentId, saveStatus);
 
-            //this is coming out and going into orch call.
             var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(providerId, GetRequestStatusFromCookie());
             var url = GetReturnToListUrl(providerId);
             var linkText = "Go back to view cohorts";
