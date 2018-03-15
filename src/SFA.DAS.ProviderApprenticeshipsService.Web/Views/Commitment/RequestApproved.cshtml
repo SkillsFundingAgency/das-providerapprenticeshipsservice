@@ -1,4 +1,4 @@
-﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.AcknowledgementViewModel
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprovedViewModel
 
 @{
     ViewBag.Title = "Request approved";
@@ -9,7 +9,7 @@
     <div class="column-full">
         <div class="govuk-box-highlight">
             <h1 class="heading-xlarge" id="changeHeadline">
-                Cohort approved
+                @Model.Headline
             </h1>
         </div>
     </div>
@@ -36,14 +36,33 @@
         </table>
 
         <h2 class="heading-medium">What happens next?</h2>
-        <p id="changeMainCopy">
-            Your cohort has been approved. To update the details for any apprentices in this cohort you will need to 
-            <a href="@Url.Action("Index" ,"ManageApprentices")">manage your apprentices</a>.
-        </p>
-
-        @if (!string.IsNullOrEmpty(Model.RedirectUrl))
+            
+        @if (Model.IsTransfer)
         {
-            <a href="@Model.RedirectUrl" aria-label="@Model.RedirectLinkText">@Model.RedirectLinkText</a>
+            <ul class="list list-bullet text">
+                <li>
+                    A transfer request has been sent to the employer who is funding this cohort
+                </li>
+                <li>
+                    Once the transfer request is approved, you'll be able to <a href="@Url.Action("Index", "ManageApprentices")">view and manage the apprentices</a>
+                </li>
+            </ul>
+        }
+        else
+        {
+            <p id="changeMainCopy">
+                Your cohort has been approved. To update the details for any apprentices in this cohort you will need to
+                <a href="@Url.Action("Index", "ManageApprentices")">manage your apprentices</a>.
+            </p>
+        }
+        
+        @if (Model.HasOtherCohortsAwaitingApproval)
+        {
+            <a href="@Url.Action("ReadyForReview")">Return to Approve cohorts</a>
+        }
+        else
+        { 
+            <a href="@Url.Action("Cohorts", "Commitment")">Return to your cohorts</a>
         }
 
     </div>
