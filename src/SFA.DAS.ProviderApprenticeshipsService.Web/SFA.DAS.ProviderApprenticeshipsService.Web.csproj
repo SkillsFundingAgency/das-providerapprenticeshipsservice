@@ -409,6 +409,7 @@
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\ApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModel.cs" />
+    <Compile Include="Models\ApprovedViewModel.cs" />
     <Compile Include="Models\BulkUpload\CsvRecordMap.cs" />
     <Compile Include="Models\CourseDataLockViewModel.cs" />
     <Compile Include="Models\DataLock\ConfirmRestartViewModel.cs" />
