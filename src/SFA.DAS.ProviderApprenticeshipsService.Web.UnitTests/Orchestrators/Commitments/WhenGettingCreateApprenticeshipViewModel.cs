@@ -30,8 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 EditStatus = EditStatus.ProviderOnly,
                 Apprenticeships = new List<Apprenticeship>(),
                 Messages = new List<MessageView>(),
-                TransferSenderId = 99,
-                TransferSenderName = "Transfer Sender Org"
+                TransferSender = new TransferSender { Id = 99, Name = "Transfer Sender Org"}
             };
 
             _mockMediator = new Mock<IMediator>();
@@ -66,8 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task ThenFrameworksAreNotRetrievedForCohortsFundedByTransfer()
         {
-            _commitment.TransferSenderId = 99;
-            _commitment.TransferSenderName = "Transfer Sender Org";
+            _commitment.TransferSender = new TransferSender { Id=  99, Name = "Transfer Sender Org"};
 
             await _orchestrator.GetCreateApprenticeshipViewModel(1L, "HashedCmtId");
 
@@ -77,8 +75,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task ThenFrameworksAreRetrievedForCohortsNotFundedByTransfer()
         {
-            _commitment.TransferSenderId = default(long?);
-            _commitment.TransferSenderName = string.Empty;
+            _commitment.TransferSender = null;
 
             await _orchestrator.GetCreateApprenticeshipViewModel(1L, "HashedCmtId");
 

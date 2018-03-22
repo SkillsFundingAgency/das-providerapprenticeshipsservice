@@ -25,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     public class WhenGettingCommitmentViewModel : ApprenticeshipValidationTestBase
     {
         [Test(Description = "Should return false on PendingChanges if overall agreement status is EmployerAgreed")]
-        public void ShouldCommitmentWithEmployerAndBothAgreed()
+        public async Task ShouldCommitmentWithEmployerAndBothAgreed()
         {
             var commitment = new CommitmentView
             {
@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _mockMediator = GetMediator(commitment);
             SetUpOrchestrator();
-            var result = _orchestrator.GetCommitmentDetails(1L, "ABBA123").Result;
+            var result = await _orchestrator.GetCommitmentDetails(1L, "ABBA123");
 
             result.PendingChanges.ShouldBeEquivalentTo(false);
         }
@@ -97,8 +97,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 EditStatus = EditStatus.ProviderOnly,
                 Apprenticeships = new List<Apprenticeship>(),
                 Messages = new List<MessageView>(),
-                TransferSenderId = 99,
-                TransferSenderName = "Transfer Sender Org"
+                TransferSender = new TransferSender {Id = 99, Name = "Transfer Sender Org"}
             };
 
             _mockMediator = GetMediator(commitment);
@@ -117,8 +116,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 EditStatus = EditStatus.ProviderOnly,
                 Apprenticeships = new List<Apprenticeship>(),
                 Messages = new List<MessageView>(),
-                TransferSenderId = default(long?),
-                TransferSenderName = string.Empty
+                TransferSender = null
             };
 
             _mockMediator = GetMediator(commitment);
@@ -130,7 +128,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
         [TestCase(123L, true)]
         [TestCase(null, false)]
-        public void ThenTheCommitmentIsMarkedAsFundedByTransferIfItHasATransferSenderId(long? transferSenderId, bool expectedTransferFlag)
+        public async Task ThenTheCommitmentIsMarkedAsFundedByTransferIfItHasATransferSenderId(long? transferSenderId, bool expectedTransferFlag)
         {
             var commitment = new CommitmentView
             {
@@ -138,12 +136,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 EditStatus = EditStatus.ProviderOnly,
                 Apprenticeships = new List<Apprenticeship>(),
                 Messages = new List<MessageView>(),
-                TransferSenderId = transferSenderId
+                TransferSender = (transferSenderId != null ? new TransferSender { Id = transferSenderId } : null)
             };
 
             _mockMediator = GetMediator(commitment);
             SetUpOrchestrator();
-            var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
+            var result = await _orchestrator.GetCommitmentDetails(1L, "ABBA213");
 
             Assert.AreEqual(expectedTransferFlag, result.IsFundedByTransfer);
         }

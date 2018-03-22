@@ -88,7 +88,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [TestCase(true, "Cohort approved and transfer request sent")]
         public async Task ThenTheHeadlineShouldReflectWhetherTheCommitmentIsToBePaidByTransfer(bool isTransfer, string expectHeadline)
         {
-            _commitment.TransferSenderId = isTransfer ? 1L : default(long?);
+            _commitment.TransferSender = (isTransfer ? new TransferSender { Id = 1L} : null);
 
             var result = await _orchestrator.GetApprovedViewModel(1, "Hashed-Id");
 
@@ -98,7 +98,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task ThenTheViewModelShouldIndicateWhenCohortIsForTransfer()
         {
-            _commitment.TransferSenderId = 1L;
+            _commitment.TransferSender = new TransferSender { Id = 1L };
 
             var result = await _orchestrator.GetApprovedViewModel(1, "Hashed-Id");
 
@@ -108,7 +108,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task ThenTheViewModelShouldIndicateWhenCohortIsNotForTransfer()
         {
-            _commitment.TransferSenderId = null;
+            _commitment.TransferSender = null;
 
             var result = await _orchestrator.GetApprovedViewModel(1, "Hashed-Id");
 
