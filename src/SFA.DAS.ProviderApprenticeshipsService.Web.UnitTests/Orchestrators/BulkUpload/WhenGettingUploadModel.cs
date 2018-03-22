@@ -54,14 +54,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void ThenIfCohortIsPaidForByATransferThenAnExceptionIsThrown()
         {
-            _commitmentView.TransferSenderId = 123L;
+            _commitmentView.TransferSender.Id = 123L;
             Assert.ThrowsAsync<InvalidOperationException>(() => _bulkUploadOrchestrator.GetUploadModel(123L, "HashedCmtId"));
         }
 
         [Test]
         public void ThenIfCohortIsNotPaidForByATransferThenAnExceptionIsNotThrown()
         {
-            _commitmentView.TransferSenderId = null;
+            _commitmentView.TransferSender = null;
             Assert.DoesNotThrowAsync(() => _bulkUploadOrchestrator.GetUploadModel(123L, "HashedCmtId"));
         }
 

@@ -359,7 +359,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 });
 
             var apprenticeships = MapFrom(data.Commitment.Apprenticeships, overlapping);
-            var trainingProgrammes = await GetTrainingProgrammes(!data.Commitment.TransferSenderId.HasValue);
+            var trainingProgrammes = await GetTrainingProgrammes(data.Commitment.TransferSender == null);
 
             var apprenticeshipGroups = new List<ApprenticeshipListItemGroupViewModel>();
 
@@ -407,7 +407,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipGroups = apprenticeshipGroups,
                 RelationshipVerified = relationshipRequest.Relationship.Verified.HasValue,
                 IsReadOnly = data.Commitment.EditStatus != EditStatus.ProviderOnly,
-                IsFundedByTransfer = data.Commitment.TransferSenderId.HasValue,
+                IsFundedByTransfer = data.Commitment.TransferSender != null,
                 Errors = errors,
                 Warnings = warnings
             };
@@ -507,7 +507,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes(!commitmentData.Commitment.TransferSenderId.HasValue),
+                ApprenticeshipProgrammes = await GetTrainingProgrammes(commitmentData.Commitment.TransferSender == null),
                 ValidationErrors = _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors)
             };
         }
@@ -553,7 +553,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 HashedCommitmentId = hashedCommitmentId,
-                IsPaidForByTransfer = commitmentData.Commitment.TransferSenderId.HasValue
+                IsPaidForByTransfer = commitmentData.Commitment.TransferSender != null
             };
 
             await AssertCommitmentStatus(commitmentId, providerId);
@@ -561,7 +561,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes(!commitmentData.Commitment.TransferSenderId.HasValue)
+                ApprenticeshipProgrammes = await GetTrainingProgrammes(commitmentData.Commitment.TransferSender == null)
             };
         }
 
@@ -815,13 +815,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var result = new ApprovedViewModel
             {
-                Headline = commitment.TransferSenderId.HasValue
+                Headline = commitment.TransferSender != null
                     ? "Cohort approved and transfer request sent"
                     : "Cohort approved",
                 CommitmentReference = commitment.Reference,
                 EmployerName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
-                IsTransfer = commitment.TransferSenderId.HasValue,
+                IsTransfer = commitment.TransferSender != null,
                 HasOtherCohortsAwaitingApproval = await GetCohortsForCurrentStatus(providerId, RequestStatus.ReadyForApproval)
             };
 

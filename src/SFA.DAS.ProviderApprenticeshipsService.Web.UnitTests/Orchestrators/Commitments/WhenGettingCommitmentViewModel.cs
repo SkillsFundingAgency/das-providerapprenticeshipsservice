@@ -97,8 +97,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 EditStatus = EditStatus.ProviderOnly,
                 Apprenticeships = new List<Apprenticeship>(),
                 Messages = new List<MessageView>(),
-                TransferSenderId = 99,
-                TransferSenderName = "Transfer Sender Org"
+                TransferSender = new TransferSender {Id = 99, Name = "Transfer Sender Org"}
             };
 
             _mockMediator = GetMediator(commitment);
@@ -117,8 +116,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 EditStatus = EditStatus.ProviderOnly,
                 Apprenticeships = new List<Apprenticeship>(),
                 Messages = new List<MessageView>(),
-                TransferSenderId = default(long?),
-                TransferSenderName = string.Empty
+                TransferSender = null
             };
 
             _mockMediator = GetMediator(commitment);
@@ -138,7 +136,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 EditStatus = EditStatus.ProviderOnly,
                 Apprenticeships = new List<Apprenticeship>(),
                 Messages = new List<MessageView>(),
-                TransferSenderId = transferSenderId
+                TransferSender = new TransferSender { Id = transferSenderId }
             };
 
             _mockMediator = GetMediator(commitment);
