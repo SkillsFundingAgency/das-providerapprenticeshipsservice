@@ -98,7 +98,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task ThenTheViewModelShouldIndicateWhenCohortIsForTransfer()
         {
-            _commitment.TransferSender.Id = 1L;
+            _commitment.TransferSender = new TransferSender { Id = 1L };
 
             var result = await _orchestrator.GetApprovedViewModel(1, "Hashed-Id");
 
