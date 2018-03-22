@@ -88,7 +88,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [TestCase(true, "Cohort approved and transfer request sent")]
         public async Task ThenTheHeadlineShouldReflectWhetherTheCommitmentIsToBePaidByTransfer(bool isTransfer, string expectHeadline)
         {
-            _commitment.TransferSender.Id = isTransfer ? 1L : default(long?);
+            _commitment.TransferSender = (isTransfer ? new TransferSender { Id = 1L} : null);
 
             var result = await _orchestrator.GetApprovedViewModel(1, "Hashed-Id");
 

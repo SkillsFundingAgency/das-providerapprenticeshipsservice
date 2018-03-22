@@ -324,7 +324,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private void AssertCohortNotPaidForByTransfer(CommitmentView commitment)
         {
-            if (commitment.TransferSender == null)
+            if (commitment.TransferSender != null)
             {
                 throw new InvalidOperationException("Bulk upload disabled for commitment paid for by a transfer");
             }

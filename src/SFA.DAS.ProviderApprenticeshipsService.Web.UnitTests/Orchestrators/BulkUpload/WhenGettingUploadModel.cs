@@ -54,7 +54,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void ThenIfCohortIsPaidForByATransferThenAnExceptionIsThrown()
         {
-            _commitmentView.TransferSender.Id = 123L;
+            _commitmentView.TransferSender = new TransferSender {Id = 123L};
             Assert.ThrowsAsync<InvalidOperationException>(() => _bulkUploadOrchestrator.GetUploadModel(123L, "HashedCmtId"));
         }
 
