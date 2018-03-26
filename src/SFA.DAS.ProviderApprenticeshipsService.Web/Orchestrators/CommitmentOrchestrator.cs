@@ -359,7 +359,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 });
 
             var apprenticeships = MapFrom(data.Commitment.Apprenticeships, overlapping);
-            var trainingProgrammes = await GetTrainingProgrammes(!data.Commitment.TransferSenderId.HasValue);
+            var trainingProgrammes = await GetTrainingProgrammes(data.Commitment.TransferSender == null);
 
             var apprenticeshipGroups = new List<ApprenticeshipListItemGroupViewModel>();
 
@@ -407,7 +407,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipGroups = apprenticeshipGroups,
                 RelationshipVerified = relationshipRequest.Relationship.Verified.HasValue,
                 IsReadOnly = data.Commitment.EditStatus != EditStatus.ProviderOnly,
-                IsFundedByTransfer = data.Commitment.TransferSenderId.HasValue,
+                IsFundedByTransfer = data.Commitment.TransferSender != null,
                 Errors = errors,
                 Warnings = warnings
             };
@@ -507,7 +507,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes(!commitmentData.Commitment.TransferSenderId.HasValue),
+                ApprenticeshipProgrammes = await GetTrainingProgrammes(commitmentData.Commitment.TransferSender == null),
                 ValidationErrors = _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors)
             };
         }
@@ -553,7 +553,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 HashedCommitmentId = hashedCommitmentId,
-                IsPaidForByTransfer = commitmentData.Commitment.TransferSenderId.HasValue
+                IsPaidForByTransfer = commitmentData.Commitment.TransferSender != null
             };
 
             await AssertCommitmentStatus(commitmentId, providerId);
@@ -561,7 +561,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes(!commitmentData.Commitment.TransferSenderId.HasValue)
+                ApprenticeshipProgrammes = await GetTrainingProgrammes(commitmentData.Commitment.TransferSender == null)
             };
         }
 
@@ -794,6 +794,35 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 WhatHappensNext = saveStatus == SaveStatus.ApproveAndSend
                     ? "The employer will review the cohort and either approve it or contact you with an update."
                     : "The updated cohort will appear in the employer’s account for them to review."
+            };
+
+            return result;
+        }
+
+        public async Task<ApprovedViewModel> GetApprovedViewModel(long providerId, string hashedCommitmentId)
+        {
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            _logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}", providerId, commitmentId);
+
+            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
+            var commitment = commitmentData.Commitment;
+
+            var result = new ApprovedViewModel
+            {
+                Headline = commitment.TransferSender != null
+                    ? "Cohort approved and transfer request sent"
+                    : "Cohort approved",
+                CommitmentReference = commitment.Reference,
+                EmployerName = commitment.LegalEntityName,
+                ProviderName = commitment.ProviderName,
+                IsTransfer = commitment.TransferSender != null,
+                HasOtherCohortsAwaitingApproval = await GetCohortsForCurrentStatus(providerId, RequestStatus.ReadyForApproval)
             };
 
             return result;

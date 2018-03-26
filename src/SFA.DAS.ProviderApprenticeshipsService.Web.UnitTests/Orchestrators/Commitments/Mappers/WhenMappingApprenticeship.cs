@@ -278,7 +278,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public void ShouldHaveTransferFlagSetIfCommitmentHasTransferSender()
         {
             var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(-5), HasHadDataLockSuccess = false };
-            _commitment.TransferSenderId = 123L;
+            _commitment.TransferSender = new TransferSender{ Id = 123L };
 
             var viewModel = _mapper.MapApprenticeship(apprenticeship, _commitment);
 

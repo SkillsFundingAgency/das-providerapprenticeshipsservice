@@ -96,7 +96,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 EmployerRef = apprenticeship.EmployerRef,
                 HasStarted = !isStartDateInFuture,
                 IsLockedForUpdate = isLockedForUpdate,
-                IsPaidForByTransfer = commitment.TransferSenderId.HasValue
+                IsPaidForByTransfer = commitment.TransferSender != null
             };
         }
 
