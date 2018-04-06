@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
 {
     public enum RequestStatus
     {

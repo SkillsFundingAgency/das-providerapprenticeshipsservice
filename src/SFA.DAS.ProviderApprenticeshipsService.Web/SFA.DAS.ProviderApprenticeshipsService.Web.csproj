@@ -436,7 +436,6 @@
     <Compile Include="Models\IPaginationViewModel.cs" />
     <Compile Include="Models\Settings\NotificationSettingsViewModel.cs" />
     <Compile Include="Models\PriceHistoryViewModel.cs" />
-    <Compile Include="Models\RequestStatus.cs" />
     <Compile Include="Models\Settings\UserNotificationSetting.cs" />
     <Compile Include="Models\SummaryUnsubscribeViewModel.cs" />
     <Compile Include="Models\Types\DateTimeViewModel.cs" />
@@ -470,9 +469,7 @@
     <Compile Include="Orchestrators\BulkUpload\IBulkUploadFileParser.cs" />
     <Compile Include="Orchestrators\BulkUpload\IBulkUploadValidator.cs" />
     <Compile Include="Orchestrators\CommitmentOrchestrator.cs" />
-    <Compile Include="Orchestrators\CommitmentStatusCalculator.cs" />
     <Compile Include="Models\BulkUpload\CsvRecord.cs" />
-    <Compile Include="Orchestrators\ICommitmentStatusCalculator.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Orchestrators\ManageApprenticesOrchestrator.cs" />
     <Compile Include="Orchestrators\Mappers\DataLockMapper.cs" />

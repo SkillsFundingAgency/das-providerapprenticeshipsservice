@@ -138,6 +138,10 @@
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandHandler.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandValidator.cs" />
+    <Compile Include="Domain\Commitment\CommitmentStatusCalculator.cs" />
+    <Compile Include="Domain\Commitment\RequestStatus.cs" />
+    <Compile Include="Extensions\CommitmentListItemExtensions.cs" />
+    <Compile Include="Extensions\CommitmentViewExtensions.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryHandler.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryRequest.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryResponse.cs" />

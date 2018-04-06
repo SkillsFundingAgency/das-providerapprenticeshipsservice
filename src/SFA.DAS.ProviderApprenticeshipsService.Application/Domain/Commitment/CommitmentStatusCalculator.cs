@@ -1,10 +1,9 @@
 ﻿using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
 {
-    public sealed class CommitmentStatusCalculator : ICommitmentStatusCalculator
+    public sealed class CommitmentStatusCalculator
     {
         public RequestStatus GetStatus(EditStatus editStatus, int apprenticeshipCount, LastAction lastAction, AgreementStatus overallAgreementStatus, LastUpdateInfo providerLastUpdateInfo)
         {
@@ -43,8 +42,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 if (overallAgreementStatus == AgreementStatus.NotAgreed)
                     return RequestStatus.ReadyForReview;
-                else
-                    return RequestStatus.ReadyForApproval;
+
+                return RequestStatus.ReadyForApproval;
             }
 
             return RequestStatus.None;
