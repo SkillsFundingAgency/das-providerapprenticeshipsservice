@@ -12,7 +12,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateApprenti
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateRelationship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
@@ -44,19 +43,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IHashingService _hashingService;
         private readonly IProviderCommitmentsLogger _logger;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
-        private readonly IAcademicYearDateProvider _academicYear;
         private readonly ApprenticeshipViewModelUniqueUlnValidator _uniqueUlnValidator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
-        private readonly ApprenticeshipViewModelValidator _apprenticeshipValidator;
         private readonly Func<int, string> _addSSuffix = i => i > 1 ? "s" : "";
 
         public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator,
             IHashingService hashingService, IProviderCommitmentsLogger logger,
             ApprenticeshipViewModelUniqueUlnValidator uniqueUlnValidator,
             ProviderApprenticeshipsServiceConfiguration configuration,
-            IApprenticeshipMapper apprenticeshipMapper,
-            ApprenticeshipViewModelValidator apprenticeshipValidator,
-            IAcademicYearDateProvider academicYear)
+            IApprenticeshipMapper apprenticeshipMapper)
             : base(mediator)
         {
             if (mediator == null)
@@ -74,7 +69,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             if (apprenticeshipMapper == null)
                 throw new ArgumentNullException(nameof(apprenticeshipMapper));
 
-
             _mediator = mediator;
             _statusCalculator = statusCalculator;
             _hashingService = hashingService;
@@ -82,8 +76,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _uniqueUlnValidator = uniqueUlnValidator;
             _configuration = configuration;
             _apprenticeshipMapper = apprenticeshipMapper;
-            _apprenticeshipValidator = apprenticeshipValidator;
-            _academicYear = academicYear;
         }
 
         public async Task<CohortsViewModel> GetCohorts(long providerId)
