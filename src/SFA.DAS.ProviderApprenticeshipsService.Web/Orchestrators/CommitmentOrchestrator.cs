@@ -48,6 +48,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly ApprenticeshipViewModelUniqueUlnValidator _uniqueUlnValidator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
         private readonly ApprenticeshipViewModelValidator _apprenticeshipValidator;
+        private readonly IFeatureToggleService _featureToggleService;
         private readonly Func<int, string> _addSSuffix = i => i > 1 ? "s" : "";
 
         public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator,
@@ -56,7 +57,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             ProviderApprenticeshipsServiceConfiguration configuration,
             IApprenticeshipMapper apprenticeshipMapper,
             ApprenticeshipViewModelValidator apprenticeshipValidator,
-            IAcademicYearDateProvider academicYear)
+            IAcademicYearDateProvider academicYear,
+            IFeatureToggleService featureToggleService)
             : base(mediator)
         {
             if (mediator == null)
@@ -73,7 +75,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 throw new ArgumentNullException(nameof(uniqueUlnValidator));
             if (apprenticeshipMapper == null)
                 throw new ArgumentNullException(nameof(apprenticeshipMapper));
-
+            if (featureToggleService == null)
+                throw new ArgumentNullException(nameof(featureToggleService));
 
             _mediator = mediator;
             _statusCalculator = statusCalculator;
@@ -84,6 +87,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _apprenticeshipMapper = apprenticeshipMapper;
             _apprenticeshipValidator = apprenticeshipValidator;
             _academicYear = academicYear;
+            _featureToggleService = featureToggleService;
         }
 
         public async Task<CohortsViewModel> GetCohorts(long providerId)
