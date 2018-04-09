@@ -46,13 +46,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly ApprenticeshipViewModelUniqueUlnValidator _uniqueUlnValidator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
+        private readonly IFeatureToggleService _featureToggleService;
         private readonly Func<int, string> _addSSuffix = i => i > 1 ? "s" : "";
 
         public CommitmentOrchestrator(IMediator mediator,
             IHashingService hashingService, IProviderCommitmentsLogger logger,
             ApprenticeshipViewModelUniqueUlnValidator uniqueUlnValidator,
             ProviderApprenticeshipsServiceConfiguration configuration,
-            IApprenticeshipMapper apprenticeshipMapper)
+            IApprenticeshipMapper apprenticeshipMapper,
+            IFeatureToggleService featureToggleService)
             : base(mediator)
         {
             if (mediator == null)
@@ -67,6 +69,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 throw new ArgumentNullException(nameof(uniqueUlnValidator));
             if (apprenticeshipMapper == null)
                 throw new ArgumentNullException(nameof(apprenticeshipMapper));
+            if (featureToggleService == null)
+                throw new ArgumentNullException(nameof(featureToggleService));
 
             _mediator = mediator;
             _hashingService = hashingService;
@@ -74,6 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _uniqueUlnValidator = uniqueUlnValidator;
             _configuration = configuration;
             _apprenticeshipMapper = apprenticeshipMapper;
+            _featureToggleService = featureToggleService;
         }
 
         public async Task<CohortsViewModel> GetCohorts(long providerId)
