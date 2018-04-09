@@ -1,3 +1,4 @@
+using FeatureToggle;
 using FluentValidation.Results;
 
 using MediatR;
@@ -6,6 +7,7 @@ using NUnit.Framework;
 using SFA.DAS.HashingService;
 using SFA.DAS.Learners.Validators;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -26,6 +28,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         protected Mock<IHashingService> _mockHashingService = new Mock<IHashingService>();
         protected Mock<IApprenticeshipMapper> _mockMapper = new Mock<IApprenticeshipMapper>();
         protected Mock<ICommitmentStatusCalculator> _mockCalculator = new Mock<ICommitmentStatusCalculator>();
+        protected Mock<IFeatureToggleService> MockFeatureToggleService;
+        protected Mock<IFeatureToggle> MockFeatureToggleOn;
 
         private ApprenticeshipViewModelValidator _validator;
         private Mock<ApprenticeshipViewModelUniqueUlnValidator> _ulnValidator;
@@ -48,6 +52,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 .Setup(m => m.ValidateAsyncOverride(It.IsAny<ApprenticeshipViewModel>()))
                 .ReturnsAsync(new ValidationResult());
 
+            MockFeatureToggleOn = new Mock<IFeatureToggle>();
+            MockFeatureToggleOn.Setup(x => x.FeatureEnabled).Returns(true);
+            MockFeatureToggleService = new Mock<IFeatureToggleService>();
+            MockFeatureToggleService.Setup(x => x.Get<Transfers>()).Returns(MockFeatureToggleOn.Object);
+
             SetUpOrchestrator();
         }
 
@@ -62,7 +71,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                        Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
                        _mockMapper.Object,
                        _validator,
-                       Mock.Of<IAcademicYearDateProvider>());
+                       Mock.Of<IAcademicYearDateProvider>(),
+                       MockFeatureToggleService.Object);
         }
 
         protected void SetUpOrchestrator(ICommitmentStatusCalculator commitmentStatusCalculator)
@@ -76,7 +86,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                        Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
                        _mockMapper.Object,
                        _validator,
-                       Mock.Of<IAcademicYearDateProvider>());
+                       Mock.Of<IAcademicYearDateProvider>(),
+                       MockFeatureToggleService.Object);
         }
     }
 }
