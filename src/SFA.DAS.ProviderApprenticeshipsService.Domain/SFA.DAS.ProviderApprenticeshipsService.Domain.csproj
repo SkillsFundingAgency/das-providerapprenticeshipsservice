@@ -142,6 +142,7 @@
     <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Interfaces\IUserSettingsRepository.cs" />
     <Compile Include="ITrainingProgramme.cs" />
+    <Compile Include="Models\FeatureToggles\Transfers.cs" />
     <Compile Include="Models\Settings\UserNotificationSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provider.cs" />
