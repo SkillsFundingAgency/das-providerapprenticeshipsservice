@@ -1,9 +1,7 @@
-using System.Security.Claims;
 using System.Web.Mvc;
-using Newtonsoft.Json;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -21,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             _flashMessage = flashMessage;
         }
 
-        protected string CurrentUserId = null;
+        protected string CurrentUserId;
 
         protected void SetInfoMessage(string messageText, FlashMessageSeverityLevel level)
         {
@@ -33,7 +31,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             _flashMessage.Delete(FlashMessageCookieName);
 
             _flashMessage.Create(message, FlashMessageCookieName);
-
         }
 
         public FlashMessageViewModel GetFlashMessageViewModelFromCookie()

@@ -33,7 +33,9 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using GetCommitmentQueryRequest = SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment.GetCommitmentQueryRequest;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
@@ -98,6 +100,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 || m == RequestStatus.NewRequest),
 
                 WithEmployerCount = commitmentStatus.Count(m => m == RequestStatus.SentForReview || m == RequestStatus.WithEmployerForApproval),
+                TransferFundedCohortsCount = _featureToggleService.Get<Transfers>().FeatureEnabled
+                    ? commitmentStatus.Count(m =>
+                        m == RequestStatus.WithSenderForApproval
+                        || m == RequestStatus.RejectedBySender) : (int?)null,
+
                 HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed,
                 SignAgreementUrl = _configuration.ContractAgreementsUrl
             };

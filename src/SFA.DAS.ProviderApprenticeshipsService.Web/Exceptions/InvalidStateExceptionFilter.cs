@@ -1,6 +1,6 @@
-using System;
 using System.Web.Mvc;
 using NLog;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions
 {

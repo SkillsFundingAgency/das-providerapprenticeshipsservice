@@ -17,9 +17,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Extensions
                 commitment.ApprenticeshipCount,
                 commitment.LastAction,
                 commitment.AgreementStatus,
-                commitment.ProviderLastUpdateInfo);
-            //commitment.TransferSenderId,
-            //commitment.TransferApprovalStatus);
+                commitment.ProviderLastUpdateInfo,
+                commitment.TransferSenderId,
+                commitment.TransferApprovalStatus);
         }
     }
 }

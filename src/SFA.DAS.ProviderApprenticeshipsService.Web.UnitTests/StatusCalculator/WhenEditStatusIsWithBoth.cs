@@ -16,7 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.StatusCalculator
         {
             var lastUpdateInfo = new LastUpdateInfo();
 
-            var status = _calculator.GetStatus(EditStatus.Both, 2, lastAction, AgreementStatus.BothAgreed, lastUpdateInfo);
+            var status = _calculator.GetStatus(EditStatus.Both, 2, lastAction, AgreementStatus.BothAgreed, lastUpdateInfo, null, null);
 
             status.Should().Be(expectedResult);
         }

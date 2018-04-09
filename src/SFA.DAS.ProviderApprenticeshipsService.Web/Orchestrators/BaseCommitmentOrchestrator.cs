@@ -7,8 +7,8 @@ using MediatR;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {

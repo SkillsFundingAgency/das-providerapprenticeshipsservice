@@ -22,6 +22,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
         ReadyForApproval,
 
         [Description("Approved")]
-        Approved
+        Approved,
+
+        [Description("With sender for approval")]
+        WithSenderForApproval,
+
+        [Description("Rejected by sender")]
+        RejectedBySender
     }
 }

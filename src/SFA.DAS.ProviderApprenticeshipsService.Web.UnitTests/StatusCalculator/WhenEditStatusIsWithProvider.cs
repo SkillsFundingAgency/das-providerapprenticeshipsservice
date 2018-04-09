@@ -23,7 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.StatusCalculator
                 Name = "Test"
             };
 
-            var status = _calculator.GetStatus(EditStatus.ProviderOnly, 2, lastAction, overallAgreementStatus, lastUpdateInfo);
+            var status = _calculator.GetStatus(EditStatus.ProviderOnly, 2, lastAction, overallAgreementStatus, lastUpdateInfo, null, null);
 
             status.Should().Be(expectedResult);
         }
@@ -34,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.StatusCalculator
         public void WhenTheProviderHasNeverModifiedTheCommitmentItIsClassedAsNew(LastAction lastAction, AgreementStatus overallAgreementStatus)
         {
             //Act
-            var status = _calculator.GetStatus(EditStatus.ProviderOnly, 2, lastAction, overallAgreementStatus, null);
+            var status = _calculator.GetStatus(EditStatus.ProviderOnly, 2, lastAction, overallAgreementStatus, null, null, null);
 
             //Assert
             Assert.AreEqual(RequestStatus.NewRequest, status);
