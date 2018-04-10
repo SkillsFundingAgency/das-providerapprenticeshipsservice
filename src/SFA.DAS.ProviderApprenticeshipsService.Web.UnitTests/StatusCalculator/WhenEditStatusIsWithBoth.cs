@@ -2,22 +2,21 @@
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.StatusCalculator
 {
     [TestFixture]
     public sealed class WhenEditStatusIsWithBoth
     {
-        private static readonly ICommitmentStatusCalculator _calculator = new CommitmentStatusCalculator();
+        private static readonly CommitmentStatusCalculator _calculator = new CommitmentStatusCalculator();
 
         [TestCase(RequestStatus.Approved, LastAction.Approve, TestName = "Approved by both parties")]
         public void WhenThereAreNoApprentices(RequestStatus expectedResult, LastAction lastAction)
         {
             var lastUpdateInfo = new LastUpdateInfo();
 
-            var status = _calculator.GetStatus(EditStatus.Both, 2, lastAction, AgreementStatus.BothAgreed, lastUpdateInfo);
+            var status = _calculator.GetStatus(EditStatus.Both, 2, lastAction, AgreementStatus.BothAgreed, lastUpdateInfo, null, null);
 
             status.Should().Be(expectedResult);
         }

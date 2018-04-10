@@ -12,7 +12,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateApprenti
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateRelationship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
@@ -33,6 +32,10 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
 using SFA.DAS.HashingService;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using GetCommitmentQueryRequest = SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment.GetCommitmentQueryRequest;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
@@ -40,29 +43,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
     public class CommitmentOrchestrator : BaseCommitmentOrchestrator
     {
         private readonly IMediator _mediator;
-        private readonly ICommitmentStatusCalculator _statusCalculator;
         private readonly IHashingService _hashingService;
         private readonly IProviderCommitmentsLogger _logger;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
-        private readonly IAcademicYearDateProvider _academicYear;
         private readonly ApprenticeshipViewModelUniqueUlnValidator _uniqueUlnValidator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
-        private readonly ApprenticeshipViewModelValidator _apprenticeshipValidator;
+        private readonly IFeatureToggleService _featureToggleService;
         private readonly Func<int, string> _addSSuffix = i => i > 1 ? "s" : "";
 
-        public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator,
+        public CommitmentOrchestrator(IMediator mediator,
             IHashingService hashingService, IProviderCommitmentsLogger logger,
             ApprenticeshipViewModelUniqueUlnValidator uniqueUlnValidator,
             ProviderApprenticeshipsServiceConfiguration configuration,
             IApprenticeshipMapper apprenticeshipMapper,
-            ApprenticeshipViewModelValidator apprenticeshipValidator,
-            IAcademicYearDateProvider academicYear)
+            IFeatureToggleService featureToggleService)
             : base(mediator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
-            if (statusCalculator == null)
-                throw new ArgumentNullException(nameof(statusCalculator));
             if (hashingService == null)
                 throw new ArgumentNullException(nameof(hashingService));
             if (logger == null)
@@ -73,17 +71,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 throw new ArgumentNullException(nameof(uniqueUlnValidator));
             if (apprenticeshipMapper == null)
                 throw new ArgumentNullException(nameof(apprenticeshipMapper));
-
+            if (featureToggleService == null)
+                throw new ArgumentNullException(nameof(featureToggleService));
 
             _mediator = mediator;
-            _statusCalculator = statusCalculator;
             _hashingService = hashingService;
             _logger = logger;
             _uniqueUlnValidator = uniqueUlnValidator;
             _configuration = configuration;
             _apprenticeshipMapper = apprenticeshipMapper;
-            _apprenticeshipValidator = apprenticeshipValidator;
-            _academicYear = academicYear;
+            _featureToggleService = featureToggleService;
         }
 
         public async Task<CohortsViewModel> GetCohorts(long providerId)
@@ -93,9 +90,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId
             });
-            var commitmentStatus =
-                data.Commitments.Select(m =>
-                    _statusCalculator.GetStatus(m.EditStatus, m.ApprenticeshipCount, m.LastAction, m.AgreementStatus, m.ProviderLastUpdateInfo)).ToList();
+            var commitmentStatus = data.Commitments.Select(m => m.GetStatus()).ToList();
 
             var model = new CohortsViewModel
             {
@@ -105,6 +100,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 || m == RequestStatus.NewRequest),
 
                 WithEmployerCount = commitmentStatus.Count(m => m == RequestStatus.SentForReview || m == RequestStatus.WithEmployerForApproval),
+                TransferFundedCohortsCount = _featureToggleService.Get<Transfers>().FeatureEnabled
+                    ? commitmentStatus.Count(m =>
+                        m == RequestStatus.WithSenderForApproval
+                        || m == RequestStatus.RejectedBySender) : (int?)null,
+
                 HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed,
                 SignAgreementUrl = _configuration.ContractAgreementsUrl
             };
@@ -316,11 +316,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderId = providerId
             });
 
-            return data.Commitments.Where(
-                m => _statusCalculator.GetStatus(m.EditStatus, m.ApprenticeshipCount, m.LastAction, m.AgreementStatus, m.ProviderLastUpdateInfo)
-                    == requestStatus);
+            return data.Commitments.Where(m => m.GetStatus() == requestStatus);
         }
-
 
         public async Task<ProviderAgreementStatus> IsSignedAgreement(long providerId)
         {
@@ -399,7 +396,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 HashedCommitmentId = hashedCommitmentId,
                 LegalEntityName = data.Commitment.LegalEntityName,
                 Reference = data.Commitment.Reference,
-                Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus, data.Commitment.ProviderLastUpdateInfo),
+                Status = data.Commitment.GetStatus(),
                 HasApprenticeships = apprenticeships.Count > 0,
                 Apprenticeships = apprenticeships,
                 LatestMessage = GetLatestMessage(data.Commitment.Messages, true)?.Message,
@@ -743,7 +740,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Reference = listItem.Reference,
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
-                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.ApprenticeshipCount, listItem.LastAction, listItem.AgreementStatus, listItem.ProviderLastUpdateInfo),
+                Status = listItem.GetStatus(),
                 LatestMessage = lastestMessage
             };
         }
@@ -756,7 +753,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Reference = listItem.Reference,
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
-                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.LastAction, listItem.AgreementStatus, listItem.ProviderLastUpdateInfo),
+                Status = listItem.GetStatus(),
                 EmployerAccountId = listItem.EmployerAccountId,
                 LatestMessage = latestMessage
             };

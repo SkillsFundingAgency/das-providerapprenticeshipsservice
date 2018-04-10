@@ -110,7 +110,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
             return new StandardsView
             {
                 CreationDate = _currentDateTime.Now,
-                Standards = standards.Select(x => new Domain.Standard
+                Standards = standards.Select(x => new ProviderApprenticeshipsService.Domain.Standard
                 {
                     Id = x.Id,
                     Level = x.Level,

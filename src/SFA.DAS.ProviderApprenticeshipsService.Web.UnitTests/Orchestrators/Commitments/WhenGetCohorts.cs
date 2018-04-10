@@ -11,7 +11,6 @@ using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
@@ -37,14 +36,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             await _orchestrator.GetCohorts(1234567);
 
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>()), Times.AtLeastOnce);
-            _mockCalculator.Verify(m => m.GetStatus(It.IsAny<EditStatus>(), It.IsAny<int>(), It.IsAny<LastAction>(), It.IsAny<AgreementStatus>(), It.IsAny<LastUpdateInfo>()), Times.Exactly(_commitments.Result.Commitments.Count));
         }
-        
 
         [Test]
         public async Task TestFilter()
         {
-            SetUpOrchestrator(new CommitmentStatusCalculator());
+            SetUpOrchestrator();
 
             var result = await _orchestrator.GetCohorts(1234567);
 

@@ -2,15 +2,14 @@
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.StatusCalculator
 {
     [TestFixture]
     public sealed class WhenEditStatusIsWithEmployer
     {
-        private static readonly ICommitmentStatusCalculator _calculator = new CommitmentStatusCalculator();
+        private static readonly CommitmentStatusCalculator Calculator = new CommitmentStatusCalculator();
 
         [TestCase(RequestStatus.SentForReview, LastAction.Amend, AgreementStatus.NotAgreed, TestName = "Sent request for review to employer")]
         [TestCase(RequestStatus.SentForReview, LastAction.Amend, AgreementStatus.EmployerAgreed, TestName = "Sent back approved request for review")]
@@ -23,7 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.StatusCalculator
                 Name = "Test"
             };
 
-            var status = _calculator.GetStatus(EditStatus.EmployerOnly, 2, lastAction, overallAgreementStatus, lastUpdateInfo);
+            var status = Calculator.GetStatus(EditStatus.EmployerOnly, 2, lastAction, overallAgreementStatus, lastUpdateInfo, null, null);
 
             status.Should().Be(expectedResult);
         }
@@ -35,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.StatusCalculator
         public void WhenTheEmployerHasNeverModifiedTheCommitmentItIsClassedAsNew(LastAction lastAction, AgreementStatus overallAgreementStatus)
         {
             //Act
-            var status = _calculator.GetStatus(EditStatus.ProviderOnly, 2, lastAction, overallAgreementStatus, null);
+            var status = Calculator.GetStatus(EditStatus.ProviderOnly, 2, lastAction, overallAgreementStatus, null, null, null);
 
             //Assert
             Assert.AreEqual(RequestStatus.NewRequest, status);
