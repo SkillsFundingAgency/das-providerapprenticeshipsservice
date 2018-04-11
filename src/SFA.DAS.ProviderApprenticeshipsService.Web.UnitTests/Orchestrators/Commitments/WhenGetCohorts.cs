@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
@@ -13,17 +15,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     [TestFixture]
     public class WhenGetCohorts : ApprenticeshipValidationTestBase
     {
-        public Task<GetCommitmentsQueryResponse> Commitments; 
-
         [SetUp]
-        protected virtual void SetUp()
+        protected void GetCohortsSetup()
         {
-            Commitments = Task.FromResult(TestData());
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>())).Returns(Commitments);
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>())).ReturnsAsync(TestData());
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetProviderAgreementQueryRequest>()))
-                .Returns(Task.FromResult(new GetProviderAgreementQueryResponse { HasAgreement = ProviderAgreementStatus.Agreed }));
+                .ReturnsAsync(new GetProviderAgreementQueryResponse { HasAgreement = ProviderAgreementStatus.Agreed });
 
-            base.SetUp();
+            SetUp();
         }
 
         [Test]
@@ -32,6 +31,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             await _orchestrator.GetCohorts(1234567);
 
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>()), Times.AtLeastOnce);
+        }
+
+        [Test]
+        public async Task ThenAllCountsShouldBeZeroIfNoCommitments()
+        {
+            //Arrange
+            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentsQueryRequest>()))
+                .ReturnsAsync(new GetCommitmentsQueryResponse
+                {
+                    Commitments = new List<CommitmentListItem>()
+                });
+
+            //Act
+            var result = await _orchestrator.GetCohorts(1234567);
+
+            //Assert
+            Assert.AreEqual(0, result.ReadyForReviewCount);
+            Assert.AreEqual(0, result.WithEmployerCount);
+            Assert.AreEqual(0, result.TransferFundedCohortsCount);
         }
 
         [Test]
