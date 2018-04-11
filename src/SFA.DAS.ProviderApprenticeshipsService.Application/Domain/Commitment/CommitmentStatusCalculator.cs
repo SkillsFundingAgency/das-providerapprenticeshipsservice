@@ -15,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
             {
                 if (!transferApprovalStatus.HasValue)
                     throw new InvalidStateException("TransferSenderId supplied, but no TransferApprovalStatus");
-                return GetTransferStatus(editStatus, transferApprovalStatus.Value);
+                return GetTransferStatus(editStatus, transferApprovalStatus.Value, lastAction, overallAgreementStatus);
             }
 
             if (editStatus == EditStatus.Both)
@@ -39,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
             return RequestStatus.None;
         }
 
-        private RequestStatus GetTransferStatus(EditStatus edit, TransferApprovalStatus transferApproval)
+        private RequestStatus GetTransferStatus(EditStatus edit, TransferApprovalStatus transferApproval, LastAction lastAction, AgreementStatus agreementStatus)
         {
             const string invalidStateExceptionMessagePrefix = "Transfer funder commitment in invalid state: ";
 
@@ -49,7 +49,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
             switch (transferApproval)
             {
                 case TransferApprovalStatus.Pending:
-                    return edit == EditStatus.Both ? RequestStatus.WithSenderForApproval : RequestStatus.NewRequest;
+                    switch (edit)
+                    {
+                        case EditStatus.Both:
+                            return RequestStatus.WithSenderForApproval;
+                        case EditStatus.EmployerOnly:
+                            return GetEmployerOnlyStatus(lastAction);
+                        case EditStatus.ProviderOnly:
+                            return GetProviderOnlyStatus(lastAction, agreementStatus);
+                        default:
+                            throw new Exception("Unexpected EditStatus");
+
+                    }
 
                 case TransferApprovalStatus.Approved:
                     if (edit != EditStatus.Both)
@@ -89,6 +100,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
 
         private RequestStatus GetEmployerOnlyStatus(LastAction lastAction)
         {
+            // is this possible on the provider side?
             if (lastAction == LastAction.None)
                 return RequestStatus.None;
 
