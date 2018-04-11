@@ -100,7 +100,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
 
         private RequestStatus GetEmployerOnlyStatus(LastAction lastAction)
         {
-            // is this possible on the provider side?
             if (lastAction == LastAction.None)
                 return RequestStatus.None;
 

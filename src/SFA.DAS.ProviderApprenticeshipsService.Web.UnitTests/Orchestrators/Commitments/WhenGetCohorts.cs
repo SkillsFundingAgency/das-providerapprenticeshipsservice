@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using System.Threading.Tasks;
-
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-
-using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.Commitments.Api.Types.Commitment;
-using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
@@ -17,13 +13,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     [TestFixture]
     public class WhenGetCohorts : ApprenticeshipValidationTestBase
     {
-        public Task<GetCommitmentsQueryResponse> _commitments; 
+        public Task<GetCommitmentsQueryResponse> Commitments; 
 
         [SetUp]
         protected virtual void SetUp()
         {
-            _commitments = Task.FromResult(TestData());
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>())).Returns(_commitments);
+            Commitments = Task.FromResult(TestData());
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>())).Returns(Commitments);
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetProviderAgreementQueryRequest>()))
                 .Returns(Task.FromResult(new GetProviderAgreementQueryResponse { HasAgreement = ProviderAgreementStatus.Agreed }));
 
@@ -51,61 +47,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             result.ReadyForReviewCount.Should().Be(6);
         }
 
-        private static GetCommitmentsQueryResponse TestData()
+        private GetCommitmentsQueryResponse TestData()
         {
             return new GetCommitmentsQueryResponse
                        {
-                           Commitments = new List<CommitmentListItem>
-                                             {
-                                                new CommitmentListItem // NewRequest
-                                                    { AgreementStatus = AgreementStatus.NotAgreed, ApprenticeshipCount = 0,
-                                                      CanBeApproved = true, CommitmentStatus = CommitmentStatus.Active,
-                                                      EditStatus = EditStatus.ProviderOnly, LastAction = LastAction.None,
-                                                      ProviderLastUpdateInfo = new LastUpdateInfo()
-                                                    },
-                                                 new CommitmentListItem // ReadyForApproval
-                                                    { AgreementStatus = AgreementStatus.EmployerAgreed, ApprenticeshipCount = 5,
-                                                      CanBeApproved = true, CommitmentStatus = CommitmentStatus.Active,
-                                                      EditStatus = EditStatus.ProviderOnly, LastAction = LastAction.Approve,
-                                                      ProviderLastUpdateInfo = new LastUpdateInfo { EmailAddress = "a@b", Name="Test"}
-                                                    },
-                                                 new CommitmentListItem // ReadyForApproval
-                                                    { AgreementStatus = AgreementStatus.EmployerAgreed, ApprenticeshipCount = 5,
-                                                      CanBeApproved = true, CommitmentStatus = CommitmentStatus.Active,
-                                                      EditStatus = EditStatus.ProviderOnly, LastAction = LastAction.Approve,
-                                                      ProviderLastUpdateInfo = new LastUpdateInfo { EmailAddress = "a@b", Name="Test"}
-                                                    },
-                                                 new CommitmentListItem // With employer
-                                                    { AgreementStatus = AgreementStatus.NotAgreed, ApprenticeshipCount = 6,
-                                                      CanBeApproved = true, CommitmentStatus = CommitmentStatus.Active,
-                                                      EditStatus = EditStatus.EmployerOnly, LastAction = LastAction.Amend,
-                                                      ProviderLastUpdateInfo = new LastUpdateInfo { EmailAddress = "a@b", Name="Test"}
-                                                    },
-                                                 new CommitmentListItem // With employer
-                                                    { AgreementStatus = AgreementStatus.ProviderAgreed, ApprenticeshipCount = 6,
-                                                      CanBeApproved = true, CommitmentStatus = CommitmentStatus.Active,
-                                                      EditStatus = EditStatus.EmployerOnly, LastAction = LastAction.Approve,
-                                                      ProviderLastUpdateInfo = new LastUpdateInfo { EmailAddress = "a@b", Name="Test"}
-                                                    },
-                                                 new CommitmentListItem // ReadyForReview
-                                                    { AgreementStatus = AgreementStatus.EmployerAgreed, ApprenticeshipCount = 5,
-                                                      CanBeApproved = false, CommitmentStatus = CommitmentStatus.Active,
-                                                      EditStatus = EditStatus.ProviderOnly, LastAction = LastAction.Amend,
-                                                      ProviderLastUpdateInfo = new LastUpdateInfo { EmailAddress = "a@b", Name="Test"}
-                                                    },
-                                                 new CommitmentListItem // ReadyForReview
-                                                    { AgreementStatus = AgreementStatus.EmployerAgreed, ApprenticeshipCount = 5,
-                                                      CanBeApproved = false, CommitmentStatus = CommitmentStatus.Active,
-                                                      EditStatus = EditStatus.ProviderOnly, LastAction = LastAction.Amend,
-                                                      ProviderLastUpdateInfo = new LastUpdateInfo { EmailAddress = "a@b", Name="Test"}
-                                                    },
-                                                 new CommitmentListItem // ReadyForReview
-                                                    { AgreementStatus = AgreementStatus.NotAgreed, ApprenticeshipCount = 0,
-                                                      CanBeApproved = true, CommitmentStatus = CommitmentStatus.Active,
-                                                      EditStatus = EditStatus.ProviderOnly, LastAction = LastAction.None,
-                                                      ProviderLastUpdateInfo = new LastUpdateInfo { EmailAddress = "a@b", Name="Test"}
-                                                    }
-                                             }
+                           Commitments = GetTestCommitmentsOfStatus(1, RequestStatus.NewRequest, RequestStatus.ReadyForApproval,
+                               RequestStatus.ReadyForApproval, RequestStatus.WithEmployerForApproval, RequestStatus.WithEmployerForApproval,
+                               RequestStatus.ReadyForReview, RequestStatus.ReadyForReview, RequestStatus.ReadyForReview).ToList()
                        };
         }
     }
