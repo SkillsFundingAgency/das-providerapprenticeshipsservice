@@ -233,6 +233,7 @@
     <Compile Include="Orchestrators\ManageApprentices\WhenSubmittingReviewApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenSubmittingUndoApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\Commitments\WhenUploadingFile.cs" />
+    <Compile Include="StatusCalculator\WhenGettingStatusOfTransferCommitment.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\ApprenticeshipBulkUploadValidationTestBase.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingCost.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingDateOfBirth.cs" />
