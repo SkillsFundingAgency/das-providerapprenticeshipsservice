@@ -56,6 +56,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
                     {
                         case EditStatus.Both:
                             return RequestStatus.WithSenderForApproval;
+                        //todo: these (EmployerOnly & ProviderOnly) status calculations will have to be updated/checked by later stories
                         case EditStatus.EmployerOnly:
                             return GetEmployerOnlyStatus(lastAction);
                         case EditStatus.ProviderOnly:
