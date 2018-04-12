@@ -7,6 +7,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
 {
     public sealed class CommitmentStatusCalculator
     {
+        /// <remarks>
+        /// Note: any commitments with CommitmentStatus == Active are filtered out before GetStatus is called on them
+        /// </remarks>
         public RequestStatus GetStatus(EditStatus editStatus, int apprenticeshipCount, LastAction lastAction,
             AgreementStatus overallAgreementStatus, LastUpdateInfo providerLastUpdateInfo,
             long? transferSenderId, TransferApprovalStatus? transferApprovalStatus)
