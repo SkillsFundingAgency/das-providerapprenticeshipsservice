@@ -58,11 +58,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         }
 
         [TestCase(/*expectedReadyForReviewCount=*/0, /*expectedWithEmployerCount=*/0, /*expectedTransferFundedCohortsCount=*/0,
+            null, TransferApprovalStatus.Pending, AgreementStatus.NotAgreed,
+            EditStatus.EmployerOnly, LastAction.None, 0, false, CommitmentStatus.New, TestName = "Just created by an employer")]
+        [TestCase(/*expectedReadyForReviewCount=*/1, /*expectedWithEmployerCount=*/0, /*expectedTransferFundedCohortsCount=*/0,
+            null, TransferApprovalStatus.Pending, AgreementStatus.NotAgreed,
+            EditStatus.ProviderOnly, LastAction.None, 0, false, CommitmentStatus.Active, TestName = "Been sent to provider by employer to add apprentices")]
+        [TestCase(/*expectedReadyForReviewCount=*/0, /*expectedWithEmployerCount=*/1, /*expectedTransferFundedCohortsCount=*/0,
             ValidTransferSenderId, TransferApprovalStatus.Pending, AgreementStatus.NotAgreed,
-            EditStatus.EmployerOnly, LastAction.None, 0, true, CommitmentStatus.Active, TestName = "With receiving employer")]
+            EditStatus.EmployerOnly, LastAction.Amend, 0, false, CommitmentStatus.Active, TestName = "With receiving employer")]
         [TestCase(/*expectedReadyForReviewCount=*/1, /*expectedWithEmployerCount=*/0, /*expectedTransferFundedCohortsCount=*/0,
             ValidTransferSenderId, TransferApprovalStatus.Pending, AgreementStatus.NotAgreed,
-            EditStatus.ProviderOnly, LastAction.None, 0, true, CommitmentStatus.Active, TestName = "With provider")]
+            EditStatus.ProviderOnly, LastAction.Amend, 0, true, CommitmentStatus.Active, TestName = "With provider")]
         [TestCase(/*expectedReadyForReviewCount=*/0, /*expectedWithEmployerCount=*/0, /*expectedTransferFundedCohortsCount=*/1,
             ValidTransferSenderId, TransferApprovalStatus.Pending, AgreementStatus.BothAgreed,
             EditStatus.Both, LastAction.Approve, 1, true, CommitmentStatus.Active, TestName = "With sender but not yet actioned by them")]
@@ -72,12 +78,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [TestCase(/*expectedReadyForReviewCount=*/0, /*expectedWithEmployerCount=*/0, /*expectedTransferFundedCohortsCount=*/0,
             ValidTransferSenderId, TransferApprovalStatus.Approved, AgreementStatus.BothAgreed,
             EditStatus.Both, LastAction.Approve, 1, true, CommitmentStatus.Active, TestName = "Approved by all 3 parties")]
-        [TestCase(/*expectedReadyForReviewCount=*/0, /*expectedWithEmployerCount=*/0, /*expectedTransferFundedCohortsCount=*/0,
-            null, TransferApprovalStatus.Pending, AgreementStatus.NotAgreed,
-            EditStatus.EmployerOnly, LastAction.None, 0, false, CommitmentStatus.New, TestName = "Just created by an employer")]
-        [TestCase(/*expectedReadyForReviewCount=*/1, /*expectedWithEmployerCount=*/0, /*expectedTransferFundedCohortsCount=*/0,
-            null, TransferApprovalStatus.Pending, AgreementStatus.NotAgreed,
-            EditStatus.ProviderOnly, LastAction.None, 0, false, CommitmentStatus.Active, TestName = "Been sent to provider by employer to add apprentices")]
         public async Task ThenCountsShouldBeCorrectWhenEmployerHasASingleCommitmentThats(
             int expectedReadyForReviewCount, int expectedWithEmployerCount, int expectedTransferFundedCohortsCount,
             long? transferSenderId, TransferApprovalStatus transferApprovalStatus,
