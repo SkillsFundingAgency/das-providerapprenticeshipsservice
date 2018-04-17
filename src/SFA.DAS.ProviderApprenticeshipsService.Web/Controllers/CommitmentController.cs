@@ -28,13 +28,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         public CommitmentController(CommitmentOrchestrator commitmentOrchestrator, ILog logger, ICookieStorageService<FlashMessageViewModel> flashMessage, ICookieStorageService<string> lastCohortCookieStorageService) : base(flashMessage)
         {
-            if (commitmentOrchestrator == null)
-                throw new ArgumentNullException(nameof(commitmentOrchestrator));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-            if(lastCohortCookieStorageService == null)
-                throw new ArgumentNullException(nameof(lastCohortCookieStorageService));
-
             _commitmentOrchestrator = commitmentOrchestrator;
             _logger = logger;
             _lastCohortCookieStorageService = lastCohortCookieStorageService;

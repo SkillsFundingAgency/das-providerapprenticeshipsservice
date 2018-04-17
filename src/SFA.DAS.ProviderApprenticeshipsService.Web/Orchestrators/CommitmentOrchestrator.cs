@@ -59,21 +59,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             IFeatureToggleService featureToggleService)
             : base(mediator)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-            if (hashingService == null)
-                throw new ArgumentNullException(nameof(hashingService));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-            if (configuration == null)
-                throw new ArgumentNullException(nameof(configuration));
-            if (uniqueUlnValidator == null)
-                throw new ArgumentNullException(nameof(uniqueUlnValidator));
-            if (apprenticeshipMapper == null)
-                throw new ArgumentNullException(nameof(apprenticeshipMapper));
-            if (featureToggleService == null)
-                throw new ArgumentNullException(nameof(featureToggleService));
-
             _mediator = mediator;
             _hashingService = hashingService;
             _logger = logger;
