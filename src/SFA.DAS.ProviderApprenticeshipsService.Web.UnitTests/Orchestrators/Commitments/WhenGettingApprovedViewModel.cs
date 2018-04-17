@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -8,7 +7,6 @@ using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
@@ -60,16 +58,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 AgreementStatus = AgreementStatus.EmployerAgreed,
                 CanBeApproved = true,
                 EditStatus = EditStatus.ProviderOnly,
-                LastAction = LastAction.Approve
+                LastAction = LastAction.Approve,
+                ProviderLastUpdateInfo = new LastUpdateInfo {Name = "Test"}
             });
-
-            _mockCalculator.Setup(x => x.GetStatus(
-                    It.IsAny<EditStatus>(),
-                    It.IsAny<int>(),
-                    It.IsAny<LastAction>(),
-                    It.IsAny<AgreementStatus>(),
-                    It.IsAny<LastUpdateInfo>()))
-                .Returns(RequestStatus.ReadyForApproval);
 
             var result = await _orchestrator.GetApprovedViewModel(1, "Hashed-Id");
 

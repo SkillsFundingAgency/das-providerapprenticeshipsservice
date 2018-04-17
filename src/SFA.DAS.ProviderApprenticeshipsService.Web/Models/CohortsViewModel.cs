@@ -6,6 +6,8 @@
 
         public int WithEmployerCount { get; set; }
 
+        public int? TransferFundedCohortsCount { get; set; }
+
         public bool HasSignedTheAgreement { get; set; }
 
         public string SignAgreementUrl { get; set; }
