@@ -142,7 +142,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<TransferFundedViewModel> GetAllTransferFunded(long providerId)
         {
-            var data = (await GetAllCommitmentsWithTheseStatuses(providerId, new [] { RequestStatus.WithSenderForApproval, RequestStatus.RejectedBySender })).ToList();
+            var data = (await GetAllCommitmentsWithTheseStatuses(providerId, RequestStatus.WithSenderForApproval, RequestStatus.RejectedBySender)).ToList();
             _logger.Info($"Provider getting all transfer funded ({data.Count}) :{providerId}", providerId);
 
             return new TransferFundedViewModel
@@ -317,7 +317,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return data.Commitments.Where(m => m.GetStatus() == requestStatus);
         }
 
-        public async Task<IEnumerable<CommitmentListItem>> GetAllCommitmentsWithTheseStatuses(long providerId, RequestStatus[] requestStatus)
+        public async Task<IEnumerable<CommitmentListItem>> GetAllCommitmentsWithTheseStatuses(long providerId, params RequestStatus[] requestStatus)
         {
             _logger.Info($"Getting all commitments for provider:{providerId}", providerId);
 

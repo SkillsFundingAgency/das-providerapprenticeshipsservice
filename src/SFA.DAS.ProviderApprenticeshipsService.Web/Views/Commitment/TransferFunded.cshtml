@@ -29,16 +29,16 @@
             {
                 <tr>
                     <td>
-                        @commitment.ReceivingEmployerName &nbsp;
+                        @commitment.ReceivingEmployerName
                     </td>
                     <td>
-                        @commitment.HashedCommitmentId &nbsp;
+                        @commitment.HashedCommitmentId
                     </td>
                     <td>
-                        @commitment.Status &nbsp;
+                        @commitment.Status
                     </td>
                     <td>
-                        <a href="@Url.Action("Details", new {Model.ProviderId, commitment.HashedCommitmentId})" title="View  @commitment.ReceivingEmployerName" aria-label="View  @commitment.ReceivingEmployerName">Details</a>
+                        <a href="@Url.Action("Details", new {Model.ProviderId, commitment.HashedCommitmentId})" title="View @commitment.ReceivingEmployerName" aria-label="View @commitment.ReceivingEmployerName">Details</a>
                     </td>
                 </tr>
             }
