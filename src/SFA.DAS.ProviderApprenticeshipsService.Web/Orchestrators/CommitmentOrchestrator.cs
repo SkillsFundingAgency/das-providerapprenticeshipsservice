@@ -329,7 +329,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return data.Commitments.Where(m => requestStatus.Contains(m.GetStatus()));
         }
 
-
         public async Task<ProviderAgreementStatus> IsSignedAgreement(long providerId)
         {
             var data = await _mediator.SendAsync(
