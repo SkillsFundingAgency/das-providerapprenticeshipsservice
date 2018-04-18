@@ -57,11 +57,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     },
                     new CommitmentListItem
                     {
-                    Id = 4,
-                    LegalEntityName = "LEName4",
-                    EmployerAccountId = 41,
-                    EditStatus = EditStatus.Neither
-                }
+                        Id = 4,
+                        LegalEntityName = "LEName4",
+                        EmployerAccountId = 41,
+                        EditStatus = EditStatus.Neither
+                    }
 
                 }
             };
