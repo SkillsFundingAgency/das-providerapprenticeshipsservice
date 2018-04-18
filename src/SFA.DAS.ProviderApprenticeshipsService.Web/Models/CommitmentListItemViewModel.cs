@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
+﻿using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
+
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
     public sealed class CommitmentListItemViewModel
     {

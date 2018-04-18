@@ -20,6 +20,7 @@
       <Setting name="InstrumentationKey" />
       <Setting name="RedisSessionProviderConnectionString" />
       <Setting name="CurrentTime" />
+      <Setting name="FeatureToggle.Transfers" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Httpsin" protocol="https" port="443" certificate="WebSslCert" />

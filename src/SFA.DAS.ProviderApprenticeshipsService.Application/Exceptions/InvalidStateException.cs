@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions
 {
     public class InvalidStateException : Exception
     {
