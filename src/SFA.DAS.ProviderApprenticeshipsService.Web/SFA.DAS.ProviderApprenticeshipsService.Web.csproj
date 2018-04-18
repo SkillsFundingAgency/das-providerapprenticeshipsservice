@@ -493,6 +493,8 @@
     <Compile Include="Models\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprovedViewModel.cs" />
     <Compile Include="Models\BulkUpload\CsvRecordMap.cs" />
+    <Compile Include="Models\TransferFundedListItemViewModel.cs" />
+    <Compile Include="Models\TransferFundedViewModel.cs" />
     <Compile Include="Models\CourseDataLockViewModel.cs" />
     <Compile Include="Models\DataLock\ConfirmRestartViewModel.cs" />
     <Compile Include="Models\DataLock\DataLockMismatchViewModel.cs" />
@@ -764,6 +766,7 @@
     <Content Include="Views\DataLock\ConfirmDataLockChanges.cshtml" />
     <Content Include="Views\DataLock\RequestRestart.cshtml" />
     <Content Include="Views\DataLock\ConfirmRestart.cshtml" />
+    <Content Include="Views\Commitment\TransferFunded.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

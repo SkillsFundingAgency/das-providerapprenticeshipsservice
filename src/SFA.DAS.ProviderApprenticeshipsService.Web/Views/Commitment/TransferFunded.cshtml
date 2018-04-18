@@ -1,0 +1,55 @@
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.TransferFundedViewModel
+
+    @{
+        ViewBag.Title = "Transfer-funded cohorts";
+        ViewBag.PageId = "transfer-funded-cohorts";
+    }
+
+<div class="grid-row">
+    <div class="column-full">
+        
+        <h1 class="heading-xlarge">Transfer-funded cohorts</h1>
+
+        @{ var commitmentsCount = Model.Commitments.Count(); }
+        <p class="dynamic-heading">You have <strong>@commitmentsCount</strong> cohort@(commitmentsCount > 1?"s":"") to be paid via a transfer</p>
+
+        
+        <table class="tableResponsive employerListing">
+            <thead>
+            <tr>
+                <th>Employer</th>
+                <th>Reference</th>
+                <th>Transfer Status</th>
+                <th></th>
+
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var commitment in Model.Commitments)
+            {
+                <tr>
+                    <td>
+                        @commitment.ReceivingEmployerName &nbsp;
+                    </td>
+                    <td>
+                        @commitment.HashedCommitmentId &nbsp;
+                    </td>
+                    <td>
+                        @commitment.Status &nbsp;
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Details", new {Model.ProviderId, commitment.HashedCommitmentId})" title="View  @commitment.ReceivingEmployerName" aria-label="View  @commitment.ReceivingEmployerName">Details</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Cohorts")" aria-label="Back to your cohorts" class="back-link">Back to your cohorts</a>
+    </div>
+}
