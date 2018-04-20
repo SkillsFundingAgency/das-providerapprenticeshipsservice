@@ -1,34 +1,33 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
     [TestFixture]
     public class WhenGetCohorts : ApprenticeshipValidationTestBase
     {
-        public Task<GetCommitmentsQueryResponse> _commitments; 
+        private const long ValidTransferSenderId = 1L;
+        private const string ProviderLastUpdatedName = "Anna-Leigh Probin";
 
         [SetUp]
-        protected virtual void SetUp()
+        protected void GetCohortsSetup()
         {
-            _commitments = Task.FromResult(TestData());
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>())).Returns(_commitments);
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>())).ReturnsAsync(TestData());
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetProviderAgreementQueryRequest>()))
-                .Returns(Task.FromResult(new GetProviderAgreementQueryResponse { HasAgreement = ProviderAgreementStatus.Agreed }));
+                .ReturnsAsync(new GetProviderAgreementQueryResponse { HasAgreement = ProviderAgreementStatus.Agreed });
 
-            base.SetUp();
+            SetUp();
         }
 
         [Test]
@@ -37,14 +36,88 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             await _orchestrator.GetCohorts(1234567);
 
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>()), Times.AtLeastOnce);
-            _mockCalculator.Verify(m => m.GetStatus(It.IsAny<EditStatus>(), It.IsAny<int>(), It.IsAny<LastAction>(), It.IsAny<AgreementStatus>(), It.IsAny<LastUpdateInfo>()), Times.Exactly(_commitments.Result.Commitments.Count));
         }
-        
+
+        [Test]
+        public async Task ThenAllCountsShouldBeZeroIfNoCommitments()
+        {
+            //Arrange
+            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentsQueryRequest>()))
+                .ReturnsAsync(new GetCommitmentsQueryResponse
+                {
+                    Commitments = new List<CommitmentListItem>()
+                });
+
+            //Act
+            var result = await _orchestrator.GetCohorts(1234567);
+
+            //Assert
+            Assert.AreEqual(0, result.ReadyForReviewCount);
+            Assert.AreEqual(0, result.WithEmployerCount);
+            Assert.AreEqual(0, result.TransferFundedCohortsCount);
+        }
+
+        [TestCase(/*expectedReadyForReviewCount=*/0, /*expectedWithEmployerCount=*/0, /*expectedTransferFundedCohortsCount=*/0,
+            null, TransferApprovalStatus.Pending, AgreementStatus.NotAgreed,
+            EditStatus.EmployerOnly, LastAction.None, 0, false, CommitmentStatus.New, TestName = "Just created by an employer")]
+        [TestCase(/*expectedReadyForReviewCount=*/1, /*expectedWithEmployerCount=*/0, /*expectedTransferFundedCohortsCount=*/0,
+            null, TransferApprovalStatus.Pending, AgreementStatus.NotAgreed,
+            EditStatus.ProviderOnly, LastAction.None, 0, false, CommitmentStatus.Active, TestName = "Been sent to provider by employer to add apprentices")]
+        [TestCase(/*expectedReadyForReviewCount=*/0, /*expectedWithEmployerCount=*/1, /*expectedTransferFundedCohortsCount=*/0,
+            ValidTransferSenderId, TransferApprovalStatus.Pending, AgreementStatus.NotAgreed,
+            EditStatus.EmployerOnly, LastAction.Amend, 0, false, CommitmentStatus.Active, TestName = "With receiving employer")]
+        [TestCase(/*expectedReadyForReviewCount=*/1, /*expectedWithEmployerCount=*/0, /*expectedTransferFundedCohortsCount=*/0,
+            ValidTransferSenderId, TransferApprovalStatus.Pending, AgreementStatus.NotAgreed,
+            EditStatus.ProviderOnly, LastAction.Amend, 0, true, CommitmentStatus.Active, TestName = "With provider")]
+        [TestCase(/*expectedReadyForReviewCount=*/0, /*expectedWithEmployerCount=*/0, /*expectedTransferFundedCohortsCount=*/1,
+            ValidTransferSenderId, TransferApprovalStatus.Pending, AgreementStatus.BothAgreed,
+            EditStatus.Both, LastAction.Approve, 1, true, CommitmentStatus.Active, TestName = "With sender but not yet actioned by them")]
+        [TestCase(/*expectedReadyForReviewCount=*/0, /*expectedWithEmployerCount=*/0, /*expectedTransferFundedCohortsCount=*/1,
+            ValidTransferSenderId, TransferApprovalStatus.Rejected, AgreementStatus.NotAgreed,
+            EditStatus.EmployerOnly, LastAction.Amend, 1, true, CommitmentStatus.Active, TestName = "With sender, rejected by them, but not yet saved or edited")]
+        [TestCase(/*expectedReadyForReviewCount=*/0, /*expectedWithEmployerCount=*/0, /*expectedTransferFundedCohortsCount=*/0,
+            ValidTransferSenderId, TransferApprovalStatus.Approved, AgreementStatus.BothAgreed,
+            EditStatus.Both, LastAction.Approve, 1, true, CommitmentStatus.Active, TestName = "Approved by all 3 parties")]
+        public async Task ThenCountsShouldBeCorrectWhenEmployerHasASingleCommitmentThats(
+            int expectedReadyForReviewCount, int expectedWithEmployerCount, int expectedTransferFundedCohortsCount,
+            long? transferSenderId, TransferApprovalStatus transferApprovalStatus,
+            AgreementStatus agreementStatus, EditStatus editStatus, LastAction lastAction, int apprenticeshipCount,
+            bool supplyProviderLastUpdatedName, CommitmentStatus commitmentStatus)
+        {
+            //Arrange
+            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentsQueryRequest>()))
+                .ReturnsAsync(new GetCommitmentsQueryResponse
+                {
+                    Commitments = commitmentStatus == CommitmentStatus.Active ? new List <CommitmentListItem>
+                    {
+                        new CommitmentListItem
+                        {
+                            CommitmentStatus = commitmentStatus,
+                            TransferSenderId = transferSenderId,
+                            TransferApprovalStatus = transferApprovalStatus,
+                            AgreementStatus = agreementStatus,
+                            EditStatus = editStatus,
+                            LastAction = lastAction,
+                            ApprenticeshipCount = apprenticeshipCount,
+                            ProviderLastUpdateInfo = supplyProviderLastUpdatedName ? new LastUpdateInfo {Name = ProviderLastUpdatedName} : null
+                        }
+                    }
+                        : new List<CommitmentListItem>()
+                });
+
+            //Act
+            var result = await _orchestrator.GetCohorts(1234567);
+
+            //Assert
+            Assert.AreEqual(expectedReadyForReviewCount, result.ReadyForReviewCount, "Incorrect ReadyForReviewCount");
+            Assert.AreEqual(expectedWithEmployerCount, result.WithEmployerCount, "Incorrect WithEmployerCount");
+            Assert.AreEqual(expectedTransferFundedCohortsCount, result.TransferFundedCohortsCount, "Incorrect TransferFundedCohortsCount");
+        }
 
         [Test]
         public async Task TestFilter()
         {
-            SetUpOrchestrator(new CommitmentStatusCalculator());
+            SetUpOrchestrator();
 
             var result = await _orchestrator.GetCohorts(1234567);
 
@@ -54,61 +127,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             result.ReadyForReviewCount.Should().Be(6);
         }
 
-        private static GetCommitmentsQueryResponse TestData()
+        private GetCommitmentsQueryResponse TestData()
         {
             return new GetCommitmentsQueryResponse
                        {
-                           Commitments = new List<CommitmentListItem>
-                                             {
-                                                new CommitmentListItem // NewRequest
-                                                    { AgreementStatus = AgreementStatus.NotAgreed, ApprenticeshipCount = 0,
-                                                      CanBeApproved = true, CommitmentStatus = CommitmentStatus.Active,
-                                                      EditStatus = EditStatus.ProviderOnly, LastAction = LastAction.None,
-                                                      ProviderLastUpdateInfo = new LastUpdateInfo()
-                                                    },
-                                                 new CommitmentListItem // ReadyForApproval
-                                                    { AgreementStatus = AgreementStatus.EmployerAgreed, ApprenticeshipCount = 5,
-                                                      CanBeApproved = true, CommitmentStatus = CommitmentStatus.Active,
-                                                      EditStatus = EditStatus.ProviderOnly, LastAction = LastAction.Approve,
-                                                      ProviderLastUpdateInfo = new LastUpdateInfo { EmailAddress = "a@b", Name="Test"}
-                                                    },
-                                                 new CommitmentListItem // ReadyForApproval
-                                                    { AgreementStatus = AgreementStatus.EmployerAgreed, ApprenticeshipCount = 5,
-                                                      CanBeApproved = true, CommitmentStatus = CommitmentStatus.Active,
-                                                      EditStatus = EditStatus.ProviderOnly, LastAction = LastAction.Approve,
-                                                      ProviderLastUpdateInfo = new LastUpdateInfo { EmailAddress = "a@b", Name="Test"}
-                                                    },
-                                                 new CommitmentListItem // With employer
-                                                    { AgreementStatus = AgreementStatus.NotAgreed, ApprenticeshipCount = 6,
-                                                      CanBeApproved = true, CommitmentStatus = CommitmentStatus.Active,
-                                                      EditStatus = EditStatus.EmployerOnly, LastAction = LastAction.Amend,
-                                                      ProviderLastUpdateInfo = new LastUpdateInfo { EmailAddress = "a@b", Name="Test"}
-                                                    },
-                                                 new CommitmentListItem // With employer
-                                                    { AgreementStatus = AgreementStatus.ProviderAgreed, ApprenticeshipCount = 6,
-                                                      CanBeApproved = true, CommitmentStatus = CommitmentStatus.Active,
-                                                      EditStatus = EditStatus.EmployerOnly, LastAction = LastAction.Approve,
-                                                      ProviderLastUpdateInfo = new LastUpdateInfo { EmailAddress = "a@b", Name="Test"}
-                                                    },
-                                                 new CommitmentListItem // ReadyForReview
-                                                    { AgreementStatus = AgreementStatus.EmployerAgreed, ApprenticeshipCount = 5,
-                                                      CanBeApproved = false, CommitmentStatus = CommitmentStatus.Active,
-                                                      EditStatus = EditStatus.ProviderOnly, LastAction = LastAction.Amend,
-                                                      ProviderLastUpdateInfo = new LastUpdateInfo { EmailAddress = "a@b", Name="Test"}
-                                                    },
-                                                 new CommitmentListItem // ReadyForReview
-                                                    { AgreementStatus = AgreementStatus.EmployerAgreed, ApprenticeshipCount = 5,
-                                                      CanBeApproved = false, CommitmentStatus = CommitmentStatus.Active,
-                                                      EditStatus = EditStatus.ProviderOnly, LastAction = LastAction.Amend,
-                                                      ProviderLastUpdateInfo = new LastUpdateInfo { EmailAddress = "a@b", Name="Test"}
-                                                    },
-                                                 new CommitmentListItem // ReadyForReview
-                                                    { AgreementStatus = AgreementStatus.NotAgreed, ApprenticeshipCount = 0,
-                                                      CanBeApproved = true, CommitmentStatus = CommitmentStatus.Active,
-                                                      EditStatus = EditStatus.ProviderOnly, LastAction = LastAction.None,
-                                                      ProviderLastUpdateInfo = new LastUpdateInfo { EmailAddress = "a@b", Name="Test"}
-                                                    }
-                                             }
+                           Commitments = GetTestCommitmentsOfStatus(1, RequestStatus.NewRequest, RequestStatus.ReadyForApproval,
+                               RequestStatus.ReadyForApproval, RequestStatus.WithEmployerForApproval, RequestStatus.WithEmployerForApproval,
+                               RequestStatus.ReadyForReview, RequestStatus.ReadyForReview, RequestStatus.ReadyForReview).ToList()
                        };
         }
     }

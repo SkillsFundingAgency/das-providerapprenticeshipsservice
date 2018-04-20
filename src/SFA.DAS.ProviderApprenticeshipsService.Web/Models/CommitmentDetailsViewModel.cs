@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
