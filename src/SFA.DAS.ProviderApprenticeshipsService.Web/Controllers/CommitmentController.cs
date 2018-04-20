@@ -73,6 +73,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [Route("cohorts/transferfunded")]
+        public async Task<ActionResult> TransferFunded(long providerId)
+        {
+            SaveRequestStatusInCookie(RequestStatus.WithSenderForApproval);
+
+            var model = await _commitmentOrchestrator.GetAllTransferFunded(providerId);
+
+            AddFlashMessageToViewModel(model);
+
+            return View(model);
+        }
+
+
+        [HttpGet]
         [Route("cohorts/review")]
         public async Task<ActionResult> ReadyForReview(long providerId)
         {           
