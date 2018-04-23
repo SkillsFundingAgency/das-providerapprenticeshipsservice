@@ -20,4 +20,5 @@ namespace SFA.DAS.PAS.Account.Api
                 throw e;
             }
         }
+    }
 }
