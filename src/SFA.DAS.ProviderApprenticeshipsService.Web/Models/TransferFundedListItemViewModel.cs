@@ -6,6 +6,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
     {
         public string HashedCommitmentId { get; set; }
         public string ReceivingEmployerName { get; set; }
-        public TransferApprovalStatus Status { get; set; }
+        public TransferApprovalStatus? Status { get; set; }
     }
 }
