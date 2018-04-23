@@ -16,9 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
         {
             if (transferSenderId.HasValue)
             {
-                if (!transferApprovalStatus.HasValue)
-                    throw new InvalidStateException("TransferSenderId supplied, but no TransferApprovalStatus");
-                return GetTransferStatus(editStatus, transferApprovalStatus.Value, lastAction, overallAgreementStatus);
+                return GetTransferStatus(editStatus, transferApprovalStatus, lastAction, overallAgreementStatus);
             }
 
             if (editStatus == EditStatus.Both)
@@ -42,14 +40,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
             return RequestStatus.None;
         }
 
-        private RequestStatus GetTransferStatus(EditStatus edit, TransferApprovalStatus transferApproval, LastAction lastAction, AgreementStatus agreementStatus)
+        private RequestStatus GetTransferStatus(EditStatus edit, TransferApprovalStatus? transferApproval, LastAction lastAction, AgreementStatus agreementStatus)
         {
             const string invalidStateExceptionMessagePrefix = "Transfer funder commitment in invalid state: ";
 
             if (edit >= EditStatus.Neither)
                 throw new Exception("Unexpected EditStatus");
 
-            switch (transferApproval)
+            switch (transferApproval ?? TransferApprovalStatus.Pending)
             {
                 case TransferApprovalStatus.Pending:
                     switch (edit)
