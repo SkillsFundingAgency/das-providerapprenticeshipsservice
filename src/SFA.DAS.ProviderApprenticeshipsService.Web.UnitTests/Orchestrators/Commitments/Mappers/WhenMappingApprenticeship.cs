@@ -284,5 +284,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             viewModel.IsPaidForByTransfer.Should().BeTrue();
         }
+
+        [TestCase(true, false, true, TransferApprovalStatus.Approved)]
+        [TestCase(false, true, true, TransferApprovalStatus.Approved)]
+        [TestCase(false, false, true, TransferApprovalStatus.Pending)]
+        [TestCase(false, true, true, TransferApprovalStatus.Pending)]
+        [TestCase(false, false, true, TransferApprovalStatus.Rejected)]
+        [TestCase(false, true, true, TransferApprovalStatus.Rejected)]
+        [TestCase(false, false, false, null)]
+        [TestCase(false, true, false, null)]
+        public void ThenIsApprovedTransferAndNoSuccessfulIlrSubmissionShouldBeSetCorrectly(bool expected, bool dataLockSuccess, bool transferSender, TransferApprovalStatus? transferApprovalStatus)
+        {
+            var apprenticeship = new Apprenticeship { HasHadDataLockSuccess = dataLockSuccess };
+            var commitment = new CommitmentView();
+
+            if (transferSender)
+            {
+                commitment.TransferSender = new TransferSender { TransferApprovalStatus = transferApprovalStatus };
+            }
+
+            var viewModel = _mapper.MapApprenticeship(apprenticeship, commitment);
+
+            Assert.AreEqual(expected, viewModel.IsApprovedTransferAndNoSuccessfulIlrSubmission);
+        }
     }
 }

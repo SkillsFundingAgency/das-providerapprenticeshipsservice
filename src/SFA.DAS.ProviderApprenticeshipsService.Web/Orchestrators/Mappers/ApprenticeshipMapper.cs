@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-
+using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
@@ -73,6 +73,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 isLockedForUpdate = true;
             }
 
+            var isApprovedTransferAndNoSuccessfulIlrSubmission =
+                commitment.TransferSender?.TransferApprovalStatus == TransferApprovalStatus.Approved
+                && !apprenticeship.HasHadDataLockSuccess;
+
             var dateOfBirth = apprenticeship.DateOfBirth;
             return new ApprenticeshipViewModel
             {
@@ -95,7 +99,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 EmployerRef = apprenticeship.EmployerRef,
                 HasStarted = !isStartDateInFuture,
                 IsLockedForUpdate = isLockedForUpdate,
-                IsPaidForByTransfer = commitment.TransferSender != null
+                IsPaidForByTransfer = commitment.TransferSender != null,
+                IsApprovedTransferAndNoSuccessfulIlrSubmission = isApprovedTransferAndNoSuccessfulIlrSubmission
             };
         }
 
