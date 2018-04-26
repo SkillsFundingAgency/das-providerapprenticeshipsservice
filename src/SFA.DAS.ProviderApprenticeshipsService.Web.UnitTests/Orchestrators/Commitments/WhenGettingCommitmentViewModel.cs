@@ -148,7 +148,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
         // --- Helpers ---
 
-        private static Mock<IMediator> GetMediator(CommitmentView commitment)
+        protected static Mock<IMediator> GetMediator(CommitmentView commitment)
         {
             var respons = new GetCommitmentQueryResponse
             {
