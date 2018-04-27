@@ -197,29 +197,17 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj">
-      <Project>{B3484618-78A0-411E-BC02-AC84C8694C3D}</Project>
+      <Project>{b3484618-78a0-411e-bc02-ac84c8694c3d}</Project>
       <Name>SFA.DAS.ProviderApprenticeshipsService.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Infrastructure\SFA.DAS.ProviderApprenticeshipsService.Infrastructure.csproj">
-      <Project>{380868C8-FA69-4DA7-B054-45AC924EC48E}</Project>
+      <Project>{380868c8-fa69-4da7-b054-45ac924ec48e}</Project>
       <Name>SFA.DAS.ProviderApprenticeshipsService.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Web\SFA.DAS.ProviderApprenticeshipsService.Web.csproj">
-      <Project>{94E473E1-2217-43C3-A228-00B8BE2BE0F1}</Project>
+      <Project>{94e473e1-2217-43c3-a228-00b8be2be0f1}</Project>
       <Name>SFA.DAS.ProviderApprenticeshipsService.Web</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Web.WebJobs.Publish.1.0.12\tools\webjobs.targets" Condition="Exists('..\packages\Microsoft.Web.WebJobs.Publish.1.0.12\tools\webjobs.targets')" />
