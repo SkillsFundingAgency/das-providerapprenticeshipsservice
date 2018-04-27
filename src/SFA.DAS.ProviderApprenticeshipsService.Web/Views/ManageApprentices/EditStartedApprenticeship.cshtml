@@ -67,7 +67,7 @@
         </div>
     }
     
-    @if (Model.IsLockedForUpdate || Model.IsApprovedTransferAndNoSuccessfulIlrSubmission)
+    @if (Model.IsLockedForUpdate || Model.IsUpdateLockedForStartDateAndCourse)
     {
         <div class="form-group">
             <hr/>
@@ -95,7 +95,7 @@
         </div>
     }
     
-    @if (Model.IsLockedForUpdate || Model.IsApprovedTransferAndNoSuccessfulIlrSubmission)
+    @if (Model.IsLockedForUpdate || Model.IsUpdateLockedForStartDateAndCourse)
     {
         <div class="form-error-group form-group">
             <hr/>
@@ -119,7 +119,7 @@
     }
     else
     {
-        if (!Model.IsApprovedTransferAndNoSuccessfulIlrSubmission)
+        if (!Model.IsUpdateLockedForStartDateAndCourse)
         {
             <div class="form-error-group form-group first-child @Html.AddClassIfPropertyInError(x => x.StartDate, "error") @Html.AddClassIfPropertyInError(x => x.StartDate, "error") @Html.AddClassIfPropertyInError("StartDateOverlap", "error")">
                 <hr/>

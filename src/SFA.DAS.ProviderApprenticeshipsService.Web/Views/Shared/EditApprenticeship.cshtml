@@ -54,7 +54,7 @@
 <div class="form-group @Html.AddClassIfPropertyInError(x => x.TrainingCode, "error")">
     <hr />
     <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
-    @if (Model.IsApprovedTransferAndNoSuccessfulIlrSubmission)
+    @if (Model.IsUpdateLockedForStartDateAndCourse)
     {
         <span id="TrainingCode">@Model.TrainingName</span>
 
@@ -84,7 +84,7 @@
 <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.StartDate, "error") @Html.AddClassIfPropertyInError(x => x.StartDate, "error") @Html.AddClassIfPropertyInError("StartDateOverlap", "error")">
     <hr />
     <fieldset>
-        @if (Model.IsApprovedTransferAndNoSuccessfulIlrSubmission)
+        @if (Model.IsUpdateLockedForStartDateAndCourse)
         {
             <legend>
                 <span class="form-label-bold">Planned training start date</span>

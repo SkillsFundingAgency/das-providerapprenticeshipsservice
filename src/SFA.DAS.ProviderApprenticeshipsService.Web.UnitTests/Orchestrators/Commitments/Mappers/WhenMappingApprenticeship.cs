@@ -274,6 +274,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             viewModel.HasStarted.Should().BeTrue();
         }
 
+
+        [Test]
+        public void ShouldHaveLockedStatusIfApprovedTransferFundedWithSuccessfulIlrSubmissionAndCourseNotYetStarted()
+        {
+            var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(3), HasHadDataLockSuccess = true };
+            var commitment = new CommitmentView { TransferSender = new TransferSender { TransferApprovalStatus = TransferApprovalStatus.Approved } };
+
+            var viewModel = _mapper.MapApprenticeship(apprenticeship, commitment);
+
+            viewModel.IsLockedForUpdate.Should().BeTrue();
+        }
+
         [Test]
         public void ShouldHaveTransferFlagSetIfCommitmentHasTransferSender()
         {
@@ -293,7 +305,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [TestCase(false, true, true, TransferApprovalStatus.Rejected)]
         [TestCase(false, false, false, null)]
         [TestCase(false, true, false, null)]
-        public void ThenIsApprovedTransferAndNoSuccessfulIlrSubmissionShouldBeSetCorrectly(bool expected, bool dataLockSuccess, bool transferSender, TransferApprovalStatus? transferApprovalStatus)
+        public void ThenIsUpdateLockedForStartDateAndCourseShouldBeSetCorrectly(bool expected, bool dataLockSuccess, bool transferSender, TransferApprovalStatus? transferApprovalStatus)
         {
             var apprenticeship = new Apprenticeship { HasHadDataLockSuccess = dataLockSuccess };
             var commitment = new CommitmentView();
@@ -305,7 +317,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             var viewModel = _mapper.MapApprenticeship(apprenticeship, commitment);
 
-            Assert.AreEqual(expected, viewModel.IsApprovedTransferAndNoSuccessfulIlrSubmission);
+            Assert.AreEqual(expected, viewModel.IsUpdateLockedForStartDateAndCourse);
         }
     }
 }

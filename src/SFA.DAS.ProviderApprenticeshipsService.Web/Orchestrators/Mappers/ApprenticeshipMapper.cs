@@ -43,15 +43,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             ILog logger,
             IAcademicYearValidator academicYearValidator)
         {
-            if (hashingService == null)
-                throw new ArgumentNullException(nameof(hashingService));
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-            if (currentDateTime == null)
-                throw new ArgumentNullException(nameof(currentDateTime));
-            if (academicYearValidator == null)
-                throw new ArgumentNullException(nameof(academicYearValidator));
-
             _hashingService = hashingService;
             _mediator = mediator;
             _currentDateTime = currentDateTime;
@@ -64,16 +55,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
                                       new DateTime(_currentDateTime.Now.Year, _currentDateTime.Now.Month, 1);
 
-            var isLockedForUpdate = apprenticeship.HasHadDataLockSuccess;
+            var isLockedForUpdate = (!isStartDateInFuture &&
+                                     (apprenticeship.HasHadDataLockSuccess || _academicYearValidator.IsAfterLastAcademicYearFundingPeriod &&
+                                      apprenticeship.StartDate.HasValue &&
+                                      _academicYearValidator.Validate(apprenticeship.StartDate.Value) == AcademicYearValidationResult.NotWithinFundingPeriod))
+                                    ||
+                                    (commitment.TransferSender?.TransferApprovalStatus == TransferApprovalStatus.Approved
+                                     && apprenticeship.HasHadDataLockSuccess && isStartDateInFuture);
 
-            if (_academicYearValidator.IsAfterLastAcademicYearFundingPeriod &&
-                 apprenticeship.StartDate.HasValue &&
-                 _academicYearValidator.Validate(apprenticeship.StartDate.Value) == AcademicYearValidationResult.NotWithinFundingPeriod)
-            {
-                isLockedForUpdate = true;
-            }
-
-            var isApprovedTransferAndNoSuccessfulIlrSubmission =
+            var isUpdateLockedForStartDateAndCourse =
                 commitment.TransferSender?.TransferApprovalStatus == TransferApprovalStatus.Approved
                 && !apprenticeship.HasHadDataLockSuccess;
 
@@ -100,7 +90,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 HasStarted = !isStartDateInFuture,
                 IsLockedForUpdate = isLockedForUpdate,
                 IsPaidForByTransfer = commitment.TransferSender != null,
-                IsApprovedTransferAndNoSuccessfulIlrSubmission = isApprovedTransferAndNoSuccessfulIlrSubmission
+                IsUpdateLockedForStartDateAndCourse = isUpdateLockedForStartDateAndCourse
             };
         }
 
