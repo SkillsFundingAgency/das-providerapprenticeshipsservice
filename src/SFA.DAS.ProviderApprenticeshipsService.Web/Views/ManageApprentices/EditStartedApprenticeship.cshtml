@@ -225,18 +225,10 @@ else
         <span class="form-hint">Add a reference, such as employee number or location - this won’t be seen by the employer</span>
         @Html.ValidationMessageFor(m => m.ProviderRef, null, new { id = "error-message-" + Html.IdFor(m => m.ProviderRef) })
         @Html.TextBoxFor(m => m.ProviderRef, new { @class = "form-control form-control-3-4" })
-	@* do we want this? does it work? *@
 	<p id="charCount-noJS">Enter up to a maximum of 20 characters</p>
     	<p id="charCount" style="display:none;"><span name="countchars" id="countchars"></span> characters remaining</p>
     </div>
 </div>
-
-@* do we need these? just hasstarted? across both partials? *@
-
-@* @Html.HiddenFor(m => m.HasStarted)
-@Html.HiddenFor(m => m.TrainingType)
-@Html.HiddenFor(m => m.TrainingName)
- *@
 
 @* next line deliberately commented: add in to support transfer validation rules in manage your apprentices *@
 @*@Html.HiddenFor(m => m.IsPaidForByTransfer)*@
