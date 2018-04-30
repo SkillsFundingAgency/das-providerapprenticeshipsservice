@@ -3,121 +3,122 @@
 <div id="edit-started-apprentice">
     <div class="form-group first-child @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
 
-        @Html.LabelFor(m => m.FirstName, "First name", new { @class = "form-label form-label-bold" })
-        @Html.ValidationMessageFor(m => m.FirstName, null, new { id = "error-message-" + Html.IdFor(m => m.FirstName) })
-        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-control-3-4" })
-    </div>
-    <div class="form-group @Html.AddClassIfPropertyInError(x => x.LastName, "error")">
-        @Html.LabelFor(m => m.LastName, "Last name", new { @class = "form-label form-label-bold" })
-        @Html.ValidationMessageFor(m => m.LastName, null, new { id = "error-message-" + Html.IdFor(m => m.LastName) })
-        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
-    </div>
+    @Html.LabelFor(m => m.FirstName, "First name", new { @class = "form-label form-label-bold" })
+    @Html.ValidationMessageFor(m => m.FirstName, null, new { id = "error-message-" + Html.IdFor(m => m.FirstName) })
+    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-control-3-4" })
+</div>
+<div class="form-group @Html.AddClassIfPropertyInError(x => x.LastName, "error")">
+    @Html.LabelFor(m => m.LastName, "Last name", new { @class = "form-label form-label-bold" })
+    @Html.ValidationMessageFor(m => m.LastName, null, new { id = "error-message-" + Html.IdFor(m => m.LastName) })
+    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
+</div>
 
-    <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.DateOfBirth, "error") ">
+<div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.DateOfBirth, "error") ">
+    <hr />
+    <span class="form-label-bold">Date of birth</span>
+    <span class="form-hint">For example, 08 12 2001</span>
+
+    <div class="form-date">
+        @Html.ValidationMessageFor(m => m.DateOfBirth, null, new { id = "error-message-" + Html.IdFor(m => m.DateOfBirth), @class = "error-message" })
+
+        <div class="form-group form-group-day">
+            <label for="@Html.IdFor(m => m.DateOfBirth.Day)">
+                Day
+            </label>
+            @Html.TextBoxFor(m => m.DateOfBirth.Day, new { @class = "form-control length-limit", type = "number", maxlength="2", min="1", max="31", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Day) })
+        </div>
+        <div class="form-group form-group-month">
+            <label for="@Html.IdFor(m => m.DateOfBirth.Month)">
+                Month
+            </label>
+            @Html.TextBoxFor(m => m.DateOfBirth.Month, new { @class = "form-control length-limit", type = "number", maxlength = "2", min = "1", max = "12", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Month) })
+        </div>
+        <div class="form-group form-group-year">
+            <label for="@Html.IdFor(m => m.DateOfBirth.Year)">
+                Year
+            </label>
+            <input aria-labelledby="@Html.IdFor(m => m.DateOfBirth.Year)" class="form-control length-limit" type="number" maxlength="4" min="1900" max="9999" data-val="true" data-val-number="The field Year must be a number." id="@Html.IdFor(m => m.DateOfBirth.Year)" name="DateOfBirth.Year", value="@Model.DateOfBirth.Year">
+        </div>
+    </div>
+</div>
+
+@if (Model.IsLockedForUpdate)
+{
+    <div class="form-group">
+        <hr/>
+        <label class="form-label-bold">
+            Unique learner number
+        </label>
+        <span>
+            @Model.ULN
+        </span>
+    </div>
+    @Html.HiddenFor(m => m.ULN)
+}
+else
+{
+    <div class="form-group @Html.AddClassIfPropertyInError(x => x.ULN, "error")">
         <hr />
-        <span class="form-label-bold">Date of birth</span>
-        <span class="form-hint">For example, 08 12 2001</span>
-
-        <div class="form-date">
-            @Html.ValidationMessageFor(m => m.DateOfBirth, null, new { id = "error-message-" + Html.IdFor(m => m.DateOfBirth), @class = "error-message" })
-
-            <div class="form-group form-group-day">
-                <label for="@Html.IdFor(m => m.DateOfBirth.Day)">
-                    Day
-                </label>
-                @Html.TextBoxFor(m => m.DateOfBirth.Day, new { @class = "form-control length-limit", type = "number", maxlength="2", min="1", max="31", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Day) })
-            </div>
-            <div class="form-group form-group-month">
-                <label for="@Html.IdFor(m => m.DateOfBirth.Month)">
-                    Month
-                </label>
-                @Html.TextBoxFor(m => m.DateOfBirth.Month, new { @class = "form-control length-limit", type = "number", maxlength="2", min="1", max="12", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Month) })
-            </div>
-            <div class="form-group form-group-year">
-                <label for="@Html.IdFor(m => m.DateOfBirth.Year)">
-                    Year
-                </label>
-                <input aria-labelledby="@Html.IdFor(m => m.DateOfBirth.Year)" class="form-control length-limit" data-val="true" data-val-number="The field Year must be a number." id="@Html.IdFor(m => m.DateOfBirth.Year)" name="DateOfBirth.Year" type="number" maxlength="4" min="1900" max="9999" value="@Model.DateOfBirth.Year">
-            </div>
-        </div>
+        <label for="@Html.IdFor(m => m.ULN)">
+            <span class="form-label form-label-bold">Unique learner number</span>
+            @Html.ValidationMessageFor(m => m.ULN, null, new { id = "error-message-" + Html.IdFor(m => m.ULN), @class = "error-message" })
+        </label>
+        @Html.TextBoxFor(m => m.ULN, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby = Html.IdFor(m => m.ULN), maxlength = "10" })
     </div>
-    
-    @if (Model.IsLockedForUpdate)
-    {
-        <div class="form-group">
-            <hr/>
-            <label class="form-label-bold">
-                Unique learner number
-            </label>
-            <span>
-                @Model.ULN
-            </span>
-        </div>
-        @Html.HiddenFor(m => m.ULN)
-    }
-    else
-    {
-        <div class="form-group @Html.AddClassIfPropertyInError(x => x.ULN, "error")">
-            <hr />
-            <label for="@Html.IdFor(m => m.ULN)">
-                <span class="form-label form-label-bold">Unique learner number</span>
-                @Html.ValidationMessageFor(m => m.ULN, null, new { id = "error-message-" + Html.IdFor(m => m.ULN), @class = "error-message" })
-            </label>
-            @Html.TextBoxFor(m => m.ULN, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby = Html.IdFor(m => m.ULN), maxlength = "10" })
-        </div>
-    }
-    
-    @if (Model.IsLockedForUpdate || Model.IsUpdateLockedForStartDateAndCourse)
-    {
-        <div class="form-group">
-            <hr/>
-            <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
-            <span>@Model.TrainingName</span>
-        </div>
-        @Html.HiddenFor(m => m.TrainingCode)
-    }
-    else
-    {
-        <div class="form-group @Html.AddClassIfPropertyInError(x => x.TrainingCode, "error")">
-            <hr />
-            <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
-            <span class="form-hint">Start typing in the name of the course or choose an option from the list</span>
-            @Html.ValidationMessageFor(m => m.TrainingCode, "Choose a training course for this apprentice", new { id = "error-message-" + Html.IdFor(m => m.TrainingCode), @class = "error-message" })
-            <select name="TrainingCode" id="TrainingCode" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
-                <option value="">Please select</option>
-                @foreach (var programme in ViewBag.ApprenticeshipProgrammes)
-                {
-                    <option value="@programme.Id" @if (programme.Id.ToString() == Model.TrainingCode) { @Html.Raw("selected") }>
-                        @programme.Title
-                    </option>
-                }
-            </select>
-        </div>
-    }
-    
-    @if (Model.IsLockedForUpdate || Model.IsUpdateLockedForStartDateAndCourse)
-    {
-        <div class="form-error-group form-group">
-            <hr/>
-            <label class="form-label-bold">Planned training start date</label>
-            <span>@Model.StartDate.DateTime.Value.ToGdsFormatWithoutDay() </span>
-        </div>
+}
 
-        @Html.HiddenFor(m => m.StartDate.Month)
-        @Html.HiddenFor(m => m.StartDate.Year)
-    }
-    @if (Model.IsLockedForUpdate)
-    {
-        <div class="form-error-group form-group">
-            <hr/>
-            <span class="form-label-bold">Planned training finish date</span>
-            <span>@Model.EndDate.DateTime.Value.ToGdsFormatWithoutDay() </span>
-        </div>
+@if (Model.IsLockedForUpdate || Model.IsUpdateLockedForStartDateAndCourse)
+{
+    <div class="form-group">
+        <hr/>
+        <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
+        <span>@Model.TrainingName</span>
+    </div>
+    @Html.HiddenFor(m => m.TrainingCode)
+    @Html.HiddenFor(m => m.TrainingName)
+}
+else
+{
+    <div class="form-group @Html.AddClassIfPropertyInError(x => x.TrainingCode, "error")">
+        <hr />
+        <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
+        <span class="form-hint">Start typing in the name of the course or choose an option from the list</span>
+        @Html.ValidationMessageFor(m => m.TrainingCode, "Choose a training course for this apprentice", new { id = "error-message-" + Html.IdFor(m => m.TrainingCode), @class = "error-message" })
+        <select name="TrainingCode" id="TrainingCode" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
+            <option value="">Please select</option>
+            @foreach (var programme in ViewBag.ApprenticeshipProgrammes)
+            {
+                <option value="@programme.Id" @if (programme.Id.ToString() == Model.TrainingCode) { @Html.Raw("selected") }>
+                    @programme.Title
+                </option>
+            }
+        </select>
+    </div>
+}
 
-        @Html.HiddenFor(m => m.EndDate.Month)
-        @Html.HiddenFor(m => m.EndDate.Year)
-    }
-    else
+@if (Model.IsLockedForUpdate || Model.IsUpdateLockedForStartDateAndCourse)
+{
+    <div class="form-error-group form-group">
+        <hr/>
+        <label class="form-label-bold">Planned training start date</label>
+        <span>@Model.StartDate.DateTime.Value.ToGdsFormatWithoutDay() </span>
+    </div>
+
+    @Html.HiddenFor(m => m.StartDate.Month)
+    @Html.HiddenFor(m => m.StartDate.Year)
+}
+@if (Model.IsLockedForUpdate)
+{
+    <div class="form-error-group form-group">
+        <hr/>
+        <span class="form-label-bold">Planned training finish date</span>
+        <span>@Model.EndDate.DateTime.Value.ToGdsFormatWithoutDay() </span>
+    </div>
+
+    @Html.HiddenFor(m => m.EndDate.Month)
+    @Html.HiddenFor(m => m.EndDate.Year)
+}
+else
     {
         if (!Model.IsUpdateLockedForStartDateAndCourse)
         {
