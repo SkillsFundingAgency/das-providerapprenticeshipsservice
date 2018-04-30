@@ -140,6 +140,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
+        public async Task<TransferFundedViewModel> GetAllTransferFunded(long providerId)
+        {
+            var data = (await GetAllCommitmentsWithTheseStatuses(providerId, RequestStatus.WithSenderForApproval, RequestStatus.RejectedBySender)).ToList();
+            _logger.Info($"Provider getting all transfer funded ({data.Count}) :{providerId}", providerId);
+
+            return new TransferFundedViewModel
+            {
+                ProviderId = providerId,
+                Commitments = data.Select(MapToTransferFundedListItemViewModel)
+            };
+        }
+
+
         public async Task<DeleteConfirmationViewModel> GetDeleteConfirmationModel(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
@@ -302,6 +315,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
 
             return data.Commitments.Where(m => m.GetStatus() == requestStatus);
+        }
+
+        public async Task<IEnumerable<CommitmentListItem>> GetAllCommitmentsWithTheseStatuses(long providerId, params RequestStatus[] requestStatus)
+        {
+            _logger.Info($"Getting all commitments for provider:{providerId}", providerId);
+
+            var data = await _mediator.SendAsync(new GetCommitmentsQueryRequest
+            {
+                ProviderId = providerId
+            });
+
+            return data.Commitments.Where(m => requestStatus.Contains(m.GetStatus()));
         }
 
         public async Task<ProviderAgreementStatus> IsSignedAgreement(long providerId)
@@ -743,6 +768,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 LatestMessage = latestMessage
             };
         }
+
+        private TransferFundedListItemViewModel MapToTransferFundedListItemViewModel(CommitmentListItem listItem)
+        {
+            return new TransferFundedListItemViewModel
+            {
+                HashedCommitmentId = _hashingService.HashValue(listItem.Id),
+                ReceivingEmployerName = listItem.LegalEntityName,
+                Status = listItem.TransferApprovalStatus
+            };
+        }
+
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes(bool includeFrameworks)
         {
