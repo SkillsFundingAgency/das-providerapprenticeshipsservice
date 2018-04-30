@@ -28,6 +28,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
             {
                 ILog exLogger = new NLogLogger();
                 exLogger.Error(ex, "Error running ContractAgreements WebJob");
+                throw;
             }
         }
     }
