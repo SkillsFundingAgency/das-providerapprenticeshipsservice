@@ -21,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [SetUp]
         public void BaseSetup()
         {
-            CurrentDateTime.Setup(x => x.Now).Returns(new DateTime(2018, 5, 1));
+            CurrentDateTime.Setup(x => x.Now).Returns(DateTime.Now.AddMonths(6));
             Validator = new ApprenticeshipViewModelValidator(new WebApprenticeshipValidationText( new Infrastructure.Services.AcademicYearDateProvider(CurrentDateTime.Object)), CurrentDateTime.Object, new Infrastructure.Services.AcademicYearDateProvider(CurrentDateTime.Object), MockUlnValidator.Object, MockAcademicYearValidator.Object);
             ValidModel = new ApprenticeshipViewModel { ULN = "1001234567", FirstName = "TestFirstName", LastName = "TestLastName" };
         }
