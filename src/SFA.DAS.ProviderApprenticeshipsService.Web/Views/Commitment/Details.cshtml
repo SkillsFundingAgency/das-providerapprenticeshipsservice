@@ -1,4 +1,5 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models
 @model CommitmentDetailsViewModel
 
@@ -114,6 +115,19 @@
             <p>@(string.IsNullOrWhiteSpace(Model.LatestMessage) ? "No message added" : Model.LatestMessage)</p>
         </div>
     </div>
+
+    @if (Model.Status == RequestStatus.RejectedBySender)
+    {
+        <div class="grid-row">
+            <div class="column-full">
+                <div class="panel panel-border-narrow">
+                    <p>The funding employer has rejected the transfer request for this cohort. </p>
+                    <p>You should contact the apprentices' employer to discuss what steps to take next.</p>
+                </div>            
+             </div>
+        </div>
+
+    }
 
     <hr class="hr-bottom">
 

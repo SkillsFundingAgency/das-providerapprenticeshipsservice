@@ -257,3 +257,5 @@ paket-files/
 src/Tools/**/*.*
 **/*.orig
 sh.exe.stackdump
+*.ncrunchsolution
+*.ncrunchproject

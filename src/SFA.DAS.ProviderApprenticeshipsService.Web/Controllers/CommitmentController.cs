@@ -454,6 +454,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 case RequestStatus.ReadyForReview:
                 case RequestStatus.ReadyForApproval:
                     return Url.Action("ReadyForReview", new { providerId });
+                case RequestStatus.WithSenderForApproval:
+                case RequestStatus.RejectedBySender:
+                    return Url.Action("TransferFunded", new {providerId});
                 default:
                     return Url.Action("Cohorts", new { providerId });
             }
