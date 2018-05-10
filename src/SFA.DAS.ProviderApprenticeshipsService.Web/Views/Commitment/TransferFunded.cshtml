@@ -1,14 +1,14 @@
 ﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.TransferFundedViewModel
 
     @{
-        ViewBag.Title = "Transfer-funded cohorts";
+        ViewBag.Title = "With transfer sending employers";
         ViewBag.PageId = "transfer-funded-cohorts";
     }
 
 <div class="grid-row">
     <div class="column-full">
         
-        <h1 class="heading-xlarge">Transfer-funded cohorts</h1>
+        <h1 class="heading-xlarge">With transfer sending employers</h1>
 
         @{ var commitmentsCount = Model.Commitments.Count(); }
         <p class="dynamic-heading">You have <strong>@commitmentsCount</strong> cohort@(commitmentsCount > 1?"s":"") to be paid via a transfer</p>
