@@ -31,7 +31,7 @@
                     <td>
                         @if (Model.DateOfBirth.DateTime.HasValue)
                         {
-                            <span>@Model.DateOfBirth.DateTime.Value.ToGdsFormatWithoutDay()</span>
+                            <span>@Model.DateOfBirth.DateTime.Value.ToGdsFormat()</span>
                         }
                         else
                         {
