@@ -76,8 +76,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         }
 
         [TestCase(false, "Cohort approved")]
-        [TestCase(true, "Cohort approved and transfer request sent")]
-        public async Task ThenTheHeadlineShouldReflectWhetherTheCommitmentIsToBePaidByTransfer(bool isTransfer, string expectHeadline)
+        [TestCase(true, "Cohort approved")]
+        public async Task ThenTheHeadlineShouldShouldBeCohortApproved(bool isTransfer, string expectHeadline)
         {
             _commitment.TransferSender = (isTransfer ? new TransferSender { Id = 1L} : null);
 
