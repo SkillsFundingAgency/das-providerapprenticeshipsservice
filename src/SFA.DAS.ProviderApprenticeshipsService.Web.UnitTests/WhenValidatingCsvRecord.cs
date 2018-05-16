@@ -35,7 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
                     TrainingCode = "12",
                     DateOfBirth = new DateTimeViewModel(DateTime.UtcNow.AddYears(-16)),
                     StartDate = new DateTimeViewModel(new DateTime(2017, 06, 20)),
-                    EndDate = new DateTimeViewModel(new DateTime(2018, 05, 15)),
+                    EndDate = new DateTimeViewModel(new DateTime(2020, 05, 15)),
                     Cost = "1234"
                 },
                 CsvRecord = new CsvRecord { CohortRef = "abba123" }
