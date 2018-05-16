@@ -833,9 +833,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var result = new ApprovedViewModel
             {
-                Headline = commitment.TransferSender != null
-                    ? "Cohort approved and transfer request sent"
-                    : "Cohort approved",
+                Headline = "Cohort approved",
                 CommitmentReference = commitment.Reference,
                 EmployerName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
