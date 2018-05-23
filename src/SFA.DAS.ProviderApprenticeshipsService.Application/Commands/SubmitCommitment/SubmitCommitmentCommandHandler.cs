@@ -22,15 +22,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
 
         public SubmitCommitmentCommandHandler(IProviderCommitmentsApi commitmentsApi, AbstractValidator<SubmitCommitmentCommand> validator, IMediator mediator, ProviderApprenticeshipsServiceConfiguration configuration)
         {
-            if (commitmentsApi == null)
-                throw new ArgumentNullException(nameof(commitmentsApi));
-            if (validator == null)
-                throw new ArgumentNullException(nameof(validator));
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-            if (configuration == null)
-                throw new ArgumentNullException(nameof(configuration));
-
             _commitmentsApi = commitmentsApi;
             _validator = validator;
             _mediator = mediator;
@@ -84,7 +75,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
 
         private SendNotificationCommand BuildNotificationCommand(CommitmentView commitment, LastAction action, string hashedCommitmentId, string displayName)
         {
-            var template = commitment.AgreementStatus == AgreementStatus.NotAgreed ? "EmployerCommitmentNotification" : "EmployerCohortApproved";
+            var tokens = new Dictionary<string, string>
+            {
+                {"type", action == LastAction.Approve ? "approval" : "review"},
+                {"cohort_reference", hashedCommitmentId},
+                {"first_name", displayName},
+            };
+
+            string template;
+            switch (commitment.AgreementStatus)
+            {
+                case AgreementStatus.NotAgreed:
+                    template = "EmployerCommitmentNotification";
+                    break;
+                case AgreementStatus.EmployerAgreed when commitment.TransferSender != null && commitment.LastAction == LastAction.Approve:
+                    template = "EmployerTransferPendingFinalApproval";
+                    tokens["sender_name"] = commitment.TransferSender.Name;
+                    break;
+                default:
+                    template = "EmployerCohortApproved";
+                    break;
+            }
 
             return new SendNotificationCommand
             {
@@ -95,12 +106,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                     Subject = "<Test Employer Notification>", // Replaced by Notify Service
                     SystemId = "x", // Don't need to populate
                     TemplateId = template,
-                    Tokens = new Dictionary<string, string>
-                    {
-                        { "type", action == LastAction.Approve ? "approval" : "review" },
-                        { "cohort_reference", hashedCommitmentId },
-                        { "first_name", displayName },
-                    }
+                    Tokens = tokens
                 }
             };
         }
