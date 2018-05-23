@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderApprenticeshipsService.Application", "SFA.DAS.ProviderApprenticeshipsService.Application\SFA.DAS.ProviderApprenticeshipsService.Application.csproj", "{849E452B-2B68-445A-980C-995311311AF0}"
 EndProject
@@ -138,5 +138,8 @@ Global
 		{D71127E9-9881-4B6E-B1C6-155CF2B579D1} = {C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}
 		{ED70AD56-7C4C-4477-88CC-6CEE98E81F9A} = {C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}
 		{ADE1D3CC-9B6A-4BF0-AF80-A8E568249A60} = {C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3DD64861-62CA-4CDB-AC38-D40047EC39BC}
 	EndGlobalSection
 EndGlobal
