@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -11,7 +12,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
     public interface IApprenticeshipMapper
     {
-        ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship);
+        ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship, CommitmentView commitment);
 
         Task<Apprenticeship> MapApprenticeship(ApprenticeshipViewModel vm);
 

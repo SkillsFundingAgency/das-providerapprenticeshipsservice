@@ -12,7 +12,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateApprenti
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateRelationship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
@@ -33,56 +32,40 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
 using SFA.DAS.HashingService;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
+using GetCommitmentQueryRequest = SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment.GetCommitmentQueryRequest;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public class CommitmentOrchestrator : BaseCommitmentOrchestrator
     {
         private readonly IMediator _mediator;
-        private readonly ICommitmentStatusCalculator _statusCalculator;
         private readonly IHashingService _hashingService;
         private readonly IProviderCommitmentsLogger _logger;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
-        private readonly IAcademicYearDateProvider _academicYear;
         private readonly ApprenticeshipViewModelUniqueUlnValidator _uniqueUlnValidator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
-        private readonly ApprenticeshipViewModelValidator _apprenticeshipValidator;
+        private readonly IFeatureToggleService _featureToggleService;
         private readonly Func<int, string> _addSSuffix = i => i > 1 ? "s" : "";
 
-        public CommitmentOrchestrator(IMediator mediator, ICommitmentStatusCalculator statusCalculator,
+        public CommitmentOrchestrator(IMediator mediator,
             IHashingService hashingService, IProviderCommitmentsLogger logger,
             ApprenticeshipViewModelUniqueUlnValidator uniqueUlnValidator,
             ProviderApprenticeshipsServiceConfiguration configuration,
             IApprenticeshipMapper apprenticeshipMapper,
-            ApprenticeshipViewModelValidator apprenticeshipValidator,
-            IAcademicYearDateProvider academicYear)
+            IFeatureToggleService featureToggleService)
             : base(mediator)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-            if (statusCalculator == null)
-                throw new ArgumentNullException(nameof(statusCalculator));
-            if (hashingService == null)
-                throw new ArgumentNullException(nameof(hashingService));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-            if (configuration == null)
-                throw new ArgumentNullException(nameof(configuration));
-            if (uniqueUlnValidator == null)
-                throw new ArgumentNullException(nameof(uniqueUlnValidator));
-            if (apprenticeshipMapper == null)
-                throw new ArgumentNullException(nameof(apprenticeshipMapper));
-
-
             _mediator = mediator;
-            _statusCalculator = statusCalculator;
             _hashingService = hashingService;
             _logger = logger;
             _uniqueUlnValidator = uniqueUlnValidator;
             _configuration = configuration;
             _apprenticeshipMapper = apprenticeshipMapper;
-            _apprenticeshipValidator = apprenticeshipValidator;
-            _academicYear = academicYear;
+            _featureToggleService = featureToggleService;
         }
 
         public async Task<CohortsViewModel> GetCohorts(long providerId)
@@ -92,9 +75,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId
             });
-            var commitmentStatus =
-                data.Commitments.Select(m =>
-                    _statusCalculator.GetStatus(m.EditStatus, m.ApprenticeshipCount, m.LastAction, m.AgreementStatus, m.ProviderLastUpdateInfo)).ToList();
+            var commitmentStatus = data.Commitments.Select(m => m.GetStatus()).ToList();
 
             var model = new CohortsViewModel
             {
@@ -104,6 +85,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 || m == RequestStatus.NewRequest),
 
                 WithEmployerCount = commitmentStatus.Count(m => m == RequestStatus.SentForReview || m == RequestStatus.WithEmployerForApproval),
+                TransferFundedCohortsCount = _featureToggleService.Get<Transfers>().FeatureEnabled
+                    ? commitmentStatus.Count(m =>
+                        m == RequestStatus.WithSenderForApproval
+                        || m == RequestStatus.RejectedBySender) : (int?)null,
+
                 HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed,
                 SignAgreementUrl = _configuration.ContractAgreementsUrl
             };
@@ -153,6 +139,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
+
+        public async Task<TransferFundedViewModel> GetAllTransferFunded(long providerId)
+        {
+            var data = (await GetAllCommitmentsWithTheseStatuses(providerId, RequestStatus.WithSenderForApproval, RequestStatus.RejectedBySender)).ToList();
+            _logger.Info($"Provider getting all transfer funded ({data.Count}) :{providerId}", providerId);
+
+            return new TransferFundedViewModel
+            {
+                ProviderId = providerId,
+                Commitments = data.Select(MapToTransferFundedListItemViewModel)
+            };
+        }
+
 
         public async Task<DeleteConfirmationViewModel> GetDeleteConfirmationModel(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
@@ -315,11 +314,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderId = providerId
             });
 
-            return data.Commitments.Where(
-                m => _statusCalculator.GetStatus(m.EditStatus, m.ApprenticeshipCount, m.LastAction, m.AgreementStatus, m.ProviderLastUpdateInfo)
-                    == requestStatus);
+            return data.Commitments.Where(m => m.GetStatus() == requestStatus);
         }
 
+        public async Task<IEnumerable<CommitmentListItem>> GetAllCommitmentsWithTheseStatuses(long providerId, params RequestStatus[] requestStatus)
+        {
+            _logger.Info($"Getting all commitments for provider:{providerId}", providerId);
+
+            var data = await _mediator.SendAsync(new GetCommitmentsQueryRequest
+            {
+                ProviderId = providerId
+            });
+
+            return data.Commitments.Where(m => requestStatus.Contains(m.GetStatus()));
+        }
 
         public async Task<ProviderAgreementStatus> IsSignedAgreement(long providerId)
         {
@@ -343,7 +351,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
-            AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
+            AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed, AgreementStatus.BothAgreed);
 
             var relationshipRequest = await _mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
             {
@@ -358,7 +366,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 });
 
             var apprenticeships = MapFrom(data.Commitment.Apprenticeships, overlapping);
-            var trainingProgrammes = await GetTrainingProgrammes();
+            var trainingProgrammes = await GetTrainingProgrammes(data.Commitment.TransferSender == null);
 
             var apprenticeshipGroups = new List<ApprenticeshipListItemGroupViewModel>();
 
@@ -398,7 +406,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 HashedCommitmentId = hashedCommitmentId,
                 LegalEntityName = data.Commitment.LegalEntityName,
                 Reference = data.Commitment.Reference,
-                Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus, data.Commitment.ProviderLastUpdateInfo),
+                Status = data.Commitment.GetStatus(),
                 HasApprenticeships = apprenticeships.Count > 0,
                 Apprenticeships = apprenticeships,
                 LatestMessage = GetLatestMessage(data.Commitment.Messages, true)?.Message,
@@ -406,6 +414,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipGroups = apprenticeshipGroups,
                 RelationshipVerified = relationshipRequest.Relationship.Verified.HasValue,
                 IsReadOnly = data.Commitment.EditStatus != EditStatus.ProviderOnly,
+                IsFundedByTransfer = data.Commitment.TransferSender != null,
                 Errors = errors,
                 Warnings = warnings
             };
@@ -486,20 +495,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
+            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
             var overlappingErrors = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
                     Apprenticeship = new List<Apprenticeship> { data.Apprenticeship }
                 });
 
-            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
+            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship, commitmentData.Commitment);
 
             apprenticeship.ProviderId = providerId;
 
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes(),
+                ApprenticeshipProgrammes = await GetTrainingProgrammes(commitmentData.Commitment.TransferSender == null),
                 ValidationErrors = _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors)
             };
         }
@@ -517,7 +532,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
-            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
+            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
+            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship, commitmentData.Commitment);
 
             apprenticeship.ProviderId = providerId;
 
@@ -529,10 +550,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             _logger.Info($"Getting info for creating apprenticeship for provider:{providerId} commitment:{commitmentId}", providerId: providerId, commitmentId: commitmentId);
 
+            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
             var apprenticeship = new ApprenticeshipViewModel
             {
                 ProviderId = providerId,
-                HashedCommitmentId = hashedCommitmentId
+                HashedCommitmentId = hashedCommitmentId,
+                IsPaidForByTransfer = commitmentData.Commitment.TransferSender != null
             };
 
             await AssertCommitmentStatus(commitmentId, providerId);
@@ -540,7 +568,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes()
+                ApprenticeshipProgrammes = await GetTrainingProgrammes(commitmentData.Commitment.TransferSender == null)
             };
         }
 
@@ -722,7 +750,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Reference = listItem.Reference,
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
-                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.ApprenticeshipCount, listItem.LastAction, listItem.AgreementStatus, listItem.ProviderLastUpdateInfo),
+                Status = listItem.GetStatus(),
                 LatestMessage = lastestMessage
             };
         }
@@ -735,16 +763,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Reference = listItem.Reference,
                 LegalEntityName = listItem.LegalEntityName,
                 ProviderName = listItem.ProviderName,
-                Status = _statusCalculator.GetStatus(listItem.EditStatus, listItem.Apprenticeships.Count, listItem.LastAction, listItem.AgreementStatus, listItem.ProviderLastUpdateInfo),
+                Status = listItem.GetStatus(),
                 EmployerAccountId = listItem.EmployerAccountId,
                 LatestMessage = latestMessage
             };
         }
 
-        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
+        private TransferFundedListItemViewModel MapToTransferFundedListItemViewModel(CommitmentListItem listItem)
+        {
+            return new TransferFundedListItemViewModel
+            {
+                HashedCommitmentId = _hashingService.HashValue(listItem.Id),
+                ReceivingEmployerName = listItem.LegalEntityName,
+                Status = listItem.TransferApprovalStatus
+            };
+        }
+
+
+        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes(bool includeFrameworks)
         {
             var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
-            var frameworksTask = _mediator.SendAsync(new GetFrameworksQueryRequest());
+            var frameworksTask = includeFrameworks ? _mediator.SendAsync(new GetFrameworksQueryRequest())
+                : Task.FromResult(new GetFrameworksQueryResponse { Frameworks = new List<Framework>() });
 
             await Task.WhenAll(standardsTask, frameworksTask);
 
@@ -772,6 +812,33 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 WhatHappensNext = saveStatus == SaveStatus.ApproveAndSend
                     ? "The employer will review the cohort and either approve it or contact you with an update."
                     : "The updated cohort will appear in the employer’s account for them to review."
+            };
+
+            return result;
+        }
+
+        public async Task<ApprovedViewModel> GetApprovedViewModel(long providerId, string hashedCommitmentId)
+        {
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            _logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}", providerId, commitmentId);
+
+            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
+            var commitment = commitmentData.Commitment;
+
+            var result = new ApprovedViewModel
+            {
+                Headline = "Cohort approved",
+                CommitmentReference = commitment.Reference,
+                EmployerName = commitment.LegalEntityName,
+                ProviderName = commitment.ProviderName,
+                IsTransfer = commitment.TransferSender != null,
+                HasOtherCohortsAwaitingApproval = await GetCohortsForCurrentStatus(providerId, RequestStatus.ReadyForApproval)
             };
 
             return result;

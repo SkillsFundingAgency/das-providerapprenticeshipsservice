@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-
+using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
@@ -23,7 +24,6 @@ using SFA.DAS.NLog.Logger;
 using TrainingType = SFA.DAS.ProviderApprenticeshipsService.Domain.TrainingType;
 using TriageStatus = SFA.DAS.Commitments.Api.Types.DataLock.Types.TriageStatus;
 using CommitmentTrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
@@ -43,15 +43,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             ILog logger,
             IAcademicYearValidator academicYearValidator)
         {
-            if (hashingService == null)
-                throw new ArgumentNullException(nameof(hashingService));
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-            if (currentDateTime == null)
-                throw new ArgumentNullException(nameof(currentDateTime));
-            if (academicYearValidator == null)
-                throw new ArgumentNullException(nameof(academicYearValidator));
-
             _hashingService = hashingService;
             _mediator = mediator;
             _currentDateTime = currentDateTime;
@@ -59,19 +50,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             _academicYearValidator = academicYearValidator;
         }
 
-        public ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship)
+        public ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship, CommitmentView commitment)
         {
             var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
                                       new DateTime(_currentDateTime.Now.Year, _currentDateTime.Now.Month, 1);
 
-            var isLockedForUpdate = apprenticeship.HasHadDataLockSuccess;
+            var isLockedForUpdate = (!isStartDateInFuture &&
+                                     (apprenticeship.HasHadDataLockSuccess || _academicYearValidator.IsAfterLastAcademicYearFundingPeriod &&
+                                      apprenticeship.StartDate.HasValue &&
+                                      _academicYearValidator.Validate(apprenticeship.StartDate.Value) == AcademicYearValidationResult.NotWithinFundingPeriod))
+                                    ||
+                                    (commitment.TransferSender?.TransferApprovalStatus == TransferApprovalStatus.Approved
+                                     && apprenticeship.HasHadDataLockSuccess && isStartDateInFuture);
 
-            if (_academicYearValidator.IsAfterLastAcademicYearFundingPeriod &&
-                 apprenticeship.StartDate.HasValue &&
-                 _academicYearValidator.Validate(apprenticeship.StartDate.Value) == AcademicYearValidationResult.NotWithinFundingPeriod)
-            {
-                isLockedForUpdate = true;
-            }
+            var isUpdateLockedForStartDateAndCourse =
+                commitment.TransferSender?.TransferApprovalStatus == TransferApprovalStatus.Approved
+                && !apprenticeship.HasHadDataLockSuccess;
 
             var dateOfBirth = apprenticeship.DateOfBirth;
             return new ApprenticeshipViewModel
@@ -94,7 +88,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 ProviderRef = apprenticeship.ProviderRef,
                 EmployerRef = apprenticeship.EmployerRef,
                 HasStarted = !isStartDateInFuture,
-                IsLockedForUpdate = isLockedForUpdate
+                IsLockedForUpdate = isLockedForUpdate,
+                IsPaidForByTransfer = commitment.TransferSender != null,
+                IsUpdateLockedForStartDateAndCourse = isUpdateLockedForStartDateAndCourse
             };
         }
 

@@ -21,6 +21,7 @@ using System.Reflection;
 using System.Web;
 using FluentValidation;
 using MediatR;
+using FeatureToggle;
 using Microsoft.Azure;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Configuration;
@@ -81,10 +82,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
+            ConfigureFeatureToggle();
+
             RegisterMediator();
             ConfigureLogging();
 
             ConfigureInstrumentedTypes();
+        }
+
+        private void ConfigureFeatureToggle()
+        {
+            For<IBooleanToggleValueProvider>().Use<CloudConfigurationBooleanValueProvider>();
+            For<IFeatureToggleService>().Use<FeatureToggleService>();
         }
 
         private void ConfigureCommitmentsApi(ProviderApprenticeshipsServiceConfiguration config)
@@ -107,10 +116,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 .Ctor<HttpClient>().Is(httpClient);
 
             For<IValidationApi>().Use<ValidationApi>()
-                .Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi)
-                .Ctor<HttpClient>().Is(httpClient);
-
-            For<IApprenticeshipApi>().Use<ApprenticeshipApi>()
                 .Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi)
                 .Ctor<HttpClient>().Is(httpClient);
         }

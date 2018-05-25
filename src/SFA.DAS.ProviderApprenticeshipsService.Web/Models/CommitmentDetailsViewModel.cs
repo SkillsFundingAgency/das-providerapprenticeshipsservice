@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
@@ -19,6 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool RelationshipVerified { get; set; }
 
         public bool IsReadOnly { get; set; }
+        public bool IsFundedByTransfer { get; set; }
 
         public Dictionary<string, string> Errors { get; set; }
         public Dictionary<string, string> Warnings { get; set; }

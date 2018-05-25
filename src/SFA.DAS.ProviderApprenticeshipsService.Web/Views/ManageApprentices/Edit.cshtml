@@ -33,6 +33,12 @@
             @Html.HiddenFor(m => m.ProviderId)
             @Html.HiddenFor(m => m.AgreementStatus)
             @Html.HiddenFor(m => m.EmployerRef)
+            @Html.HiddenFor(m => m.IsLockedForUpdate)
+            @Html.HiddenFor(m => m.IsUpdateLockedForStartDateAndCourse)
+
+            @* next line deliberately commented: add in to support transfer validation rules in manage your apprentices *@
+            @*@Html.HiddenFor(m => m.IsPaidForByTransfer)*@
+
             <button type="submit" class="button button-left-align" id="submit-edit-details">Update details</button>
             <a class="link-left-aligned" href="@Url.Action("Details", new { Model.HashedApprenticeshipId })" aria-label="Cancel">Cancel and return</a>
         </form>

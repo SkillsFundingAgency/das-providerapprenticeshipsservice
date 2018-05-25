@@ -19,13 +19,14 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetPendingAppre
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.HashingService;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -158,6 +159,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             AssertApprenticeshipIsEditable(data.Apprenticeship);
 
+            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = data.Apprenticeship.CommitmentId
+            });
+
             var overlappingErrors = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
@@ -171,7 +178,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                             ProviderId = providerId
                         });
 
-            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship);
+            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship, commitmentData.Commitment);
 
             return new ExtendedApprenticeshipViewModel
             {

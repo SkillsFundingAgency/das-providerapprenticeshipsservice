@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution;
 
@@ -9,14 +8,8 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
     // To learn more about Microsoft Azure WebJobs SDK, please see http://go.microsoft.com/fwlink/?LinkID=320976
     class Program
     {
-        // Please set the following connection strings in app.config for this WebJob to run:
-        // AzureWebJobsDashboard and AzureWebJobsStorage
         static void Main()
         {
-            // The following code ensures that the WebJob will be running continuously
-            //var host = new JobHost();
-            //host.RunAndBlock();
-
             try
             {
                 var container = IoC.Initialize();
@@ -34,7 +27,8 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
             catch (Exception ex)
             {
                 ILog exLogger = new NLogLogger();
-              exLogger.Error(ex, "Error running ContractAgreements WebJob");
+                exLogger.Error(ex, "Error running ContractAgreements WebJob");
+                throw;
             }
         }
     }

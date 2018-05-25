@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
 {
     public enum RequestStatus
     {
@@ -22,6 +22,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         ReadyForApproval,
 
         [Description("Approved")]
-        Approved
+        Approved,
+
+        [Description("Pending - with employer")]
+        WithSenderForApproval,
+
+        [Description("Rejected - with employer")]
+        RejectedBySender
     }
 }

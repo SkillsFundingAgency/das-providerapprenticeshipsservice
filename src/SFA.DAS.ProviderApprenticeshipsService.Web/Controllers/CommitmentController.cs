@@ -10,6 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using System.Security.Claims;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
@@ -27,13 +28,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         public CommitmentController(CommitmentOrchestrator commitmentOrchestrator, ILog logger, ICookieStorageService<FlashMessageViewModel> flashMessage, ICookieStorageService<string> lastCohortCookieStorageService) : base(flashMessage)
         {
-            if (commitmentOrchestrator == null)
-                throw new ArgumentNullException(nameof(commitmentOrchestrator));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-            if(lastCohortCookieStorageService == null)
-                throw new ArgumentNullException(nameof(lastCohortCookieStorageService));
-
             _commitmentOrchestrator = commitmentOrchestrator;
             _logger = logger;
             _lastCohortCookieStorageService = lastCohortCookieStorageService;
@@ -77,6 +71,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             return View("RequestList", model);
         }
+
+        [HttpGet]
+        [Route("cohorts/transferfunded")]
+        public async Task<ActionResult> TransferFunded(long providerId)
+        {
+            SaveRequestStatusInCookie(RequestStatus.WithSenderForApproval);
+
+            var model = await _commitmentOrchestrator.GetAllTransferFunded(providerId);
+
+            AddFlashMessageToViewModel(model);
+
+            return View(model);
+        }
+
 
         [HttpGet]
         [Route("cohorts/review")]
@@ -382,22 +390,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedCommitmentId}/RequestApproved")]
         public async Task<ActionResult> Approved(long providerId, string hashedCommitmentId)
         {
-            var commitment = await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId);
-            var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(providerId, RequestStatus.ReadyForApproval);
-            string url;
-            var linkText = "Return to Approve cohorts";
-            if (currentStatusCohortAny)
-            {
-                url = Url.Action("ReadyForReview", new { ProviderId = providerId });
-            }
-            else
-            {
-                url = Url.Action("Cohorts", "Commitment", new { ProviderId = providerId });
-                linkText = "Return to your cohorts";
-            }
-
-            var model = new AcknowledgementViewModel { CommitmentReference = commitment.Reference, EmployerName = commitment.LegalEntityName, ProviderName = commitment.ProviderName, Message = string.Empty, RedirectUrl = url, RedirectLinkText = linkText };
-
+            var model = await _commitmentOrchestrator.GetApprovedViewModel(providerId, hashedCommitmentId);
             return View("RequestApproved", model);
         }
 
@@ -461,6 +454,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 case RequestStatus.ReadyForReview:
                 case RequestStatus.ReadyForApproval:
                     return Url.Action("ReadyForReview", new { providerId });
+                case RequestStatus.WithSenderForApproval:
+                case RequestStatus.RejectedBySender:
+                    return Url.Action("TransferFunded", new {providerId});
                 default:
                     return Url.Action("Cohorts", new { providerId });
             }

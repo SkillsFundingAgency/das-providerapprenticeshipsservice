@@ -16,11 +16,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingA
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetRelationshipByCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
@@ -30,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     public class WhenGettingCommitmentViewModel : ApprenticeshipValidationTestBase
     {
         [Test(Description = "Should return false on PendingChanges if overall agreement status is EmployerAgreed")]
-        public void ShouldCommitmentWithEmployerAndBothAgreed()
+        public async Task ShouldCommitmentWithEmployerAndBothAgreed()
         {
             var commitment = new CommitmentView
             {
@@ -46,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _mockMediator = GetMediator(commitment);
             SetUpOrchestrator();
-            var result = _orchestrator.GetCommitmentDetails(1L, "ABBA123").Result;
+            var result = await _orchestrator.GetCommitmentDetails(1L, "ABBA123");
 
             result.PendingChanges.ShouldBeEquivalentTo(false);
         }
@@ -93,9 +88,67 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             result.IsReadOnly.ShouldBeEquivalentTo(expectedIsReadOnly);
         }
 
+        [Test]
+        public void ThenFrameworksAreNotRetrievedForCohortsFundedByTransfer()
+        {
+            var commitment = new CommitmentView
+            {
+                AgreementStatus = AgreementStatus.ProviderAgreed,
+                EditStatus = EditStatus.ProviderOnly,
+                Apprenticeships = new List<Apprenticeship>(),
+                Messages = new List<MessageView>(),
+                TransferSender = new TransferSender {Id = 99, Name = "Transfer Sender Org", TransferApprovalStatus = TransferApprovalStatus.Pending}
+            };
+
+            _mockMediator = GetMediator(commitment);
+            SetUpOrchestrator();
+            var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
+
+           _mockMediator.Verify(x => x.SendAsync(It.IsAny<GetFrameworksQueryRequest>()), Times.Never);
+        }
+
+        [Test]
+        public void ThenFrameworksAreRetrievedForCohortsNotFundedByTransfer()
+        {
+            var commitment = new CommitmentView
+            {
+                AgreementStatus = AgreementStatus.ProviderAgreed,
+                EditStatus = EditStatus.ProviderOnly,
+                Apprenticeships = new List<Apprenticeship>(),
+                Messages = new List<MessageView>(),
+                TransferSender = null
+            };
+
+            _mockMediator = GetMediator(commitment);
+            SetUpOrchestrator();
+            var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
+
+            _mockMediator.Verify(x => x.SendAsync(It.IsAny<GetFrameworksQueryRequest>()), Times.Once);
+        }
+
+        [TestCase(123L, true)]
+        [TestCase(null, false)]
+        public async Task ThenTheCommitmentIsMarkedAsFundedByTransferIfItHasATransferSenderId(long? transferSenderId, bool expectedTransferFlag)
+        {
+            var commitment = new CommitmentView
+            {
+                AgreementStatus = AgreementStatus.ProviderAgreed,
+                EditStatus = EditStatus.ProviderOnly,
+                Apprenticeships = new List<Apprenticeship>(),
+                Messages = new List<MessageView>(),
+                TransferSender = (transferSenderId != null ? new TransferSender { Id = transferSenderId, TransferApprovalStatus = TransferApprovalStatus.Pending } : null)
+            };
+
+            _mockMediator = GetMediator(commitment);
+            SetUpOrchestrator();
+            var result = await _orchestrator.GetCommitmentDetails(1L, "ABBA213");
+
+            Assert.AreEqual(expectedTransferFlag, result.IsFundedByTransfer);
+        }
+
         // --- Helpers ---
 
-        private static Mock<IMediator> GetMediator(CommitmentView commitment)
+        protected static Mock<IMediator> GetMediator(CommitmentView commitment)
         {
             var respons = new GetCommitmentQueryResponse
             {

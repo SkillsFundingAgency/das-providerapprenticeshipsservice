@@ -1,4 +1,5 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models
 @model CommitmentDetailsViewModel
 
@@ -115,6 +116,19 @@
         </div>
     </div>
 
+    @if (Model.Status == RequestStatus.RejectedBySender)
+    {
+        <div class="grid-row">
+            <div class="column-full">
+                <div class="panel panel-border-narrow">
+                    <p>The funding employer has rejected the transfer request for this cohort. </p>
+                    <p>You should contact the apprentices' employer to discuss what steps to take next.</p>
+                </div>            
+             </div>
+        </div>
+
+    }
+
     <hr class="hr-bottom">
 
     @if (!Model.IsReadOnly)
@@ -126,7 +140,11 @@
                 @{ var finishEditingText = Model.PendingChanges ? "Save and continue" : "Continue to approval"; }
                 <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
                 <a href="@Url.Action("Create", new {Model.ProviderId, Model.HashedCommitmentId})" class="button button-secondary add-app-btn" aria-label="Add an apprentice">Add an apprentice</a>
-                <a href="@Url.Action("UploadApprenticeships", "BulkUpload", new {Model.ProviderId, Model.HashedCommitmentId})" class="button button-secondary upload-btn" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
+                
+                @if (!Model.IsFundedByTransfer)
+                {
+                    <a href="@Url.Action("UploadApprenticeships", "BulkUpload", new {Model.ProviderId, Model.HashedCommitmentId})" class="button button-secondary upload-btn" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
+                }
 
                 <hr class="hr-bottom">
             </div>
@@ -289,7 +307,7 @@
         </div>
     }
 
-    @if (!Model.IsReadOnly)
+    @if (!Model.IsReadOnly && !Model.IsFundedByTransfer)
     {
         <a class="button delete-button" href="@Url.Action("DeleteCohort", new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Delete">Delete cohort</a>
     }
