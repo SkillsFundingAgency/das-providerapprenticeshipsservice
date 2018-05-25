@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -26,6 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         private Mock<IHashingService> _mockHashingService;
         private SubmitCommitmentCommandHandler _handler;
 
+        private const string CohortReference = "ABC123";
         private const string UserName = "Anita Bush";
         private const long EmployerAccountId = 54321L;
         private const string HashedEmployerAccountId = "HSHCK";
@@ -36,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             _validCommand = new SubmitCommitmentCommand()
             {
                 ProviderId = 111L,
-                HashedCommitmentId = "ABC123",
+                HashedCommitmentId = CohortReference,
                 CommitmentId = 123L,
                 Message = "Test Message",
                 CreateTask = true,
@@ -50,7 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             {
                 ProviderId = _validCommand.ProviderId,
                 AgreementStatus = AgreementStatus.EmployerAgreed,
-                Reference = "ABC123",
+                Reference = CohortReference,
                 EmployerLastUpdateInfo = new LastUpdateInfo
                 {
                     EmailAddress = "EmployerTestEmail"
@@ -96,7 +98,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             arg.Email.RecipientsAddress.Should().Be("EmployerTestEmail");
             arg.Email.TemplateId.Should().Be("EmployerCohortApproved");
             arg.Email.Tokens["type"].Should().Be("approval");
-            arg.Email.Tokens["cohort_reference"].Should().Be("ABC123");
+            arg.Email.Tokens["cohort_reference"].Should().Be(CohortReference);
         }
 
         [Test]
@@ -104,6 +106,40 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             const string senderName = "Sender";
             const string providerName = "Provider";
+
+            const string template =
+                @"Dear ((first_name)),
+
+((provider_name)) has approved cohort ((cohort_reference)).
+
+What happens next?
+A transfer request has been sent to ((sender_name)) for approval. You will receive a notification once ((sender_name)) approves or rejects the request.
+
+To view cohort ((cohort_reference)) and its progress, follow the link below.
+https://manage-apprenticeships.service.gov.uk/commitments/accounts/((employer_hashed_account))/apprentices/cohorts
+
+This is an automated message. Please do not reply to this email.
+
+Kind regards,
+
+Apprenticeship service team";
+
+            string expectedEmailBody = $@"Dear {UserName},
+
+{providerName} has approved cohort {CohortReference}.
+
+What happens next?
+A transfer request has been sent to {senderName} for approval. You will receive a notification once {senderName} approves or rejects the request.
+
+To view cohort {CohortReference} and its progress, follow the link below.
+https://manage-apprenticeships.service.gov.uk/commitments/accounts/{HashedEmployerAccountId}/apprentices/cohorts
+
+This is an automated message. Please do not reply to this email.
+
+Kind regards,
+
+Apprenticeship service team";
+
             _commitmentView.TransferSender = new TransferSender
                 { Name = senderName };
             _commitmentView.ProviderName = providerName;
@@ -119,10 +155,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             arg.Email.RecipientsAddress.Should().Be("EmployerTestEmail");
             arg.Email.TemplateId.Should().Be("EmployerTransferPendingFinalApproval");
             arg.Email.Tokens["first_name"].Should().Be(UserName);
-            arg.Email.Tokens["cohort_reference"].Should().Be("ABC123");
+            arg.Email.Tokens["cohort_reference"].Should().Be(CohortReference);
             arg.Email.Tokens["sender_name"].Should().Be(senderName);
             arg.Email.Tokens["provider_name"].Should().Be(providerName);
             arg.Email.Tokens["employer_hashed_account"].Should().Be(HashedEmployerAccountId);
+
+            var emailBody = PopulateTemplate(template, arg.Email.Tokens);
+            TestContext.WriteLine(emailBody);
+            Assert.AreEqual(expectedEmailBody, emailBody);
+        }
+
+        private string PopulateTemplate(string template, Dictionary<string, string> tokens)
+        {
+            foreach (var token in tokens)
+            {
+                template = template.Replace($"(({token.Key}))", token.Value);
+            }
+
+            return template;
         }
     }
 }
