@@ -46,13 +46,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         }
 
         [TestCase(true, SaveStatus.ApproveAndSend, ExpectedWhatHappensNextType.TransferFirstApproval)]
-        [TestCase(true, SaveStatus.AmendAndSend, ExpectedWhatHappensNextType.UpdatedCohort)]
+        //[TestCase(true, SaveStatus.AmendAndSend, ExpectedWhatHappensNextType.UpdatedCohort)]
         [TestCase(true, SaveStatus.Approve, ExpectedWhatHappensNextType.UpdatedCohort)]
-        [TestCase(true, SaveStatus.Save, ExpectedWhatHappensNextType.UpdatedCohort)]
+        //[TestCase(true, SaveStatus.Save, ExpectedWhatHappensNextType.UpdatedCohort)]
         [TestCase(false, SaveStatus.ApproveAndSend, ExpectedWhatHappensNextType.EmployerWillReview)]
-        [TestCase(false, SaveStatus.AmendAndSend, ExpectedWhatHappensNextType.UpdatedCohort)]
+        //[TestCase(false, SaveStatus.AmendAndSend, ExpectedWhatHappensNextType.UpdatedCohort)]
         [TestCase(false, SaveStatus.Approve, ExpectedWhatHappensNextType.UpdatedCohort)]
-        [TestCase(false, SaveStatus.Save, ExpectedWhatHappensNextType.UpdatedCohort)]
+        //[TestCase(false, SaveStatus.Save, ExpectedWhatHappensNextType.UpdatedCohort)]
         public async Task ThenWhatHappensNextIsPopulatedCorrectly(bool isTransfer, SaveStatus saveStatus, ExpectedWhatHappensNextType expectedWhatHappensNextType)
         {
             if (isTransfer)
