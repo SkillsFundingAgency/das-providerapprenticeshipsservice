@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Commitment;
@@ -11,7 +10,6 @@ using SFA.DAS.Commitments.Api.Types.Validation;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetBulkUploadFile;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
@@ -29,14 +27,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public sealed class BulkUploadOrchestrator : BaseCommitmentOrchestrator
     {
-        private readonly IMediator _mediator;
         private readonly BulkUploader _bulkUploader;
-        private readonly IHashingService _hashingService;
-
         private readonly BulkUploadMapper _mapper;
         private readonly IBulkUploadFileParser _fileParser;
-
-        private readonly IProviderCommitmentsLogger _logger;
 
         public BulkUploadOrchestrator(
             IMediator mediator,
@@ -44,24 +37,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             IHashingService hashingService,
             BulkUploadMapper mapper,
             IProviderCommitmentsLogger logger,
-            IBulkUploadFileParser fileParser) : base(mediator)
+            IBulkUploadFileParser fileParser) : base(mediator, hashingService, logger)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-            if (bulkUploader == null)
-                throw new ArgumentNullException(nameof(bulkUploader));
-            if (hashingService == null)
-                throw new ArgumentNullException(nameof(hashingService));
-            if (mapper == null)
-                throw new ArgumentNullException(nameof(mapper));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
-            _mediator = mediator;
             _bulkUploader = bulkUploader;
-            _hashingService = hashingService;
             _mapper = mapper;
-            _logger = logger;
             _fileParser = fileParser;
         }
 
@@ -248,19 +227,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var commitmentId = _hashingService.DecodeValue(hashedcommitmentid);
             await AssertCommitmentStatus(commitmentId, providerid);
-            var result = await _mediator.SendAsync(new GetCommitmentQueryRequest
-                                              {
-                                                  ProviderId = providerid,
-                                                  CommitmentId = commitmentId
-                                              });
+            var commitment = await GetCommitment(providerid, commitmentId);
 
-            AssertCohortNotPaidForByTransfer(result.Commitment);
+            AssertCohortNotPaidForByTransfer(commitment);
 
             var model = new UploadApprenticeshipsViewModel
             {
                 ProviderId = providerid,
                 HashedCommitmentId = hashedcommitmentid,
-                ApprenticeshipCount = result.Commitment.Apprenticeships.Count
+                ApprenticeshipCount = commitment.Apprenticeships.Count
             };
 
             return model;

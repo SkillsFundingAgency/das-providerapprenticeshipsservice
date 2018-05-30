@@ -35,15 +35,11 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
-using GetCommitmentQueryRequest = SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment.GetCommitmentQueryRequest;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public class CommitmentOrchestrator : BaseCommitmentOrchestrator
     {
-        private readonly IMediator _mediator;
-        private readonly IHashingService _hashingService;
-        private readonly IProviderCommitmentsLogger _logger;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly ApprenticeshipViewModelUniqueUlnValidator _uniqueUlnValidator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
@@ -56,11 +52,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             ProviderApprenticeshipsServiceConfiguration configuration,
             IApprenticeshipMapper apprenticeshipMapper,
             IFeatureToggleService featureToggleService)
-            : base(mediator)
+            : base(mediator, hashingService, logger)
         {
-            _mediator = mediator;
-            _hashingService = hashingService;
-            _logger = logger;
             _uniqueUlnValidator = uniqueUlnValidator;
             _configuration = configuration;
             _apprenticeshipMapper = apprenticeshipMapper;
@@ -444,24 +437,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             AssertCommitmentStatus(commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
             return MapFrom(commitment, GetLatestMessage(commitment.Messages, true)?.Message);
-        }
-
-        public async Task<CommitmentView> GetCommitment(long providerId, string hashedCommitmentId)
-        {
-            return await GetCommitment(providerId, _hashingService.DecodeValue(hashedCommitmentId));
-        }
-
-        public async Task<CommitmentView> GetCommitment(long providerId, long commitmentId)
-        {
-            _logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}", providerId, commitmentId);
-
-            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
-            {
-                ProviderId = providerId,
-                CommitmentId = commitmentId
-            });
-
-            return data.Commitment;
         }
 
         public async Task<ExtendedApprenticeshipViewModel> GetApprenticeship(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
