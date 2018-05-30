@@ -709,25 +709,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 WhatHappensNext = new List<string>()
             };
 
-            //savestatus? ApproveAndSend?
-            if (commitment.IsTransfer()
-                && commitment.AgreementStatus == AgreementStatus.ProviderAgreed
-                //&& commitment.LastAction == LastAction.Approve)
-                && saveStatus == SaveStatus.ApproveAndSend)
+            switch (saveStatus)
             {
-                result.WhatHappensNext.AddRange(new []
-                {
-                    "The employer will receive your cohort and will either confirm the information is correct or contact you to suggest changes.",
-                    "Once the employer approves the cohort, a transfer request will be sent to the funding employer to review.",
-                    "You will receive a notification once the funding employer approves or rejects the transfer request. You can view the progress of a request from the 'With transfer sending employers' status screen."
-                });
-            }
-            else
-            {
-                result.WhatHappensNext.Add(
-                    saveStatus == SaveStatus.ApproveAndSend
-                        ? "The employer will review the cohort and either approve it or contact you with an update."
-                        : "The updated cohort will appear in the employer’s account for them to review.");
+                case SaveStatus.ApproveAndSend when commitment.IsTransfer():
+                    result.WhatHappensNext.AddRange(new[]
+                    {
+                        "The employer will receive your cohort and will either confirm the information is correct or contact you to suggest changes.",
+                        "Once the employer approves the cohort, a transfer request will be sent to the funding employer to review.",
+                        "You will receive a notification once the funding employer approves or rejects the transfer request. You can view the progress of a request from the 'With transfer sending employers' status screen."
+                    });
+                    break;
+                case SaveStatus.ApproveAndSend:
+                    result.WhatHappensNext.Add("The employer will review the cohort and either approve it or contact you with an update.");
+                    break;
+                default:
+                    result.WhatHappensNext.Add("The updated cohort will appear in the employer’s account for them to review.");
+                    break;
             }
             return result;
         }
