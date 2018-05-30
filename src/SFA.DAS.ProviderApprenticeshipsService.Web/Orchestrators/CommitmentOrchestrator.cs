@@ -198,6 +198,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<VerificationOfEmployerViewModel> GetVerificationOfEmployer(long providerId, string hashedCommitmentId)
         {
+            var relationshipRequest = await GetNonVerifiedRelationshipByCommitment(providerId, hashedCommitmentId);
+
+            return new VerificationOfEmployerViewModel
+            {
+                ProviderId = providerId,
+                HashedCommitmentId = hashedCommitmentId,
+                LegalEntityId = relationshipRequest.Relationship.LegalEntityId,
+                LegalEntityName = relationshipRequest.Relationship.LegalEntityName,
+                LegalEntityAddress = relationshipRequest.Relationship.LegalEntityAddress,
+                LegalEntityOrganisationType = relationshipRequest.Relationship.LegalEntityOrganisationType
+            };
+        }
+
+        private async Task<GetRelationshipByCommitmentQueryResponse> GetNonVerifiedRelationshipByCommitment(long providerId, string hashedCommitmentId)
+        {
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
 
             var relationshipRequest = await _mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
@@ -207,39 +222,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
 
             if (relationshipRequest.Relationship.Verified.HasValue)
-            {
                 throw new InvalidStateException("Relationship already verified");
-            }
 
-            var result = new VerificationOfEmployerViewModel
-            {
-                ProviderId = providerId,
-                HashedCommitmentId = hashedCommitmentId,
-                LegalEntityId = relationshipRequest.Relationship.LegalEntityId,
-                LegalEntityName = relationshipRequest.Relationship.LegalEntityName,
-                LegalEntityAddress = relationshipRequest.Relationship.LegalEntityAddress,
-                LegalEntityOrganisationType = relationshipRequest.Relationship.LegalEntityOrganisationType
-            };
-
-            return result;
+            return relationshipRequest;
         }
 
         public async Task<VerificationOfRelationshipViewModel> GetVerificationOfRelationship(long providerId, string hashedCommitmentId)
         {
-            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            var relationshipRequest = await GetNonVerifiedRelationshipByCommitment(providerId, hashedCommitmentId);
 
-            var relationshipRequest = await _mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
-            {
-                ProviderId = providerId,
-                CommitmentId = commitmentId
-            });
-
-            if (relationshipRequest.Relationship.Verified.HasValue)
-            {
-                throw new InvalidStateException("Relationship already verified");
-            }
-
-            var result = new VerificationOfRelationshipViewModel
+            return new VerificationOfRelationshipViewModel
             {
                 ProviderId = providerId,
                 HashedCommitmentId = hashedCommitmentId,
@@ -248,24 +240,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 LegalEntityAddress = relationshipRequest.Relationship.LegalEntityAddress,
                 LegalEntityOrganisationType = relationshipRequest.Relationship.LegalEntityOrganisationType
             };
-
-            return result;
         }
 
         public async Task VerifyRelationship(long providerId, string hashedCommitmentId, bool verified, string userId)
         {
-            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
-
-            var relationshipRequest = await _mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
-            {
-                ProviderId = providerId,
-                CommitmentId = commitmentId
-            });
-
-            if (relationshipRequest.Relationship.Verified.HasValue)
-            {
-                throw new InvalidStateException("Relationship already verified");
-            }
+            var relationshipRequest = await GetNonVerifiedRelationshipByCommitment(providerId, hashedCommitmentId);
 
             var relationship = relationshipRequest.Relationship;
             relationship.Verified = verified;
