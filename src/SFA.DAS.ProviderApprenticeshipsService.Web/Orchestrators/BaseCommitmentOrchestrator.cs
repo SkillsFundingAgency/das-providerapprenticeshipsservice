@@ -23,6 +23,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             _mediator = mediator;
         }
+
+        //todo: the consumers of this get the commitment themeselves,
+        // so it makes more sense for the consumers to pass it in
+        // and not fetch it twice from the database
         protected async Task AssertCommitmentStatus(long commitmentId, long providerId)
         {
             var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest

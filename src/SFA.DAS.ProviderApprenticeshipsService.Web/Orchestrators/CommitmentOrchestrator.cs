@@ -466,7 +466,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return MapFrom(data.Commitment, GetLatestMessage(data.Commitment.Messages, true)?.Message);
         }
 
-        public async Task<CommitmentListItemViewModel> GetCommitment(long providerId, string hashedCommitmentId, bool showProviderMessage = true)
+        //todo: replace existing calls with this version?
+        public async Task<CommitmentView> GetCommitment(long providerId, string hashedCommitmentId)
         {
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
 
@@ -478,7 +479,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
-            return MapFrom(data.Commitment, GetLatestMessage(data.Commitment.Messages, showProviderMessage)?.Message);
+            return data.Commitment;
         }
 
         public async Task<ExtendedApprenticeshipViewModel> GetApprenticeship(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
@@ -779,7 +780,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes(bool includeFrameworks)
         {
             var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
@@ -797,23 +797,41 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<AcknowledgementViewModel> GetAcknowledgementViewModel(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
         {
-            var commitment = await GetCommitment(providerId, hashedCommitmentId, false);
+            var commitment = await GetCommitment(providerId, hashedCommitmentId);
             var result = new AcknowledgementViewModel
             {
                 CommitmentReference = commitment.Reference,
                 EmployerName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
-                Message = commitment.LatestMessage,
+                Message = GetLatestMessage(commitment.Messages, false)?.Message,
                 RedirectUrl = string.Empty,
                 RedirectLinkText = string.Empty,
                 PageTitle = saveStatus == SaveStatus.ApproveAndSend
                     ? "Cohort approved and sent to employer"
                     : "Cohort sent for review",
-                WhatHappensNext = saveStatus == SaveStatus.ApproveAndSend
-                    ? "The employer will review the cohort and either approve it or contact you with an update."
-                    : "The updated cohort will appear in the employer’s account for them to review."
+                WhatHappensNext = new List<string>()
             };
 
+            //savestatus? ApproveAndSend?
+            if (commitment.TransferSender != null
+                && commitment.AgreementStatus == AgreementStatus.ProviderAgreed
+                //&& commitment.LastAction == LastAction.Approve)
+                && saveStatus == SaveStatus.ApproveAndSend)
+            {
+                result.WhatHappensNext.AddRange(new []
+                {
+                    "The employer will receive your cohort and will either confirm the information is correct or contact you to suggest changes.",
+                    "Once the employer approves the cohort, a transfer request will be sent to the funding employer to review.",
+                    "You will receive a notification once the funding employer approves or rejects the transfer request. You can view the progress of a request from the 'With transfer sending employers' status screen."
+                });
+            }
+            else
+            {
+                result.WhatHappensNext.Add(
+                    saveStatus == SaveStatus.ApproveAndSend
+                        ? "The employer will review the cohort and either approve it or contact you with an update."
+                        : "The updated cohort will appear in the employer’s account for them to review.");
+            }
             return result;
         }
 
