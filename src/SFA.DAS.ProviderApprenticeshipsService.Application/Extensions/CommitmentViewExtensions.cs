@@ -22,5 +22,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Extensions
                 commitment.TransferSender?.Id,
                 commitment.TransferSender?.TransferApprovalStatus);
         }
+
+        public static bool IsTransfer(this CommitmentView commitment)
+        {
+            return commitment.TransferSender != null;
+        }
     }
 }

@@ -20,7 +20,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -343,15 +342,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         public async Task<CommitmentDetailsViewModel> GetCommitmentDetails(long providerId, string hashedCommitmentId)
         {
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
-            _logger.Info($"Getting commitment details:{commitmentId} for provider:{providerId}", providerId: providerId, commitmentId: commitmentId);
 
-            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
-            {
-                ProviderId = providerId,
-                CommitmentId = commitmentId
-            });
+            var commitment = await GetCommitment(providerId, commitmentId);
 
-            AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed, AgreementStatus.BothAgreed);
+            AssertCommitmentStatus(commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed, AgreementStatus.BothAgreed);
 
             var relationshipRequest = await _mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
             {
@@ -362,11 +356,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var overlapping = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
-                    Apprenticeship = data.Commitment.Apprenticeships
+                    Apprenticeship = commitment.Apprenticeships
                 });
 
-            var apprenticeships = MapFrom(data.Commitment.Apprenticeships, overlapping);
-            var trainingProgrammes = await GetTrainingProgrammes(data.Commitment.TransferSender == null);
+            var apprenticeships = MapFrom(commitment.Apprenticeships, overlapping);
+            var trainingProgrammes = await GetTrainingProgrammes(!commitment.IsTransfer());
 
             var apprenticeshipGroups = new List<ApprenticeshipListItemGroupViewModel>();
 
@@ -404,17 +398,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 HashedCommitmentId = hashedCommitmentId,
-                LegalEntityName = data.Commitment.LegalEntityName,
-                Reference = data.Commitment.Reference,
-                Status = data.Commitment.GetStatus(),
+                LegalEntityName = commitment.LegalEntityName,
+                Reference = commitment.Reference,
+                Status = commitment.GetStatus(),
                 HasApprenticeships = apprenticeships.Count > 0,
                 Apprenticeships = apprenticeships,
-                LatestMessage = GetLatestMessage(data.Commitment.Messages, true)?.Message,
-                PendingChanges = data.Commitment.AgreementStatus != AgreementStatus.EmployerAgreed,
+                LatestMessage = GetLatestMessage(commitment.Messages, true)?.Message,
+                PendingChanges = commitment.AgreementStatus != AgreementStatus.EmployerAgreed,
                 ApprenticeshipGroups = apprenticeshipGroups,
                 RelationshipVerified = relationshipRequest.Relationship.Verified.HasValue,
-                IsReadOnly = data.Commitment.EditStatus != EditStatus.ProviderOnly,
-                IsFundedByTransfer = data.Commitment.TransferSender != null,
+                IsReadOnly = commitment.EditStatus != EditStatus.ProviderOnly,
+                IsFundedByTransfer = commitment.IsTransfer(),
                 Errors = errors,
                 Warnings = warnings
             };
@@ -422,55 +416,43 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<DeleteCommitmentViewModel> GetDeleteCommitmentModel(long providerId, string hashedCommitmentId)
         {
-            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            var commitment = await GetCommitment(providerId, hashedCommitmentId);
 
-            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
-            {
-                ProviderId = providerId,
-                CommitmentId = commitmentId
-            });
+            string TextOrDefault(string txt) => !string.IsNullOrEmpty(txt) ? txt : "without training course details";
 
-            Func<string, string> textOrDefault = txt => !string.IsNullOrEmpty(txt) ? txt : "without training course details";
-
-            var programmeSummary = data.Commitment.Apprenticeships
+            var programmeSummary = commitment.Apprenticeships
                 .GroupBy(m => m.TrainingName)
-                .Select(m => $"{m.Count()} {textOrDefault(m.Key)}")
+                .Select(m => $"{m.Count()} {TextOrDefault(m.Key)}")
                 .ToList();
 
             return new DeleteCommitmentViewModel
             {
                 ProviderId = providerId,
                 HashedCommitmentId = hashedCommitmentId,
-                LegalEntityName = data.Commitment.LegalEntityName,
+                LegalEntityName = commitment.LegalEntityName,
                 CohortReference = hashedCommitmentId,
-                NumberOfApprenticeships = data.Commitment.Apprenticeships.Count,
+                NumberOfApprenticeships = commitment.Apprenticeships.Count,
                 ApprenticeshipTrainingProgrammes = programmeSummary
             };
         }
 
         public async Task<CommitmentListItemViewModel> GetCommitmentCheckState(long providerId, string hashedCommitmentId)
         {
-            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            var commitment = await GetCommitment(providerId, hashedCommitmentId);
 
-            _logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}", providerId, commitmentId);
+            AssertCommitmentStatus(commitment, EditStatus.ProviderOnly);
+            AssertCommitmentStatus(commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
-            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
-            {
-                ProviderId = providerId,
-                CommitmentId = commitmentId
-            });
-
-            AssertCommitmentStatus(data.Commitment, EditStatus.ProviderOnly);
-            AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
-
-            return MapFrom(data.Commitment, GetLatestMessage(data.Commitment.Messages, true)?.Message);
+            return MapFrom(commitment, GetLatestMessage(commitment.Messages, true)?.Message);
         }
 
-        //todo: replace existing calls with this version?
         public async Task<CommitmentView> GetCommitment(long providerId, string hashedCommitmentId)
         {
-            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            return await GetCommitment(providerId, _hashingService.DecodeValue(hashedCommitmentId));
+        }
 
+        public async Task<CommitmentView> GetCommitment(long providerId, long commitmentId)
+        {
             _logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}", providerId, commitmentId);
 
             var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
@@ -496,11 +478,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
-            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
-            {
-                ProviderId = providerId,
-                CommitmentId = commitmentId
-            });
+            var commitment = await GetCommitment(providerId, commitmentId);
 
             var overlappingErrors = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
@@ -508,14 +486,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     Apprenticeship = new List<Apprenticeship> { data.Apprenticeship }
                 });
 
-            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship, commitmentData.Commitment);
+            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship, commitment);
 
             apprenticeship.ProviderId = providerId;
 
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes(commitmentData.Commitment.TransferSender == null),
+                ApprenticeshipProgrammes = await GetTrainingProgrammes(!commitment.IsTransfer()),
                 ValidationErrors = _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors)
             };
         }
@@ -533,13 +511,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
-            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
-            {
-                ProviderId = providerId,
-                CommitmentId = commitmentId
-            });
+            var commitment = await GetCommitment(providerId, commitmentId);
 
-            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship, commitmentData.Commitment);
+            var apprenticeship = _apprenticeshipMapper.MapApprenticeship(data.Apprenticeship, commitment);
 
             apprenticeship.ProviderId = providerId;
 
@@ -551,17 +525,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             _logger.Info($"Getting info for creating apprenticeship for provider:{providerId} commitment:{commitmentId}", providerId: providerId, commitmentId: commitmentId);
 
-            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
-            {
-                ProviderId = providerId,
-                CommitmentId = commitmentId
-            });
+            var commitment = await GetCommitment(providerId, commitmentId);
 
             var apprenticeship = new ApprenticeshipViewModel
             {
                 ProviderId = providerId,
                 HashedCommitmentId = hashedCommitmentId,
-                IsPaidForByTransfer = commitmentData.Commitment.TransferSender != null
+                IsPaidForByTransfer = commitment.IsTransfer()
             };
 
             await AssertCommitmentStatus(commitmentId, providerId);
@@ -569,7 +539,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes(commitmentData.Commitment.TransferSender == null)
+                ApprenticeshipProgrammes = await GetTrainingProgrammes(!commitment.IsTransfer())
             };
         }
 
@@ -670,29 +640,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             _logger.Info($"Get info for finish editing options for provider:{providerId} commitment:{commitmentId}", providerId: providerId, commitmentId: commitmentId);
 
-            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
-            {
-                ProviderId = providerId,
-                CommitmentId = commitmentId
-            });
+            var commitment = await GetCommitment(providerId, commitmentId);
 
-            AssertCommitmentStatus(data.Commitment, EditStatus.ProviderOnly);
-            AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
+            AssertCommitmentStatus(commitment, EditStatus.ProviderOnly);
+            AssertCommitmentStatus(commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
             var overlaps = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
-                    Apprenticeship = data.Commitment.Apprenticeships
+                    Apprenticeship = commitment.Apprenticeships
                 });
 
             return new FinishEditingViewModel
             {
                 HashedCommitmentId = hashedCommitmentId,
                 ProviderId = providerId,
-                ReadyForApproval = data.Commitment.CanBeApproved,
-                ApprovalState = GetApprovalState(data.Commitment),
-                HasApprenticeships = data.Commitment.Apprenticeships.Any(),
-                InvalidApprenticeshipCount = data.Commitment.Apprenticeships.Count(x => !x.CanBeApproved),
+                ReadyForApproval = commitment.CanBeApproved,
+                ApprovalState = GetApprovalState(commitment),
+                HasApprenticeships = commitment.Apprenticeships.Any(),
+                InvalidApprenticeshipCount = commitment.Apprenticeships.Count(x => !x.CanBeApproved),
                 HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed,
                 SignAgreementUrl = _configuration.ContractAgreementsUrl,
                 HasOverlappingErrors = overlaps.Overlaps.Any()
@@ -813,7 +779,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
 
             //savestatus? ApproveAndSend?
-            if (commitment.TransferSender != null
+            if (commitment.IsTransfer()
                 && commitment.AgreementStatus == AgreementStatus.ProviderAgreed
                 //&& commitment.LastAction == LastAction.Approve)
                 && saveStatus == SaveStatus.ApproveAndSend)
@@ -837,34 +803,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<ApprovedViewModel> GetApprovedViewModel(long providerId, string hashedCommitmentId)
         {
-            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            var commitment = await GetCommitment(providerId, hashedCommitmentId);
 
-            _logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}", providerId, commitmentId);
-
-            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
-            {
-                ProviderId = providerId,
-                CommitmentId = commitmentId
-            });
-
-            var commitment = commitmentData.Commitment;
-
-            var result = new ApprovedViewModel
+            return new ApprovedViewModel
             {
                 Headline = "Cohort approved",
                 CommitmentReference = commitment.Reference,
                 EmployerName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
-                IsTransfer = commitment.TransferSender != null,
+                IsTransfer = commitment.IsTransfer(),
                 HasOtherCohortsAwaitingApproval = await GetCohortsForCurrentStatus(providerId, RequestStatus.ReadyForApproval)
             };
-
-            return result;
         }
 
         public async Task<Dictionary<string, string>> ValidateApprenticeship(ApprenticeshipViewModel viewModel)
         {
-
             var overlappingErrors = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
@@ -882,9 +835,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 }
             }
 
-
             return result;
         }
-
     }
 }
