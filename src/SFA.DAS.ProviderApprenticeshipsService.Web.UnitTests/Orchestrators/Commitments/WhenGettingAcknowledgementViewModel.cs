@@ -46,7 +46,39 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             UpdatedCohort
         }
 
+        //todo: check when set to approve. handle same as approveandsend??
         [TestCase(true, AgreementStatus.ProviderAgreed, SaveStatus.ApproveAndSend, ExpectedWhatHappensNextType.TransferFirstApproval)]
+        [TestCase(true, AgreementStatus.BothAgreed, SaveStatus.ApproveAndSend, ExpectedWhatHappensNextType.EmployerWillReview)]
+        [TestCase(true, AgreementStatus.EmployerAgreed, SaveStatus.ApproveAndSend, ExpectedWhatHappensNextType.EmployerWillReview)]
+        [TestCase(true, AgreementStatus.NotAgreed, SaveStatus.ApproveAndSend, ExpectedWhatHappensNextType.EmployerWillReview)]
+        [TestCase(true, AgreementStatus.ProviderAgreed, SaveStatus.AmendAndSend, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(true, AgreementStatus.BothAgreed, SaveStatus.AmendAndSend, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(true, AgreementStatus.EmployerAgreed, SaveStatus.AmendAndSend, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(true, AgreementStatus.NotAgreed, SaveStatus.AmendAndSend, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(true, AgreementStatus.ProviderAgreed, SaveStatus.Approve, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(true, AgreementStatus.BothAgreed, SaveStatus.Approve, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(true, AgreementStatus.EmployerAgreed, SaveStatus.Approve, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(true, AgreementStatus.NotAgreed, SaveStatus.Approve, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(true, AgreementStatus.ProviderAgreed, SaveStatus.Save, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(true, AgreementStatus.BothAgreed, SaveStatus.Save, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(true, AgreementStatus.EmployerAgreed, SaveStatus.Save, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(true, AgreementStatus.NotAgreed, SaveStatus.Save, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(false, AgreementStatus.ProviderAgreed, SaveStatus.ApproveAndSend, ExpectedWhatHappensNextType.EmployerWillReview)]
+        [TestCase(false, AgreementStatus.BothAgreed, SaveStatus.ApproveAndSend, ExpectedWhatHappensNextType.EmployerWillReview)]
+        [TestCase(false, AgreementStatus.EmployerAgreed, SaveStatus.ApproveAndSend, ExpectedWhatHappensNextType.EmployerWillReview)]
+        [TestCase(false, AgreementStatus.NotAgreed, SaveStatus.ApproveAndSend, ExpectedWhatHappensNextType.EmployerWillReview)]
+        [TestCase(false, AgreementStatus.ProviderAgreed, SaveStatus.AmendAndSend, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(false, AgreementStatus.BothAgreed, SaveStatus.AmendAndSend, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(false, AgreementStatus.EmployerAgreed, SaveStatus.AmendAndSend, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(false, AgreementStatus.NotAgreed, SaveStatus.AmendAndSend, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(false, AgreementStatus.ProviderAgreed, SaveStatus.Approve, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(false, AgreementStatus.BothAgreed, SaveStatus.Approve, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(false, AgreementStatus.EmployerAgreed, SaveStatus.Approve, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(false, AgreementStatus.NotAgreed, SaveStatus.Approve, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(false, AgreementStatus.ProviderAgreed, SaveStatus.Save, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(false, AgreementStatus.BothAgreed, SaveStatus.Save, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(false, AgreementStatus.EmployerAgreed, SaveStatus.Save, ExpectedWhatHappensNextType.UpdatedCohort)]
+        [TestCase(false, AgreementStatus.NotAgreed, SaveStatus.Save, ExpectedWhatHappensNextType.UpdatedCohort)]
         public async Task ThenWhatHappensNextIsPopulatedCorrectly(bool isTransfer, AgreementStatus agreementStatus, SaveStatus saveStatus, ExpectedWhatHappensNextType expectedWhatHappensNextType)
         {
             if (isTransfer)
