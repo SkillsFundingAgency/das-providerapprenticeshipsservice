@@ -74,6 +74,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 ProviderRef = "Provider ref",
                 Reference = "ABBA12",
                 StartDate = DateTime.Now.AddMonths(2),
+                StopDate = DateTime.Now.AddMonths(6),
                 EndDate = DateTime.Now.AddMonths(26),
                 TrainingCode = "code-training",
                 TrainingName = "Training name",
@@ -119,7 +120,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             viewModel.DateOfBirth.DateTime.Should().Be(new DateTime(1998, 12, 08));
             viewModel.ULN.Should().Be("1112223301");
             viewModel.StartDate.DateTime.Should().BeCloseTo(new DateTimeViewModel(DateTime.Now.AddMonths(2)).DateTime.Value, 100 * 1000);
-
+            viewModel.StopDate.DateTime.Should().BeCloseTo(new DateTimeViewModel(DateTime.Now.AddMonths(6)).DateTime.Value, 100 * 1000);
             viewModel.EndDate.DateTime.Should().BeCloseTo(new DateTimeViewModel(DateTime.Now.AddMonths(26)).DateTime.Value, 10 * 1000);
             viewModel.TrainingName.Should().Be("Training name");
             viewModel.Cost.Should().Be("1700");
@@ -140,7 +141,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             model.DateOfBirth.Should().Be(new DateTime(1998, 12, 08));
             model.ULN.Should().Be("1112223301");
             model.StartDate.Should().BeCloseTo(new DateTimeViewModel(DateTime.Now.AddMonths(2)).DateTime.Value, 10 * 1000);
-
             model.EndDate.Should().BeCloseTo(new DateTimeViewModel(DateTime.Now.AddMonths(26)).DateTime.Value, 10 * 1000);
             model.TrainingName.Should().Be("Fake training");
             model.Cost.Should().Be(1700);
