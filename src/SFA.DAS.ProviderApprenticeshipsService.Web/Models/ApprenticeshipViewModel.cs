@@ -37,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string Cost { get; set; }
 
         public DateTimeViewModel StartDate { get; set; }
-
+        public DateTimeViewModel StopDate { get; set; }
         public DateTimeViewModel EndDate { get; set; }
 
         public PaymentStatus PaymentStatus { get; set; }

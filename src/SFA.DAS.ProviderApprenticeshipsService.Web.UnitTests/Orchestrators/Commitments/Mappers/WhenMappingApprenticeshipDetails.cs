@@ -55,6 +55,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                              ProviderRef = "Provider ref",
                              Reference = "ABBA12",
                              StartDate = DateTime.Now.AddMonths(2),
+                             StopDate = DateTime.Now.AddMonths(6),
                              EndDate = DateTime.Now.AddMonths(26),
                              TrainingCode = "code-training",
                              TrainingName = "Training name",
@@ -77,6 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             viewModel.DateOfBirth.Should().Be(new DateTime(1998, 12, 08));
             viewModel.Uln.Should().Be("1112223301");
             viewModel.StartDate.Should().BeCloseTo(DateTime.Now.AddMonths(2), 10 * 1000);
+            viewModel.StopDate.Should().BeCloseTo(DateTime.Now.AddMonths(6), 10 * 1000);
 
             viewModel.EndDate.Should().BeCloseTo(DateTime.Now.AddMonths(26), 10 * 1000);
             viewModel.TrainingName.Should().Be("Training name");

@@ -109,6 +109,15 @@
                     <td>Status</td>
                     <td>@Model.Status</td>
                 </tr>
+                @if (Model.StopDate.HasValue)
+                {
+                    <tr>
+                        <td>Stop applies from</td>
+                        <td>
+                            @Model.StopDate.Value.ToGdsFormat()
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
 

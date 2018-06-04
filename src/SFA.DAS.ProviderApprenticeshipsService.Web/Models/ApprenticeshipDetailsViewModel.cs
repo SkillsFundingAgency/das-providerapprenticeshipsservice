@@ -20,6 +20,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public DateTime? EndDate { get; set; }
 
+        public DateTime? StopDate { get; set; }
+
         public string TrainingName { get; set; }
 
         public decimal? Cost { get; set; }
