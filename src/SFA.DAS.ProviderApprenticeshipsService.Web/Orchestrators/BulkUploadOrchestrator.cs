@@ -47,12 +47,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<BulkUploadResultViewModel> UploadFile(string userId, UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel, SignInUserModel signInUser)
         {
-            var commitmentId = _hashingService.DecodeValue(uploadApprenticeshipsViewModel.HashedCommitmentId);
+            var commitmentId = HashingService.DecodeValue(uploadApprenticeshipsViewModel.HashedCommitmentId);
             var providerId = uploadApprenticeshipsViewModel.ProviderId;
             var fileName = uploadApprenticeshipsViewModel?.Attachment?.FileName ?? "<unknown>";
 
 			await AssertCommitmentStatus(commitmentId, uploadApprenticeshipsViewModel.ProviderId);
-            _logger.Info($"Uploading File - Filename:{fileName}", uploadApprenticeshipsViewModel.ProviderId, commitmentId);
+            Logger.Info($"Uploading File - Filename:{fileName}", uploadApprenticeshipsViewModel.ProviderId, commitmentId);
 
             var fileValidationResult = await _bulkUploader.ValidateFileStructure(uploadApprenticeshipsViewModel, providerId, commitmentId);
 
@@ -66,20 +66,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 };
             }
 
-            _logger.Info("Uploading file of apprentices.", providerId, commitmentId);
+            Logger.Info("Uploading file of apprentices.", providerId, commitmentId);
 
             var rowValidationResult = await _bulkUploader.ValidateFileRows(fileValidationResult.Data, providerId, fileValidationResult.BulkUploadId);
 
             var sw = Stopwatch.StartNew();
             var overlapErrors = await GetOverlapErrors(fileValidationResult.Data.ToList());
-            _logger.Trace($"Validating overlaps took {sw.ElapsedMilliseconds}");
+            Logger.Trace($"Validating overlaps took {sw.ElapsedMilliseconds}");
 
             var rowErrors = rowValidationResult.Errors.ToList();
             rowErrors.AddRange(overlapErrors);
-            var hashedBulkUploadId = _hashingService.HashValue(fileValidationResult.BulkUploadId);
+            var hashedBulkUploadId = HashingService.HashValue(fileValidationResult.BulkUploadId);
             if (rowErrors.Any())
             {
-                _logger.Info($"{rowErrors.Count} Upload errors", providerId, commitmentId);
+                Logger.Info($"{rowErrors.Count} Upload errors", providerId, commitmentId);
                 return new BulkUploadResultViewModel
                 {
                     BulkUploadId = fileValidationResult.BulkUploadId,
@@ -92,7 +92,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             try
             {
 
-                await _mediator.SendAsync(new BulkUploadApprenticeshipsCommand
+                await Mediator.SendAsync(new BulkUploadApprenticeshipsCommand
                 {
                     UserId = userId,
                     ProviderId = providerId,
@@ -114,10 +114,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                         RowLevelErrors = overlaps
                     };
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
 
             return new BulkUploadResultViewModel { BulkUploadId = fileValidationResult.BulkUploadId };
@@ -151,7 +149,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Apprenticeship = apprentices
             };
 
-            var overlapResponse = await _mediator.SendAsync(overlapRequest);
+            var overlapResponse = await Mediator.SendAsync(overlapRequest);
 
             if (overlapResponse.Overlaps.Any())
             {
@@ -212,8 +210,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         //TODO: These are duplicated in Commitment Orchestrator - needs to be shared
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
-            var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
-            var frameworksTask = _mediator.SendAsync(new GetFrameworksQueryRequest());
+            var standardsTask = Mediator.SendAsync(new GetStandardsQueryRequest());
+            var frameworksTask = Mediator.SendAsync(new GetFrameworksQueryRequest());
 
             await Task.WhenAll(standardsTask, frameworksTask);
 
@@ -241,12 +239,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<UploadApprenticeshipsViewModel> GetUnsuccessfulUpload(long providerId, string hashedCommitmentId, string bulkUploadReference)
         {
-            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
-            var bulkUploadId = _hashingService.DecodeValue(bulkUploadReference);
+            var commitmentId = HashingService.DecodeValue(hashedCommitmentId);
+            var bulkUploadId = HashingService.DecodeValue(bulkUploadReference);
 
             await AssertCommitmentStatus(commitmentId, providerId);
 
-            var fileContentResult = await _mediator.SendAsync(new GetBulkUploadFileQueryRequest
+            var fileContentResult = await Mediator.SendAsync(new GetBulkUploadFileQueryRequest
             {
                 ProviderId = providerId,
                 BulkUploadId = bulkUploadId
@@ -275,21 +273,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private IEnumerable<UploadError> GetOverlappingErrors(OverlappingApprenticeship overlappingResult, int i, ApprenticeshipUploadModel record)
         {
-            const string TextStartDate = "The <strong>start date</strong> overlaps with existing training dates for the same apprentice";
-            const string TextEndDate = "The <strong>finish date</strong> overlaps with existing training dates for the same apprentice";
+            const string textStartDate = "The <strong>start date</strong> overlaps with existing training dates for the same apprentice";
+            const string textEndDate = "The <strong>finish date</strong> overlaps with existing training dates for the same apprentice";
 
             switch (overlappingResult.ValidationFailReason)
             {
                 case ValidationFailReason.OverlappingStartDate:
-                    return new List<UploadError> { new UploadError(TextStartDate, "OverlappingError", i, record) };
+                    return new List<UploadError> { new UploadError(textStartDate, "OverlappingError", i, record) };
                 case ValidationFailReason.OverlappingEndDate:
-                    return new List<UploadError> { new UploadError(TextEndDate, "OverlappingError", i, record) };
+                    return new List<UploadError> { new UploadError(textEndDate, "OverlappingError", i, record) };
                 case ValidationFailReason.DateEmbrace:
                 case ValidationFailReason.DateWithin:
                     return new List<UploadError>
                                {
-                                   new UploadError(TextStartDate, "OverlappingError", i, record),
-                                   new UploadError(TextEndDate, "OverlappingError", i, record)
+                                   new UploadError(textStartDate, "OverlappingError", i, record),
+                                   new UploadError(textEndDate, "OverlappingError", i, record)
                                };
             }
             return Enumerable.Empty<UploadError>();

@@ -16,29 +16,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public class BaseCommitmentOrchestrator
     {
-        protected readonly IMediator _mediator;
-        protected readonly IHashingService _hashingService;
-        protected readonly IProviderCommitmentsLogger _logger;
+        protected readonly IMediator Mediator;
+        protected readonly IHashingService HashingService;
+        protected readonly IProviderCommitmentsLogger Logger;
 
         public BaseCommitmentOrchestrator(IMediator mediator,
             IHashingService hashingService, IProviderCommitmentsLogger logger)
         {
             // we keep null checks here, as this is a base class
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            _hashingService = hashingService ?? throw new ArgumentNullException(nameof(hashingService));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            Mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            HashingService = hashingService ?? throw new ArgumentNullException(nameof(hashingService));
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<CommitmentView> GetCommitment(long providerId, string hashedCommitmentId)
         {
-            return await GetCommitment(providerId, _hashingService.DecodeValue(hashedCommitmentId));
+            return await GetCommitment(providerId, HashingService.DecodeValue(hashedCommitmentId));
         }
 
         public async Task<CommitmentView> GetCommitment(long providerId, long commitmentId)
         {
-            _logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}", providerId, commitmentId);
+            Logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}", providerId, commitmentId);
 
-            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            var data = await Mediator.SendAsync(new GetCommitmentQueryRequest
             {
                 ProviderId = providerId,
                 CommitmentId = commitmentId
