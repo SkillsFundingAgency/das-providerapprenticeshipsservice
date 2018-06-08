@@ -47,7 +47,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         }
 
         [Test]
-        public async Task ThenCreatingSettingsIfNoSettingsFoundGettingUsersSettings()
+        public void ThenCreatingSettingsIfNoSettingsFoundGettingUsersSettings()
         {
             _mockValidator.Setup(m => m.Validate(_command))
                 .Returns(new ValidationResult { Errors = { new ValidationFailure("Error", "Error message") } });

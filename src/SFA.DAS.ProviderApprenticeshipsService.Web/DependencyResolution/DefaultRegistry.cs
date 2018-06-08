@@ -136,12 +136,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(httpClient);
 
             For<INotificationsApiClientConfiguration>().Use(config.NotificationApi);
-
         }
 
         private void ConfigureInstrumentedTypes()
         {
-            For<IBulkUploadValidator>().Use(x => new InstrumentedBulkUploadValidator(x.GetInstance<ILog>(), x.GetInstance<BulkUploadValidator>(), x.GetInstance<IUlnValidator>(), x.GetInstance<IAcademicYearDateProvider>(), x.GetInstance<IAcademicYearValidator>()));
+            For<IBulkUploadValidator>().Use(x => new InstrumentedBulkUploadValidator(x.GetInstance<ILog>(), x.GetInstance<BulkUploadValidator>(), x.GetInstance<IUlnValidator>(), x.GetInstance<IAcademicYearDateProvider>()));
             For<IBulkUploadFileParser>().Use(x => new InstrumentedBulkUploadFileParser(x.GetInstance<ILog>(), x.GetInstance<BulkUploadFileParser>()));
 
             For<IAsyncRequestHandler<BulkUploadApprenticeshipsCommand, Unit>>()

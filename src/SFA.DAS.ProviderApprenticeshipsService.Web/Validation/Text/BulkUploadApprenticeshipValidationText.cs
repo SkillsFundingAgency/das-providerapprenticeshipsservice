@@ -58,8 +58,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
             new ValidationMessage("You must enter the <strong>end date</strong>, for example 2019-02", "LearnPlanEndDate_01");
         public ValidationMessage LearnPlanEndDate02 =>
             new ValidationMessage("You must not enter an <strong>end date</strong> that's earlier than the start date", "LearnPlanEndDate_02");
-        public ValidationMessage LearnPlanEndDate03 =>
-            new ValidationMessage("You must not enter an <strong>end date</strong> that's earlier than today's date", "LearnPlanEndDate_03");
 
         public ValidationMessage TrainingPrice01 =>
             new ValidationMessage("You must enter the <strong>total cost of training</strong> in whole pounds - don't include any symbols, characters or letters", "TrainingPrice_01");
@@ -99,9 +97,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
 
         public ValidationMessage TrainingCode01 =>
             new ValidationMessage("You must enter a valid <strong>Standard code</strong> or <strong>Framework code</strong>", "DefaultErrorCode");
-
-        public ValidationMessage EPAOrgID01 { get { throw new NotImplementedException(); } }
-        public ValidationMessage EPAOrgID02 { get { throw new NotImplementedException(); } }
-
     }
 }

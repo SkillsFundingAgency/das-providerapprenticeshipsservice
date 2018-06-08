@@ -15,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     public sealed class WhenDeletingApprenticeship : ApprenticeshipValidationTestBase
     {
         [SetUp]
-        protected void SetUp()
+        public new void SetUp()
         {
             _mockHashingService.Setup(m => m.DecodeValue("ABBA99")).Returns(123L);
             _mockHashingService.Setup(m => m.DecodeValue("ABBA66")).Returns(321L);
