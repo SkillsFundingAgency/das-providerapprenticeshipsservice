@@ -1,5 +1,4 @@
-﻿using System;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
