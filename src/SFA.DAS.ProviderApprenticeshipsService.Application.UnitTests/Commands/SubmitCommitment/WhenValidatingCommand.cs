@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.SubmitCommitment
 {
@@ -19,6 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         private SubmitCommitmentCommand _validCommand;
         private Mock<IProviderCommitmentsApi> _mockCommitmentsApi;
         private Mock<IMediator> _mockMediator;
+        private Mock<IHashingService> _mockHashingService;
         private SubmitCommitmentCommandHandler _handler;
 
         [SetUp]
@@ -37,9 +39,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 UserId = "user123",
             };
 
+            _mockHashingService = new Mock<IHashingService>();
+
             _mockCommitmentsApi = new Mock<IProviderCommitmentsApi>();
             _mockMediator = new Mock<IMediator>();
-            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentsApi.Object, new SubmitCommitmentCommandValidator(), _mockMediator.Object, new ProviderApprenticeshipsServiceConfiguration());
+            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentsApi.Object, new SubmitCommitmentCommandValidator(), _mockMediator.Object, new ProviderApprenticeshipsServiceConfiguration(), _mockHashingService.Object);
         }
 
         [Test]

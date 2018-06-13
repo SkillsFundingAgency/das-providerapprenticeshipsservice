@@ -7,6 +7,7 @@ using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.HashingService;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -19,22 +20,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
         private readonly AbstractValidator<SubmitCommitmentCommand> _validator;
         private readonly IMediator _mediator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
+        private readonly IHashingService _hashingService;
 
-        public SubmitCommitmentCommandHandler(IProviderCommitmentsApi commitmentsApi, AbstractValidator<SubmitCommitmentCommand> validator, IMediator mediator, ProviderApprenticeshipsServiceConfiguration configuration)
+        public SubmitCommitmentCommandHandler(IProviderCommitmentsApi commitmentsApi, AbstractValidator<SubmitCommitmentCommand> validator, IMediator mediator, ProviderApprenticeshipsServiceConfiguration configuration, IHashingService hashingService)
         {
-            if (commitmentsApi == null)
-                throw new ArgumentNullException(nameof(commitmentsApi));
-            if (validator == null)
-                throw new ArgumentNullException(nameof(validator));
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-            if (configuration == null)
-                throw new ArgumentNullException(nameof(configuration));
-
             _commitmentsApi = commitmentsApi;
             _validator = validator;
             _mediator = mediator;
             _configuration = configuration;
+            _hashingService = hashingService;
         }
 
         protected override async Task HandleCore(SubmitCommitmentCommand message)
@@ -84,7 +78,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
 
         private SendNotificationCommand BuildNotificationCommand(CommitmentView commitment, LastAction action, string hashedCommitmentId, string displayName)
         {
-            var template = commitment.AgreementStatus == AgreementStatus.NotAgreed ? "EmployerCommitmentNotification" : "EmployerCohortApproved";
+            var tokens = new Dictionary<string, string>
+            {
+                {"type", action == LastAction.Approve ? "approval" : "review"},
+                {"cohort_reference", hashedCommitmentId},
+                {"first_name", displayName},
+            };
+
+            string template;
+            switch (commitment.AgreementStatus)
+            {
+                case AgreementStatus.NotAgreed:
+                    template = "EmployerCommitmentNotification";
+                    break;
+                case AgreementStatus.EmployerAgreed when commitment.TransferSender != null && action == LastAction.Approve:
+                    template = "EmployerTransferPendingFinalApproval";
+                    tokens["sender_name"] = commitment.TransferSender.Name;
+                    tokens["provider_name"] = commitment.ProviderName;
+                    tokens["employer_hashed_account"] = _hashingService.HashValue(commitment.EmployerAccountId);
+                    break;
+                default:
+                    template = "EmployerCohortApproved";
+                    break;
+            }
 
             return new SendNotificationCommand
             {
@@ -95,12 +111,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                     Subject = "<Test Employer Notification>", // Replaced by Notify Service
                     SystemId = "x", // Don't need to populate
                     TemplateId = template,
-                    Tokens = new Dictionary<string, string>
-                    {
-                        { "type", action == LastAction.Approve ? "approval" : "review" },
-                        { "cohort_reference", hashedCommitmentId },
-                        { "first_name", displayName },
-                    }
+                    Tokens = tokens
                 }
             };
         }
