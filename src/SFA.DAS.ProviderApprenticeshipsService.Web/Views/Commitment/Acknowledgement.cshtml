@@ -42,11 +42,22 @@
             </tbody>
         </table>
 
-
         <h2 class="heading-medium">What happens next?</h2>
-        <p id="changeMainCopy">
-            @Model.WhatHappensNext
-        </p>
+        @if (Model.WhatHappensNext.Count == 1)
+        {
+            <p id="changeMainCopy">
+                @Model.WhatHappensNext.First()
+            </p>
+        }
+        else if (Model.WhatHappensNext.Count > 1)
+        {
+            <ul class="list-bullet">
+            @foreach (var bulletPoint in Model.WhatHappensNext)
+            {
+                <li>@bulletPoint</li>
+            }
+            </ul>
+        }
 
         @if (!string.IsNullOrEmpty(Model.RedirectUrl))
         {
