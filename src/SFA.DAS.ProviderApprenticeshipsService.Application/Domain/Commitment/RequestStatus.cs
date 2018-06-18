@@ -9,7 +9,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
         [Description("New request")]
         NewRequest,
 
-        [Description("Sent for review")]
+        [Description("Under review with employer")]
         SentForReview,
 
         [Description("Ready for review")]
@@ -24,7 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
         [Description("Approved")]
         Approved,
 
-        [Description("Pending - with employer")]
+        [Description("Pending - with funding employer")]
         WithSenderForApproval,
 
         [Description("Rejected - with employer")]
