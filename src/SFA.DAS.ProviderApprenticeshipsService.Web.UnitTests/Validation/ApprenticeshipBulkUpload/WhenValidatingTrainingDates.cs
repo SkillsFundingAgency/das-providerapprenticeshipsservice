@@ -105,6 +105,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void ShouldFailValidationForPlanedEndDateWithCurrentDate()
         {
+            MockCurrentDateTime.SetupGet(x => x.Now).Returns(new DateTime(2017, 7, 15));
             ValidModel.ApprenticeshipViewModel.StartDate = new DateTimeViewModel(new DateTime(2017, 7, 20));
             ValidModel.ApprenticeshipViewModel.EndDate = new DateTimeViewModel(new DateTime(2017, 7, 18));
 

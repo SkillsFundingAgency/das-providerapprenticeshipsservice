@@ -8,9 +8,7 @@ using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
-using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -138,44 +136,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
                     _logger.Warn($"Apprentice training course has expired. TrainingName: {apprenticeship.TrainingName}, TrainingCode: {apprenticeship.TrainingCode}, Employer Ref: {apprenticeship.EmployerRef}, ApprenticeshipId: {apprenticeship.Id}, Apprenticeship ULN: {apprenticeship.ULN}");
                 }
-
-
             }
 
             return apprenticeship;
-        }
-
-        public Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors)
-        {
-            var dict = new Dictionary<string, string>();
-            const string StartText = "The start date is not valid";
-            const string EndText = "The end date is not valid";
-
-            const string StartDateKey = "StartDateOverlap";
-            const string EndDateKey = "EndDateOverlap";
-
-
-            foreach (var item in overlappingErrors.GetFirstOverlappingApprenticeships())
-            {
-                switch (item.ValidationFailReason)
-                {
-                    case ValidationFailReason.OverlappingStartDate:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        break;
-                    case ValidationFailReason.OverlappingEndDate:
-                        dict.AddIfNotExists(EndDateKey, EndText);
-                        break;
-                    case ValidationFailReason.DateEmbrace:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        dict.AddIfNotExists(EndDateKey, EndText);
-                        break;
-                    case ValidationFailReason.DateWithin:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        dict.AddIfNotExists(EndDateKey, EndText);
-                        break;
-                }
-            }
-            return dict;
         }
 
         public ApprenticeshipUpdate MapApprenticeshipUpdate(ApprenticeshipUpdateViewModel viewModel)

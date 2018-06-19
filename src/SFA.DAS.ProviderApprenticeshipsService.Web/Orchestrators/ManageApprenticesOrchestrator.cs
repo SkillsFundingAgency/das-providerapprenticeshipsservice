@@ -22,11 +22,11 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -39,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IApprovedApprenticeshipValidator _approvedApprenticeshipValidator;
         private readonly IApprenticeshipFiltersMapper _apprenticeshipFiltersMapper;
         private readonly IDataLockMapper _dataLockMapper;
-        private string _searchPlaceholderText;
+        private readonly string _searchPlaceholderText;
 
         public ManageApprenticesOrchestrator(
             IMediator mediator,
@@ -184,7 +184,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 Apprenticeship = apprenticeship,
                 ApprenticeshipProgrammes = await GetTrainingProgrammes(),
-                ValidationErrors = _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors)
+                ValidationErrors = _approvedApprenticeshipValidator.MapOverlappingErrors(overlappingErrors)
             };
         }
 
@@ -198,14 +198,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     Apprenticeship = new List<Apprenticeship> { await _apprenticeshipMapper.MapApprenticeship(model) }
                 });
 
-            foreach (var overlap in _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors))
+            foreach (var overlap in _approvedApprenticeshipValidator.MapOverlappingErrors(overlappingErrors))
             {
                 result.Add(overlap.Key, overlap.Value);
             }
 
-            foreach (var error in _approvedApprenticeshipValidator.Validate(model))
+            foreach (var error in _approvedApprenticeshipValidator.ValidateToDictionary(model))
             {
-                result.Add(error.Key, error.Value);
+                result.AddIfNotExists(error.Key, error.Value);
             }
 
             foreach (var error in _approvedApprenticeshipValidator.ValidateAcademicYear(updateViewModel))

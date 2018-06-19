@@ -10,19 +10,22 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.Learners.Validators;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
     public sealed class ApprenticeshipUploadModelValidator : IApprenticeshipUploadModelValidator
     {
         private readonly IApprenticeshipValidationErrorText _validationText;
+        private readonly ICurrentDateTime _currentDateTime;
         private readonly IUlnValidator _ulnValidator;
 
         private static readonly Func<string, IEnumerable<string>, bool> InList = (v, l) => string.IsNullOrWhiteSpace(v) || l.Contains(v);
 
-        public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, IUlnValidator ulnValidator)
+        public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime, IUlnValidator ulnValidator)
         {
             _validationText = validationText;
+            _currentDateTime = currentDateTime;
             _ulnValidator = ulnValidator;
         }
 
@@ -146,6 +149,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             if (model.ApprenticeshipViewModel.StartDate != null && model.ApprenticeshipViewModel.EndDate.DateTime <= model.ApprenticeshipViewModel.StartDate.DateTime)
             {
                 return CreateValidationFailure("EndDate", _validationText.LearnPlanEndDate02);
+            }
+
+            if (model.ApprenticeshipViewModel.EndDate.DateTime <= _currentDateTime.Now)
+            {
+                return CreateValidationFailure("EndDate", _validationText.LearnPlanEndDate03);
             }
 
             return null;

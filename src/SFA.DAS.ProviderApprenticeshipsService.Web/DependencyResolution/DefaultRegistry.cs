@@ -48,6 +48,8 @@ using StructureMap;
 using StructureMap.Graph;
 using SFA.DAS.Learners.Validators;
 using SFA.DAS.HashingService;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -77,6 +79,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IConfiguration>().Use(config);
             For<ICache>().Use<InMemoryCache>(); //RedisCache
             For<IAgreementStatusQueryRepository>().Use<ProviderAgreementStatusRepository>();
+            For<IApprenticeshipValidationErrorText>().Use<WebApprenticeshipValidationText>();
+            For<IApprenticeshipCoreValidator>().Use<ApprenticeshipCoreValidator>().Singleton();
+            For<IApprovedApprenticeshipValidator>().Use<ApprovedApprenticeshipValidator>().Singleton();
 
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));

@@ -20,7 +20,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -45,6 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly IHashingService _hashingService;
         private readonly IProviderCommitmentsLogger _logger;
+        private readonly IApprenticeshipCoreValidator _apprenticeshipCoreValidator;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly ApprenticeshipViewModelUniqueUlnValidator _uniqueUlnValidator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
@@ -55,6 +55,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             IHashingService hashingService, IProviderCommitmentsLogger logger,
             ApprenticeshipViewModelUniqueUlnValidator uniqueUlnValidator,
             ProviderApprenticeshipsServiceConfiguration configuration,
+            IApprenticeshipCoreValidator apprenticeshipCoreValidator,
             IApprenticeshipMapper apprenticeshipMapper,
             IFeatureToggleService featureToggleService)
             : base(mediator)
@@ -64,6 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _logger = logger;
             _uniqueUlnValidator = uniqueUlnValidator;
             _configuration = configuration;
+            _apprenticeshipCoreValidator = apprenticeshipCoreValidator;
             _apprenticeshipMapper = apprenticeshipMapper;
             _featureToggleService = featureToggleService;
         }
@@ -515,7 +517,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 Apprenticeship = apprenticeship,
                 ApprenticeshipProgrammes = await GetTrainingProgrammes(commitmentData.Commitment.TransferSender == null),
-                ValidationErrors = _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors)
+                ValidationErrors = _apprenticeshipCoreValidator.MapOverlappingErrors(overlappingErrors)
             };
         }
 
@@ -846,27 +848,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<Dictionary<string, string>> ValidateApprenticeship(ApprenticeshipViewModel viewModel)
         {
-
             var overlappingErrors = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
                     Apprenticeship = new List<Apprenticeship> { await _apprenticeshipMapper.MapApprenticeship(viewModel) }
                 });
 
-            var result = _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors);
+            var result = _apprenticeshipCoreValidator.MapOverlappingErrors(overlappingErrors);
+
+            var endDateError = _apprenticeshipCoreValidator.CheckEndDateInFuture(viewModel.EndDate);
+            if (endDateError != null)
+                result.AddIfNotExists(endDateError.Value);
 
             var uniqueUlnValidationResult = await _uniqueUlnValidator.ValidateAsyncOverride(viewModel);
             if (!uniqueUlnValidationResult.IsValid)
             {
                 foreach (var error in uniqueUlnValidationResult.Errors)
                 {
-                    result.Add(error.PropertyName, error.ErrorMessage);
+                    result.AddIfNotExists(error.PropertyName, error.ErrorMessage);
                 }
             }
 
-
             return result;
         }
-
     }
 }

@@ -16,6 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
     {
         protected ApprenticeshipUploadModelValidator Validator;
         protected ApprenticeshipUploadModel ValidModel;
+        protected Mock<ICurrentDateTime> MockCurrentDateTime;
         protected Mock<IUlnValidator> MockUlnValidator;
         protected Mock<IAcademicYearDateProvider> MockAcademicYear;
         protected Mock<IAcademicYearValidator> MockAcademicYearValidator;
@@ -23,11 +24,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [SetUp]
         public void BaseSetup()
         {
+            MockCurrentDateTime = new Mock<ICurrentDateTime>();
             MockUlnValidator = new Mock<IUlnValidator>();
             MockAcademicYear = new Mock<IAcademicYearDateProvider>();
             MockAcademicYearValidator = new Mock<IAcademicYearValidator>();
 
-            Validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(MockAcademicYear.Object), MockUlnValidator.Object);
+            Validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(MockAcademicYear.Object), MockCurrentDateTime.Object, MockUlnValidator.Object);
 
             ValidModel = new ApprenticeshipUploadModel
             {

@@ -19,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public override void SetUp()
         {
             _currentDateTime = new CurrentDateTime(new DateTime(DateTime.Now.Year, 11, 01));
-            _mockMapper.Setup(m => m.MapOverlappingErrors(It.IsAny<GetOverlappingApprenticeshipsQueryResponse>()))
+            _mockApprenticeshipCoreValidator.Setup(m => m.MapOverlappingErrors(It.IsAny<GetOverlappingApprenticeshipsQueryResponse>()))
                 .Returns(new Dictionary<string, string>());
 
             base.SetUp();

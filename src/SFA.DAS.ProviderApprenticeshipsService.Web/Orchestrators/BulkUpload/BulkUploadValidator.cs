@@ -10,6 +10,7 @@ using Microsoft.Ajax.Utilities;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
@@ -39,7 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
 
             _validationText = new BulkUploadApprenticeshipValidationText(academicYear);
-            _viewModelValidator = new ApprenticeshipUploadModelValidator(_validationText, ulnValidator);
+            _viewModelValidator = new ApprenticeshipUploadModelValidator(_validationText, new CurrentDateTime(), ulnValidator);
             
             _logger = logger;
             _config = config;
