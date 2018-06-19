@@ -1,4 +1,4 @@
-﻿using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+﻿using System.Collections.Generic;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
@@ -15,6 +15,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public string PageTitle { get; set; }
 
-        public string WhatHappensNext { get; set; }
+        public List<string> WhatHappensNext { get; set; }
     }
 }

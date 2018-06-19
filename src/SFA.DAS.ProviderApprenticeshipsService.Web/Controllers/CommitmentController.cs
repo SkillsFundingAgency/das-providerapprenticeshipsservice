@@ -222,7 +222,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             SetInfoMessage("Cohort deleted", FlashMessageSeverityLevel.Okay);
 
             var currentStatusCohortAny = 
-                await _commitmentOrchestrator.GetCohortsForCurrentStatus(viewModel.ProviderId, GetRequestStatusFromCookie());
+                await _commitmentOrchestrator.AnyCohortsForStatus(viewModel.ProviderId, GetRequestStatusFromCookie());
 
             if (!currentStatusCohortAny)
                 return RedirectToAction("Cohorts", new { providerId = viewModel.ProviderId });
@@ -378,7 +378,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (viewModel.SaveStatus == SaveStatus.Save)
             {
                 SetInfoMessage("Cohort saved but not sent" ,FlashMessageSeverityLevel.None );
-                var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(viewModel.ProviderId, GetRequestStatusFromCookie());
+                var currentStatusCohortAny = await _commitmentOrchestrator.AnyCohortsForStatus(viewModel.ProviderId, GetRequestStatusFromCookie());
                 if (currentStatusCohortAny)
                     return Redirect(GetReturnToListUrl(viewModel.ProviderId));
             }
@@ -428,7 +428,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var viewModel = await _commitmentOrchestrator.GetAcknowledgementViewModel(providerId, hashedCommitmentId, saveStatus);
 
-            var currentStatusCohortAny = await _commitmentOrchestrator.GetCohortsForCurrentStatus(providerId, GetRequestStatusFromCookie());
+            var currentStatusCohortAny = await _commitmentOrchestrator.AnyCohortsForStatus(providerId, GetRequestStatusFromCookie());
             var url = GetReturnToListUrl(providerId);
             var linkText = "Go back to view cohorts";
             if (!currentStatusCohortAny)
