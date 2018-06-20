@@ -16,7 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
     {
         protected static readonly Func<string, int, bool> LengthLessThanFunc = (str, length) => (str?.Length ?? length) < length;
         protected readonly IApprenticeshipValidationErrorText ValidationText;
-        private readonly ICurrentDateTime _currentDateTime;
+        protected readonly ICurrentDateTime CurrentDateTime;
         private readonly IAcademicYearDateProvider _academicYear;
         private readonly IUlnValidator _ulnValidator;
 
@@ -26,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                                             IUlnValidator ulnValidator)
         {
             ValidationText = validationText;
-            _currentDateTime = currentDateTime;
+            CurrentDateTime = currentDateTime;
             _academicYear = academicYear;
             _ulnValidator = ulnValidator;
 
@@ -114,7 +114,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         {
             const string endDateKey = "EndDate";
 
-            return endDate.DateTime > _currentDateTime.Now ? (KeyValuePair<string, string>?)null
+            var now = CurrentDateTime.Now;
+            return new DateTime(endDate.Year.Value, endDate.Month.Value, 1) >= new DateTime(now.Year, now.Month, 1)
+                ? (KeyValuePair<string, string>?)null
                 : new KeyValuePair<string, string>(endDateKey, ValidationText.LearnPlanEndDate03.Text);
         }
 
