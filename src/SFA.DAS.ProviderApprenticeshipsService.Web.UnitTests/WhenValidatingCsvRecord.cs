@@ -33,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
                     FirstName = "TestFirstName",
                     LastName = "TestLastName",
                     TrainingCode = "12",
-                    DateOfBirth = new DateTimeViewModel(DateTime.UtcNow.AddYears(-16)),
+                    DateOfBirth = new DateTimeViewModel(DateTime.UtcNow.AddYears(-18)),
                     StartDate = new DateTimeViewModel(new DateTime(2017, 06, 20)),
                     EndDate = new DateTimeViewModel(new DateTime(2020, 05, 15)),
                     Cost = "1234"
