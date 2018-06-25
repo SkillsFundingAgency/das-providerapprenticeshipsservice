@@ -7,31 +7,55 @@ using MediatR;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public class BaseCommitmentOrchestrator
     {
-        private readonly IMediator _mediator;
+        protected readonly IMediator Mediator;
+        protected readonly IHashingService HashingService;
+        protected readonly IProviderCommitmentsLogger Logger;
 
-        public BaseCommitmentOrchestrator(IMediator mediator)
+        public BaseCommitmentOrchestrator(IMediator mediator,
+            IHashingService hashingService, IProviderCommitmentsLogger logger)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-
-            _mediator = mediator;
+            // we keep null checks here, as this is a base class
+            Mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            HashingService = hashingService ?? throw new ArgumentNullException(nameof(hashingService));
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
+
+        public async Task<CommitmentView> GetCommitment(long providerId, string hashedCommitmentId)
+        {
+            return await GetCommitment(providerId, HashingService.DecodeValue(hashedCommitmentId));
+        }
+
+        public async Task<CommitmentView> GetCommitment(long providerId, long commitmentId)
+        {
+            Logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}", providerId, commitmentId);
+
+            var data = await Mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                ProviderId = providerId,
+                CommitmentId = commitmentId
+            });
+
+            return data.Commitment;
+        }
+
         protected async Task AssertCommitmentStatus(long commitmentId, long providerId)
         {
-            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
-                                                               {
-                                                                   ProviderId = providerId,
-                                                                   CommitmentId = commitmentId
-                                                               });
-            AssertCommitmentStatus(commitmentData.Commitment, EditStatus.ProviderOnly);
-            AssertCommitmentStatus(commitmentData.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
+            AssertCommitmentStatus(await GetCommitment(providerId, commitmentId));
+        }
+
+        protected static void AssertCommitmentStatus(CommitmentView commitment)
+        {
+            AssertCommitmentStatus(commitment, EditStatus.ProviderOnly);
+            AssertCommitmentStatus(commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
         }
 
         protected static void AssertCommitmentStatus(CommitmentView commitment, params AgreementStatus[] allowedAgreementStatuses)

@@ -14,10 +14,5 @@
         {
             return status == SaveStatus.ApproveAndSend || status == SaveStatus.AmendAndSend;
         }
-
-        public static bool IsApproveWithoutSend(this SaveStatus status)
-        {
-            return status == SaveStatus.Approve;
-        }
     }
 }
