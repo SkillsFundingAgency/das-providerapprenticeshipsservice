@@ -66,6 +66,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 commitment.TransferSender?.TransferApprovalStatus == TransferApprovalStatus.Approved
                 && !apprenticeship.HasHadDataLockSuccess;
 
+            var isEndDateLockedForUpdate = commitment.AgreementStatus != AgreementStatus.BothAgreed
+                ? isLockedForUpdate
+                : isStartDateInFuture || (isLockedForUpdate && !apprenticeship.HasHadDataLockSuccess);
+
             var dateOfBirth = apprenticeship.DateOfBirth;
             return new ApprenticeshipViewModel
             {
@@ -90,7 +94,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 HasStarted = !isStartDateInFuture,
                 IsLockedForUpdate = isLockedForUpdate,
                 IsPaidForByTransfer = commitment.IsTransfer(),
-                IsUpdateLockedForStartDateAndCourse = isUpdateLockedForStartDateAndCourse
+                IsUpdateLockedForStartDateAndCourse = isUpdateLockedForStartDateAndCourse,
+                IsEndDateLockedForUpdate = isEndDateLockedForUpdate
             };
         }
 

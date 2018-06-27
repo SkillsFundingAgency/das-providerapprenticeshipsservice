@@ -24,6 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         [SetUp]
         public void Setup()
         {
+            var now = DateTime.UtcNow;
             _validModel = new ApprenticeshipUploadModel
             {
                 ApprenticeshipViewModel = new ApprenticeshipViewModel
@@ -32,9 +33,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
                     FirstName = "TestFirstName",
                     LastName = "TestLastName",
                     TrainingCode = "12",
-                    DateOfBirth = new DateTimeViewModel(DateTime.UtcNow.AddYears(-16)),
-                    StartDate = new DateTimeViewModel(new DateTime(2017, 06, 20)),
-                    EndDate = new DateTimeViewModel(new DateTime(2020, 05, 15)),
+                    DateOfBirth = new DateTimeViewModel(now.AddYears(-16)),
+                    StartDate = new DateTimeViewModel(now),
+                    EndDate = new DateTimeViewModel(now.AddYears(3)),
                     Cost = "1234"
                 },
                 CsvRecord = new CsvRecord { CohortRef = "abba123" }

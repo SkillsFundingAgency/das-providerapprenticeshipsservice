@@ -50,21 +50,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             IApprenticeshipFiltersMapper apprenticeshipFiltersMapper,
             IDataLockMapper dataLockMapper)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-            if (hashingService == null)
-                throw new ArgumentNullException(nameof(hashingService));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-            if (apprenticeshipMapper == null)
-                throw new ArgumentNullException(nameof(apprenticeshipMapper));
-            if(approvedApprenticeshipValidator == null)
-                throw new ArgumentNullException(nameof(approvedApprenticeshipValidator));
-            if(apprenticeshipFiltersMapper == null)
-                throw new ArgumentNullException(nameof(IApprenticeshipFiltersMapper));
-            if(dataLockMapper == null)
-                throw new ArgumentNullException(nameof(IDataLockMapper));
-
             _mediator = mediator;
             _hashingService = hashingService;
             _logger = logger;
