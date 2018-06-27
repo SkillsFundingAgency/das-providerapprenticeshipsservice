@@ -198,6 +198,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 result.AddIfNotExists(error.Key, error.Value);
             }
 
+            foreach (var error in _approvedApprenticeshipValidator.ValidateApprovedEndDate(updateViewModel))
+            {
+                result.AddIfNotExists(error.Key, error.Value);
+            }
+
             return result;
         }
 

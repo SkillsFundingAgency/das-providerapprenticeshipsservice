@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SFA.DAS.Learners.Validators;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
@@ -39,6 +40,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 _academicYearValidator.Validate(model.StartDate.DateTime.Value) == AcademicYearValidationResult.NotWithinFundingPeriod)
             {
                 dict.Add($"{nameof(model.StartDate)}", ValidationText.AcademicYearStartDate01.Text);
+            }
+
+            return dict;
+        }
+
+        //note: once an apprenticeship has been approved, the end date logically changes from the planned end date to the actual end date
+        public Dictionary<string, string> ValidateApprovedEndDate(CreateApprenticeshipUpdateViewModel updatedApprenticeship)
+        {
+            var dict = new Dictionary<string, string>();
+
+            if (updatedApprenticeship.EndDate != null)
+            {
+                //todo: helper for year and month only
+                var now = CurrentDateTime.Now;
+                if (new DateTime(updatedApprenticeship.EndDate.Year.Value, updatedApprenticeship.EndDate.Month.Value, 1) > new DateTime(now.Year, now.Month, 1))
+                    //todo: new text
+                    dict.Add($"{nameof(updatedApprenticeship.EndDate)}", ValidationText.EndDateBeforeOrIsCurrentMonth.Text);
             }
 
             return dict;

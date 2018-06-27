@@ -1,4 +1,5 @@
-﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+﻿using System;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
@@ -59,6 +60,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
             new ValidationMessage("You must not enter an <strong>end date</strong> that's earlier than the start date", "LearnPlanEndDate_02");
         public ValidationMessage LearnPlanEndDate03 =>
             new ValidationMessage("You must not enter an <strong>end date</strong> that's earlier than today's date", "LearnPlanEndDate_03");
+        public ValidationMessage EndDateBeforeOrIsCurrentMonth => throw new NotImplementedException();
 
         public ValidationMessage TrainingPrice01 =>
             new ValidationMessage("You must enter the <strong>total cost of training</strong> in whole pounds - don't include any symbols, characters or letters", "TrainingPrice_01");

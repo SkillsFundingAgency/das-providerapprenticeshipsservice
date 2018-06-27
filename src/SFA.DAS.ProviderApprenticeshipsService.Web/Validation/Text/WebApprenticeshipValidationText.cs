@@ -59,6 +59,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
             new ValidationMessage("The end date must not be on or before the start date", "LearnPlanEndDate_02");
         public ValidationMessage LearnPlanEndDate03 =>
             new ValidationMessage("The end date must not be in the past", "LearnPlanEndDate_03");
+        public ValidationMessage EndDateBeforeOrIsCurrentMonth =>
+            new ValidationMessage("The end date must be this month or earlier", "LearnPlanEndDate_BeforeOrIsCurrentMonth");
 
         public ValidationMessage TrainingPrice01 =>
             new ValidationMessage("Enter the total agreed training cost", "TrainingPrice_01");
