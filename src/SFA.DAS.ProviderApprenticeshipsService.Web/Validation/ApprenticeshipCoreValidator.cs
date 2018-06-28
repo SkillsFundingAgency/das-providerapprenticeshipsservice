@@ -134,30 +134,30 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         public Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors)
         {
             var dict = new Dictionary<string, string>();
-            const string StartText = "The start date is not valid";
-            const string EndText = "The end date is not valid";
+            const string startText = "The start date is not valid";
+            const string endText = "The end date is not valid";
 
-            //todo:
-            const string StartDateKey = "StartDateOverlap";
-            const string EndDateKey = "EndDateOverlap";
+            //todo: store against real StartDate and EndDate fields and handle in the same manner as employer comitments
+            const string startDateKey = "StartDateOverlap";
+            const string endDateKey = "EndDateOverlap";
 
             foreach (var item in overlappingErrors.GetFirstOverlappingApprenticeships())
             {
                 switch (item.ValidationFailReason)
                 {
                     case ValidationFailReason.OverlappingStartDate:
-                        dict.AddIfNotExists(StartDateKey, StartText);
+                        dict.AddIfNotExists(startDateKey, startText);
                         break;
                     case ValidationFailReason.OverlappingEndDate:
-                        dict.AddIfNotExists(EndDateKey, EndText);
+                        dict.AddIfNotExists(endDateKey, endText);
                         break;
                     case ValidationFailReason.DateEmbrace:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        dict.AddIfNotExists(EndDateKey, EndText);
+                        dict.AddIfNotExists(startDateKey, startText);
+                        dict.AddIfNotExists(endDateKey, endText);
                         break;
                     case ValidationFailReason.DateWithin:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        dict.AddIfNotExists(EndDateKey, EndText);
+                        dict.AddIfNotExists(startDateKey, startText);
+                        dict.AddIfNotExists(endDateKey, endText);
                         break;
                 }
             }
