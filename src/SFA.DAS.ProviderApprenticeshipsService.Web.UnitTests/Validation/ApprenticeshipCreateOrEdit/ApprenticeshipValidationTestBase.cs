@@ -22,7 +22,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         {
             CurrentDateTime.Setup(x => x.Now).Returns(DateTime.Now.AddMonths(6));
             Validator = new ApprenticeshipViewModelValidator(
-                //todo: mock the interface
                 new WebApprenticeshipValidationText(new AcademicYearDateProvider(CurrentDateTime.Object)),
                 CurrentDateTime.Object,
                 new AcademicYearDateProvider(CurrentDateTime.Object),
