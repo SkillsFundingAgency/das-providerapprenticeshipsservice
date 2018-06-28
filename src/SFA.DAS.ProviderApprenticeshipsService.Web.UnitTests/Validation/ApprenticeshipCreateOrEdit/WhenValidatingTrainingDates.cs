@@ -95,16 +95,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             result.HasValue.Should().BeFalse();
         }
 
-        [Test]
-        public void ShouldFailIfStartDateIsAfterEndDate()
+        [TestCase(1, 6, 2018, 1, 5, 2018)]
+        [TestCase(1, 6, 2018, 1, 6, 2018)]
+        public void ShouldFailValidationWhenEndDateIsOnOrBeforeStartDate(
+            int? startDay, int? startMonth, int? startYear,
+            int? endDay, int? endMonth, int? endYear)
         {
-            ValidModel.StartDate = new DateTimeViewModel(CurrentDateTime.Object.Now.AddMonths(1));
-            ValidModel.EndDate = new DateTimeViewModel(CurrentDateTime.Object.Now);
+            const string expected = "The end date must not be on or before the start date";
+            ValidModel.StartDate = new DateTimeViewModel(startDay, startMonth, startYear);
+            ValidModel.EndDate = new DateTimeViewModel(endDay, endMonth, endYear);
 
             var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeFalse();
-            result.Errors[0].ErrorMessage.Should().Be("The end date must not be on or before the start date");
+            result.Errors[0].ErrorMessage.Should().Be(expected);
         }
 
         [Test]
