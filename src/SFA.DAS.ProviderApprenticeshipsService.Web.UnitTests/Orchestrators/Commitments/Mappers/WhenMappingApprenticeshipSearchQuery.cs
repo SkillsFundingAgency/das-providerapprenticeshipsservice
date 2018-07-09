@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments.Mappers
 {
-    [TestFixture()]
+    [TestFixture]
     public class WhenMappingApprenticeshipSearchQuery
     {
         private ApprenticeshipFiltersMapper _mapper;
@@ -38,6 +38,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Course = new List<string>
                 {
                     "CourseId1", "CourseId2", "CourseId3", "CourseId4"
+                },
+                FundingStatus = new List<string>
+                {
+                    FundingStatus.TransferFunded.ToString()
                 }
             };
         }
@@ -45,54 +49,52 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public void ThenApprenticeshipStatusesAreMappedCorrectly()
         {
-            //Act
             var result = _mapper.MapToApprenticeshipSearchQuery(_filtersViewModel);
 
-            //Assert
-            Assert.AreEqual(2, result.ApprenticeshipStatuses.Count);
-            Assert.AreEqual((int)ApprenticeshipStatus.Live, (int)result.ApprenticeshipStatuses[0]);
+            CollectionAssert.AreEqual(
+                new List<ApprenticeshipStatus> { ApprenticeshipStatus.Live, ApprenticeshipStatus.Paused }, 
+                result.ApprenticeshipStatuses);
         }
 
         [Test]
         public void ThenRecordStatusesAreMappedCorrectly()
         {
-            //Act
             var result = _mapper.MapToApprenticeshipSearchQuery(_filtersViewModel);
 
-            //Assert
-            Assert.AreEqual(3, result.RecordStatuses.Count);
-            Assert.AreEqual((int)RecordStatus.NoActionNeeded, (int)result.RecordStatuses[0]);
+            CollectionAssert.AreEqual(
+                new List<RecordStatus> { RecordStatus.NoActionNeeded, RecordStatus.ChangesForReview, RecordStatus.ChangeRequested },
+                result.RecordStatuses);
         }
 
         [Test]
         public void ThenEmployersAreMappedCorrectly()
         {
-            //Act
             var result = _mapper.MapToApprenticeshipSearchQuery(_filtersViewModel);
 
-            //Assert
-            Assert.AreEqual(1, result.EmployerOrganisationIds.Count);
-            Assert.AreEqual("12345", result.EmployerOrganisationIds[0]);
+            CollectionAssert.AreEqual(new List<string> { "12345" }, result.EmployerOrganisationIds);
         }
 
         [Test]
         public void ThenCoursesAreMappedCorrectly()
         {
-            //Act
             var result = _mapper.MapToApprenticeshipSearchQuery(_filtersViewModel);
 
-            //Assert
-            Assert.AreEqual(4, result.TrainingCourses.Count);
-            Assert.AreEqual("CourseId1", result.TrainingCourses[0]);
+            CollectionAssert.AreEqual(new List<string> { "CourseId1", "CourseId2", "CourseId3", "CourseId4" }, result.TrainingCourses);
+        }
+
+        [Test]
+        public void ThenFundingStatusesAreMappedCorrectly()
+        {
+            var result = _mapper.MapToApprenticeshipSearchQuery(_filtersViewModel);
+
+            CollectionAssert.AreEqual(new List<FundingStatus> { FundingStatus.TransferFunded }, result.FundingStatuses);
         }
 
         [Test]
         public void ThenPageNumberIsMappedCorrectly()
         {
-            //Act
             var result = _mapper.MapToApprenticeshipSearchQuery(_filtersViewModel);
 
-            //Assert
             Assert.AreEqual(18, result.PageNumber);
         }
     }
