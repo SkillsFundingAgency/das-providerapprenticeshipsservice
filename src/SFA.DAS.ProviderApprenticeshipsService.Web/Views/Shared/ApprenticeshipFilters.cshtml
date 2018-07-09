@@ -4,7 +4,7 @@
 @RenderFilter("Alerts", "RecordStatus", Model.RecordStatusOptions, Model.RecordStatus)
 @RenderFilter("Apprenticeship training course", "Course", Model.TrainingCourseOptions, Model.Course)
 @RenderFilter("Organisation", "Employer", Model.EmployerOrganisationOptions, Model.Employer)
-@*@RenderFilter("Funding Status", "FundingStatus", Model.FundingStatusOptions, Model.FundingStatus)*@
+@RenderFilter("Funding Status", "FundingStatus", Model.FundingStatusOptions, Model.FundingStatus)
 
 @helper RenderFilter(string groupHeader, string groupName, List<KeyValuePair<string, string>> options, List<string> selected)
 {
