@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Domain
+namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Apprenticeship
 {
     public enum RecordStatus
     {
@@ -16,6 +16,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain
         IlrDataMismatch = 4,
         [Description("ILR changes pending")]
         IlrChangesPending = 5
-
     }
 }

@@ -68,6 +68,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     {
                         Data = new TrainingCourse {Id = "C5", Name = "Course 5", TrainingType = TrainingType.Framework}
                     }
+                },
+                FundingStatuses = new List<FacetItem<FundingStatus>>
+                {
+                    new FacetItem<FundingStatus>
+                    {
+                        Data = FundingStatus.TransferFunded,
+                        Selected = true
+                    }
                 }
             };
         }
@@ -83,7 +91,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             var actual = result.ApprenticeshipStatusOptions.First();
             Assert.AreEqual("WaitingToStart", actual.Key);
-            Assert.AreEqual((Domain.ApprenticeshipStatus.WaitingToStart).GetDescription(), actual.Value);
+            Assert.AreEqual((Domain.Models.Apprenticeship.ApprenticeshipStatus.WaitingToStart).GetDescription(), actual.Value);
 
             Assert.AreEqual(1, result.Status.Count);
         }
@@ -115,7 +123,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             var actual = result.RecordStatusOptions.First();
             Assert.AreEqual("ChangeRequested", actual.Key);
-            Assert.AreEqual((Domain.RecordStatus.ChangeRequested).GetDescription(), actual.Value);
+            Assert.AreEqual((Domain.Models.Apprenticeship.RecordStatus.ChangeRequested).GetDescription(), actual.Value);
 
             Assert.AreEqual(2, result.RecordStatus.Count);
         }
@@ -136,5 +144,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             Assert.AreEqual(2, result.Course.Count);
         }
 
+        [Test]
+        public void ThenFundingStatusesAreMappedCorrectly()
+        {
+            //Act
+            var result = _mapper.Map(_facets);
+
+            //Assert
+            Assert.AreEqual(1, result.FundingStatusOptions.Count);
+
+            var actual = result.FundingStatusOptions.First();
+            Assert.AreEqual("TransferFunded", actual.Key);
+            Assert.AreEqual("Transfer funded", actual.Value);
+
+            Assert.AreEqual(1, result.FundingStatus.Count);
+        }
     }
 }

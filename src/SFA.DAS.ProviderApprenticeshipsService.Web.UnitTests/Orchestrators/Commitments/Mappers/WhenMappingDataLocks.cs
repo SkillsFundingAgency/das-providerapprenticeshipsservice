@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Castle.Components.DictionaryAdapter;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -8,7 +7,7 @@ using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments.Mappers

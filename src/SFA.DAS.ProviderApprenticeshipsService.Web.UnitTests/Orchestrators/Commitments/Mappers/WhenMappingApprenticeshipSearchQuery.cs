@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 

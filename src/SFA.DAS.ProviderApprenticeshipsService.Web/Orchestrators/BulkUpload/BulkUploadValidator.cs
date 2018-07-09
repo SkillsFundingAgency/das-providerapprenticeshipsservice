@@ -8,7 +8,6 @@ using System.Web;
 using Microsoft.Ajax.Utilities;
 
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
@@ -19,12 +18,12 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using WebGrease.Css.Extensions;
 using SFA.DAS.Learners.Validators;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 {
     public sealed class BulkUploadValidator : IBulkUploadValidator
     {
-        private readonly ILog _logger;
         private readonly ProviderApprenticeshipsServiceConfiguration _config;
 
         // TODO: LWA - Can these be injected in?
@@ -33,16 +32,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
        
         public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, ILog logger, IUlnValidator ulnValidator, IAcademicYearDateProvider academicYear)
         {
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
             if (config == null)
                 throw new ArgumentNullException(nameof(config));
-
 
             _validationText = new BulkUploadApprenticeshipValidationText(academicYear);
             _viewModelValidator = new ApprenticeshipUploadModelValidator(_validationText, new CurrentDateTime(), ulnValidator);
             
-            _logger = logger;
             _config = config;
         }
 

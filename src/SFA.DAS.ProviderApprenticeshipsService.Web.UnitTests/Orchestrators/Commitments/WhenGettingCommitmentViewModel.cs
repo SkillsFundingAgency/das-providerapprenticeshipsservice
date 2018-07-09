@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using FluentAssertions;
 using MediatR;
@@ -15,7 +14,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetRelationshipByCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments

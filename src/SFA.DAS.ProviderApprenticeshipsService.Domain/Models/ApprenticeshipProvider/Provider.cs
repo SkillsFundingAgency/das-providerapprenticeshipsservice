@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider
 {
     public class Provider
     {
