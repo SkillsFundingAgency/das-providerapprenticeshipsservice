@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-
 using Microsoft.Ajax.Utilities;
-
-using SFA.DAS.NLog.Logger;
+using WebGrease.Css.Extensions;
+using SFA.DAS.Learners.Validators;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
-
-using WebGrease.Css.Extensions;
-using SFA.DAS.Learners.Validators;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 {
@@ -30,11 +25,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
         private readonly BulkUploadApprenticeshipValidationText _validationText;
         private readonly ApprenticeshipUploadModelValidator _viewModelValidator;
        
-        public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, ILog logger, IUlnValidator ulnValidator, IAcademicYearDateProvider academicYear)
+        public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, IUlnValidator ulnValidator, IAcademicYearDateProvider academicYear)
         {
-            if (config == null)
-                throw new ArgumentNullException(nameof(config));
-
             _validationText = new BulkUploadApprenticeshipValidationText(academicYear);
             _viewModelValidator = new ApprenticeshipUploadModelValidator(_validationText, new CurrentDateTime(), ulnValidator);
             
