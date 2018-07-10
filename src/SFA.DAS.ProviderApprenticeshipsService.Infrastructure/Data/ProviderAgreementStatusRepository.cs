@@ -88,7 +88,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
         private async Task UpdateLatestBookmark(IDbConnection conn, IDbTransaction tran, Guid newLatestBookmark)
         {
+            _logger.Info($"Updating latest bookmark to: {newLatestBookmark.ToString()}");
+
             var previousBookmark = await GetLatestBookmark(conn, tran);
+
+            _logger.Info($"Previous bookmark: {previousBookmark?.ToString() ?? "NULL"}");
 
             var parameters = new DynamicParameters();
             parameters.Add("@latestBookmark", newLatestBookmark, DbType.Guid);
@@ -96,6 +100,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
             if (previousBookmark == null)
             {
+                _logger.Info("Inserting new record into [ContractFeedEventRun]");
+
                 await conn.ExecuteAsync(
                     sql:
                         "INSERT INTO [dbo].[ContractFeedEventRun]" +
@@ -107,6 +113,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             }
             else
             {
+                _logger.Info("Updating existing record in [ContractFeedEventRun]");
+
                 await conn.ExecuteAsync(
                     sql:
                         "UPDATE [dbo].[ContractFeedEventRun]" +
