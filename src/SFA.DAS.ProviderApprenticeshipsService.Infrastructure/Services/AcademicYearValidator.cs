@@ -1,26 +1,24 @@
-﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using System;
-
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
+﻿using System;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.AcademicYear;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 {
     public class AcademicYearValidator : IAcademicYearValidator
     {
-
-        public readonly ICurrentDateTime _currentDateTime;
-        public readonly IAcademicYearDateProvider _academicYear;
+        public readonly ICurrentDateTime CurrentDateTime;
+        public readonly IAcademicYearDateProvider AcademicYear;
 
         public AcademicYearValidator(ICurrentDateTime currentDateTime, IAcademicYearDateProvider academicYear)
         {
-            _currentDateTime = currentDateTime;
-            _academicYear = academicYear;
+            CurrentDateTime = currentDateTime;
+            AcademicYear = academicYear;
         }
 
         public AcademicYearValidationResult Validate(DateTime trainingStartDate)
         {
-           if (trainingStartDate < _academicYear.CurrentAcademicYearStartDate &&
-                _currentDateTime.Now > _academicYear.LastAcademicYearFundingPeriod)
+           if (trainingStartDate < AcademicYear.CurrentAcademicYearStartDate &&
+                CurrentDateTime.Now > AcademicYear.LastAcademicYearFundingPeriod)
             {
                 return AcademicYearValidationResult.NotWithinFundingPeriod;
             }
@@ -28,6 +26,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
             return AcademicYearValidationResult.Success;
         }
 
-        public bool IsAfterLastAcademicYearFundingPeriod => _currentDateTime.Now > _academicYear.LastAcademicYearFundingPeriod;
+        public bool IsAfterLastAcademicYearFundingPeriod => CurrentDateTime.Now > AcademicYear.LastAcademicYearFundingPeriod;
     }
 }
