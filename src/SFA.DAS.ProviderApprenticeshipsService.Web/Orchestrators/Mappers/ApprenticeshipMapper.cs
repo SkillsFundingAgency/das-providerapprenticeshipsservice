@@ -195,15 +195,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         public async Task<CreateApprenticeshipUpdateViewModel> CompareAndMapToCreateUpdateApprenticeshipViewModel(Apprenticeship original, ApprenticeshipViewModel edited)
         {
-            Func<string, string, string> changedOrNull = (a, edit) =>
-               a?.Trim() == edit?.Trim() ? null : edit;
+            string ChangedOrNull(string a, string edit) => a?.Trim() == edit?.Trim() ? null : edit;
 
             var model = new CreateApprenticeshipUpdateViewModel
             {
                 HashedApprenticeshipId = _hashingService.HashValue(original.Id),
-                ULN = changedOrNull(original.ULN, edited.ULN),
-                FirstName = changedOrNull(original.FirstName, edited.FirstName),
-                LastName = changedOrNull(original.LastName, edited.LastName),
+                ULN = ChangedOrNull(original.ULN, edited.ULN),
+                FirstName = ChangedOrNull(original.FirstName, edited.FirstName),
+                LastName = ChangedOrNull(original.LastName, edited.LastName),
                 DateOfBirth = original.DateOfBirth == edited.DateOfBirth.DateTime
                     ? null
                     : edited.DateOfBirth,
@@ -241,7 +240,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
                     _logger.Warn($"Apprentice training course has expired. TrainingName: {edited.TrainingName}, TrainingCode: {edited.TrainingCode}, Employer Ref: {edited.EmployerRef}, Apprenticeship ULN: {edited.ULN}");
                 }
-
             }
 
             return model;
