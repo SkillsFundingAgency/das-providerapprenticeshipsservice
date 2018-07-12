@@ -73,10 +73,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             // and open it up if...
             //   data lock success and start date in past
             var isEndDateLockedForUpdate = isLockedForUpdate;
-            if (commitment.AgreementStatus == AgreementStatus.BothAgreed)
+            if (commitment.AgreementStatus == AgreementStatus.BothAgreed
+                && apprenticeship.HasHadDataLockSuccess)
             {
-                if (apprenticeship.HasHadDataLockSuccess)
-                    isEndDateLockedForUpdate = isStartDateInFuture;
+                isEndDateLockedForUpdate = isStartDateInFuture;
             }
 
             var dateOfBirth = apprenticeship.DateOfBirth;
