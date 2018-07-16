@@ -34,6 +34,7 @@ using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators

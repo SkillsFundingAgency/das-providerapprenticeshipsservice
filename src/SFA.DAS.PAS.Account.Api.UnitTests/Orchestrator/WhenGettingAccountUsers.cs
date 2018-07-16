@@ -11,6 +11,7 @@ using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAccountUsers;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
 
 namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
 {

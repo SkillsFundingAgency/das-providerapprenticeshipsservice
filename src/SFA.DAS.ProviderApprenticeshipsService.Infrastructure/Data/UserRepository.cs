@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
 using SFA.DAS.Sql.Client;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
