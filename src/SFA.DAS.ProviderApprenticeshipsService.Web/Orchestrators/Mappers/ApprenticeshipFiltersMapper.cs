@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
-using ApprenticeshipStatus = SFA.DAS.ProviderApprenticeshipsService.Domain.ApprenticeshipStatus;
+using ApprenticeshipStatus = SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Apprenticeship.ApprenticeshipStatus;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
@@ -48,6 +48,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 trainingCourses.AddRange(filters.Course);
             }
 
+            var fundingStatuses = new List<Commitments.Api.Types.Apprenticeship.Types.FundingStatus>();
+            if (filters.FundingStatus != null)
+            {
+                fundingStatuses.AddRange(
+                    filters.FundingStatus.Select(
+                        x => (Commitments.Api.Types.Apprenticeship.Types.FundingStatus)
+                            Enum.Parse(typeof(Commitments.Api.Types.Apprenticeship.Types.FundingStatus), x)));
+            }
+
             var result = new ApprenticeshipSearchQuery
             {
                 SearchKeyword = filters.SearchInput,
@@ -55,7 +64,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 EmployerOrganisationIds = selectedEmployers,
                 ApprenticeshipStatuses = selectedStatuses,
                 RecordStatuses = recordStatuses,
-                TrainingCourses = trainingCourses
+                TrainingCourses = trainingCourses,
+                FundingStatuses = fundingStatuses
             };
 
             return result;
@@ -93,11 +103,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             var employers = new List<KeyValuePair<string, string>>();
             foreach (var employer in facets.EmployerOrganisations)
             {
-                employers.Add(new KeyValuePair<string, string>(employer.Data.Id.ToString(), employer.Data.Name));
+                employers.Add(new KeyValuePair<string, string>(employer.Data.Id, employer.Data.Name));
 
                 if (employer.Selected)
                 {
-                    result.Employer.Add(employer.Data.Id.ToString());
+                    result.Employer.Add(employer.Data.Id);
                 }
             }
 
@@ -115,10 +125,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 }
             }
 
+            var fundingStatuses = new List<KeyValuePair<string, string>>();
+            foreach (var fundingStatus in facets.FundingStatuses)
+            {
+                var key = fundingStatus.Data.ToString();
+                fundingStatuses.Add(new KeyValuePair<string, string>(key, ((FundingStatus)fundingStatus.Data).GetDescription()));
+
+                if (fundingStatus.Selected)
+                {
+                    result.FundingStatus.Add(key);
+                }
+            }
+
             result.ApprenticeshipStatusOptions = statuses;
             result.TrainingCourseOptions = courses;
             result.EmployerOrganisationOptions = employers;
             result.RecordStatusOptions = recordStatuses;
+            result.FundingStatusOptions = fundingStatuses;
 
             return result;
         }

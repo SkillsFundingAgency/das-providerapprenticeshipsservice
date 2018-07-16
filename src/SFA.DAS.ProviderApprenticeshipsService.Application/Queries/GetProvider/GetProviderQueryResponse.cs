@@ -1,4 +1,4 @@
-﻿using SFA.DAS.ProviderApprenticeshipsService.Domain;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider
 {

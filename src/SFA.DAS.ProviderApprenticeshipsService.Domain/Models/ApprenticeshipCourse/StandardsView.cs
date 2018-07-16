@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Domain
+namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse
 {
     public class StandardsView
     {
