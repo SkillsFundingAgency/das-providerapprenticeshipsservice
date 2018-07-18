@@ -1,36 +1,34 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using FluentValidation;
+using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.Learners.Validators;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
-    public class ApprenticeshipCoreValidator : AbstractValidator<ApprenticeshipViewModel>
+    public class ApprenticeshipCoreValidator : AbstractValidator<ApprenticeshipViewModel>, IApprenticeshipCoreValidator
     {
         protected static readonly Func<string, int, bool> LengthLessThanFunc = (str, length) => (str?.Length ?? length) < length;
-        protected static readonly Func<DateTime?, bool, bool> CheckIfNotNull = (dt, b) => dt == null || b;
-        protected static readonly Func<string, int, bool> HaveNumberOfDigitsFewerThan = (str, length) => { return (str?.Count(char.IsDigit) ?? 0) < length; };
-        private readonly IApprenticeshipValidationErrorText _validationText;
-        private readonly ICurrentDateTime _currentDateTime;
+        protected readonly IApprenticeshipValidationErrorText ValidationText;
+        protected readonly ICurrentDateTime CurrentDateTime;
         private readonly IAcademicYearDateProvider _academicYear;
         private readonly IUlnValidator _ulnValidator;
-        private readonly IAcademicYearValidator _academicYearValidator;
 
         public ApprenticeshipCoreValidator(IApprenticeshipValidationErrorText validationText, 
                                             ICurrentDateTime currentDateTime, 
                                             IAcademicYearDateProvider academicYear,
-                                            IUlnValidator ulnValidator,
-                                            IAcademicYearValidator academicYearValidator)
+                                            IUlnValidator ulnValidator)
         {
-            _validationText = validationText;
-            _currentDateTime = currentDateTime;
+            ValidationText = validationText;
+            CurrentDateTime = currentDateTime;
             _academicYear = academicYear;
             _ulnValidator = ulnValidator;
-            _academicYearValidator = academicYearValidator;
 
             ValidateFirstName();
 
@@ -55,57 +53,51 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         {
             RuleFor(x => x.FirstName)
                 .Cascade(CascadeMode.StopOnFirstFailure)
-                .NotEmpty().WithMessage(_validationText.GivenNames01.Text).WithErrorCode(_validationText.GivenNames01.ErrorCode)
-                .Must(m => LengthLessThanFunc(m, 101)).WithMessage(_validationText.GivenNames02.Text).WithErrorCode(_validationText.GivenNames02.ErrorCode);
+                .NotEmpty().WithMessage(ValidationText.GivenNames01.Text).WithErrorCode(ValidationText.GivenNames01.ErrorCode)
+                .Must(m => LengthLessThanFunc(m, 101)).WithMessage(ValidationText.GivenNames02.Text).WithErrorCode(ValidationText.GivenNames02.ErrorCode);
         }
 
         private void ValidateLastName()
         {
             RuleFor(x => x.LastName)
                 .Cascade(CascadeMode.StopOnFirstFailure)
-                .NotEmpty().WithMessage(_validationText.FamilyName01.Text).WithErrorCode(_validationText.FamilyName01.ErrorCode)
-                .Must(m => LengthLessThanFunc(m, 101)).WithMessage(_validationText.FamilyName02.Text).WithErrorCode(_validationText.FamilyName02.ErrorCode); ;
+                .NotEmpty().WithMessage(ValidationText.FamilyName01.Text).WithErrorCode(ValidationText.FamilyName01.ErrorCode)
+                .Must(m => LengthLessThanFunc(m, 101)).WithMessage(ValidationText.FamilyName02.Text).WithErrorCode(ValidationText.FamilyName02.ErrorCode); ;
         }
 
         protected virtual void ValidateUln()
         {
             RuleFor(x => x.ULN)
                 .Cascade(CascadeMode.StopOnFirstFailure)
-                .Must(BeValidTenDigitUlnNumber).WithMessage(_validationText.Uln01.Text).WithErrorCode(_validationText.Uln01.ErrorCode)
-                .Must(BeValidUlnNumber).WithMessage(_validationText.Uln03.Text).WithErrorCode(_validationText.Uln03.ErrorCode);
+                .Must(BeValidTenDigitUlnNumber).WithMessage(ValidationText.Uln01.Text).WithErrorCode(ValidationText.Uln01.ErrorCode)
+                .Must(BeValidUlnNumber).WithMessage(ValidationText.Uln03.Text).WithErrorCode(ValidationText.Uln03.ErrorCode);
         }
 
         protected virtual void ValidateTraining()
         {
             RuleFor(x => x.TrainingCode)
-                .NotEmpty().WithMessage(_validationText.TrainingCode01.Text).WithErrorCode(_validationText.TrainingCode01.ErrorCode); ;
+                .NotEmpty().WithMessage(ValidationText.TrainingCode01.Text).WithErrorCode(ValidationText.TrainingCode01.ErrorCode); ;
         }
 
         protected virtual void ValidateDateOfBirth()
         {
             RuleFor(r => r.DateOfBirth)
                 .Cascade(CascadeMode.StopOnFirstFailure)
-                .NotNull().WithMessage(_validationText.DateOfBirth01.Text).WithErrorCode(_validationText.DateOfBirth01.ErrorCode)
-                .Must(ValidateDateOfBirth).WithMessage(_validationText.DateOfBirth01.Text).WithErrorCode(_validationText.DateOfBirth01.ErrorCode)
-                .Must((apprenticship, dob) =>
-                {
-                    return WillApprenticeBeAtLeast15AtStartOfTraining(apprenticship, dob);
-                }).WithMessage(_validationText.DateOfBirth02.Text).WithErrorCode(_validationText.DateOfBirth02.ErrorCode)
-                .Must(dob =>
-                {
-                    return WillApprenticeBeNoMoreThan115AtTheStartOfTheCurrentTeachingYear(dob);
-                }).WithMessage(_validationText.DateOfBirth06.Text).WithErrorCode(_validationText.DateOfBirth06.ErrorCode);
+                .NotNull().WithMessage(ValidationText.DateOfBirth01.Text).WithErrorCode(ValidationText.DateOfBirth01.ErrorCode)
+                .Must(ValidateDateOfBirth).WithMessage(ValidationText.DateOfBirth01.Text).WithErrorCode(ValidationText.DateOfBirth01.ErrorCode)
+                .Must(WillApprenticeBeAtLeast15AtStartOfTraining).WithMessage(ValidationText.DateOfBirth02.Text).WithErrorCode(ValidationText.DateOfBirth02.ErrorCode)
+                .Must(WillApprenticeBeNoMoreThan115AtTheStartOfTheCurrentTeachingYear).WithMessage(ValidationText.DateOfBirth06.Text).WithErrorCode(ValidationText.DateOfBirth06.ErrorCode);
         }
 
         protected virtual void ValidateStartDate()
         {
             RuleFor(x => x.StartDate)
                 .Cascade(CascadeMode.StopOnFirstFailure)
-                .NotNull().WithMessage(_validationText.LearnStartDate01.Text).WithErrorCode(_validationText.LearnStartDate01.ErrorCode)
-                .Must(ValidateDateWithoutDay).WithMessage(_validationText.LearnStartDate01.Text).WithErrorCode(_validationText.LearnStartDate01.ErrorCode)
-                .Must(StartDateForTransferNotBeforeMay2018).WithMessage(_validationText.LearnStartDate06.Text).WithErrorCode(_validationText.LearnStartDate06.ErrorCode)
-                .Must(NotBeBeforeMay2017).WithMessage(_validationText.LearnStartDate02.Text).WithErrorCode(_validationText.LearnStartDate02.ErrorCode)
-                .Must(StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear).WithMessage(_validationText.LearnStartDate05.Text).WithErrorCode(_validationText.LearnStartDate05.ErrorCode);
+                .NotNull().WithMessage(ValidationText.LearnStartDate01.Text).WithErrorCode(ValidationText.LearnStartDate01.ErrorCode)
+                .Must(ValidateDateWithoutDay).WithMessage(ValidationText.LearnStartDate01.Text).WithErrorCode(ValidationText.LearnStartDate01.ErrorCode)
+                .Must(StartDateForTransferNotBeforeMay2018).WithMessage(ValidationText.LearnStartDate06.Text).WithErrorCode(ValidationText.LearnStartDate06.ErrorCode)
+                .Must(NotBeBeforeMay2017).WithMessage(ValidationText.LearnStartDate02.Text).WithErrorCode(ValidationText.LearnStartDate02.ErrorCode)
+                .Must(StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear).WithMessage(ValidationText.LearnStartDate05.Text).WithErrorCode(ValidationText.LearnStartDate05.ErrorCode);
                 //.Must(BeWithinAcademicYearFundingPeriod).WithMessage(_validationText.AcademicYearStartDate01.Text).WithErrorCode(_validationText.AcademicYearStartDate01.ErrorCode);
         }
 
@@ -113,10 +105,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         {
             RuleFor(x => x.EndDate)
                 .Cascade(CascadeMode.StopOnFirstFailure)
-                .NotNull().WithMessage(_validationText.LearnPlanEndDate01.Text).WithErrorCode(_validationText.LearnPlanEndDate01.ErrorCode)
-                .Must(ValidateDateWithoutDay).WithMessage(_validationText.LearnPlanEndDate01.Text).WithErrorCode(_validationText.LearnPlanEndDate01.ErrorCode)
-                .Must(BeGreaterThenStartDate).WithMessage(_validationText.LearnPlanEndDate02.Text).WithErrorCode(_validationText.LearnPlanEndDate02.ErrorCode)
-                .Must(m => m.DateTime > _currentDateTime.Now).WithMessage(_validationText.LearnPlanEndDate03.Text).WithErrorCode(_validationText.LearnPlanEndDate03.ErrorCode);
+                .NotNull().WithMessage(ValidationText.LearnPlanEndDate01.Text).WithErrorCode(ValidationText.LearnPlanEndDate01.ErrorCode)
+                .Must(ValidateDateWithoutDay).WithMessage(ValidationText.LearnPlanEndDate01.Text).WithErrorCode(ValidationText.LearnPlanEndDate01.ErrorCode)
+                .Must(BeGreaterThenStartDate).WithMessage(ValidationText.LearnPlanEndDate02.Text).WithErrorCode(ValidationText.LearnPlanEndDate02.ErrorCode);
+        }
+
+        public KeyValuePair<string, string>? CheckEndDateInFuture(DateTimeViewModel endDate)
+        {
+            const string endDateKey = "EndDate";
+
+            var now = CurrentDateTime.Now;
+            return new DateTime(endDate.Year.Value, endDate.Month.Value, 1) > new DateTime(now.Year, now.Month, 1)
+                ? (KeyValuePair<string, string>?)null
+                : new KeyValuePair<string, string>(endDateKey, ValidationText.LearnPlanEndDate03.Text);
         }
 
         protected virtual void ValidateCost()
@@ -125,16 +126,49 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
             RuleFor(x => x.Cost)
                 .Cascade(CascadeMode.StopOnFirstFailure)
-                .NotEmpty().WithMessage(_validationText.TrainingPrice01.Text).WithErrorCode(_validationText.TrainingPrice01.ErrorCode)
-                .Matches("^([1-9]{1}([0-9]{1,2})?)+(,[0-9]{3})*$|^[1-9]{1}[0-9]*$").WithMessage(_validationText.TrainingPrice01.Text).WithErrorCode(_validationText.TrainingPrice01.ErrorCode)
-                .Must(m => decimal.TryParse(m, out parsed) && parsed <= 100000).WithMessage(_validationText.TrainingPrice02.Text).WithErrorCode(_validationText.TrainingPrice02.ErrorCode);
+                .NotEmpty().WithMessage(ValidationText.TrainingPrice01.Text).WithErrorCode(ValidationText.TrainingPrice01.ErrorCode)
+                .Matches("^([1-9]{1}([0-9]{1,2})?)+(,[0-9]{3})*$|^[1-9]{1}[0-9]*$").WithMessage(ValidationText.TrainingPrice01.Text).WithErrorCode(ValidationText.TrainingPrice01.ErrorCode)
+                .Must(m => decimal.TryParse(m, out parsed) && parsed <= 100000).WithMessage(ValidationText.TrainingPrice02.Text).WithErrorCode(ValidationText.TrainingPrice02.ErrorCode);
+        }
+
+        public Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors)
+        {
+            var dict = new Dictionary<string, string>();
+            const string startText = "The start date is not valid";
+            const string endText = "The end date is not valid";
+
+            //todo: store against real StartDate and EndDate fields and handle in the same manner as employer comitments
+            const string startDateKey = "StartDateOverlap";
+            const string endDateKey = "EndDateOverlap";
+
+            foreach (var item in overlappingErrors.GetFirstOverlappingApprenticeships())
+            {
+                switch (item.ValidationFailReason)
+                {
+                    case ValidationFailReason.OverlappingStartDate:
+                        dict.AddIfNotExists(startDateKey, startText);
+                        break;
+                    case ValidationFailReason.OverlappingEndDate:
+                        dict.AddIfNotExists(endDateKey, endText);
+                        break;
+                    case ValidationFailReason.DateEmbrace:
+                        dict.AddIfNotExists(startDateKey, startText);
+                        dict.AddIfNotExists(endDateKey, endText);
+                        break;
+                    case ValidationFailReason.DateWithin:
+                        dict.AddIfNotExists(startDateKey, startText);
+                        dict.AddIfNotExists(endDateKey, endText);
+                        break;
+                }
+            }
+            return dict;
         }
 
         private void ValidateProviderReference()
         {
             RuleFor(x => x.ProviderRef)
                 .Must(m => LengthLessThanFunc(m, 21))
-                    .When(x => !string.IsNullOrEmpty(x.ProviderRef)).WithMessage(_validationText.ProviderRef01.Text).WithErrorCode(_validationText.ProviderRef01.ErrorCode);
+                    .When(x => !string.IsNullOrEmpty(x.ProviderRef)).WithMessage(ValidationText.ProviderRef01.Text).WithErrorCode(ValidationText.ProviderRef01.ErrorCode);
         }
 
         private bool WillApprenticeBeAtLeast15AtStartOfTraining(ApprenticeshipViewModel model, DateTimeViewModel dob)
@@ -210,12 +244,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
         private bool BeValidUlnNumber(string uln)
         {
-            if (_ulnValidator.Validate(uln) == UlnValidationResult.IsInvalidUln)
-            {
-                return false;
-            }
-
-            return true;
+            return _ulnValidator.Validate(uln) != UlnValidationResult.IsInvalidUln;
         }
     }
 }

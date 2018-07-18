@@ -6,7 +6,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
-    public class ApprovedApprenticeshipViewModelValidator  : AbstractValidator<ApprenticeshipViewModel>
+    public class ApprovedApprenticeshipViewModelValidator : AbstractValidator<ApprenticeshipViewModel>
     {
         private readonly IApprenticeshipValidationErrorText _errorText;
 

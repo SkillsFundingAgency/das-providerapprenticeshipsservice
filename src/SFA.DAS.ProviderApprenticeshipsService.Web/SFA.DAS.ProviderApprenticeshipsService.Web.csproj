@@ -528,8 +528,8 @@
     <Compile Include="Models\VerificationOfEmployerViewModel.cs" />
     <Compile Include="Models\ViewModelBase.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
-    <Compile Include="Orchestrators\ApprovedApprenticeshipValidation\ApprovedApprenticeshipValidator.cs" />
-    <Compile Include="Orchestrators\ApprovedApprenticeshipValidation\IApprovedApprenticeshipValidator.cs" />
+    <Compile Include="Validation\ApprovedApprenticeshipValidator.cs" />
+    <Compile Include="Validation\IApprovedApprenticeshipValidator.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Orchestrators\DataLockOrchestrator.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipFiltersMapper.cs" />
@@ -568,6 +568,7 @@
     <Compile Include="Validation\DeleteCohortConfirmationViewModelValidator.cs" />
     <Compile Include="Validation\DeleteConfirmationViewModelValidator.cs" />
     <Compile Include="Validation\FinishEditingViewModelValidator.cs" />
+    <Compile Include="Validation\IApprenticeshipCoreValidator.cs" />
     <Compile Include="Validation\Interface\IApprenticeshipUploadModelValidator.cs" />
     <Compile Include="Validation\Text\ApprenticeshipFileValidationText.cs" />
     <Compile Include="Validation\Text\BulkUploadApprenticeshipValidationText.cs" />

@@ -48,6 +48,8 @@ using StructureMap;
 using StructureMap.Graph;
 using SFA.DAS.Learners.Validators;
 using SFA.DAS.HashingService;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -77,6 +79,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IConfiguration>().Use(config);
             For<ICache>().Use<InMemoryCache>(); //RedisCache
             For<IAgreementStatusQueryRepository>().Use<ProviderAgreementStatusRepository>();
+            For<IApprenticeshipValidationErrorText>().Use<WebApprenticeshipValidationText>();
+            For<IApprenticeshipCoreValidator>().Use<ApprenticeshipCoreValidator>().Singleton();
+            For<IApprovedApprenticeshipValidator>().Use<ApprovedApprenticeshipValidator>().Singleton();
 
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
@@ -136,12 +141,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(httpClient);
 
             For<INotificationsApiClientConfiguration>().Use(config.NotificationApi);
-
         }
 
         private void ConfigureInstrumentedTypes()
         {
-            For<IBulkUploadValidator>().Use(x => new InstrumentedBulkUploadValidator(x.GetInstance<ILog>(), x.GetInstance<BulkUploadValidator>(), x.GetInstance<IUlnValidator>(), x.GetInstance<IAcademicYearDateProvider>(), x.GetInstance<IAcademicYearValidator>()));
+            For<IBulkUploadValidator>().Use(x => new InstrumentedBulkUploadValidator(x.GetInstance<ILog>(), x.GetInstance<BulkUploadValidator>(), x.GetInstance<IUlnValidator>(), x.GetInstance<IAcademicYearDateProvider>()));
             For<IBulkUploadFileParser>().Use(x => new InstrumentedBulkUploadFileParser(x.GetInstance<ILog>(), x.GetInstance<BulkUploadFileParser>()));
 
             For<IAsyncRequestHandler<BulkUploadApprenticeshipsCommand, Unit>>()

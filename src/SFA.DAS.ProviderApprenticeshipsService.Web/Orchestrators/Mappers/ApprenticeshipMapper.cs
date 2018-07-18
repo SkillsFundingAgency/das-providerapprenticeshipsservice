@@ -8,9 +8,7 @@ using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
-using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
@@ -69,6 +67,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 commitment.TransferSender?.TransferApprovalStatus == TransferApprovalStatus.Approved
                 && !apprenticeship.HasHadDataLockSuccess;
 
+            // if editing post-approval, we also lock down end date if...
+            //   start date is in the future and has had data lock success
+            //   (as the validation rule that disallows setting end date to > current month
+            //   means any date entered would be before the start date (which is also disallowed))
+            // and open it up if...
+            //   data lock success and start date in past
+            var isEndDateLockedForUpdate = isLockedForUpdate;
+            if (commitment.AgreementStatus == AgreementStatus.BothAgreed
+                && apprenticeship.HasHadDataLockSuccess)
+            {
+                isEndDateLockedForUpdate = isStartDateInFuture;
+            }
+
             var dateOfBirth = apprenticeship.DateOfBirth;
             return new ApprenticeshipViewModel
             {
@@ -93,7 +104,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 HasStarted = !isStartDateInFuture,
                 IsLockedForUpdate = isLockedForUpdate,
                 IsPaidForByTransfer = commitment.IsTransfer(),
-                IsUpdateLockedForStartDateAndCourse = isUpdateLockedForStartDateAndCourse
+                IsUpdateLockedForStartDateAndCourse = isUpdateLockedForStartDateAndCourse,
+                IsEndDateLockedForUpdate = isEndDateLockedForUpdate
             };
         }
 
@@ -140,44 +152,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
                     _logger.Warn($"Apprentice training course has expired. TrainingName: {apprenticeship.TrainingName}, TrainingCode: {apprenticeship.TrainingCode}, Employer Ref: {apprenticeship.EmployerRef}, ApprenticeshipId: {apprenticeship.Id}, Apprenticeship ULN: {apprenticeship.ULN}");
                 }
-
-
             }
 
             return apprenticeship;
-        }
-
-        public Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors)
-        {
-            var dict = new Dictionary<string, string>();
-            const string StartText = "The start date is not valid";
-            const string EndText = "The end date is not valid";
-
-            const string StartDateKey = "StartDateOverlap";
-            const string EndDateKey = "EndDateOverlap";
-
-
-            foreach (var item in overlappingErrors.GetFirstOverlappingApprenticeships())
-            {
-                switch (item.ValidationFailReason)
-                {
-                    case ValidationFailReason.OverlappingStartDate:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        break;
-                    case ValidationFailReason.OverlappingEndDate:
-                        dict.AddIfNotExists(EndDateKey, EndText);
-                        break;
-                    case ValidationFailReason.DateEmbrace:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        dict.AddIfNotExists(EndDateKey, EndText);
-                        break;
-                    case ValidationFailReason.DateWithin:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        dict.AddIfNotExists(EndDateKey, EndText);
-                        break;
-                }
-            }
-            return dict;
         }
 
         public ApprenticeshipUpdate MapApprenticeshipUpdate(ApprenticeshipUpdateViewModel viewModel)
@@ -228,15 +205,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         public async Task<CreateApprenticeshipUpdateViewModel> CompareAndMapToCreateUpdateApprenticeshipViewModel(Apprenticeship original, ApprenticeshipViewModel edited)
         {
-            Func<string, string, string> changedOrNull = (a, edit) =>
-               a?.Trim() == edit?.Trim() ? null : edit;
+            string ChangedOrNull(string a, string edit) => a?.Trim() == edit?.Trim() ? null : edit;
 
             var model = new CreateApprenticeshipUpdateViewModel
             {
                 HashedApprenticeshipId = _hashingService.HashValue(original.Id),
-                ULN = changedOrNull(original.ULN, edited.ULN),
-                FirstName = changedOrNull(original.FirstName, edited.FirstName),
-                LastName = changedOrNull(original.LastName, edited.LastName),
+                ULN = ChangedOrNull(original.ULN, edited.ULN),
+                FirstName = ChangedOrNull(original.FirstName, edited.FirstName),
+                LastName = ChangedOrNull(original.LastName, edited.LastName),
                 DateOfBirth = original.DateOfBirth == edited.DateOfBirth.DateTime
                     ? null
                     : edited.DateOfBirth,
@@ -274,7 +250,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
                     _logger.Warn($"Apprentice training course has expired. TrainingName: {edited.TrainingName}, TrainingCode: {edited.TrainingCode}, Employer Ref: {edited.EmployerRef}, Apprenticeship ULN: {edited.ULN}");
                 }
-
             }
 
             return model;

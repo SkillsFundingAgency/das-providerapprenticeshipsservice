@@ -21,11 +21,11 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.ApprovedApprenticeshipValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
@@ -39,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IApprovedApprenticeshipValidator _approvedApprenticeshipValidator;
         private readonly IApprenticeshipFiltersMapper _apprenticeshipFiltersMapper;
         private readonly IDataLockMapper _dataLockMapper;
-        private string _searchPlaceholderText;
+        private readonly string _searchPlaceholderText;
 
         public ManageApprenticesOrchestrator(
             IMediator mediator,
@@ -50,21 +50,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             IApprenticeshipFiltersMapper apprenticeshipFiltersMapper,
             IDataLockMapper dataLockMapper)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-            if (hashingService == null)
-                throw new ArgumentNullException(nameof(hashingService));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-            if (apprenticeshipMapper == null)
-                throw new ArgumentNullException(nameof(apprenticeshipMapper));
-            if(approvedApprenticeshipValidator == null)
-                throw new ArgumentNullException(nameof(approvedApprenticeshipValidator));
-            if(apprenticeshipFiltersMapper == null)
-                throw new ArgumentNullException(nameof(IApprenticeshipFiltersMapper));
-            if(dataLockMapper == null)
-                throw new ArgumentNullException(nameof(IDataLockMapper));
-
             _mediator = mediator;
             _hashingService = hashingService;
             _logger = logger;
@@ -184,7 +169,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 Apprenticeship = apprenticeship,
                 ApprenticeshipProgrammes = await GetTrainingProgrammes(),
-                ValidationErrors = _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors)
+                ValidationErrors = _approvedApprenticeshipValidator.MapOverlappingErrors(overlappingErrors)
             };
         }
 
@@ -198,17 +183,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     Apprenticeship = new List<Apprenticeship> { await _apprenticeshipMapper.MapApprenticeship(model) }
                 });
 
-            foreach (var overlap in _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors))
+            foreach (var overlap in _approvedApprenticeshipValidator.MapOverlappingErrors(overlappingErrors))
             {
                 result.Add(overlap.Key, overlap.Value);
             }
 
-            foreach (var error in _approvedApprenticeshipValidator.Validate(model))
+            foreach (var error in _approvedApprenticeshipValidator.ValidateToDictionary(model))
             {
-                result.Add(error.Key, error.Value);
+                result.AddIfNotExists(error.Key, error.Value);
             }
 
             foreach (var error in _approvedApprenticeshipValidator.ValidateAcademicYear(updateViewModel))
+            {
+                result.AddIfNotExists(error.Key, error.Value);
+            }
+
+            foreach (var error in _approvedApprenticeshipValidator.ValidateApprovedEndDate(updateViewModel))
             {
                 result.AddIfNotExists(error.Key, error.Value);
             }

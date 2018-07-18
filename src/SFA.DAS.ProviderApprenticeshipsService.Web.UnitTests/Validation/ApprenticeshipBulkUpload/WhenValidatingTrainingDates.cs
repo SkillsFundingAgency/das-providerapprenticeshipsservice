@@ -116,7 +116,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         }
 
         [Test]
-
         public void ShouldFailIfStartDateIsAfterEndDate()
         {
             ValidModel.ApprenticeshipViewModel.StartDate = new DateTimeViewModel(DateTime.Parse("2121-05-10"));

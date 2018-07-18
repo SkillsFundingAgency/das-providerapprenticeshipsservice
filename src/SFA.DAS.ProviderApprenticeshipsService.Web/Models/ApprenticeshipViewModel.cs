@@ -52,6 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool IsLockedForUpdate { get; set; }
         public bool IsPaidForByTransfer { get; set; }
         public bool IsUpdateLockedForStartDateAndCourse { get; set; }
+        public bool IsEndDateLockedForUpdate { get; set; }
         public string StartDateTransfersMinDateAltDetailMessage { get; set; }
     }
 }

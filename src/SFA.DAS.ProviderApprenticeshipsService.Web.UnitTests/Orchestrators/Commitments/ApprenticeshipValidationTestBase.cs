@@ -31,6 +31,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         protected CommitmentOrchestrator _orchestrator;
         protected Mock<IMediator> _mockMediator = new Mock<IMediator>();
         protected Mock<IHashingService> _mockHashingService = new Mock<IHashingService>();
+        protected Mock<IApprenticeshipCoreValidator> _mockApprenticeshipCoreValidator = new Mock<IApprenticeshipCoreValidator>();
         protected Mock<IApprenticeshipMapper> _mockMapper = new Mock<IApprenticeshipMapper>();
         protected Mock<IFeatureToggleService> MockFeatureToggleService;
         protected Mock<IFeatureToggle> MockFeatureToggleOn;
@@ -64,6 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                        Mock.Of<IProviderCommitmentsLogger>(),
                        _ulnValidator.Object,
                        Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
+                       _mockApprenticeshipCoreValidator.Object,
                        _mockMapper.Object,
                        MockFeatureToggleService.Object);
         }

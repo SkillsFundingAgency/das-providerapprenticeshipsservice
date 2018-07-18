@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.Learners.Validators;
+﻿using SFA.DAS.Learners.Validators;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.AcademicYear;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
@@ -10,31 +7,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
     public sealed class ApprenticeshipViewModelValidator : ApprenticeshipCoreValidator
     {
-        private readonly WebApprenticeshipValidationText _validationText;
-        private readonly IAcademicYearValidator _academicYearValidator;
-
         public ApprenticeshipViewModelValidator(
-            WebApprenticeshipValidationText validationText, 
+            IApprenticeshipValidationErrorText validationText, 
             ICurrentDateTime currentDateTime, 
             IAcademicYearDateProvider academicYear, 
-            IUlnValidator ulnValidator, 
-            IAcademicYearValidator academicYearValidator) : base(validationText, currentDateTime, academicYear, ulnValidator, academicYearValidator)
+            IUlnValidator ulnValidator) : base(validationText, currentDateTime, academicYear, ulnValidator)
         {
-            _validationText = validationText;
-            _academicYearValidator = academicYearValidator;
-        }
-
-        public Dictionary<string, string> ValidateAcademicYear(ApprenticeshipViewModel model)
-        {
-            var dict = new Dictionary<string, string>();
-
-            if (model.StartDate?.DateTime != null &&
-                _academicYearValidator.Validate(model.StartDate.DateTime.Value) == AcademicYearValidationResult.NotWithinFundingPeriod)
-            {
-                dict.Add($"{nameof(model.StartDate)}", _validationText.AcademicYearStartDate01.Text);
-            }
-
-            return dict;
         }
 
         protected override void ValidateUln()

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using FluentValidation.Results;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
@@ -11,7 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.Learners.Validators;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
@@ -21,7 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IUlnValidator _ulnValidator;
 
-        private static Func<string, IEnumerable<string>, bool> _inList = (v, l) => string.IsNullOrWhiteSpace(v) || l.Contains(v);
+        private static readonly Func<string, IEnumerable<string>, bool> InList = (v, l) => string.IsNullOrWhiteSpace(v) || l.Contains(v);
 
         public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime, IUlnValidator ulnValidator)
         {
@@ -172,8 +171,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 return CreateValidationFailure("Cost", _validationText.TrainingPrice01);
             }
 
-            decimal parsed;
-            if (!decimal.TryParse(model.ApprenticeshipViewModel.Cost, out parsed) || parsed > 100000)
+            if (!decimal.TryParse(model.ApprenticeshipViewModel.Cost, out var parsed) || parsed > 100000)
             {
                 return CreateValidationFailure("Cost", _validationText.TrainingPrice02);
             }
@@ -213,12 +211,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
         private ValidationFailure ValidatePwayCode(ApprenticeshipUploadModel model)
         {
-            if(!string.IsNullOrWhiteSpace(model.CsvRecord.PwayCode) && _inList(model.CsvRecord.ProgType, new[] { "2", "3", "20", "21", "22", "23" }) && model.CsvRecord.PwayCode.TryParse() > 999)
+            if(!string.IsNullOrWhiteSpace(model.CsvRecord.PwayCode) && InList(model.CsvRecord.ProgType, new[] { "2", "3", "20", "21", "22", "23" }) && model.CsvRecord.PwayCode.TryParse() > 999)
             {
                 return CreateValidationFailure("PwayCode", _validationText.PwayCode01);
             }
 
-            if(!string.IsNullOrWhiteSpace(model.CsvRecord.ProgType) && _inList(model.CsvRecord.ProgType, new[] { "2", "3", "20", "21", "22", "23" }) && (model.CsvRecord.PwayCode.TryParse() ?? 0) <= 0)
+            if(!string.IsNullOrWhiteSpace(model.CsvRecord.ProgType) && InList(model.CsvRecord.ProgType, new[] { "2", "3", "20", "21", "22", "23" }) && (model.CsvRecord.PwayCode.TryParse() ?? 0) <= 0)
             {
                 return CreateValidationFailure("PwayCode", _validationText.PwayCode02);
             }
@@ -238,7 +236,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 return CreateValidationFailure("FworkCode", _validationText.FworkCode01);
             }
 
-            if (!string.IsNullOrWhiteSpace(model.CsvRecord.ProgType) && _inList(model.CsvRecord.ProgType, new[] { "2", "3", "20", "21", "22", "23" }) && (model.CsvRecord.FworkCode.TryParse() ?? 0) <= 0)
+            if (!string.IsNullOrWhiteSpace(model.CsvRecord.ProgType) && InList(model.CsvRecord.ProgType, new[] { "2", "3", "20", "21", "22", "23" }) && (model.CsvRecord.FworkCode.TryParse() ?? 0) <= 0)
             {
                 return CreateValidationFailure("FworkCode", _validationText.FworkCode02);
             }
@@ -258,7 +256,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 return CreateValidationFailure("ProgType", _validationText.ProgType01);
             }
 
-            if (!_inList(model.CsvRecord.ProgType, new[] { "2", "3", "20", "21", "22", "23", "25" }))
+            if (!InList(model.CsvRecord.ProgType, new[] { "2", "3", "20", "21", "22", "23", "25" }))
             {
                 return CreateValidationFailure("ProgType", _validationText.ProgType02);
             }
@@ -268,7 +266,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
         private static bool FrameworkProgTypeSelected(CsvRecord record)
         {
-            return !string.IsNullOrWhiteSpace(record.ProgType) && _inList(record.ProgType, new[] { "2", "3", "20", "21", "22", "23" });
+            return !string.IsNullOrWhiteSpace(record.ProgType) && InList(record.ProgType, new[] { "2", "3", "20", "21", "22", "23" });
         }
 
         private void ValidateField(ValidationResult validationResult, Func<ApprenticeshipUploadModel, ValidationFailure> validationFunc, ApprenticeshipUploadModel model)

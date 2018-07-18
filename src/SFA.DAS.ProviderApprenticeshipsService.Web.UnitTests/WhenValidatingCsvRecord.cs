@@ -2,7 +2,6 @@
 using FluentAssertions;
 
 using NUnit.Framework;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -11,6 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.Learners.Validators;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
 {
@@ -20,11 +20,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
         private ApprenticeshipUploadModel _validModel;
         private Moq.Mock<IUlnValidator> _mockUlnValidator;
         private Moq.Mock<IAcademicYearDateProvider> _mockAcademicYear;
-        private Moq.Mock<IAcademicYearValidator> _mockAcademicYearValidator;
 
         [SetUp]
         public void Setup()
         {
+            var now = DateTime.UtcNow;
             _validModel = new ApprenticeshipUploadModel
             {
                 ApprenticeshipViewModel = new ApprenticeshipViewModel
@@ -33,9 +33,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
                     FirstName = "TestFirstName",
                     LastName = "TestLastName",
                     TrainingCode = "12",
-                    DateOfBirth = new DateTimeViewModel(DateTime.UtcNow.AddYears(-18)),
-                    StartDate = new DateTimeViewModel(new DateTime(2017, 06, 20)),
-                    EndDate = new DateTimeViewModel(new DateTime(2020, 05, 15)),
+                    DateOfBirth = new DateTimeViewModel(now.AddYears(-16)),
+                    StartDate = new DateTimeViewModel(now),
+                    EndDate = new DateTimeViewModel(now.AddYears(3)),
                     Cost = "1234"
                 },
                 CsvRecord = new CsvRecord { CohortRef = "abba123" }
@@ -44,7 +44,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             _mockAcademicYear = new Moq.Mock<IAcademicYearDateProvider>();
             _mockUlnValidator = new Moq.Mock<IUlnValidator>();
             _mockUlnValidator.Setup(m => m.Validate(_validModel.ApprenticeshipViewModel.ULN)).Returns(UlnValidationResult.Success);
-            _mockAcademicYearValidator = new Moq.Mock<IAcademicYearValidator>();
 
             _validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(_mockAcademicYear.Object), new CurrentDateTime(), _mockUlnValidator.Object);
         }

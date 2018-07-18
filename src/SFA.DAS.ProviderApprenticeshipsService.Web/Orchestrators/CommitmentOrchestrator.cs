@@ -41,6 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public class CommitmentOrchestrator : BaseCommitmentOrchestrator
     {
+        private readonly IApprenticeshipCoreValidator _apprenticeshipCoreValidator;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly ApprenticeshipViewModelUniqueUlnValidator _uniqueUlnValidator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
@@ -51,12 +52,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             IHashingService hashingService, IProviderCommitmentsLogger logger,
             ApprenticeshipViewModelUniqueUlnValidator uniqueUlnValidator,
             ProviderApprenticeshipsServiceConfiguration configuration,
+            IApprenticeshipCoreValidator apprenticeshipCoreValidator,
             IApprenticeshipMapper apprenticeshipMapper,
             IFeatureToggleService featureToggleService)
             : base(mediator, hashingService, logger)
         {
             _uniqueUlnValidator = uniqueUlnValidator;
             _configuration = configuration;
+            _apprenticeshipCoreValidator = apprenticeshipCoreValidator;
             _apprenticeshipMapper = apprenticeshipMapper;
             _featureToggleService = featureToggleService;
         }
@@ -430,7 +433,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 Apprenticeship = apprenticeship,
                 ApprenticeshipProgrammes = await GetTrainingProgrammes(!commitment.IsTransfer()),
-                ValidationErrors = _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors)
+                ValidationErrors = _apprenticeshipCoreValidator.MapOverlappingErrors(overlappingErrors)
             };
         }
 
@@ -753,14 +756,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     Apprenticeship = new List<Apprenticeship> { await _apprenticeshipMapper.MapApprenticeship(viewModel) }
                 });
 
-            var result = _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors);
+            var result = _apprenticeshipCoreValidator.MapOverlappingErrors(overlappingErrors);
+
+            var endDateError = _apprenticeshipCoreValidator.CheckEndDateInFuture(viewModel.EndDate);
+            if (endDateError != null)
+                result.AddIfNotExists(endDateError.Value);
 
             var uniqueUlnValidationResult = await _uniqueUlnValidator.ValidateAsyncOverride(viewModel);
             if (!uniqueUlnValidationResult.IsValid)
             {
                 foreach (var error in uniqueUlnValidationResult.Errors)
                 {
-                    result.Add(error.PropertyName, error.ErrorMessage);
+                    result.AddIfNotExists(error.PropertyName, error.ErrorMessage);
                 }
             }
 

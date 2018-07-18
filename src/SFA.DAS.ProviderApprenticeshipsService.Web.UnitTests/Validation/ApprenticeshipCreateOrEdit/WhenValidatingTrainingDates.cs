@@ -56,10 +56,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase(5, 9, -1, "The end date is not valid")]
         [TestCase(0, 0, 0, "The end date is not valid")]
         [TestCase(1, 18, 2121, "The end date is not valid")]
-        [TestCase(5, 9, 1998, "The end date must not be in the past")]
         public void ShouldFailValidationForPlannedEndDate(int? day, int? month, int? year, string expected)
         {
-
             ValidModel.EndDate = new DateTimeViewModel(day, month, year);
 
             var result = Validator.Validate(ValidModel);
@@ -68,42 +66,49 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             result.Errors[0].ErrorMessage.Should().Be(expected);
         }
 
-        [TestCase(null, null, null)]
-        [TestCase(5, 9, 2100)]
-        [TestCase(1, 1, 2023)]
-        [TestCase(null, 9, 2067)]
-        public void ShouldNotFailValidationForPlannedEndDate(int? day, int? month, int? year)
+        [TestCase(0, 1)]
+        [TestCase(0, 28)]
+        [TestCase(-1, 1)]
+        [TestCase(-1, 28)]
+        [TestCase(-12, 1)]
+        public void ShouldFailValidationForPlanedEndDateInPast(int monthsToAdd, int currentDay)
         {
-            ValidModel.EndDate = new DateTimeViewModel(day, month, year);
+            CurrentDateTime.Setup(x => x.Now).Returns(new DateTime(2019, 3, currentDay));
+            var endDate = new DateTimeViewModel(CurrentDateTime.Object.Now.AddMonths(monthsToAdd)) { Day = 1 };
 
-            var result = Validator.Validate(ValidModel);
+            var result = Validator.CheckEndDateInFuture(endDate);
 
-            result.IsValid.Should().BeTrue();
+            result.HasValue.Should().BeTrue();
+            result.Value.Key.Should().Be("EndDate");
+            result.Value.Value.Should().Be("The end date must not be in the past");
         }
 
-        [Test]
-        public void ShouldFailValidationForPlanedEndDate()
+        [TestCase(1, 1)]
+        [TestCase(12, 1)]
+        public void ShouldPassValidationForPlanedEndDateInFuture(int monthsToAdd, int currentDay)
         {
-            var date = new DateTime(2018, 4, 1);
-            ValidModel.EndDate = new DateTimeViewModel(date.Day, date.Month, date.Year);
+            CurrentDateTime.Setup(x => x.Now).Returns(new DateTime(2019, 3, currentDay));
+            var endDate = new DateTimeViewModel(CurrentDateTime.Object.Now.AddMonths(monthsToAdd)) { Day = 1 };
+
+            var result = Validator.CheckEndDateInFuture(endDate);
+
+            result.HasValue.Should().BeFalse();
+        }
+
+        [TestCase(1, 6, 2018, 1, 5, 2018)]
+        [TestCase(1, 6, 2018, 1, 6, 2018)]
+        public void ShouldFailValidationWhenEndDateIsOnOrBeforeStartDate(
+            int? startDay, int? startMonth, int? startYear,
+            int? endDay, int? endMonth, int? endYear)
+        {
+            const string expected = "The end date must not be on or before the start date";
+            ValidModel.StartDate = new DateTimeViewModel(startDay, startMonth, startYear);
+            ValidModel.EndDate = new DateTimeViewModel(endDay, endMonth, endYear);
 
             var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeFalse();
-            result.Errors[0].ErrorMessage.Should().Be("The end date must not be in the past");
-        }
-
-        [Test]
-
-        public void ShouldFailIfStartDateIsAfterEndDate()
-        {
-            ValidModel.StartDate = new DateTimeViewModel(CurrentDateTime.Object.Now.AddMonths(1));
-            ValidModel.EndDate = new DateTimeViewModel(CurrentDateTime.Object.Now);
-
-            var result = Validator.Validate(ValidModel);
-
-            result.IsValid.Should().BeFalse();
-            result.Errors[0].ErrorMessage.Should().Be("The end date must not be on or before the start date");
+            result.Errors[0].ErrorMessage.Should().Be(expected);
         }
 
         [Test]
