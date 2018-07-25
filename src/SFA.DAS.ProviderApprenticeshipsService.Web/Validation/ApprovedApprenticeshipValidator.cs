@@ -49,7 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         {
             var dict = new Dictionary<string, string>();
 
-            if (updatedApprenticeship.EndDate != null)
+            if (updatedApprenticeship.EndDate.DateTime != null)
             {
                 if (updatedApprenticeship.OriginalApprenticeship.HasHadDataLockSuccess)
                 {
