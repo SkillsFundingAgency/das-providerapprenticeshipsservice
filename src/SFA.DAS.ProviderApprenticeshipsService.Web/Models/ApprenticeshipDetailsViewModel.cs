@@ -36,6 +36,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public string CohortReference { get; set; }
 
+        public string AccountLegalEntityPublicHashedId { get; set; }
+
         public bool EnableEdit { get; set; }
 
         public List<string> Alerts { get; set; }

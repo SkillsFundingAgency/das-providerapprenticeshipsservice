@@ -6,6 +6,8 @@ using SFA.DAS.PAS.Account.Api.Attributes;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
+//todo: looks like automapper package is not used and can be removed
+
 namespace SFA.DAS.PAS.Account.Api.Controllers
 {
     [RoutePrefix("api/account")]
