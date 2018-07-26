@@ -46,7 +46,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Approv
         /// </remarks>
         [TestCase(true)]
         [TestCase(false)]
-        public void AndHasHadDataLockSuccessShouldPassValidationWhenNoEndDateSupplied(bool hasHadDataLockSuccess)
+        public void ShouldPassValidationWhenNoEndDateSupplied(bool hasHadDataLockSuccess)
         {
             _currentDateTime.Setup(x => x.Now).Returns(new DateTime(2019, 1, 1));
             _createApprenticeshipUpdateViewModel.OriginalApprenticeship = new Apprenticeship { HasHadDataLockSuccess = hasHadDataLockSuccess };
