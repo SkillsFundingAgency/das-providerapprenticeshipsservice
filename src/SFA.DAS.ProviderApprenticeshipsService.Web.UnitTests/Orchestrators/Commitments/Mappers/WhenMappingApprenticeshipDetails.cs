@@ -47,6 +47,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                              Id = 1,
                              LastName = "Last name",
                              LegalEntityName = "LegalEntityName",
+                             AccountLegalEntityPublicHashedId = "ALEPHI",
                              NINumber = "SE4445566O",
                              PaymentStatus = PaymentStatus.Active,
                              PendingUpdateOriginator = Originator.Provider,
@@ -85,6 +86,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             viewModel.Cost.Should().Be(1700);
 
             viewModel.EmployerName.Should().Be("LegalEntityName");
+            viewModel.AccountLegalEntityPublicHashedId.Should().Be("ALEPHI");
             viewModel.CohortReference.Should().Be("hashed");
             viewModel.ProviderReference.Should().Be("Provider ref");
         }
