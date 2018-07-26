@@ -44,12 +44,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Approv
         /// Through the UI, with the other end date validation rules in place, validation would fail if no end date was supplied.
         /// Passing validation here refers to the validation in the ValidateApprovedEndDate method only!
         /// </remarks>
-        [Test]
-        public void AndHasHadDataLockSuccessShouldPassValidationWhenNoEndDateSupplied()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void AndHasHadDataLockSuccessShouldPassValidationWhenNoEndDateSupplied(bool hasHadDataLockSuccess)
         {
             _currentDateTime.Setup(x => x.Now).Returns(new DateTime(2019, 1, 1));
-            _createApprenticeshipUpdateViewModel.OriginalApprenticeship = new Apprenticeship { HasHadDataLockSuccess = true };
+            _createApprenticeshipUpdateViewModel.OriginalApprenticeship = new Apprenticeship { HasHadDataLockSuccess = hasHadDataLockSuccess };
             _createApprenticeshipUpdateViewModel.EndDate = new DateTimeViewModel();
+
+            var result = _validator.ValidateApprovedEndDate(_createApprenticeshipUpdateViewModel);
+
+            Assert.IsFalse(result.ContainsKey(FieldName));
+        }
+
+        /// <remarks>
+        /// Passing validation here refers to the validation in the ValidateApprovedEndDate method only!
+        /// </remarks>
+        [TestCase(true)]
+        [TestCase(false)]
+        public void ShouldPassValidationWhenEndDateHasntChanged(bool hasHadDataLockSuccess)
+        {
+            _currentDateTime.Setup(x => x.Now).Returns(new DateTime(2019, 1, 1));
+            _createApprenticeshipUpdateViewModel.OriginalApprenticeship = new Apprenticeship { HasHadDataLockSuccess = hasHadDataLockSuccess };
+            _createApprenticeshipUpdateViewModel.EndDate = null;
 
             var result = _validator.ValidateApprovedEndDate(_createApprenticeshipUpdateViewModel);
 
