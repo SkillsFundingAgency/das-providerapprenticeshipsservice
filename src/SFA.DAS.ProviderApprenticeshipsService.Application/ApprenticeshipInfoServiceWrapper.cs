@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.Apprenticeships.Api.Client;
@@ -24,13 +23,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
 
         public ApprenticeshipInfoServiceWrapper(ICache cache, IApprenticeshipInfoServiceConfiguration configuration, ICurrentDateTime currentDateTime)
         {
-            if (cache == null)
-                throw new ArgumentNullException(nameof(cache));
-            if (configuration == null)
-                throw new ArgumentNullException(nameof(configuration));
-            if (currentDateTime == null)
-                throw new ArgumentNullException(nameof(currentDateTime));
-
             _cache = cache;
             _configuration = configuration;
             _currentDateTime = currentDateTime;
@@ -86,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
                     PathwayCode = x.PathwayCode,
                     PathwayName = x.PathwayName,
                     Duration = x.Duration,
-                    MaxFunding = x.MaxFunding
+                    MaxFunding = x.CurrentFundingCap
                 }).ToList()
             };
         }
@@ -118,7 +110,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application
                     Level = x.Level,
                     Title = GetTitle(x.Title, x.Level) + " (Standard)",
                     Duration = x.Duration,
-                    MaxFunding = x.MaxFunding
+                    MaxFunding = x.CurrentFundingCap
                 }).ToList()
             };
         }
