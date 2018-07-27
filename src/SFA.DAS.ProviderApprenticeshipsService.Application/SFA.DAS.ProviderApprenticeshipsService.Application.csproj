@@ -224,6 +224,9 @@
     <Compile Include="Queries\GetStandards\GetStandardsQueryRequest.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryResponse.cs" />
     <Compile Include="Queries\GetAccountUsers\GetAccountUsersQuery.cs" />
+    <Compile Include="Queries\GetTrainingProgrammes\GetTrainingProgrammesQueryHandler.cs" />
+    <Compile Include="Queries\GetTrainingProgrammes\GetTrainingProgrammesQueryRequest.cs" />
+    <Compile Include="Queries\GetTrainingProgrammes\GetTrainingProgrammesQueryResponse.cs" />
     <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsHandler.cs" />
     <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsQuery.cs" />
     <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsResponse.cs" />
