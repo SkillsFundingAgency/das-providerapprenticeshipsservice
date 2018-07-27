@@ -13,10 +13,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.ApprenticeshipS
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLocks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLockSummary;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetPendingApprenticeshipUpdate;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -25,6 +23,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
@@ -308,16 +307,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
-            var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
-            var frameworksTask = _mediator.SendAsync(new GetFrameworksQueryRequest());
-
-            await Task.WhenAll(standardsTask, frameworksTask);
-
-            return
-                standardsTask.Result.Standards.Cast<ITrainingProgramme>()
-                    .Union(frameworksTask.Result.Frameworks)
-                    .OrderBy(m => m.Title)
-                    .ToList();
+            var programmes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest
+            {
+                IncludeFrameworks = true
+            });
+            return programmes.TrainingProgrammes;
         }
 
         private async Task AssertNoPendingApprenticeshipUpdate(long providerId, long apprenticeshipId)

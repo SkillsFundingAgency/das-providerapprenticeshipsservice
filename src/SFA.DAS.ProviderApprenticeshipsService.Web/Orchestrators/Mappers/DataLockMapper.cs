@@ -6,8 +6,7 @@ using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -193,12 +192,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
-            var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
-            var frameworksTask = _mediator.SendAsync(new GetFrameworksQueryRequest());
-
-            await Task.WhenAll(standardsTask, frameworksTask);
-
-            return standardsTask.Result.Standards.Cast<ITrainingProgramme>().Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>()).OrderBy(m => m.Title).ToList();
+            var programmes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest
+            {
+                IncludeFrameworks = true
+            });
+            return programmes.TrainingProgrammes;
         }
     }
 }

@@ -13,10 +13,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateRelation
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetRelationshipByCommitment;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -34,6 +32,7 @@ using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 
@@ -683,17 +682,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes(bool includeFrameworks)
         {
-            var standardsTask = Mediator.SendAsync(new GetStandardsQueryRequest());
-            var frameworksTask = includeFrameworks ? Mediator.SendAsync(new GetFrameworksQueryRequest())
-                : Task.FromResult(new GetFrameworksQueryResponse { Frameworks = new List<Framework>() });
-
-            await Task.WhenAll(standardsTask, frameworksTask);
-
-            return
-                standardsTask.Result.Standards.Cast<ITrainingProgramme>()
-                    .Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>())
-                    .OrderBy(m => m.Title)
-                    .ToList();
+            var programmes = await Mediator.SendAsync(new GetTrainingProgrammesQueryRequest
+            {
+                IncludeFrameworks = includeFrameworks
+            });
+            return programmes.TrainingProgrammes;
         }
 
         public async Task<AcknowledgementViewModel> GetAcknowledgementViewModel(long providerId, string hashedCommitmentId, SaveStatus saveStatus)

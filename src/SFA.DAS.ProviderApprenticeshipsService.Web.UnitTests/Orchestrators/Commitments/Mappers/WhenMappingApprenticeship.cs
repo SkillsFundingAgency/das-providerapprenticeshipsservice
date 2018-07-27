@@ -11,8 +11,6 @@ using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -23,6 +21,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using TrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.AcademicYear;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
@@ -82,22 +81,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 ULN = "1112223301"
             };
 
-            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetStandardsQueryRequest>()))
-                .ReturnsAsync(new GetStandardsQueryResponse
+            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetTrainingProgrammesQueryRequest>()))
+                .ReturnsAsync(new GetTrainingProgrammesQueryResponse { TrainingProgrammes = new List<ITrainingProgramme>
                 {
-                    Standards = new List<Standard>
+                    new Standard
                     {
-                        new Standard
-                            {
-                                Duration = 12,
-                                Id = "code-training",
-                                Level = 3,
-                                Title = "Fake training"
-                            }
+                        Duration = 12,
+                        Id = "code-training",
+                        Level = 3,
+                        Title = "Fake training"
                     }
+                }
                 });
-            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetFrameworksQueryRequest>()))
-                .ReturnsAsync(new GetFrameworksQueryResponse { Frameworks = new List<Framework>() });
 
             _mapper = new ApprenticeshipMapper(
                 _hashingService.Object, 

@@ -205,9 +205,6 @@
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryHandler.cs" />
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryRequest.cs" />
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryResponse.cs" />
-    <Compile Include="Queries\GetFrameworks\GetFrameworksQueryHandler.cs" />
-    <Compile Include="Queries\GetFrameworks\GetFrameworksQueryRequest.cs" />
-    <Compile Include="Queries\GetFrameworks\GetFrameworksQueryResponse.cs" />
     <Compile Include="Queries\GetOverlappingApprenticeships\GetOverlappingApprenticeshipsQueryHandler.cs" />
     <Compile Include="Queries\GetOverlappingApprenticeships\GetOverlappingApprenticeshipsQueryRequest.cs" />
     <Compile Include="Queries\GetOverlappingApprenticeships\GetOverlappingApprenticeshipsQueryResponse.cs" />
@@ -220,9 +217,6 @@
     <Compile Include="Queries\GetRelationshipByCommitment\GetRelationshipByCommitmentQueryHandler.cs" />
     <Compile Include="Queries\GetRelationshipByCommitment\GetRelationshipByCommitmentQueryRequest.cs" />
     <Compile Include="Queries\GetRelationshipByCommitment\GetRelationshipByCommitmentQueryResponse.cs" />
-    <Compile Include="Queries\GetStandards\GetStandardsQueryHandler.cs" />
-    <Compile Include="Queries\GetStandards\GetStandardsQueryRequest.cs" />
-    <Compile Include="Queries\GetStandards\GetStandardsQueryResponse.cs" />
     <Compile Include="Queries\GetAccountUsers\GetAccountUsersQuery.cs" />
     <Compile Include="Queries\GetTrainingProgrammes\GetTrainingProgrammesQueryHandler.cs" />
     <Compile Include="Queries\GetTrainingProgrammes\GetTrainingProgrammesQueryRequest.cs" />
