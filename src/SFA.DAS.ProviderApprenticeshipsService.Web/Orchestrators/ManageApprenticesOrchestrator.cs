@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,13 +22,11 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
-    public sealed class ManageApprenticesOrchestrator
+    public sealed class ManageApprenticesOrchestrator : BaseCommitmentOrchestrator
     {
         private readonly IMediator _mediator;
         private readonly IProviderCommitmentsLogger _logger;
@@ -47,7 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             IApprenticeshipMapper apprenticeshipMapper,
             IApprovedApprenticeshipValidator approvedApprenticeshipValidator,
             IApprenticeshipFiltersMapper apprenticeshipFiltersMapper,
-            IDataLockMapper dataLockMapper)
+            IDataLockMapper dataLockMapper) : base(mediator, hashingService, logger)
         {
             _mediator = mediator;
             _hashingService = hashingService;
@@ -303,15 +300,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 UserDisplayName = signedInUser.DisplayName,
                 UserEmailAddress = signedInUser.Email
             });
-        }
-
-        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
-        {
-            var programmes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest
-            {
-                IncludeFrameworks = true
-            });
-            return programmes.TrainingProgrammes;
         }
 
         private async Task AssertNoPendingApprenticeshipUpdate(long providerId, long apprenticeshipId)

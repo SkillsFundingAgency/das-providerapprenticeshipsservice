@@ -32,8 +32,6 @@ using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
@@ -678,15 +676,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ReceivingEmployerName = listItem.LegalEntityName,
                 Status = listItem.TransferApprovalStatus
             };
-        }
-
-        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes(bool includeFrameworks)
-        {
-            var programmes = await Mediator.SendAsync(new GetTrainingProgrammesQueryRequest
-            {
-                IncludeFrameworks = includeFrameworks
-            });
-            return programmes.TrainingProgrammes;
         }
 
         public async Task<AcknowledgementViewModel> GetAcknowledgementViewModel(long providerId, string hashedCommitmentId, SaveStatus saveStatus)

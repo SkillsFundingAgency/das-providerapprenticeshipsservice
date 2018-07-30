@@ -12,13 +12,12 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticesh
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipPriceHistory;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
-    public sealed class DataLockOrchestrator
+    public sealed class DataLockOrchestrator : BaseCommitmentOrchestrator
     {
         private readonly IMediator _mediator;
         private readonly IHashingService _hashingService;
@@ -31,7 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             IHashingService hashingService,
             IProviderCommitmentsLogger logger,
             IApprenticeshipMapper apprenticeshipMapper,
-            IDataLockMapper dataLockMapper)
+            IDataLockMapper dataLockMapper): base(mediator, hashingService, logger)
         {
             _mediator = mediator;
             _hashingService = hashingService;

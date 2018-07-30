@@ -20,7 +20,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using ApiTrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
@@ -204,16 +203,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             }
 
             return apprenticeship;
-        }
-
-        //TODO: These are duplicated in Commitment Orchestrator - needs to be shared
-        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
-        {
-            var programmes = await Mediator.SendAsync(new GetTrainingProgrammesQueryRequest
-            {
-                IncludeFrameworks = true
-            });
-            return programmes.TrainingProgrammes;
         }
 
         public async Task<UploadApprenticeshipsViewModel> GetUploadModel(long providerid, string hashedcommitmentid)
