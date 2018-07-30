@@ -91,7 +91,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             return null;
         }
 
-        //TODO: These are duplicated in Commitment Orchestrator - needs to be shared
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
             var programmes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest

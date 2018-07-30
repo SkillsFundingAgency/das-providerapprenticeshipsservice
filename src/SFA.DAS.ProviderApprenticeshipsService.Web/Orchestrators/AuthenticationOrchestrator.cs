@@ -13,11 +13,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public AuthenticationOrchestrator(IMediator mediator, IProviderCommitmentsLogger logger)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
             _mediator = mediator;
             _logger = logger;
         }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Apprenticeships.Api.Types.Exceptions;
-using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
@@ -25,11 +24,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public AccountOrchestrator(IMediator mediator, ILog logger)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
             _mediator = mediator;
             _logger = logger;
         }
