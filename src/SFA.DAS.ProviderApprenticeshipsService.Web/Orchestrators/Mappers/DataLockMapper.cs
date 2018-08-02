@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -123,13 +124,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
             foreach (var dataLock in source.DataLockWithCourseMismatch)
             {
-                var training = trainingProgrammes.Single(x => x.Id == dataLock.IlrTrainingCourseCode);
+                var training = trainingProgrammes.SingleOrDefault(x => x.Id == dataLock.IlrTrainingCourseCode);
+                if (training == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Datalock {dataLock.DataLockEventId} IlrTrainingCourseCode {dataLock.IlrTrainingCourseCode} not found; possible expiry");
+                }
                 result.DataLockWithCourseMismatch.Add(MapDataLockStatus(dataLock, training));
             }
 
             foreach (var dataLock in source.DataLockWithOnlyPriceMismatch)
             {
-                var training = trainingProgrammes.Single(x => x.Id == dataLock.IlrTrainingCourseCode);
+                var training = trainingProgrammes.SingleOrDefault(x => x.Id == dataLock.IlrTrainingCourseCode);
+                if (training == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Datalock {dataLock.DataLockEventId} IlrTrainingCourseCode {dataLock.IlrTrainingCourseCode} not found; possible expiry");
+                }
                 result.DataLockWithOnlyPriceMismatch.Add(MapDataLockStatus(dataLock, training));
             }
 
