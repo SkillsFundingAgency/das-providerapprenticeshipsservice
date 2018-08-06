@@ -9,7 +9,7 @@ using Standard = SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Apprentice
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Mappers
 {
-    public class ApprenticeshipInfoServiceMapper
+    public class ApprenticeshipInfoServiceMapper : IApprenticeshipInfoServiceMapper
     {
         private readonly ICurrentDateTime _currentDateTime;
 
