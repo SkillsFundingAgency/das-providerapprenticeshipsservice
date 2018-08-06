@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse
+﻿using System;
+
+namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse
 {
     public interface ITrainingProgramme
     {
@@ -6,5 +8,7 @@
         string Title { get; set; }
         int Level { get; set; }
         int MaxFunding { get; set; }
+        DateTime? EffectiveFrom { get; set; }
+        DateTime? EffectiveTo { get; set; }
     }
 }

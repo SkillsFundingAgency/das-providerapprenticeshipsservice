@@ -4,7 +4,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvide
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
-    public interface IApprenticeshipInfoServiceWrapper
+    public interface IApprenticeshipInfoService
     {
         Task<StandardsView> GetStandardsAsync(bool refreshCache = false);
         Task<FrameworksView> GetFrameworksAsync(bool refreshCache = false);

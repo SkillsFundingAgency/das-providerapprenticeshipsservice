@@ -117,7 +117,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApprenticeshipInfoServiceWrapper.cs" />
+    <Compile Include="Mappers\ApprenticeshipInfoServiceMapper.cs" />
+    <Compile Include="Services\ApprenticeshipInfoService.cs" />
     <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileCommand.cs" />
     <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileHandler.cs" />
     <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileValidator.cs" />
