@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -20,6 +21,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public AgreementController(AgreementOrchestrator orchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
         {
             _orchestrator = orchestrator;
+        }
+
+        [HttpGet]
+        //todo: [OutputCache(CacheProfile = "NoCache")]
+        [Route("")]
+        public async Task<ActionResult> Agreements(long providerId)
+        {
+            var model = await _orchestrator.GetAgreementsViewModel(providerId);
+
+            return View(model);
         }
     }
 }

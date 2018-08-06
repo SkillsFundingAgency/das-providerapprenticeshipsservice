@@ -478,6 +478,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AcknowledgementViewModel.cs" />
+    <Compile Include="Models\Agreement\AgreementsViewModel.cs" />
     <Compile Include="Models\ApprenticeshipDetailsViewModel.cs" />
     <Compile Include="Models\AgreementNotSignedViewModel.cs" />
     <Compile Include="Models\ApprenticeshipFiltersViewModel.cs" />
