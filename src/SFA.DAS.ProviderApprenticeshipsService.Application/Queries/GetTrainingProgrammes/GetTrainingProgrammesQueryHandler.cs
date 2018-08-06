@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
@@ -30,10 +31,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTraining
                 programmes = (await standardsTask).Standards.Union((await getFrameworksTask).Frameworks.Cast<ITrainingProgramme>());
             }
 
-            return new GetTrainingProgrammesQueryResponse
+            var result = new GetTrainingProgrammesQueryResponse();
+
+            if (!message.EffectiveDate.HasValue)
             {
-                TrainingProgrammes = programmes.OrderBy(m => m.Title).ToList()
-            };
+                result.TrainingProgrammes = programmes.OrderBy(m => m.Title).ToList();
+            }
+            else
+            {
+                result.TrainingProgrammes = programmes.Where(x => x.IsActiveOn(message.EffectiveDate.Value))
+                    .OrderBy(m => m.Title)
+                    .ToList();
+            }
+
+            return result;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes
 {
@@ -7,8 +8,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTraining
         public GetTrainingProgrammesQueryRequest()
         {
             IncludeFrameworks = true;
+            EffectiveDate = DateTime.UtcNow;
         }
 
         public bool IncludeFrameworks { get; set; }
+        public DateTime? EffectiveDate { get; set; }
     }
 }
