@@ -1,0 +1,54 @@
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.Agreement.AgreementsViewModel
+
+@{
+    ViewBag.Title = "Organisations and Agreements";
+    ViewBag.PageID = "organisations-and-agreements";
+}
+
+<div class="grid-row">
+    <div class="column-full">
+
+        <h1 class="heading-xlarge">Organisations and Agreements</h1>
+
+        <p class="dynamic-heading">Listed below is every organisation you work with on the apprenticeship service and their agreement ID.</p>
+
+        <p class="dynamic-heading">You need to add this agreement ID to the individualised learner record (ILR) data. This allows us to provider users with better error messages whenever a data mismatch occurs.</p>
+        
+        @* todo: employerlisting? *@
+        <table class="tableResponsive employerListing">
+            <thead>
+                <tr>
+                    <th>Organisation</th>
+                    <th>Cohort ID</th>
+                    <th>Agreement ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cohortAgreement in Model.CohortAgreements)
+                {
+                    <tr>
+                        <td>
+                            @cohortAgreement.OrganisationName
+                            @*@cohortAgreement.LegalEntityName*@
+                        </td>
+                        <td>
+                            @cohortAgreement.CohortID
+                            @*@cohortAgreement.HashedCommitmentId*@
+                        </td>
+                        <td>
+                            @cohortAgreement.AgreementID
+                            @*@cohortAgreement.AccountLegalEntityPublicHashedId*@
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        @*<a href="@Url.Action("todo")" aria-label="Back to your cohorts" class="back-link">Back to your cohorts</a>*@
+    </div>
+}

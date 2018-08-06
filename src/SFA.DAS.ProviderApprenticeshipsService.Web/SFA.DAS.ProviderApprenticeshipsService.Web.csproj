@@ -764,10 +764,10 @@
     <Content Include="Views\DataLock\RequestRestart.cshtml" />
     <Content Include="Views\DataLock\ConfirmRestart.cshtml" />
     <Content Include="Views\Commitment\TransferFunded.cshtml" />
+    <Content Include="Views\Agreement\Agreements.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Agreement\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
