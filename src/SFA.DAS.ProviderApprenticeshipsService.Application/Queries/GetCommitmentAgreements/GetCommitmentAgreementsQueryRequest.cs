@@ -4,5 +4,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitme
 {
     public class GetCommitmentAgreementsQueryRequest : IAsyncRequest<GetCommitmentAgreementsQueryResponse>
     {
+        public long ProviderId { get; set; }
     }
 }
