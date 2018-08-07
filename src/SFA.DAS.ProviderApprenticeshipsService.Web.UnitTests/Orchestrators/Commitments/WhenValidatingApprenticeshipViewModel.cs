@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
@@ -34,6 +35,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var result = await _orchestrator.ValidateApprenticeship(ValidModel);
 
             result.Keys.Should().NotContain($"{nameof(ValidModel.StartDate)}");
+        }
+
+        [Test]
+        public async Task ThenEndDateShouldntBeValidatedIfNotSupplied()
+        {
+            var apprenticeship = new ApprenticeshipViewModel { EndDate = new DateTimeViewModel() };
+
+            var result = await _orchestrator.ValidateApprenticeship(apprenticeship);
+
+            CollectionAssert.AreEqual(new Dictionary<string, string>(), result);
         }
     }
 }

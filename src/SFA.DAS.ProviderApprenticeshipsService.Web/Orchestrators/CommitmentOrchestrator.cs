@@ -740,9 +740,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var result = _apprenticeshipCoreValidator.MapOverlappingErrors(overlappingErrors);
 
-            var endDateError = _apprenticeshipCoreValidator.CheckEndDateInFuture(viewModel.EndDate);
-            if (endDateError != null)
-                result.AddIfNotExists(endDateError.Value);
+            // EndDate is optional before approval
+            if (viewModel.EndDate.DateTime != null)
+            {
+                var endDateError = _apprenticeshipCoreValidator.CheckEndDateInFuture(viewModel.EndDate);
+                if (endDateError != null)
+                    result.AddIfNotExists(endDateError.Value);
+            }
 
             var uniqueUlnValidationResult = await _uniqueUlnValidator.ValidateAsyncOverride(viewModel);
             if (!uniqueUlnValidationResult.IsValid)
