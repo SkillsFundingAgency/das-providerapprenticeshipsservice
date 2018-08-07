@@ -6,6 +6,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
 using Framework = SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse.Framework;
 using Standard = SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse.Standard;
+using FundingPeriod= SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse.FundingPeriod;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Mappers
 {
@@ -35,7 +36,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Mappers
                     Duration = x.Duration,
                     MaxFunding = x.CurrentFundingCap,
                     EffectiveFrom = x.EffectiveFrom,
-                    EffectiveTo = x.EffectiveTo
+                    EffectiveTo = x.EffectiveTo,
+                    FundingPeriods = MapFundingPeriods(x.FundingPeriods)
                 }).ToList()
             };
         }
@@ -69,9 +71,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Mappers
                     Duration = x.Duration,
                     MaxFunding = x.CurrentFundingCap,
                     EffectiveFrom = x.EffectiveFrom,
-                    EffectiveTo = x.EffectiveTo
+                    EffectiveTo = x.EffectiveTo,
+                    FundingPeriods = MapFundingPeriods(x.FundingPeriods)
                 }).ToList()
             };
+        }
+
+        private IEnumerable<FundingPeriod> MapFundingPeriods(IEnumerable<Apprenticeships.Api.Types.FundingPeriod> source)
+        {
+            if (source == null)
+            {
+                return Enumerable.Empty<FundingPeriod>();
+            }
+
+            return source.Select(x => new FundingPeriod
+            {
+                EffectiveFrom = x.EffectiveFrom,
+                EffectiveTo = x.EffectiveTo,
+                FundingCap = x.FundingCap
+            });
         }
 
         private static string GetTitle(string title, int level)

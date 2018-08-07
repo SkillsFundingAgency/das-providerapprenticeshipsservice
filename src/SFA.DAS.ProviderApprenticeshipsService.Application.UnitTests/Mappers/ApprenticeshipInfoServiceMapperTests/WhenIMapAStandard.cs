@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using KellermanSoftware.CompareNetObjects;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -27,7 +28,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Mappers.A
                 Level = 1,
                 CurrentFundingCap = 1000, //this is to become redundant
                 EffectiveFrom = new DateTime(2017, 05, 01),
-                EffectiveTo = new DateTime(2020, 7, 31)
+                EffectiveTo = new DateTime(2020, 7, 31),
+                FundingPeriods = new List<FundingPeriod>
+                {
+                    new FundingPeriod { EffectiveFrom = new DateTime(2017,05,01), EffectiveTo = new DateTime(2018, 12, 31), FundingCap = 5000 },
+                    new FundingPeriod { EffectiveFrom = new DateTime(2019,01,01), EffectiveTo = new DateTime(2020, 7, 31), FundingCap = 2000 }
+                }
             };
         }
 
@@ -60,6 +66,34 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Mappers.A
 
             //Assert
             Assert.AreEqual(_standard.EffectiveFrom, result.Standards[0].EffectiveFrom);
+        }
+
+        [Test]
+        public void ThenFundingPeriodsAreMappedCorrectly()
+        {
+            //Act
+            var result = _mapper.MapFrom(new List<StandardSummary> { CopyOf(_standard) });
+
+            var comparer = new CompareLogic(new ComparisonConfig
+            {
+                IgnoreObjectTypes = true
+            });
+
+            Assert.IsTrue(comparer.Compare(result.Standards[0].FundingPeriods, _standard.FundingPeriods).AreEqual);
+        }
+
+        [Test]
+        public void ThenFundingPeriodsAreMappedCorrectlyWhenNull()
+        {
+            //Arrange
+            _standard.FundingPeriods = null;
+
+            //Act
+            var result = _mapper.MapFrom(new List<StandardSummary> { CopyOf(_standard) });
+
+            //Assert
+            Assert.IsNotNull(result.Standards[0].FundingPeriods);
+            Assert.IsEmpty(result.Standards[0].FundingPeriods);
         }
 
         private static StandardSummary CopyOf(StandardSummary source)

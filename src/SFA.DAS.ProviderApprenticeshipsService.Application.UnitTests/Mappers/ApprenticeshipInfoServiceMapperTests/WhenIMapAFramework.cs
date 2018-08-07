@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using KellermanSoftware.CompareNetObjects;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -29,7 +30,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Mappers.A
                 Level = 1,
                 CurrentFundingCap = 1000, //this is to become redundant
                 EffectiveFrom = new DateTime(2017, 05, 01),
-                EffectiveTo = new DateTime(2020, 7, 31)
+                EffectiveTo = new DateTime(2020, 7, 31),
+                FundingPeriods = new List<FundingPeriod>
+                {
+                    new FundingPeriod { EffectiveFrom = new DateTime(2017,05,01), EffectiveTo = new DateTime(2018, 12, 31), FundingCap = 5000 },
+                    new FundingPeriod { EffectiveFrom = new DateTime(2019,01,01), EffectiveTo = new DateTime(2020, 7, 31), FundingCap = 2000 }
+                }
             };
         }
 
@@ -62,6 +68,35 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Mappers.A
 
             //Assert
             Assert.AreEqual(_framework.EffectiveFrom, result.Frameworks[0].EffectiveFrom);
+        }
+
+        [Test]
+        public void ThenFundingPeriodsAreMappedCorrectly()
+        {
+            //Act
+            var result = _mapper.MapFrom(new List<FrameworkSummary> { CopyOf(_framework) });
+
+            //Assert
+            var comparer = new CompareLogic(new ComparisonConfig
+            {
+                IgnoreObjectTypes = true
+            });
+
+            Assert.IsTrue(comparer.Compare(result.Frameworks[0].FundingPeriods, _framework.FundingPeriods).AreEqual);
+        }
+
+        [Test]
+        public void ThenFundingPeriodsAreMappedCorrectlyWhenNull()
+        {
+            //Arrange
+            _framework.FundingPeriods = null;
+
+            //Act
+            var result = _mapper.MapFrom(new List<FrameworkSummary> { CopyOf(_framework) });
+
+            //Assert
+            Assert.IsNotNull(result.Frameworks[0].FundingPeriods);
+            Assert.IsEmpty(result.Frameworks[0].FundingPeriods);
         }
 
         private static FrameworkSummary CopyOf(FrameworkSummary source)
