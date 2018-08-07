@@ -77,7 +77,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Mappers
             };
         }
 
-        private IEnumerable<FundingPeriod> MapFundingPeriods(IEnumerable<Apprenticeships.Api.Types.FundingPeriod> source)
+        private static IEnumerable<FundingPeriod> MapFundingPeriods(IEnumerable<Apprenticeships.Api.Types.FundingPeriod> source)
         {
             if (source == null)
             {
