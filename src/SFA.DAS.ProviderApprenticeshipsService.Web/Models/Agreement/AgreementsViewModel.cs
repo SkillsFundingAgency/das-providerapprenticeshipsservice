@@ -7,5 +7,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Agreement
 {
     public class AgreementsViewModel
     {
+        public IEnumerable<CohortAgreement> CohortAgreements;
     }
 }
