@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Extensions
@@ -7,10 +8,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Extensions
     {
         public static bool IsActiveOn(this ITrainingProgramme course, DateTime effectiveDate)
         {
-            if ((!course.EffectiveFrom.HasValue || course.EffectiveFrom.Value <= effectiveDate) &&
-                (!course.EffectiveTo.HasValue || course.EffectiveTo.Value >= effectiveDate)) return true;
+            if ((!course.EffectiveFrom.HasValue || course.EffectiveFrom.Value.Date <= effectiveDate.Date) &&
+                (!course.EffectiveTo.HasValue || course.EffectiveTo.Value.Date >= effectiveDate.Date)) return true;
 
             return false;
+        }
+
+        public static int FundingCapOn(this ITrainingProgramme course, DateTime effectiveDate)
+        {
+            if (!course.IsActiveOn(effectiveDate))
+            {
+                return 0;
+            }
+
+            var applicableFundingPeriod = course.FundingPeriods.FirstOrDefault(x =>
+                (!x.EffectiveFrom.HasValue || x.EffectiveFrom.Value.Date <= effectiveDate.Date) &&
+                (!x.EffectiveTo.HasValue || x.EffectiveTo.Value.Date >= effectiveDate.Date));
+
+            return applicableFundingPeriod?.FundingCap ?? 0;
         }
     }
 }
