@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderAgreement
 {
     public class GetProviderAgreementQueryRequest : IAsyncRequest<GetProviderAgreementQueryResponse>
     {

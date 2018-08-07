@@ -170,9 +170,9 @@
     <Compile Include="Commands\UpdateRelationship\UpdateRelationshipCommandValidator.cs" />
     <Compile Include="InvalidRequestException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\GetAgreement\GetProviderAgreementQueryHandler.cs" />
-    <Compile Include="Queries\GetAgreement\GetProviderAgreementQueryRequest.cs" />
-    <Compile Include="Queries\GetAgreement\GetProviderAgreementQueryResponse.cs" />
+    <Compile Include="Queries\GetProviderAgreement\GetProviderAgreementQueryHandler.cs" />
+    <Compile Include="Queries\GetProviderAgreement\GetProviderAgreementQueryRequest.cs" />
+    <Compile Include="Queries\GetProviderAgreement\GetProviderAgreementQueryResponse.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLockQueryRequest.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLocksQueryResponse.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLockSummaryQueryHandler.cs" />
@@ -194,6 +194,9 @@
     <Compile Include="Queries\GetFrameworks\GetFrameworksQueryHandler.cs" />
     <Compile Include="Queries\GetFrameworks\GetFrameworksQueryRequest.cs" />
     <Compile Include="Queries\GetFrameworks\GetFrameworksQueryResponse.cs" />
+    <Compile Include="Queries\GetCommitmentAgreements\GetCommitmentAgreementsQueryHandler.cs" />
+    <Compile Include="Queries\GetCommitmentAgreements\GetCommitmentAgreementsQueryRequest.cs" />
+    <Compile Include="Queries\GetCommitmentAgreements\GetCommitmentAgreementsQueryResponse.cs" />
     <Compile Include="Queries\GetOverlappingApprenticeships\GetOverlappingApprenticeshipsQueryHandler.cs" />
     <Compile Include="Queries\GetOverlappingApprenticeships\GetOverlappingApprenticeshipsQueryRequest.cs" />
     <Compile Include="Queries\GetOverlappingApprenticeships\GetOverlappingApprenticeshipsQueryResponse.cs" />
