@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using MediatR;
 using SFA.DAS.HashingService;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitmentAgreements;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Agreement;
 
@@ -24,9 +22,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             Logger.Info($"Getting agreements for provider: {providerId}", providerId: providerId);
 
-            return Task.FromResult(new AgreementsViewModel
-            {
-            });
+            throw new NotImplementedException();
+
+            //var response = await Mediator.SendAsync(new GetCommitmentAgreementsQueryRequest
+            //{
+            //    ProviderId = providerId
+            //});
+
+            //return response..ToList();
         }
     }
 }
