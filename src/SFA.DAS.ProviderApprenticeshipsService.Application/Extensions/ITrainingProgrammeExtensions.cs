@@ -8,10 +8,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Extensions
     {
         public static bool IsActiveOn(this ITrainingProgramme course, DateTime effectiveDate)
         {
-            if ((!course.EffectiveFrom.HasValue || course.EffectiveFrom.Value.Date <= effectiveDate.Date) &&
-                (!course.EffectiveTo.HasValue || course.EffectiveTo.Value.Date >= effectiveDate.Date)) return true;
-
-            return false;
+            return (!course.EffectiveFrom.HasValue || course.EffectiveFrom.Value.FirstOfMonth() <= effectiveDate.Date) &&
+                   (!course.EffectiveTo.HasValue || course.EffectiveTo.Value.Date >= effectiveDate.FirstOfMonth());
         }
 
         public static int FundingCapOn(this ITrainingProgramme course, DateTime effectiveDate)

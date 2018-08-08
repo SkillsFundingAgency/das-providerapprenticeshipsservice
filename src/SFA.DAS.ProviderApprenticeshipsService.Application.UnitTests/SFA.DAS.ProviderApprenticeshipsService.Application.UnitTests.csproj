@@ -152,6 +152,7 @@
     <Compile Include="Commands\UpdateRelationship\WhenValidatingCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\WhenUpsertingRegisteredUser.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\WhenValidatingCommand.cs" />
+    <Compile Include="Extensions\DateTimeExtensions\WhenGettingFirstOfMonth.cs" />
     <Compile Include="Extensions\ITrainingProgrammeExtensionsTest\WhenDetermingWhetherACourseIsActive.cs" />
     <Compile Include="Extensions\ITrainingProgrammeExtensionsTest\WhenDeterminingFundingCap.cs" />
     <Compile Include="Mappers\ApprenticeshipInfoServiceMapperTests\WhenIMapAFramework.cs" />
@@ -189,9 +190,6 @@
       <Project>{380868C8-FA69-4DA7-B054-45AC924EC48E}</Project>
       <Name>SFA.DAS.ProviderApprenticeshipsService.Infrastructure</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_Readme\Compare-NET-Objects-Help.txt" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
