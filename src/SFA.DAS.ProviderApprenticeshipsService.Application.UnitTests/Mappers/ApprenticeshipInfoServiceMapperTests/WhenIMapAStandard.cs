@@ -28,7 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Mappers.A
                 Level = 1,
                 CurrentFundingCap = 1000, //this is to become redundant
                 EffectiveFrom = new DateTime(2017, 05, 01),
-                EffectiveTo = new DateTime(2020, 7, 31),
+                LastDateForNewStarts = new DateTime(2020, 7, 31),
                 FundingPeriods = new List<FundingPeriod>
                 {
                     new FundingPeriod { EffectiveFrom = new DateTime(2017,05,01), EffectiveTo = new DateTime(2018, 12, 31), FundingCap = 5000 },
@@ -65,7 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Mappers.A
             var result = _mapper.MapFrom(new List<StandardSummary> { CopyOf(_standard) });
 
             //Assert
-            Assert.AreEqual(_standard.EffectiveFrom, result.Standards[0].EffectiveFrom);
+            Assert.AreEqual(_standard.LastDateForNewStarts, result.Standards[0].EffectiveTo);
         }
 
         [Test]
