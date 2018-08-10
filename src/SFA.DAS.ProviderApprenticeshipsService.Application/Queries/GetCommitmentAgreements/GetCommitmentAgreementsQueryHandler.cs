@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -17,15 +17,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitme
             _commitmentsApi = commitmentsApi;
         }
 
-        public Task<GetCommitmentAgreementsQueryResponse> Handle(GetCommitmentAgreementsQueryRequest message)
+        public async Task<GetCommitmentAgreementsQueryResponse> Handle(GetCommitmentAgreementsQueryRequest message)
         {
-            throw new NotImplementedException();
-            //var response = await _commitmentsApi.GetX(message.ProviderId);
+            var commitmentAgreements = await _commitmentsApi.GetCommitmentAgreements(message.ProviderId);
 
-            //return new GetOrganisationsAgreementsQueryResponse
-            //{
-            //    X = response
-            //};
+            return new GetCommitmentAgreementsQueryResponse
+            {
+                CommitmentAgreements = commitmentAgreements.ToList()
+            };
         }
     }
 }
