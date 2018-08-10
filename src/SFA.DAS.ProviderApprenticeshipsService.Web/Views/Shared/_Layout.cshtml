@@ -122,7 +122,6 @@
         </div>
     }
 
-
     <main role="main">
         @if (HttpContext.Current.User.Identity.IsAuthenticated && !(ViewBag?.HideNavBar ?? false))
         {
@@ -135,9 +134,9 @@
                         <nav class="header-inner">
                             <ul role="menubar" id="global-nav-links">
                                 <li><a href="@Url.Action("Index", "Account")" role="menuitem" class="@(controllerName == "Account" ? "selected" : "")">Home</a></li>
-                                <li><a href="@Url.Action("Index", "ManageApprentices", new { providerId = providerId})" role="menuitem" class="@(controllerName == "ManageApprentices" ? "selected" : "")">Manage your apprentices</a></li>
-                                <li><a href="@Url.Action("Cohorts", "Commitment", new { providerId = providerId})" role="menuitem" class="@(controllerName == "Commitment" ? "selected" : "")">Your cohorts</a></li>
-                                <li><a href="@Url.Action("Cohorts", "Commitment", new { providerId = providerId})" role="menuitem" class="@(controllerName == "Commitment" ? "selected" : "")">Agreement IDs</a></li>
+                                <li><a href="@Url.Action("Index", "ManageApprentices", new {providerId = providerId})" role="menuitem" class="@(controllerName == "ManageApprentices" ? "selected" : "")">Manage your apprentices</a></li>
+                                <li><a href="@Url.Action("Cohorts", "Commitment", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Commitment" ? "selected" : "")">Your cohorts</a></li>
+                                <li><a href="@Url.Action("Agreements", "Agreement", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Agreement" ? "selected" : "")">Agreement IDs</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -150,8 +149,6 @@
             @RenderBody()
         </div>
     </main>
-
-
 
     <footer class="group js-footer" id="footer" role="contentinfo">
         <div class="footer-wrapper">
@@ -184,7 +181,5 @@
     @Scripts.Render("~/bundles/sfajs")
 
     @RenderSection("pageSpecificJS", required: false)
-
-
 </body>
 </html>
