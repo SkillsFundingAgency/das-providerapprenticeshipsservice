@@ -282,6 +282,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 PendingChanges = pendingChange,
                 Alerts = MapAlerts(apprenticeship),
                 CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
+                AccountLegalEntityPublicHashedId = apprenticeship.AccountLegalEntityPublicHashedId,
                 ProviderReference = apprenticeship.ProviderRef,
                 HasHadDataLockSuccess = apprenticeship.HasHadDataLockSuccess,
                 EnableEdit = pendingChange == PendingChanges.None
