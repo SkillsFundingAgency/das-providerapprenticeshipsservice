@@ -155,6 +155,7 @@
     <Compile Include="Extensions\DateTimeExtensions\WhenGettingFirstOfMonth.cs" />
     <Compile Include="Extensions\ITrainingProgrammeExtensionsTest\WhenDetermingWhetherACourseIsActive.cs" />
     <Compile Include="Extensions\ITrainingProgrammeExtensionsTest\WhenDeterminingFundingCap.cs" />
+    <Compile Include="Extensions\ITrainingProgrammeExtensionsTest\WhenDeterminingTheStatusOfACourseOnSpecificDate.cs" />
     <Compile Include="Mappers\ApprenticeshipInfoServiceMapperTests\WhenIMapAFramework.cs" />
     <Compile Include="Mappers\ApprenticeshipInfoServiceMapperTests\WhenIMapAProvider.cs" />
     <Compile Include="Mappers\ApprenticeshipInfoServiceMapperTests\WhenIMapAStandard.cs" />

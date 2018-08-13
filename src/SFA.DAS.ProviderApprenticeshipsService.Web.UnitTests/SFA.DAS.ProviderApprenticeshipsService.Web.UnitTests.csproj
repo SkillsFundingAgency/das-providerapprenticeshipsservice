@@ -248,6 +248,7 @@
     <Compile Include="Validation\ApprenticeshipCreateOrEdit\ApprenticeshipValidationTestBase.cs" />
     <Compile Include="Validation\ApprenticeshipCreateOrEdit\WhenValidatingFirstName.cs" />
     <Compile Include="Validation\ApprenticeshipCreateOrEdit\WhenValidatingDateOfBirth.cs" />
+    <Compile Include="Validation\ApprenticeshipCreateOrEdit\WhenValidatingStartDate.cs" />
     <Compile Include="Validation\ApprenticeshipCreateOrEdit\WhenValidatingTrainingCode.cs" />
     <Compile Include="Validation\ApprenticeshipCreateOrEdit\WhenValidatingTrainingDates.cs" />
     <Compile Include="Validation\ApprenticeshipCreateOrEdit\WhenValidatingCost.cs" />

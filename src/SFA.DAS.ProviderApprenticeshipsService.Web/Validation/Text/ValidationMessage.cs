@@ -12,5 +12,7 @@
         public string Text { get; }
 
         public string ErrorCode { get; }
+
+
     }
 }

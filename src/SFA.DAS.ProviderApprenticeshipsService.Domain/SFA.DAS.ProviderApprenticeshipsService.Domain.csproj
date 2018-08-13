@@ -132,6 +132,7 @@
     <Compile Include="Interfaces\IApprenticeshipInfoServiceMapper.cs" />
     <Compile Include="Models\AcademicYear\AcademicYearValidationResult.cs" />
     <Compile Include="Models\ApprenticeshipCourse\FundingPeriod.cs" />
+    <Compile Include="Models\ApprenticeshipCourse\TrainingProgrammeStatus.cs" />
     <Compile Include="Models\Apprenticeship\ApprenticeshipStatus.cs" />
     <Compile Include="ContractFeed\ContractFeedEvent.cs" />
     <Compile Include="Data\IAgreementStatusQueryRepository.cs" />

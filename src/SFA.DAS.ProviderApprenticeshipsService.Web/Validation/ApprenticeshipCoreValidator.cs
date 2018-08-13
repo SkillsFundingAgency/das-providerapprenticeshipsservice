@@ -1,13 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
+using FluentValidation.Validators;
+using MediatR;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.Learners.Validators;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
@@ -19,16 +25,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         protected readonly ICurrentDateTime CurrentDateTime;
         private readonly IAcademicYearDateProvider _academicYear;
         private readonly IUlnValidator _ulnValidator;
+        protected readonly IMediator Mediator;
 
         public ApprenticeshipCoreValidator(IApprenticeshipValidationErrorText validationText, 
                                             ICurrentDateTime currentDateTime, 
                                             IAcademicYearDateProvider academicYear,
-                                            IUlnValidator ulnValidator)
+                                            IUlnValidator ulnValidator,
+                                            IMediator mediator)
         {
             ValidationText = validationText;
             CurrentDateTime = currentDateTime;
             _academicYear = academicYear;
             _ulnValidator = ulnValidator;
+            Mediator = mediator;
 
             ValidateFirstName();
 
@@ -93,6 +102,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         {
             RuleFor(x => x.StartDate)
                 .Cascade(CascadeMode.StopOnFirstFailure)
+                .Must(TrainingCourseValidOnStartDate)
+                    .WithErrorCode(ValidationText.LearnStartDateNotValidForTrainingCourse.ErrorCode)
+                    .WithMessage(ValidationText.LearnStartDateNotValidForTrainingCourse.Text)
                 .NotNull().WithMessage(ValidationText.LearnStartDate01.Text).WithErrorCode(ValidationText.LearnStartDate01.ErrorCode)
                 .Must(ValidateDateWithoutDay).WithMessage(ValidationText.LearnStartDate01.Text).WithErrorCode(ValidationText.LearnStartDate01.ErrorCode)
                 .Must(StartDateForTransferNotBeforeMay2018).WithMessage(ValidationText.LearnStartDate06.Text).WithErrorCode(ValidationText.LearnStartDate06.ErrorCode)
@@ -245,6 +257,36 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         private bool BeValidUlnNumber(string uln)
         {
             return _ulnValidator.Validate(uln) != UlnValidationResult.IsInvalidUln;
+        }
+
+        private bool TrainingCourseValidOnStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel startDate, PropertyValidatorContext context)
+        {
+            if (string.IsNullOrWhiteSpace(viewModel.TrainingCode) || (!startDate.DateTime.HasValue))
+            {
+                return true;
+            }
+
+            var result = Mediator.SendAsync(new GetTrainingProgrammesQueryRequest
+            {
+                EffectiveDate = null,
+                IncludeFrameworks = true
+            }).Result;
+
+            var course = result.TrainingProgrammes.Single(x => x.Id == viewModel.TrainingCode);
+
+            var courseStatus = course.GetStatusOn(startDate.DateTime.Value);
+
+            if (courseStatus == TrainingProgrammeStatus.Active)
+            {
+                return true;
+            }
+
+            var suffix = courseStatus == TrainingProgrammeStatus.Pending
+                ? $"after {course.EffectiveFrom.Value.AddMonths(-1):MM yy}"
+                : $"before {course.EffectiveTo.Value.AddMonths(1):MM yy}";
+
+            context.MessageFormatter.AppendArgument("suffix", suffix);
+            return false;
         }
     }
 }

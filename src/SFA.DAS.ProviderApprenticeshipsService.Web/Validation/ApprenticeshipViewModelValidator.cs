@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Learners.Validators;
+﻿using MediatR;
+using SFA.DAS.Learners.Validators;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
@@ -11,7 +12,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             IApprenticeshipValidationErrorText validationText, 
             ICurrentDateTime currentDateTime, 
             IAcademicYearDateProvider academicYear, 
-            IUlnValidator ulnValidator) : base(validationText, currentDateTime, academicYear, ulnValidator)
+            IUlnValidator ulnValidator, IMediator mediator) : base(validationText, currentDateTime, academicYear, ulnValidator, mediator)
         {
         }
 
