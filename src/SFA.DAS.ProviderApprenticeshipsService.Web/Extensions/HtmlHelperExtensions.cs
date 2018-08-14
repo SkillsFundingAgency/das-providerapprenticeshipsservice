@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 {
@@ -37,6 +39,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
             }
 
             return new MvcHtmlString(errorClass);
+        }
+        
+        public static MvcHtmlString DasValidationMessageFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
+            Expression<Func<TModel, TProperty>> expression)
+        {
+            var propertyName = ExpressionHelper.GetExpressionText(expression);
+
+            if (htmlHelper.ViewData.ModelState.IsValidField(propertyName))
+            {
+                return new MvcHtmlString(string.Empty);
+            }
+
+            var error = htmlHelper.ViewData.ModelState[propertyName].Errors.First();
+            var errorMesage = ValidationMessage.ExtractFieldMessage(error.ErrorMessage);
+            
+            var builder = new TagBuilder("span");
+
+            builder.AddCssClass("error-message");
+            builder.AddCssClass("field-validation-error");
+            builder.Attributes.Add("id", $"error-message-{propertyName}");
+            builder.SetInnerText(errorMesage);
+
+            return new MvcHtmlString(builder.ToString());
         }
     }
 }

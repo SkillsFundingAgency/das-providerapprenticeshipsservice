@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipViewModel
 
 <div class="form-group @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
@@ -140,7 +141,8 @@ else
                 }
                 else
                 {
-                    @Html.ValidationMessageFor(m => m.StartDate, null, new { id = "error-message-" + Html.IdFor(m => m.StartDate), @class = "error-message" })
+                    @Html.DasValidationMessageFor(m=> m.StartDate);
+
                     @Html.ValidationMessage("StartDateOverlap",
                         "The date overlaps with existing training dates for the same apprentice. " +
                         "Please check the date - contact the employer for help.",
