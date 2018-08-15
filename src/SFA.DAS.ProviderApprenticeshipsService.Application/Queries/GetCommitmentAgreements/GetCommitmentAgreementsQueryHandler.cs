@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 
@@ -23,7 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitme
 
             return new GetCommitmentAgreementsQueryResponse
             {
-                CommitmentAgreements = commitmentAgreements.ToList()
+                CommitmentAgreements = commitmentAgreements
             };
         }
     }

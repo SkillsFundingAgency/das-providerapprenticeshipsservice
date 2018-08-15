@@ -18,8 +18,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         public void WhenGettingCommitmentAgreementsSetup()
         {
             _commitmentsApi = new Mock<IProviderCommitmentsApi>();
-            _commitmentsApi.Setup(x => x.GetCommitmentAgreements(It.IsAny<long>()))
-                .ReturnsAsync(() => new List<CommitmentAgreement>());
 
             _handler = new GetCommitmentAgreementsQueryHandler(_commitmentsApi.Object);
         }
@@ -27,9 +25,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         [Test]
         public async Task ThenCommitmentAgreementsAreReturned()
         {
-            var query = new GetCommitmentAgreementsQueryRequest { ProviderId = 1 };
+            const long providerId = 777L;
+
+            var query = new GetCommitmentAgreementsQueryRequest { ProviderId = providerId };
+
+            var commitmentAgreements = new List<CommitmentAgreement>
+            {
+                new CommitmentAgreement {Reference = "R1", AccountLegalEntityPublicHashedId = "A1", LegalEntityName = "L1"},
+                new CommitmentAgreement {Reference = "R2", AccountLegalEntityPublicHashedId = "A2", LegalEntityName = "L2"},
+            };
+
+            _commitmentsApi.Setup(x => x.GetCommitmentAgreements(providerId))
+                .ReturnsAsync(() => TestHelper.Clone(commitmentAgreements));
 
             var response = await _handler.Handle(query);
+
+            TestHelper.EnumerablesAreEqual(commitmentAgreements, response.CommitmentAgreements);
         }
     }
 }
