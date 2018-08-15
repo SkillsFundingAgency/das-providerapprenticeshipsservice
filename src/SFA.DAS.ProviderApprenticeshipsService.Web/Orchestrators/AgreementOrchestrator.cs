@@ -1,22 +1,26 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitmentAgreements;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Agreement;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public sealed class AgreementOrchestrator : BaseCommitmentOrchestrator
     {
+        private readonly IAgreementMapper _agreementMapper;
+
         public AgreementOrchestrator(
             IMediator mediator,
             IHashingService hashingService,
-            IProviderCommitmentsLogger logger)
+            IProviderCommitmentsLogger logger,
+            IAgreementMapper agreementMapper)
         : base(mediator, hashingService, logger)
         {
+            _agreementMapper = agreementMapper;
         }
 
         public async Task<AgreementsViewModel> GetAgreementsViewModel(long providerId)
@@ -30,14 +34,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             return new AgreementsViewModel
             {
-                //todo: move to mapper?
-                CommitmentAgreements = response.CommitmentAgreements.Select(ca => new CommitmentAgreement
-                {
-                    // here we're basically mapping between what we call properties internally to what the view calls them
-                    AgreementID = ca.AccountLegalEntityPublicHashedId,
-                    CohortID = ca.Reference,
-                    OrganisationName = ca.LegalEntityName
-                })
+                //todo: check bread crumb
+                CommitmentAgreements = response.CommitmentAgreements.Select(_agreementMapper.Map)
+                    .OrderBy(ca => ca.OrganisationName)
+                    .ThenBy(ca => ca.CohortID)
             };
         }
     }

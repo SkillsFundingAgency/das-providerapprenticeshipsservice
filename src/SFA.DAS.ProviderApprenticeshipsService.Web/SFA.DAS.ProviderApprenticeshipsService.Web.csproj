@@ -529,6 +529,8 @@
     <Compile Include="Models\ViewModelBase.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
     <Compile Include="Orchestrators\AgreementOrchestrator.cs" />
+    <Compile Include="Orchestrators\Mappers\AgreementMapper.cs" />
+    <Compile Include="Orchestrators\Mappers\IAgreementMapper.cs" />
     <Compile Include="Validation\ApprovedApprenticeshipValidator.cs" />
     <Compile Include="Validation\IApprovedApprenticeshipValidator.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
