@@ -20,7 +20,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        //todo: [OutputCache(CacheProfile = "NoCache")]
         [Route("")]
         public async Task<ActionResult> Agreements(long providerId)
         {

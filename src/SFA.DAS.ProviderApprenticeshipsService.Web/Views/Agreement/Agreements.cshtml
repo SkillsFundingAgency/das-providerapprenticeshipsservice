@@ -8,13 +8,12 @@
 <div class="grid-row">
     <div class="column-full">
 
-        <h1 class="heading-xlarge">Organisations and Agreements</h1>
+        <h1 class="heading-xlarge">Organisations and agreements</h1>
 
         <p class="dynamic-heading">Listed below is every organisation you work with on the apprenticeship service and their agreement ID.</p>
 
         <p class="dynamic-heading">You need to add this agreement ID to the individualised learner record (ILR) data. This allows us to provider users with better error messages whenever a data mismatch occurs.</p>
-        
-        @* todo: employerlisting? *@
+
         <table class="tableResponsive employerListing">
             <thead>
                 <tr>
@@ -43,9 +42,8 @@
     </div>
 </div>
 
-
 @section breadcrumb {
     <div class="breadcrumbs">
-        @*<a href="@Url.Action("todo")" aria-label="Back to your cohorts" class="back-link">Back to your cohorts</a>*@
+        <a href="@Url.Action("Index", "Home")" aria-label="Back to account home" class="back-link">Back</a>
     </div>
 }
