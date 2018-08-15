@@ -34,7 +34,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             return new AgreementsViewModel
             {
-                //todo: check bread crumb
                 CommitmentAgreements = response.CommitmentAgreements.Select(_agreementMapper.Map)
                     .OrderBy(ca => ca.OrganisationName)
                     .ThenBy(ca => ca.CohortID)
