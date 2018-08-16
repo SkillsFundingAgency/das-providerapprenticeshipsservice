@@ -282,8 +282,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             }
 
             var suffix = courseStatus == TrainingProgrammeStatus.Pending
-                ? $"after {course.EffectiveFrom.Value.AddMonths(-1):MM yy}"
-                : $"before {course.EffectiveTo.Value.AddMonths(1):MM yy}";
+                ? $"after {course.EffectiveFrom.Value.AddMonths(-1):MM yyyy}"
+                : $"before {course.EffectiveTo.Value.AddMonths(1):MM yyyy}";
 
             context.MessageFormatter.AppendArgument("suffix", suffix);
             return false;
