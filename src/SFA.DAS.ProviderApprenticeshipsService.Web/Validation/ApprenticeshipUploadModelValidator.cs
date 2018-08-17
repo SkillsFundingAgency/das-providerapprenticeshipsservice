@@ -130,6 +130,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate02);
             }
             
+            //if (model.ApprenticeshipViewModel.TrainingCode)
 
             return null;
         }

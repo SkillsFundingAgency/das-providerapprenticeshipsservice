@@ -101,7 +101,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                         var validationResult = _viewModelValidator.Validate(record);
                         validationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i, record)));
 
-                        var validationMessage = ValidateTraining(viewModel, trainingProgrammes);
+                        var validationMessage = ValidateTrainingInConjunctionWithStartDate(viewModel, trainingProgrammes);
                         if (validationMessage != null)
                             errors.Add(new UploadError(validationMessage.Value.Text, validationMessage.Value.ErrorCode, i, record));
                     });
@@ -109,11 +109,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             return errors;
         }
 
-        private static ValidationMessage? ValidateTraining(ApprenticeshipViewModel viewModel, List<ITrainingProgramme> trainingProgrammes)
+        private ValidationMessage? ValidateTrainingInConjunctionWithStartDate(ApprenticeshipViewModel viewModel, List<ITrainingProgramme> trainingProgrammes)
         {
-            //todo: the validation messages belong in BulkUploadApprenticeshipValidationText
+            //todo: the validation messages belong in BulkUploadApprenticeshipValidationText (IApprenticeshipValidationErrorText), but...
+            // the validationtext classes already contain a TrainingCode01 but that has an errorCode of "DefaultErrorCode"
+            // and the "Training_01" errorCode below already existed, and we can't change existing error codes, as external systems will probably rely on them.
+            // also the different implementations of IApprenticeshipValidationErrorText contain their own subset of error messages so not entirely convinced we need the interface
+            // and it's not injected as a dependency either, so might be best to just have seperate centralised validation message containers
+            // but don't want to tackle it as a refactor now
 
             // we take our cue from the existing validation and only return the first error
+            //todo: the course not active error is recorded against startdate, so if we do only want 1 error then we shouldn't check this if there's already a start date
             if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
             {
                 // not as safe as single, but quicker
@@ -132,7 +138,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                             ? $"after {trainingProgram.EffectiveFrom.Value.AddMonths(-1):MM yyyy}"
                             : $"before {trainingProgram.EffectiveTo.Value.AddMonths(1):MM yyyy}";
 
-                        return new ValidationMessage($"This training course is only available to apprentices with a start date {suffix}", "Training_NotActive");
+                        // this actually associates the error with the start date field
+                        return new ValidationMessage(_validationText.LearnStartDateNotValidForTrainingCourse, suffix);
                     }
                 }
             }
