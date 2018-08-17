@@ -130,7 +130,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate02);
             }
             
-            //if (model.ApprenticeshipViewModel.TrainingCode)
+            // we pass the field that failed, but that ultimatly gets discarded anyway, so why bother? we could just work with validationmessages anyway
+            // to do it here, we'd have to pass the trainingprogrammes through the path to get here, or refetch them, or make them available another way e.g. static, none of these choices are appealing, so we'll wait until the bulk upload is refactored
+            //if (!string.IsNullOrWhiteSpace(model.ApprenticeshipViewModel.TrainingCode))
 
             return null;
         }
