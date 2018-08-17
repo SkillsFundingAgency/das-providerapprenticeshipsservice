@@ -101,28 +101,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                         var validationResult = _viewModelValidator.Validate(record);
                         validationResult.Errors.ForEach(m => errors.Add(new UploadError(m.ErrorMessage, m.ErrorCode, i, record)));
 
-                        //// TODO: LWA - Should we move this into the validator?
-                        //if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode) && trainingProgrammes.All(m => m.Id != viewModel.TrainingCode))
-                        //    errors.Add(new UploadError("Not a valid <strong>Training code</strong>", "Training_01", i, record));
-
-                        (string message, string errorCode) = ValidateTraining(viewModel, trainingProgrammes);
-                        if (message != null)
-                            errors.Add(new UploadError(message, errorCode, i, record));
+                        var validationMessage = ValidateTraining(viewModel, trainingProgrammes);
+                        if (validationMessage != null)
+                            errors.Add(new UploadError(validationMessage.Value.Text, validationMessage.Value.ErrorCode, i, record));
                     });
 
             return errors;
         }
 
-        private static (string message, string errorCode) ValidateTraining(ApprenticeshipViewModel viewModel, List<ITrainingProgramme> trainingProgrammes)
+        private static ValidationMessage? ValidateTraining(ApprenticeshipViewModel viewModel, List<ITrainingProgramme> trainingProgrammes)
         {
+            //todo: the validation messages belong in BulkUploadApprenticeshipValidationText
+
             // we take our cue from the existing validation and only return the first error
             if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
             {
                 // not as safe as single, but quicker
                 var trainingProgram = trainingProgrammes.Find(tp => tp.Id == viewModel.TrainingCode);
                 if (trainingProgram == null)
-                    return ("Not a valid <strong>Training code</strong>", "Training_01");
-                    //errors.Add(new UploadError("Not a valid <strong>Training code</strong>", "Training_01", i, record));
+                    return new ValidationMessage("Not a valid <strong>Training code</strong>", "Training_01");
 
                 if (viewModel.StartDate?.DateTime != null)
                 {
@@ -135,15 +132,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                             ? $"after {trainingProgram.EffectiveFrom.Value.AddMonths(-1):MM yyyy}"
                             : $"before {trainingProgram.EffectiveTo.Value.AddMonths(1):MM yyyy}";
 
-                        return ($"This training course is only available to apprentices with a start date {suffix}", "Training_02");
-                        //errors.Add(new UploadError(
-                        //    $"This training course is only available to apprentices with a start date {suffix}", "Training_02",
-                        //    i, record));
+                        return new ValidationMessage($"This training course is only available to apprentices with a start date {suffix}", "Training_NotActive");
                     }
                 }
             }
 
-            return (null, null);
+            return null;
         }
     }
 }
