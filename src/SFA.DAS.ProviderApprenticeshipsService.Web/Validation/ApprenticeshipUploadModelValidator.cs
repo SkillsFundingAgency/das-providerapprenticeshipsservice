@@ -280,9 +280,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
         private ValidationFailure CreateValidationFailure(string propertyName, ValidationMessage validationMessage)
         {
-            var validationFailure = new ValidationFailure(propertyName, validationMessage.Text);
-            validationFailure.ErrorCode = validationMessage.ErrorCode;
-            return validationFailure;
+            return new ValidationFailure(propertyName, validationMessage.Text) {ErrorCode = validationMessage.ErrorCode};
         }
 
         private bool WillApprenticeBeAtLeast15AtStartOfTraining(ApprenticeshipViewModel model, DateTimeViewModel dob)

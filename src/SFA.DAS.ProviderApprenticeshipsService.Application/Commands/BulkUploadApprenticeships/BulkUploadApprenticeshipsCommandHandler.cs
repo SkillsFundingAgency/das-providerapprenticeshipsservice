@@ -9,13 +9,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUpload
 {
     public sealed class BulkUploadApprenticeshipsCommandHandler : AsyncRequestHandler<BulkUploadApprenticeshipsCommand>
     {
-        private IProviderCommitmentsApi _providerCommitmentsApi;
+        private readonly IProviderCommitmentsApi _providerCommitmentsApi;
 
         public BulkUploadApprenticeshipsCommandHandler(IProviderCommitmentsApi providerCommitmentsApi)
         {
-            if (providerCommitmentsApi  == null)
-                throw new ArgumentNullException(nameof(providerCommitmentsApi));
-
             _providerCommitmentsApi  = providerCommitmentsApi;
         }
 
