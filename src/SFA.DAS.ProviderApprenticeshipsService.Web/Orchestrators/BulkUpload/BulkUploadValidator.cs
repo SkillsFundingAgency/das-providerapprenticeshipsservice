@@ -136,7 +136,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                             ? $"after {trainingProgram.EffectiveFrom.Value.AddMonths(-1):MM yyyy}"
                             : $"before {trainingProgram.EffectiveTo.Value.AddMonths(1):MM yyyy}";
 
-                        // this actually associates the error with the start date field
                         return new ValidationMessage(_validationText.LearnStartDateNotValidForTrainingCourse, suffix);
                     }
                 }
