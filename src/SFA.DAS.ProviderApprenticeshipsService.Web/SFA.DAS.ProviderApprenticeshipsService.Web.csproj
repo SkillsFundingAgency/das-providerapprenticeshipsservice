@@ -209,11 +209,11 @@
     <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.11.75\lib\net462\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=2.1.549.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.2.1.549\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=2.1.564.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.2.1.564\lib\net462\SFA.DAS.Commitments.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.1.549.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.1.549\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.1.564.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.1.564\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Common.Domain, Version=1.4.43.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.43\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
@@ -445,6 +445,7 @@
     <Compile Include="Attributes\ProviderUkPrnCheckActionFilter.cs" />
     <Compile Include="Attributes\ProviderUkPrnCheckAttribute.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AgreementController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BulkUploadController.cs" />
     <Compile Include="Controllers\CommitmentController.cs" />
@@ -472,6 +473,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AcknowledgementViewModel.cs" />
+    <Compile Include="Models\Agreement\AgreementsViewModel.cs" />
+    <Compile Include="Models\Agreement\CommitmentAgreement.cs" />
     <Compile Include="Models\ApprenticeshipDetailsViewModel.cs" />
     <Compile Include="Models\AgreementNotSignedViewModel.cs" />
     <Compile Include="Models\ApprenticeshipFiltersViewModel.cs" />
@@ -523,6 +526,9 @@
     <Compile Include="Models\VerificationOfEmployerViewModel.cs" />
     <Compile Include="Models\ViewModelBase.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
+    <Compile Include="Orchestrators\AgreementOrchestrator.cs" />
+    <Compile Include="Orchestrators\Mappers\AgreementMapper.cs" />
+    <Compile Include="Orchestrators\Mappers\IAgreementMapper.cs" />
     <Compile Include="Validation\ApprovedApprenticeshipValidator.cs" />
     <Compile Include="Validation\IApprovedApprenticeshipValidator.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
@@ -756,6 +762,7 @@
     <Content Include="Views\DataLock\RequestRestart.cshtml" />
     <Content Include="Views\DataLock\ConfirmRestart.cshtml" />
     <Content Include="Views\Commitment\TransferFunded.cshtml" />
+    <Content Include="Views\Agreement\Agreements.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
