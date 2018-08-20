@@ -21,11 +21,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
 
         public string ErrorCode { get; }
 
-        //public string ErrorCode(params object[] args)
-        //{
-        //    return string.Format(ErrorCode, args);
-        //}
-
         public static string ExtractBannerMessage(string errorMessage)
         {
             var seperatorIndex = errorMessage.IndexOf("||");
