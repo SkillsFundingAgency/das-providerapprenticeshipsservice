@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
@@ -45,6 +46,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var errors = _sut.ValidateRecords(GetTestData(), new List<ITrainingProgramme>()).ToList();
             errors.Count.Should().Be(1);
             errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("Row:1 - Not a valid <strong>Training code</strong>");
+        }
+
+        [TestCase(2018, 12, 2020, 01, "This training course is only available to apprentices with a start date after 05 2019")]
+        [TestCase(2019, 04, 2020, 01, "This training course is only available to apprentices with a start date after 05 2019")]
+        [TestCase(2019, 05, 2020, 01, "This training course is only available to apprentices with a start date after 05 2019")]
+        [TestCase(2020, 10, 2021, 09, "This training course is only available to apprentices with a start date before 10 2020")]
+        [TestCase(2020, 11, 2021, 09, "This training course is only available to apprentices with a start date before 10 2020")]
+        [TestCase(2021, 01, 2021, 09, "This training course is only available to apprentices with a start date before 10 2020")]
+        public void AndTrainingCodeIsPendingThenValidationFails(int existingStartYear, int existingStartMonth, int existingEndYear, int existingEndMonth, string expectedErrorMessage)
+        {
+            var errors = _sut.ValidateRecords(GetTestData(existingStartYear, existingStartMonth, existingEndYear, existingEndMonth), new List<ITrainingProgramme>
+            {
+                new Standard
+                {
+                    EffectiveFrom = new DateTime(2019,6,1),
+                    EffectiveTo = new DateTime(2020,9,1),
+                    Id = "2"
+                }
+            }).ToList();
+
+            errors.Count.Should().Be(1);
+            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo($"Row:1 - {expectedErrorMessage}");
         }
 
         [Test]
@@ -118,14 +141,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                        };
         }
 
-        private IEnumerable<ApprenticeshipUploadModel> GetTestData()
+        private IEnumerable<ApprenticeshipUploadModel> GetTestData(int existingStartYear = 2120, int existingStartMonth = 8, int existingEndYear = 2125, int existingEndMonth = 12)
         {
             var apprenticeships = new List<ApprenticeshipViewModel>
             {
                 new ApprenticeshipViewModel
                 {
                     FirstName = "Bob", LastName = "The cat", DateOfBirth = new DateTimeViewModel(8, 12, 1998), TrainingCode = "2", ULN = "1234567890", ProgType = 25,
-                    StartDate = new DateTimeViewModel(null, 8, 2120), EndDate = new DateTimeViewModel(null, 12, 2125), Cost = "15000", EmployerRef = "Abba123"
+                    StartDate = new DateTimeViewModel(null, existingStartMonth, existingStartYear), EndDate = new DateTimeViewModel(null, existingEndMonth, existingEndYear), Cost = "15000", EmployerRef = "Abba123"
                 }
             };
             var records = new List<CsvRecord>

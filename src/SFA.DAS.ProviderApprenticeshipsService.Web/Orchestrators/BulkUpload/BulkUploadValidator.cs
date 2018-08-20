@@ -116,10 +116,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             // and the "Training_01" errorCode below already existed, and we can't change existing error codes, as external systems will probably rely on them.
             // also the different implementations of IApprenticeshipValidationErrorText contain their own subset of error messages so not entirely convinced we need the interface
             // and it's not injected as a dependency either, so might be best to just have seperate centralised validation message containers
-            // but don't want to tackle it as a refactor now
+            // but don't want to tackle it as a refactor now as the risk/reward ratio is not good
 
-            // we take our cue from the existing validation and only return the first error
-            //todo: the course not active error is recorded against startdate, so if we do only want 1 error then we shouldn't check this if there's already a start date
             if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
             {
                 // not as safe as single, but quicker
