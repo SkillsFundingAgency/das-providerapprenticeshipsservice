@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.ProviderApprenticeshipsService.Domain;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderAgreement
 {
     public class GetProviderAgreementQueryResponse
     {
