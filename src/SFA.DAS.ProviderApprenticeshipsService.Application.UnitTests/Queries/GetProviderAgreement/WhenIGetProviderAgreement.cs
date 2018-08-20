@@ -1,23 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using FluentAssertions;
-
 using Moq;
-
 using NUnit.Framework;
-
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAgreement;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.GetAgreement
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.GetProviderAgreement
 {
     [TestFixture]
-    public class WhenIGetAgreement
+    public class WhenIGetProviderAgreement
     {
         private Mock<IAgreementStatusQueryRepository> _agreementRepository;
         private GetProviderAgreementQueryHandler _handler;
