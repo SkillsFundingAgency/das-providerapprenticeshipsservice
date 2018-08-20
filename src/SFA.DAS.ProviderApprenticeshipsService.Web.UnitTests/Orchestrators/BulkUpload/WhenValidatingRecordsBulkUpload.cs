@@ -54,7 +54,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [TestCase(2020, 10, "This training course is only available to apprentices with a start date before 10 2020", Description = "Start date just after")]
         [TestCase(2020, 11, "This training course is only available to apprentices with a start date before 10 2020", Description = "Start date after")]
         [TestCase(2021, 01, "This training course is only available to apprentices with a start date before 10 2020", Description = "Start date after (month numerically lower)")]
-        public void AndTrainingCodeIsPendingThenValidationFails(int existingStartYear, int existingStartMonth, string expectedErrorMessage)
+        public void AndTrainingCodeIsPendingOrExpiredThenValidationFails(int existingStartYear, int existingStartMonth, string expectedErrorMessage)
         {
             var errors = _sut.ValidateRecords(GetTestData(existingStartYear, existingStartMonth, 2021, 09), new List<ITrainingProgramme>
             {
@@ -68,6 +68,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
 
             errors.Count.Should().Be(1);
             errors.FirstOrDefault().ToString().ShouldBeEquivalentTo($"Row:1 - {expectedErrorMessage}");
+        }
+
+        [TestCase(2019, 06, Description = "Start date first valid")]
+        [TestCase(2019, 07, Description = "Start date valid")]
+        [TestCase(2019, 09, Description = "Start date last valid")]
+        public void AndTrainingCodeIsActiveThenValidationPasses(int existingStartYear, int existingStartMonth)
+        {
+            var errors = _sut.ValidateRecords(GetTestData(existingStartYear, existingStartMonth, 2021, 09), new List<ITrainingProgramme>
+            {
+                new Standard
+                {
+                    EffectiveFrom = new DateTime(2019,6,1),
+                    EffectiveTo = new DateTime(2020,9,1),
+                    Id = "2"
+                }
+            }).ToList();
+
+            errors.Count.Should().Be(0);
         }
 
         [Test]
