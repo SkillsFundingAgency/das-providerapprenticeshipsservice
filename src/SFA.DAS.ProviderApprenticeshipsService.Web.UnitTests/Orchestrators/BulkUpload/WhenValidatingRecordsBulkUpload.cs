@@ -48,15 +48,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("Row:1 - Not a valid <strong>Training code</strong>");
         }
 
-        [TestCase(2018, 12, 2020, 01, "This training course is only available to apprentices with a start date after 05 2019")]
-        [TestCase(2019, 04, 2020, 01, "This training course is only available to apprentices with a start date after 05 2019")]
-        [TestCase(2019, 05, 2020, 01, "This training course is only available to apprentices with a start date after 05 2019")]
-        [TestCase(2020, 10, 2021, 09, "This training course is only available to apprentices with a start date before 10 2020")]
-        [TestCase(2020, 11, 2021, 09, "This training course is only available to apprentices with a start date before 10 2020")]
-        [TestCase(2021, 01, 2021, 09, "This training course is only available to apprentices with a start date before 10 2020")]
-        public void AndTrainingCodeIsPendingThenValidationFails(int existingStartYear, int existingStartMonth, int existingEndYear, int existingEndMonth, string expectedErrorMessage)
+        [TestCase(2018, 12, "This training course is only available to apprentices with a start date after 05 2019", Description = "Start date before (month numerically higher)")]
+        [TestCase(2019, 04, "This training course is only available to apprentices with a start date after 05 2019", Description = "Start date before")]
+        [TestCase(2019, 05, "This training course is only available to apprentices with a start date after 05 2019", Description = "Start date just before")]
+        [TestCase(2020, 10, "This training course is only available to apprentices with a start date before 10 2020", Description = "Start date just after")]
+        [TestCase(2020, 11, "This training course is only available to apprentices with a start date before 10 2020", Description = "Start date after")]
+        [TestCase(2021, 01, "This training course is only available to apprentices with a start date before 10 2020", Description = "Start date after (month numerically lower)")]
+        public void AndTrainingCodeIsPendingThenValidationFails(int existingStartYear, int existingStartMonth, string expectedErrorMessage)
         {
-            var errors = _sut.ValidateRecords(GetTestData(existingStartYear, existingStartMonth, existingEndYear, existingEndMonth), new List<ITrainingProgramme>
+            var errors = _sut.ValidateRecords(GetTestData(existingStartYear, existingStartMonth, 2021, 09), new List<ITrainingProgramme>
             {
                 new Standard
                 {
