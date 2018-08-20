@@ -17,7 +17,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
     [TestFixture]
     public class WhenValidatingRecordsBulkUpload
     {
-        BulkUploadValidator _sut;
+        private BulkUploadValidator _sut;
 
         [SetUp]
         public void SetUp()
@@ -41,11 +41,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         }
 
         [Test]
-        public void MissingTrainingCode()
+        public void AndMissingTrainingCodeThenFailsValidation()
         {
             var errors = _sut.ValidateRecords(GetTestData(), new List<ITrainingProgramme>()).ToList();
             errors.Count.Should().Be(1);
             errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("Row:1 - Not a valid <strong>Training code</strong>");
+        }
+
+        [Test]
+        public void AndMissingStartDateThenFailsValidation()
+        {
+            var testData = GetTestData();
+            testData.First().ApprenticeshipViewModel.StartDate = null;
+
+            var errors = _sut.ValidateRecords(testData, TrainingProgrammes()).ToList();
+            errors.Count.Should().Be(1);
+            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("Row:1 - You must enter the <strong>start date</strong>, for example 2017-09");
         }
 
         [TestCase(2018, 12, "This training course is only available to apprentices with a start date after 05 2019", Description = "Start date before (month numerically higher)")]
