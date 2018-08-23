@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Validators;
 using MediatR;
@@ -102,7 +103,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         {
             RuleFor(x => x.StartDate)
                 .Cascade(CascadeMode.StopOnFirstFailure)
-                .Must(TrainingCourseValidOnStartDate)
+                .MustAsync(async (viewModel, startDate, context, cancellationToken) => await TrainingCourseValidOnStartDate(viewModel, startDate, context))
                     .WithErrorCode(ValidationText.LearnStartDateNotValidForTrainingCourse.ErrorCode)
                     .WithMessage(ValidationText.LearnStartDateNotValidForTrainingCourse.Text)
                 .NotNull().WithMessage(ValidationText.LearnStartDate01.Text).WithErrorCode(ValidationText.LearnStartDate01.ErrorCode)
@@ -237,21 +238,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         private bool ValidateDateOfBirth(DateTimeViewModel date)
         {
             // Check the day has value as the view model supports just month and year entry
-            if (date.DateTime == null || !date.Day.HasValue) return false;
-
-            return true;
+            return date.DateTime != null && date.Day.HasValue;
         }
 
         private bool BeValidTenDigitUlnNumber(string uln)
         {
             var result = _ulnValidator.Validate(uln);
 
-            if (result == UlnValidationResult.IsInValidTenDigitUlnNumber || result == UlnValidationResult.IsEmptyUlnNumber)
-            {
-                return false;
-            }
-
-            return true;
+            return result != UlnValidationResult.IsInValidTenDigitUlnNumber && result != UlnValidationResult.IsEmptyUlnNumber;
         }
 
         private bool BeValidUlnNumber(string uln)
@@ -259,27 +253,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             return _ulnValidator.Validate(uln) != UlnValidationResult.IsInvalidUln;
         }
 
-        private bool TrainingCourseValidOnStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel startDate, PropertyValidatorContext context)
+        private async Task<bool> TrainingCourseValidOnStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel startDate, PropertyValidatorContext context)
         {
             if (string.IsNullOrWhiteSpace(viewModel.TrainingCode) || (!startDate.DateTime.HasValue))
-            {
                 return true;
-            }
 
-            var result = Mediator.SendAsync(new GetTrainingProgrammesQueryRequest
+            var result = await Mediator.SendAsync(new GetTrainingProgrammesQueryRequest
             {
                 EffectiveDate = null,
                 IncludeFrameworks = true
-            }).Result;
+            });
 
             var course = result.TrainingProgrammes.Single(x => x.Id == viewModel.TrainingCode);
 
             var courseStatus = course.GetStatusOn(startDate.DateTime.Value);
 
             if (courseStatus == TrainingProgrammeStatus.Active)
-            {
                 return true;
-            }
 
             var suffix = courseStatus == TrainingProgrammeStatus.Pending
                 ? $"after {course.EffectiveFrom.Value.AddMonths(-1):MM yyyy}"
