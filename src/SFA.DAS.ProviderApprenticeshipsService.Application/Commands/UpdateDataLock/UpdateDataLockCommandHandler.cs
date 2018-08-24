@@ -1,9 +1,7 @@
 using System;
 using System.Threading.Tasks;
-
 using FluentValidation;
 using MediatR;
-
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.NLog.Logger;
@@ -12,24 +10,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateData
 {
     public sealed class UpdateDataLockCommandHandler : AsyncRequestHandler<UpdateDataLockCommand>
     {
-        private readonly AbstractValidator<UpdateDataLockCommand> _validator;
-
+        private readonly IValidator<UpdateDataLockCommand> _validator;
         private readonly IProviderCommitmentsApi _commitmentsApi;
-
         private readonly ILog _logger;
 
         public UpdateDataLockCommandHandler(
-            AbstractValidator<UpdateDataLockCommand> validator,
+            IValidator<UpdateDataLockCommand> validator,
             IProviderCommitmentsApi commitmentsApi,
             ILog logger)
         {
-            if (validator == null)
-                throw new ArgumentNullException(nameof(validator));
-            if (commitmentsApi == null)
-                throw new ArgumentNullException(nameof(commitmentsApi));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
             _validator = validator;
             _commitmentsApi = commitmentsApi;
             _logger = logger;

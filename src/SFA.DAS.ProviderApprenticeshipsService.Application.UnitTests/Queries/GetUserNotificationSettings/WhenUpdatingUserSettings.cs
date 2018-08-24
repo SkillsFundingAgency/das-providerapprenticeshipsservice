@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-
 using FluentAssertions;
-
 using FluentValidation;
 using FluentValidation.Results;
 using Moq;
 using NUnit.Framework;
-
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
@@ -18,9 +15,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
     {
         private UpdateUserNotificationSettingsHandler _sut;
         private Mock<IUserSettingsRepository> _mockSettingsRepo;
-        private Mock<AbstractValidator<UpdateUserNotificationSettingsCommand>> _mockValidator;
+        private Mock<IValidator<UpdateUserNotificationSettingsCommand>> _mockValidator;
 
-        const string UserRef = "userRef";
+        private const string UserRef = "userRef";
 
         private UpdateUserNotificationSettingsCommand _command;
 
@@ -28,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         public void SetUp()
         {
             _mockSettingsRepo = new Mock<IUserSettingsRepository>();
-            _mockValidator = new Mock<AbstractValidator<UpdateUserNotificationSettingsCommand>>();
+            _mockValidator = new Mock<IValidator<UpdateUserNotificationSettingsCommand>>();
 
             _sut = new UpdateUserNotificationSettingsHandler(_mockSettingsRepo.Object, _mockValidator.Object, Mock.Of<IProviderCommitmentsLogger>());
 

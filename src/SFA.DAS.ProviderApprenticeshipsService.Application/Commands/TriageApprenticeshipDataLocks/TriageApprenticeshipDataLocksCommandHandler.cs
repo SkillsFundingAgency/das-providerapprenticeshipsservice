@@ -10,15 +10,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.TriageAppr
 {
     public class TriageApprenticeshipDataLocksCommandHandler : AsyncRequestHandler<TriageApprenticeshipDataLocksCommand>
     {
-        private IProviderCommitmentsApi _commitmentsApi;
-        private readonly AbstractValidator<TriageApprenticeshipDataLocksCommand> _validator;
+        private readonly IProviderCommitmentsApi _commitmentsApi;
+        private readonly IValidator<TriageApprenticeshipDataLocksCommand> _validator;
         private readonly ILog _logger;
-
 
         public TriageApprenticeshipDataLocksCommandHandler(
             IProviderCommitmentsApi commitmentsApi, 
             ILog logger, 
-            AbstractValidator<TriageApprenticeshipDataLocksCommand> validator)
+            IValidator<TriageApprenticeshipDataLocksCommand> validator)
         {
             _commitmentsApi = commitmentsApi;
             _logger = logger;
@@ -29,9 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.TriageAppr
         {
             var validationResult = _validator.Validate(command);
             if (!validationResult.IsValid)
-            {
                 throw new ValidationException(validationResult.Errors);
-            }
 
             var triageSubmission = new DataLockTriageSubmission
             {

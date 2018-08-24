@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
-
 using FluentValidation;
 using MediatR;
-
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUserNotificationSettings
@@ -10,14 +8,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUser
     public class UpdateUserNotificationSettingsHandler : AsyncRequestHandler<UpdateUserNotificationSettingsCommand>
     {
         private readonly IUserSettingsRepository _userSettingsRepository;
-
-        private readonly AbstractValidator<UpdateUserNotificationSettingsCommand> _validator;
-
+        private readonly IValidator<UpdateUserNotificationSettingsCommand> _validator;
         private readonly IProviderCommitmentsLogger _logger;
 
         public UpdateUserNotificationSettingsHandler(
             IUserSettingsRepository userSettingsRepository, 
-            AbstractValidator<UpdateUserNotificationSettingsCommand> validator,
+            IValidator<UpdateUserNotificationSettingsCommand> validator,
             IProviderCommitmentsLogger logger)
         {
             _userSettingsRepository = userSettingsRepository;

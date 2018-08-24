@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -15,9 +14,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateAppr
 
         public CreateApprenticeshipCommandHandler(IProviderCommitmentsApi commitmentsApi)
         {
-            if (commitmentsApi == null)
-                throw new ArgumentNullException(nameof(commitmentsApi));
             _commitmentsApi = commitmentsApi;
+            //todo: di validator
             _validator = new CreateApprenticeshipCommandValidator();
         }
 

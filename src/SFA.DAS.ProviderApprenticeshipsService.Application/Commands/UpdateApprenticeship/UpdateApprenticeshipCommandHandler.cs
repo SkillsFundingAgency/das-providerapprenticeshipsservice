@@ -1,11 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
-
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateApprenticeship
 {
@@ -16,9 +14,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateAppr
 
         public UpdateApprenticeshipCommandHandler(IProviderCommitmentsApi commitmentsApi)
         {
-            if (commitmentsApi == null)
-                throw new ArgumentNullException(nameof(commitmentsApi));
             _commitmentsApi = commitmentsApi;
+            //todo: di
             _validator = new UpdateApprenticeshipCommandValidator();
         }
 

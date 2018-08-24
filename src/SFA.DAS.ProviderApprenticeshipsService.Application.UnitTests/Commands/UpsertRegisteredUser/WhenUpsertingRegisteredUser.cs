@@ -15,13 +15,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     public class WhenUpsertingRegisteredUser
     {
         private UpsertRegisteredUserCommandHandler _handler;
-        private Mock<UpsertRegisteredUserCommandValidator> _validator;
+        private Mock<IValidator<UpsertRegisteredUserCommand>> _validator;
         private Mock<IUserRepository> _repository;
 
         [SetUp]
         public void Arrange()
         {
-            _validator = new Mock<UpsertRegisteredUserCommandValidator>();
+            _validator = new Mock<IValidator<UpsertRegisteredUserCommand>>();
             _validator.Setup(x => x.Validate(It.IsAny<UpsertRegisteredUserCommand>()))
                 .Returns(new ValidationResult());
 
@@ -30,19 +30,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 .Returns(() => Task.FromResult(new Unit()));
 
             _handler = new UpsertRegisteredUserCommandHandler(_validator.Object, _repository.Object);
-        }
-
-        [Test]
-        public async Task ThenTheCommandIsValidated()
-        {
-            //Arrange
-            var command = new UpsertRegisteredUserCommand();
-
-            //Act
-            await _handler.Handle(command);
-
-            //Assert
-            _validator.Verify(x => x.Validate(It.IsAny<UpsertRegisteredUserCommand>()), Times.Once);
         }
 
         [Test]
@@ -62,7 +49,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             //Act & Assert
             Assert.ThrowsAsync<ValidationException>(() =>_handler.Handle(command));
         }
-    
 
         [Test]
         public async Task ThenTheRepositoryIsCalledToUpsertRegisteredUser()

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 
@@ -12,15 +11,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteAppr
     public sealed class DeleteApprenticeshipCommandHandler : AsyncRequestHandler<DeleteApprenticeshipCommand>
     {
         private readonly IProviderCommitmentsApi _commitmentsApi;
-        private readonly AbstractValidator<DeleteApprenticeshipCommand> _validator;
+        private readonly IValidator<DeleteApprenticeshipCommand> _validator;
 
-        public DeleteApprenticeshipCommandHandler(AbstractValidator<DeleteApprenticeshipCommand> validator, IProviderCommitmentsApi commitmentsApi)
+        public DeleteApprenticeshipCommandHandler(IValidator<DeleteApprenticeshipCommand> validator, IProviderCommitmentsApi commitmentsApi)
         {
-            if (validator == null)
-                throw new ArgumentNullException(nameof(validator));
-            if (commitmentsApi == null)
-                throw new ArgumentNullException(nameof(commitmentsApi));
-
             _validator = validator;
             _commitmentsApi = commitmentsApi;
         }
