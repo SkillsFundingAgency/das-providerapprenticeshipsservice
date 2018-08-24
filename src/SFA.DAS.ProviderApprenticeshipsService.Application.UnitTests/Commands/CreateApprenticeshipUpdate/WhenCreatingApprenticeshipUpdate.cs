@@ -28,9 +28,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             _validator.Setup(x => x.Validate(It.IsAny<CreateApprenticeshipUpdateCommand>()))
                 .Returns(new ValidationResult());
 
-            //_validator.Setup(x => x.ValidateAsync(It.IsAny<CreateApprenticeshipUpdateCommand>(), It.IsAny<CancellationToken>()))
-            //    .ReturnsAsync(new ValidationResult());
-
             _handler = new CreateApprenticeshipUpdateCommandHandler(_commitmentsApi.Object, _validator.Object);
         }
 
