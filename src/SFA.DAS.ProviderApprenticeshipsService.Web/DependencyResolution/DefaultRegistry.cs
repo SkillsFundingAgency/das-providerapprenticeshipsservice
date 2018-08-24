@@ -61,12 +61,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             Scan(
                 scan => {
                     scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
-                    scan.RegisterConcreteTypesAgainstTheFirstInterface();
-                    scan.ConnectImplementationsToTypesClosing(typeof(AbstractValidator<>)).OnAddedPluginTypes(t => t.Singleton());
+                    scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(t => t.Singleton());
                     scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
                     scan.ConnectImplementationsToTypesClosing(typeof(IAsyncRequestHandler<,>));
                     scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
                     scan.ConnectImplementationsToTypesClosing(typeof(IAsyncNotificationHandler<>));
+                    scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 });
 
             var config = GetConfiguration();

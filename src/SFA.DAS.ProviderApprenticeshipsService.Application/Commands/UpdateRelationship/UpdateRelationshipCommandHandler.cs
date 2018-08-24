@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
-
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 
@@ -10,10 +9,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateRela
     public class UpdateRelationshipCommandHandler : AsyncRequestHandler<UpdateRelationshipCommand>
     {
         private readonly IRelationshipApi _relationshipApi;
+        private readonly IValidator<UpdateRelationshipCommand> _validator;
 
-        private readonly AbstractValidator<UpdateRelationshipCommand> _validator;
-
-        public UpdateRelationshipCommandHandler(IRelationshipApi relationship, AbstractValidator<UpdateRelationshipCommand> validator)
+        public UpdateRelationshipCommandHandler(IRelationshipApi relationship, IValidator<UpdateRelationshipCommand> validator)
         {
             _relationshipApi = relationship;
             _validator = validator;
@@ -22,7 +20,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateRela
         protected override async Task HandleCore(UpdateRelationshipCommand message)
         {
             var validationResult = _validator.Validate(message);
-
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
 

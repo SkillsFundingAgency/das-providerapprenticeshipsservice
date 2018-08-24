@@ -12,17 +12,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteComm
 {
     public sealed class DeleteCommitmentCommandHandler : AsyncRequestHandler<DeleteCommitmentCommand>
     {
-        private readonly AbstractValidator<DeleteCommitmentCommand> _validator;
-
+        private readonly IValidator<DeleteCommitmentCommand> _validator;
         private readonly IProviderCommitmentsApi _commitmentsApi;
 
-        public DeleteCommitmentCommandHandler(AbstractValidator<DeleteCommitmentCommand> validator, IProviderCommitmentsApi commitmentsApi)
+        public DeleteCommitmentCommandHandler(IValidator<DeleteCommitmentCommand> validator, IProviderCommitmentsApi commitmentsApi)
         {
-            if (validator == null)
-                throw new ArgumentNullException(nameof(validator));
-            if (commitmentsApi == null)
-                throw new ArgumentNullException(nameof(commitmentsApi));
-
             _validator = validator;
             _commitmentsApi = commitmentsApi;
         }

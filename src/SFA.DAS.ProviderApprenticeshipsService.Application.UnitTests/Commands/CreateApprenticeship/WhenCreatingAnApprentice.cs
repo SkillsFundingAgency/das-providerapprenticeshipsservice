@@ -20,6 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         public void Setup()
         {
             _mockCommitmentsApi = new Mock<IProviderCommitmentsApi>();
+
             _exampleValidCommand = new CreateApprenticeshipCommand
             {
                 UserId = "user123",
@@ -29,7 +30,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 UserDisplayName = "Bob"
             };
 
-            _handler = new CreateApprenticeshipCommandHandler(_mockCommitmentsApi.Object);
+            _handler = new CreateApprenticeshipCommandHandler(
+                _mockCommitmentsApi.Object, new CreateApprenticeshipCommandValidator());
         }
 
         [Test]

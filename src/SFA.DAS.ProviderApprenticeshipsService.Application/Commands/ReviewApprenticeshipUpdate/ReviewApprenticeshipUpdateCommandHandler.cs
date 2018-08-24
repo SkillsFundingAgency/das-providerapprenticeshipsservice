@@ -12,15 +12,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewAppr
     public sealed class ReviewApprenticeshipUpdateCommandHandler : AsyncRequestHandler<ReviewApprenticeshipUpdateCommand>
     {
         private readonly IProviderCommitmentsApi _commitmentsApi;
-        private readonly AbstractValidator<ReviewApprenticeshipUpdateCommand> _validator;
+        private readonly IValidator<ReviewApprenticeshipUpdateCommand> _validator;
 
-        public ReviewApprenticeshipUpdateCommandHandler(AbstractValidator<ReviewApprenticeshipUpdateCommand> validator, IProviderCommitmentsApi commitmentsApi)
+        public ReviewApprenticeshipUpdateCommandHandler(IValidator<ReviewApprenticeshipUpdateCommand> validator, IProviderCommitmentsApi commitmentsApi)
         {
-            if (validator == null)
-                throw new ArgumentNullException(nameof(validator));
-            if (commitmentsApi == null)
-                throw new ArgumentNullException(nameof(commitmentsApi));
-
             _validator = validator;
             _commitmentsApi = commitmentsApi;
         }
@@ -29,9 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewAppr
         {
             var validationResult = _validator.Validate(command);
             if (!validationResult.IsValid)
-            {
                 throw new ValidationException(validationResult.Errors);
-            }
 
             var submission = new ApprenticeshipUpdateSubmission
             {

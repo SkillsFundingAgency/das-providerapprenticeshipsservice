@@ -12,15 +12,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoAppren
     public sealed class UndoApprenticeshipUpdateCommandHandler : AsyncRequestHandler<UndoApprenticeshipUpdateCommand>
     {
         private readonly IProviderCommitmentsApi _commitmentsApi;
-        private readonly AbstractValidator<UndoApprenticeshipUpdateCommand> _validator;
+        private readonly IValidator<UndoApprenticeshipUpdateCommand> _validator;
 
-        public UndoApprenticeshipUpdateCommandHandler(AbstractValidator<UndoApprenticeshipUpdateCommand> validator, IProviderCommitmentsApi commitmentsApi)
+        public UndoApprenticeshipUpdateCommandHandler(IValidator<UndoApprenticeshipUpdateCommand> validator, IProviderCommitmentsApi commitmentsApi)
         {
-            if (validator == null)
-                throw new ArgumentNullException(nameof(validator));
-            if(commitmentsApi == null)
-                throw new ArgumentNullException(nameof(commitmentsApi));
-
             _validator = validator;
             _commitmentsApi = commitmentsApi;
         }
@@ -29,9 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoAppren
         {
             var validationResult = _validator.Validate(command);
             if (!validationResult.IsValid)
-            {
                 throw new ValidationException(validationResult.Errors);
-            }
 
             var submission = new ApprenticeshipUpdateSubmission
             {
