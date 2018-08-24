@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
-
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
@@ -10,19 +10,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateAppr
     public class CreateApprenticeshipCommandHandler : AsyncRequestHandler<CreateApprenticeshipCommand>
     {
         private readonly IProviderCommitmentsApi _commitmentsApi;
-        private readonly CreateApprenticeshipCommandValidator _validator;
+        private readonly IValidator<CreateApprenticeshipCommand> _validator;
 
-        public CreateApprenticeshipCommandHandler(IProviderCommitmentsApi commitmentsApi)
+        public CreateApprenticeshipCommandHandler(
+            IProviderCommitmentsApi commitmentsApi,
+            IValidator<CreateApprenticeshipCommand> validator)
         {
             _commitmentsApi = commitmentsApi;
-            //todo: di validator
-            _validator = new CreateApprenticeshipCommandValidator();
+            _validator = validator;
         }
 
         protected override async Task HandleCore(CreateApprenticeshipCommand message)
         {
             var validationResult = _validator.Validate(message);
-
             if (!validationResult.IsValid)
                 throw new InvalidRequestException(validationResult.Errors);
 

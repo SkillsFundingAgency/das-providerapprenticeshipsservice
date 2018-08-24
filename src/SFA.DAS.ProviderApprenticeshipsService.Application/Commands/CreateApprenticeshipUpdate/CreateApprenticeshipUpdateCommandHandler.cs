@@ -13,7 +13,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateAppr
         private readonly IProviderCommitmentsApi _commitmentsApi;
         private readonly IValidator<CreateApprenticeshipUpdateCommand> _validator;
 
-        public CreateApprenticeshipUpdateCommandHandler(IProviderCommitmentsApi commitmentsApi, IValidator<CreateApprenticeshipUpdateCommand> validator)
+        public CreateApprenticeshipUpdateCommandHandler(
+            IProviderCommitmentsApi commitmentsApi,
+            IValidator<CreateApprenticeshipUpdateCommand> validator)
         {
             _commitmentsApi = commitmentsApi;
             _validator = validator;

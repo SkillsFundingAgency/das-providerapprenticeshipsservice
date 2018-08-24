@@ -25,9 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUser
         {
             var validationResult = _validator.Validate(command);
             if (!validationResult.IsValid)
-            {
                 throw new InvalidRequestException(validationResult.Errors);
-            }
 
             await _userSettingsRepository.UpdateUserSettings(command.UserRef, command.ReceiveNotifications);
 
