@@ -11,9 +11,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string HashedApprenticeshipId { get; set; }
         public string ApprenticeshipName { get; internal set; }
         public DateTime? ApprenticeDateOfBirth { get; set; }
-        public decimal? Cost { get; internal set; }
+        public decimal? Cost { get; set; }
         public DateTime? EndDate { get; internal set; }
-        public DateTime? StartDate { get; internal set; }
+        public DateTime? StartDate { get; set; }
         public string TrainingCode { get; internal set; }
         public string TrainingName { get; internal set; }
         public string ULN { get; internal set; }
