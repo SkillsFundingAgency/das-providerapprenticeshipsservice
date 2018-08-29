@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
+@using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
@@ -150,7 +151,6 @@
                 <hr class="hr-bottom">
             </div>
         </div>
-
                     }
 
     <div class="grid-row">
@@ -211,10 +211,9 @@
                                     @($"{group.ApprenticeshipsOverFundingLimit} {_addS("apprenticeship", group.ApprenticeshipsOverFundingLimit)} above funding band maximum")
                                 </p>
                                 <p>
-                                    The costs are above the £@group.TrainingProgramme.MaxFunding.ToString("N0") <a target="_blank" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">maximum value of the funding band</a> for this apprenticeship. You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.
+                                    The costs are above the@(group.CommonFundingCap != null ? $" £{group.CommonFundingCap:N0}" : "") <a target="_blank" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">maximum value of the funding band</a> for this apprenticeship. You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.
                                 </p>
                             </div>
-
                           }
                             </div>
 
@@ -272,7 +271,11 @@
                                             <span class="missing">&ndash;</span>
                                         </td>
                                     }
-                                    @if (group.TrainingProgramme != null && apprenticeship.Cost.HasValue && apprenticeship.Cost > group.TrainingProgramme.MaxFunding && !Model.Errors.Any())
+                                    @if (group.TrainingProgramme != null 
+                                         && apprenticeship.Cost.HasValue 
+                                         && apprenticeship.StartDate.HasValue
+                                         && apprenticeship.Cost > group.TrainingProgramme.FundingCapOn(apprenticeship.StartDate.Value)
+                                         && !Model.Errors.Any())
                                     {
                                         <td class="funding-cap-alert">
                                             <a href="#max-funding-group-@group.GroupId" aria-label="Cost is above the maximum funding band" aria-describedby="max-funding-group-@group.GroupId" title="Cost is above the maximum funding band">@FormatCost(apprenticeship.Cost)</a>
@@ -289,7 +292,7 @@
                                         @if (Model.IsReadOnly)
                                         {
                                             <a href="@Url.Action("View", new {Model.HashedCommitmentId, apprenticeship.HashedApprenticeshipId})"
-                                               title="Edit @apprenticeship.ApprenticeshipName" aria-label="Edit @apprenticeship.ApprenticeshipName">View</a>
+                                               title="View @apprenticeship.ApprenticeshipName" aria-label="View @apprenticeship.ApprenticeshipName">View</a>
                                         }
                                         else
                                         {
@@ -301,9 +304,7 @@
                             }
                         </tbody>
                     </table>
-
                 }
-
             </div>
         </div>
     }
