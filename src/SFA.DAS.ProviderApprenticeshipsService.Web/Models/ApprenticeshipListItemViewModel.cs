@@ -17,7 +17,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string TrainingCode { get; internal set; }
         public string TrainingName { get; internal set; }
         public string ULN { get; internal set; }
-        public bool CanBeApprove { get; internal set; }
+        public bool CanBeApproved { get; internal set; }
 
         public IEnumerable<OverlappingApprenticeship> OverlappingApprenticeships { get; set; }
     }

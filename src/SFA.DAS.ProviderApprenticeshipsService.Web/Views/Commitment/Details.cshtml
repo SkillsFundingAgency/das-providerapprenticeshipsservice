@@ -73,8 +73,8 @@
         </div>
         <div class="column-one-third incomplete-apps">
             <div>
-                <h2 class="bold-xlarge">@Model.Apprenticeships.Count(x => !x.CanBeApprove)</h2>
-                <p class="heading-small">Incomplete @_addS("record", Model.Apprenticeships.Count(x => !x.CanBeApprove))</p>
+                <h2 class="bold-xlarge">@Model.Apprenticeships.Count(x => !x.CanBeApproved)</h2>
+                <p class="heading-small">Incomplete @_addS("record", Model.Apprenticeships.Count(x => !x.CanBeApproved))</p>
             </div>
         </div>
         <div class="column-one-third total-cost">
@@ -229,7 +229,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var apprenticeship in group.Apprenticeships.OrderBy(a => a.CanBeApprove))
+                            @foreach (var apprenticeship in group.Apprenticeships.OrderBy(a => a.CanBeApproved))
                             {
                                 <tr>
                                     <td>@GetValueOrDefault(apprenticeship.ApprenticeshipName)</td>
