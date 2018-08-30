@@ -117,6 +117,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         {
             if (model.ApprenticeshipViewModel.StartDate == null)
             {
+                // we pass the field that failed, but that ultimatly gets discarded anyway, so why bother? we could just work with validationmessages
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate01);
             }
 
@@ -130,6 +131,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate02);
             }
             
+            // we could check the start date against the training programme here, but we'd have to pass the trainingprogrammes through the call stack, or refetch them, or make them available another way e.g. static.
+            // none of these choices are appealing, so we'll wait until bulk upload is refactored
 
             return null;
         }
@@ -280,9 +283,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
         private ValidationFailure CreateValidationFailure(string propertyName, ValidationMessage validationMessage)
         {
-            var validationFailure = new ValidationFailure(propertyName, validationMessage.Text);
-            validationFailure.ErrorCode = validationMessage.ErrorCode;
-            return validationFailure;
+            return new ValidationFailure(propertyName, validationMessage.Text) {ErrorCode = validationMessage.ErrorCode};
         }
 
         private bool WillApprenticeBeAtLeast15AtStartOfTraining(ApprenticeshipViewModel model, DateTimeViewModel dob)

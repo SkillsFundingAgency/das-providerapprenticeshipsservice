@@ -45,7 +45,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         }
 
         [Test(Description = "Should return true on PendingChanges overall agreement status isn't EmployerAgreed")]
-        public void CommitmentWithOneProviderAgreed()
+        public async Task CommitmentWithOneProviderAgreed()
         {
             var commitment = new CommitmentView
             {
@@ -61,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _mockMediator = GetMediator(commitment);
             SetUpOrchestrator();
-            var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
+            var result = await _orchestrator.GetCommitmentDetails(1L, "ABBA213");
 
             result.PendingChanges.ShouldBeEquivalentTo(true);
         }
@@ -69,7 +69,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [TestCase(EditStatus.EmployerOnly, true)]
         [TestCase(EditStatus.ProviderOnly, false)]
         [TestCase(EditStatus.Neither, true)]
-        public void ThenCommitmentReadOnlyFlagIsSet(EditStatus editStatus, bool expectedIsReadOnly)
+        public async Task ThenCommitmentReadOnlyFlagIsSet(EditStatus editStatus, bool expectedIsReadOnly)
         {
             var commitment = new CommitmentView
             {
@@ -81,13 +81,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _mockMediator = GetMediator(commitment);
             SetUpOrchestrator();
-            var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
+            var result = await _orchestrator.GetCommitmentDetails(1L, "ABBA213");
 
             result.IsReadOnly.ShouldBeEquivalentTo(expectedIsReadOnly);
         }
 
         [Test]
-        public void ThenFrameworksAreNotRetrievedForCohortsFundedByTransfer()
+        public async Task ThenFrameworksAreNotRetrievedForCohortsFundedByTransfer()
         {
             var commitment = new CommitmentView
             {
@@ -100,13 +100,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _mockMediator = GetMediator(commitment);
             SetUpOrchestrator();
-            var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
+            await _orchestrator.GetCommitmentDetails(1L, "ABBA213");
 
             _mockMediator.Verify(x => x.SendAsync(It.Is<GetTrainingProgrammesQueryRequest>(r => !r.IncludeFrameworks)), Times.Once);
         }
 
         [Test]
-        public void ThenFrameworksAreRetrievedForCohortsNotFundedByTransfer()
+        public async Task ThenFrameworksAreRetrievedForCohortsNotFundedByTransfer()
         {
             var commitment = new CommitmentView
             {
@@ -119,7 +119,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _mockMediator = GetMediator(commitment);
             SetUpOrchestrator();
-            var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
+            await _orchestrator.GetCommitmentDetails(1L, "ABBA213");
 
             _mockMediator.Verify(x => x.SendAsync(It.Is<GetTrainingProgrammesQueryRequest>(r => r.IncludeFrameworks)), Times.Once);
         }

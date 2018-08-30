@@ -54,7 +54,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
         public ValidationMessage LearnStartDate06 =>
             new ValidationMessage("Apprentices funded through a transfer can't start earlier than May 2018", "LearnStartDate_06");
         public ValidationMessage LearnStartDateNotValidForTrainingCourse =>
-            new ValidationMessage("This training course is only available to apprentices with a start date {suffix}||To select this course enter a start date {suffix}", "LearnStartDate_NotValidForTrainingCourse");
+            new ValidationMessage("This training course is only available to apprentices with a start date {0}", "LearnStartDate_NotValidForTrainingCourse");
 
         public ValidationMessage LearnPlanEndDate01 =>
             new ValidationMessage("You must enter the <strong>end date</strong>, for example 2019-02", "LearnPlanEndDate_01");

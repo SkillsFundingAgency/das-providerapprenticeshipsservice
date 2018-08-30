@@ -84,7 +84,7 @@
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Client.0.11.75\lib\net462\SFA.DAS.Apprenticeships.Api.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.11.75\lib\net462\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.11.82\lib\net462\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Commitments.Api.Client, Version=2.1.564.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.2.1.564\lib\net462\SFA.DAS.Commitments.Api.Client.dll</HintPath>
@@ -178,7 +178,7 @@
     <Compile Include="Commands\UpsertRegisteredUser\WhenUpsertingRegisteredUser.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\WhenValidatingCommand.cs" />
     <Compile Include="Extensions\DateTimeExtensions\WhenGettingFirstOfMonth.cs" />
-    <Compile Include="Extensions\ITrainingProgrammeExtensionsTest\WhenDetermingWhetherACourseIsActive.cs" />
+    <Compile Include="Extensions\ITrainingProgrammeExtensionsTest\WhenDeterminingWhetherACourseIsActive.cs" />
     <Compile Include="Extensions\ITrainingProgrammeExtensionsTest\WhenDeterminingFundingCap.cs" />
     <Compile Include="Extensions\ITrainingProgrammeExtensionsTest\WhenDeterminingTheStatusOfACourseOnSpecificDate.cs" />
     <Compile Include="Mappers\ApprenticeshipInfoServiceMapperTests\WhenIMapAFramework.cs" />
