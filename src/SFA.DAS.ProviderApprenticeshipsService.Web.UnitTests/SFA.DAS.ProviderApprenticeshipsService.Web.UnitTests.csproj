@@ -230,7 +230,7 @@
     <Compile Include="Orchestrators\Commitments\WhenGettingAcknowledgementViewModel.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingApprovedViewModel.cs" />
-    <Compile Include="Orchestrators\Commitments\WhenGettingCommitmentViewModelWhichIsATransfer.cs" />
+    <Compile Include="Orchestrators\Commitments\WhenGettingCommitmentDetailsWhichIsATransfer.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingCreateApprenticeshipViewModel.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingTransferFundedCohorts.cs" />
     <Compile Include="Orchestrators\Commitments\WhenValidatingApprenticeshipViewModel.cs" />
@@ -282,7 +282,7 @@
     <Compile Include="Orchestrators\BulkUpload\WhenValidatingBulkUploadFileAttributes.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
     <Compile Include="Orchestrators\Commitments\WhenApproveCommitment.cs" />
-    <Compile Include="Orchestrators\Commitments\WhenGettingCommitmentViewModel.cs" />
+    <Compile Include="Orchestrators\Commitments\WhenGettingCommitmentDetails.cs" />
     <Compile Include="Orchestrators\Commitments\WhenFinishEditing.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithEmployer.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithBoth.cs" />

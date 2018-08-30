@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using MediatR;
 using Moq;
@@ -20,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 {
     using Task = System.Threading.Tasks.Task;
 
-    public class WhenGettingCommitmentViewModel : ApprenticeshipValidationTestBase
+    public class WhenGettingCommitmentDetails : ApprenticeshipValidationTestBase
     {
         [Test(Description = "Should return false on PendingChanges if overall agreement status is EmployerAgreed")]
         public async Task ShouldCommitmentWithEmployerAndBothAgreed()
@@ -142,6 +143,61 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var result = await _orchestrator.GetCommitmentDetails(1L, "ABBA213");
 
             Assert.AreEqual(expectedTransferFlag, result.IsFundedByTransfer);
+        }
+
+        [Test]
+        public async Task AndApprenticeshipIsOverFundingLimitThenACostWarningShouldBeAddedToViewModel()
+        {
+            var commitment = new CommitmentView
+            {
+                AgreementStatus = AgreementStatus.ProviderAgreed,
+                EditStatus = EditStatus.ProviderOnly,
+                Apprenticeships = new List<Apprenticeship>
+                {
+                    new Apprenticeship
+                    {
+                        StartDate = new DateTime(2020,2,2),
+                        Cost = 500
+                    }
+                },
+                Messages = new List<MessageView>()
+            };
+
+            _mockMediator = GetMediator(commitment);
+            SetUpOrchestrator();
+
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetTrainingProgrammesQueryRequest>()))
+                .ReturnsAsync(new GetTrainingProgrammesQueryResponse
+                {
+                    TrainingProgrammes = new List<ITrainingProgramme>
+                    {
+                        new Standard
+                        {
+                            FundingPeriods = new[]
+                            {
+                                new FundingPeriod
+                                {
+                                    EffectiveFrom = new DateTime(2020, 2, 1),
+                                    EffectiveTo = new DateTime(2020, 3, 1),
+                                    FundingCap = 100
+                                }
+                            },
+                            EffectiveFrom = new DateTime(2020, 2, 1),
+                            EffectiveTo = new DateTime(2020, 3, 1),
+                            Title = "Tit"
+                        }
+                    }
+                });
+
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>()))
+                .ReturnsAsync(new GetOverlappingApprenticeshipsQueryResponse
+                {
+                    Overlaps = Enumerable.Empty<ApprenticeshipOverlapValidationResult>()
+                });
+
+            var result = await _orchestrator.GetCommitmentDetails(1L, "ABBA213");
+
+            TestHelper.EnumerablesAreEqual(new[] { new KeyValuePair<string, string>("0", "Cost for Tit") }, result.Warnings.AsEnumerable());
         }
 
         // --- Helpers ---

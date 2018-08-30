@@ -13,6 +13,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public int ApprenticeshipsOverFundingLimit { get; }
         public int? CommonFundingCap { get; }
 
+        private bool AllApprenticeshipsOverFundingLimit =>
+            Apprenticeships.Any() && ApprenticeshipsOverFundingLimit == Apprenticeships.Count;
+
+        public bool ShowCommonFundingCap => AllApprenticeshipsOverFundingLimit && CommonFundingCap != null;
+
         public string GroupId => TrainingProgramme?.Id ?? "0";
 
         public string GroupName => TrainingProgramme?.Title ?? "No training course";
@@ -34,19 +39,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
             CommonFundingCap = CalculateCommonFundingCap();
         }
 
-        // if the training program is not effective on the start date, the user will get a validation message when creating the apprenticeship
-        // (e.g. This training course is only available to apprentices with a start date after 04 2018)
-        // so we don't have to worry too much about FundingCapOn returning 0, when the start date is outside of a funding cap
-        // but do we need to explicitly check for it? we don't want e.g. the common funding cap to be calculated as non-null 0
-
-        //todo: having this logic in the ViewModel is probably not the best place for it
+        /// <remarks>
+        /// if the training program is not effective on the start date, the user will get a validation message when creating the apprenticeship
+        /// (e.g. This training course is only available to apprentices with a start date after 04 2018)
+        /// so we shouldn't see FundingCapOn returning 0 (when the start date is outside of a funding cap)
+        /// but if we see it, we treat the apprenticeship as *not* over the funding limit
+        /// </remarks>
         private int CalculateApprenticeshipsOverFundingLimit()
         {
             // if the user hasn't entered a startdate, cost and training programme yet, we don't show any error relating to band cap for that apprenticeship (we should still show errors for those with a startdate)
             if (TrainingProgramme == null)
                 return 0;
 
-            return Apprenticeships.Count(x => x.StartDate.HasValue && x.Cost.HasValue && x.Cost > TrainingProgramme.FundingCapOn(x.StartDate.Value));
+            return Apprenticeships.Count(x =>
+            {
+                if (!x.StartDate.HasValue)
+                    return false;
+
+                var fundingCapAtStartDate = TrainingProgramme.FundingCapOn(x.StartDate.Value);
+                return x.Cost.HasValue && fundingCapAtStartDate > 0
+                                       && x.Cost > fundingCapAtStartDate;
+            });
             //OverFundingLimit extension on apprenticeship?
         }
 
@@ -57,13 +70,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         /// </summary>
         private int? CalculateCommonFundingCap()
         {
-            if (TrainingProgramme == null || Apprenticeships.Count == 0)
+            if (TrainingProgramme == null || !Apprenticeships.Any())
                 return null;
 
-            if (Apprenticeships.Any(a => !a.Cost.HasValue || !a.StartDate.HasValue))
+            if (Apprenticeships.Any(a => !a.StartDate.HasValue))
                 return null;
 
             var firstFundingCap = TrainingProgramme.FundingCapOn(Apprenticeships.First().StartDate.Value);
+
+            // check for magic 0, which means unable to calculate a funding cap (e.g. date out of bounds)
+            if (firstFundingCap == 0)
+                return null;
 
             if (Apprenticeships.Skip(1).Any(a => TrainingProgramme.FundingCapOn(a.StartDate.Value) != firstFundingCap))
                 return null;

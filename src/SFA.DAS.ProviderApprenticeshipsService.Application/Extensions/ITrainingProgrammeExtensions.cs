@@ -20,10 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Extensions
                 {
                     return TrainingProgrammeStatus.Active;
                 }
-                else
-                {
-                    return TrainingProgrammeStatus.Expired;
-                }
+                return TrainingProgrammeStatus.Expired;
             }
 
             return TrainingProgrammeStatus.Pending;
@@ -32,9 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Extensions
         public static int FundingCapOn(this ITrainingProgramme course, DateTime effectiveDate)
         {
             if (!course.IsActiveOn(effectiveDate))
-            {
                 return 0;
-            }
 
             var applicableFundingPeriod = course.FundingPeriods.FirstOrDefault(x =>
                 (!x.EffectiveFrom.HasValue || x.EffectiveFrom.Value.Date <= effectiveDate.Date) &&
