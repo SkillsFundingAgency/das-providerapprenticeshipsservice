@@ -24,8 +24,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public int OverlapErrorCount => Apprenticeships.Count(x => x.OverlappingApprenticeships.Any());
 
-        //public bool ShowOverlapError => Apprenticeships.SelectMany(m => m.OverlappingApprenticeships).Any();
-
         /// <remarks>
         /// ApprenticeshipsOverFundingLimit and CommonFundingCap are only guaraneteed to be correct if the ctor's params are not mutated after instantiation or on another thread during contruction
         /// </remarks>
@@ -47,20 +45,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         /// </remarks>
         private int CalculateApprenticeshipsOverFundingLimit()
         {
-            // if the user hasn't entered a startdate, cost and training programme yet, we don't show any error relating to band cap for that apprenticeship (we should still show errors for those with a startdate)
             if (TrainingProgramme == null)
                 return 0;
 
-            return Apprenticeships.Count(x =>
-            {
-                if (!x.StartDate.HasValue)
-                    return false;
-
-                var fundingCapAtStartDate = TrainingProgramme.FundingCapOn(x.StartDate.Value);
-                return x.Cost.HasValue && fundingCapAtStartDate > 0
-                                       && x.Cost > fundingCapAtStartDate;
-            });
-            //OverFundingLimit extension on apprenticeship?
+            return Apprenticeships.Count(x => x.IsOverFundingLimit(TrainingProgramme));
         }
 
         /// <summary>
