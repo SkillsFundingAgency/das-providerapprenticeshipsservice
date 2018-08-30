@@ -10,10 +10,9 @@ using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.Commitments.Api.Types.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetRelationshipByCommitment;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
 
@@ -103,7 +102,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             SetUpOrchestrator();
             var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
 
-           _mockMediator.Verify(x => x.SendAsync(It.IsAny<GetFrameworksQueryRequest>()), Times.Never);
+            _mockMediator.Verify(x => x.SendAsync(It.Is<GetTrainingProgrammesQueryRequest>(r => !r.IncludeFrameworks)), Times.Once);
         }
 
         [Test]
@@ -122,7 +121,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             SetUpOrchestrator();
             var result = _orchestrator.GetCommitmentDetails(1L, "ABBA213").Result;
 
-            _mockMediator.Verify(x => x.SendAsync(It.IsAny<GetFrameworksQueryRequest>()), Times.Once);
+            _mockMediator.Verify(x => x.SendAsync(It.Is<GetTrainingProgrammesQueryRequest>(r => r.IncludeFrameworks)), Times.Once);
         }
 
         [TestCase(123L, true)]
@@ -158,17 +157,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
                 .Returns(Task.Factory.StartNew(() => respons));
 
-            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetStandardsQueryRequest>()))
-                .ReturnsAsync(() => new GetStandardsQueryResponse
-                {
-                    Standards = new List<Standard>()
-                });
-
-            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetFrameworksQueryRequest>()))
-                .ReturnsAsync(() => new GetFrameworksQueryResponse
-                {
-                    Frameworks = new List<Framework>()
-                });
+            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetTrainingProgrammesQueryRequest>()))
+                .ReturnsAsync(new GetTrainingProgrammesQueryResponse { TrainingProgrammes = new List<ITrainingProgramme>() });
 
             mockMediator.Setup(m => m.SendAsync(It.IsAny<GetRelationshipByCommitmentQueryRequest>()))
                 .ReturnsAsync(() => new GetRelationshipByCommitmentQueryResponse

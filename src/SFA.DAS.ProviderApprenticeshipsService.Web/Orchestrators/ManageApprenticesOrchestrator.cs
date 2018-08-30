@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,10 +12,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.ApprenticeshipS
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLocks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLockSummary;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetPendingApprenticeshipUpdate;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -26,11 +23,10 @@ using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
-    public sealed class ManageApprenticesOrchestrator
+    public sealed class ManageApprenticesOrchestrator : BaseCommitmentOrchestrator
     {
         private readonly IMediator _mediator;
         private readonly IProviderCommitmentsLogger _logger;
@@ -48,7 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             IApprenticeshipMapper apprenticeshipMapper,
             IApprovedApprenticeshipValidator approvedApprenticeshipValidator,
             IApprenticeshipFiltersMapper apprenticeshipFiltersMapper,
-            IDataLockMapper dataLockMapper)
+            IDataLockMapper dataLockMapper) : base(mediator, hashingService, logger)
         {
             _mediator = mediator;
             _hashingService = hashingService;
@@ -304,20 +300,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 UserDisplayName = signedInUser.DisplayName,
                 UserEmailAddress = signedInUser.Email
             });
-        }
-
-        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
-        {
-            var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
-            var frameworksTask = _mediator.SendAsync(new GetFrameworksQueryRequest());
-
-            await Task.WhenAll(standardsTask, frameworksTask);
-
-            return
-                standardsTask.Result.Standards.Cast<ITrainingProgramme>()
-                    .Union(frameworksTask.Result.Frameworks)
-                    .OrderBy(m => m.Title)
-                    .ToList();
         }
 
         private async Task AssertNoPendingApprenticeshipUpdate(long providerId, long apprenticeshipId)

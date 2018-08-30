@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,8 +7,7 @@ using System.Threading.Tasks;
 using MediatR;
 
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SaveBulkUploadFile;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -26,15 +24,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
         public BulkUploader(IMediator mediator, IBulkUploadValidator bulkUploadValidator, IBulkUploadFileParser fileParser, IProviderCommitmentsLogger logger)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-            if (bulkUploadValidator == null)
-                throw new ArgumentNullException(nameof(bulkUploadValidator));
-            if (fileParser == null)
-                throw new ArgumentNullException(nameof(fileParser));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
             _mediator = mediator;
             _bulkUploadValidator = bulkUploadValidator;
             _fileParser = fileParser;
@@ -113,19 +102,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             };
         }
 
-        //TODO: These are duplicated in Commitment Orchestrator - needs to be shared
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
-            var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
-            var frameworksTask = _mediator.SendAsync(new GetFrameworksQueryRequest());
-
-            await Task.WhenAll(standardsTask, frameworksTask);
-
-            return
-                standardsTask.Result.Standards.Cast<ITrainingProgramme>()
-                    .Union(frameworksTask.Result.Frameworks)
-                    .OrderBy(m => m.Title)
-                    .ToList();
+            var programmes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest
+            {
+                IncludeFrameworks = true
+            });
+            return programmes.TrainingProgrammes;
         }
 
         private string StripHtml(string input)

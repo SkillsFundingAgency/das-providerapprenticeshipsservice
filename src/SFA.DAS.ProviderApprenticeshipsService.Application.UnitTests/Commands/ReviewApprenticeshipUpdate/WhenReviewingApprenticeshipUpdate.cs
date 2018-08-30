@@ -18,12 +18,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     {
         private ReviewApprenticeshipUpdateCommandHandler _handler;
         private Mock<IProviderCommitmentsApi> _commitmentsApi;
-        private Mock<AbstractValidator<ReviewApprenticeshipUpdateCommand>> _validator;
+        private Mock<IValidator<ReviewApprenticeshipUpdateCommand>> _validator;
 
         [SetUp]
         public void Arrange()
         {
-            _validator = new Mock<AbstractValidator<ReviewApprenticeshipUpdateCommand>>();
+            _validator = new Mock<IValidator<ReviewApprenticeshipUpdateCommand>>();
             _validator.Setup(x => x.Validate(It.IsAny<ReviewApprenticeshipUpdateCommand>()))
                 .Returns(() => new ValidationResult());
 

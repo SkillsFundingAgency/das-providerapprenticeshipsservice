@@ -9,19 +9,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotifi
 {
     public sealed class SendNotificationCommandHandler : AsyncRequestHandler<SendNotificationCommand>
     {
-        private readonly AbstractValidator<SendNotificationCommand> _validator;
+        private readonly IValidator<SendNotificationCommand> _validator;
         private readonly INotificationsApi _notificationsApi;
         private readonly ILog _logger;
 
-        public SendNotificationCommandHandler(AbstractValidator<SendNotificationCommand>validator, INotificationsApi notificationsApi, ILog logger)
+        public SendNotificationCommandHandler(IValidator<SendNotificationCommand>validator, INotificationsApi notificationsApi, ILog logger)
         {
-            if (validator == null)
-                throw new ArgumentNullException(nameof(validator));
-            if (notificationsApi == null)
-                throw new ArgumentNullException(nameof(notificationsApi));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
             _validator = validator;
             _notificationsApi = notificationsApi;
             _logger = logger;

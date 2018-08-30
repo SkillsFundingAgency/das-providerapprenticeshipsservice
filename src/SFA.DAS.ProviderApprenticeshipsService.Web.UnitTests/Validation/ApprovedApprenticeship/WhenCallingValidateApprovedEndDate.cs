@@ -1,4 +1,5 @@
 ﻿using System;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
@@ -37,7 +38,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Approv
                 _currentDateTime.Object,
                 academicYearProvider,
                 _mockAcademicYearValidator.Object,
-                new Mock<IUlnValidator>().Object);
+                new Mock<IUlnValidator>().Object,
+                Mock.Of<IMediator>());
         }
 
         /// <remarks>

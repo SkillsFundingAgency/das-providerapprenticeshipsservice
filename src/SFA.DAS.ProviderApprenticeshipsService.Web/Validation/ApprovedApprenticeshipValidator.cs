@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MediatR;
 using SFA.DAS.Learners.Validators;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.AcademicYear;
@@ -18,8 +19,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             ICurrentDateTime currentDateTime,
             IAcademicYearDateProvider academicYear,
             IAcademicYearValidator academicYearValidator,
-            IUlnValidator ulnValidator)
-            : base(validationText, currentDateTime, academicYear, ulnValidator)
+            IUlnValidator ulnValidator, IMediator mediator)
+            : base(validationText, currentDateTime, academicYear, ulnValidator, mediator)
         {
             _academicYearValidator = academicYearValidator;
         }

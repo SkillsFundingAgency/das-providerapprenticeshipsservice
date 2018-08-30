@@ -2,7 +2,8 @@
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships
 {
-    public sealed class BulkUploadApprenticeshipsCommandValidator : AbstractValidator<BulkUploadApprenticeshipsCommand>
+    public sealed class BulkUploadApprenticeshipsCommandValidator
+        : AbstractValidator<BulkUploadApprenticeshipsCommand>
     {
         public BulkUploadApprenticeshipsCommandValidator()
         {

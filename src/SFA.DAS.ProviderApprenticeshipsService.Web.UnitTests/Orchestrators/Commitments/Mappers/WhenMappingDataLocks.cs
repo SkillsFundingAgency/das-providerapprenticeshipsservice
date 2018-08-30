@@ -5,8 +5,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
@@ -22,23 +21,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetStandardsQueryRequest>()))
-                .ReturnsAsync(() => new GetStandardsQueryResponse
-                {
-                    Standards = new List<Standard>
-                    {
-                        new Standard
-                        {
-                            Id = "TEST"
-                        }
-                    }
-                });
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetFrameworksQueryRequest>()))
-                .ReturnsAsync(() => new GetFrameworksQueryResponse
+            _mediator.Setup(m => m.SendAsync(It.IsAny<GetTrainingProgrammesQueryRequest>()))
+                .ReturnsAsync(new GetTrainingProgrammesQueryResponse { TrainingProgrammes = new List<ITrainingProgramme>
                 {
-                    Frameworks = new List<Framework>()
-                });
+                    new Standard
+                    {
+                        Id = "TEST"
+                    }
+                } });
 
             _mapper = new DataLockMapper(_mediator.Object);
         }

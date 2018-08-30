@@ -8,11 +8,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegi
 {
     public class UpsertRegisteredUserCommandHandler: AsyncRequestHandler<UpsertRegisteredUserCommand>
     {
-        private readonly AbstractValidator<UpsertRegisteredUserCommand> _validator;
+        private readonly IValidator<UpsertRegisteredUserCommand> _validator;
         private readonly IUserRepository _userRepository;
 
         public UpsertRegisteredUserCommandHandler(
-            AbstractValidator<UpsertRegisteredUserCommand> validator,
+            IValidator<UpsertRegisteredUserCommand> validator,
             IUserRepository userRepository)
         {
             _validator = validator;
@@ -23,9 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegi
         {
             var validationResult = _validator.Validate(message);
             if (!validationResult.IsValid)
-            {
                 throw new ValidationException(validationResult.Errors);
-            }
 
             await _userRepository.Upsert(new User
             {

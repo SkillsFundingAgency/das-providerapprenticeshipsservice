@@ -7,18 +7,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider
 {
     public class GetProviderQueryHandler : IAsyncRequestHandler<GetProviderQueryRequest, GetProviderQueryResponse>
     {
-        private readonly IApprenticeshipInfoServiceWrapper _apprenticeshipInfoServiceWrapper;
+        private readonly IApprenticeshipInfoService _apprenticeshipInfoService;
 
-        public GetProviderQueryHandler(IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper)
+        public GetProviderQueryHandler(IApprenticeshipInfoService apprenticeshipInfoService)
         {
-            if (apprenticeshipInfoServiceWrapper == null)
-                throw new ArgumentNullException(nameof(apprenticeshipInfoServiceWrapper));
-            _apprenticeshipInfoServiceWrapper = apprenticeshipInfoServiceWrapper;
+            if (apprenticeshipInfoService == null)
+                throw new ArgumentNullException(nameof(apprenticeshipInfoService));
+            _apprenticeshipInfoService = apprenticeshipInfoService;
         }
 
         public async Task<GetProviderQueryResponse> Handle(GetProviderQueryRequest message)
         {
-            var provider = _apprenticeshipInfoServiceWrapper.GetProvider(message.UKPRN);
+            var provider = _apprenticeshipInfoService.GetProvider(message.UKPRN);
 
             return await Task.FromResult(new GetProviderQueryResponse
             {

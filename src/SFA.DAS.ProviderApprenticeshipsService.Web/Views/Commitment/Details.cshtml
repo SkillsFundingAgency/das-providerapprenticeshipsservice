@@ -1,6 +1,7 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
 @model CommitmentDetailsViewModel
 
 @{
@@ -23,7 +24,7 @@
                         {
                             <li>
                                 <a href="#error-message-@errorMsg.Key" data-focuses="error-message-@errorMsg.Key">
-                                    @errorMsg.Value
+                                    @ValidationMessage.ExtractBannerMessage(errorMsg.Value)
                                 </a>
                             </li>
                         }

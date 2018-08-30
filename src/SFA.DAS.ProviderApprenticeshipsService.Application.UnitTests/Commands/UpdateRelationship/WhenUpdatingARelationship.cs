@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateRelationship;
@@ -19,14 +15,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     public class WhenUpdatingARelationship
     {
         private UpdateRelationshipCommandHandler _handler;
-        private Mock<UpdateRelationshipCommandValidator> _validator;
+        private Mock<IValidator<UpdateRelationshipCommand>> _validator;
         private Mock<IRelationshipApi> _relationshipApi;
-
 
         [SetUp]
         public void Arrange()
         {
-            _validator = new Mock<UpdateRelationshipCommandValidator>();
+            _validator = new Mock<IValidator<UpdateRelationshipCommand>>();
             _validator.Setup(x => x.Validate(It.IsAny<UpdateRelationshipCommand>()))
                 .Returns(new ValidationResult());
 
@@ -37,7 +32,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
 
             _handler = new UpdateRelationshipCommandHandler(_relationshipApi.Object, _validator.Object);
         }
-
 
         [Test]
         public async Task ThenTheApiIsCalledToPerformPatch()
@@ -87,6 +81,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             //Assert
             _validator.Verify(x=> x.Validate(It.IsAny<UpdateRelationshipCommand>()), Times.Once);
         }
-
     }
 }

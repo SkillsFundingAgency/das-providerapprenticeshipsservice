@@ -17,12 +17,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
     public class SubmitCommitmentCommandHandler : AsyncRequestHandler<SubmitCommitmentCommand>
     {
         private readonly IProviderCommitmentsApi _commitmentsApi;
-        private readonly AbstractValidator<SubmitCommitmentCommand> _validator;
+        private readonly IValidator<SubmitCommitmentCommand> _validator;
         private readonly IMediator _mediator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
         private readonly IHashingService _hashingService;
 
-        public SubmitCommitmentCommandHandler(IProviderCommitmentsApi commitmentsApi, AbstractValidator<SubmitCommitmentCommand> validator, IMediator mediator, ProviderApprenticeshipsServiceConfiguration configuration, IHashingService hashingService)
+        public SubmitCommitmentCommandHandler(IProviderCommitmentsApi commitmentsApi, IValidator<SubmitCommitmentCommand> validator, IMediator mediator, ProviderApprenticeshipsServiceConfiguration configuration, IHashingService hashingService)
         {
             _commitmentsApi = commitmentsApi;
             _validator = validator;
@@ -34,7 +34,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
         protected override async Task HandleCore(SubmitCommitmentCommand message)
         {
             var validationResult = _validator.Validate(message);
-
             if (!validationResult.IsValid)
                 throw new InvalidRequestException(validationResult.Errors);
 

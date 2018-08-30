@@ -17,9 +17,7 @@ using SFA.DAS.Commitments.Api.Types.Validation;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
@@ -28,6 +26,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
 using SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.BulkUpload;
 using SFA.DAS.HashingService;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
@@ -53,16 +52,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _file.Setup(m => m.ContentLength).Returns(400);
 
             _mockMediator = new Mock<IMediator>();
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetStandardsQueryRequest>()))
-                .Returns(Task.Run(() => new GetStandardsQueryResponse { Standards = new List<Standard>
-                                                                                        {
-                                                                                            new Standard {Id = "2", Title = "Hej" }
-                                                                                        } }));
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetFrameworksQueryRequest>()))
-                .Returns(Task.Run(() => new GetFrameworksQueryResponse { Frameworks = new List<Framework>
-                                                                                          {
-                                                                                              new Framework { Id = "1-2-3" }
-                                                                                          } }));
+
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetTrainingProgrammesQueryRequest>()))
+                .ReturnsAsync(new GetTrainingProgrammesQueryResponse { TrainingProgrammes = new List<ITrainingProgramme>
+                {
+                    {
+                        new Standard {Id = "2", Title = "Hej" }
+                    },
+                    {
+                        new Framework { Id = "1-2-3" }
+                    }
+                } });
+
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>()))
                 .Returns(
                     Task.Run(() => new GetOverlappingApprenticeshipsQueryResponse

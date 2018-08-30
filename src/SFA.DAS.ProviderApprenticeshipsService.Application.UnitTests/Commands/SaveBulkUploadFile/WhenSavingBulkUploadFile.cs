@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-
 using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
 using Moq;
 using NUnit.Framework;
-
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SaveBulkUploadFile;
@@ -17,16 +15,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     public class WhenSavingBulkUploadFile
     {
         private Mock<IProviderCommitmentsApi> _mockApi; 
-        private Mock<SaveBulkUploadFileValidator> _mockValidator;
+        private Mock<IValidator<SaveBulkUploadFileCommand>> _mockValidator;
         private SaveBulkUploadFileHandler _sut;
-
         private SaveBulkUploadFileCommand _command;
 
         [SetUp]
         public void SetUp()
         {
             _mockApi = new Mock<IProviderCommitmentsApi>();
-            _mockValidator = new Mock<SaveBulkUploadFileValidator>();
+            _mockValidator = new Mock<IValidator<SaveBulkUploadFileCommand>>();
             _sut = new SaveBulkUploadFileHandler(_mockApi.Object, _mockValidator.Object);
 
             _command =

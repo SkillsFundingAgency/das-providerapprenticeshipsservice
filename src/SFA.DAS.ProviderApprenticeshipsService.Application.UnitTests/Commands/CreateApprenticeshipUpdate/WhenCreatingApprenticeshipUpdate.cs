@@ -15,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     {
         private CreateApprenticeshipUpdateCommandHandler _handler;
         private Mock<IProviderCommitmentsApi> _commitmentsApi;
-        private Mock<AbstractValidator<CreateApprenticeshipUpdateCommand>> _validator;
+        private Mock<IValidator<CreateApprenticeshipUpdateCommand>> _validator;
 
         [SetUp]
         public void Arrange()
@@ -24,10 +24,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             _commitmentsApi.Setup(x => x.CreateApprenticeshipUpdate(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ApprenticeshipUpdateRequest>()))
                 .Returns(() => Task.FromResult(new Unit()));
 
-            _validator = new Mock<AbstractValidator<CreateApprenticeshipUpdateCommand>>();
+            _validator = new Mock<IValidator<CreateApprenticeshipUpdateCommand>>();
             _validator.Setup(x => x.Validate(It.IsAny<CreateApprenticeshipUpdateCommand>()))
                 .Returns(new ValidationResult());
-            
+
             _handler = new CreateApprenticeshipUpdateCommandHandler(_commitmentsApi.Object, _validator.Object);
         }
 

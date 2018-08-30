@@ -11,15 +11,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateAppr
     public class CreateApprenticeshipUpdateCommandHandler: AsyncRequestHandler<CreateApprenticeshipUpdateCommand>
     {
         private readonly IProviderCommitmentsApi _commitmentsApi;
-        private readonly AbstractValidator<CreateApprenticeshipUpdateCommand> _validator;
+        private readonly IValidator<CreateApprenticeshipUpdateCommand> _validator;
 
-        public CreateApprenticeshipUpdateCommandHandler(IProviderCommitmentsApi commitmentsApi, AbstractValidator<CreateApprenticeshipUpdateCommand> validator)
+        public CreateApprenticeshipUpdateCommandHandler(
+            IProviderCommitmentsApi commitmentsApi,
+            IValidator<CreateApprenticeshipUpdateCommand> validator)
         {
-            if(commitmentsApi==null)
-                throw new ArgumentNullException(nameof(commitmentsApi));
-            if(validator==null)
-                throw new ArgumentNullException(nameof(validator));
-
             _commitmentsApi = commitmentsApi;
             _validator = validator;
         }

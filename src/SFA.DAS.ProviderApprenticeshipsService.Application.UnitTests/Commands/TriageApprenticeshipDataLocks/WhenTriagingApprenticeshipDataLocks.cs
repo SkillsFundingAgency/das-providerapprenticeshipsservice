@@ -18,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         private TriageApprenticeshipDataLocksCommandHandler _handler;
         private Mock<IProviderCommitmentsApi> _commitmentsApi;
         private Mock<ILog> _logger;
-        private Mock<AbstractValidator<TriageApprenticeshipDataLocksCommand>> _validator;
+        private Mock<IValidator<TriageApprenticeshipDataLocksCommand>> _validator;
 
         [SetUp]
         public void Arrange()
@@ -28,7 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 It.IsAny<DataLockTriageSubmission>()))
                 .Returns(() => Task.FromResult(new Unit()));
 
-            _validator = new Mock<AbstractValidator<TriageApprenticeshipDataLocksCommand>>();
+            _validator = new Mock<IValidator<TriageApprenticeshipDataLocksCommand>>();
             _validator.Setup(x => x.Validate(It.IsAny<TriageApprenticeshipDataLocksCommand>()))
                 .Returns(() => new ValidationResult());
 
