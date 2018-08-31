@@ -197,7 +197,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             var result = await _orchestrator.GetCommitmentDetails(1L, "ABBA213");
 
-            TestHelper.EnumerablesAreEqual(new[] { new KeyValuePair<string, string>("0", "Cost for Tit") }, result.Warnings.AsEnumerable());
+            Assert.IsTrue(TestHelper.EnumerablesAreEqual(new[] { new KeyValuePair<string, string>("0", "Cost for Tit") }, result.Warnings.AsEnumerable()));
         }
 
         // --- Helpers ---
