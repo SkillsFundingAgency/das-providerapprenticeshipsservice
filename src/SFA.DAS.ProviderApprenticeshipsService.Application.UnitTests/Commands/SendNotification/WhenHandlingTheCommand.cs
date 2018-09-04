@@ -47,7 +47,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 .Which.Errors.ToList().Contains(validationFailure).Should().BeTrue();
         }
 
-        [Test, MoqCustomisedAutoData, Ignore("todo")]
+        [Test, MoqCustomisedAutoData]
         public async Task ThenSendsEmailToNotificationApi(
             SendNotificationCommand command,
             [Frozen] Mock<IBackgroundNotificationService> mockNotificationsApi,

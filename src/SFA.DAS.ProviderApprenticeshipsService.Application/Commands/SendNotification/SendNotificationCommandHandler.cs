@@ -1,25 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentValidation;
-using FluentValidation.Internal;
-using FluentValidation.Results;
 using MediatR;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification
 {
     public sealed class SendNotificationCommandHandler : AsyncRequestHandler<SendNotificationCommand>
     {
         private readonly IValidator<SendNotificationCommand> _validator;
-        private readonly INotificationsApi _notificationsApi;
+        private readonly IBackgroundNotificationService _backgroundNotificationService;
         private readonly ILog _logger;
 
         public SendNotificationCommandHandler(IValidator<SendNotificationCommand>validator, INotificationsApi notificationsApi, ILog logger)
         {
             _validator = validator;
-            _notificationsApi = notificationsApi;
+            _backgroundNotificationService = backgroundNotificationService;
             _logger = logger;
         }
 
@@ -37,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotifi
 
             try
             {
-                await _notificationsApi.SendEmail(message.Email);
+                await _backgroundNotificationService.SendEmail(message.Email);
             }
             catch(Exception ex)
             {
