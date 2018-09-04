@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentValidation;
+using FluentValidation.Internal;
+using FluentValidation.Results;
 using MediatR;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
@@ -22,7 +25,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotifi
 
         protected override async Task HandleCore(SendNotificationCommand message)
         {
-            _validator.ValidateAndThrow(message);
+            var validationResult = _validator.Validate(message);
+            if (!validationResult.IsValid)
+            {
+                _logger.Info("Invalid SendNotificationCommand, not sending");
+                throw new ValidationException(validationResult.Errors);
+            }
+                
 
             _logger.Info($"Sending email to {message.Email.RecipientsAddress}. Template: {message.Email.TemplateId}");
 
