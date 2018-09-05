@@ -82,7 +82,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Extension
         [TestCase("2018-07-31", 1, Description = "At end of first open-start funding band")]
         [TestCase("2018-08-01", 2, Description = "Start of second funding band")]
         [TestCase("2020-01-01", 2, Description = "Within second open-ended funding band")]
-        public void AndFirstFundingPeriodHasNUllEffectiveFromThenTheApplicableFundingPeriodIsUsed(DateTime effectiveDate, int expectCap)
+        public void AndFirstFundingPeriodHasNullEffectiveFromThenTheApplicableFundingPeriodIsUsed(DateTime effectiveDate, int expectCap)
         {
             var courseAndFundingBandStart = (DateTime?)null;
             var courseAndFundingBandEnd = (DateTime?)null;
