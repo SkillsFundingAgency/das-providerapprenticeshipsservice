@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using KellermanSoftware.CompareNetObjects;
+using System.Linq;
 using Moq;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.Apprenticeships.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Mappers;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
+using FundingPeriod = SFA.DAS.Apprenticeships.Api.Types.FundingPeriod;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Mappers.ApprenticeshipInfoServiceMapperTests
 {
@@ -15,6 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Mappers.A
     {
         private ApprenticeshipInfoServiceMapper _mapper;
         private FrameworkSummary _framework;
+        private Func<FrameworksView> _act;
 
         [SetUp]
         public void Arrange()
@@ -37,52 +39,65 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Mappers.A
                     new FundingPeriod { EffectiveFrom = new DateTime(2019,01,01), EffectiveTo = new DateTime(2020, 7, 31), FundingCap = 2000 }
                 }
             };
+
+            _act = () => _mapper.MapFrom(new List<FrameworkSummary> { TestHelper.Clone(_framework) });
         }
 
         [Test]
         public void ThenTitleIsMappedCorrectly()
         {
-            //Act
-            var result = _mapper.MapFrom(new List<FrameworkSummary> { CopyOf(_framework) });
+            var result = _act();
 
             //Assert
             var expectedTitle = $"{_framework.Title}, Level: {_framework.Level}";
-            Assert.AreEqual(expectedTitle, result.Frameworks[0].Title);
+            Assert.AreEqual(expectedTitle, result.Frameworks.First().Title);
         }
 
         [Test]
         public void ThenEffectiveFromIsMappedCorrectly()
         {
-            //Act
-            var result = _mapper.MapFrom(new List<FrameworkSummary> { CopyOf(_framework) });
+            var result = _act();
 
             //Assert
-            Assert.AreEqual(_framework.EffectiveFrom, result.Frameworks[0].EffectiveFrom);
+            Assert.AreEqual(_framework.EffectiveFrom, result.Frameworks.First().EffectiveFrom);
+        }
+
+        [Test]
+        public void ThenFundingPeriodsAreOrderedAscending()
+        {
+            _framework.FundingPeriods = new List<FundingPeriod>
+            {
+                new FundingPeriod {EffectiveFrom = new DateTime(2019,1,1)},
+                new FundingPeriod {EffectiveFrom = null},
+                new FundingPeriod {EffectiveFrom = new DateTime(2018,1,1)}
+            };
+
+            var result = _act();
+
+            //Assert
+            Assert.IsTrue(TestHelper.EnumerablesAreEqual(new List<FundingPeriod>
+            {
+                new FundingPeriod {EffectiveFrom = null},
+                new FundingPeriod {EffectiveFrom = new DateTime(2018,1,1)},
+                new FundingPeriod {EffectiveFrom = new DateTime(2019,1,1)}
+            }, result.Frameworks.First().FundingPeriods));
         }
 
         [Test]
         public void ThenEffectiveToIsMappedCorrectly()
         {
-            //Act
-            var result = _mapper.MapFrom(new List<FrameworkSummary> { CopyOf(_framework) });
+            var result = _act();
 
             //Assert
-            Assert.AreEqual(_framework.EffectiveFrom, result.Frameworks[0].EffectiveFrom);
+            Assert.AreEqual(_framework.EffectiveFrom, result.Frameworks.First().EffectiveFrom);
         }
 
         [Test]
         public void ThenFundingPeriodsAreMappedCorrectly()
         {
-            //Act
-            var result = _mapper.MapFrom(new List<FrameworkSummary> { CopyOf(_framework) });
+            var result = _act();
 
-            //Assert
-            var comparer = new CompareLogic(new ComparisonConfig
-            {
-                IgnoreObjectTypes = true
-            });
-
-            Assert.IsTrue(comparer.Compare(result.Frameworks[0].FundingPeriods, _framework.FundingPeriods).AreEqual);
+            Assert.IsTrue(TestHelper.EnumerablesAreEqual(_framework.FundingPeriods, result.Frameworks.First().FundingPeriods));
         }
 
         [Test]
@@ -91,18 +106,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Mappers.A
             //Arrange
             _framework.FundingPeriods = null;
 
-            //Act
-            var result = _mapper.MapFrom(new List<FrameworkSummary> { CopyOf(_framework) });
+            var result = _act();
 
             //Assert
-            Assert.IsNotNull(result.Frameworks[0].FundingPeriods);
-            Assert.IsEmpty(result.Frameworks[0].FundingPeriods);
-        }
-
-        private static FrameworkSummary CopyOf(FrameworkSummary source)
-        {
-            //copy the payload to guard against handler modifications
-            return JsonConvert.DeserializeObject<FrameworkSummary>(JsonConvert.SerializeObject(source));
+            Assert.IsNotNull(result.Frameworks.First().FundingPeriods);
+            Assert.IsEmpty(result.Frameworks.First().FundingPeriods);
         }
     }
 }
