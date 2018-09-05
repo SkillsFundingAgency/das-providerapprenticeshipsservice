@@ -13,7 +13,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotifi
         private readonly IBackgroundNotificationService _backgroundNotificationService;
         private readonly ILog _logger;
 
-        public SendNotificationCommandHandler(IValidator<SendNotificationCommand>validator, INotificationsApi notificationsApi, ILog logger)
+        public SendNotificationCommandHandler(IValidator<SendNotificationCommand>validator, IBackgroundNotificationService backgroundNotificationService, ILog logger)
         {
             _validator = validator;
             _backgroundNotificationService = backgroundNotificationService;
