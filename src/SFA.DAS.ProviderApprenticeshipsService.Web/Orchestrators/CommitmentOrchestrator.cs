@@ -316,36 +316,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var apprenticeships = MapFrom(commitment.Apprenticeships, overlapping);
             var trainingProgrammes = await GetTrainingProgrammes(!commitment.IsTransfer());
 
-            var apprenticeshipGroups = new List<ApprenticeshipListItemGroupViewModel>();
-
             var errors = new Dictionary<string, string>();
             var warnings = new Dictionary<string, string>();
 
-            foreach (var group in apprenticeships.OrderBy(x => x.TrainingName).GroupBy(x => x.TrainingCode))
+            var apprenticeshipGroups = apprenticeships.OrderBy(x => x.TrainingName).GroupBy(x => x.TrainingCode)
+                .Select(g => new ApprenticeshipListItemGroupViewModel(g.OrderBy(x => x.CanBeApproved).ToList(), trainingProgrammes.FirstOrDefault(x => x.Id == g.Key)))
+                    .ToList();
+
+            foreach (var apprenticeshipGroup in apprenticeshipGroups)
             {
-                var apprenticeshipListGroup = new ApprenticeshipListItemGroupViewModel
+                if (apprenticeshipGroup.OverlapErrorCount > 0)
                 {
-                    Apprenticeships = group.OrderBy(x => x.CanBeApprove).ToList(),
-                    TrainingProgramme = trainingProgrammes.FirstOrDefault(x => x.Id == group.Key)
-                };
-
-                apprenticeshipGroups.Add(apprenticeshipListGroup);
-
-                var trainingTitle = string.Empty;
-                if (!string.IsNullOrEmpty(apprenticeshipListGroup.TrainingProgramme?.Title))
-                {
-                    trainingTitle = $":{apprenticeshipListGroup.TrainingProgramme.Title}";
+                    var trainingTitle = string.IsNullOrEmpty(apprenticeshipGroup.TrainingProgramme?.Title)
+                        ? string.Empty
+                        : $":{apprenticeshipGroup.TrainingProgramme.Title}";
+                    errors.Add(apprenticeshipGroup.GroupId, $"Overlapping training dates{trainingTitle}");
                 }
 
-                if (apprenticeshipListGroup.OverlapErrorCount > 0)
-                {
-                    errors.Add($"{apprenticeshipListGroup.GroupId}", $"Overlapping training dates{trainingTitle}");
-                }
-
-                if (apprenticeshipListGroup.ApprenticeshipsOverFundingLimit > 0)
-                {
-                    warnings.Add(apprenticeshipListGroup.GroupId, $"Cost for {apprenticeshipListGroup.TrainingProgramme.Title}");
-                }
+                if (apprenticeshipGroup.ApprenticeshipsOverFundingLimit > 0) // for this to be true, there must be a TrainingProgramme, so no need to cater for null
+                    warnings.Add(apprenticeshipGroup.GroupId, $"Cost for {apprenticeshipGroup.TrainingProgramme.Title}");
             }
 
             return new CommitmentDetailsViewModel
@@ -623,7 +612,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     StartDate = x.StartDate,
                     EndDate = x.EndDate,
                     Cost = x.Cost,
-                    CanBeApprove = x.CanBeApproved,
+                    CanBeApproved = x.CanBeApproved,
                     OverlappingApprenticeships = overlaps?.GetOverlappingApprenticeships(x.Id)
                 }).ToList();
 

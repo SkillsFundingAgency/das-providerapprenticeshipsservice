@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using KellermanSoftware.CompareNetObjects;
+using System.Linq;
 using Moq;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.Apprenticeships.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Mappers;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
+using FundingPeriod = SFA.DAS.Apprenticeships.Api.Types.FundingPeriod;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Mappers.ApprenticeshipInfoServiceMapperTests
 {
@@ -15,6 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Mappers.A
     {
         private ApprenticeshipInfoServiceMapper _mapper;
         private StandardSummary _standard;
+        private Func<StandardsView> _act;
 
         [SetUp]
         public void Arrange()
@@ -35,51 +37,66 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Mappers.A
                     new FundingPeriod { EffectiveFrom = new DateTime(2019,01,01), EffectiveTo = new DateTime(2020, 7, 31), FundingCap = 2000 }
                 }
             };
+
+            //copy the payload to guard against handler modifications
+            _act = () => _mapper.MapFrom(new List<StandardSummary> { TestHelper.Clone(_standard) });
         }
 
         [Test]
         public void ThenTitleIsMappedCorrectly()
         {
-            //Act
-            var result = _mapper.MapFrom(new List<StandardSummary> { CopyOf(_standard) });
+            var result = _act();
 
             //Assert
             var expectedTitle = $"{_standard.Title}, Level: {_standard.Level} (Standard)";
-            Assert.AreEqual(expectedTitle, result.Standards[0].Title);
+            Assert.AreEqual(expectedTitle, result.Standards.First().Title);
         }
 
         [Test]
         public void ThenEffectiveFromIsMappedCorrectly()
         {
-            //Act
-            var result = _mapper.MapFrom(new List<StandardSummary> { CopyOf(_standard) });
+            var result = _act();
 
             //Assert
-            Assert.AreEqual(_standard.EffectiveFrom, result.Standards[0].EffectiveFrom);
+            Assert.AreEqual(_standard.EffectiveFrom, result.Standards.First().EffectiveFrom);
+        }
+
+        [Test]
+        public void ThenFundingPeriodsAreOrderedAscending()
+        {
+            _standard.FundingPeriods = new List<FundingPeriod>
+            {
+                new FundingPeriod {EffectiveFrom = new DateTime(2019,1,1)},
+                new FundingPeriod {EffectiveFrom = null},
+                new FundingPeriod {EffectiveFrom = new DateTime(2018,1,1)}
+            };
+
+            var result = _act();
+
+            //Assert
+            Assert.IsTrue(TestHelper.EnumerablesAreEqual(new List<FundingPeriod>
+            {
+                new FundingPeriod {EffectiveFrom = null},
+                new FundingPeriod {EffectiveFrom = new DateTime(2018,1,1)},
+                new FundingPeriod {EffectiveFrom = new DateTime(2019,1,1)}
+            }, result.Standards.First().FundingPeriods));
         }
 
         [Test]
         public void ThenEffectiveToIsMappedCorrectly()
         {
-            //Act
-            var result = _mapper.MapFrom(new List<StandardSummary> { CopyOf(_standard) });
+            var result = _act();
 
             //Assert
-            Assert.AreEqual(_standard.LastDateForNewStarts, result.Standards[0].EffectiveTo);
+            Assert.AreEqual(_standard.LastDateForNewStarts, result.Standards.First().EffectiveTo);
         }
 
         [Test]
         public void ThenFundingPeriodsAreMappedCorrectly()
         {
-            //Act
-            var result = _mapper.MapFrom(new List<StandardSummary> { CopyOf(_standard) });
+            var result = _act();
 
-            var comparer = new CompareLogic(new ComparisonConfig
-            {
-                IgnoreObjectTypes = true
-            });
-
-            Assert.IsTrue(comparer.Compare(result.Standards[0].FundingPeriods, _standard.FundingPeriods).AreEqual);
+            Assert.IsTrue(TestHelper.EnumerablesAreEqual(_standard.FundingPeriods, result.Standards.First().FundingPeriods));
         }
 
         [Test]
@@ -88,18 +105,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Mappers.A
             //Arrange
             _standard.FundingPeriods = null;
 
-            //Act
-            var result = _mapper.MapFrom(new List<StandardSummary> { CopyOf(_standard) });
+            var result = _act();
 
             //Assert
-            Assert.IsNotNull(result.Standards[0].FundingPeriods);
-            Assert.IsEmpty(result.Standards[0].FundingPeriods);
-        }
-
-        private static StandardSummary CopyOf(StandardSummary source)
-        {
-            //copy the payload to guard against handler modifications
-            return JsonConvert.DeserializeObject<StandardSummary>(JsonConvert.SerializeObject(source));
+            Assert.IsNotNull(result.Standards.First().FundingPeriods);
+            Assert.IsEmpty(result.Standards.First().FundingPeriods);
         }
     }
 }

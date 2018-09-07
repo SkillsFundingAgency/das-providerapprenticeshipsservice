@@ -13,7 +13,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 {
     using Task = System.Threading.Tasks.Task;
 
-    public class WhenGettingCommitmentViewModelWhichIsATransfer : WhenGettingCommitmentViewModel
+    public class WhenGettingCommitmentDetailsWhichIsATransfer : WhenGettingCommitmentDetails
     {
         [Test(Description = "Should return ReadOnly if Both Parties have agreed")]
         public async Task ShouldBeAbleToViewACommitmentWhereBothPartiesHaveAgreed()

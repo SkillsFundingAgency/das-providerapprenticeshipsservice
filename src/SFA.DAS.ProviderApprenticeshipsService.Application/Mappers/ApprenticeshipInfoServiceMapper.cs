@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SFA.DAS.Apprenticeships.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -47,7 +48,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Mappers
             return new ProvidersView
             {
                 CreatedDate = _currentDateTime.Now,
-                Provider = new Provider()
+                Provider = new Provider
                 {
                     Ukprn = provider.Ukprn,
                     ProviderName = provider.ProviderName,
@@ -80,16 +81,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Mappers
         private static IEnumerable<FundingPeriod> MapFundingPeriods(IEnumerable<Apprenticeships.Api.Types.FundingPeriod> source)
         {
             if (source == null)
-            {
                 return Enumerable.Empty<FundingPeriod>();
-            }
 
             return source.Select(x => new FundingPeriod
             {
                 EffectiveFrom = x.EffectiveFrom,
                 EffectiveTo = x.EffectiveTo,
                 FundingCap = x.FundingCap
-            });
+            }).OrderBy(y => y.EffectiveFrom ?? DateTime.MinValue);
         }
 
         private static string GetTitle(string title, int level)
