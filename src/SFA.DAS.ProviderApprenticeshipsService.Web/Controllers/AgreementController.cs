@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-//using ClosedXML.Excel;
+using ClosedXML.Excel;
+using ClosedXML.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -17,7 +18,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         private readonly AgreementOrchestrator _orchestrator;
         private const string FileName = "organisations_and_areements";
         private const string CsvContentType = "text/csv";
-        private const string ExcelContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
         public AgreementController(AgreementOrchestrator orchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
         {
@@ -47,16 +47,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var model = await _orchestrator.GetAgreementsViewModel(providerId);
 
-            return File(new byte[] { }, ExcelContentType, $"{FileName}_{DateTime.Now:s}.xlsx");
-
-            /*var workbook = new XLWorkbook();
+            var workbook = new XLWorkbook();
             workbook.AddWorksheet(model.ToDataTable() ,"Agreements");
 
-            using (var memoryStream = new MemoryStream())
-            {
-                workbook.SaveAs(memoryStream);
-                return File(memoryStream, ExcelContentType, $"{FileName}_{DateTime.Now:s}.xlsx");
-            } */
+            return workbook.Deliver($"{FileName}_{DateTime.Now:s}.xlsx"); 
         }
     }
 }
