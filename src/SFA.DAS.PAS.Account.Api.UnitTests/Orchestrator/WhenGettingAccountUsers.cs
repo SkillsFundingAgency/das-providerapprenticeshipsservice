@@ -1,12 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-
+using AutoFixture;
 using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using Ploeh.AutoFixture;
-
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAccountUsers;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;

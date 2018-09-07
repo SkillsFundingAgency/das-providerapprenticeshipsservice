@@ -3,32 +3,38 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification
 {
     public sealed class SendNotificationCommandHandler : AsyncRequestHandler<SendNotificationCommand>
     {
         private readonly IValidator<SendNotificationCommand> _validator;
-        private readonly INotificationsApi _notificationsApi;
+        private readonly IBackgroundNotificationService _backgroundNotificationService;
         private readonly ILog _logger;
 
-        public SendNotificationCommandHandler(IValidator<SendNotificationCommand>validator, INotificationsApi notificationsApi, ILog logger)
+        public SendNotificationCommandHandler(IValidator<SendNotificationCommand>validator, IBackgroundNotificationService backgroundNotificationService, ILog logger)
         {
             _validator = validator;
-            _notificationsApi = notificationsApi;
+            _backgroundNotificationService = backgroundNotificationService;
             _logger = logger;
         }
 
         protected override async Task HandleCore(SendNotificationCommand message)
         {
-            _validator.ValidateAndThrow(message);
+            var validationResult = _validator.Validate(message);
+            if (!validationResult.IsValid)
+            {
+                _logger.Info("Invalid SendNotificationCommand, not sending");
+                throw new ValidationException(validationResult.Errors);
+            }
+                
 
             _logger.Info($"Sending email to {message.Email.RecipientsAddress}. Template: {message.Email.TemplateId}");
 
             try
             {
-                await _notificationsApi.SendEmail(message.Email);
+                await _backgroundNotificationService.SendEmail(message.Email);
             }
             catch(Exception ex)
             {

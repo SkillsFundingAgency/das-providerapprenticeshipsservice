@@ -8,6 +8,7 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.SendNotification
 {
@@ -31,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 }
             };
 
-            _handler = new SendNotificationCommandHandler(new SendNotificationCommandValidator(), Mock.Of<INotificationsApi>(), Mock.Of<ILog>());
+            _handler = new SendNotificationCommandHandler(new SendNotificationCommandValidator(), Mock.Of<IBackgroundNotificationService>(), Mock.Of<ILog>());
         }
 
         [Test]
