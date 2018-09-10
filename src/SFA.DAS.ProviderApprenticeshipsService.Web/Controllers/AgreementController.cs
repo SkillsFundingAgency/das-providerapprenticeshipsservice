@@ -5,6 +5,7 @@ using ClosedXML.Excel;
 using ClosedXML.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Helpers;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
@@ -17,8 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     {
         private readonly AgreementOrchestrator _orchestrator;
         private const string FileName = "organisations_and_areements";
-        private const string CsvContentType = "text/csv";
-
+        
         public AgreementController(AgreementOrchestrator orchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
         {
             _orchestrator = orchestrator;
@@ -37,8 +37,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<FileResult> DownloadCsv(long providerId)
         {
             var model = await _orchestrator.GetAgreementsViewModel(providerId);
-            var bytes = model.ToString();//todo: convert to csv
-            return File(bytes, CsvContentType, $"{FileName}_{DateTime.Now:s}.csv");
+
+            return CsvWriterFacade.Deliver(model.CommitmentAgreements, $"{FileName}_{DateTime.Now:s}.csv");
         }
 
         [HttpGet]
