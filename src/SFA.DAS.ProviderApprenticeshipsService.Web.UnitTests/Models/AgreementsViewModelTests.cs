@@ -17,7 +17,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models
             {
                 var dataTable = sut.ToDataTable();
 
-                dataTable.Columns[0].ColumnName.Should().Be(nameof(CommitmentAgreement.OrganisationName));
+                dataTable.Columns[0].ColumnName
+                    .Should().Be(nameof(CommitmentAgreement.OrganisationName));
             }
 
             [Test, AutoData]
@@ -25,7 +26,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models
             {
                 var dataTable = sut.ToDataTable();
 
-                dataTable.Columns[1].ColumnName.Should().Be(nameof(CommitmentAgreement.CohortID));
+                dataTable.Columns[1].ColumnName
+                    .Should().Be(nameof(CommitmentAgreement.CohortID));
             }
 
             [Test, AutoData]
@@ -33,36 +35,34 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models
             {
                 var dataTable = sut.ToDataTable();
 
-                dataTable.Columns[2].ColumnName.Should().Be(nameof(CommitmentAgreement.AgreementID));
-            }
-
-            //todo: use phil's technique to assert entire collection
-
-            [Test, AutoData]
-            public void ThenFirstRowHasCorrectOrganisationName(AgreementsViewModel sut)
-            {
-                var dataTable = sut.ToDataTable();
-
-                dataTable.Rows[0][nameof(CommitmentAgreement.OrganisationName)]
-                    .Should().Be(sut.CommitmentAgreements.First().OrganisationName);
+                dataTable.Columns[2].ColumnName
+                    .Should().Be(nameof(CommitmentAgreement.AgreementID));
             }
 
             [Test, AutoData]
-            public void ThenFirstRowHasCorrectCohortId(AgreementsViewModel sut)
+            public void ThenTheDataTableRowCountIsSameAsCommitmentAgreementsCount(AgreementsViewModel sut)
             {
                 var dataTable = sut.ToDataTable();
 
-                dataTable.Rows[0][nameof(CommitmentAgreement.CohortID)]
-                    .Should().Be(sut.CommitmentAgreements.First().CohortID);
+                dataTable.Rows.Count
+                    .Should().Be(sut.CommitmentAgreements.Count());
             }
 
             [Test, AutoData]
-            public void ThenFirstRowHasCorrectAgreementId(AgreementsViewModel sut)
+            public void ThenEachDataRowHasCorrectValuesAssigned(AgreementsViewModel sut)
             {
                 var dataTable = sut.ToDataTable();
+                var expected = sut.CommitmentAgreements.ToList();
 
-                dataTable.Rows[0][nameof(CommitmentAgreement.AgreementID)]
-                    .Should().Be(sut.CommitmentAgreements.First().AgreementID);
+                for (var i = 0; i < expected.Count; i++)
+                {
+                    dataTable.Rows[i][nameof(CommitmentAgreement.OrganisationName)]
+                        .Should().Be(expected[i].OrganisationName);
+                    dataTable.Rows[i][nameof(CommitmentAgreement.CohortID)]
+                        .Should().Be(expected[i].CohortID);
+                    dataTable.Rows[i][nameof(CommitmentAgreement.AgreementID)]
+                        .Should().Be(expected[i].AgreementID);
+                }
             }
         }
     }
