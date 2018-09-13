@@ -229,6 +229,9 @@
     <Compile Include="AcademicYear\WhenValidatingAcademicYear.cs" />
     <Compile Include="Models\AgreementsViewModelTests.cs" />
     <Compile Include="Models\DataLockSummaryViewModelTests.cs" />
+    <Compile Include="MoqCustomisedAutoData.cs" />
+    <Compile Include="Orchestrators\Agreement\WhenGettingAgreementsAsExcel.cs" />
+    <Compile Include="Orchestrators\Agreement\WhenGettingAgreementsAsCsv.cs" />
     <Compile Include="Orchestrators\Agreement\WhenGettingAgreementsViewModel.cs" />
     <Compile Include="Orchestrators\Authentication\WhenSavingIdentityAttributes.cs" />
     <Compile Include="Orchestrators\BulkUpload\BulkUploadTestBase.cs" />
