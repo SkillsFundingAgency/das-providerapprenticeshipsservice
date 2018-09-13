@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using ClosedXML.Excel;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Agreement;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Formatters
@@ -10,7 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Formatters
         public byte[] Format(IEnumerable<CommitmentAgreement> commitmentAgreements)
         {
             var workbook = new XLWorkbook();
-            workbook.AddWorksheet(new AgreementsViewModel {CommitmentAgreements = commitmentAgreements}.ToDataTable(), "Agreements");
+            workbook.AddWorksheet(commitmentAgreements.ToDataTable(), "Agreements");
 
             using (var memoryStream = new MemoryStream())
             {

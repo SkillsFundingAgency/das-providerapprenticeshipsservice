@@ -1,19 +1,20 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using AutoFixture.NUnit3;
 using FluentAssertions;
 using NUnit.Framework;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Agreement;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Extensions
 {
     [TestFixture]
-    public class AgreementsViewModelTests
+    public class IEnumerableCommitmentAgreementTests
     {
         [TestFixture]
         public class WhenCallingToDataTable
         {
             [Test, AutoData]
-            public void ThenFirstColumnIsOrganisationName(AgreementsViewModel sut)
+            public void ThenFirstColumnIsOrganisationName(List<CommitmentAgreement> sut)
             {
                 var dataTable = sut.ToDataTable();
 
@@ -22,7 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models
             }
 
             [Test, AutoData]
-            public void ThenSecondColumnIsCohortId(AgreementsViewModel sut)
+            public void ThenSecondColumnIsCohortId(List<CommitmentAgreement> sut)
             {
                 var dataTable = sut.ToDataTable();
 
@@ -31,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models
             }
 
             [Test, AutoData]
-            public void ThenThirdColumnIsAgreementId(AgreementsViewModel sut)
+            public void ThenThirdColumnIsAgreementId(List<CommitmentAgreement> sut)
             {
                 var dataTable = sut.ToDataTable();
 
@@ -40,21 +41,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models
             }
 
             [Test, AutoData]
-            public void ThenTheDataTableRowCountIsSameAsCommitmentAgreementsCount(AgreementsViewModel sut)
+            public void ThenTheDataTableRowCountIsSameAsCommitmentAgreementsCount(List<CommitmentAgreement> sut)
             {
                 var dataTable = sut.ToDataTable();
 
                 dataTable.Rows.Count
-                    .Should().Be(sut.CommitmentAgreements.Count());
+                    .Should().Be(sut.Count);
             }
 
             [Test, AutoData]
-            public void ThenEachDataRowHasCorrectValuesAssigned(AgreementsViewModel sut)
+            public void ThenEachDataRowHasCorrectValuesAssigned(List<CommitmentAgreement> sut)
             {
-                var dataTable = sut.ToDataTable();
-                var expected = sut.CommitmentAgreements.ToList();
+                var expected = new CommitmentAgreement[sut.Count];
+                sut.CopyTo(expected);
 
-                for (var i = 0; i < expected.Count; i++)
+                var dataTable = sut.ToDataTable();
+
+                for (var i = 0; i < expected.Length; i++)
                 {
                     dataTable.Rows[i][nameof(CommitmentAgreement.OrganisationName)]
                         .Should().Be(expected[i].OrganisationName);

@@ -230,7 +230,7 @@
   <ItemGroup>
     <Compile Include="AcademicYear\WhenDeterminingTheAcademicYear.cs" />
     <Compile Include="AcademicYear\WhenValidatingAcademicYear.cs" />
-    <Compile Include="Models\AgreementsViewModelTests.cs" />
+    <Compile Include="Extensions\IEnumerableCommitmentAgreementTests.cs" />
     <Compile Include="Models\DataLockSummaryViewModelTests.cs" />
     <Compile Include="MoqCustomisedAutoData.cs" />
     <Compile Include="Orchestrators\Agreement\WhenGettingAgreementsAsExcel.cs" />

@@ -5,6 +5,7 @@ using ClosedXML.Excel;
 using ClosedXML.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Helpers;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
@@ -48,7 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var model = await _orchestrator.GetAgreementsViewModel(providerId);
 
             var workbook = new XLWorkbook();
-            workbook.AddWorksheet(model.ToDataTable() ,"Agreements");
+            workbook.AddWorksheet(model.CommitmentAgreements.ToDataTable() ,"Agreements");
 
             return workbook.Deliver($"{FileName}_{DateTime.Now:s}.xlsx"); 
         }
