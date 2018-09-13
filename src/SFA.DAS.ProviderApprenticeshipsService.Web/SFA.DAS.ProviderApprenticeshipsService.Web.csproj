@@ -558,6 +558,7 @@
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
     <Compile Include="Orchestrators\AgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\Formatters\CsvFormatter.cs" />
+    <Compile Include="Orchestrators\Formatters\ExcelFormatter.cs" />
     <Compile Include="Orchestrators\Formatters\ICsvFormatter.cs" />
     <Compile Include="Orchestrators\Formatters\IExcelFormatter.cs" />
     <Compile Include="Orchestrators\Mappers\AgreementMapper.cs" />
