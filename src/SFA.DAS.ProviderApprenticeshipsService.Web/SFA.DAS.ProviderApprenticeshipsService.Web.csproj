@@ -501,7 +501,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\CsvWriterFacade.cs" />
     <Compile Include="Models\AcknowledgementViewModel.cs" />
     <Compile Include="Models\Agreement\AgreementsViewModel.cs" />
     <Compile Include="Models\Agreement\CommitmentAgreement.cs" />

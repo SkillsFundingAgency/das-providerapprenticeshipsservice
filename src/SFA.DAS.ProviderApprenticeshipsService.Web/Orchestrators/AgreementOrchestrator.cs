@@ -33,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<AgreementsViewModel> GetAgreementsViewModel(long providerId)
         {
-            Logger.Info($"Getting agreements for provider: {providerId}", providerId: providerId);
+            Logger.Info($"Getting agreements for provider: {providerId}", providerId);
 
             return new AgreementsViewModel
             {
