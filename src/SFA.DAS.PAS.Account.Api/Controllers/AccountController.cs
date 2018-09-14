@@ -25,7 +25,7 @@ namespace SFA.DAS.PAS.Account.Api.Controllers
 
         [Route("{ukprn}/users")]
         [HttpGet]
-        [ApiAuthorize]
+        [ApiAuthorize(Roles = "ReadAccountUsers")]
         public async Task<IHttpActionResult> GetAccountUsers(long ukprn)
         {
             _logger.Info($"Getting account users for ukprn: {ukprn}", providerId: ukprn);

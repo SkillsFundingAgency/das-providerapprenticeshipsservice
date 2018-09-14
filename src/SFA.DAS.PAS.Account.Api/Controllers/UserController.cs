@@ -22,7 +22,7 @@ namespace SFA.DAS.PAS.Account.Api.Controllers
 
         [Route("{userRef}")]
         [HttpGet]
-        [ApiAuthorize]
+        [ApiAuthorize(Roles = "ReadUserSettings")]
         public async Task<IHttpActionResult> GetUserSettings(string userRef)
         {
             _logger.Info($"Getting users settings for user: {userRef}");
