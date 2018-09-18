@@ -5,8 +5,8 @@
         public int ProviderId { get; set; }
         public string ProviderName { get; set; }
         public AccountStatus AccountStatus { get; set; }
-
         public string Message { get; set; }
+        public bool ShowAcademicYearBanner { get; set; }
     }
 
     public enum AccountStatus

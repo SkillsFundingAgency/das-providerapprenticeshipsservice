@@ -216,6 +216,7 @@
     <Compile Include="AcademicYear\WhenDeterminingTheAcademicYear.cs" />
     <Compile Include="AcademicYear\WhenValidatingAcademicYear.cs" />
     <Compile Include="Models\DataLockSummaryViewModelTests.cs" />
+    <Compile Include="Orchestrators\Account\WhenGettingProvider.cs" />
     <Compile Include="Orchestrators\Agreement\WhenGettingAgreementsViewModel.cs" />
     <Compile Include="Orchestrators\Authentication\WhenSavingIdentityAttributes.cs" />
     <Compile Include="Orchestrators\BulkUpload\BulkUploadTestBase.cs" />
