@@ -17,7 +17,7 @@
       <Setting name="FeatureToggle.Transfers" value="__FeatureToggle.Transfers__" />
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="WebSslCert" thumbprint="E1ED3D898100C041C912BFA02A2B9AAAF5E4C568" thumbprintAlgorithm="sha1" />
+      <Certificate name="WebSslCert" thumbprint="57C6F5230355B74AE0D95DC4623434E2326AABAE" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
   <NetworkConfiguration>

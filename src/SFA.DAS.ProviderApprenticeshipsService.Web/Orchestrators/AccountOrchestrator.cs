@@ -12,6 +12,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUserNoti
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 
@@ -21,11 +22,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ILog _logger;
+        private readonly ICurrentDateTime _currentDateTime;
 
-        public AccountOrchestrator(IMediator mediator, ILog logger)
+        public AccountOrchestrator(IMediator mediator, ILog logger, ICurrentDateTime currentDateTime)
         {
             _mediator = mediator;
             _logger = logger;
+            _currentDateTime = currentDateTime;
         }
 
         public async Task<AccountHomeViewModel> GetProvider(int providerId)
@@ -38,7 +41,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
                 var provider = providers.ProvidersView.Provider;
 
-                return new AccountHomeViewModel {AccountStatus = AccountStatus.Active, ProviderName = provider.ProviderName, ProviderId = providerId};
+                return new AccountHomeViewModel
+                {
+                    AccountStatus = AccountStatus.Active,
+                    ProviderName = provider.ProviderName,
+                    ProviderId = providerId,
+                    ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2018, 10, 19)
+                };
             }
             catch (EntityNotFoundException)
             {
