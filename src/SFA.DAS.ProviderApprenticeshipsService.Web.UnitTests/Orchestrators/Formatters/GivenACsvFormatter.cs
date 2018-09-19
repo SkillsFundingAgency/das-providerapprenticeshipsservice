@@ -18,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.For
                 List<CommitmentAgreement> agreements,
                 CsvFormatter sut)
             {
-                var byteResult = sut.Format(agreements);
+                var byteResult = sut.Format(TestHelper.Clone(agreements));
 
                 var stringResult = Encoding.Default.GetString(byteResult);
                 stringResult.Should().StartWith(
@@ -30,7 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.For
                 List<CommitmentAgreement> agreements,
                 CsvFormatter sut)
             {
-                var byteResult = sut.Format(agreements);
+                var byteResult = sut.Format(TestHelper.Clone(agreements));
 
                 var stringResult = Encoding.Default.GetString(byteResult);
                 stringResult.Should().Contain($"{agreements[0].OrganisationName},{agreements[0].CohortID},{agreements[0].AgreementID}");
