@@ -14,7 +14,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     public class AgreementController : BaseController
     {
         private readonly AgreementOrchestrator _orchestrator;
-        private const string FileName = "organisations_and_areements";
+        private const string FileName = "organisations_and_agreements";
         private const string CsvContentType = "text/csv";
         private const string ExcelContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
