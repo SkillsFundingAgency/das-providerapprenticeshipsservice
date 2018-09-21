@@ -1,5 +1,4 @@
-﻿using System;
-using MediatR;
+﻿using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
@@ -50,21 +49,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                 Mock.Of<IBulkUploadFileParser>());
         }
 
-
-        [Test]
-        public void ThenIfCohortIsPaidForByATransferThenAnExceptionIsThrown()
-        {
-            _commitmentView.TransferSender = new TransferSender {Id = 123L};
-            Assert.ThrowsAsync<InvalidOperationException>(() => _bulkUploadOrchestrator.GetUploadModel(123L, "HashedCmtId"));
-        }
-
         [Test]
         public void ThenIfCohortIsNotPaidForByATransferThenAnExceptionIsNotThrown()
         {
             _commitmentView.TransferSender = null;
             Assert.DoesNotThrowAsync(() => _bulkUploadOrchestrator.GetUploadModel(123L, "HashedCmtId"));
         }
-
-
     }
 }
