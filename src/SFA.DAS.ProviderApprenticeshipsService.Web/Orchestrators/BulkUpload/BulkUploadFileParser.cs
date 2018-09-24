@@ -6,6 +6,8 @@ using System.Linq;
 using CsvHelper;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -23,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _logger = logger;
         }
 
-        public BulkUploadResult CreateViewModels(long providerId, long commitmentId, string fileInput)
+        public BulkUploadResult CreateViewModels(long providerId, CommitmentView commitment, string fileInput)
         {
             const string errorMessage = "Upload failed. Please check your file and try again.";
 
@@ -41,24 +43,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                     {
                         Data = csvReader.GetRecords<CsvRecord>()
                             .ToList()
-                            .Select(MapTo)
+                            .Select(record => MapTo(record, commitment))
                     };
                 }
                  catch (CsvMissingFieldException)
                 {
-                    _logger.Info("Failed to process bulk upload file (missing field).", providerId, commitmentId);
+                    _logger.Info("Failed to process bulk upload file (missing field).", providerId, commitment.Id);
                     return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("Some mandatory fields are incomplete. Please check your file and upload again.") } };
                 }
                 catch (Exception)
                 {
-                    _logger.Info("Failed to process bulk upload file.", providerId, commitmentId);
+                    _logger.Info("Failed to process bulk upload file.", providerId, commitment.Id);
 
                     return new BulkUploadResult { Errors = new List<UploadError> { new UploadError(errorMessage) } };
                 }
             }
         }
 
-        private ApprenticeshipUploadModel MapTo(CsvRecord record)
+        private ApprenticeshipUploadModel MapTo(CsvRecord record, CommitmentView commitment)
         {
             var dateOfBirth = GetValidDate(record.DateOfBirth, "yyyy-MM-dd");
             var learnerStartDate = GetValidDate(record.StartDate, "yyyy-MM");
@@ -82,7 +84,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 EndDate = new DateTimeViewModel(learnerEndDate),
                 ProgType = record.ProgType.TryParse(),
                 TrainingCode = trainingCode,
-                //IsPaidForByTransfer = todo: get from commitment, todo: get commitment
+                IsPaidForByTransfer = commitment.IsTransfer()
             };
             return new ApprenticeshipUploadModel
             {
