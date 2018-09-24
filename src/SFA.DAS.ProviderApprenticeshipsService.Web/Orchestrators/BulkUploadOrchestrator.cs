@@ -47,7 +47,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var providerId = uploadApprenticeshipsViewModel.ProviderId;
             var fileName = uploadApprenticeshipsViewModel?.Attachment?.FileName ?? "<unknown>";
 
-			await AssertCommitmentStatus(commitmentId, uploadApprenticeshipsViewModel.ProviderId);
+            var commitment = await GetCommitment(providerId, commitmentId);
+			AssertCommitmentStatus(commitment);
             Logger.Info($"Uploading File - Filename:{fileName}", uploadApprenticeshipsViewModel.ProviderId, commitmentId);
 
             var fileValidationResult = await _bulkUploader.ValidateFileStructure(uploadApprenticeshipsViewModel, providerId, commitmentId);

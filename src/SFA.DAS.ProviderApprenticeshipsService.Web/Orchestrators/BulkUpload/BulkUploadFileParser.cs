@@ -20,9 +20,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
         public BulkUploadFileParser(IProviderCommitmentsLogger logger)
         {
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
             _logger = logger;
         }
 
@@ -84,7 +81,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 StartDate = new DateTimeViewModel(learnerStartDate),
                 EndDate = new DateTimeViewModel(learnerEndDate),
                 ProgType = record.ProgType.TryParse(),
-                TrainingCode = trainingCode
+                TrainingCode = trainingCode,
+                //IsPaidForByTransfer = todo: get from commitment, todo: get commitment
             };
             return new ApprenticeshipUploadModel
             {
