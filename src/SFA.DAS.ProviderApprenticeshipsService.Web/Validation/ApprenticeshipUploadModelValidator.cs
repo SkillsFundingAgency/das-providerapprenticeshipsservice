@@ -244,8 +244,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 return CreateValidationFailure("FworkCode", _validationText.FworkCode02);
             }
 
-            // todo: if fwork code and commitment.istransfer true then invalid.
-            // commitment is realised in BaseCommitmentOrchestrator.AssertCommitmentStatus() - used in BulkUploadOrchestrator
+            if (!string.IsNullOrWhiteSpace(model.CsvRecord.FworkCode) &&
+                model.ApprenticeshipViewModel.IsPaidForByTransfer)
+                return CreateValidationFailure("FworkCode", new ValidationMessage("wrong", "wrong")); //_validationText.FworkCode04);
             
             if (model.CsvRecord.ProgType == "25" && !string.IsNullOrWhiteSpace(model.CsvRecord.FworkCode) && model.CsvRecord.FworkCode != "0")
             {
