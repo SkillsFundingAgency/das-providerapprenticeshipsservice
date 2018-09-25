@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.ApprenticeshipBulkUpload
@@ -28,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeFalse();
-            // todo: result.Errors.First().ErrorMessage.Should().Be("blah");
+            result.Errors.Single().ErrorMessage.Should().Be("wrong");
         }
 
         [Test]

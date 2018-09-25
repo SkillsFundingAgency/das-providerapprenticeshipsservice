@@ -246,7 +246,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
             if (!string.IsNullOrWhiteSpace(model.CsvRecord.FworkCode) &&
                 model.ApprenticeshipViewModel.IsPaidForByTransfer)
-                return CreateValidationFailure("FworkCode", new ValidationMessage("wrong", "wrong")); //_validationText.FworkCode04);
+                return CreateValidationFailure("FworkCode", new ValidationMessage("wrong", "wrong")); // todo: _validationText.FworkCode04);
             
             if (model.CsvRecord.ProgType == "25" && !string.IsNullOrWhiteSpace(model.CsvRecord.FworkCode) && model.CsvRecord.FworkCode != "0")
             {
