@@ -29,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Single().ErrorMessage.Should().Be("wrong");
+            result.Errors.Single().ErrorMessage.Should().Be("Entered apprenticeship type is a framework.</br>All apprenticeship types must be apprenticeship standards.");
         }
 
         [Test]

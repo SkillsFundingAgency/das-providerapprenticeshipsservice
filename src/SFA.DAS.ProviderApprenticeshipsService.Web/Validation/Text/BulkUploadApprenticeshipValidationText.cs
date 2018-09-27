@@ -85,6 +85,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
               new ValidationMessage("You must enter a <strong>Framework code</strong> - you can add up to 3 characters", "FworkCode_02");
         public ValidationMessage FworkCode03 =>
               new ValidationMessage("You must not enter a <strong>Framework code</strong> when you've entered a Standard programme type", "FworkCode_03");
+        public ValidationMessage FworkCode04 =>
+            new ValidationMessage("Entered apprenticeship type is a framework.</br>All apprenticeship types must be apprenticeship standards.", "FworkCode_04");
 
         public ValidationMessage PwayCode01 =>
               new ValidationMessage("The <strong>Pathway code</strong> must be 3 characters or fewer", "PwayCode_01");

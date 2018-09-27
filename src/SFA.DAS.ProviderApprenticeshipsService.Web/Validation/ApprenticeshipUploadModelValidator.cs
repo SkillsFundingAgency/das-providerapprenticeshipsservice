@@ -243,15 +243,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             {
                 return CreateValidationFailure("FworkCode", _validationText.FworkCode02);
             }
-
-            if (!string.IsNullOrWhiteSpace(model.CsvRecord.FworkCode) &&
-                model.ApprenticeshipViewModel.IsPaidForByTransfer)
-                return CreateValidationFailure("FworkCode", new ValidationMessage("wrong", "wrong")); // todo: _validationText.FworkCode04);
             
             if (model.CsvRecord.ProgType == "25" && !string.IsNullOrWhiteSpace(model.CsvRecord.FworkCode) && model.CsvRecord.FworkCode != "0")
             {
                 return CreateValidationFailure("FworkCode", _validationText.FworkCode03);
             }
+
+            if (!string.IsNullOrWhiteSpace(model.CsvRecord.FworkCode) &&
+                model.ApprenticeshipViewModel.IsPaidForByTransfer)
+                return CreateValidationFailure("FworkCode", _validationText.FworkCode04);
 
             return null;
         }
