@@ -556,6 +556,7 @@
     <Compile Include="Models\ViewModelBase.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
     <Compile Include="Orchestrators\AgreementOrchestrator.cs" />
+    <Compile Include="Orchestrators\FiltersCookieManager.cs" />
     <Compile Include="Orchestrators\Formatters\CsvFormatter.cs" />
     <Compile Include="Orchestrators\Formatters\ExcelFormatter.cs" />
     <Compile Include="Orchestrators\Formatters\ICsvFormatter.cs" />

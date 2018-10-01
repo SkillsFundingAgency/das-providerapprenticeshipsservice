@@ -273,6 +273,7 @@
     <Compile Include="Orchestrators\Commitments\WhenValidatingApprenticeshipViewModel.cs" />
     <Compile Include="Orchestrators\Formatters\GivenACsvFormatter.cs" />
     <Compile Include="Orchestrators\Formatters\GivenAnExcelFormatter.cs" />
+    <Compile Include="Orchestrators\ManageApprentices\WhenCheckingForFiltersCookie.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenCreatingApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\Commitments\WhenCreatingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingDeleteApprenticeshipConfirmation.cs" />

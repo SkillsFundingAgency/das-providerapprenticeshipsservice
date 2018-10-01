@@ -22,8 +22,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
             FundingStatusOptions = new List<KeyValuePair<string, string>>();
         }
 
-        public int PageNumber { get; set; }
-
         public List<KeyValuePair<string, string>> ApprenticeshipStatusOptions { get; set; }
         public List<KeyValuePair<string, string>> TrainingCourseOptions { get; set; }
         public List<KeyValuePair<string, string>> RecordStatusOptions { get; set; }
@@ -36,9 +34,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public List<string> Course { get; set; }
         public List<string> FundingStatus { get; set; }
 
+        public int PageNumber { get; set; }
         public string SearchInput { get; set; }
-
         public bool ResetFilter { get; set; }
+        public bool CheckCookie { get; set; }
 
         public bool HasValues()
         {
