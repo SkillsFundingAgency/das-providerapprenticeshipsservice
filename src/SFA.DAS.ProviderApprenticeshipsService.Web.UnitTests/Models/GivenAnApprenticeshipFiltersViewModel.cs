@@ -98,7 +98,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models
             public void AndPageNumberHasValueThenReturnsTrue(
                 Generator<int> intGenerator)
             {
-                var pageNumber = intGenerator.Single(i => i > 1);
+                var pageNumber = intGenerator.First(i => i > 1);
 
                 var sut = new ApprenticeshipFiltersViewModel
                 {
