@@ -560,6 +560,7 @@
     <Compile Include="Orchestrators\Formatters\ExcelFormatter.cs" />
     <Compile Include="Orchestrators\Formatters\ICsvFormatter.cs" />
     <Compile Include="Orchestrators\Formatters\IExcelFormatter.cs" />
+    <Compile Include="Orchestrators\IFiltersCookieManager.cs" />
     <Compile Include="Orchestrators\Mappers\AgreementMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IAgreementMapper.cs" />
     <Compile Include="Validation\ApprovedApprenticeshipValidator.cs" />
