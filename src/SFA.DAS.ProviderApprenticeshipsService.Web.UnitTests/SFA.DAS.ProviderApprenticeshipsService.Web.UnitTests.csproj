@@ -248,6 +248,7 @@
     <Compile Include="AcademicYear\WhenValidatingAcademicYear.cs" />
     <Compile Include="Extensions\IEnumerableCommitmentAgreementTests.cs" />
     <Compile Include="Models\DataLockSummaryViewModelTests.cs" />
+    <Compile Include="Models\GivenAnApprenticeshipFiltersViewModel.cs" />
     <Compile Include="MoqCustomisedAutoData.cs" />
     <Compile Include="Orchestrators\Account\WhenGettingProvider.cs" />
     <Compile Include="Orchestrators\Agreement\WhenGettingAgreementsAsExcel.cs" />

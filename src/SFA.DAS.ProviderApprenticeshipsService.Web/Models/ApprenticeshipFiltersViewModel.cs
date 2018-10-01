@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Ajax.Utilities;
+using System.Collections.Generic;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
@@ -38,5 +39,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string SearchInput { get; set; }
 
         public bool ResetFilter { get; set; }
+
+        public bool HasValues()
+        {
+            return Status.Count > 0
+                   || RecordStatus.Count > 0
+                   || Employer.Count > 0
+                   || Course.Count > 0
+                   || FundingStatus.Count > 0
+                   || !SearchInput.IsNullOrWhiteSpace()
+                   || PageNumber > 1;
+        }
     }
 }
