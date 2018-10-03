@@ -130,6 +130,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             {
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate02);
             }
+
+            var transfersAllowedStartDate = DateTime.Parse("2018-05-01");
+            if (model.ApprenticeshipViewModel.StartDate.DateTime < transfersAllowedStartDate
+                && model.ApprenticeshipViewModel.IsPaidForByTransfer)
+                return CreateValidationFailure("StartDate", _validationText.LearnStartDate06);
+                
             
             // we could check the start date against the training programme here, but we'd have to pass the trainingprogrammes through the call stack, or refetch them, or make them available another way e.g. static.
             // none of these choices are appealing, so we'll wait until bulk upload is refactored

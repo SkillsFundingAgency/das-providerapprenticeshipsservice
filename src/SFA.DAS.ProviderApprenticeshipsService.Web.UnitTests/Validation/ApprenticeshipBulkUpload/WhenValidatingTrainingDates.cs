@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -9,28 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
     public class WhenValidatingTrainingDates : ApprenticeshipBulkUploadValidationTestBase
     {
         [Test]
-        public void ShouldFailIfStartDateHasNullObjectReference()
-        {
-            ValidModel.ApprenticeshipViewModel.StartDate = null;
-
-            var result = Validator.Validate(ValidModel);
-
-            result.IsValid.Should().BeFalse();
-        }
-
-        [Test]
-        public void ShouldFailIfEndDateHasNullObjectReference()
-        {
-            ValidModel.ApprenticeshipViewModel.EndDate = null;
-
-            var result = Validator.Validate(ValidModel);
-
-            result.IsValid.Should().BeFalse();
-        }
-
-
-        [Test]
-        public void ShouldIfStartDateBeforeMay2017()
+        public void ShouldFailIfStartDateBeforeMay2017()
         {
             ValidModel.ApprenticeshipViewModel.StartDate = new DateTimeViewModel(30, 4, 2017);
 
@@ -147,6 +127,31 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeFalse();
+        }
+
+        [Test]
+        public void AndStartDateBeforeMay2018AndIsTransferThenInvalid()
+        {
+            ValidModel.ApprenticeshipViewModel.StartDate = new DateTimeViewModel(DateTime.Parse("2018-04-30"));
+            ValidModel.ApprenticeshipViewModel.EndDate = new DateTimeViewModel(DateTime.Parse("2020-05-10"));
+            ValidModel.ApprenticeshipViewModel.IsPaidForByTransfer = true;
+
+            var result = Validator.Validate(ValidModel);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Single().ErrorMessage.Should().Be("Apprentices funded through a transfer can't start earlier than May 2018");
+        }
+
+        [Test]
+        public void AndStartDateAfterMay2018AndIsTransferThenValid()
+        {
+            ValidModel.ApprenticeshipViewModel.StartDate = new DateTimeViewModel(DateTime.Parse("2018-05-01"));
+            ValidModel.ApprenticeshipViewModel.EndDate = new DateTimeViewModel(DateTime.Parse("2020-05-10"));
+            ValidModel.ApprenticeshipViewModel.IsPaidForByTransfer = true;
+
+            var result = Validator.Validate(ValidModel);
+
+            result.IsValid.Should().BeTrue();
         }
     }
 }
