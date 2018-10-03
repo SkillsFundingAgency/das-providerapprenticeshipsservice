@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.ApprenticeshipBulkUpload
 {
@@ -10,6 +12,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void AndNoFrameworkCodeAndIsTransferThenValid()
         {
+            ValidModel.ApprenticeshipViewModel.StartDate = new DateTimeViewModel(DateTime.Parse("2018-05-01"));
             ValidModel.ApprenticeshipViewModel.IsPaidForByTransfer = true;
 
             var result = Validator.Validate(ValidModel);
@@ -20,6 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void AndHasFrameworkCodeAndIsTransferThenInvalid()
         {
+            ValidModel.ApprenticeshipViewModel.StartDate = new DateTimeViewModel(DateTime.Parse("2018-05-01"));
             ValidModel.CsvRecord.ProgType = "2";
             ValidModel.CsvRecord.StdCode = null;
             ValidModel.CsvRecord.PwayCode = "45";
