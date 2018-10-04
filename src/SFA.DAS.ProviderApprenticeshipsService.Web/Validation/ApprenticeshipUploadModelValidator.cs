@@ -126,12 +126,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate01);
             }
 
-            if (model.ApprenticeshipViewModel.StartDate.DateTime < new DateTime(2017, 5, 1))
-            {
+            var apprenticeshipAllowedStartDate = new DateTime(2017, 05, 01);
+            if (model.ApprenticeshipViewModel.StartDate.DateTime < apprenticeshipAllowedStartDate 
+                && !model.ApprenticeshipViewModel.IsPaidForByTransfer)
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate02);
-            }
 
-            var transfersAllowedStartDate = DateTime.Parse("2018-05-01");
+            var transfersAllowedStartDate = new DateTime(2018, 05, 01);
             if (model.ApprenticeshipViewModel.StartDate.DateTime < transfersAllowedStartDate
                 && model.ApprenticeshipViewModel.IsPaidForByTransfer)
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate06);

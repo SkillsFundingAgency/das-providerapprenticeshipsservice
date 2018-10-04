@@ -143,6 +143,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         }
 
         [Test]
+        public void AndStartDateBeforeMay2017AndIsTransferThenOnlyIncludesSingleValidationError()
+        {
+            ValidModel.ApprenticeshipViewModel.StartDate = new DateTimeViewModel(DateTime.Parse("2017-04-30"));
+            ValidModel.ApprenticeshipViewModel.EndDate = new DateTimeViewModel(DateTime.Parse("2020-05-10"));
+            ValidModel.ApprenticeshipViewModel.IsPaidForByTransfer = true;
+
+            var result = Validator.Validate(ValidModel);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Single().ErrorMessage.Should().Be("Apprentices funded through a transfer can't start earlier than May 2018");
+        }
+
+        [Test]
         public void AndStartDateAfterMay2018AndIsTransferThenValid()
         {
             ValidModel.ApprenticeshipViewModel.StartDate = new DateTimeViewModel(DateTime.Parse("2018-05-01"));
