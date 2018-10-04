@@ -18,6 +18,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 using ApiTrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
 using SFA.DAS.HashingService;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
@@ -213,7 +214,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerid,
                 HashedCommitmentId = hashedcommitmentid,
-                ApprenticeshipCount = commitment.Apprenticeships.Count
+                ApprenticeshipCount = commitment.Apprenticeships.Count,
+                IsPaidByTransfer = commitment.IsTransfer()
             };
         }
 

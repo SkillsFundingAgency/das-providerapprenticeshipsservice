@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using System.Threading.Tasks;
+using AutoFixture.NUnit3;
+using FluentAssertions;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
@@ -54,6 +57,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         {
             _commitmentView.TransferSender = null;
             Assert.DoesNotThrowAsync(() => _bulkUploadOrchestrator.GetUploadModel(123L, "HashedCmtId"));
+        }
+
+        [Test, AutoData]
+        public async Task AndHasTransferSender_ThenIsPaidByTransferIsTrue(TransferSender transferSender)
+        {
+            _commitmentView.TransferSender = transferSender;
+             var result = await _bulkUploadOrchestrator.GetUploadModel(123L, "HashedCmtId");
+            result.IsPaidByTransfer.Should().BeTrue();
+        }
+
+        [Test]
+        public async Task AndNullTransferSender_ThenIsPaidByTransferIsFalse()
+        {
+            _commitmentView.TransferSender = null;
+            var result = await _bulkUploadOrchestrator.GetUploadModel(123L, "HashedCmtId");
+            result.IsPaidByTransfer.Should().BeFalse();
         }
     }
 }
