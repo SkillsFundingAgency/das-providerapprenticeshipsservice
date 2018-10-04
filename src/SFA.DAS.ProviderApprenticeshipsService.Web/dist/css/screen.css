@@ -3783,6 +3783,18 @@ table .changed-item {
   margin-top: 0;
 }
 
+#total-count {
+  margin-bottom: 1.25em;
+}
+
+#total-count p {
+  margin-bottom: 0.3125em;
+}
+
+#total-count strong {
+  font-weight: 600;
+}
+
 #search-form {
   margin: 7px 0 15px 0;
 }
