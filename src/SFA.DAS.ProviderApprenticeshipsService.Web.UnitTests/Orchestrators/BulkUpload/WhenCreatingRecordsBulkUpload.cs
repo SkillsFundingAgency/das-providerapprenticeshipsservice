@@ -8,6 +8,7 @@ using System.Web;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 
@@ -61,7 +62,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [SetUp]
         public void Setup()
         {
-           
             _file = new Mock<HttpPostedFileBase>();
             _file.Setup(m => m.FileName).Returns("APPDATA-20051030-213855.csv");
             _file.Setup(m => m.ContentLength).Returns(400);
@@ -74,7 +74,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void CreatingViewModels()
         {
-            var records = _sut.CreateViewModels(123, 456, _testData);
+            var commitment = new CommitmentView {Id = 456};
+            var records = _sut.CreateViewModels(123, commitment, _testData);
             records.Data.Count().Should().Be(8);
             records.Errors.Should().NotBeNull();
             records.Errors.Should().BeEmpty();
@@ -86,9 +87,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var logger = new Mock<IProviderCommitmentsLogger>();
             logger.Setup(x => x.Info(It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>())).Verifiable();
             logger.Setup(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>())).Verifiable();
+            var commitment = new CommitmentView { Id = 456 };
             _sut = new BulkUploadFileParser(logger.Object);
 
-            var records = _sut.CreateViewModels(123, 456, "");
+            var records = _sut.CreateViewModels(123, commitment, "");
             records.Data.Should().BeNull();
             records.Errors.Should().NotBeNull();
             records.Errors.First().Message.Should().Be("Upload failed. Please check your file and try again.");
@@ -104,6 +106,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var logger = new Mock<IProviderCommitmentsLogger>();
             logger.Setup(x => x.Info(It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>())).Verifiable();
             logger.Setup(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>())).Verifiable();
+            var commitment = new CommitmentView { Id = 456 };
             _sut = new BulkUploadFileParser(logger.Object);
 
             var builder = new StringBuilder();
@@ -117,7 +120,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var textStream = new MemoryStream(Encoding.UTF8.GetBytes(inputData));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
-            var result = _sut.CreateViewModels(123, 456, inputData);
+            var result = _sut.CreateViewModels(123, commitment, inputData);
 
             var errors = result.Errors.ToList();
             Assert.AreEqual(0, errors.Count);
@@ -134,6 +137,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var logger = new Mock<IProviderCommitmentsLogger>();
             logger.Setup(x => x.Info(It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>())).Verifiable();
             logger.Setup(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>())).Verifiable();
+            var commitment = new CommitmentView { Id = 456 };
             _sut = new BulkUploadFileParser(logger.Object);
 
             var inputData = $"{header}" +
@@ -146,7 +150,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var textStream = new MemoryStream(Encoding.UTF8.GetBytes(inputData));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
-           var result = _sut.CreateViewModels(123, 456, inputData);
+           var result = _sut.CreateViewModels(123, commitment, inputData);
 
             var errors = result.Errors.ToList();
             Assert.AreEqual(1, errors.Count);

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
-using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Validation;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
@@ -49,10 +48,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var providerId = uploadApprenticeshipsViewModel.ProviderId;
             var fileName = uploadApprenticeshipsViewModel?.Attachment?.FileName ?? "<unknown>";
 
-			await AssertCommitmentStatus(commitmentId, uploadApprenticeshipsViewModel.ProviderId);
+            var commitment = await GetCommitment(providerId, commitmentId);
+			AssertCommitmentStatus(commitment);
             Logger.Info($"Uploading File - Filename:{fileName}", uploadApprenticeshipsViewModel.ProviderId, commitmentId);
 
-            var fileValidationResult = await _bulkUploader.ValidateFileStructure(uploadApprenticeshipsViewModel, providerId, commitmentId);
+            var fileValidationResult = await _bulkUploader.ValidateFileStructure(uploadApprenticeshipsViewModel, providerId, commitment);
 
             if (fileValidationResult.Errors.Any())
             {
@@ -210,13 +210,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var commitment = await GetCommitment(providerid, hashedcommitmentid);
             AssertCommitmentStatus(commitment);
 
-            AssertCohortNotPaidForByTransfer(commitment);
-
             return new UploadApprenticeshipsViewModel
             {
                 ProviderId = providerid,
                 HashedCommitmentId = hashedcommitmentid,
-                ApprenticeshipCount = commitment.Apprenticeships.Count
+                ApprenticeshipCount = commitment.Apprenticeships.Count,
+                IsPaidByTransfer = commitment.IsTransfer()
             };
         }
 
@@ -225,7 +224,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var commitmentId = HashingService.DecodeValue(hashedCommitmentId);
             var bulkUploadId = HashingService.DecodeValue(bulkUploadReference);
 
-            await AssertCommitmentStatus(commitmentId, providerId);
+            var commitment = await GetCommitment(providerId, commitmentId);
+            AssertCommitmentStatus(commitment);
 
             var fileContentResult = await Mediator.SendAsync(new GetBulkUploadFileQueryRequest
             {
@@ -233,7 +233,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 BulkUploadId = bulkUploadId
             });
 
-            var uploadResult = _fileParser.CreateViewModels(providerId, commitmentId, fileContentResult.FileContent);
+            var uploadResult = _fileParser.CreateViewModels(providerId, commitment, fileContentResult.FileContent);
 
             var validationResult = await _bulkUploader.ValidateFileRows(uploadResult.Data, providerId, bulkUploadId);
             var overlaps = await GetOverlapErrors(uploadResult.Data.ToList());
@@ -274,12 +274,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                                };
             }
             return Enumerable.Empty<UploadError>();
-        }
-
-        private void AssertCohortNotPaidForByTransfer(CommitmentView commitment)
-        {
-            if (commitment.IsTransfer())
-                throw new InvalidOperationException("Bulk upload disabled for commitment paid for by a transfer");
         }
     }
 }

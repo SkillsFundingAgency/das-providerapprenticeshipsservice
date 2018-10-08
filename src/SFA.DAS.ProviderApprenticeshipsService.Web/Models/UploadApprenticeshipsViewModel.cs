@@ -26,5 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public int RowCount { get; set; }
 
         public IEnumerable<UploadError> FileErrors { get; set; }
+
+        public bool IsPaidByTransfer { get; set; }
     }
 }

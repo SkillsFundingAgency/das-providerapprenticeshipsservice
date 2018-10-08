@@ -291,6 +291,7 @@
     <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingCost.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingDateOfBirth.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingFirstName.cs" />
+    <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingFrameworkCode.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingLastName.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingProviderReference.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingTrainingCode.cs" />

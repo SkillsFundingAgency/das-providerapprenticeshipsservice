@@ -13,6 +13,7 @@
         ValidationMessage FworkCode01 { get; }
         ValidationMessage FworkCode02 { get; }
         ValidationMessage FworkCode03 { get; }
+        ValidationMessage FworkCode04 { get; }
         ValidationMessage GivenNames01 { get; }
         ValidationMessage GivenNames02 { get; }
         ValidationMessage LearnPlanEndDate01 { get; }
