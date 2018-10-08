@@ -280,6 +280,7 @@
     <Compile Include="Orchestrators\Commitments\WhenDeletingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGetCohorts.cs" />
     <Compile Include="Orchestrators\DataLock\WhenGettingApprenticeshipDataLockMismatches.cs" />
+    <Compile Include="Orchestrators\ManageApprentices\WhenGettingApprenticeship.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenGettingApprenticeships.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenGettingReviewApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenGettingUndoApprenticeshipUpdate.cs" />
