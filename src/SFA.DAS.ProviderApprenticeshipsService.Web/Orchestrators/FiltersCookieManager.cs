@@ -31,5 +31,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _filterCookieStorageService.Create(filtersViewModel, nameof(ApprenticeshipFiltersViewModel));
             return filtersViewModel;
         }
+
+        public ApprenticeshipFiltersViewModel GetCookie()
+        {
+            return _filterCookieStorageService.Get(nameof(ApprenticeshipFiltersViewModel))
+                   ?? new ApprenticeshipFiltersViewModel();
+        }
+
+        public void SetCookie(ApprenticeshipFiltersViewModel filtersViewModel)
+        {
+            _filterCookieStorageService.Delete(nameof(ApprenticeshipFiltersViewModel));
+            _filterCookieStorageService.Create(filtersViewModel, nameof(ApprenticeshipFiltersViewModel));
+        }
     }
 }
