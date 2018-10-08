@@ -39,8 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public int PageNumber { get; set; }
         public string SearchInput { get; set; }
         public bool ResetFilter { get; set; }
-        public bool CheckCookie { get; set; }
-
+        
         public bool HasValues()
         {
             return Status.Count > 0
