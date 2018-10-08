@@ -316,6 +316,7 @@
     <Compile Include="Validation\Messages\WhenExtractingMessages.cs" />
     <Compile Include="Validation\WhenValidatingVerificationOfRelationshipViewModel.cs" />
     <Compile Include="Validation\WhenValidatingVerificationOfEmployerViewModel.cs" />
+    <Compile Include="ViewModels\GivenAnApprenticeshipFiltersViewModel.cs" />
     <Compile Include="ViewModels\WhenCreatedApprenticeshipListItemGroupViewModel.cs" />
     <Compile Include="WhenValidatingCsvRecord.cs" />
     <Compile Include="Orchestrators\BulkUpload\WhenCreatingRecordsBulkUpload.cs" />

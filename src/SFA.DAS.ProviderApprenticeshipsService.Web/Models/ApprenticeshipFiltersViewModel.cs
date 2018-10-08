@@ -1,5 +1,7 @@
-﻿using Microsoft.Ajax.Utilities;
+﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
@@ -46,8 +48,33 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
                    || Employer.Count > 0
                    || Course.Count > 0
                    || FundingStatus.Count > 0
-                   || !SearchInput.IsNullOrWhiteSpace()
-                   || PageNumber > 1;
+                   || !string.IsNullOrWhiteSpace(SearchInput);
+        }
+
+        public string ToQueryString()
+        {
+            var result = new List<string>();
+
+            var props = GetType().GetProperties()
+                .Where(p => p.GetValue(this) != null
+                            && !p.Name.EndsWith("Options"));
+
+            foreach (var p in props)
+            {
+                var value = p.GetValue(this);
+                if (value is ICollection enumerable)
+                {
+                    result.AddRange(from object v in enumerable
+                        select
+                            $"{p.Name}={HttpUtility.UrlEncode(v.ToString())}");
+                }
+                else
+                {
+                    result.Add($"{p.Name}={HttpUtility.UrlEncode(value.ToString())}");
+                }
+            }
+
+            return string.Join("&", result.ToArray());
         }
     }
 }
