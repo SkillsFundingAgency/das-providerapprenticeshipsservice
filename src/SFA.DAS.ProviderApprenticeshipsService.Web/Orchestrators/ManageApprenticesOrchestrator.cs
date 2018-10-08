@@ -66,7 +66,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             if (filters.SearchInput?.Trim() == _searchPlaceholderText.Trim())
                 filters.SearchInput = string.Empty;
 
-            filters = _filtersCookieManager.CheckForCookie(filters);
+            _filtersCookieManager.SetCookie(filters);
 
             var searchQuery = _apprenticeshipFiltersMapper.MapToApprenticeshipSearchQuery(filters);
 

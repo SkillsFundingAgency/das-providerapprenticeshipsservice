@@ -26,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
                 .Setup(mediator => mediator.SendAsync(It.IsAny<ApprenticeshipSearchQueryRequest>()))
                 .ReturnsAsync(apprenticeshipSearchQueryResponse);
             await sut.GetApprenticeships(providerId, filtersViewModel);
-            mockFilterCookieManager.Verify(manager => manager.CheckForCookie(filtersViewModel));
+            mockFilterCookieManager.Verify(manager => manager.SetCookie(filtersViewModel));
         }
     }
 }

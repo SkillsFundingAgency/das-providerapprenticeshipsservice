@@ -4,6 +4,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public interface IFiltersCookieManager
     {
-        ApprenticeshipFiltersViewModel CheckForCookie(ApprenticeshipFiltersViewModel filtersViewModel);
+        void SetCookie(ApprenticeshipFiltersViewModel filtersViewModel);
+        ApprenticeshipFiltersViewModel GetCookie();
     }
 }
