@@ -35,8 +35,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
                 Mock.Of<IApprenticeshipMapper>(),
                 Mock.Of<IApprovedApprenticeshipValidator>(),
                 _mockApprenticeshipFiltersMapper.Object,
-                Mock.Of<IDataLockMapper>()
-                );
+                Mock.Of<IDataLockMapper>(), 
+                Mock.Of<IFiltersCookieManager>());
         }
 
         [TestCase(true)]

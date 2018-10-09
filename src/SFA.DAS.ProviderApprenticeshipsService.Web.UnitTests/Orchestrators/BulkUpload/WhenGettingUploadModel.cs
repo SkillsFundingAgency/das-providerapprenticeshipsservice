@@ -1,4 +1,6 @@
-﻿using System;
+﻿using System.Threading.Tasks;
+using AutoFixture.NUnit3;
+using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -50,14 +52,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                 Mock.Of<IBulkUploadFileParser>());
         }
 
-
-        [Test]
-        public void ThenIfCohortIsPaidForByATransferThenAnExceptionIsThrown()
-        {
-            _commitmentView.TransferSender = new TransferSender {Id = 123L};
-            Assert.ThrowsAsync<InvalidOperationException>(() => _bulkUploadOrchestrator.GetUploadModel(123L, "HashedCmtId"));
-        }
-
         [Test]
         public void ThenIfCohortIsNotPaidForByATransferThenAnExceptionIsNotThrown()
         {
@@ -65,6 +59,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             Assert.DoesNotThrowAsync(() => _bulkUploadOrchestrator.GetUploadModel(123L, "HashedCmtId"));
         }
 
+        [Test, AutoData]
+        public async Task AndHasTransferSender_ThenIsPaidByTransferIsTrue(TransferSender transferSender)
+        {
+            _commitmentView.TransferSender = transferSender;
+             var result = await _bulkUploadOrchestrator.GetUploadModel(123L, "HashedCmtId");
+            result.IsPaidByTransfer.Should().BeTrue();
+        }
 
+        [Test]
+        public async Task AndNullTransferSender_ThenIsPaidByTransferIsFalse()
+        {
+            _commitmentView.TransferSender = null;
+            var result = await _bulkUploadOrchestrator.GetUploadModel(123L, "HashedCmtId");
+            result.IsPaidByTransfer.Should().BeFalse();
+        }
     }
 }

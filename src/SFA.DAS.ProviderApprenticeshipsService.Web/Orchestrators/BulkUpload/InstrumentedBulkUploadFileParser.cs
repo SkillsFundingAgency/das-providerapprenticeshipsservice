@@ -1,6 +1,6 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
+using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 
@@ -13,20 +13,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
         public InstrumentedBulkUploadFileParser(ILog logger, IBulkUploadFileParser parser)
         {
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-            if (parser == null)
-                throw new ArgumentNullException(nameof(parser));
-
             _logger = logger;
             _parser = parser;
         }
 
-        public BulkUploadResult CreateViewModels(long providerId, long commitmentId, string fileContent)
+        public BulkUploadResult CreateViewModels(long providerId, CommitmentView commitment, string fileContent)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var result = _parser.CreateViewModels(providerId, commitmentId, fileContent);
+            var result = _parser.CreateViewModels(providerId, commitment, fileContent);
 
             _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to create {result.Data?.Count()} viewmodels");
 
