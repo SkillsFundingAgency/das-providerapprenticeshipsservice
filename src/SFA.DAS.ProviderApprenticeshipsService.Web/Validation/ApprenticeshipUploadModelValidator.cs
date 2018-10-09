@@ -126,10 +126,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate01);
             }
 
-            if (model.ApprenticeshipViewModel.StartDate.DateTime < new DateTime(2017, 5, 1))
-            {
+            var apprenticeshipAllowedStartDate = new DateTime(2017, 05, 01);
+            if (model.ApprenticeshipViewModel.StartDate.DateTime < apprenticeshipAllowedStartDate 
+                && !model.ApprenticeshipViewModel.IsPaidForByTransfer)
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate02);
-            }
+
+            var transfersAllowedStartDate = new DateTime(2018, 05, 01);
+            if (model.ApprenticeshipViewModel.StartDate.DateTime < transfersAllowedStartDate
+                && model.ApprenticeshipViewModel.IsPaidForByTransfer)
+                return CreateValidationFailure("StartDate", _validationText.LearnStartDate06);
+                
             
             // we could check the start date against the training programme here, but we'd have to pass the trainingprogrammes through the call stack, or refetch them, or make them available another way e.g. static.
             // none of these choices are appealing, so we'll wait until bulk upload is refactored
@@ -243,11 +249,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             {
                 return CreateValidationFailure("FworkCode", _validationText.FworkCode02);
             }
-
+            
             if (model.CsvRecord.ProgType == "25" && !string.IsNullOrWhiteSpace(model.CsvRecord.FworkCode) && model.CsvRecord.FworkCode != "0")
             {
                 return CreateValidationFailure("FworkCode", _validationText.FworkCode03);
             }
+
+            if (!string.IsNullOrWhiteSpace(model.CsvRecord.FworkCode) &&
+                model.ApprenticeshipViewModel.IsPaidForByTransfer)
+                return CreateValidationFailure("FworkCode", _validationText.FworkCode04);
 
             return null;
         }

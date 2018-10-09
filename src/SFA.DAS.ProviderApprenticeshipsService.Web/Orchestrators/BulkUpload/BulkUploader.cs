@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MediatR;
-
+using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SaveBulkUploadFile;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -55,7 +55,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             return new BulkUploadResult { Errors = new List<UploadError>(), Data = rows };
         }
 
-        public async Task<BulkUploadResult> ValidateFileStructure(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel, long providerId, long commitmentId)
+        public async Task<BulkUploadResult> ValidateFileStructure(UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel, long providerId, CommitmentView commitment)
         {
             if (uploadApprenticeshipsViewModel.Attachment == null)
                 return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("No file chosen") } };
@@ -68,7 +68,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 new SaveBulkUploadFileCommand
                 {
                     ProviderId = uploadApprenticeshipsViewModel.ProviderId,
-                    CommitmentId = commitmentId,
+                    CommitmentId = commitment.Id,
                     FileContent = fileContent,
                     FileName = fileName
                 });
@@ -79,14 +79,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             if (fileAttributeErrors.Any())
             {
                 foreach (var error in fileAttributeErrors)
-                    _logger.Warn($"File Structure Error  -->  {error.Message}", providerId: uploadApprenticeshipsViewModel.ProviderId, commitmentId: commitmentId);
+                    _logger.Warn($"File Structure Error  -->  {error.Message}", uploadApprenticeshipsViewModel.ProviderId, commitment.Id);
 
-                _logger.Info($"Failed validation bulk upload file with {fileAttributeErrors.Count} errors", uploadApprenticeshipsViewModel.ProviderId, commitmentId: commitmentId);
+                _logger.Info($"Failed validation bulk upload file with {fileAttributeErrors.Count} errors", uploadApprenticeshipsViewModel.ProviderId, commitment.Id);
 
                 return new BulkUploadResult { Errors = fileAttributeErrors };
             }
 
-            var uploadResult = _fileParser.CreateViewModels(providerId, commitmentId, fileContent);
+            var uploadResult = _fileParser.CreateViewModels(providerId, commitment, fileContent);
 
             if (uploadResult.HasErrors)
                 return uploadResult;

@@ -75,6 +75,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
         public ValidationMessage FworkCode01 { get { throw new NotImplementedException(); } }
         public ValidationMessage FworkCode02 { get { throw new NotImplementedException(); } }
         public ValidationMessage FworkCode03 { get { throw new NotImplementedException(); } }
+        public ValidationMessage FworkCode04 { get { throw new NotImplementedException(); } }
 
         public ValidationMessage ProgType01 { get { throw new NotImplementedException(); } }
         public ValidationMessage ProgType02 { get { throw new NotImplementedException(); } }
