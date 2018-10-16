@@ -56,10 +56,31 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
             return await _cache.GetCustomValueAsync<FrameworksView>(FrameworksKey);
         }
 
-        public ProvidersView GetProvider(long ukPrn)
+        public ProvidersView GetProvider(long ukprn)
         {
+            var deletedUkprns = new List<Apprenticeships.Api.Types.Providers.Provider>
+            {
+                new Apprenticeships.Api.Types.Providers.Provider
+                {
+                    Ukprn = 10000534,
+                    ProviderName = "BARNFIELD COLLEGE",
+                    Email = string.Empty
+                },
+                new Apprenticeships.Api.Types.Providers.Provider
+                {
+                    Ukprn = 10004442,
+                    ProviderName = "MOULTON COLLEGE",
+                    Email = string.Empty
+                }
+            };
+
+            if (deletedUkprns.Exists(provider1 => provider1.Ukprn == ukprn))
+            {
+                return _mapper.MapFrom(deletedUkprns.Single(provider1 => provider1.Ukprn == ukprn));
+            }
+
             var api = new Providers.Api.Client.ProviderApiClient(_configuration.BaseUrl);
-            var providers = api.Get(ukPrn);           
+            var providers = api.Get(ukprn);           
             return _mapper.MapFrom(providers);
         }
     }
