@@ -4,10 +4,13 @@
     ViewBag.HideNavBar = true;
 }
 
-<div class="info-summary" tabindex="-1">
-    <h3 class="heading-medium">Scheduled maintenance</h3>
-    <p>The apprenticeship service will be undergoing scheduled maintenance over the weekend of 20 and 21 October 2018. You may experience some service disruption during this time. We expect the service to be fully operational by 8am on 22 October.</p>
-</div>
+@if (DateTime.UtcNow < new DateTime(2018,10,22,8,0,0))
+{
+    <div class="info-summary" tabindex="-1">
+        <h3 class="heading-medium">Scheduled maintenance</h3>
+        <p>The apprenticeship service will be undergoing scheduled maintenance over the weekend of 20 and 21 October 2018. You may experience some service disruption during this time. We expect the service to be fully operational by 8am on 22 October.</p>
+    </div>
+}
 
 <div class="grid-row">
     <div class="column-two-thirds">
