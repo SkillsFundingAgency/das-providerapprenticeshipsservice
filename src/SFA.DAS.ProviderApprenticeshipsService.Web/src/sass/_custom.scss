@@ -833,6 +833,18 @@ width: 100%;
    }
 }
 
+#total-count {
+    margin-bottom: em(20, 16);
+
+    p {
+        margin-bottom: em(5, 16);
+    }
+
+    strong {
+        font-weight: 600;
+    }
+}
+
 #search-form{
 		margin:7px 0 15px 0;
         legend{margin-bottom:0;}
