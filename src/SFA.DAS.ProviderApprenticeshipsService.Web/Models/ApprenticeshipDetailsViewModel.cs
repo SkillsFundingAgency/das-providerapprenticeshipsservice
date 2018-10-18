@@ -47,6 +47,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public DataLockSummaryViewModel DataLockSummaryViewModel { get; set; }
 
         public bool HasHadDataLockSuccess { get; set; }
+
+        public ApprenticeshipFiltersViewModel SearchFiltersForListView { get; set; }
     }
 
     public enum DataLockErrorType

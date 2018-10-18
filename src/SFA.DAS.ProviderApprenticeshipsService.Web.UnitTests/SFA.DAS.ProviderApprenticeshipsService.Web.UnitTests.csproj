@@ -272,12 +272,15 @@
     <Compile Include="Orchestrators\Commitments\WhenValidatingApprenticeshipViewModel.cs" />
     <Compile Include="Orchestrators\Formatters\GivenACsvFormatter.cs" />
     <Compile Include="Orchestrators\Formatters\GivenAnExcelFormatter.cs" />
+    <Compile Include="Orchestrators\ManageApprentices\GivenAFiltersCookieManager.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenCreatingApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\Commitments\WhenCreatingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingDeleteApprenticeshipConfirmation.cs" />
     <Compile Include="Orchestrators\Commitments\WhenDeletingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGetCohorts.cs" />
     <Compile Include="Orchestrators\DataLock\WhenGettingApprenticeshipDataLockMismatches.cs" />
+    <Compile Include="Orchestrators\ManageApprentices\WhenGettingApprenticeship.cs" />
+    <Compile Include="Orchestrators\ManageApprentices\WhenGettingApprenticeships.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenGettingReviewApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenGettingUndoApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\Commitments\WhenMappingApprenticeshipUpdate.cs" />
@@ -314,6 +317,7 @@
     <Compile Include="Validation\Messages\WhenExtractingMessages.cs" />
     <Compile Include="Validation\WhenValidatingVerificationOfRelationshipViewModel.cs" />
     <Compile Include="Validation\WhenValidatingVerificationOfEmployerViewModel.cs" />
+    <Compile Include="ViewModels\GivenAnApprenticeshipFiltersViewModel.cs" />
     <Compile Include="ViewModels\WhenCreatedApprenticeshipListItemGroupViewModel.cs" />
     <Compile Include="WhenValidatingCsvRecord.cs" />
     <Compile Include="Orchestrators\BulkUpload\WhenCreatingRecordsBulkUpload.cs" />

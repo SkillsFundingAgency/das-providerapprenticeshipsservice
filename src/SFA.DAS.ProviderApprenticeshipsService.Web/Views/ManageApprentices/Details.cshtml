@@ -221,7 +221,7 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("Index", "ManageApprentices")" aria-label="Back to your apprentices" class="back-link">Back to your apprentices</a>
+        <a href="@Url.Action("Index", "ManageApprentices")?@Model.SearchFiltersForListView.ToQueryString()" aria-label="Back to your apprentices" class="back-link">Back to your apprentices</a>
     </div>
 }
 
