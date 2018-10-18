@@ -4,16 +4,25 @@
     ViewBag.HideNavBar = true;
 }
 
+@if (DateTime.UtcNow < new DateTime(2018,10,22,8,0,0))
+{
+    <div class="info-summary" tabindex="-1">
+        <h3 class="heading-medium">Scheduled maintenance</h3>
+        <p>The apprenticeship service will be undergoing scheduled maintenance over the weekend of 20 and 21 October 2018. You may experience some service disruption during this time. We expect the service to be fully operational by 8am on 22 October.</p>
+    </div>
+}
+
 <div class="grid-row">
     <div class="column-two-thirds">
+
         <h1 class="heading-xlarge">Add and update apprentice records as a training provider</h1>
-        
+
         <p>This service is for training providers registered with the apprenticeship service to work with employers to:</p>
         <ul class="list list-bullet">
             <li>add details of the apprentices they're going to train</li>
             <li>manage details of the apprentices they're currently training</li>
         </ul>
-     
+
         <h2 class="heading-medium">Before you start</h2>
         <p>You need to have an account with the government’s Information Management Services system (IdAMS) to use this.</p>
         <p>If your organisation doesn't already have an IdAMS account, you’ll get your account details when you <a href="https://www.gov.uk/guidance/register-of-apprenticeship-training-providers" target="_blank" rel="external">register as an apprenticeship training provider</a>.</p>
@@ -24,5 +33,5 @@
         </div>
 
 
-</div>
+    </div>
 </div>
