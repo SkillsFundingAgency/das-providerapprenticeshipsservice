@@ -59,6 +59,17 @@ else
             }
             else
             {
+                <div id="total-count">
+                    <p>
+                        <strong>@Model.TotalResults</strong> record@(Model.TotalResults > 1 ? "s" : null) found.
+                    </p>
+                    @if (Model.Filters.HasValues())
+                    {
+                        <p>
+                            You can search again or <a href="@Url.Action("Index")" title="see all apprentices" class="text-link">see all apprentices</a>
+                        </p>   
+                    }
+                </div>
                 <table class="tableResponsive provider-list-view">
                     <thead>
                         <tr>

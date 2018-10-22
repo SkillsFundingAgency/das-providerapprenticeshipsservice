@@ -35,6 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IApprovedApprenticeshipValidator _approvedApprenticeshipValidator;
         private readonly IApprenticeshipFiltersMapper _apprenticeshipFiltersMapper;
         private readonly IDataLockMapper _dataLockMapper;
+        private readonly IFiltersCookieManager _filtersCookieManager;
         private readonly string _searchPlaceholderText;
 
         public ManageApprenticesOrchestrator(
@@ -44,7 +45,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             IApprenticeshipMapper apprenticeshipMapper,
             IApprovedApprenticeshipValidator approvedApprenticeshipValidator,
             IApprenticeshipFiltersMapper apprenticeshipFiltersMapper,
-            IDataLockMapper dataLockMapper) : base(mediator, hashingService, logger)
+            IDataLockMapper dataLockMapper,
+            IFiltersCookieManager filtersCookieManager) : base(mediator, hashingService, logger)
         {
             _mediator = mediator;
             _hashingService = hashingService;
@@ -53,6 +55,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _approvedApprenticeshipValidator = approvedApprenticeshipValidator;
             _apprenticeshipFiltersMapper = apprenticeshipFiltersMapper;
             _dataLockMapper = dataLockMapper;
+            _filtersCookieManager = filtersCookieManager;
             _searchPlaceholderText = "Enter a name or ULN";
         }
 
@@ -62,6 +65,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             if (filters.SearchInput?.Trim() == _searchPlaceholderText.Trim())
                 filters.SearchInput = string.Empty;
+
+            _filtersCookieManager.SetCookie(filters);
 
             var searchQuery = _apprenticeshipFiltersMapper.MapToApprenticeshipSearchQuery(filters);
 
@@ -110,6 +115,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var result = _apprenticeshipMapper.MapApprenticeshipDetails(data.Apprenticeship);
 
+            result.SearchFiltersForListView = _filtersCookieManager.GetCookie();
             result.DataLockSummaryViewModel = await _dataLockMapper.MapDataLockSummary(dataLockSummary.DataLockSummary, data.Apprenticeship.HasHadDataLockSuccess);
 
             return result;
