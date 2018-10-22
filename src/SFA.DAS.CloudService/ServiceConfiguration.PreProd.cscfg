@@ -14,7 +14,7 @@
       <Setting name="InstrumentationKey" value="__InstrumentationKey__" />
       <Setting name="RedisSessionProviderConnectionString" value="__RedisSessionProviderConnectionString__" />
       <Setting name="CurrentTime" value="" />
-      <Setting name="FeatureToggle.Transfers" value="__FeatureToggle.Transfers__" />
+      <Setting name="FeatureToggle.ProviderRelationships" value="__FeatureToggle.ProviderRelationships__" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="57C6F5230355B74AE0D95DC4623434E2326AABAE" thumbprintAlgorithm="sha1" />
