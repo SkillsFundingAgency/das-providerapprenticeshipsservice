@@ -20,9 +20,23 @@
     </div>
 </div>
 
+<!-- New Create Cohort link markup -->
+@if (Model.ShowCreateCohortLink)
+{
+    <div class="column-one-half">
+        <h2 class="heading-medium">
+            <a href="@Url.Action("Create", "Commitment", new {providerId = Model.ProviderId})">Create a cohort</a>
+        </h2>
+        <p>Create new cohorts on behalf of an employer.</p>
+        <hr/>
+    </div>
+}
+<!-- End new Create Cohort link markup -->
+
+
 <div class="grid-row">
     <div class="column-two-thirds">
-        <div class="grid-row">          
+        <div class="grid-row">
             <div class="column-one-half">
                 <h2 class="heading-medium">
                     <a href="@Url.Action("Cohorts", "Commitment", new {providerId = Model.ProviderId})">Your cohorts</a>
