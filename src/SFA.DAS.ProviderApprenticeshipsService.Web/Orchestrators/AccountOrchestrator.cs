@@ -13,6 +13,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 
@@ -23,30 +24,47 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly ILog _logger;
         private readonly ICurrentDateTime _currentDateTime;
+        private readonly IFeatureToggleService _featureToggleService;
 
-        public AccountOrchestrator(IMediator mediator, ILog logger, ICurrentDateTime currentDateTime)
+        public AccountOrchestrator(IMediator mediator,
+            ILog logger,
+            ICurrentDateTime currentDateTime,
+            IFeatureToggleService featureToggleService)
         {
             _mediator = mediator;
             _logger = logger;
             _currentDateTime = currentDateTime;
+            _featureToggleService = featureToggleService;
         }
 
-        public async Task<AccountHomeViewModel> GetProvider(int providerId)
+        public async Task<AccountHomeViewModel> GetAccountHomeViewModel(int providerId)
         {
             try
             {
                 _logger.Info($"Getting provider {providerId}");
 
                 var providers = await _mediator.SendAsync(new GetProviderQueryRequest { UKPRN = providerId });
-
                 var provider = providers.ProvidersView.Provider;
+
+                var showCreateCohortLink = false;
+
+                //1. determine if provider permissions is enabled
+                if (_featureToggleService.Get<ProviderRelationships>().FeatureEnabled)
+                {
+                    //2. determine if provider has any organisations having granted CreateCohort permission
+                    //todo...
+
+                    showCreateCohortLink = true;
+                }
+
 
                 return new AccountHomeViewModel
                 {
                     AccountStatus = AccountStatus.Active,
                     ProviderName = provider.ProviderName,
                     ProviderId = providerId,
-                    ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2018, 10, 19)
+                    ShowAcademicYearBanner = false,
+                    ShowCreateCohortLink = showCreateCohortLink
                 };
             }
             catch (EntityNotFoundException)

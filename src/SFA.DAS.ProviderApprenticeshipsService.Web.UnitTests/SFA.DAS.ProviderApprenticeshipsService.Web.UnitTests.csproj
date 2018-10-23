@@ -249,7 +249,7 @@
     <Compile Include="Extensions\IEnumerableCommitmentAgreementTests.cs" />
     <Compile Include="Models\DataLockSummaryViewModelTests.cs" />
     <Compile Include="MoqCustomisedAutoData.cs" />
-    <Compile Include="Orchestrators\Account\WhenGettingProvider.cs" />
+    <Compile Include="Orchestrators\Account\WhenGettingAccountHomeViewModel.cs" />
     <Compile Include="Orchestrators\Agreement\WhenGettingAgreementsAsExcel.cs" />
     <Compile Include="Orchestrators\Agreement\WhenGettingAgreementsAsCsv.cs" />
     <Compile Include="Orchestrators\Agreement\WhenGettingAgreementsViewModel.cs" />
