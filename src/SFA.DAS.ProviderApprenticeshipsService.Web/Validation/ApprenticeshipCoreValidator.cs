@@ -103,11 +103,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         {
             RuleFor(x => x.StartDate)
                 .Cascade(CascadeMode.StopOnFirstFailure)
+                .NotNull().WithMessage(ValidationText.LearnStartDate01.Text).WithErrorCode(ValidationText.LearnStartDate01.ErrorCode)
+                .Must(ValidateDateWithoutDay).WithMessage(ValidationText.LearnStartDate01.Text).WithErrorCode(ValidationText.LearnStartDate01.ErrorCode)
+                .Must(StartDateOnOrAfterAcademicYearStartDate).WithMessage(ValidationText.AcademicYearStartDate01.Text).WithErrorCode(ValidationText.AcademicYearStartDate01.ErrorCode)
                 .MustAsync(async (viewModel, startDate, context, cancellationToken) => await TrainingCourseValidOnStartDate(viewModel, startDate, context))
                     .WithErrorCode(ValidationText.LearnStartDateNotValidForTrainingCourse.ErrorCode)
                     .WithMessage(ValidationText.LearnStartDateNotValidForTrainingCourse.Text)
-                .NotNull().WithMessage(ValidationText.LearnStartDate01.Text).WithErrorCode(ValidationText.LearnStartDate01.ErrorCode)
-                .Must(ValidateDateWithoutDay).WithMessage(ValidationText.LearnStartDate01.Text).WithErrorCode(ValidationText.LearnStartDate01.ErrorCode)
                 .Must(StartDateForTransferNotBeforeMay2018).WithMessage(ValidationText.LearnStartDate06.Text).WithErrorCode(ValidationText.LearnStartDate06.ErrorCode)
                 .Must(NotBeBeforeMay2017).WithMessage(ValidationText.LearnStartDate02.Text).WithErrorCode(ValidationText.LearnStartDate02.ErrorCode)
                 .Must(StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear).WithMessage(ValidationText.LearnStartDate05.Text).WithErrorCode(ValidationText.LearnStartDate05.ErrorCode);
@@ -202,10 +203,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             return age <= 115;
         }
 
+        private bool StartDateOnOrAfterAcademicYearStartDate(DateTimeViewModel startDate)
+        {
+            return startDate.DateTime.Value >= _academicYear.CurrentAcademicYearStartDate;
+        }
+
         private bool StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear(DateTimeViewModel startDate)
         {
             return startDate.DateTime.Value <= _academicYear.CurrentAcademicYearEndDate.AddYears(1);
         }
+
         private bool StartDateForTransferNotBeforeMay2018(ApprenticeshipViewModel viewModel, DateTimeViewModel date)
         {
             if (!viewModel.IsPaidForByTransfer || date.DateTime >= new DateTime(2018, 5, 1))
@@ -217,6 +224,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             viewModel.StartDateTransfersMinDateAltDetailMessage = "The start date can't be earlier than May 2018";
             return false;
         }
+
         private bool BeGreaterThenStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel date)
         {
             if (viewModel.StartDate?.DateTime == null || viewModel.EndDate?.DateTime == null) return true;
