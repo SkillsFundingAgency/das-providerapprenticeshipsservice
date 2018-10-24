@@ -36,11 +36,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
                             Id = "TESTCOURSE",
                             EffectiveFrom = new DateTime(2018, 5, 1),
                             EffectiveTo = new DateTime(2018, 7, 1)
+                        },
+                        new Standard
+                        {
+                            Id = "OTHERCOURSE",
+                            EffectiveFrom = new DateTime(2017, 1, 1)
                         }
                     }
                 });
 
-            CurrentDateTime.Setup(x => x.Now).Returns(DateTime.Now.AddMonths(6));
+            CurrentDateTime.Setup(x => x.Now).Returns(new DateTime(2017, 11, 5));
             Validator = new ApprenticeshipViewModelValidator(
                 new WebApprenticeshipValidationText(new AcademicYearDateProvider(CurrentDateTime.Object)),
                 CurrentDateTime.Object,

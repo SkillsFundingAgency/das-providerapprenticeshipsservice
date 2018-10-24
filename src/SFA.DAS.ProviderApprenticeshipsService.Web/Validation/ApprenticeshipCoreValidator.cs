@@ -111,7 +111,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 .Must(StartDateForTransferNotBeforeMay2018).WithMessage(ValidationText.LearnStartDate06.Text).WithErrorCode(ValidationText.LearnStartDate06.ErrorCode)
                 .Must(NotBeBeforeMay2017).WithMessage(ValidationText.LearnStartDate02.Text).WithErrorCode(ValidationText.LearnStartDate02.ErrorCode)
                 .Must(StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear).WithMessage(ValidationText.LearnStartDate05.Text).WithErrorCode(ValidationText.LearnStartDate05.ErrorCode);
-                //.Must(BeWithinAcademicYearFundingPeriod).WithMessage(_validationText.AcademicYearStartDate01.Text).WithErrorCode(_validationText.AcademicYearStartDate01.ErrorCode);
         }
 
         protected virtual void ValidateEndDate()
