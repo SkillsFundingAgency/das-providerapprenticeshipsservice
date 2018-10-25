@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.AcademicYear;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.ApprenticeshipBulkUpload
@@ -165,6 +167,43 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeTrue();
+        }
+
+        [Test]
+        public void AndStartDateNotWithinFundingPeriodThenInvalid()
+        {
+            //Arrange
+            MockAcademicYearValidator
+                .Setup(validator => validator.Validate(It.IsAny<DateTime>()))
+                .Returns(AcademicYearValidationResult.NotWithinFundingPeriod);
+            
+            //Act
+            var result = Validator.Validate(ValidModel);
+
+            //Assert
+            result.IsValid.Should().BeFalse();
+            result.Errors.Single().ErrorMessage.Should().MatchRegex("<strong>Start dates</strong> can\'t be in the previous academic year. The earliest date you can use is [0-9]{2} [0-9]{4}");
+            result.Errors.Single().ErrorCode.Should().Be("AcademicYear_01");
+        }
+
+        [Test]
+        public void AndStartDateIsBeforeAcademicYearAndBeforeTrainingStartThenOnlyHasStartDateError()
+        {
+            //Arrange
+            MockAcademicYearValidator
+                .Setup(validator => validator.Validate(It.IsAny<DateTime>()))
+                .Returns(AcademicYearValidationResult.NotWithinFundingPeriod);
+            ValidModel.ApprenticeshipViewModel.StartDate = new DateTimeViewModel(DateTime.Parse("2017-04-30"));
+            ValidModel.ApprenticeshipViewModel.EndDate = new DateTimeViewModel(DateTime.Parse("2020-05-10"));
+            ValidModel.ApprenticeshipViewModel.IsPaidForByTransfer = true;
+
+            //Act
+            var result = Validator.Validate(ValidModel);
+
+            //Assert
+            result.IsValid.Should().BeFalse();
+            result.Errors.Single().ErrorMessage.Should().MatchRegex("<strong>Start dates</strong> can\'t be in the previous academic year. The earliest date you can use is [0-9]{2} [0-9]{4}");
+            result.Errors.Single().ErrorCode.Should().Be("AcademicYear_01");
         }
     }
 }

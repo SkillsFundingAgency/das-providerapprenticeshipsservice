@@ -11,6 +11,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.Learners.Validators;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.AcademicYear;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
@@ -19,14 +20,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         private readonly IApprenticeshipValidationErrorText _validationText;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IUlnValidator _ulnValidator;
+        private readonly IAcademicYearValidator _academicYearValidator;
 
         private static readonly Func<string, IEnumerable<string>, bool> InList = (v, l) => string.IsNullOrWhiteSpace(v) || l.Contains(v);
 
-        public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime, IUlnValidator ulnValidator)
+        public ApprenticeshipUploadModelValidator(
+            IApprenticeshipValidationErrorText validationText, 
+            ICurrentDateTime currentDateTime, 
+            IUlnValidator ulnValidator,
+            IAcademicYearValidator academicYearValidator)
         {
             _validationText = validationText;
             _currentDateTime = currentDateTime;
             _ulnValidator = ulnValidator;
+            _academicYearValidator = academicYearValidator;
         }
 
         public ValidationResult Validate(ApprenticeshipUploadModel model)
@@ -124,6 +131,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             if (model.ApprenticeshipViewModel.StartDate.DateTime == null)
             {
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate01);
+            }
+
+            var result = _academicYearValidator.Validate(model.ApprenticeshipViewModel.StartDate.DateTime.Value);
+            if (result == AcademicYearValidationResult.NotWithinFundingPeriod)
+            {
+                return CreateValidationFailure("StartDate", _validationText.AcademicYearStartDate01);
             }
 
             var apprenticeshipAllowedStartDate = new DateTime(2017, 05, 01);

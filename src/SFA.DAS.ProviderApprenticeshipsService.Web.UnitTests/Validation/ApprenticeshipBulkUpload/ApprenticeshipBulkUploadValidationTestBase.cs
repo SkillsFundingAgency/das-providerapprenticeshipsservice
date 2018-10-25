@@ -29,7 +29,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             MockAcademicYear = new Mock<IAcademicYearDateProvider>();
             MockAcademicYearValidator = new Mock<IAcademicYearValidator>();
 
-            Validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(MockAcademicYear.Object), MockCurrentDateTime.Object, MockUlnValidator.Object);
+            Validator = new ApprenticeshipUploadModelValidator(
+                new BulkUploadApprenticeshipValidationText(MockAcademicYear.Object), 
+                MockCurrentDateTime.Object, 
+                MockUlnValidator.Object,
+                MockAcademicYearValidator.Object);
 
             ValidModel = new ApprenticeshipUploadModel
             {
@@ -44,7 +48,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
                     EndDate = new DateTimeViewModel(new DateTime(2018, 05, 15)),
                     Cost = "1234"
                 },
-                CsvRecord = new CsvRecord { CohortRef = "abba123", ProgType = "25", StdCode = "123" }
+                CsvRecord = new CsvRecord
+                {
+                    CohortRef = "abba123",
+                    ProgType = "25",
+                    StdCode = "123"
+                }
             };
         }
     }

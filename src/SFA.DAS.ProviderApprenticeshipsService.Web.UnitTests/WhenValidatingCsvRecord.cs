@@ -1,6 +1,6 @@
 ﻿using System;
 using FluentAssertions;
-
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
@@ -18,8 +18,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
     {
         private ApprenticeshipUploadModelValidator _validator;
         private ApprenticeshipUploadModel _validModel;
-        private Moq.Mock<IUlnValidator> _mockUlnValidator;
-        private Moq.Mock<IAcademicYearDateProvider> _mockAcademicYear;
+        private Mock<IUlnValidator> _mockUlnValidator;
+        private Mock<IAcademicYearDateProvider> _mockAcademicYearProvider;
+        private Mock<IAcademicYearValidator> _mockAcademicYearValidator;
 
         [SetUp]
         public void Setup()
@@ -41,11 +42,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
                 CsvRecord = new CsvRecord { CohortRef = "abba123" }
             };
 
-            _mockAcademicYear = new Moq.Mock<IAcademicYearDateProvider>();
-            _mockUlnValidator = new Moq.Mock<IUlnValidator>();
+            _mockAcademicYearProvider = new Mock<IAcademicYearDateProvider>();
+            _mockAcademicYearValidator = new Mock<IAcademicYearValidator>();
+            _mockUlnValidator = new Mock<IUlnValidator>();
             _mockUlnValidator.Setup(m => m.Validate(_validModel.ApprenticeshipViewModel.ULN)).Returns(UlnValidationResult.Success);
 
-            _validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(_mockAcademicYear.Object), new CurrentDateTime(), _mockUlnValidator.Object);
+            _validator = new ApprenticeshipUploadModelValidator(
+                new BulkUploadApprenticeshipValidationText(_mockAcademicYearProvider.Object), 
+                new CurrentDateTime(), 
+                _mockUlnValidator.Object,
+                _mockAcademicYearValidator.Object);
         }
 
         [TestCase("1", "The <strong>Programme type</strong> you've added isn't valid", "ProgType_02")]
