@@ -1,13 +1,8 @@
 ﻿using Moq;
 using NUnit.Framework;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.AcademicYear;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.AcademicYear
@@ -23,7 +18,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.AcademicYear
         public void SetUp()
         {
             _mockCurrentDateTime = new Mock<ICurrentDateTime>();
-         
         }
 
         [TestCase("2017-10-20", "2017-07-01", AcademicYearValidationResult.NotWithinFundingPeriod)]
@@ -36,21 +30,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.AcademicYear
         public void ThenAcademicYearValidationShouldReturnExpectedResult(DateTime currentDate, DateTime startDate, AcademicYearValidationResult expectedResult)
         {
             //Arrange
-            var yearStartDate = new DateTime(2016, 8, 1);
-            var fundingPeriodDate = new DateTime(2017, 10, 19);
-
             _mockCurrentDateTime.Setup(x => x.Now).Returns(currentDate);
-            _academicYear = new Infrastructure.Services.AcademicYearDateProvider(_mockCurrentDateTime.Object);
-
+            _academicYear = new AcademicYearDateProvider(_mockCurrentDateTime.Object);
             _academicYearValidator = new AcademicYearValidator(_mockCurrentDateTime.Object, _academicYear);
+
             //Act
             var result = _academicYearValidator.Validate(startDate);
 
             //Assert
             Assert.AreEqual(expectedResult, result);
-       
         }
-
-
     }
 }

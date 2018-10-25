@@ -6,14 +6,7 @@ using System.Web;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
-using SFA.DAS.Learners.Validators;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.BulkUpload
 {
