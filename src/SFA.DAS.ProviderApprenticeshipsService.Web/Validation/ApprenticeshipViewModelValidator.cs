@@ -12,7 +12,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             IApprenticeshipValidationErrorText validationText, 
             ICurrentDateTime currentDateTime, 
             IAcademicYearDateProvider academicYear, 
-            IUlnValidator ulnValidator, IMediator mediator) : base(validationText, currentDateTime, academicYear, ulnValidator, mediator)
+            IAcademicYearValidator academicYearValidator,
+            IUlnValidator ulnValidator, 
+            IMediator mediator) 
+            : base(validationText, currentDateTime, academicYear, academicYearValidator, ulnValidator, mediator)
         {
         }
 

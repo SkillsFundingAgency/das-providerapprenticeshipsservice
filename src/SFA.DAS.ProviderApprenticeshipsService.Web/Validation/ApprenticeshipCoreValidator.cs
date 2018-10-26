@@ -14,6 +14,7 @@ using SFA.DAS.Learners.Validators;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.AcademicYear;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
@@ -25,18 +26,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         protected readonly IApprenticeshipValidationErrorText ValidationText;
         protected readonly ICurrentDateTime CurrentDateTime;
         private readonly IAcademicYearDateProvider _academicYear;
+        private readonly IAcademicYearValidator _academicYearValidator;
         private readonly IUlnValidator _ulnValidator;
         protected readonly IMediator Mediator;
 
-        public ApprenticeshipCoreValidator(IApprenticeshipValidationErrorText validationText, 
-                                            ICurrentDateTime currentDateTime, 
-                                            IAcademicYearDateProvider academicYear,
-                                            IUlnValidator ulnValidator,
-                                            IMediator mediator)
+        public ApprenticeshipCoreValidator(
+            IApprenticeshipValidationErrorText validationText, 
+            ICurrentDateTime currentDateTime, 
+            IAcademicYearDateProvider academicYear,
+            IAcademicYearValidator academicYearValidator,
+            IUlnValidator ulnValidator,
+            IMediator mediator)
         {
             ValidationText = validationText;
             CurrentDateTime = currentDateTime;
             _academicYear = academicYear;
+            _academicYearValidator = academicYearValidator;
             _ulnValidator = ulnValidator;
             Mediator = mediator;
 
@@ -205,7 +210,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
         private bool StartDateOnOrAfterAcademicYearStartDate(DateTimeViewModel startDate)
         {
-            return startDate.DateTime.Value >= _academicYear.CurrentAcademicYearStartDate;
+            var result = _academicYearValidator.Validate(startDate.DateTime.Value);
+            return result == AcademicYearValidationResult.Success;
+            //return startDate.DateTime.Value >= _academicYear.CurrentAcademicYearStartDate;
         }
 
         private bool StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear(DateTimeViewModel startDate)

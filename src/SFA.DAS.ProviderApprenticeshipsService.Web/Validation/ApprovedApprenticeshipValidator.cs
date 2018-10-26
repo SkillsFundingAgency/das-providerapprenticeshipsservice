@@ -20,7 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             IAcademicYearDateProvider academicYear,
             IAcademicYearValidator academicYearValidator,
             IUlnValidator ulnValidator, IMediator mediator)
-            : base(validationText, currentDateTime, academicYear, ulnValidator, mediator)
+            : base(validationText, currentDateTime, academicYear, academicYearValidator, ulnValidator, mediator)
         {
             _academicYearValidator = academicYearValidator;
         }
