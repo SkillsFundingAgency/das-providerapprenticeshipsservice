@@ -170,6 +170,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         }
 
         [Test]
+        public void AndStartDateWithinFundingPeriodThenValid()
+        {
+            //Arrange
+            MockAcademicYearValidator
+                .Setup(validator => validator.Validate(It.IsAny<DateTime>()))
+                .Returns(AcademicYearValidationResult.Success);
+
+            //Act
+            var result = Validator.Validate(ValidModel);
+
+            //Assert
+            result.IsValid.Should().BeTrue();
+        }
+
+        [Test]
         public void AndStartDateNotWithinFundingPeriodThenInvalid()
         {
             //Arrange
