@@ -15,8 +15,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using StructureMap;
+using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.ProviderPermissions;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution {
 	
@@ -27,6 +29,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution {
                 c.Policies.Add(new ConfigurationPolicy<ProviderApprenticeshipsServiceConfiguration>("SFA.DAS.ProviderApprenticeshipsService"));
                 c.Policies.Add<CurrentDatePolicy>();
                 c.AddRegistry<ValidationRegistry>();
+                c.AddRegistry<AuthorizationRegistry>();
+                c.AddRegistry<ProviderPermissionsAuthorizationRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }

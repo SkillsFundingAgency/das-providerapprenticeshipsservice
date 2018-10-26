@@ -9,6 +9,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using System.Security.Claims;
+using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.Authorization.ProviderPermissions;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -101,6 +103,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/verification")]
+        [DasAuthorize(ProviderPermissions.CreateCohort)]
         public async Task<ActionResult> VerificationOfEmployer(long providerId, string hashedCommitmentId)
         {
             var model = await _commitmentOrchestrator.GetVerificationOfEmployer(providerId, hashedCommitmentId);
@@ -110,6 +113,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [Route("{hashedCommitmentId}/verification")]
         [ValidateAntiForgeryToken]
+        [DasAuthorize(ProviderPermissions.CreateCohort)]
         public ActionResult VerificationOfEmployer(VerificationOfEmployerViewModel viewModel)
         {
             if (!ModelState.IsValid)

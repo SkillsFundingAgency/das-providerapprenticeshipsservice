@@ -23,6 +23,8 @@ using FluentValidation;
 using MediatR;
 using FeatureToggle;
 using Microsoft.Azure;
+using StructureMap;
+using SFA.DAS.Authorization;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -34,6 +36,8 @@ using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
+using SFA.DAS.Learners.Validators;
+using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -42,12 +46,9 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
-using StructureMap;
-using StructureMap.Graph;
-using SFA.DAS.Learners.Validators;
-using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
@@ -87,6 +88,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
+            For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
+            
             ConfigureFeatureToggle();
 
             RegisterMediator();
