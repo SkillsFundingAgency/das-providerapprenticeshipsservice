@@ -9,7 +9,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
     {
         public ValidationRegistry()
         {
-            For<IValidator<ApprenticeshipViewModel>>().Use<ApprenticeshipViewModelValidator>();
+            For<IValidator<ApprenticeshipViewModel>>().Use<ApprenticeshipViewModelValidator>().Singleton();
         }
     }
 }
