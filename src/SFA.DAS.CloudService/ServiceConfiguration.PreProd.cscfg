@@ -15,6 +15,7 @@
       <Setting name="RedisSessionProviderConnectionString" value="__RedisSessionProviderConnectionString__" />
       <Setting name="CurrentTime" value="" />
       <Setting name="FeatureToggle.ProviderRelationships" value="__FeatureToggle.ProviderRelationships__" />
+      <Setting name="UseStubProviderRelationships" value="__UseStubProviderRelationships__" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="57C6F5230355B74AE0D95DC4623434E2326AABAE" thumbprintAlgorithm="sha1" />

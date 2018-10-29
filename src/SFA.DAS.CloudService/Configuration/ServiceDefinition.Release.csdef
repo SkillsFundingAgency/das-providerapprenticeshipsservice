@@ -21,6 +21,7 @@
       <Setting name="RedisSessionProviderConnectionString" />
       <Setting name="CurrentTime" />
       <Setting name="FeatureToggle.Transfers" />
+      <Setting name="UseStubProviderRelationships" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Httpsin" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-prd-pas-ilb"/>

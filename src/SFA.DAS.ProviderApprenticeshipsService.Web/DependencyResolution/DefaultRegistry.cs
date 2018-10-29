@@ -34,7 +34,6 @@ using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Caching;
@@ -45,11 +44,11 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using StructureMap;
-using StructureMap.Graph;
 using SFA.DAS.Learners.Validators;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
+using SFA.DAS.ProviderRelationships.Api.Client;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -204,6 +203,37 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         {
             SystemDetails.EnvironmentName = envName;
             SystemDetails.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        }
+
+        private void ConfigureProviderRelationshipsApiClient()
+        {
+            var useStub = GetUseStubProviderRelationshipsSetting();
+
+            if (useStub)
+            {
+                For<IProviderRelationshipsApiClient>().Use<StubProviderRelationshipsApiClient>();
+            }
+            else
+            {
+                For<IProviderRelationshipsApiClient>().Use<ProviderRelationshipsApiClient>();
+            }
+        }
+
+        private bool GetUseStubProviderRelationshipsSetting()
+        {
+            var value = CloudConfigurationManager.GetSetting("UseStubProviderRelationships");
+
+            if (value == null)
+            {
+                return false;
+            }
+
+            if (!bool.TryParse(value, out var result))
+            {
+                return false;
+            }
+
+            return result;
         }
     }
 }
