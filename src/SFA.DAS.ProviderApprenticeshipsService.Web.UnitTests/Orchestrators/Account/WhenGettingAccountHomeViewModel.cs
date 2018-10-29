@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FeatureToggle;
 using FluentAssertions;
 using MediatR;
 using Moq;
@@ -9,16 +10,19 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Account
 {
     [TestFixture]
-    public class WhenGettingProvider
+    public class WhenGettingAccountHomeViewModel
     {
         private AccountOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ICurrentDateTime> _currentDateTime;
+        private Mock<IFeatureToggleService> _featureToggleService;
+        private Mock<IFeatureToggle> _featureToggle;
 
         [SetUp]
         public void Arrange()
@@ -35,25 +39,42 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
                     }
                 });
 
+            _featureToggle = new Mock<IFeatureToggle>();
+            _featureToggleService = new Mock<IFeatureToggleService>();
+            _featureToggleService.Setup(x => x.Get<ProviderRelationships>()).Returns(_featureToggle.Object);
+            
             _currentDateTime = new Mock<ICurrentDateTime>();
 
             _orchestrator = new AccountOrchestrator(
                 _mediator.Object,
                 Mock.Of<ILog>(),
-                _currentDateTime.Object
+                _currentDateTime.Object,
+                _featureToggleService.Object
             );
         }
 
-        [TestCase("2018-10-18", true, TestName = "Banner visible if no time set")]
-        [TestCase("2018-10-18 11:59:59", true, TestName = "Banner visible until midnight")]
-        [TestCase("2018-10-19 00:00:00", false, TestName = "Banner hidden after midnight")]
+        [TestCase("2018-10-18", false, TestName = "Banner permanently hidden")]
         public async Task ThenDisplayOfAcademicYearBannerIsDetermined(DateTime now, bool expectShowBanner)
         {
             _currentDateTime.Setup(x => x.Now).Returns(now);
 
-            var model = await _orchestrator.GetProvider(1);
+            var model = await _orchestrator.GetAccountHomeViewModel(1);
 
             model.ShowAcademicYearBanner.Should().Be(expectShowBanner);
+        }
+
+        [TestCase(true, true)]
+        [TestCase(false, false)]
+        public async Task ThenDisplayOfCreateCohortLinkIsDetermined(bool featureEnabled, bool expectShowLink)
+        {
+            //Arrange
+            _featureToggle.Setup(x => x.FeatureEnabled).Returns(featureEnabled);
+
+            //Act
+            var model = await _orchestrator.GetAccountHomeViewModel(1);
+
+            //Assert
+            model.ShowCreateCohortLink.Should().Be(expectShowLink);
         }
     }
 }
