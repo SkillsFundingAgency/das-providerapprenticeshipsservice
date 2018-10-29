@@ -36,6 +36,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{accountLegalEntityPublicHashedId}/confirmemployer")]
+        [DasAuthorize(ProviderPermissions.CreateCohort)]
+        public ActionResult ConfirmEmployer(long providerId, string accountLegalEntityPublicHashedId)
+        {
+            return View(1);
+        }
+
+        [HttpGet]
         [Route("Cohorts")]
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> Cohorts(long providerId)

@@ -168,6 +168,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         private void ConfigureHashingService(ProviderApprenticeshipsServiceConfiguration config)
         {
             For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
+            For<IPublicHashingService>().Use(x => new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring));
         }
 
         private IProviderCommitmentsLogger GetBaseLogger(IContext x)

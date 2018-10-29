@@ -48,6 +48,17 @@
                 <p>Find and view organisations and their agreement IDs.</p>
                 <hr />
             </div>
+            
+            <div class="column-one-half">
+                <h2 class="heading-medium">
+                    @*commitment or agreement?*@
+                    <a href="@Url.Action("ConfirmEmployer", "Commitment", new {providerId = Model.ProviderId, accountLegalEntityPublicHashedId = "GMXJMN"})">Test confirm employer page</a>
+                </h2>
+                <p>Test confirm employer page.</p>
+                <hr />
+            </div>
+
+
         </div>
     </div>
 @if (@Model.ShowAcademicYearBanner)
