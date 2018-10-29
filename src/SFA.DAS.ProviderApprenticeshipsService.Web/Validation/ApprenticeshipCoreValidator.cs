@@ -258,7 +258,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             if (string.IsNullOrWhiteSpace(viewModel.TrainingCode) || (!startDate.DateTime.HasValue))
                 return true;
 
-            var result = await Mediator.SendAsync(new GetTrainingProgrammesQueryRequest
+            var result = await Mediator.Send(new GetTrainingProgrammesQueryRequest
             {
                 EffectiveDate = null,
                 IncludeFrameworks = true

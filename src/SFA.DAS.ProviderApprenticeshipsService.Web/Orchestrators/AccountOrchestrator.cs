@@ -37,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 _logger.Info($"Getting provider {providerId}");
 
-                var providers = await _mediator.SendAsync(new GetProviderQueryRequest { UKPRN = providerId });
+                var providers = await _mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });
 
                 var provider = providers.ProvidersView.Provider;
 
@@ -61,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             _logger.Info($"Getting setting for user {userRef}");
 
-            var response = await _mediator.SendAsync(new GetUserNotificationSettingsQuery
+            var response = await _mediator.Send(new GetUserNotificationSettingsQuery
             {
                 UserRef = userRef
             });
@@ -82,7 +82,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var setting = model.NotificationSettings.First();
             _logger.Info($"Uppdating setting for user {setting.UserRef}");
 
-            await _mediator.SendAsync(new UpdateUserNotificationSettingsCommand
+            await _mediator.Send(new UpdateUserNotificationSettingsCommand
             {
                 UserRef = setting.UserRef,
                 ReceiveNotifications = setting.ReceiveNotifications
@@ -93,14 +93,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<SummaryUnsubscribeViewModel> Unsubscribe(string userRef, string urlSettingsPage)
         {
-            var userSettings = await _mediator.SendAsync(new GetUserNotificationSettingsQuery { UserRef = userRef });
-            var user = await _mediator.SendAsync(new GetUserQuery { UserRef = userRef });
+            var userSettings = await _mediator.Send(new GetUserNotificationSettingsQuery { UserRef = userRef });
+            var user = await _mediator.Send(new GetUserQuery { UserRef = userRef });
 
             var alreadyUnsubscribed = !userSettings.NotificationSettings.FirstOrDefault()?.ReceiveNotifications == true;
             if (userSettings.NotificationSettings.FirstOrDefault()?.ReceiveNotifications == true)
             {
-                await _mediator.SendAsync(new UnsubscribeNotificationRequest { UserRef = userRef });
-                await _mediator.SendAsync(BuildNotificationCommand(user.EmailAddress, user.Name, urlSettingsPage));
+                await _mediator.Send(new UnsubscribeNotificationRequest { UserRef = userRef });
+                await _mediator.Send(BuildNotificationCommand(user.EmailAddress, user.Name, urlSettingsPage));
             }
 
             return new SummaryUnsubscribeViewModel { AlreadyUnsubscribed = alreadyUnsubscribed };

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture.NUnit3;
 using FluentAssertions;
@@ -26,8 +27,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
         {
             mockMediator
                 .Setup(mediator =>
-                    mediator.SendAsync(It.Is<GetCommitmentAgreementsQueryRequest>(request =>
-                        request.ProviderId == providerId)))
+                    mediator.Send(It.Is<GetCommitmentAgreementsQueryRequest>(request =>
+                        request.ProviderId == providerId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(getAgreementsResponse);
 
             mockExcelFormatter

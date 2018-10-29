@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -23,7 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<ReviewApprenticeshipUpdateCommand>()))
+            _mediator.Setup(x => x.Send(It.IsAny<ReviewApprenticeshipUpdateCommand>(), new CancellationToken()))
                 .ReturnsAsync(() => new Unit());
 
             _mockApprenticeshipFiltersMapper = new Mock<ApprenticeshipFiltersMapper>();
@@ -53,14 +54,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
             await _orchestrator.SubmitReviewApprenticeshipUpdate(providerId, apprenticeshipId, userId, isApproved, loginUser);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(
+            _mediator.Verify(x => x.Send(
                 It.Is<ReviewApprenticeshipUpdateCommand>(r =>
                     r.IsApproved == isApproved
                     && r.ProviderId == providerId
                     && r.UserId == userId
                     && r.UserDisplayName == loginUser.DisplayName
                     && r.UserEmailAddress == loginUser.Email
-                )), Times.Once());
+                ), It.IsAny<CancellationToken>()), Times.Once());
         }
     }
 }

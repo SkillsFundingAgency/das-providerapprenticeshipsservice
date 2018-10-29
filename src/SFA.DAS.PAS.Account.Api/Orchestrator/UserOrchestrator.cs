@@ -23,7 +23,7 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
 
         public async Task<User> GetUser(string userRef)
         {
-            var userSetting = await _mediator.SendAsync(new GetUserNotificationSettingsQuery {UserRef = userRef });
+            var userSetting = await _mediator.Send(new GetUserNotificationSettingsQuery {UserRef = userRef });
 
             var setting = userSetting.NotificationSettings.SingleOrDefault();
             if (setting == null)

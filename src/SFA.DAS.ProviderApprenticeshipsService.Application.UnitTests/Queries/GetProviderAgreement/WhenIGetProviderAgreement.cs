@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
@@ -32,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             _agreementRepository.Setup(m => m.GetContractEvents(It.IsAny<long>()))
                 .Returns(Task.Run(() => new List<ContractFeedEvent>().AsEnumerable()));
 
-            var result = await _handler.Handle(new GetProviderAgreementQueryRequest { ProviderId = 1234567 });
+            var result = await _handler.Handle(new GetProviderAgreementQueryRequest { ProviderId = 1234567 }, new CancellationToken());
 
             result.HasAgreement.Should().Be(ProviderAgreementStatus.NotAgreed);
         }
@@ -48,7 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             _agreementRepository.Setup(m => m.GetContractEvents(It.IsAny<long>()))
                 .Returns(Task.Run(() =>  returnList.AsEnumerable()));
 
-            var result = await _handler.Handle(new GetProviderAgreementQueryRequest { ProviderId = 1234567 });
+            var result = await _handler.Handle(new GetProviderAgreementQueryRequest { ProviderId = 1234567 }, new CancellationToken());
 
             result.HasAgreement.Should().Be(ProviderAgreementStatus.Agreed);
         }
@@ -64,7 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             _agreementRepository.Setup(m => m.GetContractEvents(It.IsAny<long>()))
                 .Returns(Task.Run(() => returnList.AsEnumerable()));
 
-            var result = await _handler.Handle(new GetProviderAgreementQueryRequest { ProviderId = 1234567 });
+            var result = await _handler.Handle(new GetProviderAgreementQueryRequest { ProviderId = 1234567 }, new CancellationToken());
 
             result.HasAgreement.Should().Be(ProviderAgreementStatus.NotAgreed);
         }

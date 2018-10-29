@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -21,7 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         private Mock<IProviderCommitmentsApi> _mockCommitmentsApi;
         private Mock<IMediator> _mockMediator;
         private Mock<IHashingService> _mockHashingService;
-        private SubmitCommitmentCommandHandler _handler;
+        private IRequestHandler<SubmitCommitmentCommand> _handler;
 
         [SetUp]
         public void Setup()
@@ -51,7 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.ProviderId = 0;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             var m = act.ShouldThrow<InvalidRequestException>();
             m.Which.ErrorMessages.Count.Should().Be(1);
@@ -65,7 +66,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.HashedCommitmentId = hashedCommitmentId;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             var m = act.ShouldThrow<InvalidRequestException>();
             m.Which.ErrorMessages.Count.Should().Be(1);
@@ -77,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.CommitmentId = 0;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             var m = act.ShouldThrow<InvalidRequestException>();
             m.Which.ErrorMessages.Count.Should().Be(1);
@@ -89,7 +90,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.LastAction = LastAction.None;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             var m = act.ShouldThrow<InvalidRequestException>();
             m.Which.ErrorMessages.Count.Should().Be(1);
@@ -103,7 +104,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.UserDisplayName = userDisplayName;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             var m = act.ShouldThrow<InvalidRequestException>();
             m.Which.ErrorMessages.Count.Should().Be(1);
@@ -117,7 +118,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.UserEmailAddress = userEmailAddress;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             var m = act.ShouldThrow<InvalidRequestException>();
             m.Which.ErrorMessages.Count.Should().Be(1);
@@ -131,7 +132,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.UserId = userId;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             var m = act.ShouldThrow<InvalidRequestException>();
             m.Which.ErrorMessages.Count.Should().Be(1);

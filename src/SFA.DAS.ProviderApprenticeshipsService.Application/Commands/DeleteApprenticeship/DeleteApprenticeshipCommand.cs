@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship
 {
-    public sealed class DeleteApprenticeshipCommand : IAsyncRequest
+    public sealed class DeleteApprenticeshipCommand : IRequest
     {
         public string UserId { get; set; }
         public long ProviderId { get; set; }

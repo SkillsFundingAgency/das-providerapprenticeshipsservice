@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -33,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             };
 
             //Act
-            await _handler.Handle(command);
+            await _handler.Handle(command, new CancellationToken());
 
             //Assert
             _providerCommitmentsApi.Verify(x =>
@@ -53,7 +54,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             };
 
             //Act
-            var result = await _handler.Handle(command);
+            var result = await _handler.Handle(command, new CancellationToken());
 
             //Assert
             Assert.AreEqual("TEST", result.FileContent);

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -21,7 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUser
             _logger = logger;
         }
 
-        protected override async Task HandleCore(UpdateUserNotificationSettingsCommand command)
+        protected override async Task Handle(UpdateUserNotificationSettingsCommand command, CancellationToken cancellationToken)
         {
             var validationResult = _validator.Validate(command);
             if (!validationResult.IsValid)

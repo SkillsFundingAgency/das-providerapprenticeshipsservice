@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -58,11 +59,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
 
             _mockMediator.Verify(
                 x =>
-                    x.SendAsync(
+                    x.Send(
                         It.Is<CreateApprenticeshipUpdateCommand>(
                             c =>
                                 c.ProviderId == providerId && c.UserId == userId && c.ApprenticeshipUpdate == expectedApprenticeship && c.UserDisplayName == signedInUser.DisplayName &&
-                                c.UserEmailAddress == signedInUser.Email)), Times.Once);
+                                c.UserEmailAddress == signedInUser.Email), It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

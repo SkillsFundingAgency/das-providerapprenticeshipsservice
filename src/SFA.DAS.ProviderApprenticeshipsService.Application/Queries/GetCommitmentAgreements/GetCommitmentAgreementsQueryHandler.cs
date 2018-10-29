@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 
@@ -7,7 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitme
     /// <summary>
     /// For all the provider's commitments, returns a subset of each commitment related to its agreement
     /// </summary>
-    public class GetCommitmentAgreementsQueryHandler : IAsyncRequestHandler<GetCommitmentAgreementsQueryRequest, GetCommitmentAgreementsQueryResponse>
+    public class GetCommitmentAgreementsQueryHandler : IRequestHandler<GetCommitmentAgreementsQueryRequest, GetCommitmentAgreementsQueryResponse>
     {
         private readonly IProviderCommitmentsApi _commitmentsApi;
 
@@ -16,7 +17,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitme
             _commitmentsApi = commitmentsApi;
         }
 
-        public async Task<GetCommitmentAgreementsQueryResponse> Handle(GetCommitmentAgreementsQueryRequest message)
+        public async Task<GetCommitmentAgreementsQueryResponse> Handle(GetCommitmentAgreementsQueryRequest message, CancellationToken cancellationToken)
         {
             var commitmentAgreements = await _commitmentsApi.GetCommitmentAgreements(message.ProviderId);
 

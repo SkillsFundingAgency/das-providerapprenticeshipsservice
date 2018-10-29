@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentValidation;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 
@@ -13,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     [TestFixture]
     public sealed class WhenValidatingCommand
     {
-        private DeleteApprenticeshipCommandHandler _handler;
+        private IRequestHandler<DeleteApprenticeshipCommand> _handler;
         private DeleteApprenticeshipCommand _validCommand;
 
         [SetUp]
@@ -33,7 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.ProviderId = 0;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             act.ShouldThrow<ValidationException>().Which.Message.Contains("Provider Id");
         }
@@ -43,7 +45,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.ApprenticeshipId = 0;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             act.ShouldThrow<ValidationException>().Which.Message.Contains("Provider Id");
         }
@@ -55,7 +57,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.UserId = userId;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             act.ShouldThrow<ValidationException>().Which.Message.Contains("User Id");
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         public void BaseSetup()
         {
             MockMediator = new Mock<IMediator>();
-            MockMediator.Setup(x => x.SendAsync(It.IsAny<GetTrainingProgrammesQueryRequest>()))
+            MockMediator.Setup(x => x.Send(It.IsAny<GetTrainingProgrammesQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetTrainingProgrammesQueryResponse
                 {
                     TrainingProgrammes = new List<ITrainingProgramme>

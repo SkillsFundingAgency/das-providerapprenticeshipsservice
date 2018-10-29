@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using MediatR;
@@ -24,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
         {
             _mediator = new Mock<IMediator>();
             _mediator
-                .Setup(x => x.SendAsync(It.IsAny<GetProviderQueryRequest>()))
+                .Setup(x => x.Send(It.IsAny<GetProviderQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetProviderQueryResponse
                 {
                     ProvidersView = new ProvidersView

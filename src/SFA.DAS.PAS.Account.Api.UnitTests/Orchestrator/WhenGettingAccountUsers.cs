@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
 using FluentAssertions;
@@ -36,7 +37,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
             response.Add(_fixture.Build<User>().With(m => m.UserRef, "userRef1").Create(), _fixture.Build<UserSetting>().With(m => m.ReceiveNotifications, true).Create());
             response.Add(_fixture.Build<User>().With(m => m.UserRef, "userRef2").Create(), _fixture.Build<UserSetting>().With(m => m.ReceiveNotifications, false).Create());
 
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetAccountUsersQuery>())).ReturnsAsync(response);
+            _mediator.Setup(m => m.Send(It.IsAny<GetAccountUsersQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
             var result = (await _sut.GetAccountUsers(12345)).ToArray();
 
             result.Length.Should().Be(2);
@@ -53,7 +54,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
             response.Add(_fixture.Build<User>().With(m => m.UserRef, "userRef1").Create(), null);
             response.Add(_fixture.Build<User>().With(m => m.UserRef, "userRef2").Create(), _fixture.Build<UserSetting>().With(m => m.ReceiveNotifications, false).Create());
 
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetAccountUsersQuery>())).ReturnsAsync(response);
+            _mediator.Setup(m => m.Send(It.IsAny<GetAccountUsersQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
             var result = (await _sut.GetAccountUsers(12345)).ToArray();
 
             result.Length.Should().Be(2);
@@ -68,7 +69,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
         {
             var response = new GetAccountUsersResponse();
 
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetAccountUsersQuery>())).ReturnsAsync(response);
+            _mediator.Setup(m => m.Send(It.IsAny<GetAccountUsersQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
             var result = (await _sut.GetAccountUsers(12345)).ToArray();
 
             result.Length.Should().Be(0);

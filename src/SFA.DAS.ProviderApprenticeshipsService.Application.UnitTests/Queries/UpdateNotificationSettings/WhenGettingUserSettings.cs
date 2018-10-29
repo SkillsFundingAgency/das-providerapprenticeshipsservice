@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using FluentAssertions;
@@ -32,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             _mockSettingsRepo.Setup(m => m.GetUserSetting(UserRef))
                 .ReturnsAsync(new List<UserSetting> {new UserSetting { ReceiveNotifications = true, UserId = 1, UserRef = UserRef} });
 
-            var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef =  UserRef});
+            var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef =  UserRef}, new CancellationToken());
 
             result.NotificationSettings.Count.Should().Be(1);
 
@@ -43,7 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         [Test]
         public async Task ThenCreatingSettingsIfNoSettingsFoundGettingUsersSettings()
         {
-            var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef = UserRef });
+            var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef = UserRef }, new CancellationToken());
 
             result.NotificationSettings.Count.Should().Be(0);
 
