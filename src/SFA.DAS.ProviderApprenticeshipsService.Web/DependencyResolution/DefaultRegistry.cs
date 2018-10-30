@@ -87,6 +87,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             ConfigureFeatureToggle();
 
             RegisterMediator();
+
+            ConfigureProviderRelationshipsApiClient();
+
             ConfigureLogging();
 
             ConfigureInstrumentedTypes();

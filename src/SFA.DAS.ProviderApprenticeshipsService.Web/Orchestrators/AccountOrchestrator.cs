@@ -9,11 +9,13 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotificati
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UnsubscribeNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
+using SFA.DAS.ProviderRelationships.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -41,26 +43,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 _logger.Info($"Getting provider {providerId}");
 
-                var providers = await _mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });
-
-                var provider = providers.ProvidersView.Provider;
+                var providerResponse = await _mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });
 
                 var showCreateCohortLink = false;
-
-                //1. determine if provider permissions is enabled
                 if (_featureToggleService.Get<Domain.Models.FeatureToggles.ProviderRelationships>().FeatureEnabled)
                 {
-                    //2. determine if provider has any organisations having granted CreateCohort permission
-                    //todo...
-
-                    showCreateCohortLink = true;
-                }
-
+                    showCreateCohortLink = await ProviderHasPermission(providerId, PermissionEnumDto.CreateCohort);
+                }                  
 
                 return new AccountHomeViewModel
                 {
                     AccountStatus = AccountStatus.Active,
-                    ProviderName = provider.ProviderName,
+                    ProviderName = providerResponse.ProvidersView.Provider.ProviderName,
                     ProviderId = providerId,
                     ShowAcademicYearBanner = false,
                     ShowCreateCohortLink = showCreateCohortLink
@@ -152,6 +146,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     }
                 }
             };
+        }
+
+        private async Task<bool> ProviderHasPermission(long providerId, PermissionEnumDto permission)
+        {
+            var permissionResponse = await _mediator.Send(new GetProviderHasRelationshipWithPermissionQueryRequest
+            {
+                Permission = permission,
+                ProviderId = providerId
+            });
+
+            return permissionResponse.HasPermission;
         }
     }
 }

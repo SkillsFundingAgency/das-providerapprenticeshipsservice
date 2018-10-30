@@ -8,10 +8,12 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.ProviderRelationships.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Account
 {
@@ -39,9 +41,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
                     }
                 });
 
+            _mediator.Setup(x =>
+                    x.Send(It.Is<GetProviderHasRelationshipWithPermissionQueryRequest>(r =>
+                            r.Permission == PermissionEnumDto.CreateCohort),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => new GetProviderHasRelationshipWithPermissionQueryResponse());
+
             _featureToggle = new Mock<IFeatureToggle>();
             _featureToggleService = new Mock<IFeatureToggleService>();
-            _featureToggleService.Setup(x => x.Get<ProviderRelationships>()).Returns(_featureToggle.Object);
+            _featureToggleService.Setup(x => x.Get<Domain.Models.FeatureToggles.ProviderRelationships>()).Returns(_featureToggle.Object);
             
             _currentDateTime = new Mock<ICurrentDateTime>();
 
@@ -63,12 +71,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
             model.ShowAcademicYearBanner.Should().Be(expectShowBanner);
         }
 
-        [TestCase(true, true)]
-        [TestCase(false, false)]
-        public async Task ThenDisplayOfCreateCohortLinkIsDetermined(bool featureEnabled, bool expectShowLink)
+        [TestCase(true, true, true, Description = "Show link if feature is enabled and provider has relevant permission" )]
+        [TestCase(true, false, false, Description = "Hide link if feature is enabled but provider does not have relevant permission")]
+        [TestCase(false, true, false, Description = "Hide link if feature is disabled but provider has relevant permission")]
+        [TestCase(false, false, false, Description = "Hide link if feature is disabled and provider does not has relevant permission")]
+        public async Task ThenDisplayOfCreateCohortLinkIsDetermined(bool featureEnabled, bool hasPermission, bool expectShowLink)
         {
             //Arrange
             _featureToggle.Setup(x => x.FeatureEnabled).Returns(featureEnabled);
+
+            _mediator.Setup(x =>
+                    x.Send(It.Is<GetProviderHasRelationshipWithPermissionQueryRequest>(r =>
+                            r.Permission == PermissionEnumDto.CreateCohort),
+                        It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => new GetProviderHasRelationshipWithPermissionQueryResponse{ HasPermission = hasPermission});
 
             //Act
             var model = await _orchestrator.GetAccountHomeViewModel(1);
