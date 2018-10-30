@@ -3740,3 +3740,16 @@ table .changed-item {
 .warning-summary .warning-dismiss {
   color: #f47738;
 }
+
+.boxes {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px;
+}
+
+.box {
+  box-sizing: border-box;
+  border-bottom: 1px solid #bfc1c3;
+  margin: 0 15px;
+  width: calc(50% - 30px);
+}

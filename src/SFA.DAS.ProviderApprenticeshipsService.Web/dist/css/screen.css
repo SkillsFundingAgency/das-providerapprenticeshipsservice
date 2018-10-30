@@ -4217,3 +4217,23 @@ table .changed-item {
 .warning-summary .warning-dismiss {
   color: #f47738;
 }
+
+@media (min-width: 641px) {
+  .boxes {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
+  }
+}
+
+.box {
+  box-sizing: border-box;
+  border-bottom: 1px solid #bfc1c3;
+}
+
+@media (min-width: 641px) {
+  .box {
+    margin: 0 15px;
+    width: calc(50% - 30px);
+  }
+}
