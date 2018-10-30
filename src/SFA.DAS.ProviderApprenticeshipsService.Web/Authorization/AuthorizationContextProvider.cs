@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Routing;
 using SFA.DAS.Authorization;
@@ -29,30 +31,56 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
 
             var routeValueDictionary = _httpContext.Request.RequestContext.RouteData.Values;
 
-            //use initializer
-            // replace tryget with [] in authcontext
-            var authorizationContext = new AuthorizationContext();
-
-            authorizationContext.Set(Keys.AccountLegalEntityId, GetAccountLegalEntityId(routeValueDictionary));
-            // alternative source:
-            // var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
-            authorizationContext.Set(Keys.ProviderId, routeValueDictionary[RouteDataKeys.ProviderId]);
-
-            return authorizationContext;
-
-            // look for providerid
-            // look for AccountLegalEntityPublicHashedId / AccountLegalEntityId directly
-            // if not found, look for HashedCommitmentId / CommitmentId and fetch AccountLegalEntityPublicHashedIdFrom db
-            // unhash along the way if necessary
-            // bit nasty going to db every time
-            // does this get called for every action?
-            // in provider permissions case, we only actually need the context if a provider permission has been set on the DasAuthorizeAttribute, otherwise we should avoid getting the context
+            return new AuthorizationContext
+            {
+                { Keys.AccountLegalEntityId, GetAccountLegalEntityId(routeValueDictionary) },
+                { Keys.ProviderId, routeValueDictionary[RouteDataKeys.ProviderId] }            // alternative source: long.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
+            };
         }
 
         private long? GetAccountLegalEntityId(RouteValueDictionary routeValueDictionary)
         {
             var accountLegalEntityPublicHashedId = (string)routeValueDictionary[RouteDataKeys.AccountLegalEntityPublicHashedId];
             return accountLegalEntityPublicHashedId != null ? _publicHashingService.DecodeValue(accountLegalEntityPublicHashedId) : (long?)null;
+        }
+    }
+
+    public class AuthorizationContext : IAuthorizationContext, IEnumerable
+    {
+        private readonly Dictionary<string, object> _data = new Dictionary<string, object>();
+
+        public T Get<T>(string key)
+        {
+            if (_data.TryGetValue(key, out var value))
+            {
+                return (T)value;
+            }
+
+            throw new KeyNotFoundException($"The key '{key}' was not present in the authorization context");
+        }
+
+        public void Set<T>(string key, T value)
+        {
+            _data.Add(key, value);
+        }
+
+        public void Add<T>(string key, T value)
+        {
+            _data.Add(key, value);
+        }
+
+        public bool TryGet<T>(string key, out T value)
+        {
+            var exists = _data.TryGetValue(key, out var obj);
+
+            value = exists ? (T)obj : default(T);
+
+            return exists;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return ((IEnumerable) _data).GetEnumerator();
         }
     }
 }
