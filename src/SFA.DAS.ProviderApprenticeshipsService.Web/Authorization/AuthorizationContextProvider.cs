@@ -11,6 +11,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
         private readonly HttpContextBase _httpContext;
         private readonly IPublicHashingService _publicHashingService;
 
+        private static class Keys
+        {
+            public const string AccountLegalEntityId = "AccountLegalEntityId";
+            public const string ProviderId = "ProviderId";
+        }
+
         public AuthorizationContextProvider(HttpContextBase httpContext, IPublicHashingService publicHashingService)
         {
             _httpContext = httpContext;
@@ -23,21 +29,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
 
             var routeValueDictionary = _httpContext.Request.RequestContext.RouteData.Values;
 
-            //authorizationContext.Set(AuthorizationContextKeys.AccountLegalEntityId, GetAccountLegalEntityId());
-            // authorizationContext.Set(AuthorizationContextKeys.ProviderId, GetProviderId());
-
-            //var accountLegalEntityPublicHashedId = (string)routeValueDictionary[RouteDataKeys.AccountLegalEntityPublicHashedId];
-            //var accountLegalEntityId = accountLegalEntityPublicHashedId != null ? _publicHashingService.DecodeValue(accountLegalEntityPublicHashedId) : (long?)null;
-            //var accountLegalEntityId = _publicHashingService?.DecodeValue(accountLegalEntityPublicHashedId);
-
             //use initializer
             // replace tryget with [] in authcontext
             var authorizationContext = new AuthorizationContext();
 
-            authorizationContext.Set("AccountLegalEntityId", GetAccountLegalEntityId(routeValueDictionary));
+            authorizationContext.Set(Keys.AccountLegalEntityId, GetAccountLegalEntityId(routeValueDictionary));
             // alternative source:
             // var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
-            authorizationContext.Set("ProviderId", routeValueDictionary[RouteDataKeys.ProviderId]);
+            authorizationContext.Set(Keys.ProviderId, routeValueDictionary[RouteDataKeys.ProviderId]);
 
             return authorizationContext;
 

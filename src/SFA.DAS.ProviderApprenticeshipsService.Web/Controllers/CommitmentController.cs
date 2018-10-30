@@ -35,6 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             _lastCohortCookieStorageService = lastCohortCookieStorageService;
         }
 
+        //todo: we could use the model binding so that the context is filled in automagically (would need to have 1 model class in derived from I??)
         [HttpGet]
         [Route("{accountLegalEntityPublicHashedId}/confirmemployer")]
         [DasAuthorize(ProviderPermissions.CreateCohort)]
