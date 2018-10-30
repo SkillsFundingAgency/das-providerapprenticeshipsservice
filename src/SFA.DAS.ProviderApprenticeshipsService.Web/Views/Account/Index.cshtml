@@ -20,50 +20,81 @@
     </div>
 </div>
 
-<!-- New Create Cohort link markup -->
-@if (Model.ShowCreateCohortLink)
-{
-    <div class="column-one-half">
-        <h2 class="heading-medium">
-            <a href="@Url.Action("Create", "Commitment", new {providerId = Model.ProviderId})">Create a cohort</a>
-        </h2>
-        <p>Create new cohorts on behalf of an employer.</p>
-        <hr/>
-    </div>
-}
-<!-- End new Create Cohort link markup -->
+
+
+
 
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <div class="grid-row">
-            <div class="column-one-half">
-                <h2 class="heading-medium">
-                    <a href="@Url.Action("Cohorts", "Commitment", new {providerId = Model.ProviderId})">Your cohorts</a>
-                </h2>
-                <p>Review, edit, approve and add apprentices to new cohorts.</p>
-                <hr/>
+        @if (Model.ShowCreateCohortLink)
+        {   <!-- New Create Cohort link markup -->
+            <div class="grid-row">
+                <div class="column-one-half">
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("Create", "Commitment", new {providerId = Model.ProviderId})">Create a cohort</a>
+                    </h2>
+                    <p>Create new cohorts on behalf of an employer.</p>
+                    <hr>
+                </div>
+                <div class="column-one-half">
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("Cohorts", "Commitment", new {providerId = Model.ProviderId})">Your cohorts</a>
+                    </h2>
+                    <p>Review, edit, approve and add apprentices to new cohorts.</p>
+                    <hr>
+                </div>
             </div>
-            <div class="column-one-half">
-                <h2 class="heading-medium">
-                    <a href="@Url.Action("Index", "ManageApprentices", new {providerId = Model.ProviderId})">Manage your apprentices</a>
-                </h2>
-                <p>
-                    View and update approved apprentice records.
-                </p>
-                <hr/>
+            <div class="grid-row">
+                <div class="column-one-half">
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("Index", "ManageApprentices", new {providerId = Model.ProviderId})">Manage your apprentices</a>
+                    </h2>
+                    <p>View and update approved apprentice records.</p>
+                    <hr>
+                </div>
+                <div class="column-one-half">
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("Agreements", "Agreement", new {providerId = Model.ProviderId})">Organisations and agreements</a>
+                    </h2>
+                    <p>Find and view organisations and their agreement IDs.</p>
+                    <hr>
+                </div>
             </div>
-        </div>
-        <div class="grid-row">
-            <div class="column-one-half">
-                <h2 class="heading-medium">
-                    <a href="@Url.Action("Agreements", "Agreement", new {providerId = Model.ProviderId})">Organisations and agreements</a>
-                </h2>
-                <p>Find and view organisations and their agreement IDs.</p>
-                <hr />
+            <!-- End new Create Cohort link markup -->
+
+        } else {
+            <div class="grid-row">
+                <div class="column-one-half">
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("Cohorts", "Commitment", new {providerId = Model.ProviderId})">Your cohorts</a>
+                    </h2>
+                    <p>Review, edit, approve and add apprentices to new cohorts.</p>
+                    <hr>
+                </div>
+                <div class="column-one-half">
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("Index", "ManageApprentices", new {providerId = Model.ProviderId})">Manage your apprentices</a>
+                    </h2>
+                    <p>View and update approved apprentice records.</p>
+                    <hr>
+                </div>
             </div>
-        </div>
+            <div class="grid-row">
+                <div class="column-one-half">
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("Agreements", "Agreement", new {providerId = Model.ProviderId})">Organisations and agreements</a>
+                    </h2>
+                    <p>Find and view organisations and their agreement IDs.</p>
+                    <hr>
+                </div>
+            </div>
+        }
     </div>
+
+
+
+
 @if (@Model.ShowAcademicYearBanner)
 {
     <div class="column-one-third academic-banner">
