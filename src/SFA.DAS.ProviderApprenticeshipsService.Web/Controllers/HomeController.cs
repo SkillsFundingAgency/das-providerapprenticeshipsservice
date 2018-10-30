@@ -37,11 +37,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             return View();
         }
-
-        [Route("~/steve", Name = "steve")]
-        public ActionResult Steve()
-        {
-            return View();
-        }
     }
 }
