@@ -13,7 +13,6 @@ using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -52,7 +51,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             MockFeatureToggleOn = new Mock<IFeatureToggle>();
             MockFeatureToggleOn.Setup(x => x.FeatureEnabled).Returns(true);
             MockFeatureToggleService = new Mock<IFeatureToggleService>();
-            MockFeatureToggleService.Setup(x => x.Get<Transfers>()).Returns(MockFeatureToggleOn.Object);
 
             SetUpOrchestrator();
         }
