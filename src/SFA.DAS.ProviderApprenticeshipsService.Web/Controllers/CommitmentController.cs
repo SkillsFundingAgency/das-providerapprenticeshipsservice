@@ -311,7 +311,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/AddApprentice")]
-        public async Task<ActionResult> Create(long providerId, string hashedCommitmentId)
+        public async Task<ActionResult> AddApprentice(long providerId, string hashedCommitmentId)
         {
             var model = await _commitmentOrchestrator.GetCreateApprenticeshipViewModel(providerId, hashedCommitmentId);
             ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
@@ -322,7 +322,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedCommitmentId}/AddApprentice")]
-        public async Task<ActionResult> Create(ApprenticeshipViewModel apprenticeship)
+        public async Task<ActionResult> AddApprentice(ApprenticeshipViewModel apprenticeship)
         {
             try
             {

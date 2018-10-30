@@ -798,7 +798,7 @@
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Commitment\Details.cshtml" />
     <Content Include="Views\Commitment\Edit.cshtml" />
-    <Content Include="Views\Commitment\Create.cshtml" />
+    <Content Include="Views\Commitment\AddApprentice.cshtml" />
     <Content Include="Views\Commitment\Submit.cshtml" />
     <Content Include="Views\Shared\ValidationSummary.cshtml" />
     <Content Include="Views\Commitment\FinishEditing.cshtml" />

@@ -20,7 +20,7 @@
       <Setting name="InstrumentationKey" />
       <Setting name="RedisSessionProviderConnectionString" />
       <Setting name="CurrentTime" />
-      <Setting name="FeatureToggle.Transfers" />
+      <Setting name="FeatureToggle.ProviderRelationships" />
       <Setting name="UseStubProviderRelationships" />
     </ConfigurationSettings>
     <Endpoints>
