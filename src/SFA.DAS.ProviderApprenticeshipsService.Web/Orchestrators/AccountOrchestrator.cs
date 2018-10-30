@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -13,7 +12,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 
@@ -50,7 +48,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 var showCreateCohortLink = false;
 
                 //1. determine if provider permissions is enabled
-                if (_featureToggleService.Get<ProviderRelationships>().FeatureEnabled)
+                if (_featureToggleService.Get<Domain.Models.FeatureToggles.ProviderRelationships>().FeatureEnabled)
                 {
                     //2. determine if provider has any organisations having granted CreateCohort permission
                     //todo...
