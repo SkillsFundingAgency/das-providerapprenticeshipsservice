@@ -853,7 +853,7 @@
     <Content Include="Views\DataLock\ConfirmRestart.cshtml" />
     <Content Include="Views\Commitment\TransferFunded.cshtml" />
     <Content Include="Views\Agreement\Agreements.cshtml" />
-    <Content Include="Views\CreateCohort\CreateCohort.cshtml" />
+    <Content Include="Views\CreateCohort\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

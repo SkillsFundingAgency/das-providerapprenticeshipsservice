@@ -1,8 +1,9 @@
-﻿using System.Web.Mvc;
-using MediatR;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -11,15 +12,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     [RoutePrefix("{providerId}/apprentices")]
     public class CreateCohortController : BaseController
     {
-        public CreateCohortController(ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
-        { 
+        private readonly CreateCohortOrchestrator _orchestrator;
+
+        public CreateCohortController(ICookieStorageService<FlashMessageViewModel> flashMessage,
+            CreateCohortOrchestrator orchestrator) : base(flashMessage)
+        {
+            _orchestrator = orchestrator;
         }
 
         [HttpGet]
         [Route("cohorts/create")]
-        public ActionResult Create(long providerId)
+        public async Task<ActionResult> Create(long providerId)
         {
-            return View("CreateCohort");
+            var model = await _orchestrator.GetCreateCohortViewModel(providerId);
+
+            return View(model);
         }
     }
 }
