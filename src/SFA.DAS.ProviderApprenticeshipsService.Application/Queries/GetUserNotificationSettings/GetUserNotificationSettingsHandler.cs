@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using MediatR;
@@ -8,21 +9,19 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings
 {
-    public class GetUserNotificationSettingsHandler : IAsyncRequestHandler<GetUserNotificationSettingsQuery, GetUserNotificationSettingsResponse>
+    public class GetUserNotificationSettingsHandler : IRequestHandler<GetUserNotificationSettingsQuery, GetUserNotificationSettingsResponse>
     {
         private readonly IUserSettingsRepository _userRepository;
 
         private readonly IProviderCommitmentsLogger _logger;
 
-        public GetUserNotificationSettingsHandler(
-            IUserSettingsRepository userRepository,
-            IProviderCommitmentsLogger logger)
+        public GetUserNotificationSettingsHandler(IUserSettingsRepository userRepository, IProviderCommitmentsLogger logger)
         {
             _userRepository = userRepository;
             _logger = logger;
         }
 
-        public async Task<GetUserNotificationSettingsResponse> Handle(GetUserNotificationSettingsQuery message)
+        public async Task<GetUserNotificationSettingsResponse> Handle(GetUserNotificationSettingsQuery message, CancellationToken cancellationToken)
         {
             var userSettings = (await _userRepository.GetUserSetting(message.UserRef)).ToList();
             if (!userSettings.Any())

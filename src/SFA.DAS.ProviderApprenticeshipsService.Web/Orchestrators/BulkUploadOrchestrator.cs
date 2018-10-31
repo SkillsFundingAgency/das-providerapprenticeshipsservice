@@ -90,7 +90,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             try
             {
 
-                await Mediator.SendAsync(new BulkUploadApprenticeshipsCommand
+                await Mediator.Send(new BulkUploadApprenticeshipsCommand
                 {
                     UserId = userId,
                     ProviderId = providerId,
@@ -147,7 +147,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Apprenticeship = apprentices
             };
 
-            var overlapResponse = await Mediator.SendAsync(overlapRequest);
+            var overlapResponse = await Mediator.Send(overlapRequest);
 
             if (overlapResponse.Overlaps.Any())
             {
@@ -227,7 +227,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var commitment = await GetCommitment(providerId, commitmentId);
             AssertCommitmentStatus(commitment);
 
-            var fileContentResult = await Mediator.SendAsync(new GetBulkUploadFileQueryRequest
+            var fileContentResult = await Mediator.Send(new GetBulkUploadFileQueryRequest
             {
                 ProviderId = providerId,
                 BulkUploadId = bulkUploadId

@@ -1255,5 +1255,21 @@ $warning-colour: $orange;
 
 
 
+.boxes {
+    @include media(tablet) {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -15px;
+    }
+}
+
+.box {
+    box-sizing: border-box;
+    border-bottom: 1px solid $border-colour;
+    @include media(tablet) {
+        margin: 0 15px;
+        width: calc(50% - 30px);
+    }
+}
 
 

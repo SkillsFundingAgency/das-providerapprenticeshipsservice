@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
@@ -24,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.TriageAppr
             _validator = validator;
         }
 
-        protected override async Task HandleCore(TriageApprenticeshipDataLocksCommand command)
+        protected override async Task Handle(TriageApprenticeshipDataLocksCommand command, CancellationToken cancellationToken)
         {
             var validationResult = _validator.Validate(command);
             if (!validationResult.IsValid)

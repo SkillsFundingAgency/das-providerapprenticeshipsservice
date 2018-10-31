@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -18,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Aut
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<UpsertRegisteredUserCommand>()))
+            _mediator.Setup(x => x.Send(It.IsAny<UpsertRegisteredUserCommand>(), new CancellationToken()))
                 .ReturnsAsync(new Unit());
 
             _orchestrator = new AuthenticationOrchestrator(_mediator.Object, Mock.Of<IProviderCommitmentsLogger>());
@@ -31,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Aut
             await _orchestrator.SaveIdentityAttributes("UserRef", 12345, "DisplayName", "Email");
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<UpsertRegisteredUserCommand>()));
+            _mediator.Verify(x => x.Send(It.IsAny<UpsertRegisteredUserCommand>(), It.IsAny<CancellationToken>()));
         }
     }
 }

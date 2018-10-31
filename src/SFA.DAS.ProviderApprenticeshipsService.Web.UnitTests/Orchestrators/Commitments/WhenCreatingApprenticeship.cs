@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -37,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mockHashingService.Setup(x => x.DecodeValue(viewModel.HashedApprenticeshipId)).Returns(expectedApprenticeshipId);
             _mockHashingService.Setup(x => x.DecodeValue(viewModel.HashedCommitmentId)).Returns(expectedCommitmentId);
 
-            _mockMediator.Setup(x => x.SendAsync(It.Is<GetCommitmentQueryRequest>(y => y.ProviderId == viewModel.ProviderId && y.CommitmentId == expectedCommitmentId)))
+            _mockMediator.Setup(x => x.Send(It.Is<GetCommitmentQueryRequest>(y => y.ProviderId == viewModel.ProviderId && y.CommitmentId == expectedCommitmentId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetCommitmentQueryResponse { Commitment = new CommitmentView { EditStatus = EditStatus.ProviderOnly, AgreementStatus = AgreementStatus.EmployerAgreed } });
 
             _mockMapper.Setup(m => m.MapApprenticeship(It.IsAny<ApprenticeshipViewModel>()))
@@ -47,11 +48,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _mockMediator.Verify(
                 x =>
-                    x.SendAsync(
+                    x.Send(
                         It.Is<CreateApprenticeshipCommand>(
                             c =>
                                 c.ProviderId == viewModel.ProviderId && c.UserId == "user123" && c.Apprenticeship != null && c.UserDisplayName == signedInUser.DisplayName &&
-                                c.UserEmailAddress == signedInUser.Email)), Times.Once);
+                                c.UserEmailAddress == signedInUser.Email), It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

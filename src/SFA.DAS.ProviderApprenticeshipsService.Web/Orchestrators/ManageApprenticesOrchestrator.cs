@@ -70,7 +70,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var searchQuery = _apprenticeshipFiltersMapper.MapToApprenticeshipSearchQuery(filters);
 
-            var searchResponse = await _mediator.SendAsync(new ApprenticeshipSearchQueryRequest
+            var searchResponse = await _mediator.Send(new ApprenticeshipSearchQueryRequest
             {
                 ProviderId = providerId,
                 Query = searchQuery
@@ -105,9 +105,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             _logger.Info($"Getting On-programme apprenticeships Provider: {providerId}, ApprenticeshipId: {apprenticeshipId}", providerId: providerId, apprenticeshipId: apprenticeshipId);
 
-            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { ProviderId = providerId, ApprenticeshipId = apprenticeshipId });
+            var data = await _mediator.Send(new GetApprenticeshipQueryRequest { ProviderId = providerId, ApprenticeshipId = apprenticeshipId });
 
-            var dataLockSummary = await _mediator.SendAsync(new GetApprenticeshipDataLockSummaryQueryRequest
+            var dataLockSummary = await _mediator.Send(new GetApprenticeshipDataLockSummaryQueryRequest
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId
@@ -128,7 +128,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             _logger.Info($"Getting On-programme apprenticeships Provider: {providerId}, ApprenticeshipId: {apprenticeshipId}", providerId: providerId, apprenticeshipId: apprenticeshipId);
 
-            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { ProviderId = providerId, ApprenticeshipId = apprenticeshipId });
+            var data = await _mediator.Send(new GetApprenticeshipQueryRequest { ProviderId = providerId, ApprenticeshipId = apprenticeshipId });
 
             return data.Apprenticeship;
         }
@@ -138,7 +138,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
             await AssertNoPendingApprenticeshipUpdate(providerId, apprenticeshipId);
 
-            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            var data = await _mediator.Send(new GetApprenticeshipQueryRequest
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId
@@ -146,19 +146,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             AssertApprenticeshipIsEditable(data.Apprenticeship);
 
-            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            var commitmentData = await _mediator.Send(new GetCommitmentQueryRequest
             {
                 ProviderId = providerId,
                 CommitmentId = data.Apprenticeship.CommitmentId
             });
 
-            var overlappingErrors = await _mediator.SendAsync(
+            var overlappingErrors = await _mediator.Send(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
                     Apprenticeship = new List<Apprenticeship> { data.Apprenticeship }
                 });
 
-            var dataLocks = await _mediator.SendAsync(
+            var dataLocks = await _mediator.Send(
                     new GetApprenticeshipDataLocksQueryRequest
                         {
                             ApprenticeshipId = apprenticeshipId,
@@ -179,7 +179,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var result = new Dictionary<string, string>();
 
-            var overlappingErrors = await _mediator.SendAsync(
+            var overlappingErrors = await _mediator.Send(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
                     Apprenticeship = new List<Apprenticeship> { await _apprenticeshipMapper.MapApprenticeship(model) }
@@ -213,7 +213,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
             await AssertNoPendingApprenticeshipUpdate(providerId, apprenticeshipId);
 
-            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            var data = await _mediator.Send(new GetApprenticeshipQueryRequest
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId
@@ -225,7 +225,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task CreateApprenticeshipUpdate(CreateApprenticeshipUpdateViewModel updateApprenticeship, long providerId, string userId, SignInUserModel signedInUser)
         {
-            await _mediator.SendAsync(new CreateApprenticeshipUpdateCommand
+            await _mediator.Send(new CreateApprenticeshipUpdateCommand
             {
                 ProviderId = providerId,
                 ApprenticeshipUpdate = _apprenticeshipMapper.MapApprenticeshipUpdate(updateApprenticeship),
@@ -239,7 +239,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
 
-            var update = await _mediator.SendAsync(new GetPendingApprenticeshipUpdateQueryRequest
+            var update = await _mediator.Send(new GetPendingApprenticeshipUpdateQueryRequest
             {
                 ApprenticeshipId = apprenticeshipId,
                 ProviderId = providerId
@@ -247,7 +247,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             AssertApprenticeshipUpdateReviewable(update.ApprenticeshipUpdate);
 
-            var original = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            var original = await _mediator.Send(new GetApprenticeshipQueryRequest
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId
@@ -261,7 +261,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
 
-            await _mediator.SendAsync(new ReviewApprenticeshipUpdateCommand
+            await _mediator.Send(new ReviewApprenticeshipUpdateCommand
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId,
@@ -276,7 +276,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
 
-            var update = await _mediator.SendAsync(new GetPendingApprenticeshipUpdateQueryRequest
+            var update = await _mediator.Send(new GetPendingApprenticeshipUpdateQueryRequest
             {
                 ApprenticeshipId = apprenticeshipId,
                 ProviderId = providerId
@@ -284,7 +284,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             AssertApprenticeshipUpdateUndoable(update.ApprenticeshipUpdate);
 
-            var original = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            var original = await _mediator.Send(new GetApprenticeshipQueryRequest
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId
@@ -298,7 +298,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
 
-            await _mediator.SendAsync(new UndoApprenticeshipUpdateCommand
+            await _mediator.Send(new UndoApprenticeshipUpdateCommand
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId,
@@ -310,7 +310,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private async Task AssertNoPendingApprenticeshipUpdate(long providerId, long apprenticeshipId)
         {
-            var result = await _mediator.SendAsync(new GetPendingApprenticeshipUpdateQueryRequest
+            var result = await _mediator.Send(new GetPendingApprenticeshipUpdateQueryRequest
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId

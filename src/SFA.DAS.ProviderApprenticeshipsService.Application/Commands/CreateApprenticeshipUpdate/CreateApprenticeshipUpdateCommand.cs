@@ -5,7 +5,7 @@ using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeshipUpdate
 {
     [Validator(typeof(CreateApprenticeshipUpdateCommandValidator))]
-    public class CreateApprenticeshipUpdateCommand : IAsyncRequest
+    public class CreateApprenticeshipUpdateCommand : IRequest
     {
         public string UserId { get; set; }
         public long ProviderId { get; set; }

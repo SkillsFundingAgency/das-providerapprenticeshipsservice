@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 using MediatR;
@@ -35,25 +36,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Dat
         public void Arrange()
         {
            _mediator = new Mock<IMediator>();
-           _mediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipPriceHistoryQueryRequest>()))
+           _mediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipPriceHistoryQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => new GetApprenticeshipPriceHistoryQueryResponse
                 {
                     History = new List<PriceHistory>()
                 });
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => new GetApprenticeshipQueryResponse
                 {
                     Apprenticeship = new Apprenticeship()
                 });
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetCommitmentQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => new GetCommitmentQueryResponse
                 {
                     Commitment = new CommitmentView()
                 });
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipDataLockSummaryQueryRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipDataLockSummaryQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => new GetApprenticeshipDataLockSummaryQueryResponse
                 {
                     DataLockSummary = new DataLockSummary()
@@ -87,7 +88,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Dat
             await _orchestrator.GetApprenticeshipMismatchDataLock(1, "TEST");
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetApprenticeshipPriceHistoryQueryRequest>()),
+            _mediator.Verify(x => x.Send(It.IsAny<GetApprenticeshipPriceHistoryQueryRequest>(), It.IsAny<CancellationToken>()),
                 Times.Once);
         }
 
@@ -98,7 +99,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Dat
             await _orchestrator.GetApprenticeshipMismatchDataLock(1, "TEST");
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetApprenticeshipDataLockSummaryQueryRequest>()), Times.Once());
+            _mediator.Verify(x => x.Send(It.IsAny<GetApprenticeshipDataLockSummaryQueryRequest>(), It.IsAny<CancellationToken>()), Times.Once());
         }
 
         [Test]

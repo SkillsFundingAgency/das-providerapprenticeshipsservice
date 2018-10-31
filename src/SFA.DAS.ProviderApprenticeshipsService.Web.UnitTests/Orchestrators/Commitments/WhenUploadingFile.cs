@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using FluentAssertions;
@@ -53,7 +54,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _mockMediator = new Mock<IMediator>();
 
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetTrainingProgrammesQueryRequest>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetTrainingProgrammesQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetTrainingProgrammesQueryResponse { TrainingProgrammes = new List<ITrainingProgramme>
                 {
                     {
@@ -64,7 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     }
                 } });
 
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>(), It.IsAny<CancellationToken>()))
                 .Returns(
                     Task.Run(() => new GetOverlappingApprenticeshipsQueryResponse
                             {
@@ -88,7 +89,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task TestPerformance()
         {
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetCommitmentQueryRequest>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(new GetCommitmentQueryResponse
                 {
                     Commitment = new CommitmentView
@@ -127,11 +128,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _file.Setup(m => m.InputStream).Returns(textStream);
 
             BulkUploadApprenticeshipsCommand commandArgument = null;
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<BulkUploadApprenticeshipsCommand>()))
+            _mockMediator.Setup(x => x.Send(It.IsAny<BulkUploadApprenticeshipsCommand>(), new CancellationToken()))
                 .ReturnsAsync(new Unit())
-                .Callback((object x) => commandArgument = x as BulkUploadApprenticeshipsCommand);
+                .Callback<BulkUploadApprenticeshipsCommand, CancellationToken>((command, token) => commandArgument = command);
 
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetCommitmentQueryRequest>(), new CancellationToken()))
                 .Returns(Task.FromResult(new GetCommitmentQueryResponse
                 {
                     Commitment = new CommitmentView
@@ -146,7 +147,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             await _sut.UploadFile("user123", model, signinUser);
 
-            _mockMediator.Verify(x => x.SendAsync(It.IsAny<BulkUploadApprenticeshipsCommand>()), Times.Once);
+            _mockMediator.Verify(x => x.Send(It.IsAny<BulkUploadApprenticeshipsCommand>(), new CancellationToken()), Times.Once);
 
             commandArgument.ProviderId.Should().Be(111);
             commandArgument.CommitmentId.Should().Be(123);
@@ -176,11 +177,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _file.Setup(m => m.InputStream).Returns(textStream);
 
             BulkUploadApprenticeshipsCommand commandArgument = null;
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<BulkUploadApprenticeshipsCommand>()))
+            _mockMediator.Setup(x => x.Send(It.IsAny<BulkUploadApprenticeshipsCommand>(), new CancellationToken()))
                 .ReturnsAsync(new Unit())
                 .Callback((object x) => commandArgument = x as BulkUploadApprenticeshipsCommand);
 
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetCommitmentQueryRequest>(), new CancellationToken()))
                 .Returns(Task.FromResult(new GetCommitmentQueryResponse
                 {
                     Commitment = new CommitmentView
@@ -190,7 +191,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     }
                 }));
 
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>(), It.IsAny<CancellationToken>()))
                 .Returns(
                     Task.Run(() => new GetOverlappingApprenticeshipsQueryResponse
                     {
@@ -224,11 +225,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _file.Setup(m => m.InputStream).Returns(textStream);
 
             BulkUploadApprenticeshipsCommand commandArgument = null;
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<BulkUploadApprenticeshipsCommand>()))
+            _mockMediator.Setup(x => x.Send(It.IsAny<BulkUploadApprenticeshipsCommand>(), new CancellationToken()))
                 .ReturnsAsync(new Unit())
                 .Callback((object x) => commandArgument = x as BulkUploadApprenticeshipsCommand);
 
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetCommitmentQueryRequest>(), new CancellationToken()))
                 .Returns(Task.FromResult(new GetCommitmentQueryResponse
                 {
                     Commitment = new CommitmentView
@@ -238,7 +239,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     }
                 }));
 
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>(), new CancellationToken()))
                 .Returns(
                     Task.Run(() => new GetOverlappingApprenticeshipsQueryResponse
                     {
@@ -281,11 +282,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _file.Setup(m => m.InputStream).Returns(textStream);
 
             BulkUploadApprenticeshipsCommand commandArgument = null;
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<BulkUploadApprenticeshipsCommand>()))
+            _mockMediator.Setup(x => x.Send(It.IsAny<BulkUploadApprenticeshipsCommand>(), new CancellationToken()))
                 .ReturnsAsync(new Unit())
                 .Callback((object x) => commandArgument = x as BulkUploadApprenticeshipsCommand);
 
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetCommitmentQueryRequest>(), new CancellationToken()))
                 .Returns(Task.FromResult(new GetCommitmentQueryResponse
                 {
                     Commitment = new CommitmentView
@@ -295,7 +296,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     }
                 }));
 
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>(), It.IsAny<CancellationToken>()))
                 .Returns(
                     Task.Run(() => new GetOverlappingApprenticeshipsQueryResponse
                     {

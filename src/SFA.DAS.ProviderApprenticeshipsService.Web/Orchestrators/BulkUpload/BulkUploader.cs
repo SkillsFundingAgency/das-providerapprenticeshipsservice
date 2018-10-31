@@ -64,7 +64,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             var fileName = uploadApprenticeshipsViewModel?.Attachment?.FileName ?? "<- NO NAME ->";
 
             _logger.Trace($"Saving bulk upload file. {fileName}");
-            var bulkUploadId = await _mediator.SendAsync(
+            var bulkUploadId = await _mediator.Send(
                 new SaveBulkUploadFileCommand
                 {
                     ProviderId = uploadApprenticeshipsViewModel.ProviderId,
@@ -104,7 +104,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
-            var programmes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest
+            var programmes = await _mediator.Send(new GetTrainingProgrammesQueryRequest
             {
                 IncludeFrameworks = true
             });

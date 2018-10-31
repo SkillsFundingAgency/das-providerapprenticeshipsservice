@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 using MediatR;
 
@@ -6,7 +7,7 @@ using SFA.DAS.Commitments.Api.Client.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipDataLocks
 {
-    public class GetApprenticeshipDataLocksQueryHandler : IAsyncRequestHandler<GetApprenticeshipDataLocksQueryRequest,GetApprenticeshipDataLocksQueryResponse>
+    public class GetApprenticeshipDataLocksQueryHandler : IRequestHandler<GetApprenticeshipDataLocksQueryRequest,GetApprenticeshipDataLocksQueryResponse>
     {
         private readonly IProviderCommitmentsApi _commitmentsApi;
 
@@ -15,7 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenti
             _commitmentsApi = commitmentsApi;
         }
 
-        public async Task<GetApprenticeshipDataLocksQueryResponse> Handle(GetApprenticeshipDataLocksQueryRequest command)
+        public async Task<GetApprenticeshipDataLocksQueryResponse> Handle(GetApprenticeshipDataLocksQueryRequest command, CancellationToken cancellationToken)
         {
             var response = await _commitmentsApi.GetDataLocks(command.ProviderId, command.ApprenticeshipId);
 

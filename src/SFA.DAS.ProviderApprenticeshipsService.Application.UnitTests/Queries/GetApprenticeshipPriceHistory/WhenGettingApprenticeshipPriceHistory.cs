@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -34,7 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             };
 
             //Act
-            await _handler.Handle(query);
+            await _handler.Handle(query, new CancellationToken());
 
             //Assert
             _commitmentsApi.Verify(x => x.GetPriceHistory(It.IsAny<long>(), It.Is<long>(id => id == 1)), Times.Once);

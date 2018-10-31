@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 
@@ -6,7 +7,7 @@ using SFA.DAS.Commitments.Api.Client.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeshipPriceHistory
 {
-    public class GetApprenticeshipPriceHistoryQueryHandler : IAsyncRequestHandler<GetApprenticeshipPriceHistoryQueryRequest, GetApprenticeshipPriceHistoryQueryResponse>
+    public class GetApprenticeshipPriceHistoryQueryHandler : IRequestHandler<GetApprenticeshipPriceHistoryQueryRequest, GetApprenticeshipPriceHistoryQueryResponse>
     {
         private readonly IProviderCommitmentsApi _commitmentsApi;
 
@@ -15,7 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenti
             _commitmentsApi = commitmentsApi;
         }
 
-        public async Task<GetApprenticeshipPriceHistoryQueryResponse> Handle(GetApprenticeshipPriceHistoryQueryRequest message)
+        public async Task<GetApprenticeshipPriceHistoryQueryResponse> Handle(GetApprenticeshipPriceHistoryQueryRequest message, CancellationToken cancellationToken)
         {
             var response = await _commitmentsApi.GetPriceHistory(message.ProviderId, message.ApprenticeshipId);
 

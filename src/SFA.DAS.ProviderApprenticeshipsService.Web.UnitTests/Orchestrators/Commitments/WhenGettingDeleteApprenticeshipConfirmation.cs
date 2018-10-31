@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 
@@ -30,12 +31,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Apprenticeship = new DAS.Commitments.Api.Types.Apprenticeship.Apprenticeship { FirstName = "Bob", LastName = "Tester", DateOfBirth = new DateTime(1999, 1, 2) }
             };
 
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
-                .ReturnsAsync(dummyResponse).Callback<GetApprenticeshipQueryRequest>(x => arg = x);
+            _mockMediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipQueryRequest>(), new CancellationToken()))
+                .ReturnsAsync(dummyResponse)
+                .Callback<GetApprenticeshipQueryRequest, CancellationToken>((command, token) => arg = command);
 
             await _orchestrator.GetDeleteConfirmationModel(123L, "ABBA99", "ABBA66");
 
-            _mockMediator.Verify(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
+            _mockMediator.Verify(x => x.Send(It.IsAny<GetApprenticeshipQueryRequest>(), new CancellationToken()), Times.Once);
             arg.ProviderId.Should().Be(123);
             arg.ApprenticeshipId.Should().Be(321);
         }
@@ -50,8 +52,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Apprenticeship = new DAS.Commitments.Api.Types.Apprenticeship.Apprenticeship { FirstName = "Bob", LastName = "Tester", DateOfBirth = new DateTime(1999, 1, 2) }
             };
 
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
-                .ReturnsAsync(dummyResponse).Callback<GetApprenticeshipQueryRequest>(x => arg = x);
+            _mockMediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipQueryRequest>(), new CancellationToken()))
+                .ReturnsAsync(dummyResponse)
+                .Callback<GetApprenticeshipQueryRequest, CancellationToken>((command, token) => arg = command);
 
             var viewModel = await _orchestrator.GetDeleteConfirmationModel(123L, "ABBA99", "ABBA66");
 
@@ -67,7 +70,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Apprenticeship = new DAS.Commitments.Api.Types.Apprenticeship.Apprenticeship { LastName = "Tester", DateOfBirth = new DateTime(1999, 1, 2) }
             };
 
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
+            _mockMediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(dummyResponse).Callback<GetApprenticeshipQueryRequest>(x => arg = x);
 
             var viewModel = await _orchestrator.GetDeleteConfirmationModel(123L, "ABBA99", "ABBA66");
@@ -85,8 +88,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Apprenticeship = new DAS.Commitments.Api.Types.Apprenticeship.Apprenticeship { FirstName = "Bob", LastName = "Tester", DateOfBirth = new DateTime(1999, 1, 2) }
             };
 
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
-                .ReturnsAsync(dummyResponse).Callback<GetApprenticeshipQueryRequest>(x => arg = x);
+            _mockMediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipQueryRequest>(), new CancellationToken()))
+                .ReturnsAsync(dummyResponse)
+                .Callback<GetApprenticeshipQueryRequest, CancellationToken>((command, token) => arg = command);
 
             var viewModel = await _orchestrator.GetDeleteConfirmationModel(123L, "ABBA99", "ABBA66");
 
@@ -103,8 +107,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Apprenticeship = new DAS.Commitments.Api.Types.Apprenticeship.Apprenticeship { FirstName = "Bob", LastName = "Tester", DateOfBirth = null }
             };
 
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
-                .ReturnsAsync(dummyResponse).Callback<GetApprenticeshipQueryRequest>(x => arg = x);
+            _mockMediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipQueryRequest>(), new CancellationToken()))
+                .ReturnsAsync(dummyResponse)
+                .Callback<GetApprenticeshipQueryRequest, CancellationToken>((command, token) => arg = command);
 
             var viewModel = await _orchestrator.GetDeleteConfirmationModel(123L, "ABBA99", "ABBA66");
 

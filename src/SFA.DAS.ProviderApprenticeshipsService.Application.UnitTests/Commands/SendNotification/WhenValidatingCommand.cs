@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentValidation;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.NLog.Logger;
@@ -15,7 +17,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     [TestFixture]
     public sealed class WhenValidatingCommand
     {
-        private SendNotificationCommandHandler _handler;
+        private IRequestHandler<SendNotificationCommand> _handler;
         private SendNotificationCommand _validCommand;
 
         [SetUp]
@@ -40,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.Email = null;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             act.ShouldThrow<ValidationException>().Which.Message.Contains("Email");
         }
@@ -52,7 +54,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.Email.RecipientsAddress = value;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             act.ShouldThrow<ValidationException>().Which.Message.Contains("Recipients Address");
         }
@@ -64,7 +66,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.Email.ReplyToAddress = value;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             act.ShouldThrow<ValidationException>().Which.Message.Contains("Recipients Address");
         }
@@ -76,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.Email.Subject = value;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             act.ShouldThrow<ValidationException>().Which.Message.Contains("Subject");
         }
@@ -88,7 +90,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.Email.TemplateId = value;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             act.ShouldThrow<ValidationException>().Which.Message.Contains("Template Id");
         }

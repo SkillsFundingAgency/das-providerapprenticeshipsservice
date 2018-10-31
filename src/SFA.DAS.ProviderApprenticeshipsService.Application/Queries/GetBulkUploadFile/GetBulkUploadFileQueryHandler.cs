@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetBulkUploadFile
 {
-    public class GetBulkUploadFileQueryHandler : IAsyncRequestHandler<GetBulkUploadFileQueryRequest, GetBulkUploadFileQueryResponse>
+    public class GetBulkUploadFileQueryHandler : IRequestHandler<GetBulkUploadFileQueryRequest, GetBulkUploadFileQueryResponse>
     {
         private readonly IProviderCommitmentsApi _commitmentsApi;
 
@@ -13,7 +14,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetBulkUplo
             _commitmentsApi = commitmentsApi;
         }
 
-        public async Task<GetBulkUploadFileQueryResponse> Handle(GetBulkUploadFileQueryRequest message)
+        public async Task<GetBulkUploadFileQueryResponse> Handle(GetBulkUploadFileQueryRequest message, CancellationToken cancellationToken)
         {
             var result = await _commitmentsApi.BulkUploadFile(message.ProviderId, message.BulkUploadId);
 

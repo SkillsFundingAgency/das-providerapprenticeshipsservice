@@ -4,7 +4,7 @@ using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships
 {
-    public sealed class BulkUploadApprenticeshipsCommand : IAsyncRequest
+    public sealed class BulkUploadApprenticeshipsCommand : IRequest
     {
         public string UserId { get; set; }
         public long ProviderId { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -66,7 +67,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             {
                 IncludeFrameworks = false,
                 EffectiveDate = null
-            });
+            }, new CancellationToken());
 
             Assert.AreEqual(_standards.Count, result.TrainingProgrammes.Count);
             Assert.IsInstanceOf<Standard>(result.TrainingProgrammes[0]);
@@ -79,7 +80,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             {
                 IncludeFrameworks = true,
                 EffectiveDate = null
-            });
+            }, new CancellationToken());
 
             Assert.AreEqual(_standards.Count + _frameworks.Count, result.TrainingProgrammes.Count);
             Assert.IsTrue(result.TrainingProgrammes.Any(x => x is Standard));
@@ -93,7 +94,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             {
                 IncludeFrameworks = true,
                 EffectiveDate = new DateTime(2016, 06, 01)
-            });
+            }, new CancellationToken());
 
             Assert.AreEqual(1, result.TrainingProgrammes.Count);
             Assert.IsInstanceOf<Standard>(result.TrainingProgrammes[0]);
@@ -106,7 +107,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             {
                 IncludeFrameworks = true,
                 EffectiveDate = null
-            });
+            }, new CancellationToken());
 
             Assert.AreEqual(2, result.TrainingProgrammes.Count);
         }

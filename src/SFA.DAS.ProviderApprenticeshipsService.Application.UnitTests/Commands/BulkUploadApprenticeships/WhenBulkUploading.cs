@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 
@@ -9,6 +11,7 @@ using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.BulkUploadApprenticeships
 {
@@ -17,7 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     {
         private Mock<IProviderCommitmentsApi> _mockCommitmentsApi;
         private BulkUploadApprenticeshipsCommand _exampleValidCommand;
-        private BulkUploadApprenticeshipsCommandHandler _handler;
+        private IRequestHandler<BulkUploadApprenticeshipsCommand> _handler;
 
         [SetUp]
         public void Setup()
@@ -37,13 +40,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 UserDisplayName = "Bob"
             };
 
-            _handler = new BulkUploadApprenticeshipsCommandHandler(_mockCommitmentsApi.Object);
+            _handler = new BulkUploadApprenticeshipsCommandHandler(_mockCommitmentsApi.Object, Mock.Of<IProviderCommitmentsLogger>());
         }
 
         [Test]
         public async Task ShouldCallCommitmentApi()
         {
-            await _handler.Handle(_exampleValidCommand);
+            await _handler.Handle(_exampleValidCommand, new CancellationToken());
 
             _mockCommitmentsApi.Verify(
                 x =>
@@ -59,7 +62,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _exampleValidCommand.ProviderId = 0; // This is invalid
 
-            Func<Task> act = async () => { await _handler.Handle(_exampleValidCommand); };
+            Func<Task> act = async () => { await _handler.Handle(_exampleValidCommand, new CancellationToken()); };
 
             act.ShouldThrow<InvalidRequestException>();
         }

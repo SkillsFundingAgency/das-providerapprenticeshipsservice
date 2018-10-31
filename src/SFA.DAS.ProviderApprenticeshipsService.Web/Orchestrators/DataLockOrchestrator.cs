@@ -45,25 +45,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             _logger.Info($"Getting apprenticeship datalock for provider: {providerId}", providerId: providerId, apprenticeshipId: apprenticeshipId);
 
-            var datalockSummary = await _mediator.SendAsync(new GetApprenticeshipDataLockSummaryQueryRequest
+            var datalockSummary = await _mediator.Send(new GetApprenticeshipDataLockSummaryQueryRequest
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId
             });
 
-            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            var data = await _mediator.Send(new GetApprenticeshipQueryRequest
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId
             });
 
-            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            var commitmentData = await _mediator.Send(new GetCommitmentQueryRequest
             {
                 ProviderId = providerId,
                 CommitmentId = data.Apprenticeship.CommitmentId
             });
 
-            var priceHistory = await _mediator.SendAsync(new GetApprenticeshipPriceHistoryQueryRequest
+            var priceHistory = await _mediator.Send(new GetApprenticeshipPriceHistoryQueryRequest
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId
@@ -116,7 +116,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             _logger.Info($"Updating price data locks to triage {triageStatus} for apprenticeship: {apprenticeshipId}", apprenticeshipId);
 
-            await _mediator.SendAsync(new TriageApprenticeshipDataLocksCommand
+            await _mediator.Send(new TriageApprenticeshipDataLocksCommand
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId,
@@ -132,7 +132,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             _logger.Info($"Updating data lock to triage {triage} for datalock: {dataLockEventId}, apprenticeship: {apprenticeshipId}", apprenticeshipId);
 
-            await _mediator.SendAsync(new UpdateDataLockCommand
+            await _mediator.Send(new UpdateDataLockCommand
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId,
@@ -145,7 +145,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
 
-            await _mediator.SendAsync(new UpdateDataLockCommand
+            await _mediator.Send(new UpdateDataLockCommand
             {
                 ProviderId = providerId,
                 ApprenticeshipId = apprenticeshipId,
