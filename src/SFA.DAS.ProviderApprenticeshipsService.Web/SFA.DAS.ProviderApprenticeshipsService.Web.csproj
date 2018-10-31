@@ -562,6 +562,8 @@
     <Compile Include="Models\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprovedViewModel.cs" />
     <Compile Include="Models\BulkUpload\CsvRecordMap.cs" />
+    <Compile Include="Models\CreateCohort\CreateCohortViewModel.cs" />
+    <Compile Include="Models\CreateCohort\LegalEntityViewModel.cs" />
     <Compile Include="Models\TransferFundedListItemViewModel.cs" />
     <Compile Include="Models\TransferFundedViewModel.cs" />
     <Compile Include="Models\CourseDataLockViewModel.cs" />
@@ -612,7 +614,9 @@
     <Compile Include="Orchestrators\Formatters\IExcelFormatter.cs" />
     <Compile Include="Orchestrators\IFiltersCookieManager.cs" />
     <Compile Include="Orchestrators\Mappers\AgreementMapper.cs" />
+    <Compile Include="Orchestrators\Mappers\CreateCohortMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IAgreementMapper.cs" />
+    <Compile Include="Orchestrators\Mappers\ICreateCohortMapper.cs" />
     <Compile Include="Validation\ApprovedApprenticeshipValidator.cs" />
     <Compile Include="Validation\IApprovedApprenticeshipValidator.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
