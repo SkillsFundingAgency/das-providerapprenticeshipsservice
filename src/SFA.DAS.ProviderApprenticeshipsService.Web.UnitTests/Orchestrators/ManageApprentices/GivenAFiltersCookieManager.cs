@@ -25,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
 
                 var response = sut.GetCookie();
 
-                response.ShouldBeEquivalentTo(new ApprenticeshipFiltersViewModel());
+                response.Should().BeEquivalentTo(new ApprenticeshipFiltersViewModel());
             }
 
             [Test, MoqCustomisedAutoData]

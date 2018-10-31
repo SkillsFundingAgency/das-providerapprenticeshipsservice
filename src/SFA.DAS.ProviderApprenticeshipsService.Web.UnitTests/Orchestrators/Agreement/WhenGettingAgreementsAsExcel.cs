@@ -36,7 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
 
             var result = await sut.GetAgreementsAsExcel(providerId);
 
-            result.ShouldBeEquivalentTo(expectedResult);
+            result.Should().BeEquivalentTo(expectedResult);
         }
     }
 }

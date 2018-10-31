@@ -74,13 +74,8 @@
     <Reference Include="FeatureToggle.Common, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FeatureToggle.Common.4.0.2\lib\netstandard1.4\FeatureToggle.Common.dll</HintPath>
     </Reference>
-    <Reference Include="FluentAssertions, Version=4.15.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.4.15.0\lib\net45\FluentAssertions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FluentAssertions.Core, Version=4.15.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.4.15.0\lib\net45\FluentAssertions.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="FluentAssertions, Version=5.4.2.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.5.4.2\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
     <Reference Include="FluentValidation, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.8.0.0\lib\net45\FluentValidation.dll</HintPath>
@@ -119,6 +114,9 @@
     <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.Authorization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Authorization.0.1.9\lib\netstandard2.0\SFA.DAS.Authorization.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Commitments.Api.Client, Version=2.1.564.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.2.1.564\lib\net462\SFA.DAS.Commitments.Api.Client.dll</HintPath>
     </Reference>
@@ -139,6 +137,12 @@
     </Reference>
     <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.39208, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.39208\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Testing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Testing.2.0.19\lib\netstandard2.0\SFA.DAS.Testing.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StructureMap.4.7.0\lib\net45\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -246,6 +250,7 @@
   <ItemGroup>
     <Compile Include="AcademicYear\WhenDeterminingTheAcademicYear.cs" />
     <Compile Include="AcademicYear\WhenValidatingAcademicYear.cs" />
+    <Compile Include="Authorization\AuthorizationContextProviderTests.cs" />
     <Compile Include="Extensions\IEnumerableCommitmentAgreementTests.cs" />
     <Compile Include="Models\DataLockSummaryViewModelTests.cs" />
     <Compile Include="MoqCustomisedAutoData.cs" />
