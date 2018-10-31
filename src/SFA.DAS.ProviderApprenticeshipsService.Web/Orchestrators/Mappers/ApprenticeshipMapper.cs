@@ -54,30 +54,42 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
                                       new DateTime(_currentDateTime.Now.Year, _currentDateTime.Now.Month, 1);
 
-            var isLockedForUpdate = (!isStartDateInFuture &&
-                                     (apprenticeship.HasHadDataLockSuccess || _academicYearValidator.IsAfterLastAcademicYearFundingPeriod &&
-                                      apprenticeship.StartDate.HasValue &&
-                                      _academicYearValidator.Validate(apprenticeship.StartDate.Value) == AcademicYearValidationResult.NotWithinFundingPeriod))
-                                    ||
-                                    (commitment.TransferSender?.TransferApprovalStatus == TransferApprovalStatus.Approved
-                                     && apprenticeship.HasHadDataLockSuccess && isStartDateInFuture);
+            var isUpdateLockedForStartDateAndCourse = false;
+            var isEndDateLockedForUpdate = false;
+            var isLockedForUpdate = false;
 
-            var isUpdateLockedForStartDateAndCourse =
-                commitment.TransferSender?.TransferApprovalStatus == TransferApprovalStatus.Approved
-                && !apprenticeship.HasHadDataLockSuccess;
-
-            // if editing post-approval, we also lock down end date if...
-            //   start date is in the future and has had data lock success
-            //   (as the validation rule that disallows setting end date to > current month
-            //   means any date entered would be before the start date (which is also disallowed))
-            // and open it up if...
-            //   data lock success and start date in past
-            var isEndDateLockedForUpdate = isLockedForUpdate;
-            if (commitment.AgreementStatus == AgreementStatus.BothAgreed
-                && apprenticeship.HasHadDataLockSuccess)
+            //locking fields concerns post-approval apprenticeships only
+            //this method should be split into pre- and post-approval versions
+            //ideally dealing with different api types and view models
+            if (apprenticeship.PaymentStatus != PaymentStatus.PendingApproval)
             {
-                isEndDateLockedForUpdate = isStartDateInFuture;
+                isLockedForUpdate = (!isStartDateInFuture &&
+                                         (apprenticeship.HasHadDataLockSuccess || _academicYearValidator.IsAfterLastAcademicYearFundingPeriod &&
+                                          apprenticeship.StartDate.HasValue &&
+                                          _academicYearValidator.Validate(apprenticeship.StartDate.Value) == AcademicYearValidationResult.NotWithinFundingPeriod))
+                                        ||
+                                        (commitment.TransferSender?.TransferApprovalStatus == TransferApprovalStatus.Approved
+                                         && apprenticeship.HasHadDataLockSuccess && isStartDateInFuture);
+
+                isUpdateLockedForStartDateAndCourse =
+                    commitment.TransferSender?.TransferApprovalStatus == TransferApprovalStatus.Approved
+                    && !apprenticeship.HasHadDataLockSuccess;
+
+                // if editing post-approval, we also lock down end date if...
+                //   start date is in the future and has had data lock success
+                //   (as the validation rule that disallows setting end date to > current month
+                //   means any date entered would be before the start date (which is also disallowed))
+                // and open it up if...
+                //   data lock success and start date in past
+                isEndDateLockedForUpdate = isLockedForUpdate;
+                if (commitment.AgreementStatus == AgreementStatus.BothAgreed
+                    && apprenticeship.HasHadDataLockSuccess)
+                {
+                    isEndDateLockedForUpdate = isStartDateInFuture;
+                }
+
             }
+
 
             var dateOfBirth = apprenticeship.DateOfBirth;
             return new ApprenticeshipViewModel
