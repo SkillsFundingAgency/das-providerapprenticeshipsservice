@@ -329,6 +329,7 @@
     <Compile Include="Orchestrators\Commitments\WhenGettingCreateApprenticeshipViewModel.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingTransferFundedCohorts.cs" />
     <Compile Include="Orchestrators\Commitments\WhenValidatingApprenticeshipViewModel.cs" />
+    <Compile Include="Orchestrators\CreateCohort\WhenIGetCreateCohortViewModel.cs" />
     <Compile Include="Orchestrators\Formatters\GivenACsvFormatter.cs" />
     <Compile Include="Orchestrators\Formatters\GivenAnExcelFormatter.cs" />
     <Compile Include="Orchestrators\ManageApprentices\GivenAFiltersCookieManager.cs" />
