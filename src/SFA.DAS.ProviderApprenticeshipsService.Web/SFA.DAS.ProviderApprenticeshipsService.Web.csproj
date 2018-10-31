@@ -527,6 +527,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BulkUploadController.cs" />
     <Compile Include="Controllers\CommitmentController.cs" />
+    <Compile Include="Controllers\CreateCohortController.cs" />
     <Compile Include="Controllers\DataLockController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -851,7 +852,7 @@
     <Content Include="Views\DataLock\ConfirmRestart.cshtml" />
     <Content Include="Views\Commitment\TransferFunded.cshtml" />
     <Content Include="Views\Agreement\Agreements.cshtml" />
-    <Content Include="Views\Commitment\CreateCohort.cshtml" />
+    <Content Include="Views\CreateCohort\CreateCohort.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

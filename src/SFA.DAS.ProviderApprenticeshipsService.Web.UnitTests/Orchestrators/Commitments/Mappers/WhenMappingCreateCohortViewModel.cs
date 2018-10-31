@@ -10,23 +10,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     public class WhenMappingCreateCohortViewModel
     {
         private CreateCohortMapper _mapper;
-        private ProviderRelationshipResponse _source;
+        private List<ProviderRelationshipResponse.ProviderRelationship> _source;
 
         [SetUp]
         public void Arrange()
         {
-            _source = new ProviderRelationshipResponse
+            _source = new List<ProviderRelationshipResponse.ProviderRelationship>
             {
-                ProviderRelationships = new List<ProviderRelationshipResponse.ProviderRelationship>
+                new ProviderRelationshipResponse.ProviderRelationship
                 {
-                    new ProviderRelationshipResponse.ProviderRelationship
-                    {
-                        EmployerAccountId = 1,
-                        EmployerAccountLegalEntityName = "EmployerAccountLegalEntityName",
-                        EmployerAccountLegalEntityPublicHashedId = "EmployerAccountLegalEntityName",
-                        EmployerName = "EmployerName",
-                        Ukprn = 2
-                    }
+                    EmployerAccountId = 1,
+                    EmployerAccountLegalEntityName = "EmployerAccountLegalEntityName",
+                    EmployerAccountLegalEntityPublicHashedId = "EmployerAccountLegalEntityName",
+                    EmployerName = "EmployerName",
+                    Ukprn = 2
                 }
             };
 
@@ -38,7 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             var result = _mapper.Map(TestHelper.Clone(_source)).LegalEntities.First();
 
-            var source = _source.ProviderRelationships.First();
+            var source = _source.First();
             Assert.AreEqual(source.EmployerAccountId, result.EmployerAccountId);
         }
 
@@ -47,7 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             var result = _mapper.Map(TestHelper.Clone(_source)).LegalEntities.First();
 
-            var source = _source.ProviderRelationships.First();
+            var source = _source.First();
             Assert.AreEqual(source.EmployerAccountLegalEntityName, result.EmployerAccountLegalEntityName);
         }
 
@@ -56,7 +53,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             var result = _mapper.Map(TestHelper.Clone(_source)).LegalEntities.First();
 
-            var source = _source.ProviderRelationships.First();
+            var source = _source.First();
             Assert.AreEqual(source.EmployerAccountLegalEntityPublicHashedId, result.EmployerAccountLegalEntityPublicHashedId);
         }
 
@@ -65,26 +62,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             var result = _mapper.Map(TestHelper.Clone(_source)).LegalEntities.First();
 
-            var source = _source.ProviderRelationships.First();
+            var source = _source.First();
             Assert.AreEqual(source.EmployerName, result.EmployerName);
         }
 
         [Test]
         public void ThenAllProviderRelationshipsAreMapped()
         {
-            _source = new ProviderRelationshipResponse
+            _source = new List<ProviderRelationshipResponse.ProviderRelationship>
             {
-                ProviderRelationships = new List<ProviderRelationshipResponse.ProviderRelationship>
-                {
-                    new ProviderRelationshipResponse.ProviderRelationship(),
-                    new ProviderRelationshipResponse.ProviderRelationship(),
-                    new ProviderRelationshipResponse.ProviderRelationship()
-                }
+                new ProviderRelationshipResponse.ProviderRelationship(),
+                new ProviderRelationshipResponse.ProviderRelationship(),
+                new ProviderRelationshipResponse.ProviderRelationship()               
             };
 
             var result = _mapper.Map(TestHelper.Clone(_source));
 
-            Assert.AreEqual(_source.ProviderRelationships.Count(), result.LegalEntities.Count());
+            Assert.AreEqual(_source.Count(), result.LegalEntities.Count());
         }
     }
 }

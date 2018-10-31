@@ -6,13 +6,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
     public class CreateCohortMapper : ICreateCohortMapper
     {
-        public CreateCohortViewModel Map(ProviderRelationshipResponse source)
+        public CreateCohortViewModel Map(IEnumerable<ProviderRelationshipResponse.ProviderRelationship> source)
         {
             var result = new CreateCohortViewModel();
 
             var legalEntities = new List<LegalEntityViewModel>();
 
-            foreach (var relationship in source.ProviderRelationships)
+            foreach (var relationship in source)
             {
                 legalEntities.Add(new LegalEntityViewModel
                 {

@@ -443,13 +443,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return View(viewModel);
         }
 
-        [HttpGet]
-        [Route("cohorts/create")]
-        public ActionResult Create(long providerId)
-        {
-            return View("CreateCohort");
-        }
-
         private string GetReturnToListUrl(long providerId)
         {
             switch (GetRequestStatusFromCookie())
