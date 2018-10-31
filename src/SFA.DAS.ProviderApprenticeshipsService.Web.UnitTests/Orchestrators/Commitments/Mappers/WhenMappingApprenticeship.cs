@@ -250,7 +250,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public void ShouldHaveLockedStatusIfDataLocksSuccesFound()
         {
-            var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(-1), HasHadDataLockSuccess = true };
+            var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(-1), HasHadDataLockSuccess = true, PaymentStatus = PaymentStatus.Active };
             var viewModel = _mapper.MapApprenticeship(apprenticeship, _commitment);
 
             viewModel.IsLockedForUpdate.Should().BeTrue();
@@ -264,7 +264,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mockAcademicYearValidator.Setup(m => m.IsAfterLastAcademicYearFundingPeriod).Returns(true);
             _mockAcademicYearValidator.Setup(m => m.Validate(It.IsAny<DateTime>())).Returns(AcademicYearValidationResult.NotWithinFundingPeriod);
 
-            var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(-5), HasHadDataLockSuccess = false };
+            var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(-5), HasHadDataLockSuccess = false, PaymentStatus = PaymentStatus.Active };
             var viewModel = _mapper.MapApprenticeship(apprenticeship, _commitment);
 
             viewModel.IsLockedForUpdate.Should().BeTrue();
@@ -275,7 +275,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public void ShouldHaveLockedStatusIfApprovedTransferFundedWithSuccessfulIlrSubmissionAndCourseNotYetStarted()
         {
-            var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(3), HasHadDataLockSuccess = true };
+            var apprenticeship = new Apprenticeship { StartDate = _now.AddMonths(3), HasHadDataLockSuccess = true, PaymentStatus = PaymentStatus.Active };
             var commitment = new CommitmentView { TransferSender = new TransferSender { TransferApprovalStatus = TransferApprovalStatus.Approved } };
 
             var viewModel = _mapper.MapApprenticeship(apprenticeship, commitment);
@@ -305,7 +305,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [TestCase(false, true, false, null)]
         public void ThenIsUpdateLockedForStartDateAndCourseShouldBeSetCorrectly(bool expected, bool dataLockSuccess, bool transferSender, TransferApprovalStatus? transferApprovalStatus)
         {
-            var apprenticeship = new Apprenticeship { HasHadDataLockSuccess = dataLockSuccess };
+            var apprenticeship = new Apprenticeship { HasHadDataLockSuccess = dataLockSuccess, PaymentStatus = PaymentStatus.Active };
             var commitment = new CommitmentView();
 
             if (transferSender)
@@ -343,7 +343,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var apprenticeship = new Apprenticeship
             {
                 HasHadDataLockSuccess = dataLockSuccess,
-                StartDate = _now.AddMonths(isStartDateInFuture ? 1 : -1)
+                StartDate = _now.AddMonths(isStartDateInFuture ? 1 : -1),
+                PaymentStatus = PaymentStatus.Active
             };
 
             var commitment = new CommitmentView { AgreementStatus = AgreementStatus.BothAgreed };
