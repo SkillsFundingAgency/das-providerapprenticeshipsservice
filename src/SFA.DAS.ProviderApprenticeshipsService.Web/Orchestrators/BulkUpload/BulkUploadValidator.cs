@@ -5,12 +5,9 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Ajax.Utilities;
 using WebGrease.Css.Extensions;
-using SFA.DAS.Learners.Validators;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
@@ -22,16 +19,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
     public sealed class BulkUploadValidator : IBulkUploadValidator
     {
         private readonly ProviderApprenticeshipsServiceConfiguration _config;
-
-        // TODO: LWA - Can these be injected in?
-        private readonly BulkUploadApprenticeshipValidationText _validationText;
-        private readonly ApprenticeshipUploadModelValidator _viewModelValidator;
+        private readonly IApprenticeshipValidationErrorText _validationText;
+        private readonly IApprenticeshipUploadModelValidator _viewModelValidator;
        
-        public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, IUlnValidator ulnValidator, IAcademicYearDateProvider academicYear)
+        public BulkUploadValidator(
+            ProviderApprenticeshipsServiceConfiguration config, 
+            IApprenticeshipValidationErrorText apprenticeshipValidationErrorText, 
+            IApprenticeshipUploadModelValidator apprenticeshipUploadModelValidator)
         {
-            _validationText = new BulkUploadApprenticeshipValidationText(academicYear);
-            _viewModelValidator = new ApprenticeshipUploadModelValidator(_validationText, new CurrentDateTime(), ulnValidator);
-            
+            _validationText = apprenticeshipValidationErrorText;
+            _viewModelValidator = apprenticeshipUploadModelValidator;
             _config = config;
         }
 

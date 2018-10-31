@@ -14,6 +14,7 @@ using SFA.DAS.Learners.Validators;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.AcademicYear;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
@@ -25,18 +26,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         protected readonly IApprenticeshipValidationErrorText ValidationText;
         protected readonly ICurrentDateTime CurrentDateTime;
         private readonly IAcademicYearDateProvider _academicYear;
+        private readonly IAcademicYearValidator _academicYearValidator;
         private readonly IUlnValidator _ulnValidator;
         protected readonly IMediator Mediator;
 
-        public ApprenticeshipCoreValidator(IApprenticeshipValidationErrorText validationText, 
-                                            ICurrentDateTime currentDateTime, 
-                                            IAcademicYearDateProvider academicYear,
-                                            IUlnValidator ulnValidator,
-                                            IMediator mediator)
+        public ApprenticeshipCoreValidator(
+            IApprenticeshipValidationErrorText validationText, 
+            ICurrentDateTime currentDateTime, 
+            IAcademicYearDateProvider academicYear,
+            IAcademicYearValidator academicYearValidator,
+            IUlnValidator ulnValidator,
+            IMediator mediator)
         {
             ValidationText = validationText;
             CurrentDateTime = currentDateTime;
             _academicYear = academicYear;
+            _academicYearValidator = academicYearValidator;
             _ulnValidator = ulnValidator;
             Mediator = mediator;
 
@@ -103,15 +108,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         {
             RuleFor(x => x.StartDate)
                 .Cascade(CascadeMode.StopOnFirstFailure)
+                .NotNull().WithMessage(ValidationText.LearnStartDate01.Text).WithErrorCode(ValidationText.LearnStartDate01.ErrorCode)
+                .Must(ValidateDateWithoutDay).WithMessage(ValidationText.LearnStartDate01.Text).WithErrorCode(ValidationText.LearnStartDate01.ErrorCode)
+                .Must(StartDateOnOrAfterAcademicYearStartDate).WithMessage(ValidationText.AcademicYearStartDate01.Text).WithErrorCode(ValidationText.AcademicYearStartDate01.ErrorCode)
                 .MustAsync(async (viewModel, startDate, context, cancellationToken) => await TrainingCourseValidOnStartDate(viewModel, startDate, context))
                     .WithErrorCode(ValidationText.LearnStartDateNotValidForTrainingCourse.ErrorCode)
                     .WithMessage(ValidationText.LearnStartDateNotValidForTrainingCourse.Text)
-                .NotNull().WithMessage(ValidationText.LearnStartDate01.Text).WithErrorCode(ValidationText.LearnStartDate01.ErrorCode)
-                .Must(ValidateDateWithoutDay).WithMessage(ValidationText.LearnStartDate01.Text).WithErrorCode(ValidationText.LearnStartDate01.ErrorCode)
                 .Must(StartDateForTransferNotBeforeMay2018).WithMessage(ValidationText.LearnStartDate06.Text).WithErrorCode(ValidationText.LearnStartDate06.ErrorCode)
                 .Must(NotBeBeforeMay2017).WithMessage(ValidationText.LearnStartDate02.Text).WithErrorCode(ValidationText.LearnStartDate02.ErrorCode)
                 .Must(StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear).WithMessage(ValidationText.LearnStartDate05.Text).WithErrorCode(ValidationText.LearnStartDate05.ErrorCode);
-                //.Must(BeWithinAcademicYearFundingPeriod).WithMessage(_validationText.AcademicYearStartDate01.Text).WithErrorCode(_validationText.AcademicYearStartDate01.ErrorCode);
         }
 
         protected virtual void ValidateEndDate()
@@ -203,10 +208,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             return age <= 115;
         }
 
+        private bool StartDateOnOrAfterAcademicYearStartDate(DateTimeViewModel startDate)
+        {
+            var result = _academicYearValidator.Validate(startDate.DateTime.Value);
+            return result == AcademicYearValidationResult.Success;
+            //return startDate.DateTime.Value >= _academicYear.CurrentAcademicYearStartDate;
+        }
+
         private bool StartDateWithinAYearOfTheEndOfTheCurrentTeachingYear(DateTimeViewModel startDate)
         {
             return startDate.DateTime.Value <= _academicYear.CurrentAcademicYearEndDate.AddYears(1);
         }
+
         private bool StartDateForTransferNotBeforeMay2018(ApprenticeshipViewModel viewModel, DateTimeViewModel date)
         {
             if (!viewModel.IsPaidForByTransfer || date.DateTime >= new DateTime(2018, 5, 1))
@@ -218,6 +231,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             viewModel.StartDateTransfersMinDateAltDetailMessage = "The start date can't be earlier than May 2018";
             return false;
         }
+
         private bool BeGreaterThenStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel date)
         {
             if (viewModel.StartDate?.DateTime == null || viewModel.EndDate?.DateTime == null) return true;

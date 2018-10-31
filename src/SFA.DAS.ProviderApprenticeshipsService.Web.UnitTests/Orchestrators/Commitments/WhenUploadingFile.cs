@@ -28,6 +28,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.BulkUpl
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
@@ -38,6 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         private BulkUploadOrchestrator _sut;
         private Mock<HttpPostedFileBase> _file;
         private Mock<IMediator> _mockMediator;
+        private Mock<IBulkUploadValidator> _mockBulkUploadValidator;
 
         private Mock<IProviderCommitmentsLogger> _logger;
 
@@ -56,12 +58,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetTrainingProgrammesQueryRequest>()))
                 .ReturnsAsync(new GetTrainingProgrammesQueryResponse { TrainingProgrammes = new List<ITrainingProgramme>
                 {
-                    {
-                        new Standard {Id = "2", Title = "Hej" }
-                    },
-                    {
-                        new Framework { Id = "1-2-3" }
-                    }
+                    new Standard {Id = "2", Title = "Hej" },
+                    new Framework { Id = "1-2-3" }
                 } });
 
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>()))
@@ -71,14 +69,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                                 Overlaps = new List<ApprenticeshipOverlapValidationResult>()
                             }));
 
-            var uploadValidator = BulkUploadTestHelper.GetBulkUploadValidator(512);
-
             _logger = new Mock<IProviderCommitmentsLogger>();
             _logger.Setup(x => x.Info(It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>())).Verifiable();
             _logger.Setup(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>())).Verifiable();
 
+            _mockBulkUploadValidator = new Mock<IBulkUploadValidator>();
+
             var uploadFileParser = new BulkUploadFileParser(_logger.Object);
-            var bulkUploader = new BulkUploader(_mockMediator.Object, uploadValidator, uploadFileParser, Mock.Of<IProviderCommitmentsLogger>());
+            var bulkUploader = new BulkUploader(_mockMediator.Object, _mockBulkUploadValidator.Object, uploadFileParser, Mock.Of<IProviderCommitmentsLogger>());
             var bulkUploadMapper = new BulkUploadMapper(_mockMediator.Object);
 
             _sut = new BulkUploadOrchestrator(_mockMediator.Object, bulkUploader, mockHashingService.Object,
@@ -98,12 +96,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     }
                 }));
 
+            var errors = new List<UploadError>();
+            for (int i = 0; i < 80*1000; i++)
+            {
+                errors.Add(new UploadError("errorMessage", "errorCode"));
+            }
+
+            _mockBulkUploadValidator
+                .Setup(uploadValidator =>
+                    uploadValidator.ValidateRecords(It.IsAny<IEnumerable<ApprenticeshipUploadModel>>(),
+                        It.IsAny<List<ITrainingProgramme>>()))
+                .Returns(errors);
+
             const int upper = 40 * 1000;
             var testData = new List<string>();
             for (int i = 0; i < upper; i++)
             {
                 var uln = (1000000000 + i).ToString();
-                testData.Add("\n\rABBA123,Chris,Froberg,1998-12-08,,,,2,2020-08,2025-08,1500,,Employer ref,Provider ref," + uln);
+                testData.Add("\n\rABBA123,Chris,Froberg,1998-12-08,,,25,2,2020-08,2025-08,1500,,Employer ref,Provider ref," + uln);
             }
             var str = HeaderLine + string.Join("", testData);
 
