@@ -32,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
             return new AuthorizationContext
             {
                 { Keys.AccountLegalEntityId, GetAccountLegalEntityId(routeValueDictionary) },
-                { Keys.ProviderId, routeValueDictionary[RouteDataKeys.ProviderId] }            // alternative source: long.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
+                { Keys.ProviderId, GetProviderId(routeValueDictionary) }            // alternative source: long.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
             };
         }
 
@@ -40,6 +40,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
         {
             var accountLegalEntityPublicHashedId = (string)routeValueDictionary[RouteDataKeys.AccountLegalEntityPublicHashedId];
             return accountLegalEntityPublicHashedId != null ? _publicHashingService.DecodeValue(accountLegalEntityPublicHashedId) : (long?)null;
+        }
+
+        private long? GetProviderId(RouteValueDictionary routeValueDictionary)
+        {
+            if (long.TryParse((string) routeValueDictionary[RouteDataKeys.ProviderId], out var providerId))
+                return providerId;
+
+            return null;
         }
     }
 }
