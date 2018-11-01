@@ -1273,3 +1273,27 @@ $warning-colour: $orange;
 }
 
 
+dl.inline-secondary {
+    color: $grey-1;
+    margin-bottom: 30px;
+
+    dt {
+        margin-top: 5px;
+    }
+
+    @include media(tablet) {
+        margin-top: -15px;
+
+        dt:after {
+            content: ":"
+        }
+
+        dt, dd {
+            display: inline-block
+        }
+
+        dd {
+            margin-right: 10px
+        }
+    }
+}

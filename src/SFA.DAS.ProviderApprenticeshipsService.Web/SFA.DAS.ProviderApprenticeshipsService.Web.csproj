@@ -854,6 +854,7 @@
     <Content Include="Views\Commitment\TransferFunded.cshtml" />
     <Content Include="Views\Agreement\Agreements.cshtml" />
     <Content Include="Views\CreateCohort\Create.cshtml" />
+    <Content Include="Views\CreateCohort\ConfirmEmployer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

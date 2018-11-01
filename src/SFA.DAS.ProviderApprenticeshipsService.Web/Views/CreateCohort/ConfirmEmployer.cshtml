@@ -1,0 +1,43 @@
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+
+@{
+    ViewBag.Title = "ConfirmEmployer";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Confirm employer</h1>
+        <p class="heading-large">Joe Bloggs Ltd</p>
+        <dl class="inline-secondary">
+            <dt>Account name</dt>
+            <dd>JOE BLOGGS</dd>
+            <dt>Agreement ID</dt>
+            <dd>NBHGYK</dd>
+        </dl>
+        <form action="@Url.Action("ConfirmEmployer")" method="POST">
+            <div class="form-group">
+                <fieldset>
+
+                    <legend>
+                        <span class="heading-small">
+                            Is this the employer you'd like to add a cohort for?
+                        </span>
+                    </legend>
+
+                    <label for="confirm-yes" class="block-label selection-button-radio">
+                        <input id="confirm-yes" type="radio" name="confirm-employer" value="Yes">
+                        Yes, use Joe Bloggs Ltd
+                    </label>
+
+                    <label for="confirm-no" class="block-label selection-button-radio">
+                        <input id="confirm-no" type="radio" name="confirm-employer" value="No">
+                        No, choose a different employer
+                    </label>
+
+                </fieldset>
+            </div>
+            <button type="submit" class="button">Continue</button>
+        </form>
+    </div>
+</div>
