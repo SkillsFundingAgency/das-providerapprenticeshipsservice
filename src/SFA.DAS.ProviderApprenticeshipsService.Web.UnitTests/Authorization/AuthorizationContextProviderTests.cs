@@ -17,13 +17,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
     public class AuthorizationContextProviderTests : FluentTest<AuthorizationContextProviderTestsFixture>
     {
         [Test]
-        public void GetAuthorizationContext_WhenGettingAuthorizationContextAndAccountLegalEntityPublicHashedIdExistsAndProviderIdExists_ThenShouldReturnAuthorizationContextWithAccountLegalEntityIdAndProviderId()
+        public void WhenGettingAuthorizationContextAndBothAccountLegalEntityPublicHashedIdAndProviderIdExists_ThenShouldReturnAuthorizationContextWithAccountLegalEntityIdAndProviderId()
         {
             Run(f => f.SetValidAccountLegalEntityPublicHashedId().SetValidProviderId(), f => f.GetAuthorizationContext(), (f, r) =>
             {
                 r.Should().NotBeNull();
                 r.Get<long?>("AccountLegalEntityId").Should().Be(f.AccountLegalEntityId);
-                r.Get<long?>("ProviderId").Should().Be(f.AccountLegalEntityId);
+                r.Get<long?>("ProviderId").Should().Be(f.ProviderId);
             });
         }
 
