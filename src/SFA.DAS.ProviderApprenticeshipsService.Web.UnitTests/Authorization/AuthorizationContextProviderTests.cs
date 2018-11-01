@@ -9,6 +9,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Routing;
 using SFA.DAS.Testing;
+using Fix = SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization.AuthorizationContextProviderTestsFixture;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
 {
@@ -17,43 +18,89 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
     public class AuthorizationContextProviderTests : FluentTest<AuthorizationContextProviderTestsFixture>
     {
         [Test]
-        public void WhenGettingAuthorizationContextAndBothAccountLegalEntityPublicHashedIdAndProviderIdExists_ThenShouldReturnAuthorizationContextWithAccountLegalEntityIdAndProviderId()
+        public void WhenGettingAuthorizationContextAndAllRequiredRouteValuesAreAvailable_ThenShouldReturnAuthorizationContextWithAllValuesSet()
         {
             Run(f => f.SetValidAccountLegalEntityPublicHashedId().SetValidProviderId(), f => f.GetAuthorizationContext(), (f, r) =>
             {
                 r.Should().NotBeNull();
-                r.Get<long?>("AccountLegalEntityId").Should().Be(f.AccountLegalEntityId);
-                r.Get<long?>("ProviderId").Should().Be(f.ProviderId);
+                r.Get<long?>(Fix.ContextKeys.AccountLegalEntityId).Should().Be(f.AccountLegalEntityId);
+                r.Get<long?>(Fix.ContextKeys.ProviderId).Should().Be(f.ProviderId);
             });
         }
 
-        //[Test]
-        //public void GetAuthorizationContext_WhenGettingAuthorizationContextAndAccountIdDoesNotExistAndUserIsNotAuthenticated_ThenShouldReturnAuthroizationContextWithoutAccountIdAndUserRefValues()
-        //{
-        //    Run(f => f.SetNoAccountId().SetUnauthenticatedUser(), f => f.GetAuthorizationContext(), (f, r) =>
-        //    {
-        //        r.Should().NotBeNull();
-        //        r.Get<string>("AccountHashedId").Should().BeNull();
-        //        r.Get<long?>("AccountId").Should().BeNull();
-        //        r.Get<Guid?>("UserRef").Should().BeNull();
-        //    });
-        //}
+        #region Invalid AccountLegalEntityPublicHashedId
 
-        //[Test]
-        //public void GetAuthorizationContext_WhenGettingAuthorizationContextAndAccountIdExistsAndIsInvalid_ThenShouldThrowUnauthorizedAccessException()
-        //{
-        //    Run(f => f.SetInvalidAccountId(), f => f.GetAuthorizationContext(), (f, r) => r.Should().Throw<UnauthorizedAccessException>());
-        //}
+        [Test]
+        public void WhenGettingAuthorizationContextAndRequiredRouteValuesAreAvailableButAccountLegalEntityPublicHashedIdIsNotAValidHash_ThenShouldThrowException()
+        {
+            Run(f => f.SetInvalidHashAccountLegalEntityPublicHashedId().SetValidProviderId(),
+                f => f.GetAuthorizationContext(),
+                (f, r) => r.Should().Throw<Exception>());
+        }
 
-        //[Test]
-        //public void GetAuthorizationContext_WhenGettingAuthorizationContextAndUserIsAuthenticatedAndUserRefIsInvalid_ThenShouldThrowUnauthorizedAccessException()
-        //{
-        //    Run(f => f.SetInvalidAccountId().SetInvalidUserRef(), f => f.GetAuthorizationContext(), (f, r) => r.Should().Throw<UnauthorizedAccessException>());
-        //}
+        [Test]
+        public void WhenGettingAuthorizationContextAndRequiredRouteValuesAreAvailableButAccountLegalEntityPublicHashedIdIsNotAvailable_ThenShouldReturnAuthorizationContextWithAllValuesSetExceptAccountLegalEntityId()
+        {
+            Run(f => f.SetValidProviderId(),
+                f => f.GetAuthorizationContext(),
+                (f, r) =>
+                {
+                    r.Should().NotBeNull();
+                    r.Get<long?>(Fix.ContextKeys.ProviderId).Should().Be(f.ProviderId);
+
+                    var exists = r.TryGet<long?>(Fix.ContextKeys.AccountLegalEntityId, out var value);
+                    exists.Should().BeTrue();
+                    value.Should().BeNull();
+                });
+        }
+
+        #endregion Invalid AccountLegalEntityPublicHashedId
+
+        #region Invalid ProviderId
+
+        [Test]
+        public void WhenGettingAuthorizationContextAndRequiredRouteValuesAreAvailableButProviderIdIsNotValid_ThenShouldReturnAuthorizationContextWithAllValuesSetExceptProviderId()
+        {
+            Run(f => f.SetValidAccountLegalEntityPublicHashedId().SetInvalidProviderId(),
+                f => f.GetAuthorizationContext(),
+                (f, r) =>
+                {
+                    r.Should().NotBeNull();
+                    r.Get<long?>(Fix.ContextKeys.AccountLegalEntityId).Should().Be(f.AccountLegalEntityId);
+
+                    var exists = r.TryGet<long?>(Fix.ContextKeys.ProviderId, out var value);
+                    exists.Should().BeTrue();
+                    value.Should().BeNull();
+                });
+        }
+
+        [Test]
+        public void WhenGettingAuthorizationContextAndRequiredRouteValuesAreAvailableButProviderIdIsNotAvailable_ThenShouldReturnAuthorizationContextWithAllValuesSetExceptProviderId()
+        {
+            Run(f => f.SetValidAccountLegalEntityPublicHashedId(),
+                f => f.GetAuthorizationContext(),
+                (f, r) =>
+                {
+                    r.Should().NotBeNull();
+                    r.Get<long?>(Fix.ContextKeys.AccountLegalEntityId).Should().Be(f.AccountLegalEntityId);
+
+                    var exists = r.TryGet<long?>(Fix.ContextKeys.ProviderId, out var value);
+                    exists.Should().BeTrue();
+                    value.Should().BeNull();
+                });
+        }
+
+        #endregion Invalid ProviderId
     }
 
     public class AuthorizationContextProviderTestsFixture
     {
+        public static class ContextKeys
+        {
+            public const string AccountLegalEntityId = "AccountLegalEntityId";
+            public const string ProviderId = "ProviderId";
+        }
+
         public IAuthorizationContextProvider AuthorizationContextProvider { get; set; }
         public Mock<HttpContextBase> HttpContext { get; set; }
         public Mock<IPublicHashingService> PublicHashingService { get; set; }
@@ -93,7 +140,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
             return this;
         }
 
-        public AuthorizationContextProviderTestsFixture SetInvalidAccountLegalEntityPublicHashedId()
+        public AuthorizationContextProviderTestsFixture SetInvalidHashAccountLegalEntityPublicHashedId()
         {
             AccountLegalEntityPublicHashedIdRouteValue = "AAA";
 
@@ -104,11 +151,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
             return this;
         }
 
-        //public AuthorizationContextProviderTestsFixture SetNoAccountLegalEntityPublicHashedId()
-        //{
-        //    return this;
-        //}
-
         #endregion Set AccountLegalEntityId
 
         #region Set ProviderId
@@ -117,6 +159,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
         {
             ProviderIdRouteValue = "123";
             ProviderId = 123;
+
+            RouteData.Values[RouteDataKeys.ProviderId] = ProviderIdRouteValue;
+
+            return this;
+        }
+
+        public AuthorizationContextProviderTestsFixture SetInvalidProviderId()
+        {
+            ProviderIdRouteValue = "Skunk";
 
             RouteData.Values[RouteDataKeys.ProviderId] = ProviderIdRouteValue;
 
