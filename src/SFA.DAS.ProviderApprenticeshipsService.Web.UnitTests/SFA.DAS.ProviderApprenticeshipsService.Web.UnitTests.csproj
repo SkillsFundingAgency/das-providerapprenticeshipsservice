@@ -315,8 +315,6 @@
     <Compile Include="Validation\ApprenticeshipUpdate\WhenValidatingUndoApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Validation\ApprovedApprenticeship\WhenCallingValidateApprovedEndDate.cs" />
     <Compile Include="Validation\Messages\WhenExtractingMessages.cs" />
-    <Compile Include="Validation\WhenValidatingVerificationOfRelationshipViewModel.cs" />
-    <Compile Include="Validation\WhenValidatingVerificationOfEmployerViewModel.cs" />
     <Compile Include="ViewModels\GivenAnApprenticeshipFiltersViewModel.cs" />
     <Compile Include="ViewModels\WhenCreatedApprenticeshipListItemGroupViewModel.cs" />
     <Compile Include="WhenValidatingCsvRecord.cs" />

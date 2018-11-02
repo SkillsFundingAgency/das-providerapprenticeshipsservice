@@ -197,21 +197,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return apprenticeship.Apprenticeship.ApprenticeshipName;
         }
 
-        public async Task<VerificationOfEmployerViewModel> GetVerificationOfEmployer(long providerId, string hashedCommitmentId)
-        {
-            var relationshipRequest = await GetNonVerifiedRelationshipByCommitment(providerId, hashedCommitmentId);
-
-            return new VerificationOfEmployerViewModel
-            {
-                ProviderId = providerId,
-                HashedCommitmentId = hashedCommitmentId,
-                LegalEntityId = relationshipRequest.Relationship.LegalEntityId,
-                LegalEntityName = relationshipRequest.Relationship.LegalEntityName,
-                LegalEntityAddress = relationshipRequest.Relationship.LegalEntityAddress,
-                LegalEntityOrganisationType = relationshipRequest.Relationship.LegalEntityOrganisationType
-            };
-        }
-
         private async Task<GetRelationshipByCommitmentQueryResponse> GetNonVerifiedRelationshipByCommitment(long providerId, string hashedCommitmentId)
         {
             var commitmentId = HashingService.DecodeValue(hashedCommitmentId);
@@ -226,21 +211,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 throw new InvalidStateException("Relationship already verified");
 
             return relationshipRequest;
-        }
-
-        public async Task<VerificationOfRelationshipViewModel> GetVerificationOfRelationship(long providerId, string hashedCommitmentId)
-        {
-            var relationshipRequest = await GetNonVerifiedRelationshipByCommitment(providerId, hashedCommitmentId);
-
-            return new VerificationOfRelationshipViewModel
-            {
-                ProviderId = providerId,
-                HashedCommitmentId = hashedCommitmentId,
-                LegalEntityId = relationshipRequest.Relationship.LegalEntityId,
-                LegalEntityName = relationshipRequest.Relationship.LegalEntityName,
-                LegalEntityAddress = relationshipRequest.Relationship.LegalEntityAddress,
-                LegalEntityOrganisationType = relationshipRequest.Relationship.LegalEntityOrganisationType
-            };
         }
 
         public async Task VerifyRelationship(long providerId, string hashedCommitmentId, bool verified, string userId)
