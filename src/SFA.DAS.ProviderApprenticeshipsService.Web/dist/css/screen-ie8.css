@@ -3363,10 +3363,6 @@ table .changed-item {
   margin: 0 auto;
 }
 
-.user-menu li {
-  margin-bottom: 0;
-}
-
 /* Floating menu styles*/
 .phase-banner-beta {
   border-bottom: 0;
@@ -3417,14 +3413,26 @@ table .changed-item {
   margin: 0 auto;
 }
 
+.user-menu li {
+  margin-bottom: 0;
+}
+
+#global-header-bar {
+  margin: 0;
+}
+
 #floating-menu {
   clear: both;
   width: 100%;
   background: #F47738;
   color: #fff;
   z-index: 1;
-  max-width: 960px;
   margin: 0 auto;
+  padding: 0 15px;
+  box-sizing: border-box;
+  padding: 0 30px;
+  padding: 0;
+  max-width: 960px;
 }
 
 #floating-menu a {
@@ -3432,24 +3440,33 @@ table .changed-item {
 }
 
 #floating-menu p {
-  margin: 0 auto;
-  float: left;
-  margin: 0 0 0 15px;
   font-weight: bold;
   font-size: 19px;
   max-width: 960px;
-}
-
-#floating-menu #service-info-list {
+  margin: 0;
   float: left;
-  margin-left: 15px;
-  float: right;
+  margin-bottom: 0;
   margin-left: 0;
 }
 
-#floating-menu #service-info-list #service-info-list li {
+#floating-menu #service-info-list {
+  margin-top: 5px;
+  float: right;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+#floating-menu #service-info-list li {
+  display: block;
+  margin: 0 10px 5px 0;
+}
+
+#floating-menu #service-info-list li {
+  margin: 0 0 5px 15px;
+}
+
+#floating-menu #service-info-list li {
   float: left;
-  margin-right: 20px;
 }
 
 #no-search-results {
