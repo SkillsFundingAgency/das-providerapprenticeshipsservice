@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort;
-using SFA.DAS.ProviderRelationships.Types;
+using SFA.DAS.ProviderRelationships.Types.Dtos;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
     public class CreateCohortMapper : ICreateCohortMapper
     {
-        public CreateCohortViewModel Map(IEnumerable<ProviderRelationshipResponse.ProviderRelationship> source)
+        public CreateCohortViewModel Map(IEnumerable<RelationshipDto> source)
         {
             var result = new CreateCohortViewModel();
 
@@ -17,9 +17,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 legalEntities.Add(new LegalEntityViewModel
                 {
                     EmployerAccountId = relationship.EmployerAccountId,
-                    EmployerName = relationship.EmployerName,
+                    EmployerAccountName = relationship.EmployerAccountName,
                     EmployerAccountLegalEntityPublicHashedId = relationship.EmployerAccountLegalEntityPublicHashedId,
-                    EmployerAccountLegalEntityName = relationship.EmployerAccountLegalEntityName
+                    EmployerAccountLegalEntityName = relationship.EmployerAccountLegalEntityName,  
                 });
             }
 

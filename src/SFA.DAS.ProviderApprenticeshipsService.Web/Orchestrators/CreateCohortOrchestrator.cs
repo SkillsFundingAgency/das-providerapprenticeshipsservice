@@ -6,6 +6,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.ProviderRelationships.Types;
+using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -29,7 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var relationshipsWithPermission = await Mediator.Send(new GetProviderRelationshipsWithPermissionQueryRequest
             {
                 ProviderId = providerId,
-                Permission = PermissionEnumDto.CreateCohort
+                Permission = Operation.CreateCohort
             });
 
             var result = _createCohortMapper.Map(relationshipsWithPermission.ProviderRelationships);

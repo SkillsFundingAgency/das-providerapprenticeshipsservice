@@ -9,7 +9,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Confirm employer</h1>
-        <p class="heading-large">@Model.EmployerName</p>
+        <p class="heading-large">@Model.EmployerAccountName</p>
         <dl class="inline-secondary">
             <dt>Account name</dt>
             <dd>@Model.EmployerAccountLegalEntityName</dd>
@@ -20,7 +20,7 @@
 
             @Html.HiddenFor(model => model.EmployerAccountLegalEntityName)
             @Html.HiddenFor(model => model.EmployerAccountLegalEntityPublicHashedId)
-            @Html.HiddenFor(model => model.EmployerName)
+            @Html.HiddenFor(model => model.EmployerAccountName)
             @Html.HiddenFor(model => model.EmployerAccountId)
 
             <div class="form-group">

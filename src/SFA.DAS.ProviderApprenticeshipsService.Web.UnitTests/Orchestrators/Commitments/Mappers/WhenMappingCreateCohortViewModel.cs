@@ -63,7 +63,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var result = _mapper.Map(TestHelper.Clone(_source)).LegalEntities.First();
 
             var source = _source.First();
-            Assert.AreEqual(source.EmployerName, result.EmployerName);
+            Assert.AreEqual(source.EmployerName, result.EmployerAccountName);
         }
 
         [Test]
