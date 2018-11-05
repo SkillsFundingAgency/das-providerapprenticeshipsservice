@@ -12,7 +12,6 @@ using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.Commitments.Api.Types.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetRelationshipByCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using CommitmentView = SFA.DAS.Commitments.Api.Types.Commitment.CommitmentView;
@@ -215,15 +214,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             mockMediator.Setup(m => m.SendAsync(It.IsAny<GetTrainingProgrammesQueryRequest>()))
                 .ReturnsAsync(new GetTrainingProgrammesQueryResponse { TrainingProgrammes = new List<ITrainingProgramme>() });
-
-            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetRelationshipByCommitmentQueryRequest>()))
-                .ReturnsAsync(() => new GetRelationshipByCommitmentQueryResponse
-                {
-                    Relationship = new Relationship
-                    {
-                        Verified = true
-                    }
-                });
 
             mockMediator.Setup(m => m.SendAsync(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>()))
                 .ReturnsAsync(() => new GetOverlappingApprenticeshipsQueryResponse
