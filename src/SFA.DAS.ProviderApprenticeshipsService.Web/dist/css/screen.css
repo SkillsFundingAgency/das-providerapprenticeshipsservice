@@ -3106,6 +3106,60 @@ span.helpText {
   cursor: pointer;
 }
 
+@media (min-width: 641px) {
+  .bingo-boxes {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
+  }
+}
+
+.bingo-box {
+  box-sizing: border-box;
+  border-bottom: 1px solid #bfc1c3;
+  background: #2e358b;
+  color: #fff;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+@media (min-width: 641px) {
+  .bingo-box {
+    margin: 15px;
+    width: calc(50% - 31px);
+  }
+}
+
+.bingo-box h2 {
+  margin: 0;
+}
+
+.bingo-box p.heading-small {
+  margin: 0;
+}
+
+@media (min-width: 641px) {
+  .bingo-box p.heading-small {
+    font-size: 24px;
+  }
+}
+
+.bingo-box.clickable {
+  padding: 0;
+}
+
+.bingo-box.clickable a {
+  padding: 15px;
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  background: #2e358b;
+}
+
+.bingo-box.clickable a:hover {
+  background: #212665;
+}
+
 #cohorts-landing-page .bingo-background {
   background: #2e358b;
   color: #fff;
@@ -3901,6 +3955,12 @@ table .changed-item {
 }
 
 #floating-menu-prov .width-adjust {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+#floating-menu.fixed-header p {
+  padding: 0 15px;
   max-width: 960px;
   margin: 0 auto;
 }
