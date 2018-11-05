@@ -2728,6 +2728,8 @@ span.helpText {
   color: #fff;
   text-decoration: none;
   background: #2e358b;
+  box-sizing: border-box;
+  height: 100%;
 }
 
 .bingo-box.clickable a:hover {
