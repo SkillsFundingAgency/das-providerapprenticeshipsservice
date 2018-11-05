@@ -100,6 +100,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [Route("cohorts/drafts")]
+        public ActionResult DraftList(long providerId)
+        {
+        
+            return View("DraftList");
+        }
+
+        [HttpGet]
         [Route("{hashedCommitmentId}/verification")]
         public async Task<ActionResult> VerificationOfEmployer(long providerId, string hashedCommitmentId)
         {

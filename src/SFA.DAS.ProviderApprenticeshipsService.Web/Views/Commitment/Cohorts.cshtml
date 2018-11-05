@@ -23,13 +23,13 @@
 
         <div class="bingo-boxes">
             <div class="bingo-box @GetClickableClass(Model.ReadyForReviewCount)">
-             
                     @if (Model.ReadyForReviewCount > 0)
                     {
+
                         if (Model.HasSignedTheAgreement)
                         {
                             <a href="@Url.Action("ReadyForReview")" title="@Model.ReadyForReviewCount ready for review" aria-label="View all new requests that are ready for review">
-                                <h2 class="bold-xxlarge">   @Model.ReadyForReviewCount </h2>
+                                <h2 class="bold-xxlarge">@Model.ReadyForReviewCount</h2>
                                 <p class="heading-small">Ready for review</p>
                             </a>
                         }
@@ -63,9 +63,21 @@
             </div>
 
 
-            <div class="bingo-box">
-                <h2 class="bold-xxlarge"><span>0</span></h2>
-                <p class="heading-small">Drafts</p>
+            <div class="bingo-box @GetClickableClass(Model.DraftCount)">
+                @if (Model.DraftCount > 0)
+                {
+                    <a href="@Url.Action("Drafts")" title="@Model.DraftCount drafts" aria-label="View all drafts">
+                        <h2 class="bold-xxlarge">@Model.DraftCount</h2>
+                        <p class="heading-small">
+                            @(Model.DraftCount == 1 ? "Draft" : "Drafts")
+                        </p>
+                    </a>
+                }
+                else
+                {
+                    <h2 class="bold-xxlarge"><span>0</span></h2>
+                    <p class="heading-small">Drafts</p>
+                }
             </div>
 
             @if (Model.TransferFundedCohortsCount.HasValue)

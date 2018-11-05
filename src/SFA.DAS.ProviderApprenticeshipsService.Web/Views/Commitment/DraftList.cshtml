@@ -1,0 +1,60 @@
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CommitmentListViewModel
+
+<div class="grid-row">
+    <div class="column-full">
+
+        <h1 class="heading-xlarge">Draft cohorts</h1>
+       
+
+
+        @if (1 == 2)
+        {
+            <div class="panel panel-border-wide alert-default">
+
+                <p>You don’t have any drafts in progress.</p>
+
+            </div>
+        }
+        else
+        {
+            <p class="dynamic-heading">You have <strong>COUNT</strong> cohort waiting to be sent to an employer:</p>
+            <table class="tableResponsive employerListing">
+                <thead>
+                    <tr>
+                        <th scope="col">Employer</th>
+                        <th scope="col">Reference</th>
+                        <th scope="col">Last message</th>
+                        <th scope="col"><span class="vh">Action</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                  
+                        <tr>
+                            <td>
+                                Employer &nbsp;
+                            </td>
+                            <td>
+                                Reference &nbsp;
+                            </td>
+                            <td>
+                                Latest Message &nbsp;
+                            </td>
+                            <td  class="link-right">
+                                <a href="">
+                                    Details <span class="vh">about Reference </span>
+                                </a>
+                            </td>
+                        </tr>
+                    
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Cohorts")" aria-label="Back to your cohorts" class="back-link">Back to your cohorts</a>
+    </div>
+}
