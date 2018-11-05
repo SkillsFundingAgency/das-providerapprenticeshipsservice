@@ -563,6 +563,7 @@
     <Compile Include="Models\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprovedViewModel.cs" />
     <Compile Include="Models\BulkUpload\CsvRecordMap.cs" />
+    <Compile Include="Models\CreateCohort\ConfirmEmployerViewModel.cs" />
     <Compile Include="Models\CreateCohort\CreateCohortViewModel.cs" />
     <Compile Include="Models\CreateCohort\LegalEntityViewModel.cs" />
     <Compile Include="Models\TransferFundedListItemViewModel.cs" />

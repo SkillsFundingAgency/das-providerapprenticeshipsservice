@@ -1,4 +1,5 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort.LegalEntityViewModel
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 
 @{
@@ -8,14 +9,20 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Confirm employer</h1>
-        <p class="heading-large">Joe Bloggs Ltd</p>
+        <p class="heading-large">@Model.EmployerName</p>
         <dl class="inline-secondary">
             <dt>Account name</dt>
-            <dd>JOE BLOGGS</dd>
+            <dd>@Model.EmployerAccountLegalEntityName</dd>
             <dt>Agreement ID</dt>
-            <dd>NBHGYK</dd>
+            <dd>@Model.EmployerAccountLegalEntityPublicHashedId</dd>
         </dl>
         <form action="@Url.Action("ConfirmEmployer")" method="POST">
+
+            @Html.HiddenFor(model => model.EmployerAccountLegalEntityName)
+            @Html.HiddenFor(model => model.EmployerAccountLegalEntityPublicHashedId)
+            @Html.HiddenFor(model => model.EmployerName)
+            @Html.HiddenFor(model => model.EmployerAccountId)
+
             <div class="form-group">
                 <fieldset>
 
@@ -26,12 +33,12 @@
                     </legend>
 
                     <label for="confirm-yes" class="block-label selection-button-radio">
-                        <input id="confirm-yes" type="radio" name="confirm-employer" value="Yes">
-                        Yes, use Joe Bloggs Ltd
+                        <input id="confirm-yes" type="radio" name="Confirm" value="True">
+                        Yes, use @Model.EmployerAccountLegalEntityName
                     </label>
 
                     <label for="confirm-no" class="block-label selection-button-radio">
-                        <input id="confirm-no" type="radio" name="confirm-employer" value="No">
+                        <input id="confirm-no" type="radio" name="Confirm" value="False">
                         No, choose a different employer
                     </label>
 

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
@@ -32,18 +33,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("cohorts/create/confirm-employer")]
-        public async Task<ActionResult> ConfirmEmployer(long providerId)
+        public async Task<ActionResult> ConfirmEmployer(long providerId, LegalEntityViewModel legalEntity)
         {
+            //...?
             var model = await _orchestrator.GetCreateCohortViewModel(providerId);
 
-            return View(model);
+            return View(legalEntity);
         }
 
         [HttpPost]
         [Route("cohorts/create/confirm-employer")]
-        public async Task<ActionResult> ConfirmEmployer(long providerId, string somethingElse)
+        public async Task<ActionResult> ConfirmEmployer(long providerId, ConfirmEmployerViewModel confirmViewModel)
         {
-           
             var model = await _orchestrator.GetCreateCohortViewModel(providerId);
             return View(model);
         }
