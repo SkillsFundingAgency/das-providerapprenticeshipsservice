@@ -9,11 +9,9 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenti
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateApprenticeship;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateRelationship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetRelationshipByCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -197,37 +195,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return apprenticeship.Apprenticeship.ApprenticeshipName;
         }
 
-        private async Task<GetRelationshipByCommitmentQueryResponse> GetNonVerifiedRelationshipByCommitment(long providerId, string hashedCommitmentId)
-        {
-            var commitmentId = HashingService.DecodeValue(hashedCommitmentId);
-
-            var relationshipRequest = await Mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
-            {
-                ProviderId = providerId,
-                CommitmentId = commitmentId
-            });
-
-            if (relationshipRequest.Relationship.Verified.HasValue)
-                throw new InvalidStateException("Relationship already verified");
-
-            return relationshipRequest;
-        }
-
-        public async Task VerifyRelationship(long providerId, string hashedCommitmentId, bool verified, string userId)
-        {
-            var relationshipRequest = await GetNonVerifiedRelationshipByCommitment(providerId, hashedCommitmentId);
-
-            var relationship = relationshipRequest.Relationship;
-            relationship.Verified = verified;
-
-            await Mediator.SendAsync(new UpdateRelationshipCommand
-            {
-                ProviderId = providerId,
-                Relationship = relationship,
-                UserId = userId
-            });
-        }
-
         public async Task<AgreementNotSignedViewModel> GetAgreementPage(long providerId, string hashedCommitmentId)
         {
             var model = new AgreementNotSignedViewModel
@@ -271,12 +238,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             AssertCommitmentStatus(commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed, AgreementStatus.BothAgreed);
 
-            var relationshipRequest = await Mediator.SendAsync(new GetRelationshipByCommitmentQueryRequest
-            {
-                ProviderId = providerId,
-                CommitmentId = commitmentId
-            });
-
             var overlapping = await Mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
@@ -319,7 +280,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 LatestMessage = GetLatestMessage(commitment.Messages, true)?.Message,
                 PendingChanges = commitment.AgreementStatus != AgreementStatus.EmployerAgreed,
                 ApprenticeshipGroups = apprenticeshipGroups,
-                RelationshipVerified = relationshipRequest.Relationship.Verified.HasValue,
                 IsReadOnly = commitment.EditStatus != EditStatus.ProviderOnly,
                 IsFundedByTransfer = commitment.IsTransfer(),
                 Errors = errors,
