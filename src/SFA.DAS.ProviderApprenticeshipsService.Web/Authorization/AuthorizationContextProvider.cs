@@ -25,9 +25,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
 
         public IAuthorizationContext GetAuthorizationContext()
         {
-            //todo: change GetAuthorizationContext to Populate(AuthorizationContext ), or IAuthContext Get(authContext) as all will create one anyway? or derived??
-
             var routeValueDictionary = _httpContext.Request.RequestContext.RouteData.Values;
+
+            //todo: insert everything we calc into here... or use magic binding
+            //_httpContext.Items["accountId"] = 123;
+
+            //var authorizationContext = new AuthorizationContext();
+
+            //authorizationContext.AddProviderPermissionsContext(
+            //    GetProviderId(routeValueDictionary),
+            //    GetAccountLegalEntityId(routeValueDictionary));
+
+            //return authorizationContext;
 
             return new AuthorizationContext
             {
