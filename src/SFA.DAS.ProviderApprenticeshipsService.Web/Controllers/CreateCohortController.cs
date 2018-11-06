@@ -33,23 +33,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("cohorts/create/confirm-employer")]
-        public async Task<ActionResult> ConfirmEmployer(long providerId, LegalEntityViewModel legalEntity)
+        public ActionResult ConfirmEmployer(long providerId, LegalEntityViewModel legalEntity)
         {
-            //...?
-            var model = await _orchestrator.GetCreateCohortViewModel(providerId);
-
             return View(legalEntity);
         }
 
         [HttpPost]
         [Route("cohorts/create/confirm-employer")]
-        public async Task<ActionResult> ConfirmEmployer(long providerId, ConfirmEmployerViewModel confirmViewModel)
+        public async Task<ActionResult> ConfirmEmployer(int providerId, ConfirmEmployerViewModel confirmViewModel)
         {
-            var model = await _orchestrator.GetCreateCohortViewModel(providerId);
-            return View(model);
+            if (!confirmViewModel.Confirm)
+            {
+                return RedirectToAction("Create");
+            }
+
+            var hashedCommitmentId = await _orchestrator.CreateCohort(providerId, confirmViewModel, CurrentUserId, GetSignedInUser());
+            return RedirectToAction("Details", "Commitment", new { providerId, hashedCommitmentId });
         }
     }
 }
-
-
-
