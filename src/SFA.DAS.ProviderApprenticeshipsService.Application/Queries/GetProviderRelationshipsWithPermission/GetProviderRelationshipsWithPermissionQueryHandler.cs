@@ -31,7 +31,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider
             {
                 Operation = request.Permission,
                 Ukprn = request.ProviderId
-            });
+            }, cancellationToken);
 
             return new GetProviderRelationshipsWithPermissionQueryResponse
             {
