@@ -49,6 +49,7 @@ using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.ProviderRelationships.Api.Client;
+using SFA.DAS.EAS.Account.Api.Client;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -79,6 +80,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IApprenticeshipValidationErrorText>().Use<WebApprenticeshipValidationText>();
             For<IApprenticeshipCoreValidator>().Use<ApprenticeshipCoreValidator>().Singleton();
             For<IApprovedApprenticeshipValidator>().Use<ApprovedApprenticeshipValidator>().Singleton();
+            For<IAccountApiClient>().Use<AccountApiClient>();
 
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));

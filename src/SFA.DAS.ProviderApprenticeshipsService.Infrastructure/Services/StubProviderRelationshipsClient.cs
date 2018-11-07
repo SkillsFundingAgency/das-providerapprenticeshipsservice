@@ -31,7 +31,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
             return Task.Run(() => _relationships.Any(r => r.Ukprn == request.Ukprn), cancellationToken);
         }
 
-        public Task<bool> HasRelationshipWithPermission(RelationshipsRequest request, CancellationToken token) => HasRelationshipWithPermission(request, token);
+        public async Task<bool> HasRelationshipWithPermission(RelationshipsRequest request, CancellationToken token)
+        {
+            return (await GetRelationshipsWithPermission(request, token)).Relationships.Any();
+        }
 
         public Task<RelationshipsResponse> GetRelationshipsWithPermission(RelationshipsRequest request, CancellationToken token)
         {
