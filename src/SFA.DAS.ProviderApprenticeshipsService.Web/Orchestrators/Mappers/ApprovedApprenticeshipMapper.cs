@@ -64,15 +64,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                                && new[] { PaymentStatus.Active, PaymentStatus.Paused }.Contains(apprenticeship.PaymentStatus);
 
             model.DataLockCourse =
-                apprenticeship.DataLocks.Any(x => x.WithCourseError() && x.TriageStatus == TriageStatus.Unknown);
+                apprenticeship.DataLocks.Any(x => x.WithCourseError());
             model.DataLockPrice =
-                apprenticeship.DataLocks.Any(x => x.IsPriceOnly() && x.TriageStatus == TriageStatus.Unknown);
+                apprenticeship.DataLocks.Any(x => x.IsPriceOnly());
             model.DataLockCourseTriaged =
-                apprenticeship.DataLocks.Any(x => x.WithCourseError() && x.TriageStatus == TriageStatus.Restart);
+                apprenticeship.DataLocks.Any(x => x.WithCourseError());
             model.DataLockCourseChangeTriaged =
-                apprenticeship.DataLocks.Any(x => x.WithCourseError() && x.TriageStatus == TriageStatus.Change);
+                apprenticeship.DataLocks.Any(x => x.WithCourseError());
             model.DataLockPriceTriaged =
-                apprenticeship.DataLocks.Any(x => x.IsPriceOnly() && x.TriageStatus == TriageStatus.Change);
+                apprenticeship.DataLocks.Any(x => x.IsPriceOnly());
 
             return model;
         }

@@ -79,11 +79,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 PriceEpisodes = new List<PriceHistory> { new PriceHistory { Cost = _expectedCost } },
                 DataLocks = new List<DataLockStatus>
                 {
-                    new DataLockStatus{ ErrorCode = DataLockErrorCode.Dlock03, TriageStatus = TriageStatus.Unknown },
-                    new DataLockStatus{ ErrorCode = DataLockErrorCode.Dlock07, TriageStatus = TriageStatus.Unknown },
-                    new DataLockStatus{ ErrorCode = DataLockErrorCode.Dlock03, TriageStatus = TriageStatus.Restart },
-                    new DataLockStatus{ ErrorCode = DataLockErrorCode.Dlock03, TriageStatus = TriageStatus.Change },
-                    new DataLockStatus{ ErrorCode = DataLockErrorCode.Dlock07, TriageStatus = TriageStatus.Change }
+                    new DataLockStatus{ ErrorCode = DataLockErrorCode.Dlock03, TriageStatus = TriageStatus.FixIlr },
+                    new DataLockStatus{ ErrorCode = DataLockErrorCode.Dlock07, TriageStatus = TriageStatus.FixIlr },
+                    new DataLockStatus{ ErrorCode = DataLockErrorCode.Dlock03, TriageStatus = TriageStatus.FixIlr },
+                    new DataLockStatus{ ErrorCode = DataLockErrorCode.Dlock03, TriageStatus = TriageStatus.FixIlr },
+                    new DataLockStatus{ ErrorCode = DataLockErrorCode.Dlock07, TriageStatus = TriageStatus.FixIlr }
                 }
             };
 
@@ -199,31 +199,31 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         }
 
         [Test]
-        public void ThenDataLockCourseIsMappedCorrectly()
+        public void ThenDataLockCourseIsMappedCorrectlyRegardlessOfTriageStatus()
         {
             Assert.That(_result.DataLockCourse, Is.True);
         }
 
         [Test]
-        public void ThenDataLockPriceIsMappedCorrectly()
+        public void ThenDataLockPriceIsMappedCorrectlyRegardlessOfTriageStatus()
         {
             Assert.That(_result.DataLockCourse, Is.True);
         }
 
         [Test]
-        public void ThenDataLockCourseTriagedIsMappedCorrectly()
+        public void ThenDataLockCourseTriagedIsMappedCorrectlyRegardlessOfTriageStatus()
         {
             Assert.That(_result.DataLockCourse, Is.True);
         }
 
         [Test]
-        public void ThenDataLockCourseChangeTriagedIsMappedCorrectly()
+        public void ThenDataLockCourseChangeTriagedIsMappedCorrectlyRegardlessOfTriageStatus()
         {
             Assert.That(_result.DataLockCourse, Is.True);
         }
 
         [Test]
-        public void ThenDataLockPriceTriagedIsMappedCorrectly()
+        public void ThenDataLockPriceTriagedIsMappedCorrectlyRegardlessOfTriageStatus()
         {
             Assert.That(_result.DataLockCourse, Is.True);
         }
