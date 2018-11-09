@@ -35,6 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("cohorts/create/confirm-employer")]
         public ActionResult ConfirmEmployer(long providerId, ConfirmEmployerViewModel confirmViewModel)
         {
+            ModelState.Clear();
             if (!confirmViewModel.IsComplete)
             {
                 return RedirectToAction("Create");
@@ -54,7 +55,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("ConfirmEmployer", confirmViewModel);
+                return View(confirmViewModel);
             }
 
             var hashedCommitmentId = await _orchestrator.CreateCohort(providerId, confirmViewModel, CurrentUserId, GetSignedInUser());
