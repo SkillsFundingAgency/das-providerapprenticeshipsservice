@@ -36,6 +36,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
         private readonly string _userId = "userId";
         private readonly int _providerId = 10005124;
         private readonly long _employerAccountId = 1234;
+        private readonly long _employerAccountLegalEntityId = 5678;
+        private readonly string _employerAccountLegalEntityPublicHashedId = "EmployerAccountLegalEntityPublicHashedId";
         private readonly long _apiResponse = 789;
 
         [SetUp]
@@ -43,12 +45,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
         {
             _permissionsResponse = new GetProviderRelationshipsWithPermissionQueryResponse
             {
-                ProviderRelationships = new List<RelationshipDto>()
+                ProviderRelationships = new List<RelationshipDto>
+                {
+                    new RelationshipDto
+                    {
+                        EmployerAccountId = _employerAccountId,
+                        EmployerAccountLegalEntityId = _employerAccountLegalEntityId,
+                        EmployerAccountLegalEntityPublicHashedId = _employerAccountLegalEntityPublicHashedId
+                    }
+                }
             };
 
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(It.Is<string>(s => s == "EmployerAccountHashedId"))).Returns(_employerAccountId);
             _hashingService.Setup(x => x.HashValue(It.Is<long>(l => l == _apiResponse))).Returns("CohortRef");
+            _hashingService.Setup(x => x.DecodeValue(It.Is<string>(s => s == _employerAccountLegalEntityPublicHashedId)))
+                .Returns(_employerAccountLegalEntityId);
 
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.Send(It.IsAny<GetProviderRelationshipsWithPermissionQueryRequest>(),
@@ -71,7 +83,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
             _legalEntity = new LegalEntity
             {
                 Id = 1,
-                AccountLegalEntityPublicHashedId = "AccountLegalEntityPublicHashedId",
+                AccountLegalEntityPublicHashedId = _employerAccountLegalEntityPublicHashedId,
                 Code = "code",
                 Name = "Test Legal Entity",
                 RegisteredAddress = "Test Address",
@@ -94,7 +106,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
 
             _confirmEmployerViewModel = new ConfirmEmployerViewModel
             {
-                EmployerAccountLegalEntityPublicHashedId = "AccountLegalEntityPublicHashedId",
+                EmployerAccountLegalEntityPublicHashedId = _employerAccountLegalEntityPublicHashedId,
                 EmployerAccountHashedId = "EmployerAccountHashedId"
             };
 
@@ -231,6 +243,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
         {
             var result = await _orchestrator.CreateCohort(_providerId, TestHelper.Clone(_confirmEmployerViewModel), _userId, _signInUserModel);
             Assert.AreEqual("CohortRef", result);
+        }
+
+
+        [Test]
+        public void ThenTheProviderMustHavePermission()
+        {
+            _confirmEmployerViewModel.EmployerAccountLegalEntityPublicHashedId = "LEGAL_ENTITY_WITHOUT_PERMISSION";
+
+            Assert.ThrowsAsync<InvalidOperationException>(() => _orchestrator.CreateCohort(_providerId, TestHelper.Clone(_confirmEmployerViewModel), _userId, _signInUserModel));
         }
     }
 }

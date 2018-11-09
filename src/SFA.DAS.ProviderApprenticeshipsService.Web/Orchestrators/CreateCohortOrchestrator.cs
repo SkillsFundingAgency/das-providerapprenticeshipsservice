@@ -51,12 +51,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             Logger.Info($"Creating cohort", providerId);
 
-            //todo: call provider relationships again to verify that the user selected a valid option/has permission
-            //this will be obsoleted by the Auth check but worth doing now?
-
-            var providerResponse = await Mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });
-
             var employerAccountId = HashingService.DecodeValue(confirmEmployerViewModel.EmployerAccountHashedId);
+
+            var relationshipData = await Mediator.Send(new GetProviderRelationshipsWithPermissionQueryRequest
+            {
+                Permission = Operation.CreateCohort,
+                ProviderId = providerId
+            });
+
+            //Check that the relationship is a valid selection
+            var relationship = relationshipData.ProviderRelationships.SingleOrDefault(x =>
+                x.EmployerAccountId == employerAccountId
+                && x.EmployerAccountLegalEntityPublicHashedId == confirmEmployerViewModel.EmployerAccountLegalEntityPublicHashedId
+            );
+
+            if (relationship == null)
+            {
+                throw new InvalidOperationException(
+                    $"Error creating cohort - operation not permitted for Provider: {providerId}, Employer Account {employerAccountId}, Legal Entity {confirmEmployerViewModel.EmployerAccountLegalEntityPublicHashedId} ");
+            }
+
+            var providerResponse = await Mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });           
 
             var accountRequest = await Mediator.Send(new GetEmployerAccountLegalEntitiesRequest
             {
