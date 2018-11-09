@@ -1,306 +1,231 @@
-//using System;
-//using System.Collections.Generic;
-//using Moq;
-//using NUnit.Framework;
-//using SFA.DAS.Commitments.Api.Types.Apprenticeship;
-//using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
-//using SFA.DAS.Commitments.Api.Types.ApprovedApprenticeship;
-//using SFA.DAS.Commitments.Api.Types.DataLock;
-//using SFA.DAS.Commitments.Api.Types.DataLock.Types;
-//using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-//using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
-//using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
+using System;
+using System.Collections.Generic;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.Commitments.Api.Types.ApprovedApprenticeship;
+using SFA.DAS.Commitments.Api.Types.DataLock;
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
+using SFA.DAS.HashingService;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
-//namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments.Mappers
-//{
-//    [TestFixture]
-//    public class WhenMappingApprovedApprenticeship
-//    {
-//        private ApprovedApprenticeshipMapper _mapper;
-//        private ApprovedApprenticeship _source;
-//        private Mock<ICurrentDateTime> _currentDateTime;
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments.Mappers
+{
+    [TestFixture]
+    public class WhenMappingApprovedApprenticeship
+    {
+        private ApprovedApprenticeshipMapper _mapper;
 
-//        [SetUp]
-//        public void Arrange()
-//        {
-//            _currentDateTime = new Mock<ICurrentDateTime>();
-//            _currentDateTime.Setup(x => x.Now).Returns(new DateTime(2018, 6, 1));
+        private ApprovedApprenticeship _source;
 
-//            _mapper = new ApprovedApprenticeshipMapper(null, null, null);
+        private string _expectedHashedApprenticeshipId;
+        private decimal _expectedCost;
+        private string _expectedStatus;
 
-//            _source = new ApprovedApprenticeship
-//            {
-//                Id = 1,
-//                EndpointAssessorName = "EPA",
-//                HasHadDataLockSuccess = false,
-//                AccountLegalEntityPublicHashedId = "AGREEMENT_ID",
-//                LegalEntityName = "TEST_LEGAL_ENTITY_NAME",
-//                LegalEntityId = "TEST_LEGAL_ENTITY_ID",
-//                ProviderId = 3,
-//                ProviderName = "TEST_PROVIDER_NAME",
-//                UpdateOriginator = null,
-//                PaymentOrder = 2,
-//                ProviderRef = "PROVIDER_REF",
-//                EmployerRef = "EMPLOYER_REF",
-//                PaymentStatus = PaymentStatus.Active,
-//                StopDate = null,
-//                PauseDate = null,
-//                StartDate = new DateTime(2018, 1, 1),
-//                EndDate = new DateTime(2020, 12, 31),
-//                TrainingName = "TRAINING_NAME",
-//                TrainingCode = "TRAINING_CODE",
-//                TrainingType = TrainingType.Framework,
-//                ULN = "ULN",
-//                DateOfBirth = new DateTime(2000, 1, 1),
-//                LastName = "LAST_NAME",
-//                FirstName = "FIRST_NAME",
-//                TransferSenderId = null,
-//                EmployerAccountId = 4,
-//                CohortReference = "COHORT_REF"
-//            };
-//        }
+        private Mock<IPaymentStatusMapper> _mockPaymentStatusMapper;
+        private Mock<IHashingService> _mockHashingService;
+        private Mock<ICurrentDateTime> _mockCurrentDateTime;
 
-//        [Test]
-//        public void ThenAllPropertiesAreMappedCorrectly()
-//        {
-//            var result = _mapper.Map(TestHelper.Clone(_source));
+        private ApprovedApprenticeshipViewModel _result;
 
-//            Assert.AreEqual(_source.AccountLegalEntityPublicHashedId, result.AccountLegalEntityPublicHashedId);
-//            Assert.AreEqual(_source.FirstName, result.FirstName);
-//            Assert.AreEqual(_source.LastName, result.LastName);
-//            Assert.AreEqual(_source.ULN, result.Uln);
-//            Assert.AreEqual(_source.DateOfBirth, result.DateOfBirth);
-//            Assert.AreEqual(_source.StartDate, result.StartDate);
-//            Assert.AreEqual(_source.EndDate, result.EndDate);
-//            Assert.AreEqual(_source.StopDate, result.StopDate);
-//            Assert.AreEqual(_source.TrainingName, result.TrainingName);
-//            Assert.AreEqual(_source.EmployerRef, result.EmployerName); //employer name
-//            Assert.AreEqual(_source.ProviderRef, result.ProviderReference); //employer name
-//            Assert.AreEqual(_source.CohortReference, result.CohortReference);
-//        }
+        [SetUp]
+        public void Arrange()
+        {
+            _mockPaymentStatusMapper = new Mock<IPaymentStatusMapper>();
+            _mockHashingService = new Mock<IHashingService>();
+            _mockCurrentDateTime = new Mock<ICurrentDateTime>();
 
-//        //[TestCase(TriageStatus.Restart, true)]
-//        //[TestCase(TriageStatus.Change, false)]
-//        //[TestCase(TriageStatus.Unknown, false)]
-//        //public void ThenPendingDataLockRestartIsMappedCorrectly(TriageStatus triageStatus, bool expectPendingRestart)
-//        //{
-//        //    //Arrange
-//        //    _source.DataLocks = new List<DataLockStatus>
-//        //    {
-//        //        new DataLockStatus
-//        //        {
-//        //            ErrorCode = DataLockErrorCode.Dlock03,
-//        //            Status = Status.Fail,
-//        //            TriageStatus = triageStatus
-//        //        }
-//        //    };
+            _expectedHashedApprenticeshipId = "hashone";
+            _expectedCost = 112;
+            _expectedStatus = "test status";
 
-//        //    //Act
-//        //    var result = _mapper.Map(TestHelper.Clone(_source));
+            _mockHashingService.Setup(x => x.HashValue(It.IsAny<long>())).Returns(_expectedHashedApprenticeshipId);
+            _mockPaymentStatusMapper.Setup(x => x.Map(It.IsAny<PaymentStatus>(), It.IsAny<DateTime?>())).Returns(_expectedStatus);
 
-//        //    //Assert
-//        //    Assert.AreEqual(expectPendingRestart, result.PendingDataLockRestart);
-//        //}
+            _mapper = new ApprovedApprenticeshipMapper(_mockPaymentStatusMapper.Object, _mockHashingService.Object, _mockCurrentDateTime.Object);
 
-//        //[TestCase(TriageStatus.Change, true)]
-//        //[TestCase(TriageStatus.Unknown, false)]
-//        //public void ThenPendingDataLockChangeIsMappedCorrectly(TriageStatus triageStatus, bool expectPendingChange)
-//        //{
-//        //    //Arrange
-//        //    _source.DataLocks = new List<DataLockStatus>
-//        //    {
-//        //        new DataLockStatus
-//        //        {
-//        //            ErrorCode = DataLockErrorCode.Dlock07,
-//        //            Status = Status.Fail,
-//        //            TriageStatus = triageStatus
-//        //        }
-//        //    };
+            _source = new ApprovedApprenticeship
+            {
+                Id = 1,
+                EndpointAssessorName = "EPA",
+                HasHadDataLockSuccess = false,
+                AccountLegalEntityPublicHashedId = "AGREEMENT_ID",
+                LegalEntityName = "TEST_LEGAL_ENTITY_NAME",
+                LegalEntityId = "TEST_LEGAL_ENTITY_ID",
+                ProviderId = 3,
+                ProviderName = "TEST_PROVIDER_NAME",
+                UpdateOriginator = Originator.Provider,
+                PaymentOrder = 2,
+                ProviderRef = "PROVIDER_REF",
+                EmployerRef = "EMPLOYER_REF",
+                PaymentStatus = PaymentStatus.Active,
+                StopDate = null,
+                PauseDate = null,
+                StartDate = new DateTime(2018, 1, 1),
+                EndDate = new DateTime(2020, 12, 31),
+                TrainingName = "TRAINING_NAME",
+                TrainingCode = "TRAINING_CODE",
+                TrainingType = TrainingType.Framework,
+                ULN = "ULN",
+                DateOfBirth = new DateTime(2000, 1, 1),
+                LastName = "LAST_NAME",
+                FirstName = "FIRST_NAME",
+                TransferSenderId = null,
+                EmployerAccountId = 4,
+                CohortReference = "COHORT_REF",
+                PriceEpisodes = new List<PriceHistory> { new PriceHistory { Cost = _expectedCost } },
+                DataLocks = new List<DataLockStatus>
+                {
+                    new DataLockStatus{ ErrorCode = DataLockErrorCode.Dlock03, TriageStatus = TriageStatus.Unknown },
+                    new DataLockStatus{ ErrorCode = DataLockErrorCode.Dlock07, TriageStatus = TriageStatus.Unknown },
+                    new DataLockStatus{ ErrorCode = DataLockErrorCode.Dlock03, TriageStatus = TriageStatus.Restart },
+                    new DataLockStatus{ ErrorCode = DataLockErrorCode.Dlock03, TriageStatus = TriageStatus.Change },
+                    new DataLockStatus{ ErrorCode = DataLockErrorCode.Dlock07, TriageStatus = TriageStatus.Change }
+                }
+            };
 
-//        //    //Act
-//        //    var result = _mapper.Map(TestHelper.Clone(_source));
+            _result = _mapper.Map(_source);
+        }
 
-//        //    //Assert
-//        //    Assert.AreEqual(expectPendingChange, result.PendingDataLockChange);
-//        //}
+        [Test]
+        public void ThenHashedApprenticeshipIdIsMappedCorrectly()
+        {
+            Assert.That(_result.HashedApprenticeshipId, Is.EqualTo(_expectedHashedApprenticeshipId));
+        }
 
+        [Test]
+        public void ThenFirstNameIsMappedCorrectly()
+        {
+            Assert.That(_result.FirstName, Is.EqualTo(_source.FirstName));
+        }
 
-//        //[TestCase(PaymentStatus.Active, true)]
-//        //[TestCase(PaymentStatus.Withdrawn, false)]
-//        //public void ThenCanEditStatusIsMappedCorrectly(PaymentStatus paymentStatus, bool expectCanEditStatus)
-//        //{
-//        //    //Arrange
-//        //    _source.PaymentStatus = paymentStatus;
+        [Test]
+        public void ThenLastNameIsMappedCorrectly()
+        {
+            Assert.That(_result.LastName, Is.EqualTo(_source.LastName));
+        }
 
-//        //    //Act
-//        //    var result = _mapper.Map(TestHelper.Clone(_source));
+        [Test]
+        public void ThenDateOfBirthIsMappedCorrectly()
+        {
+            Assert.That(_result.DateOfBirth, Is.EqualTo(_source.DateOfBirth));
+        }
 
-//        //    //Assert
-//        //    Assert.AreEqual(expectCanEditStatus, result.CanEditStatus);
-//        //}
+        [Test]
+        public void ThenUlnIsMappedCorrectly()
+        {
+            Assert.That(_result.Uln, Is.EqualTo(_source.ULN));
+        }
 
-//        //[TestCase(PaymentStatus.Withdrawn, false, true)]
-//        //[TestCase(PaymentStatus.Active, false, false)]
-//        //[TestCase(PaymentStatus.Withdrawn, true, false)]
-//        //[TestCase(PaymentStatus.Paused, false, false)]
-//        //public void ThenCanEditStopDateIsMappedCorrectly(PaymentStatus paymentStatus, bool stoppedBackToStart, bool expectCanEditStopDate)
-//        //{
-//        //    //Arrange
-//        //    _source.PaymentStatus = paymentStatus;
-//        //    if (stoppedBackToStart) _source.StopDate = _source.StartDate;
+        [Test]
+        public void ThenStartDateIsMappedCorrectly()
+        {
+            Assert.That(_result.StartDate, Is.EqualTo(_source.StartDate));
+        }
 
-//        //    //Act
-//        //    var result = _mapper.Map(TestHelper.Clone(_source));
+        [Test]
+        public void ThenEndDateIsMappedCorrectly()
+        {
+            Assert.That(_result.EndDate, Is.EqualTo(_source.EndDate));
+        }
 
-//        //    //Assert
-//        //    Assert.AreEqual(expectCanEditStopDate, result.CanEditStopDate);
-//        //}
+        [Test]
+        public void ThenStopDateIsMappedCorrectly()
+        {
+            Assert.That(_result.StopDate, Is.EqualTo(_source.StopDate));
+        }
 
-//        [Test]
-//        public void ThenEditIsEnabledIfAllConditionsMet()
-//        {
-//            //Act
-//            var result = _mapper.Map(TestHelper.Clone(_source));
+        [Test]
+        public void ThenTrainingNameIsMappedCorrectly()
+        {
+            Assert.That(_result.TrainingName, Is.EqualTo(_source.TrainingName));
+        }
 
-//            //Assert
-//            Assert.AreEqual(true, result.EnableEdit);
-//        }
+        [Test]
+        public void ThenEmployerNameIsMappedCorrectly()
+        {
+            Assert.That(_result.EmployerName, Is.EqualTo(_source.LegalEntityName));
+        }
 
-//        [Test]
-//        public void ThenEditIsDisabledIfCourseDataLockTriagedAsChange()
-//        {
-//            //Arrange
-//            _source.DataLocks = new List<DataLockStatus>
-//            {
-//                new DataLockStatus
-//                {
-//                    ErrorCode = DataLockErrorCode.Dlock03,
-//                    TriageStatus = TriageStatus.Change
-//                }
-//            };
+        [Test]
+        public void ThenCohortReferenceIsMappedCorrectly()
+        {
+            Assert.That(_result.CohortReference, Is.EqualTo(_source.CohortReference));
+        }
 
-//            //Act
-//            var result = _mapper.Map(TestHelper.Clone(_source));
+        [Test]
+        public void ThenAccountLegalEntityPublicHashedIdIsMappedCorrectly()
+        {
+            Assert.That(_result.AccountLegalEntityPublicHashedId, Is.EqualTo(_source.AccountLegalEntityPublicHashedId));
+        }
 
-//            //Assert
-//            Assert.IsFalse(result.EnableEdit);
-//        }
+        [Test]
+        public void ThenProviderReferenceIsMappedCorrectly()
+        {
+            Assert.That(_result.ProviderReference, Is.EqualTo(_source.ProviderRef));
+        }
 
-//        [Test]
-//        public void ThenEditIsDisabledIfCourseDataLockTriagedAsRestart()
-//        {
-//            //Arrange
-//            _source.DataLocks = new List<DataLockStatus>
-//            {
-//                new DataLockStatus
-//                {
-//                    ErrorCode = DataLockErrorCode.Dlock03,
-//                    TriageStatus = TriageStatus.Restart
-//                }
-//            };
+        [Test]
+        public void ThenHasHadDataLockSuccessIsMappedCorrectly()
+        {
+            Assert.That(_result.HasHadDataLockSuccess, Is.EqualTo(_source.HasHadDataLockSuccess));
+        }
 
-//            //Act
-//            var result = _mapper.Map(TestHelper.Clone(_source));
+        [Test]
+        public void ThenCurrentCostIsMappedCorrectly()
+        {
+            Assert.That(_result.CurrentCost, Is.EqualTo(_expectedCost));
+        }
 
-//            //Assert
-//            Assert.IsFalse(result.EnableEdit);
-//        }
+        [Test]
+        public void ThenStatusIsMappedCorrectly()
+        {
+            Assert.That(_result.Status, Is.EqualTo(_expectedStatus));
+        }
 
-//        [Test]
-//        public void ThenEditIsDisabledIfPriceDataLockTriagedAsChange()
-//        {
-//            //Arrange
-//            _source.DataLocks = new List<DataLockStatus>
-//            {
-//                new DataLockStatus
-//                {
-//                    ErrorCode = DataLockErrorCode.Dlock07,
-//                    TriageStatus = TriageStatus.Change
-//                }
-//            };
+        [Test]
+        public void ThenPendingChangeIsMappedCorrectly()
+        {
+            Assert.That(_result.PendingChanges, Is.EqualTo(PendingChanges.WaitingForEmployer));
+        }
 
-//            //Act
-//            var result = _mapper.Map(TestHelper.Clone(_source));
+        [Test]
+        public void ThenEnableEditIsMappedCorrectly()
+        {
+            Assert.That(_result.EnableEdit, Is.False);
+        }
 
-//            //Assert
-//            Assert.IsFalse(result.EnableEdit);
-//        }
+        [Test]
+        public void ThenDataLockCourseIsMappedCorrectly()
+        {
+            Assert.That(_result.DataLockCourse, Is.True);
+        }
 
-//        [TestCase(true, false)]
-//        [TestCase(false, true)]
-//        public void ThenEditDisabledIfPendingChanges(bool hasPendingChanges, bool expectCanEdit)
-//        {
-//            //Arrange
-//            if (hasPendingChanges) _source.UpdateOriginator = Originator.Employer;
+        [Test]
+        public void ThenDataLockPriceIsMappedCorrectly()
+        {
+            Assert.That(_result.DataLockCourse, Is.True);
+        }
 
-//            //Act
-//            var result = _mapper.Map(TestHelper.Clone(_source));
+        [Test]
+        public void ThenDataLockCourseTriagedIsMappedCorrectly()
+        {
+            Assert.That(_result.DataLockCourse, Is.True);
+        }
 
-//            //Assert
-//            Assert.AreEqual(expectCanEdit, result.EnableEdit);
-//        }
+        [Test]
+        public void ThenDataLockCourseChangeTriagedIsMappedCorrectly()
+        {
+            Assert.That(_result.DataLockCourse, Is.True);
+        }
 
-//        [TestCase(PaymentStatus.Active, true)]
-//        [TestCase(PaymentStatus.Paused, true)]
-//        [TestCase(PaymentStatus.Withdrawn, false)]
-//        public void ThenEditDisabledIfNotActiveOrPaused(PaymentStatus paymentStatus, bool expectCanEdit)
-//        {
-//            //Arrange
-//            _source.PaymentStatus = paymentStatus;
-
-//            //Act
-//            var result = _mapper.Map(TestHelper.Clone(_source));
-
-//            //Assert
-//            Assert.AreEqual(expectCanEdit, result.EnableEdit);
-//        }
-
-//        //[Test]
-//        //public void ThenCurrentCostIsMappedCorrectly()
-//        //{
-//        //    //Arrange
-//        //    _source.PriceEpisodes = new List<PriceHistory>
-//        //    {
-//        //        new PriceHistory{ Cost = 1000, FromDate = new DateTime(2018,1,1), ToDate = new DateTime(2019,1,1)}
-//        //    };
-
-//        //    //Act
-//        //    var result = _mapper.Map(TestHelper.Clone(_source));
-
-//        //    //Assert
-//        //    Assert.AreEqual(1000, result.CurrentCost);
-//        //}
-
-//        [TestCase("2018-01-01", "2018-06-01", PaymentStatus.Active, "Waiting to start")]
-//        [TestCase("2018-06-01", "2018-06-01", PaymentStatus.Active, "Live")]
-//        [TestCase("2018-01-01", "2018-06-01", PaymentStatus.Withdrawn, "Stopped")]
-//        [TestCase("2018-01-01", "2018-06-01", PaymentStatus.Paused, "Paused")]
-//        public void ThenStatusIsMappedCorrectly(DateTime now, DateTime startDate, PaymentStatus paymentStatus, string expectedStatus)
-//        {
-//            //Arrange
-//            _currentDateTime.Setup(x => x.Now).Returns(now);
-//            _source.PaymentStatus = paymentStatus;
-//            _source.StartDate = startDate;
-
-//            //Act
-//            var result = _mapper.Map(TestHelper.Clone(_source));
-
-//            //Assert
-//            Assert.AreEqual(expectedStatus, result.Status);
-//        }
-
-//        //[TestCase(Originator.Employer, PendingChanges.WaitingForApproval)]
-//        //[TestCase(Originator.Provider, PendingChanges.ReadyForApproval)]
-//        //public void ThenPendingChangesIsMappedCorrectly(Originator originator, PendingChanges expectPendingChange)
-//        //{
-//        //    //Arrange
-//        //    _source.UpdateOriginator = originator;
-
-//        //    //Act
-//        //    var result = _mapper.Map(TestHelper.Clone(_source));
-
-//        //    //Assert
-//        //    Assert.AreEqual(expectPendingChange, result.PendingChanges);
-//        //}
-//    }
-//}
+        [Test]
+        public void ThenDataLockPriceTriagedIsMappedCorrectly()
+        {
+            Assert.That(_result.DataLockCourse, Is.True);
+        }
+    }
+}
