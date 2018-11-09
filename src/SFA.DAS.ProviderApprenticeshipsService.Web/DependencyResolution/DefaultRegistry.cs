@@ -81,6 +81,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IApprenticeshipCoreValidator>().Use<ApprenticeshipCoreValidator>().Singleton();
             For<IApprovedApprenticeshipValidator>().Use<ApprovedApprenticeshipValidator>().Singleton();
             For<IAccountApiClient>().Use<AccountApiClient>();
+            For<IAccountApiConfiguration>().Use<Domain.Configuration.AccountApiConfiguration>();
 
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));

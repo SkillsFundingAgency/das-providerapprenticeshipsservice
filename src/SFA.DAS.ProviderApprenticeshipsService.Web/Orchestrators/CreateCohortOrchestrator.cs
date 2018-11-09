@@ -79,6 +79,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 UserId = userId,
                 Commitment = new Commitment
                 {
+                    Reference = Guid.NewGuid().ToString().ToUpper(),
                     EmployerAccountId = employerAccountId,
                     LegalEntityId = legalEntity.Code,
                     LegalEntityName = legalEntity.Name,

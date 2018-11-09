@@ -97,5 +97,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             arg.Email.Tokens["type"].Should().Be("approval");
             arg.Email.Tokens["cohort_reference"].Should().Be("ABC123");
         }
+
+        [Test]
+        public async Task ShouldSendNotRequestToApproveToEmployerIfEmailAddressUnknown()
+        {
+            _mockCommitmentsApi.Setup(x => x.GetProviderCommitment(_validCommand.ProviderId, _validCommand.CommitmentId))
+                .ReturnsAsync(new CommitmentView
+                {
+                    ProviderId = _validCommand.ProviderId,
+                    AgreementStatus = AgreementStatus.NotAgreed,
+                    Reference = "ABC123",
+                    EmployerLastUpdateInfo = new LastUpdateInfo
+                    {
+                        EmailAddress = ""
+                    }
+                });
+
+            await _handler.Handle(_validCommand, new CancellationToken());
+
+            _mockMediator.Verify(x => x.Send(It.IsAny<SendNotificationCommand>(), It.IsAny<CancellationToken>()), Times.Never);
+
+        }
     }
 }
