@@ -11,10 +11,10 @@
         @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
         <h1 class="heading-xlarge">Confirm employer</h1>
-        <p class="heading-large">@Model.EmployerAccountName</p>
+        <p class="heading-large">@Model.EmployerAccountLegalEntityName</p>
         <dl class="inline-secondary">
             <dt>Account name</dt>
-            <dd>@Model.EmployerAccountLegalEntityName</dd>
+            <dd>@Model.EmployerAccountName</dd>
             <dt>Agreement ID</dt>
             <dd>@Model.EmployerAccountLegalEntityPublicHashedId</dd>
         </dl>
