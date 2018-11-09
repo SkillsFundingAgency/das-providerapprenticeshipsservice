@@ -32,7 +32,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Mock.Of<IMediator>(),
                 new CurrentDateTime(),
                  Mock.Of<ILog>(),
-                 Mock.Of<IAcademicYearValidator>());
+                 Mock.Of<IAcademicYearValidator>(),
+                null,
+                null);
         }
 
         [Test]

@@ -21,6 +21,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprovedApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
@@ -37,6 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IDataLockMapper _dataLockMapper;
         private readonly IFiltersCookieManager _filtersCookieManager;
         private readonly string _searchPlaceholderText;
+        private readonly IApprovedApprenticeshipMapper _approvedApprenticeshipMapper;
 
         public ManageApprenticesOrchestrator(
             IMediator mediator,
@@ -46,7 +48,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             IApprovedApprenticeshipValidator approvedApprenticeshipValidator,
             IApprenticeshipFiltersMapper apprenticeshipFiltersMapper,
             IDataLockMapper dataLockMapper,
-            IFiltersCookieManager filtersCookieManager) : base(mediator, hashingService, logger)
+            IFiltersCookieManager filtersCookieManager,
+            IApprovedApprenticeshipMapper approvedApprenticeshipMapper) : base(mediator, hashingService, logger)
         {
             _mediator = mediator;
             _hashingService = hashingService;
@@ -56,6 +59,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _apprenticeshipFiltersMapper = apprenticeshipFiltersMapper;
             _dataLockMapper = dataLockMapper;
             _filtersCookieManager = filtersCookieManager;
+            _approvedApprenticeshipMapper = approvedApprenticeshipMapper;
             _searchPlaceholderText = "Enter a name or ULN";
         }
 
@@ -117,6 +121,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             result.SearchFiltersForListView = _filtersCookieManager.GetCookie();
             result.DataLockSummaryViewModel = await _dataLockMapper.MapDataLockSummary(dataLockSummary.DataLockSummary, data.Apprenticeship.HasHadDataLockSuccess);
+
+            return result;
+
+        }
+
+        public async Task<ApprovedApprenticeshipViewModel> GetApprovedApprenticeshipViewModel(long providerId, string hashedApprenticeshipId)
+        {
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Info($"Getting On-programme approved apprenticeships Provider: {providerId}, ApprenticeshipId: {apprenticeshipId}", providerId: providerId, apprenticeshipId: apprenticeshipId);
+
+            var data = await _mediator.SendAsync(new GetApprovedApprenticeshipQueryRequest { ApprovedApprenticeshipId = apprenticeshipId, ProviderId = providerId });
+
+            var dataLockSummary = await _mediator.SendAsync(new GetApprenticeshipDataLockSummaryQueryRequest
+            {
+                ProviderId = providerId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            var result = _approvedApprenticeshipMapper.Map(data.ApprovedApprenticeship);
+
+            result.SearchFiltersForListView = _filtersCookieManager.GetCookie();
+            result.DataLockSummaryViewModel = await _dataLockMapper.MapDataLockSummary(dataLockSummary.DataLockSummary, data.ApprovedApprenticeship.HasHadDataLockSuccess);
 
             return result;
 

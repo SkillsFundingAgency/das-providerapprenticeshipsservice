@@ -99,7 +99,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 mockMediator.Object,
                 new CurrentDateTime(_now),
                 Mock.Of<ILog>(),
-                _mockAcademicYearValidator.Object
+                _mockAcademicYearValidator.Object,
+                null,
+                null
                 );
         }
 

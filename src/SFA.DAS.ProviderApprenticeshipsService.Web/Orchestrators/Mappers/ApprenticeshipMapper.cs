@@ -34,19 +34,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         private readonly ICurrentDateTime _currentDateTime;
         private readonly ILog _logger;
         private readonly IAcademicYearValidator _academicYearValidator;
+        private readonly IPaymentStatusMapper _paymentStatusMapper;
+        private readonly IAlertMapper _alertMapper;
 
         public ApprenticeshipMapper(
             IHashingService hashingService, 
             IMediator mediator, 
             ICurrentDateTime currentDateTime, 
             ILog logger,
-            IAcademicYearValidator academicYearValidator)
+            IAcademicYearValidator academicYearValidator,
+            IPaymentStatusMapper paymentStatusMapper,
+            IAlertMapper alertMapper)
         {
             _hashingService = hashingService;
             _mediator = mediator;
             _currentDateTime = currentDateTime;
             _logger = logger;
             _academicYearValidator = academicYearValidator;
+            _paymentStatusMapper = paymentStatusMapper;
+            _alertMapper = alertMapper;
         }
 
         public ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship, CommitmentView commitment)
@@ -268,7 +274,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         public ApprenticeshipDetailsViewModel MapApprenticeshipDetails(Apprenticeship apprenticeship)
         {
-            var statusText = MapPaymentStatus(apprenticeship.PaymentStatus, apprenticeship.StartDate);
+            var statusText = _paymentStatusMapper.Map(apprenticeship.PaymentStatus, apprenticeship.StartDate);
 
             var pendingChange = PendingChanges.None;
             if (apprenticeship.PendingUpdateOriginator == Originator.Employer)
@@ -291,7 +297,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 Status = statusText,
                 EmployerName = apprenticeship.LegalEntityName,
                 PendingChanges = pendingChange,
-                Alerts = MapAlerts(apprenticeship),
+                Alerts = _alertMapper.MapAlerts(apprenticeship),
                 CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
                 AccountLegalEntityPublicHashedId = apprenticeship.AccountLegalEntityPublicHashedId,
                 ProviderReference = apprenticeship.ProviderRef,
@@ -304,40 +310,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                             && !apprenticeship.DataLockPriceTriaged
                             && new[] { PaymentStatus.Active, PaymentStatus.Paused, }.Contains(apprenticeship.PaymentStatus)
             };
-        }
-
-        private List<string> MapAlerts(Apprenticeship apprenticeship)
-        {
-            var result = new List<string>();
-
-            if (apprenticeship.DataLockCourse || apprenticeship.DataLockPrice)
-            {
-                result.Add("ILR data mismatch");
-            }
-
-            if (apprenticeship.DataLockPriceTriaged || apprenticeship.DataLockCourseChangeTriaged)
-            {
-                result.Add("Changes pending");
-            }
-
-            if (apprenticeship.DataLockCourseTriaged)
-            {
-                result.Add("Changes requested");
-            }
-
-            if (apprenticeship.PendingUpdateOriginator != null)
-            {
-                if (apprenticeship.PendingUpdateOriginator == Originator.Provider)
-                {
-                    result.Add("Changes pending");
-                }
-                else
-                {
-                    result.Add("Changes for review");
-                }
-            }
-
-            return result.Distinct().ToList();
         }
 
         public DataLockErrorType MapErrorType(DataLockErrorCode errorCode)
@@ -364,30 +336,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 return TriageStatus.FixIlr;
 
             return TriageStatus.Unknown;
-        }
-
-        private string MapPaymentStatus(PaymentStatus paymentStatus, DateTime? startDate)
-        {
-            var isStartDateInFuture = startDate.HasValue && startDate.Value > new DateTime(_currentDateTime.Now.Year, _currentDateTime.Now.Month, 1);
-
-            switch (paymentStatus)
-            {
-                case PaymentStatus.PendingApproval:
-                    return "Approval needed";
-                case PaymentStatus.Active:
-                    return
-                        isStartDateInFuture ? "Waiting to start" : "Live";
-                case PaymentStatus.Paused:
-                    return "Paused";
-                case PaymentStatus.Withdrawn:
-                    return "Stopped";
-                case PaymentStatus.Completed:
-                    return "Finished";
-                case PaymentStatus.Deleted:
-                    return "Deleted";
-                default:
-                    return string.Empty;
-            }
         }
 
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)

@@ -40,7 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> Details(long providerid, string hashedApprenticeshipId)
         {
-            var model = await _orchestrator.GetApprenticeshipViewModel(providerid, hashedApprenticeshipId);
+            var model = await _orchestrator.GetApprovedApprenticeshipViewModel(providerid, hashedApprenticeshipId);
 
             var flashMesssage = GetFlashMessageViewModelFromCookie();
 

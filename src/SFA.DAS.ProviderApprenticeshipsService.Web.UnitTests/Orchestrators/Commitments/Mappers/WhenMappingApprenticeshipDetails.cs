@@ -64,7 +64,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                              ULN = "1112223301"
                          };
 
-            _mapper = new ApprenticeshipMapper(_hashingService.Object, Mock.Of<IMediator>(), new CurrentDateTime(), Mock.Of<ILog>(), Mock.Of<IAcademicYearValidator>());
+            _mapper = new ApprenticeshipMapper(_hashingService.Object, Mock.Of<IMediator>(), new CurrentDateTime(), Mock.Of<ILog>(), Mock.Of<IAcademicYearValidator>(), null, null);
         }
 
         [Test]

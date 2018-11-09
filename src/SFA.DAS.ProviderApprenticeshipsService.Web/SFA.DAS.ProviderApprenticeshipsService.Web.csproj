@@ -225,11 +225,11 @@
     <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.11.75\lib\net462\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=2.1.564.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.2.1.564\lib\net462\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=2.1.701.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.2.1.701\lib\net462\SFA.DAS.Commitments.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.1.564.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.1.564\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.1.701.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.1.701\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Common.Domain, Version=1.4.43.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.43\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
@@ -511,6 +511,7 @@
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\ApprenticeshipUpdateViewModel.cs" />
     <Compile Include="Models\ApprenticeshipUpdate\CreateApprenticeshipUpdateViewModel.cs" />
+    <Compile Include="Models\ApprovedApprenticeshipViewModel.cs" />
     <Compile Include="Models\ApprovedViewModel.cs" />
     <Compile Include="Models\BulkUpload\CsvRecordMap.cs" />
     <Compile Include="Models\TransferFundedListItemViewModel.cs" />
@@ -563,7 +564,13 @@
     <Compile Include="Orchestrators\Formatters\IExcelFormatter.cs" />
     <Compile Include="Orchestrators\IFiltersCookieManager.cs" />
     <Compile Include="Orchestrators\Mappers\AgreementMapper.cs" />
+    <Compile Include="Orchestrators\Mappers\AlertMapper.cs" />
+    <Compile Include="Orchestrators\Mappers\ApprovedApprenticeshipMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IAgreementMapper.cs" />
+    <Compile Include="Orchestrators\Mappers\IAlertMapper.cs" />
+    <Compile Include="Orchestrators\Mappers\IApprovedApprenticeshipMapper.cs" />
+    <Compile Include="Orchestrators\Mappers\IPaymentStatusMapper.cs" />
+    <Compile Include="Orchestrators\Mappers\PaymentStatusMapper.cs" />
     <Compile Include="Validation\ApprovedApprenticeshipValidator.cs" />
     <Compile Include="Validation\IApprovedApprenticeshipValidator.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
