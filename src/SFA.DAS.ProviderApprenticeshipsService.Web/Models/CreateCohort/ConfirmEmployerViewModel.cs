@@ -1,7 +1,10 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort
 {
     public class ConfirmEmployerViewModel : LegalEntityViewModel
     {
-        public bool Confirm { get; set; }
+        [Required(ErrorMessage = "Please choose an option")]
+        public bool? Confirm { get; set; }
     }
 }

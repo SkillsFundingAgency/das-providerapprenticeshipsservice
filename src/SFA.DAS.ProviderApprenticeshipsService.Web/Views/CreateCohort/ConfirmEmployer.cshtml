@@ -1,5 +1,5 @@
-﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort.LegalEntityViewModel
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort.ConfirmEmployerViewModel
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 
 @{
@@ -8,6 +8,8 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
+        @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+
         <h1 class="heading-xlarge">Confirm employer</h1>
         <p class="heading-large">@Model.EmployerAccountName</p>
         <dl class="inline-secondary">
@@ -23,10 +25,11 @@
             @Html.HiddenFor(model => model.EmployerAccountName)
             @Html.HiddenFor(model => model.EmployerAccountHashedId)
 
-            <div class="form-group">
+            <div class="form-group" @Html.AddClassIfPropertyInError(x => x.Confirm, "error")">
                 <fieldset>
 
                     <legend>
+                        @Html.ValidationMessageFor(m => m.Confirm, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.Confirm) })
                         <span class="heading-small">
                             Is this the employer you'd like to add a cohort for?
                         </span>
