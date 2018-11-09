@@ -1,24 +1,77 @@
-﻿using System;
-
-using FluentAssertions;
+﻿using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
-
+using System;
 using TrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.HashingService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments.Mappers
 {
+    [TestFixture]
+    public class WhenMappingPaymentStatus
+    {
+        private Mock<ICurrentDateTime> _mockCurrentDateTime;
+
+        private PaymentStatusMapper _mapper;
+
+        [SetUp]
+        public void Arrange()
+        {
+            _mockCurrentDateTime = new Mock<ICurrentDateTime>();
+            _mockCurrentDateTime.Setup(x => x.Now).Returns(DateTime.UtcNow);
+            _mapper = new PaymentStatusMapper(_mockCurrentDateTime.Object);
+        }
+
+        [Test]
+        public void ShouldHaveStatusTextForFututreStart()
+        {
+            var result = _mapper.Map(PaymentStatus.Active, DateTime.UtcNow.AddDays(1));
+
+            result.Should().Be("Waiting to start");
+        }
+
+        [Test]
+        public void ShouldHaveStatusTextWhenStarted()
+        { 
+            var result = _mapper.Map(PaymentStatus.Active, DateTime.UtcNow.AddMonths(-5));
+
+            result.Should().Be("Live");
+        }
+
+        [Test]
+        public void ShouldHaveStatusTextWhenCanceled()
+        {
+            var result = _mapper.Map(PaymentStatus.Withdrawn, DateTime.UtcNow.AddMonths(-5));
+
+            result.Should().Be("Stopped");
+        }
+
+        [Test]
+        public void ShouldHaveStatusTextWhenPaused()
+        {
+            var result = _mapper.Map(PaymentStatus.Paused, DateTime.UtcNow.AddMonths(-5));
+
+            result.Should().Be("Paused");
+        }
+
+        [Test]
+        public void ShouldHaveStatusTextWhenCompleted()
+        {
+            var result = _mapper.Map(PaymentStatus.Completed, DateTime.UtcNow.AddMonths(-5));
+
+            result.Should().Be("Finished");
+        }
+    }
+
     [TestFixture]
     public class WhenMappingApprenticeshipDetails
     {
@@ -27,12 +80,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         private ApprenticeshipMapper _mapper;
 
         private Apprenticeship _model;
+        private Mock<IPaymentStatusMapper> _mockPaymentStatusMapper;
 
         [SetUp]
         public void Arrange()
         {
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.HashValue(It.IsAny<long>())).Returns("hashed");
+
+            _mockPaymentStatusMapper = new Mock<IPaymentStatusMapper>();
+            _mockPaymentStatusMapper.Setup(x => x.Map(It.IsAny<PaymentStatus>(), It.IsAny<DateTime?>()))
+                .Returns("Live");
 
             _model = new Apprenticeship
                          {
@@ -64,7 +122,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                              ULN = "1112223301"
                          };
 
-            _mapper = new ApprenticeshipMapper(_hashingService.Object, Mock.Of<IMediator>(), new CurrentDateTime(), Mock.Of<ILog>(), Mock.Of<IAcademicYearValidator>(), null, null);
+            _mapper = new ApprenticeshipMapper(_hashingService.Object, Mock.Of<IMediator>(), new CurrentDateTime(), Mock.Of<ILog>(), Mock.Of<IAcademicYearValidator>(), _mockPaymentStatusMapper.Object);
         }
 
         [Test]
@@ -152,54 +210,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             viewModel.EnableEdit.Should().BeFalse();
             viewModel.PendingChanges.Should().Be(PendingChanges.WaitingForEmployer);
-        }
-
-        [Test]
-        public void ShouldHaveStatusTextForFututreStart()
-        {
-            var viewModel = _mapper.MapApprenticeshipDetails(_model);
-
-            viewModel.Status.Should().Be("Waiting to start");
-        }
-
-        [Test]
-        public void ShouldHaveStatusTextWhenStarted()
-        {
-            _model.PaymentStatus = PaymentStatus.Active;
-            _model.StartDate = DateTime.Now.AddMonths(-5);
-            var viewModel = _mapper.MapApprenticeshipDetails(_model);
-
-            viewModel.Status.Should().Be("Live");
-        }
-
-        [Test]
-        public void ShouldHaveStatusTextWhenCanceled()
-        {
-            _model.PaymentStatus = PaymentStatus.Withdrawn;
-            _model.StartDate = DateTime.Now.AddMonths(-5);
-            var viewModel = _mapper.MapApprenticeshipDetails(_model);
-
-            viewModel.Status.Should().Be("Stopped");
-        }
-
-        [Test]
-        public void ShouldHaveStatusTextWhenPaused()
-        {
-            _model.PaymentStatus = PaymentStatus.Paused;
-            _model.StartDate = DateTime.Now.AddMonths(-5);
-            var viewModel = _mapper.MapApprenticeshipDetails(_model);
-
-            viewModel.Status.Should().Be("Paused");
-        }
-
-        [Test]
-        public void ShouldHaveStatusTextWhenCompleted()
-        {
-            _model.PaymentStatus = PaymentStatus.Completed;
-            _model.StartDate = DateTime.Now.AddMonths(-5);
-            var viewModel = _mapper.MapApprenticeshipDetails(_model);
-
-            viewModel.Status.Should().Be("Finished");
         }
 
         [Test]

@@ -13,19 +13,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
     {
         private readonly IPaymentStatusMapper _paymentStatusMapper;
         private readonly IHashingService _hashingService;
-        private readonly IAlertMapper _alertMapper;
         private readonly ICurrentDateTime _currentDateTime;
 
         public ApprovedApprenticeshipMapper
         (
             IPaymentStatusMapper paymentStatusMapper,
             IHashingService hashingService,
-            IAlertMapper alertMapper,
             ICurrentDateTime currentDateTime
         ){
             _paymentStatusMapper = paymentStatusMapper;
             _hashingService = hashingService;
-            _alertMapper = alertMapper;
             _currentDateTime = currentDateTime;
         }
 
@@ -50,7 +47,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 EndDate = apprenticeship.EndDate,
                 StopDate = apprenticeship.StopDate,
                 TrainingName = apprenticeship.TrainingName,
-                Cost = apprenticeship.PriceEpisodes.GetCostOn(_currentDateTime.Now),
+                CurrentCost = apprenticeship.PriceEpisodes.GetCostOn(_currentDateTime.Now),
                 Status = statusText,
                 EmployerName = apprenticeship.LegalEntityName,
                 PendingChanges = pendingChange,
@@ -76,8 +73,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 apprenticeship.DataLocks.Any(x => x.WithCourseError() && x.TriageStatus == TriageStatus.Change);
             model.DataLockPriceTriaged =
                 apprenticeship.DataLocks.Any(x => x.IsPriceOnly() && x.TriageStatus == TriageStatus.Change);
-
-            model.Alerts = _alertMapper.MapAlerts(model, apprenticeship);
 
             return model;
         }

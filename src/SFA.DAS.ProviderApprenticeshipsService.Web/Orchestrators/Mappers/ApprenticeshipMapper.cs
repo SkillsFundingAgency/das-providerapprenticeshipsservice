@@ -35,7 +35,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         private readonly ILog _logger;
         private readonly IAcademicYearValidator _academicYearValidator;
         private readonly IPaymentStatusMapper _paymentStatusMapper;
-        private readonly IAlertMapper _alertMapper;
 
         public ApprenticeshipMapper(
             IHashingService hashingService, 
@@ -43,16 +42,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             ICurrentDateTime currentDateTime, 
             ILog logger,
             IAcademicYearValidator academicYearValidator,
-            IPaymentStatusMapper paymentStatusMapper,
-            IAlertMapper alertMapper)
-        {
+            IPaymentStatusMapper paymentStatusMapper
+        ){
             _hashingService = hashingService;
             _mediator = mediator;
             _currentDateTime = currentDateTime;
             _logger = logger;
             _academicYearValidator = academicYearValidator;
             _paymentStatusMapper = paymentStatusMapper;
-            _alertMapper = alertMapper;
         }
 
         public ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship, CommitmentView commitment)
@@ -297,7 +294,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 Status = statusText,
                 EmployerName = apprenticeship.LegalEntityName,
                 PendingChanges = pendingChange,
-                Alerts = _alertMapper.MapAlerts(apprenticeship),
+                Alerts = MapAlerts(apprenticeship),
                 CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
                 AccountLegalEntityPublicHashedId = apprenticeship.AccountLegalEntityPublicHashedId,
                 ProviderReference = apprenticeship.ProviderRef,
@@ -355,6 +352,40 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         private static string NullableDecimalToString(decimal? item)
         {
             return (item.HasValue) ? string.Format("{0:#}", item.Value) : "";
+        }
+
+        private List<string> MapAlerts(Apprenticeship apprenticeship)
+        {
+            var result = new List<string>();
+
+            if (apprenticeship.DataLockCourse || apprenticeship.DataLockPrice)
+            {
+                result.Add("ILR data mismatch");
+            }
+
+            if (apprenticeship.DataLockPriceTriaged || apprenticeship.DataLockCourseChangeTriaged)
+            {
+                result.Add("Changes pending");
+            }
+
+            if (apprenticeship.DataLockCourseTriaged)
+            {
+                result.Add("Changes requested");
+            }
+
+            if (apprenticeship.PendingUpdateOriginator != null)
+            {
+                if (apprenticeship.PendingUpdateOriginator == Originator.Provider)
+                {
+                    result.Add("Changes pending");
+                }
+                else
+                {
+                    result.Add("Changes for review");
+                }
+            }
+
+            return result.Distinct().ToList();
         }
     }
 }

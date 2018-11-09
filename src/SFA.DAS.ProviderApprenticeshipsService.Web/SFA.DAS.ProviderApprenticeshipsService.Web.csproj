@@ -564,10 +564,8 @@
     <Compile Include="Orchestrators\Formatters\IExcelFormatter.cs" />
     <Compile Include="Orchestrators\IFiltersCookieManager.cs" />
     <Compile Include="Orchestrators\Mappers\AgreementMapper.cs" />
-    <Compile Include="Orchestrators\Mappers\AlertMapper.cs" />
     <Compile Include="Orchestrators\Mappers\ApprovedApprenticeshipMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IAgreementMapper.cs" />
-    <Compile Include="Orchestrators\Mappers\IAlertMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IApprovedApprenticeshipMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IPaymentStatusMapper.cs" />
     <Compile Include="Orchestrators\Mappers\PaymentStatusMapper.cs" />

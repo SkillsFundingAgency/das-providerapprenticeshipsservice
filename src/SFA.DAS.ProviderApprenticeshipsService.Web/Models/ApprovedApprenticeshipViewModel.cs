@@ -25,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public string TrainingName { get; set; }
 
-        public decimal? Cost { get; set; }
+        public decimal CurrentCost { get; set; }
 
         public string Status { get; set; }
 
@@ -40,8 +40,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string AccountLegalEntityPublicHashedId { get; set; }
 
         public bool EnableEdit { get; set; }
-
-        public List<string> Alerts { get; set; }
 
         //todo: this is not used in the manage apprentices list, so maybe create a new 
         //viewmodel for that page?
