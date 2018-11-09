@@ -31,8 +31,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                _hashingService.Object,
                 Mock.Of<IMediator>(),
                 new CurrentDateTime(),
-                 Mock.Of<ILog>(),
-                 Mock.Of<IAcademicYearValidator>());
+                Mock.Of<ILog>(),
+                Mock.Of<IAcademicYearValidator>(),
+                null);
         }
 
         [Test]

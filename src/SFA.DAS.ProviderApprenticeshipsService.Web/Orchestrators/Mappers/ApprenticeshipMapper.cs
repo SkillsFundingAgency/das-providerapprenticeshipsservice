@@ -34,19 +34,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         private readonly ICurrentDateTime _currentDateTime;
         private readonly ILog _logger;
         private readonly IAcademicYearValidator _academicYearValidator;
+        private readonly IPaymentStatusMapper _paymentStatusMapper;
 
         public ApprenticeshipMapper(
             IHashingService hashingService, 
             IMediator mediator, 
             ICurrentDateTime currentDateTime, 
             ILog logger,
-            IAcademicYearValidator academicYearValidator)
-        {
+            IAcademicYearValidator academicYearValidator,
+            IPaymentStatusMapper paymentStatusMapper
+        ){
             _hashingService = hashingService;
             _mediator = mediator;
             _currentDateTime = currentDateTime;
             _logger = logger;
             _academicYearValidator = academicYearValidator;
+            _paymentStatusMapper = paymentStatusMapper;
         }
 
         public ApprenticeshipViewModel MapApprenticeship(Apprenticeship apprenticeship, CommitmentView commitment)
@@ -268,7 +271,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         public ApprenticeshipDetailsViewModel MapApprenticeshipDetails(Apprenticeship apprenticeship)
         {
-            var statusText = MapPaymentStatus(apprenticeship.PaymentStatus, apprenticeship.StartDate);
+            var statusText = _paymentStatusMapper.Map(apprenticeship.PaymentStatus, apprenticeship.StartDate);
 
             var pendingChange = PendingChanges.None;
             if (apprenticeship.PendingUpdateOriginator == Originator.Employer)
@@ -306,6 +309,51 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             };
         }
 
+        public DataLockErrorType MapErrorType(DataLockErrorCode errorCode)
+        {
+            if (errorCode.HasFlag(DataLockErrorCode.Dlock03)
+                || errorCode.HasFlag(DataLockErrorCode.Dlock04)
+                || errorCode.HasFlag(DataLockErrorCode.Dlock05)
+                || errorCode.HasFlag(DataLockErrorCode.Dlock06)
+                )
+                return DataLockErrorType.RestartRequired;
+
+            if (errorCode.HasFlag(DataLockErrorCode.Dlock07)
+                || errorCode.HasFlag(DataLockErrorCode.Dlock09))
+                return DataLockErrorType.UpdateNeeded;
+
+            return DataLockErrorType.None;
+        }
+
+        public TriageStatus MapTriangeStatus(SubmitStatusViewModel submitStatusViewModel)
+        {
+            if (submitStatusViewModel == SubmitStatusViewModel.Confirm)
+                return TriageStatus.Change;
+            if (submitStatusViewModel == SubmitStatusViewModel.UpdateDataInIlr)
+                return TriageStatus.FixIlr;
+
+            return TriageStatus.Unknown;
+        }
+
+        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
+        {
+            return (await GetTrainingProgrammes()).FirstOrDefault(x => x.Id == trainingCode);
+        }
+
+        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
+        {
+            var programmes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest
+            {
+                IncludeFrameworks = true
+            });
+            return programmes.TrainingProgrammes;
+        }
+
+        private static string NullableDecimalToString(decimal? item)
+        {
+            return (item.HasValue) ? string.Format("{0:#}", item.Value) : "";
+        }
+
         private List<string> MapAlerts(Apprenticeship apprenticeship)
         {
             var result = new List<string>();
@@ -338,75 +386,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             }
 
             return result.Distinct().ToList();
-        }
-
-        public DataLockErrorType MapErrorType(DataLockErrorCode errorCode)
-        {
-            if (errorCode.HasFlag(DataLockErrorCode.Dlock03)
-                || errorCode.HasFlag(DataLockErrorCode.Dlock04)
-                || errorCode.HasFlag(DataLockErrorCode.Dlock05)
-                || errorCode.HasFlag(DataLockErrorCode.Dlock06)
-                )
-                return DataLockErrorType.RestartRequired;
-
-            if (errorCode.HasFlag(DataLockErrorCode.Dlock07)
-                || errorCode.HasFlag(DataLockErrorCode.Dlock09))
-                return DataLockErrorType.UpdateNeeded;
-
-            return DataLockErrorType.None;
-        }
-
-        public TriageStatus MapTriangeStatus(SubmitStatusViewModel submitStatusViewModel)
-        {
-            if (submitStatusViewModel == SubmitStatusViewModel.Confirm)
-                return TriageStatus.Change;
-            if (submitStatusViewModel == SubmitStatusViewModel.UpdateDataInIlr)
-                return TriageStatus.FixIlr;
-
-            return TriageStatus.Unknown;
-        }
-
-        private string MapPaymentStatus(PaymentStatus paymentStatus, DateTime? startDate)
-        {
-            var isStartDateInFuture = startDate.HasValue && startDate.Value > new DateTime(_currentDateTime.Now.Year, _currentDateTime.Now.Month, 1);
-
-            switch (paymentStatus)
-            {
-                case PaymentStatus.PendingApproval:
-                    return "Approval needed";
-                case PaymentStatus.Active:
-                    return
-                        isStartDateInFuture ? "Waiting to start" : "Live";
-                case PaymentStatus.Paused:
-                    return "Paused";
-                case PaymentStatus.Withdrawn:
-                    return "Stopped";
-                case PaymentStatus.Completed:
-                    return "Finished";
-                case PaymentStatus.Deleted:
-                    return "Deleted";
-                default:
-                    return string.Empty;
-            }
-        }
-
-        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
-        {
-            return (await GetTrainingProgrammes()).FirstOrDefault(x => x.Id == trainingCode);
-        }
-
-        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
-        {
-            var programmes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest
-            {
-                IncludeFrameworks = true
-            });
-            return programmes.TrainingProgrammes;
-        }
-
-        private static string NullableDecimalToString(decimal? item)
-        {
-            return (item.HasValue) ? string.Format("{0:#}", item.Value) : "";
         }
     }
 }

@@ -35,6 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         private CommitmentView _commitment;
         private ApprenticeshipMapper _mapper;
         private Mock<IAcademicYearValidator> _mockAcademicYearValidator;
+        private Mock<IPaymentStatusMapper> _mockPaymentStatusMapper;
 
         private DateTime _now;
 
@@ -48,6 +49,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _hashingService.Setup(x => x.HashValue(It.IsAny<long>())).Returns("hashed");
             _hashingService.Setup(x => x.DecodeValue("hashed")).Returns(1998);
+
+            _mockPaymentStatusMapper = new Mock<IPaymentStatusMapper>();
+            _mockPaymentStatusMapper.Setup(x => x.Map(It.IsAny<PaymentStatus>(), It.IsAny<DateTime?>()))
+                .Returns("Live");
 
             _commitment = new CommitmentView();
 
@@ -99,7 +104,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 mockMediator.Object,
                 new CurrentDateTime(_now),
                 Mock.Of<ILog>(),
-                _mockAcademicYearValidator.Object
+                _mockAcademicYearValidator.Object,
+                _mockPaymentStatusMapper.Object
                 );
         }
 
