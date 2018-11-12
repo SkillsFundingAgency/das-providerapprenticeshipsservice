@@ -23,8 +23,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
             Run(f => f.SetValidAccountLegalEntityPublicHashedId().SetValidProviderId(), f => f.GetAuthorizationContext(), (f, r) =>
             {
                 r.Should().NotBeNull();
+                //todo: now that we use the extension method to set the values, we probably shouldn't be looking for the individual keys
+                // but we're probably going to switch to magic marker anyway
                 r.Get<long?>(Fix.ContextKeys.AccountLegalEntityId).Should().Be(f.AccountLegalEntityId);
-                r.Get<long?>(Fix.ContextKeys.ProviderId).Should().Be(f.ProviderId);
+                r.Get<long?>(Fix.ContextKeys.Ukprn).Should().Be(f.ProviderId);
             });
         }
 
@@ -46,7 +48,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
                 (f, r) =>
                 {
                     r.Should().NotBeNull();
-                    r.Get<long?>(Fix.ContextKeys.ProviderId).Should().Be(f.ProviderId);
+                    r.Get<long?>(Fix.ContextKeys.Ukprn).Should().Be(f.ProviderId);
 
                     var exists = r.TryGet<long?>(Fix.ContextKeys.AccountLegalEntityId, out var value);
                     exists.Should().BeTrue();
@@ -68,7 +70,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
                     r.Should().NotBeNull();
                     r.Get<long?>(Fix.ContextKeys.AccountLegalEntityId).Should().Be(f.AccountLegalEntityId);
 
-                    var exists = r.TryGet<long?>(Fix.ContextKeys.ProviderId, out var value);
+                    var exists = r.TryGet<long?>(Fix.ContextKeys.Ukprn, out var value);
                     exists.Should().BeTrue();
                     value.Should().BeNull();
                 });
@@ -84,7 +86,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
                     r.Should().NotBeNull();
                     r.Get<long?>(Fix.ContextKeys.AccountLegalEntityId).Should().Be(f.AccountLegalEntityId);
 
-                    var exists = r.TryGet<long?>(Fix.ContextKeys.ProviderId, out var value);
+                    var exists = r.TryGet<long?>(Fix.ContextKeys.Ukprn, out var value);
                     exists.Should().BeTrue();
                     value.Should().BeNull();
                 });
@@ -98,7 +100,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
         public static class ContextKeys
         {
             public const string AccountLegalEntityId = "AccountLegalEntityId";
-            public const string ProviderId = "ProviderId";
+            public const string Ukprn = "Ukprn";
         }
 
         public IAuthorizationContextProvider AuthorizationContextProvider { get; set; }
