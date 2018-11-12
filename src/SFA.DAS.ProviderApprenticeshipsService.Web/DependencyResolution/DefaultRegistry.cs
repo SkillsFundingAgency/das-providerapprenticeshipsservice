@@ -46,7 +46,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
-using StructureMap;
 using SFA.DAS.Learners.Validators;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.Authorization.ProviderPermissions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort;
@@ -31,8 +33,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
+        //todo: we could use the model binding so that the context is filled in automagically (would need to have 1 model class in derived from I??)
         [HttpGet]
         [Route("cohorts/create/confirm-employer")]
+        [DasAuthorize(ProviderOperation.CreateCohort)]
         public ActionResult ConfirmEmployer(long providerId, ConfirmEmployerViewModel confirmViewModel)
         {
             ModelState.Clear();

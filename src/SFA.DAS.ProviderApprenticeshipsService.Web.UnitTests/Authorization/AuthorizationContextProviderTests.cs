@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Web;
 using System.Web.Routing;
 using FluentAssertions;
@@ -111,13 +112,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
         public string ProviderIdRouteValue { get; set; }
         public long ProviderId { get; set; }
         public RouteData RouteData { get; set; }
+        public NameValueCollection Params { get; set; }
 
         public AuthorizationContextProviderTestsFixture()
         {
             RouteData = new RouteData();
+            Params = new NameValueCollection();
 
             HttpContext = new Mock<HttpContextBase>();
             HttpContext.Setup(c => c.Request.RequestContext.RouteData).Returns(RouteData);
+            HttpContext.Setup(c => c.Request.Params).Returns(Params);
 
             PublicHashingService = new Mock<IPublicHashingService>();
             AuthorizationContextProvider = new AuthorizationContextProvider(HttpContext.Object, PublicHashingService.Object);
@@ -135,7 +139,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
             AccountLegalEntityPublicHashedIdRouteValue = "ABC123";
             AccountLegalEntityId = 123;
 
-            RouteData.Values[RouteDataKeys.AccountLegalEntityPublicHashedId] = AccountLegalEntityPublicHashedIdRouteValue;
+            Params[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId] = AccountLegalEntityPublicHashedIdRouteValue;
 
             PublicHashingService.Setup(h => h.DecodeValue(AccountLegalEntityPublicHashedIdRouteValue)).Returns(AccountLegalEntityId);
 
@@ -146,7 +150,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
         {
             AccountLegalEntityPublicHashedIdRouteValue = "AAA";
 
-            RouteData.Values[RouteDataKeys.AccountLegalEntityPublicHashedId] = AccountLegalEntityPublicHashedIdRouteValue;
+            Params[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId] = AccountLegalEntityPublicHashedIdRouteValue;
 
             PublicHashingService.Setup(h => h.DecodeValue(AccountLegalEntityPublicHashedIdRouteValue)).Throws<Exception>();
 

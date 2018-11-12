@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using System.Web;
 using System.Web.Routing;
 using SFA.DAS.Authorization;
@@ -26,23 +27,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
 
         public IAuthorizationContext GetAuthorizationContext()
         {
-            var routeValueDictionary = _httpContext.Request.RequestContext.RouteData.Values;
+            var request = _httpContext.Request;
 
             //todo: insert everything we calc into here... or use magic binding
             //_httpContext.Items["accountId"] = 123;
 
             var authorizationContext = new AuthorizationContext();
 
+            //todo: fetch case-insensitively?
             authorizationContext.AddProviderPermissionValues(
-                GetAccountLegalEntityId(routeValueDictionary),
-                GetProviderId(routeValueDictionary));                // alternative source: long.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
+                GetAccountLegalEntityId(request.Params),
+                GetProviderId(request.RequestContext.RouteData.Values));                // alternative source: long.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
 
             return authorizationContext;
         }
 
-        private long? GetAccountLegalEntityId(RouteValueDictionary routeValueDictionary)
+        private long? GetAccountLegalEntityId(NameValueCollection parameters)
         {
-            var accountLegalEntityPublicHashedId = (string)routeValueDictionary[RouteDataKeys.AccountLegalEntityPublicHashedId];
+            var accountLegalEntityPublicHashedId = parameters[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId];
             return accountLegalEntityPublicHashedId != null ? _publicHashingService.DecodeValue(accountLegalEntityPublicHashedId) : (long?)null;
         }
 
