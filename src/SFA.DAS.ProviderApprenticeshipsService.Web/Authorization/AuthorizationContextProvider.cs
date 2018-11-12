@@ -1,6 +1,7 @@
 using System.Web;
 using System.Web.Routing;
 using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.ProviderPermissions;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Routing;
 
@@ -30,19 +31,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
             //todo: insert everything we calc into here... or use magic binding
             //_httpContext.Items["accountId"] = 123;
 
-            //var authorizationContext = new AuthorizationContext();
+            var authorizationContext = new AuthorizationContext();
 
-            //authorizationContext.AddProviderPermissionsContext(
-            //    GetProviderId(routeValueDictionary),
-            //    GetAccountLegalEntityId(routeValueDictionary));
+            authorizationContext.AddProviderPermissionValues(
+                GetAccountLegalEntityId(routeValueDictionary),
+                GetProviderId(routeValueDictionary));                // alternative source: long.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
 
-            //return authorizationContext;
-
-            return new AuthorizationContext
-            {
-                { Keys.AccountLegalEntityId, GetAccountLegalEntityId(routeValueDictionary) },
-                { Keys.ProviderId, GetProviderId(routeValueDictionary) }            // alternative source: long.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
-            };
+            return authorizationContext;
         }
 
         private long? GetAccountLegalEntityId(RouteValueDictionary routeValueDictionary)
