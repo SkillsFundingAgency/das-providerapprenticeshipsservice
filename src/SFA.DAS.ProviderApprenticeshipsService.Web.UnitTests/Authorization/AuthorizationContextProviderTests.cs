@@ -15,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
 {
     [TestFixture]
     [Parallelizable]
-    public class AuthorizationContextProviderTests : FluentTest<AuthorizationContextProviderTestsFixture>
+    public class AuthorizationContextProviderTests : FluentTest<Fix>
     {
         [Test]
         public void WhenGettingAuthorizationContextAndAllRequiredRouteValuesAreAvailable_ThenShouldReturnAuthorizationContextWithAllValuesSet()
