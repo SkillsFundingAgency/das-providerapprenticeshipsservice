@@ -3693,3 +3693,38 @@ table .changed-item {
 .warning-summary .warning-dismiss {
   color: #f47738;
 }
+
+.boxes {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px;
+}
+
+.box {
+  box-sizing: border-box;
+  border-bottom: 1px solid #bfc1c3;
+  margin: 0 15px;
+  width: calc(50% - 30px);
+}
+
+dl.inline-secondary {
+    color: #6f777b;
+    margin-bottom: 30px;
+    margin-top: -10px;
+}
+
+dl.inline-secondary dt {
+    margin-top: 5px;
+}
+
+dl.inline-secondary dt:after {
+    content: ":";
+}
+
+dl.inline-secondary dt, dl.inline-secondary dd {
+    display: inline-block;
+}
+
+dl.inline-secondary dd {
+    margin-right: 10px;
+}

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
@@ -14,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     [TestFixture]
     public class WhenUpdatingARelationship
     {
-        private UpdateRelationshipCommandHandler _handler;
+        private IRequestHandler<UpdateRelationshipCommand> _handler;
         private Mock<IValidator<UpdateRelationshipCommand>> _validator;
         private Mock<IRelationshipApi> _relationshipApi;
 
@@ -40,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             var command = new UpdateRelationshipCommand {Relationship = new Relationship()};
 
             //Act
-            await _handler.Handle(command);
+            await _handler.Handle(command, new CancellationToken());
 
             //Assert
             _relationshipApi.Verify(x => x.PatchRelationship(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>(),
@@ -61,7 +62,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
 
             //Act & Assert
             Assert.ThrowsAsync<ValidationException>(() =>
-                _handler.Handle(command)
+                _handler.Handle(command, new CancellationToken())
             );
 
             //Assert
@@ -76,7 +77,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             var command = new UpdateRelationshipCommand { Relationship = new Relationship() };
 
             //Act
-            await _handler.Handle(command);
+            await _handler.Handle(command, new CancellationToken());
 
             //Assert
             _validator.Verify(x=> x.Validate(It.IsAny<UpdateRelationshipCommand>()), Times.Once);

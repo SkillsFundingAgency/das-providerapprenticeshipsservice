@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship
 {
-    public class GetApprenticeshipQueryRequest : IAsyncRequest<GetApprenticeshipQueryResponse>
+    public class GetApprenticeshipQueryRequest : IRequest<GetApprenticeshipQueryResponse>
     {
         public long ProviderId { get; set; }
 

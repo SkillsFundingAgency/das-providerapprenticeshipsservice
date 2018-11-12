@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUserNotificationSettings;
@@ -13,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
     [TestFixture]
     public class WhenUpdatingUserSettings
     {
-        private UpdateUserNotificationSettingsHandler _sut;
+        private IRequestHandler<UpdateUserNotificationSettingsCommand> _sut;
         private Mock<IUserSettingsRepository> _mockSettingsRepo;
         private Mock<IValidator<UpdateUserNotificationSettingsCommand>> _mockValidator;
 
@@ -37,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         {
             _mockValidator.Setup(m => m.Validate(_command)) .Returns(new ValidationResult() );
 
-            await _sut.Handle(_command);
+            await _sut.Handle(_command, new CancellationToken());
 
             _mockSettingsRepo.Verify(m => m.GetUserSetting(It.IsAny<string>()), Times.Never);
             _mockSettingsRepo.Verify(m => m.UpdateUserSettings(_command.UserRef, _command.ReceiveNotifications), Times.Once);
@@ -49,7 +51,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             _mockValidator.Setup(m => m.Validate(_command))
                 .Returns(new ValidationResult { Errors = { new ValidationFailure("Error", "Error message") } });
 
-            Func<Task> act = async () => await _sut.Handle(_command);
+            Func<Task> act = async () => await _sut.Handle(_command, new CancellationToken());
             act.ShouldThrow<InvalidRequestException>();
 
             _mockSettingsRepo.Verify(m => m.GetUserSetting(It.IsAny<string>()), Times.Never);

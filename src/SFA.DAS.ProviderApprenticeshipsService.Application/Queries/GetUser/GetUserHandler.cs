@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 using FluentValidation.Results;
@@ -8,7 +9,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser
 {
-    public class GetUserHandler : IAsyncRequestHandler<GetUserQuery, GetUserResponse>
+    public class GetUserHandler : IRequestHandler<GetUserQuery, GetUserResponse>
     {
         private readonly IUserRepository _userRepository;
 
@@ -17,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser
             _userRepository = userRepository;
         }
 
-        public async Task<GetUserResponse> Handle(GetUserQuery request)
+        public async Task<GetUserResponse> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(request.UserRef))
             {

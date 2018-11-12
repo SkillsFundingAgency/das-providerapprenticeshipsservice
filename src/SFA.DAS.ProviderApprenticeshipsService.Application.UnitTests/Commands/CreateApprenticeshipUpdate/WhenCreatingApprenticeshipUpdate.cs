@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
@@ -13,7 +14,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     [TestFixture]
     public class WhenCreatingApprenticeshipUpdate
     {
-        private CreateApprenticeshipUpdateCommandHandler _handler;
+        private IRequestHandler<CreateApprenticeshipUpdateCommand> _handler;
         private Mock<IProviderCommitmentsApi> _commitmentsApi;
         private Mock<IValidator<CreateApprenticeshipUpdateCommand>> _validator;
 
@@ -43,7 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             };
 
             //Act
-            await _handler.Handle(command);
+            await _handler.Handle(command, new CancellationToken());
 
             //Assert
             _validator.Verify(x=> x.Validate(It.IsAny<CreateApprenticeshipUpdateCommand>()), Times.Once);
@@ -63,7 +64,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             };
 
             //Act
-            await _handler.Handle(command);
+            await _handler.Handle(command, new CancellationToken());
 
             //Assert
             _commitmentsApi.Verify(

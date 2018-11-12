@@ -3,7 +3,7 @@ using MediatR;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes
 {
-    public sealed class GetTrainingProgrammesQueryRequest : IAsyncRequest<GetTrainingProgrammesQueryResponse>
+    public sealed class GetTrainingProgrammesQueryRequest : IRequest<GetTrainingProgrammesQueryResponse>
     {
         public GetTrainingProgrammesQueryRequest()
         {

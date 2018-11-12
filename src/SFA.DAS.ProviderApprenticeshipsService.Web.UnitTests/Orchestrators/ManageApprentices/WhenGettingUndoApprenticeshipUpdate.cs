@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentValidation;
@@ -32,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<UndoApprenticeshipUpdateCommand>()))
+            _mediator.Setup(x => x.Send(It.IsAny<UndoApprenticeshipUpdateCommand>(), new CancellationToken()))
                 .ReturnsAsync(() => new Unit());
 
             _mockApprenticeshipFiltersMapper = new Mock<IApprenticeshipFiltersMapper>();
@@ -47,10 +48,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
                 }
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPendingApprenticeshipUpdateQueryRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetPendingApprenticeshipUpdateQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(() => _pendingApprenticeshipUpdate);
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(() => new GetApprenticeshipQueryResponse
                 {
                     Apprenticeship = new Apprenticeship()
@@ -91,7 +92,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
             await _orchestrator.GetUndoApprenticeshipUpdateModel(0, "");
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
+            _mediator.Verify(x => x.Send(It.IsAny<GetApprenticeshipQueryRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]

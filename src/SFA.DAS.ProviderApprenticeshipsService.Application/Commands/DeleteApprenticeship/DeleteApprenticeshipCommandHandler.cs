@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 
@@ -19,7 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteAppr
             _commitmentsApi = commitmentsApi;
         }
 
-        protected override Task HandleCore(DeleteApprenticeshipCommand message)
+        protected override Task Handle(DeleteApprenticeshipCommand message, CancellationToken cancellationToken)
         {
             _validator.ValidateAndThrow(message);
 

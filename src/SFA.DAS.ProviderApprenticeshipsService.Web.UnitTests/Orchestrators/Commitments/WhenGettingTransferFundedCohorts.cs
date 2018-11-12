@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using FluentAssertions;
@@ -65,7 +66,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
                 }
             };
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentsQueryRequest>())).ReturnsAsync(_response);
+            _mockMediator.Setup(x => x.Send(It.IsAny<GetCommitmentsQueryRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(_response);
             _mockHashingService.Setup(x => x.HashValue(It.IsAny<long>())).Returns((long p) => $"RST{p}");
 
             base.SetUp();
@@ -76,7 +77,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             await _orchestrator.GetAllTransferFunded(12222);
 
-            _mockMediator.Verify(x=>x.SendAsync(It.Is<GetCommitmentsQueryRequest>(p=>p.ProviderId == 12222)));
+            _mockMediator.Verify(x=>x.Send(It.Is<GetCommitmentsQueryRequest>(p=>p.ProviderId == 12222), new CancellationToken()));
         }
 
 

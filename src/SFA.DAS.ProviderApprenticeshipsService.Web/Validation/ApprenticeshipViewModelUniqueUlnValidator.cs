@@ -51,7 +51,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             var id = viewModel.HashedApprenticeshipId == null ? 0 : _hashingService.DecodeValue(viewModel.HashedApprenticeshipId);
             var commitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId);
 
-            var cohort = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            var cohort = await _mediator.Send(new GetCommitmentQueryRequest
             {
                 CommitmentId = commitmentId,
                 ProviderId = viewModel.ProviderId

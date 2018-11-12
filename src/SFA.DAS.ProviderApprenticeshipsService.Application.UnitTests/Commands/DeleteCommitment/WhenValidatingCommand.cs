@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using FluentAssertions;
 
 using FluentValidation;
-
+using MediatR;
 using Moq;
 
 using NUnit.Framework;
@@ -22,7 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
 
         private Mock<IProviderCommitmentsApi> _mockCommitmentsApi;
 
-        private DeleteCommitmentCommandHandler _handler;
+        private IRequestHandler<DeleteCommitmentCommand> _handler;
 
         [SetUp]
         public void Setup()
@@ -41,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public void ShouldNotThrowExceptionIfProviderIdAndCommitmentid()
         {
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             act.ShouldNotThrow<ValidationException>();
         }
@@ -51,7 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.ProviderId = 0;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             var m = act.ShouldThrow<ValidationException>().Which.Message;
             m.Should().Contain("Provider Id");
@@ -63,7 +64,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.CommitmentId = 0;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             var m = act.ShouldThrow<ValidationException>().Which.Message;
             m.Should().NotContain("Provider Id");
@@ -77,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _validCommand.UserId = userId;
 
-            Func<Task> act = async () => await _handler.Handle(_validCommand);
+            Func<Task> act = async () => await _handler.Handle(_validCommand, new CancellationToken());
 
             act.ShouldThrow<ValidationException>().Which.Message.Contains("User Id");
         }

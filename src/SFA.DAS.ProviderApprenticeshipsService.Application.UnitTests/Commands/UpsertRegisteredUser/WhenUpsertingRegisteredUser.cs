@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
@@ -14,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     [TestFixture]
     public class WhenUpsertingRegisteredUser
     {
-        private UpsertRegisteredUserCommandHandler _handler;
+        private IRequestHandler<UpsertRegisteredUserCommand> _handler;
         private Mock<IValidator<UpsertRegisteredUserCommand>> _validator;
         private Mock<IUserRepository> _repository;
 
@@ -47,7 +48,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             var command = new UpsertRegisteredUserCommand();
 
             //Act & Assert
-            Assert.ThrowsAsync<ValidationException>(() =>_handler.Handle(command));
+            Assert.ThrowsAsync<ValidationException>(() =>_handler.Handle(command, new CancellationToken()));
         }
 
         [Test]
@@ -63,7 +64,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             };
 
             //Act
-            await _handler.Handle(command);
+            await _handler.Handle(command, new CancellationToken());
 
             //Assert
             _repository.Verify(x => x.Upsert(

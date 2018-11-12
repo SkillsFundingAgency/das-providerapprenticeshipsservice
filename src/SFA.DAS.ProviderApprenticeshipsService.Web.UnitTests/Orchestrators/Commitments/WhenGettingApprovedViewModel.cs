@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -25,13 +26,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _otherCommitments = new List<CommitmentListItem>();
 
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+            _mockMediator.Setup(x => x.Send(It.IsAny<GetCommitmentQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => new GetCommitmentQueryResponse
                 {
                     Commitment = _commitment
                 });
 
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentsQueryRequest>()))
+            _mockMediator.Setup(x => x.Send(It.IsAny<GetCommitmentsQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => new GetCommitmentsQueryResponse
                 {
                     Commitments = _otherCommitments
@@ -45,7 +46,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             await _orchestrator.GetApprovedViewModel(1, "Hashed-Id");
 
-            _mockMediator.Verify(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()),
+            _mockMediator.Verify(x => x.Send(It.IsAny<GetCommitmentQueryRequest>(), It.IsAny<CancellationToken>()),
                 Times.Once);
         }
 

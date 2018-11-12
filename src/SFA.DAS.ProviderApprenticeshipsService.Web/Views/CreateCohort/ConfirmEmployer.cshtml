@@ -1,0 +1,59 @@
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort.ConfirmEmployerViewModel
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+
+@{
+    ViewBag.Title = "Confirm Employer";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+
+        <h1 class="heading-xlarge">Confirm employer</h1>
+        <p class="heading-large">@Model.EmployerAccountLegalEntityName</p>
+        <dl class="inline-secondary">
+            <dt>Account name</dt>
+            <dd>@Model.EmployerAccountName</dd>
+            <dt>Agreement ID</dt>
+            <dd>@Model.EmployerAccountLegalEntityPublicHashedId</dd>
+        </dl>
+        <form action="@Url.Action("ConfirmEmployer")" method="POST">
+
+            @Html.HiddenFor(model => model.EmployerAccountLegalEntityName)
+            @Html.HiddenFor(model => model.EmployerAccountLegalEntityPublicHashedId)
+            @Html.HiddenFor(model => model.EmployerAccountName)
+            @Html.HiddenFor(model => model.EmployerAccountPublicHashedId)
+
+            <div class="form-group" @Html.AddClassIfPropertyInError(x => x.Confirm, "error")">
+                <fieldset>
+
+                    <legend>
+                        @Html.ValidationMessageFor(m => m.Confirm, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.Confirm) })
+                        <span class="heading-small">
+                            Is this the employer you'd like to add a cohort for?
+                        </span>
+                    </legend>
+
+                    <label for="confirm-yes" class="block-label selection-button-radio">
+                        <input id="confirm-yes" type="radio" name="Confirm" value="True">
+                        Yes, use @Model.EmployerAccountLegalEntityName
+                    </label>
+
+                    <label for="confirm-no" class="block-label selection-button-radio">
+                        <input id="confirm-no" type="radio" name="Confirm" value="False">
+                        No, choose a different employer
+                    </label>
+
+                </fieldset>
+            </div>
+            <button type="submit" class="button">Continue</button>
+        </form>
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Create")" aria-label="Back" class="back-link">Back</a>
+    </div>
+}

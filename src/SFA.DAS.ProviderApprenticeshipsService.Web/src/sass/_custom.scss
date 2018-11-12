@@ -1255,5 +1255,45 @@ $warning-colour: $orange;
 
 
 
+.boxes {
+    @include media(tablet) {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -15px;
+    }
+}
+
+.box {
+    box-sizing: border-box;
+    border-bottom: 1px solid $border-colour;
+    @include media(tablet) {
+        margin: 0 15px;
+        width: calc(50% - 30px);
+    }
+}
 
 
+dl.inline-secondary {
+    color: $grey-1;
+    margin-bottom: 30px;
+
+    dt {
+        margin-top: 5px;
+    }
+
+    @include media(tablet) {
+        margin-top: -15px;
+
+        dt:after {
+            content: ":"
+        }
+
+        dt, dd {
+            display: inline-block
+        }
+
+        dd {
+            margin-right: 10px
+        }
+    }
+}

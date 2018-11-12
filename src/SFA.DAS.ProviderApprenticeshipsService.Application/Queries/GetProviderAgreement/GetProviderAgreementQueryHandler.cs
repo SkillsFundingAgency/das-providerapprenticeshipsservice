@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
@@ -8,7 +9,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderAgreement
 {
-    public class GetProviderAgreementQueryHandler : IAsyncRequestHandler<GetProviderAgreementQueryRequest, GetProviderAgreementQueryResponse>
+    public class GetProviderAgreementQueryHandler : IRequestHandler<GetProviderAgreementQueryRequest, GetProviderAgreementQueryResponse>
     {
         private readonly IAgreementStatusQueryRepository _agreementStatusQueryRepository;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
@@ -19,7 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider
             _configuration = configuration;
         }
 
-        public async Task<GetProviderAgreementQueryResponse> Handle(GetProviderAgreementQueryRequest message)
+        public async Task<GetProviderAgreementQueryResponse> Handle(GetProviderAgreementQueryRequest message, CancellationToken cancellationToken)
         {
             if(!_configuration.CheckForContractAgreements)
                 return new GetProviderAgreementQueryResponse { HasAgreement = ProviderAgreementStatus.Agreed };

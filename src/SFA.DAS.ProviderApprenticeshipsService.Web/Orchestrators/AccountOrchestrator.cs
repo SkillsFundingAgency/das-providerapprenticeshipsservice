@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -10,11 +9,14 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotificati
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UnsubscribeNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
+using SFA.DAS.ProviderRelationships.Types;
+using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -23,30 +25,40 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly ILog _logger;
         private readonly ICurrentDateTime _currentDateTime;
+        private readonly IFeatureToggleService _featureToggleService;
 
-        public AccountOrchestrator(IMediator mediator, ILog logger, ICurrentDateTime currentDateTime)
+        public AccountOrchestrator(IMediator mediator,
+            ILog logger,
+            ICurrentDateTime currentDateTime,
+            IFeatureToggleService featureToggleService)
         {
             _mediator = mediator;
             _logger = logger;
             _currentDateTime = currentDateTime;
+            _featureToggleService = featureToggleService;
         }
 
-        public async Task<AccountHomeViewModel> GetProvider(int providerId)
+        public async Task<AccountHomeViewModel> GetAccountHomeViewModel(int providerId)
         {
             try
             {
                 _logger.Info($"Getting provider {providerId}");
 
-                var providers = await _mediator.SendAsync(new GetProviderQueryRequest { UKPRN = providerId });
+                var providerResponse = await _mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });
 
-                var provider = providers.ProvidersView.Provider;
+                var showCreateCohortLink = false;
+                if (_featureToggleService.Get<Domain.Models.FeatureToggles.ProviderRelationships>().FeatureEnabled)
+                {
+                    showCreateCohortLink = await ProviderHasPermission(providerId, Operation.CreateCohort);
+                }                  
 
                 return new AccountHomeViewModel
                 {
                     AccountStatus = AccountStatus.Active,
-                    ProviderName = provider.ProviderName,
+                    ProviderName = providerResponse.ProvidersView.Provider.ProviderName,
                     ProviderId = providerId,
-                    ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2018, 10, 19)
+                    ShowAcademicYearBanner = false,
+                    ShowCreateCohortLink = showCreateCohortLink
                 };
             }
             catch (EntityNotFoundException)
@@ -61,7 +73,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             _logger.Info($"Getting setting for user {userRef}");
 
-            var response = await _mediator.SendAsync(new GetUserNotificationSettingsQuery
+            var response = await _mediator.Send(new GetUserNotificationSettingsQuery
             {
                 UserRef = userRef
             });
@@ -82,7 +94,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var setting = model.NotificationSettings.First();
             _logger.Info($"Uppdating setting for user {setting.UserRef}");
 
-            await _mediator.SendAsync(new UpdateUserNotificationSettingsCommand
+            await _mediator.Send(new UpdateUserNotificationSettingsCommand
             {
                 UserRef = setting.UserRef,
                 ReceiveNotifications = setting.ReceiveNotifications
@@ -93,14 +105,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<SummaryUnsubscribeViewModel> Unsubscribe(string userRef, string urlSettingsPage)
         {
-            var userSettings = await _mediator.SendAsync(new GetUserNotificationSettingsQuery { UserRef = userRef });
-            var user = await _mediator.SendAsync(new GetUserQuery { UserRef = userRef });
+            var userSettings = await _mediator.Send(new GetUserNotificationSettingsQuery { UserRef = userRef });
+            var user = await _mediator.Send(new GetUserQuery { UserRef = userRef });
 
             var alreadyUnsubscribed = !userSettings.NotificationSettings.FirstOrDefault()?.ReceiveNotifications == true;
             if (userSettings.NotificationSettings.FirstOrDefault()?.ReceiveNotifications == true)
             {
-                await _mediator.SendAsync(new UnsubscribeNotificationRequest { UserRef = userRef });
-                await _mediator.SendAsync(BuildNotificationCommand(user.EmailAddress, user.Name, urlSettingsPage));
+                await _mediator.Send(new UnsubscribeNotificationRequest { UserRef = userRef });
+                await _mediator.Send(BuildNotificationCommand(user.EmailAddress, user.Name, urlSettingsPage));
             }
 
             return new SummaryUnsubscribeViewModel { AlreadyUnsubscribed = alreadyUnsubscribed };
@@ -135,6 +147,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     }
                 }
             };
+        }
+
+        private async Task<bool> ProviderHasPermission(long providerId, Operation permission)
+        {
+            var permissionResponse = await _mediator.Send(new GetProviderHasRelationshipWithPermissionQueryRequest
+            {
+                Permission = permission,
+                ProviderId = providerId
+            });
+
+            return permissionResponse.HasPermission;
         }
     }
 }

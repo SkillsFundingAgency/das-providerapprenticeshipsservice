@@ -36,9 +36,6 @@ using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
-using SFA.DAS.Learners.Validators;
-using SFA.DAS.HashingService;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Caching;
@@ -49,8 +46,13 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
+using StructureMap;
+using SFA.DAS.Learners.Validators;
+using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
+using SFA.DAS.ProviderRelationships.Api.Client;
+using SFA.DAS.EAS.Account.Api.Client;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -64,9 +66,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                     scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
                     scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(t => t.Singleton());
                     scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
-                    scan.ConnectImplementationsToTypesClosing(typeof(IAsyncRequestHandler<,>));
                     scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
-                    scan.ConnectImplementationsToTypesClosing(typeof(IAsyncNotificationHandler<>));
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 });
 
@@ -83,6 +83,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IApprenticeshipValidationErrorText>().Use<WebApprenticeshipValidationText>();
             For<IApprenticeshipCoreValidator>().Use<ApprenticeshipCoreValidator>().Singleton();
             For<IApprovedApprenticeshipValidator>().Use<ApprovedApprenticeshipValidator>().Singleton();
+            For<IAccountApiClient>().Use<AccountApiClient>();
+            For<IAccountApiConfiguration>().Use<Domain.Configuration.AccountApiConfiguration>();
 
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
@@ -93,6 +95,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             ConfigureFeatureToggle();
 
             RegisterMediator();
+
+            ConfigureProviderRelationshipsApiClient();
+
             ConfigureLogging();
 
             ConfigureInstrumentedTypes();
@@ -150,9 +155,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         {
             For<IBulkUploadValidator>().Use(x => new InstrumentedBulkUploadValidator(x.GetInstance<ILog>(), x.GetInstance<BulkUploadValidator>(), x.GetInstance<IUlnValidator>(), x.GetInstance<IAcademicYearDateProvider>()));
             For<IBulkUploadFileParser>().Use(x => new InstrumentedBulkUploadFileParser(x.GetInstance<ILog>(), x.GetInstance<BulkUploadFileParser>()));
-
-            For<IAsyncRequestHandler<BulkUploadApprenticeshipsCommand, Unit>>()
-                .Use(x => new InstrumentedBulkUploadApprenticeshipsCommandHandler(x.GetInstance<IProviderCommitmentsLogger>(), x.GetInstance<BulkUploadApprenticeshipsCommandHandler>()));
         }
 
         private void ConfigureLogging()
@@ -205,8 +207,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
         private void RegisterMediator()
         {
-            For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
-            For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
+            For<ServiceFactory>().Use<ServiceFactory>(ctx => ctx.GetInstance);
             For<IMediator>().Use<Mediator>();
         }
 
@@ -214,6 +215,37 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         {
             SystemDetails.EnvironmentName = envName;
             SystemDetails.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        }
+
+        private void ConfigureProviderRelationshipsApiClient()
+        {
+            var useStub = GetUseStubProviderRelationshipsSetting();
+
+            if (useStub)
+            {
+                For<IProviderRelationshipsApiClient>().Use<StubProviderRelationshipsApiClient>();
+            }
+            else
+            {
+                For<IProviderRelationshipsApiClient>().Use<ProviderRelationshipsApiClient>();
+            }
+        }
+
+        private bool GetUseStubProviderRelationshipsSetting()
+        {
+            var value = CloudConfigurationManager.GetSetting("UseStubProviderRelationships");
+
+            if (value == null)
+            {
+                return false;
+            }
+
+            if (!bool.TryParse(value, out var result))
+            {
+                return false;
+            }
+
+            return result;
         }
     }
 }

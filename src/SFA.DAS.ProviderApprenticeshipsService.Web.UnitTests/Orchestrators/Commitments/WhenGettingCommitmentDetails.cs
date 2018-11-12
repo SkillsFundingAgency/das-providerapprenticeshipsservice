@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using FluentAssertions;
 using MediatR;
 using Moq;
@@ -103,7 +104,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             SetUpOrchestrator();
             await _orchestrator.GetCommitmentDetails(1L, "ABBA213");
 
-            _mockMediator.Verify(x => x.SendAsync(It.Is<GetTrainingProgrammesQueryRequest>(r => !r.IncludeFrameworks)), Times.Once);
+            _mockMediator.Verify(x => x.Send(It.Is<GetTrainingProgrammesQueryRequest>(r => !r.IncludeFrameworks), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
@@ -122,7 +123,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             SetUpOrchestrator();
             await _orchestrator.GetCommitmentDetails(1L, "ABBA213");
 
-            _mockMediator.Verify(x => x.SendAsync(It.Is<GetTrainingProgrammesQueryRequest>(r => r.IncludeFrameworks)), Times.Once);
+            _mockMediator.Verify(x => x.Send(It.Is<GetTrainingProgrammesQueryRequest>(r => r.IncludeFrameworks), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestCase(123L, true)]
@@ -166,7 +167,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mockMediator = GetMediator(commitment);
             SetUpOrchestrator();
 
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetTrainingProgrammesQueryRequest>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetTrainingProgrammesQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(new GetTrainingProgrammesQueryResponse
                 {
                     TrainingProgrammes = new List<ITrainingProgramme>
@@ -189,7 +190,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     }
                 });
 
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(new GetOverlappingApprenticeshipsQueryResponse
                 {
                     Overlaps = Enumerable.Empty<ApprenticeshipOverlapValidationResult>()
@@ -210,13 +211,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             };
 
             var mockMediator = new Mock<IMediator>();
-            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+            mockMediator.Setup(m => m.Send(It.IsAny<GetCommitmentQueryRequest>(), new CancellationToken()))
                 .Returns(Task.Factory.StartNew(() => respons));
 
-            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetTrainingProgrammesQueryRequest>()))
+            mockMediator.Setup(m => m.Send(It.IsAny<GetTrainingProgrammesQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(new GetTrainingProgrammesQueryResponse { TrainingProgrammes = new List<ITrainingProgramme>() });
 
-            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetRelationshipByCommitmentQueryRequest>()))
+            mockMediator.Setup(m => m.Send(It.IsAny<GetRelationshipByCommitmentQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(() => new GetRelationshipByCommitmentQueryResponse
                 {
                     Relationship = new Relationship
@@ -225,7 +226,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     }
                 });
 
-            mockMediator.Setup(m => m.SendAsync(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>()))
+            mockMediator.Setup(m => m.Send(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(() => new GetOverlappingApprenticeshipsQueryResponse
                 {
                     Overlaps = new List<ApprenticeshipOverlapValidationResult>()

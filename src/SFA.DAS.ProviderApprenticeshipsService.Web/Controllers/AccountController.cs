@@ -65,7 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
 
-            var model = await _accountOrchestrator.GetProvider(providerId);
+            var model = await _accountOrchestrator.GetAccountHomeViewModel(providerId);
             if(!string.IsNullOrEmpty(message))
                 model.Message = HttpUtility.UrlDecode(message);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.Azure;
 using SFA.DAS.Configuration;
@@ -22,8 +23,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 
         protected override void apply(Type pluginType, IConfiguredInstance instance)
         {
-            var serviceConfigurationParamater = instance?.Constructor?.GetParameters().FirstOrDefault(x => x.ParameterType == typeof(T));
-
+            var serviceConfigurationParamater = instance?.Constructor?.GetParameters().FirstOrDefault(x => x.ParameterType == typeof(T)
+                                                            || ((System.Reflection.TypeInfo)typeof(T)).GetInterface(x.ParameterType.Name) != null);
+           
             if (serviceConfigurationParamater != null)
             {
                 var environment = Environment.GetEnvironmentVariable("DASENV");
@@ -42,7 +44,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
                     instance.Dependencies.AddForConstructorParameter(serviceConfigurationParamater, result);
                 }
             }
-
         }
 
         private static IConfigurationRepository GetConfigurationRepository()

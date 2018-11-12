@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
@@ -23,8 +24,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [SetUp]
         protected void GetCohortsSetup()
         {
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>())).ReturnsAsync(TestData());
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetProviderAgreementQueryRequest>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetCommitmentsQueryRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData());
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetProviderAgreementQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetProviderAgreementQueryResponse { HasAgreement = ProviderAgreementStatus.Agreed });
 
             SetUp();
@@ -35,14 +36,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             await _orchestrator.GetCohorts(1234567);
 
-            _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>()), Times.AtLeastOnce);
+            _mockMediator.Verify(m => m.Send(It.IsAny<GetCommitmentsQueryRequest>(), It.IsAny<CancellationToken>()), Times.AtLeastOnce);
         }
 
         [Test]
         public async Task ThenAllCountsShouldBeZeroIfNoCommitments()
         {
             //Arrange
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentsQueryRequest>()))
+            _mockMediator.Setup(x => x.Send(It.IsAny<GetCommitmentsQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetCommitmentsQueryResponse
                 {
                     Commitments = new List<CommitmentListItem>()
@@ -85,7 +86,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             bool supplyProviderLastUpdatedName, CommitmentStatus commitmentStatus)
         {
             //Arrange
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentsQueryRequest>()))
+            _mockMediator.Setup(x => x.Send(It.IsAny<GetCommitmentsQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetCommitmentsQueryResponse
                 {
                     Commitments = commitmentStatus == CommitmentStatus.Active ? new List <CommitmentListItem>
@@ -121,7 +122,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             var result = await _orchestrator.GetCohorts(1234567);
 
-            _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetCommitmentsQueryRequest>()), Times.Once);
+            _mockMediator.Verify(m => m.Send(It.IsAny<GetCommitmentsQueryRequest>(), new CancellationToken()), Times.Once);
 
             result.WithEmployerCount.Should().Be(2);
             result.ReadyForReviewCount.Should().Be(6);

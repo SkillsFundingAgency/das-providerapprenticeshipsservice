@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using MediatR;
@@ -9,19 +10,16 @@ using SFA.DAS.Commitments.Api.Types.Validation;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships
 {
-    public class GetOverlappingApprenticeshipsQueryHandler :
-        IAsyncRequestHandler<GetOverlappingApprenticeshipsQueryRequest, GetOverlappingApprenticeshipsQueryResponse>
+    public class GetOverlappingApprenticeshipsQueryHandler :IRequestHandler<GetOverlappingApprenticeshipsQueryRequest, GetOverlappingApprenticeshipsQueryResponse>
     {
         private readonly IValidationApi _validationApi;
 
         public GetOverlappingApprenticeshipsQueryHandler(IValidationApi validationApi)
         {
-            if(validationApi == null)
-                throw new ArgumentException(nameof(validationApi));
             _validationApi = validationApi;
         }
 
-        public async Task<GetOverlappingApprenticeshipsQueryResponse> Handle(GetOverlappingApprenticeshipsQueryRequest request)
+        public async Task<GetOverlappingApprenticeshipsQueryResponse> Handle(GetOverlappingApprenticeshipsQueryRequest request, CancellationToken cancellationToken)
         {
             var apprenticeships = request.Apprenticeship
                 .Where(m =>

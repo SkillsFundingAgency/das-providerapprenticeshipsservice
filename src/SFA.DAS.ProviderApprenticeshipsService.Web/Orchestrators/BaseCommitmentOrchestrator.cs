@@ -14,6 +14,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -41,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             Logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}", providerId, commitmentId);
 
-            var data = await Mediator.SendAsync(new GetCommitmentQueryRequest
+            var data = await Mediator.Send(new GetCommitmentQueryRequest
             {
                 ProviderId = providerId,
                 CommitmentId = commitmentId
@@ -81,7 +82,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         protected async Task<List<ITrainingProgramme>> GetTrainingProgrammes(bool includeFrameworks = true)
         {
-            var programmes = await Mediator.SendAsync(new GetTrainingProgrammesQueryRequest
+            var programmes = await Mediator.Send(new GetTrainingProgrammesQueryRequest
             {
                 IncludeFrameworks = includeFrameworks
             });
