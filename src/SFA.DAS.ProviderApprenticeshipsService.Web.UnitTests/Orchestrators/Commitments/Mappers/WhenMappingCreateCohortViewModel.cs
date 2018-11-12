@@ -20,13 +20,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public void Arrange()
         {
             _hashingService = new Mock<IHashingService>();
-            _hashingService.Setup(x => x.HashValue(It.IsAny<long>())).Returns("EmployerAccountHashedId");
+            _hashingService.Setup(x => x.HashValue(It.IsAny<long>())).Returns("EmployerAccountPublicHashedId");
 
             _source = new List<RelationshipDto>
             {
                 new RelationshipDto
                 {
                     EmployerAccountId = 1,
+                    EmployerAccountPublicHashedId = "EmployerAccountPublicHashedId",
                     EmployerAccountLegalEntityName = "EmployerAccountLegalEntityName",
                     EmployerAccountLegalEntityPublicHashedId = "EmployerAccountLegalEntityName",
                     EmployerAccountName = "EmployerName",
@@ -41,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public void ThenEmployerAccountIdIsMapped()
         {
             var result = _mapper.Map(TestHelper.Clone(_source)).LegalEntities.First();
-            Assert.AreEqual("EmployerAccountHashedId", result.EmployerAccountPublicHashedId);
+            Assert.AreEqual("EmployerAccountPublicHashedId", result.EmployerAccountPublicHashedId);
         }
 
         [Test]

@@ -14,6 +14,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderRela
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Organisation;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
@@ -28,6 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
         private CreateCohortOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<IHashingService> _hashingService;
+        private Mock<IPublicHashingService> _publicHashingService;
         private GetProviderRelationshipsWithPermissionQueryResponse _permissionsResponse;
         private ConfirmEmployerViewModel _confirmEmployerViewModel;
         private GetProviderQueryResponse _provider;
@@ -37,6 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
         private readonly int _providerId = 10005124;
         private readonly long _employerAccountId = 1234;
         private readonly long _employerAccountLegalEntityId = 5678;
+        private readonly string _employerAccountPublicHashedId = "EmployerAccountPublicHashedId";
         private readonly string _employerAccountLegalEntityPublicHashedId = "EmployerAccountLegalEntityPublicHashedId";
         private readonly long _apiResponse = 789;
 
@@ -49,6 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
                 {
                     new RelationshipDto
                     {
+                        EmployerAccountPublicHashedId = _employerAccountPublicHashedId,
                         EmployerAccountId = _employerAccountId,
                         EmployerAccountLegalEntityId = _employerAccountLegalEntityId,
                         EmployerAccountLegalEntityPublicHashedId = _employerAccountLegalEntityPublicHashedId
@@ -57,9 +61,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
             };
 
             _hashingService = new Mock<IHashingService>();
-            _hashingService.Setup(x => x.DecodeValue(It.Is<string>(s => s == "EmployerAccountHashedId"))).Returns(_employerAccountId);
             _hashingService.Setup(x => x.HashValue(It.Is<long>(l => l == _apiResponse))).Returns("CohortRef");
-            _hashingService.Setup(x => x.DecodeValue(It.Is<string>(s => s == _employerAccountLegalEntityPublicHashedId)))
+
+            _publicHashingService = new Mock<IPublicHashingService>();
+            _publicHashingService.Setup(x => x.DecodeValue(It.Is<string>(s => s == _employerAccountPublicHashedId))).Returns(_employerAccountId);
+            _publicHashingService.Setup(x => x.DecodeValue(It.Is<string>(s => s == _employerAccountLegalEntityPublicHashedId)))
                 .Returns(_employerAccountLegalEntityId);
 
             _mediator = new Mock<IMediator>();
@@ -107,13 +113,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
             _confirmEmployerViewModel = new ConfirmEmployerViewModel
             {
                 EmployerAccountLegalEntityPublicHashedId = _employerAccountLegalEntityPublicHashedId,
-                EmployerAccountPublicHashedId = "EmployerAccountHashedId"
+                EmployerAccountPublicHashedId = _employerAccountPublicHashedId
             };
 
             _orchestrator = new CreateCohortOrchestrator(_mediator.Object,
                 Mock.Of<ICreateCohortMapper>(),
                 _hashingService.Object,
-                Mock.Of<IProviderCommitmentsLogger>());
+                Mock.Of<IProviderCommitmentsLogger>(),
+                _publicHashingService.Object);
         }
 
         [Test]
