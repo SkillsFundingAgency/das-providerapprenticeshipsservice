@@ -24,7 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             {
                 legalEntities.Add(new LegalEntityViewModel
                 {
-                    EmployerAccountHashedId = _hashingService.HashValue(relationship.EmployerAccountId),
+                    EmployerAccountPublicHashedId = relationship.EmployerAccountPublicHashedId,
                     EmployerAccountName = relationship.EmployerAccountName,
                     EmployerAccountLegalEntityPublicHashedId = relationship.EmployerAccountLegalEntityPublicHashedId,
                     EmployerAccountLegalEntityName = relationship.EmployerAccountLegalEntityName,  

@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public void ThenEmployerAccountIdIsMapped()
         {
             var result = _mapper.Map(TestHelper.Clone(_source)).LegalEntities.First();
-            Assert.AreEqual("EmployerAccountHashedId", result.EmployerAccountHashedId);
+            Assert.AreEqual("EmployerAccountHashedId", result.EmployerAccountPublicHashedId);
         }
 
         [Test]

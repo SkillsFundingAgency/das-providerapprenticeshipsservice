@@ -9,18 +9,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 {
     public class StubProviderRelationshipsApiClient : IProviderRelationshipsApiClient
     {
+        private readonly IPublicHashingService _publicHashingService;
         private readonly List<RelationshipDto> _relationships;
 
-        public StubProviderRelationshipsApiClient()
+        public StubProviderRelationshipsApiClient(IPublicHashingService publicHashingService)
         {
+            _publicHashingService = publicHashingService;
             _relationships = new List<RelationshipDto>
             {
                 new RelationshipDto
                 {
                     Ukprn = 10005077,
                     EmployerAccountId = 1516,
+                    EmployerAccountPublicHashedId = _publicHashingService.HashValue(1516),
                     EmployerAccountLegalEntityName = "SAINSBURY'S LIMITED",
-                    EmployerAccountLegalEntityPublicHashedId = "DY3GKY",
+                    EmployerAccountLegalEntityId = 353,
+                    EmployerAccountLegalEntityPublicHashedId = _publicHashingService.HashValue(353),
                     EmployerAccountName = "SAINSBURY'S LIMITED"
                 }
             };

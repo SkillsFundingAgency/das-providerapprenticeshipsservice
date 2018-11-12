@@ -107,7 +107,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
             _confirmEmployerViewModel = new ConfirmEmployerViewModel
             {
                 EmployerAccountLegalEntityPublicHashedId = _employerAccountLegalEntityPublicHashedId,
-                EmployerAccountHashedId = "EmployerAccountHashedId"
+                EmployerAccountPublicHashedId = "EmployerAccountHashedId"
             };
 
             _orchestrator = new CreateCohortOrchestrator(_mediator.Object,

@@ -12,6 +12,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetEmployerAcco
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderRelationshipsWithPermission;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
@@ -22,14 +23,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
     public class CreateCohortOrchestrator : BaseCommitmentOrchestrator
     {
         private readonly ICreateCohortMapper _createCohortMapper;
+        private readonly IPublicHashingService _publicHashingService;
 
         public CreateCohortOrchestrator(
             IMediator mediator,
             ICreateCohortMapper createCohortMapper,
             IHashingService hashingService,
-            IProviderCommitmentsLogger logger) : base(mediator, hashingService, logger)
+            IProviderCommitmentsLogger logger,
+            IPublicHashingService publicHashingService) : base(mediator, hashingService, logger)
         {
             _createCohortMapper = createCohortMapper;
+            _publicHashingService = publicHashingService;
         }
 
         public async Task<CreateCohortViewModel> GetCreateCohortViewModel(long providerId)
@@ -51,7 +55,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             Logger.Info($"Creating cohort", providerId);
 
-            var employerAccountId = HashingService.DecodeValue(confirmEmployerViewModel.EmployerAccountHashedId);
+            var employerAccountId = _publicHashingService.DecodeValue(confirmEmployerViewModel.EmployerAccountPublicHashedId);
 
             var relationshipData = await Mediator.Send(new GetProviderRelationshipsWithPermissionQueryRequest
             {
@@ -61,7 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             //Check that the relationship is a valid selection
             var relationship = relationshipData.ProviderRelationships.SingleOrDefault(x =>
-                x.EmployerAccountId == employerAccountId
+                x.EmployerAccountPublicHashedId == confirmEmployerViewModel.EmployerAccountPublicHashedId
                 && x.EmployerAccountLegalEntityPublicHashedId == confirmEmployerViewModel.EmployerAccountLegalEntityPublicHashedId
             );
 
@@ -73,13 +77,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var providerResponse = await Mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });           
 
-            var accountRequest = await Mediator.Send(new GetEmployerAccountLegalEntitiesRequest
+            var accountResponse = await Mediator.Send(new GetEmployerAccountLegalEntitiesRequest
             {
                 UserId = userId,
-                HashedAccountId = confirmEmployerViewModel.EmployerAccountHashedId
+                HashedAccountId = confirmEmployerViewModel.EmployerAccountPublicHashedId
             });
 
-            var legalEntity = accountRequest.LegalEntities.SingleOrDefault(x =>
+            var legalEntity = accountResponse.LegalEntities.SingleOrDefault(x =>
                 x.AccountLegalEntityPublicHashedId ==
                 confirmEmployerViewModel.EmployerAccountLegalEntityPublicHashedId);
 
