@@ -52,6 +52,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.ProviderRelationships.Api.Client;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.ProviderRelationships.ReadStore.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -69,7 +70,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 });
 
-            var config = GetConfiguration();
+            var environment = GetAndStoreEnvironment();
+            var configurationRepository = GetConfigurationRepository();
+
+            var config = GetConfiguration(environment, configurationRepository);
+            var providerPermissionsReadStoreConfig = GetProviderPermissionsReadStoreConfiguration(environment, configurationRepository);
+
+            For<ProviderRelationshipsReadStoreConfiguration>().Use(providerPermissionsReadStoreConfig);
 
             ConfigureHashingService(config);
             ConfigureCommitmentsApi(config);
@@ -178,7 +185,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             return new ProviderCommitmentsLogger(new NLogLogger(parentType, x.GetInstance<IRequestContext>()));
         }
 
-        private ProviderApprenticeshipsServiceConfiguration GetConfiguration()
+        private string GetAndStoreEnvironment()
         {
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
@@ -190,13 +197,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 PopulateSystemDetails(environment);
             }
 
-            var configurationRepository = GetConfigurationRepository();
+            return environment;
+        }
+
+        private ProviderApprenticeshipsServiceConfiguration GetConfiguration(string environment, IConfigurationRepository configurationRepository)
+        {
             var configurationService = new ConfigurationService(configurationRepository,
                 new ConfigurationOptions(ServiceName, environment, "1.0"));
 
-            var result = configurationService.Get<ProviderApprenticeshipsServiceConfiguration>();
+            return configurationService.Get<ProviderApprenticeshipsServiceConfiguration>();
+        }
 
-            return result;
+        private ProviderRelationshipsReadStoreConfiguration GetProviderPermissionsReadStoreConfiguration(string environment, IConfigurationRepository configurationRepository)
+        {
+            //todo: need to add config to das-employer-config
+            // could pick up SFA.DAS.ProviderRelationships.ReadStore, but probably better for each site to have its own config
+            // (unless falling back to default bootstrap in auth service) : if dependency missing, pick ConfigurationStorageConnectionString from standard env variable (central config) and use that
+            var configurationService = new ConfigurationService(configurationRepository,
+                new ConfigurationOptions("SFA.DAS.ProviderApprenticeshipsService.ProviderRelationships.ReadStore", environment, "1.0"));
+
+            return configurationService.Get<ProviderRelationshipsReadStoreConfiguration>();
         }
 
         private static IConfigurationRepository GetConfigurationRepository()
