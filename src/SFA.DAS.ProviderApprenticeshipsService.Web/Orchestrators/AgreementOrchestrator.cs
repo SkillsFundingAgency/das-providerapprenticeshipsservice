@@ -55,7 +55,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private async Task<IEnumerable<CommitmentAgreement>> GetCommitmentAgreements(long providerId)
         {
-            var response = await Mediator.SendAsync(new GetCommitmentAgreementsQueryRequest
+            var response = await Mediator.Send(new GetCommitmentAgreementsQueryRequest
             {
                 ProviderId = providerId
             });

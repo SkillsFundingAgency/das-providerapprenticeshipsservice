@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SaveBulkUploadFile
 {
-    public class SaveBulkUploadFileCommand : IAsyncRequest<long>
+    public class SaveBulkUploadFileCommand : IRequest<long>
     {
         public long ProviderId { get; set; }
 

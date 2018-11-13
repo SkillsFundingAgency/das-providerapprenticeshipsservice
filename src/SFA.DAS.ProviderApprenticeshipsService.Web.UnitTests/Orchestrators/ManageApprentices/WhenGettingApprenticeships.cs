@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using AutoFixture.NUnit3;
 using MediatR;
 using Moq;
@@ -23,7 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
             ManageApprenticesOrchestrator sut)
         {
             mockMediator
-                .Setup(mediator => mediator.SendAsync(It.IsAny<ApprenticeshipSearchQueryRequest>()))
+                .Setup(mediator => mediator.Send(It.IsAny<ApprenticeshipSearchQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(apprenticeshipSearchQueryResponse);
             await sut.GetApprenticeships(providerId, filtersViewModel);
             mockFilterCookieManager.Verify(manager => manager.SetCookie(filtersViewModel));

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -34,7 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             };
 
             //Act
-            await _handler.Handle(request);
+            await _handler.Handle(request, new CancellationToken());
 
             //Assert
             _clientApi.Verify(x=>x.GetPendingApprenticeshipUpdate(It.IsAny<long>(), It.IsAny<long>()), Times.Once);

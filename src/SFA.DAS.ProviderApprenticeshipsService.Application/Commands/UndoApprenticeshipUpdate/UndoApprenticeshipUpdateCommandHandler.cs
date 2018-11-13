@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
@@ -20,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoAppren
             _commitmentsApi = commitmentsApi;
         }
 
-        protected override async Task HandleCore(UndoApprenticeshipUpdateCommand command)
+        protected override Task Handle(UndoApprenticeshipUpdateCommand command, CancellationToken cancellationToken)
         {
             var validationResult = _validator.Validate(command);
             if (!validationResult.IsValid)
@@ -33,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UndoAppren
                 LastUpdatedByInfo = new LastUpdateInfo { EmailAddress = command.UserEmailAddress, Name = command.UserDisplayName }
             };
 
-            await _commitmentsApi.PatchApprenticeshipUpdate(command.ProviderId, command.ApprenticeshipId, submission);
+            return _commitmentsApi.PatchApprenticeshipUpdate(command.ProviderId, command.ApprenticeshipId, submission);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
@@ -23,10 +24,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         public async Task CheckStatusUpdate(SaveStatus input, LastAction expectedLastAction, bool expectedCreateTaskBool)
         {
             _mockHashingService.Setup(m => m.DecodeValue("ABBA99")).Returns(2L);
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetProviderAgreementQueryRequest>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetProviderAgreementQueryRequest>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(new GetProviderAgreementQueryResponse { HasAgreement = ProviderAgreementStatus.Agreed }));
 
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetCommitmentQueryRequest>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(new GetCommitmentQueryResponse
                 {
                     Commitment = new CommitmentView
@@ -39,12 +40,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             await _orchestrator.SubmitCommitment("UserId", 1L, "ABBA99", input, string.Empty, new SignInUserModel());
 
            _mockMediator.Verify(m => m
-                .SendAsync(It.Is<SubmitCommitmentCommand>(
+                .Send(It.Is<SubmitCommitmentCommand>(
                     p => p.ProviderId == 1L &&
                     p.CommitmentId == 2L &&
                     p.Message == string.Empty &&
                     p.LastAction == expectedLastAction &&
-                    p.CreateTask == expectedCreateTaskBool)));
+                    p.CreateTask == expectedCreateTaskBool), It.IsAny<CancellationToken>()));
         }
     }
 }

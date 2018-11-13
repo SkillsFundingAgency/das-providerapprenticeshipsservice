@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -38,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             _commitmentsApi.Setup(x => x.GetCommitmentAgreements(providerId))
                 .ReturnsAsync(() => TestHelper.Clone(commitmentAgreements));
 
-            var response = await _handler.Handle(query);
+            var response = await _handler.Handle(query, new CancellationToken());
 
             TestHelper.EnumerablesAreEqual(commitmentAgreements, response.CommitmentAgreements);
         }

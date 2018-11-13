@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using AutoFixture.NUnit3;
 using FluentAssertions;
 using MediatR;
@@ -32,10 +33,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
             ManageApprenticesOrchestrator sut)
         {
             mockMediator
-                .Setup(mediator => mediator.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
+                .Setup(mediator => mediator.Send(It.IsAny<GetApprenticeshipQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(getApprenticeshipQueryResponse);
             mockMediator
-                .Setup(mediator => mediator.SendAsync(It.IsAny<GetApprenticeshipDataLockSummaryQueryRequest>()))
+                .Setup(mediator => mediator.Send(It.IsAny<GetApprenticeshipDataLockSummaryQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(apprenticeshipDataLockSummaryQueryResponse);
 
             mockMapper

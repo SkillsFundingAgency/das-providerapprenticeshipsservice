@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -40,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
         {
             const long providerId = 54321L;
 
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentAgreementsQueryRequest>()))
+            _mediator.Setup(m => m.Send(It.IsAny<GetCommitmentAgreementsQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(new GetCommitmentAgreementsQueryResponse
                 {
                     CommitmentAgreements = new List<CommitmentAgreement>
@@ -70,7 +71,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
         {
             const long providerId = 54321L;
 
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetCommitmentAgreementsQueryRequest>()))
+            _mediator.Setup(m => m.Send(It.IsAny<GetCommitmentAgreementsQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(new GetCommitmentAgreementsQueryResponse
                 {
                     CommitmentAgreements = new List<CommitmentAgreement>

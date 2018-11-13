@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
@@ -8,7 +9,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes
 {
-    public sealed class GetTrainingProgrammesQueryHandler : IAsyncRequestHandler<GetTrainingProgrammesQueryRequest, GetTrainingProgrammesQueryResponse>
+    public sealed class GetTrainingProgrammesQueryHandler : IRequestHandler<GetTrainingProgrammesQueryRequest, GetTrainingProgrammesQueryResponse>
     {
         private readonly IApprenticeshipInfoService _apprenticeshipInfoService;
 
@@ -17,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTraining
             _apprenticeshipInfoService = apprenticeshipInfoService;
         }
 
-        public async Task<GetTrainingProgrammesQueryResponse> Handle(GetTrainingProgrammesQueryRequest message)
+        public async Task<GetTrainingProgrammesQueryResponse> Handle(GetTrainingProgrammesQueryRequest message, CancellationToken cancellationToken)
         {
             IEnumerable<ITrainingProgramme> programmes;
             var standardsTask = _apprenticeshipInfoService.GetStandardsAsync();

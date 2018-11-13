@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.ReviewApprenticeshipUpdate
 {
-    public sealed class ReviewApprenticeshipUpdateCommand : IAsyncRequest
+    public sealed class ReviewApprenticeshipUpdateCommand : IRequest
     {
         public string UserId { get; set; }
         public long ProviderId { get; set; }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
@@ -20,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotifi
             _logger = logger;
         }
 
-        protected override async Task HandleCore(SendNotificationCommand message)
+        protected override Task Handle(SendNotificationCommand message, CancellationToken cancellationToken)
         {
             var validationResult = _validator.Validate(message);
             if (!validationResult.IsValid)
@@ -34,11 +35,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotifi
 
             try
             {
-                await _backgroundNotificationService.SendEmail(message.Email);
+                return _backgroundNotificationService.SendEmail(message.Email);
             }
             catch(Exception ex)
             {
                 _logger.Error(ex, $"Error calling Notification Api. Recipient: {message.Email.RecipientsAddress}");
+                return Task.CompletedTask;
             }
         }
     }

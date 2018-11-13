@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentValidation;
@@ -42,7 +43,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public async Task ShouldValidateAndCallApi()
         {
-            var result = await _sut.Handle(_command);
+            var result = await _sut.Handle(_command, new CancellationToken());
 
             _mockValidator.Verify(m => m.Validate(_command), Times.Once);
             _mockApi.Verify(m => m.BulkUploadFile(_command.ProviderId, It.IsAny<BulkUploadFileRequest>()), Times.Once);
@@ -55,9 +56,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             _mockValidator.Setup(m => m.Validate(_command))
                 .Returns(
-                    new ValidationResult(new[] { new ValidationFailure("FailingPropery", "Failing error message"), }));
+                    new ValidationResult(new[] { new ValidationFailure("FailingProperty", "Failing error message"), }));
 
-            Func<Task> act = async () => await _sut.Handle(_command);
+            Func<Task> act = async () => await _sut.Handle(_command, new CancellationToken());
             act.ShouldThrow<ValidationException>();
 
             _mockValidator.Verify(m => m.Validate(_command), Times.Once);

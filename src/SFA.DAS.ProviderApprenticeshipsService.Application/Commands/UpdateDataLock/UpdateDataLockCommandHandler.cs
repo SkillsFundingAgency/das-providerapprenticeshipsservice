@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
@@ -24,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateData
             _logger = logger;
         }
 
-        protected override async Task HandleCore(UpdateDataLockCommand command)
+        protected override Task Handle(UpdateDataLockCommand command, CancellationToken cancellationToken)
         {
             _validator.ValidateAndThrow(command);
             try
@@ -35,7 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateData
                             UserId = command.UserId
                         };
 
-                await _commitmentsApi.PatchDataLocks(command.ProviderId, command.ApprenticeshipId, submission);
+                return _commitmentsApi.PatchDataLocks(command.ProviderId, command.ApprenticeshipId, submission);
             }
             catch (Exception ex)
             {

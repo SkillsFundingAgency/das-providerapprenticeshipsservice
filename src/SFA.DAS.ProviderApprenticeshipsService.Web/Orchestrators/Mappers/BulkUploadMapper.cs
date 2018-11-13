@@ -93,7 +93,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
-            var programmes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest
+            var programmes = await _mediator.Send(new GetTrainingProgrammesQueryRequest
             {
                 IncludeFrameworks = true
             });

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentValidation;
@@ -16,7 +17,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     [TestFixture]
     public class WhenReviewingApprenticeshipUpdate
     {
-        private ReviewApprenticeshipUpdateCommandHandler _handler;
+        private IRequestHandler<ReviewApprenticeshipUpdateCommand> _handler;
         private Mock<IProviderCommitmentsApi> _commitmentsApi;
         private Mock<IValidator<ReviewApprenticeshipUpdateCommand>> _validator;
 
@@ -41,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             var command = new ReviewApprenticeshipUpdateCommand();
 
             //Act
-            await _handler.Handle(command);
+            await _handler.Handle(command, new CancellationToken());
 
             //Assert
             _validator.Verify(x=> x.Validate(It.IsAny<ReviewApprenticeshipUpdateCommand>()), Times.Once);
@@ -60,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             var command = new ReviewApprenticeshipUpdateCommand();
 
             //Act & Assert
-            Func<Task> act = async () => { await _handler.Handle(command); };
+            Func<Task> act = async () => { await _handler.Handle(command, new CancellationToken()); };
             act.ShouldThrow<ValidationException>();
         }
 
@@ -80,7 +81,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             };
 
             //Act
-            await _handler.Handle(command);
+            await _handler.Handle(command, new CancellationToken());
 
             //Assert
             _commitmentsApi.Verify(x => x.PatchApprenticeshipUpdate(
