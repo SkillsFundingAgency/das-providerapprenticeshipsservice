@@ -278,6 +278,9 @@
     <Compile Include="Queries\GetProviderHasRelationshipWithPermission\GetProviderHasRelationshipWithPermissionQueryHandler.cs" />
     <Compile Include="Queries\GetProviderHasRelationshipWithPermission\GetProviderHasRelationshipWithPermissionQueryRequest.cs" />
     <Compile Include="Queries\GetProviderHasRelationshipWithPermission\GetProviderHasRelationshipWithPermissionQueryResponse.cs" />
+    <Compile Include="Queries\GetProviderRelationshipsWithPermission\GetProviderRelationshipsWithPermissionQueryHandler.cs" />
+    <Compile Include="Queries\GetProviderRelationshipsWithPermission\GetProviderRelationshipsWithPermissionQueryRequest.cs" />
+    <Compile Include="Queries\GetProviderRelationshipsWithPermission\GetProviderRelationshipsWithPermissionQueryResponse.cs" />
     <Compile Include="Services\ApprenticeshipInfoService.cs" />
     <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileCommand.cs" />
     <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileHandler.cs" />

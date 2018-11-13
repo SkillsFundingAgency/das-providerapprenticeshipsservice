@@ -347,6 +347,7 @@
     <Compile Include="Queries\GetBulkUploadFile\WhenIGetBulkUploadFile.cs" />
     <Compile Include="Queries\GetPendingApprenticeshipUpdate\WhenIGetPendingApprenticeshipUpdate.cs" />
     <Compile Include="Queries\GetProviderHasRelationshipWithPermission\WhenIGetProviderHasRelationshipWithPermission.cs" />
+    <Compile Include="Queries\GetProviderRelationshipsWithPermission\WhenIGetProviderRelationshipsWithPermission.cs" />
     <Compile Include="Queries\GetTrainingProgrammesTests\WhenIGetTrainingProgrammes.cs" />
     <Compile Include="Queries\UpdateNotificationSettings\WhenGettingUserSettings.cs" />
     <Compile Include="Queries\GetUserNotificationSettings\WhenUpdatingUserSettings.cs" />
