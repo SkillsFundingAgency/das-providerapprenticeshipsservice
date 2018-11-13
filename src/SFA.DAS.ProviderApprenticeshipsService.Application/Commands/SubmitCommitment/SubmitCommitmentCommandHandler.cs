@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
@@ -22,7 +23,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
         private readonly IHashingService _hashingService;
 
-        public SubmitCommitmentCommandHandler(IProviderCommitmentsApi commitmentsApi, IValidator<SubmitCommitmentCommand> validator, IMediator mediator, ProviderApprenticeshipsServiceConfiguration configuration, IHashingService hashingService)
+        public SubmitCommitmentCommandHandler(IProviderCommitmentsApi commitmentsApi,
+            IValidator<SubmitCommitmentCommand> validator,
+            IMediator mediator,
+            ProviderApprenticeshipsServiceConfiguration configuration,
+            IHashingService hashingService)
         {
             _commitmentsApi = commitmentsApi;
             _validator = validator;
@@ -31,7 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
             _hashingService = hashingService;
         }
 
-        protected override async Task HandleCore(SubmitCommitmentCommand message)
+        protected override async Task Handle(SubmitCommitmentCommand message, CancellationToken cancellationToken)
         {
             var validationResult = _validator.Validate(message);
             if (!validationResult.IsValid)
@@ -72,7 +77,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
             var notificationCommand = BuildNotificationCommand(commitment, message.LastAction,
                                 message.HashedCommitmentId, message.UserDisplayName);
 
-            await _mediator.SendAsync(notificationCommand);
+            await _mediator.Send(notificationCommand);
         }
 
         private SendNotificationCommand BuildNotificationCommand(CommitmentView commitment, LastAction action, string hashedCommitmentId, string displayName)

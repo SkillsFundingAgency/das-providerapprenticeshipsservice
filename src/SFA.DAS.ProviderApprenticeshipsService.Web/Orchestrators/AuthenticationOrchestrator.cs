@@ -21,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             _logger.Info($"Updating \"{userId}\" attributes - ukprn:\"{ukprn}\", displayname:\"{displayName}\", email:\"{email}\"");
 
-            await _mediator.SendAsync(new UpsertRegisteredUserCommand
+            await _mediator.Send(new UpsertRegisteredUserCommand
             {
                 UserRef = userId,
                 DisplayName = displayName,

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -20,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateAppr
             _validator = validator;
         }
 
-        protected override async Task HandleCore(UpdateApprenticeshipCommand message)
+        protected override Task Handle(UpdateApprenticeshipCommand message, CancellationToken cancellationToken)
         {
             var validationResult = _validator.Validate(message);
             if (!validationResult.IsValid)
@@ -33,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateAppr
                 LastUpdatedByInfo = new LastUpdateInfo { EmailAddress = message.UserEmailAddress, Name = message.UserDisplayName }
             };
 
-            await _commitmentsApi.UpdateProviderApprenticeship(message.ProviderId, message.Apprenticeship.CommitmentId, message.Apprenticeship.Id, request);
+            return _commitmentsApi.UpdateProviderApprenticeship(message.ProviderId, message.Apprenticeship.CommitmentId, message.Apprenticeship.Id, request);
         }
     }
 }

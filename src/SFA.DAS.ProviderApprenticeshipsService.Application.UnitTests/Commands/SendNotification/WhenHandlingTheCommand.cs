@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture.NUnit3;
 using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
+using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.NLog.Logger;
+using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
@@ -15,15 +19,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     [TestFixture]
     public class WhenHandlingTheCommand
     {
-        [Test, MoqCustomisedAutoData]
-        public async Task ThenItValidatesTheCommand(
-            SendNotificationCommand command,
-            [Frozen] Mock<IValidator<SendNotificationCommand>> mockValidator,
-            SendNotificationCommandHandler sut)
-        {
-            await sut.Handle(command);
+        private Mock<IValidator<SendNotificationCommand>> _mockValidator;
+        IRequestHandler<SendNotificationCommand> _sut;
+        private Mock<IBackgroundNotificationService> _backgroundNotificationService;
 
-            mockValidator.Verify(validator => validator.Validate(command), Times.Once);
+        [SetUp]
+        public void Arrange()
+        {
+            _mockValidator = new Mock<IValidator<SendNotificationCommand>>();
+            _mockValidator.Setup(x => x.Validate(It.IsAny<SendNotificationCommand>()))
+                .Returns(() => new ValidationResult());
+
+            _backgroundNotificationService = new Mock<IBackgroundNotificationService>();
+            _sut = new SendNotificationCommandHandler(_mockValidator.Object, _backgroundNotificationService.Object, Mock.Of<ILog>());
+
+            _backgroundNotificationService.Setup(api => api.SendEmail(It.IsAny<Email>())).Returns(Task.CompletedTask);
+        }
+
+        [Test, MoqCustomisedAutoData]
+        public async Task ThenItValidatesTheCommand(SendNotificationCommand command)
+        {
+            await _sut.Handle(command, new CancellationToken());
+
+            _mockValidator.Verify(validator => validator.Validate(command), Times.Once);
         }
 
         [Test, MoqCustomisedAutoData]
@@ -31,31 +49,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             SendNotificationCommand command,
             ValidationFailure validationFailure,
             ValidationResult validationResult,
-            InvalidRequestException validationException,
-            [Frozen] Mock<IValidator<SendNotificationCommand>> mockValidator,
-            SendNotificationCommandHandler sut)
+            InvalidRequestException validationException)
         {
             validationResult.Errors.Add(validationFailure);
 
-            mockValidator
+            _mockValidator
                 .Setup(validator => validator.Validate(command))
                 .Returns(validationResult);
                 
-            Func<Task> act = async () => { await sut.Handle(command); };
+            Func<Task> act = async () => { await _sut.Handle(command, new CancellationToken()); };
 
             act.ShouldThrowExactly<ValidationException>()
                 .Which.Errors.ToList().Contains(validationFailure).Should().BeTrue();
         }
 
         [Test, MoqCustomisedAutoData]
-        public async Task ThenSendsEmailToNotificationApi(
-            SendNotificationCommand command,
-            [Frozen] Mock<IBackgroundNotificationService> mockNotificationsApi,
-            SendNotificationCommandHandler sut)
+        public async Task ThenSendsEmailToNotificationApi(SendNotificationCommand command)
         {
-            await sut.Handle(command);
+            await _sut.Handle(command, new CancellationToken());
 
-            mockNotificationsApi.Verify(api => api.SendEmail(command.Email), Times.Once);
+            _backgroundNotificationService.Verify(api => api.SendEmail(command.Email), Times.Once);
         }
     }
 }

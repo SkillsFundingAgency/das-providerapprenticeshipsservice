@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 using FluentAssertions;
 using MediatR;
@@ -25,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         private Mock<IProviderCommitmentsApi> _mockCommitmentsApi;
         private Mock<IMediator> _mockMediator;
         private Mock<IHashingService> _mockHashingService;
-        private SubmitCommitmentCommandHandler _handler;
+        private IRequestHandler<SubmitCommitmentCommand> _handler;
 
         [SetUp]
         public void Setup()
@@ -60,13 +61,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
 
             var configuration = new ProviderApprenticeshipsServiceConfiguration { EnableEmailNotifications = true };
             _mockMediator = new Mock<IMediator>();
-            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentsApi.Object, new SubmitCommitmentCommandValidator(), _mockMediator.Object, configuration, _mockHashingService.Object);
+            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentsApi.Object,
+                new SubmitCommitmentCommandValidator(),
+                _mockMediator.Object,
+                configuration,
+                _mockHashingService.Object);
         }
 
         [Test]
         public async Task ShouldApproveTheCohort()
         {
-            await _handler.Handle(_validCommand);
+            await _handler.Handle(_validCommand, new CancellationToken());
 
             _mockCommitmentsApi.Verify(x => x.ApproveCohort(_validCommand.ProviderId, _validCommand.CommitmentId,
                 It.Is<CommitmentSubmission>(y =>
@@ -79,12 +84,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         {
             SendNotificationCommand arg = null;
 
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<SendNotificationCommand>()))
-                .ReturnsAsync(new Unit()).Callback<SendNotificationCommand>(x => arg = x);
+            _mockMediator.Setup(x => x.Send(It.IsAny<SendNotificationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new Unit())
+                .Callback<SendNotificationCommand, CancellationToken>((command, token) => arg = command);
 
-            await _handler.Handle(_validCommand);
+            await _handler.Handle(_validCommand, new CancellationToken());
 
-            _mockMediator.Verify(x => x.SendAsync(It.IsAny<SendNotificationCommand>()), Times.Once);
+            _mockMediator.Verify(x => x.Send(It.IsAny<SendNotificationCommand>(), It.IsAny<CancellationToken>()), Times.Once);
 
             arg.Email.RecipientsAddress.Should().Be("EmployerTestEmail");
             arg.Email.TemplateId.Should().Be("EmployerCommitmentNotification");

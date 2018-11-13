@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -21,7 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Messages = new List<MessageView>()
             };
 
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+            _mockMediator.Setup(x => x.Send(It.IsAny<GetCommitmentQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => new GetCommitmentQueryResponse
                 {
                     Commitment = _commitment
@@ -35,7 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             await _orchestrator.GetAcknowledgementViewModel(1, "Hashed-Id", SaveStatus.ApproveAndSend);
 
-            _mockMediator.Verify(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()), Times.Once);
+            _mockMediator.Verify(x => x.Send(It.IsAny<GetCommitmentQueryRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         public enum ExpectedWhatHappensNextType

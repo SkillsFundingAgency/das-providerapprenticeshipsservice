@@ -4,7 +4,7 @@ using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment
 {
-    public class SubmitCommitmentCommand : IAsyncRequest
+    public class SubmitCommitmentCommand : IRequest
     {
         public long ProviderId { get; set; }
 

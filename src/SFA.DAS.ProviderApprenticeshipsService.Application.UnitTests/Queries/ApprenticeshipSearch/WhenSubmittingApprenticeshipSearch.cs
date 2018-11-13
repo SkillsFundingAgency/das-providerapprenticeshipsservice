@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -45,7 +46,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.A
             };
 
             //Act
-            await _handler.Handle(request);
+            await _handler.Handle(request, new CancellationToken());
 
             //Assert
             _commitmentsApi.Verify(
@@ -66,7 +67,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.A
             };
 
             //Act
-            await _handler.Handle(request);
+            await _handler.Handle(request, new CancellationToken());
 
             //Assert
             _commitmentsApi.Verify(
@@ -87,7 +88,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.A
             };
 
             //Act
-            var response = await _handler.Handle(request);
+            var response = await _handler.Handle(request, new CancellationToken());
 
             //Assert
             response.PageNumber.Should().Be(2);

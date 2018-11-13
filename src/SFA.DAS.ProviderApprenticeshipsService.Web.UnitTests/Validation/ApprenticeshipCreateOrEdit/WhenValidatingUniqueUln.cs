@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -27,7 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(() => 0);
 
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetCommitmentQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => new GetCommitmentQueryResponse
                 {
                     Commitment = new CommitmentView
@@ -52,7 +53,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             await _validator.ValidateAsync(viewModel);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()), Times.Once);
+            _mediator.Verify(x => x.Send(It.IsAny<GetCommitmentQueryRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
@@ -65,7 +66,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             await _validator.ValidateAsync(viewModel);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()), Times.Never);
+            _mediator.Verify(x => x.Send(It.IsAny<GetCommitmentQueryRequest>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Test]
@@ -77,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
                 ULN = "TEST"
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetCommitmentQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => new GetCommitmentQueryResponse
                 {
                     Commitment = new CommitmentView
@@ -107,7 +108,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
                 ULN = "TEST"
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetCommitmentQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => new GetCommitmentQueryResponse
                 {
                     Commitment = new CommitmentView
@@ -139,7 +140,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
 
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(() => 1);
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetCommitmentQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => new GetCommitmentQueryResponse
                 {
                     Commitment = new CommitmentView

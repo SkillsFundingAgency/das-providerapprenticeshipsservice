@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
@@ -21,7 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateAppr
             _validator = validator;
         }
 
-        protected override async Task HandleCore(CreateApprenticeshipUpdateCommand command)
+        protected override Task Handle(CreateApprenticeshipUpdateCommand command, CancellationToken cancellationToken)
         {
             var validationResult = _validator.Validate(command);
             if (!validationResult.IsValid)
@@ -38,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateAppr
                 }
             };
 
-            await _commitmentsApi.CreateApprenticeshipUpdate(command.ProviderId, command.ApprenticeshipUpdate.ApprenticeshipId, request);
+            return _commitmentsApi.CreateApprenticeshipUpdate(command.ProviderId, command.ApprenticeshipUpdate.ApprenticeshipId, request);
         }
     }
 }

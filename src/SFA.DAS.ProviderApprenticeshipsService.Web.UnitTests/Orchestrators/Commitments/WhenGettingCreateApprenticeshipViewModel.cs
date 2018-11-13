@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -33,19 +34,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             };
 
             _mockMediator = new Mock<IMediator>();
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
+            _mockMediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(() => new GetApprenticeshipQueryResponse
                 {
                     Apprenticeship = new Apprenticeship()
                 });
 
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+            _mockMediator.Setup(x => x.Send(It.IsAny<GetCommitmentQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(() => new GetCommitmentQueryResponse
                 {
                     Commitment = _commitment
                 });
 
-            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetTrainingProgrammesQueryRequest>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetTrainingProgrammesQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(new GetTrainingProgrammesQueryResponse { TrainingProgrammes = new List<ITrainingProgramme>() });
 
             SetUpOrchestrator();
@@ -59,7 +60,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             await _orchestrator.GetCreateApprenticeshipViewModel(1L, "HashedCmtId");
 
-            _mockMediator.Verify(x => x.SendAsync(It.Is<GetTrainingProgrammesQueryRequest>(r => !r.IncludeFrameworks)), Times.Once);
+            _mockMediator.Verify(x => x.Send(It.Is<GetTrainingProgrammesQueryRequest>(r => !r.IncludeFrameworks), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
@@ -69,7 +70,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             await _orchestrator.GetCreateApprenticeshipViewModel(1L, "HashedCmtId");
 
-            _mockMediator.Verify(x => x.SendAsync(It.Is<GetTrainingProgrammesQueryRequest>(r => r.IncludeFrameworks)), Times.Once);
+            _mockMediator.Verify(x => x.Send(It.Is<GetTrainingProgrammesQueryRequest>(r => r.IncludeFrameworks), It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

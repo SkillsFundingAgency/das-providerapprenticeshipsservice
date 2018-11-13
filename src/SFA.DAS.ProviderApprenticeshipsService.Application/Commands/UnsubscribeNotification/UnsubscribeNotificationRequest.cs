@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UnsubscribeNotification
 {
-    public class UnsubscribeNotificationRequest : IAsyncRequest
+    public class UnsubscribeNotificationRequest : IRequest
     {
         public string UserRef { get; set; }
     }

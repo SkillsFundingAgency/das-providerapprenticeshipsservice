@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using FluentAssertions;
 using MediatR;
 using Moq;
@@ -26,10 +27,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             DeleteApprenticeshipCommand arg = null;
 
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<DeleteApprenticeshipCommand>()))
-                .ReturnsAsync(new Unit()).Callback<DeleteApprenticeshipCommand>(x => arg = x);
+            _mockMediator.Setup(x => x.Send(It.IsAny<DeleteApprenticeshipCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new Unit())
+                .Callback<DeleteApprenticeshipCommand, CancellationToken>((command, token) => arg = command);
 
-            _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
+            _mockMediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetApprenticeshipQueryResponse { Apprenticeship = new Apprenticeship() });
 
             var signInUser = new SignInUserModel { DisplayName = "Bob", Email = "test@email.com" };
@@ -41,7 +43,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 HashedApprenticeshipId = "ABBA66"
             }, signInUser);
 
-            _mockMediator.Verify(x => x.SendAsync(It.IsAny<DeleteApprenticeshipCommand>()), Times.Once);
+            _mockMediator.Verify(x => x.Send(It.IsAny<DeleteApprenticeshipCommand>(), It.IsAny<CancellationToken>()), Times.Once);
             arg.ProviderId.Should().Be(123);
             arg.ApprenticeshipId.Should().Be(321);
             arg.UserDisplayName.Should().Be(signInUser.DisplayName);

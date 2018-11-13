@@ -141,7 +141,7 @@
 
                 @{ var finishEditingText = Model.PendingChanges ? "Save and continue" : "Continue to approval"; }
                 <a class="button finishEditingBtn" href="@Url.Action("FinishEditing")" aria-label="@finishEditingText">@finishEditingText</a>
-                <a href="@Url.Action("Create", new {Model.ProviderId, Model.HashedCommitmentId})" class="button button-secondary add-app-btn" aria-label="Add an apprentice">Add an apprentice</a>
+                <a href="@Url.Action("AddApprentice", new {Model.ProviderId, Model.HashedCommitmentId})" class="button button-secondary add-app-btn" aria-label="Add an apprentice">Add an apprentice</a>
                 <a href="@Url.Action("UploadApprenticeships", "BulkUpload", new {Model.ProviderId, Model.HashedCommitmentId})" class="button button-secondary upload-btn" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
                 <hr class="hr-bottom">
             </div>
@@ -161,7 +161,7 @@
                     else
                     {
                         <p>
-                            You haven’t added any apprentices yet - <a href="@Url.Action("Create", new {Model.ProviderId, Model.HashedCommitmentId})">add an apprentice</a>.
+                            You haven’t added any apprentices yet - <a href="@Url.Action("AddApprentice", new {Model.ProviderId, Model.HashedCommitmentId})">add an apprentice</a>.
                         </p>
                     }
 

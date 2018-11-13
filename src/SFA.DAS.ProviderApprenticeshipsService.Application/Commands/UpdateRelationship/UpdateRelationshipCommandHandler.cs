@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -17,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateRela
             _validator = validator;
         }
 
-        protected override async Task HandleCore(UpdateRelationshipCommand message)
+        protected override Task Handle(UpdateRelationshipCommand message, CancellationToken cancellationToken)
         {
             var validationResult = _validator.Validate(message);
             if (!validationResult.IsValid)
@@ -29,7 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateRela
                 Relationship = message.Relationship
             };
 
-            await _relationshipApi.PatchRelationship(message.ProviderId, message.Relationship.EmployerAccountId,
+            return _relationshipApi.PatchRelationship(message.ProviderId, message.Relationship.EmployerAccountId,
                 message.Relationship.LegalEntityId, request);
         }
     }

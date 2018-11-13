@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 
@@ -11,7 +13,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     [TestFixture]
     public sealed class WhenDeletingApprentice
     {
-        private DeleteApprenticeshipCommandHandler _handler;
+        private IRequestHandler<DeleteApprenticeshipCommand> _handler;
         private DeleteApprenticeshipCommand _validCommand;
         private Mock<IProviderCommitmentsApi> _mockCommitmentsApi;
 
@@ -34,7 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public async Task ShouldCallCommitmentsApi()
         {
-            await _handler.Handle(_validCommand);
+            await _handler.Handle(_validCommand, new CancellationToken());
 
             _mockCommitmentsApi.Verify(
                 x =>

@@ -24,7 +24,7 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
 
         public async Task<IEnumerable<User>> GetAccountUsers(long ukprn)
         {
-            var result = await _mediator.SendAsync(new GetAccountUsersQuery { Ukprn = ukprn });
+            var result = await _mediator.Send(new GetAccountUsersQuery { Ukprn = ukprn });
 
             return result.UserSettings.Select(
                 m =>

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -19,13 +20,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegi
             _userRepository = userRepository;
         }
 
-        protected override async Task HandleCore(UpsertRegisteredUserCommand message)
+        protected override Task Handle(UpsertRegisteredUserCommand message, CancellationToken cancellationToken)
         {
             var validationResult = _validator.Validate(message);
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
 
-            await _userRepository.Upsert(new User
+            return _userRepository.Upsert(new User
             {
                 UserRef = message.UserRef,
                 DisplayName = message.DisplayName,
