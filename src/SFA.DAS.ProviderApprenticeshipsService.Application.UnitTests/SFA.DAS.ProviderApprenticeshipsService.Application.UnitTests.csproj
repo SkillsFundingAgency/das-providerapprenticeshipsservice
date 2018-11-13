@@ -326,8 +326,6 @@
     <Compile Include="Commands\TriageApprenticeshipDataLocks\WhenValidatingCommand.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\WhenUndoingApprenticeshipUpdate.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\WhenValidatingCommand.cs" />
-    <Compile Include="Commands\UpdateRelationship\WhenUpdatingARelationship.cs" />
-    <Compile Include="Commands\UpdateRelationship\WhenValidatingCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\WhenUpsertingRegisteredUser.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\WhenValidatingCommand.cs" />
     <Compile Include="Extensions\DateTimeExtensions\WhenGettingFirstOfMonth.cs" />
