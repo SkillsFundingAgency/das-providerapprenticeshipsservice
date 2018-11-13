@@ -140,16 +140,16 @@
       <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.39208\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.ProviderRelationships.Api.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ProviderRelationships.Api.Client.0.1.384\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Api.Client.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.ProviderRelationships.Api.Client.0.1.481\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Api.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.ProviderRelationships.Document.Repository, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ProviderRelationships.Document.Repository.0.1.384\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Document.Repository.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.ProviderRelationships.Document.Repository.0.1.481\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Document.Repository.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.ProviderRelationships.ReadStore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ProviderRelationships.ReadStore.0.1.384\lib\netstandard2.0\SFA.DAS.ProviderRelationships.ReadStore.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.ProviderRelationships.ReadStore.0.1.481\lib\netstandard2.0\SFA.DAS.ProviderRelationships.ReadStore.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.ProviderRelationships.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ProviderRelationships.Types.0.1.384\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Types.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.ProviderRelationships.Types.0.1.481\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Testing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Testing.2.0.19\lib\netstandard2.0\SFA.DAS.Testing.dll</HintPath>

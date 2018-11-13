@@ -130,16 +130,16 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.ProviderRelationships.Api.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ProviderRelationships.Api.Client.0.1.384\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Api.Client.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.ProviderRelationships.Api.Client.0.1.481\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Api.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.ProviderRelationships.Document.Repository, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ProviderRelationships.Document.Repository.0.1.384\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Document.Repository.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.ProviderRelationships.Document.Repository.0.1.481\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Document.Repository.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.ProviderRelationships.ReadStore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ProviderRelationships.ReadStore.0.1.384\lib\netstandard2.0\SFA.DAS.ProviderRelationships.ReadStore.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.ProviderRelationships.ReadStore.0.1.481\lib\netstandard2.0\SFA.DAS.ProviderRelationships.ReadStore.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.ProviderRelationships.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ProviderRelationships.Types.0.1.384\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Types.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.ProviderRelationships.Types.0.1.481\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Types.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.7.0\lib\net45\StructureMap.dll</HintPath>
