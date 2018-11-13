@@ -861,6 +861,7 @@
     <Content Include="Views\Agreement\Agreements.cshtml" />
     <Content Include="Views\CreateCohort\Create.cshtml" />
     <Content Include="Views\CreateCohort\ConfirmEmployer.cshtml" />
+    <Content Include="Views\Commitment\DraftList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
