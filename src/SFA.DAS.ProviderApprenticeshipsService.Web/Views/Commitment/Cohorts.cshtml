@@ -66,7 +66,7 @@
             <div class="bingo-box @GetClickableClass(Model.DraftCount)">
                 @if (Model.DraftCount > 0)
                 {
-                    <a href="@Url.Action("Drafts")" title="@Model.DraftCount drafts" aria-label="View all drafts">
+                    <a href="@Url.Action("DraftList")" title="@Model.DraftCount drafts" aria-label="View all drafts">
                         <h2 class="bold-xxlarge">@Model.DraftCount</h2>
                         <p class="heading-small">
                             @(Model.DraftCount == 1 ? "Draft" : "Drafts")

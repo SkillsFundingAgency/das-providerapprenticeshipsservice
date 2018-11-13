@@ -101,10 +101,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("cohorts/drafts")]
-        public ActionResult DraftList(long providerId)
+        public async Task<ActionResult> DraftList(long providerId)
         {
-        
-            return View("DraftList");
+            SaveRequestStatusInCookie(RequestStatus.NewRequest);
+
+            var model = await _commitmentOrchestrator.GetAllDrafts(providerId);
+
+            AddFlashMessageToViewModel(model);
+
+            return View("DraftList", model);
         }
 
         [HttpGet]
@@ -455,10 +460,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             switch (GetRequestStatusFromCookie())
             {
+                case RequestStatus.NewRequest:
+                    return Url.Action("DraftList", new {providerId});
                 case RequestStatus.WithEmployerForApproval:
                 case RequestStatus.SentForReview:
                     return Url.Action("WithEmployer", new { providerId });
-                case RequestStatus.NewRequest:
                 case RequestStatus.ReadyForReview:
                 case RequestStatus.ReadyForApproval:
                     return Url.Action("ReadyForReview", new { providerId });

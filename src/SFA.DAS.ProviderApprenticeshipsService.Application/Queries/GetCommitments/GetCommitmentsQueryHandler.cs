@@ -25,7 +25,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitme
             return new GetCommitmentsQueryResponse
             {
                 Commitments = response
-                    .Where(x => x.CommitmentStatus == CommitmentStatus.Active)
+                    .Where(x => x.CommitmentStatus == CommitmentStatus.Active
+                                || (x.EditStatus == EditStatus.ProviderOnly && x.CommitmentStatus == CommitmentStatus.New))
                     .ToList()
             };
         }

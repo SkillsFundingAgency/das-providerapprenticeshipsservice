@@ -33,6 +33,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderAgreement;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
+using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -64,6 +66,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         public async Task<CohortsViewModel> GetCohorts(long providerId)
         {
             Logger.Info($"Getting cohorts :{providerId}", providerId);
+
+            var showDrafts = _featureToggleService.Get<Domain.Models.FeatureToggles.ProviderRelationships>().FeatureEnabled;
+            if (showDrafts)
+            {
+                var relationshipResponse = await Mediator.Send(new GetProviderHasRelationshipWithPermissionQueryRequest
+                {
+                    ProviderId = providerId,
+                    Permission = Operation.CreateCohort
+                });
+                showDrafts = relationshipResponse.HasPermission;
+            }
+
             var data = await Mediator.Send(new GetCommitmentsQueryRequest
             {
                 ProviderId = providerId
@@ -72,10 +86,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var model = new CohortsViewModel
             {
+                DraftCount = commitmentStatus.Count(m =>
+                    m == RequestStatus.NewRequest ),
+
                 ReadyForReviewCount = commitmentStatus.Count(m =>
                 m == RequestStatus.ReadyForReview
-                || m == RequestStatus.ReadyForApproval
-                || m == RequestStatus.NewRequest),
+                || m == RequestStatus.ReadyForApproval),
 
                 WithEmployerCount = commitmentStatus.Count(m => m == RequestStatus.SentForReview || m == RequestStatus.WithEmployerForApproval),
                 TransferFundedCohortsCount = commitmentStatus.Count(m =>
@@ -83,7 +99,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                         || m == RequestStatus.RejectedBySender),
 
                 HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed,
-                SignAgreementUrl = _configuration.ContractAgreementsUrl
+                SignAgreementUrl = _configuration.ContractAgreementsUrl,
+                ShowDrafts = showDrafts
             };
 
             return model;
@@ -92,7 +109,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         public async Task<CommitmentListViewModel> GetAllReadyForReview(long providerId)
         {
             var data = (await GetAllCommitmentsWithTheseStatuses(providerId,
-                RequestStatus.ReadyForReview, RequestStatus.ReadyForApproval, RequestStatus.NewRequest)).ToList();
+                RequestStatus.ReadyForReview, RequestStatus.ReadyForApproval)).ToList();
 
             Logger.Info($"Provider getting all new, ReadyForReview or ReadyForApproval ({data.Count}) :{providerId}", providerId);
 
@@ -135,6 +152,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 ProviderId = providerId,
                 Commitments = data.Select(MapToTransferFundedListItemViewModel)
+            };
+        }
+
+        public async Task<CommitmentListViewModel> GetAllDrafts(long providerId)
+        {
+            var data = (await GetAllCommitmentsWithTheseStatuses(providerId,
+                RequestStatus.NewRequest)).ToList();
+
+            Logger.Info($"Provider getting all New ({data.Count}) :{providerId}", providerId);
+
+            return new CommitmentListViewModel
+            {
+                ProviderId = providerId,
+                Commitments = MapFrom(data, true),
+                PageTitle = "Draft cohorts",
+                PageId = "draft-cohorts-list",
+                PageHeading = "Draft cohorts",
+                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSuffix(data.Count)} waiting to be sent to an employer:",
+                HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
             };
         }
 

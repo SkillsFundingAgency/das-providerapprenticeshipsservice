@@ -51,6 +51,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             MockFeatureToggleOn = new Mock<IFeatureToggle>();
             MockFeatureToggleOn.Setup(x => x.FeatureEnabled).Returns(true);
             MockFeatureToggleService = new Mock<IFeatureToggleService>();
+            MockFeatureToggleService.Setup(x => x.Get<Domain.Models.FeatureToggles.ProviderRelationships>())
+                .Returns(MockFeatureToggleOn.Object);           
 
             SetUpOrchestrator();
         }

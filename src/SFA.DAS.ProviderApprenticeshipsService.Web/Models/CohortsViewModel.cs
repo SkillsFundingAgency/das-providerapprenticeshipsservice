@@ -13,5 +13,6 @@
         public bool HasSignedTheAgreement { get; set; }
 
         public string SignAgreementUrl { get; set; }
+        public bool ShowDrafts { get; set; }
     }
 }

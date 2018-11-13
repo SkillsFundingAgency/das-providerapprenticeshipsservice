@@ -22,10 +22,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
             if (editStatus == EditStatus.Both)
                 return RequestStatus.Approved;
 
-            if (string.IsNullOrWhiteSpace(providerLastUpdateInfo?.Name))
-            {
-                return RequestStatus.NewRequest;
-            }
+            //if (string.IsNullOrWhiteSpace(providerLastUpdateInfo?.Name))
+            //{
+            //    return RequestStatus.NewRequest;
+            //}
 
             if (editStatus == EditStatus.ProviderOnly)
             {
@@ -83,7 +83,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
         {
             if (lastAction == LastAction.None)
             {
-                return RequestStatus.ReadyForReview;
+                return RequestStatus.NewRequest;
             }
 
             if (lastAction == LastAction.Amend)
