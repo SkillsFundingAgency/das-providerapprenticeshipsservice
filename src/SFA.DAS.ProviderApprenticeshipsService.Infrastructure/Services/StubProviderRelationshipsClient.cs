@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.ProviderRelationships.Api.Client;
 using SFA.DAS.ProviderRelationships.Types.Dtos;
 
@@ -10,29 +11,50 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
     public class StubProviderRelationshipsApiClient : IProviderRelationshipsApiClient
     {
         private readonly IPublicHashingService _publicHashingService;
-        private readonly List<RelationshipDto> _relationships;
+        private readonly IProviderCommitmentsApi _commitmentsApi;
 
-        public StubProviderRelationshipsApiClient(IPublicHashingService publicHashingService)
+        public StubProviderRelationshipsApiClient(IPublicHashingService publicHashingService, IProviderCommitmentsApi commitmentsApi)
         {
+            _commitmentsApi = commitmentsApi;
             _publicHashingService = publicHashingService;
-            _relationships = new List<RelationshipDto>
+        }
+
+        private async Task<List<RelationshipDto>> GetStubRelationships()
+        {
+            var apprenticeships = await  _commitmentsApi.GetProviderApprenticeships(10005077);
+            
+            var result = new List<RelationshipDto>();
+            foreach (var apprenticeship in apprenticeships)
             {
-                new RelationshipDto
+
+                var relationship = new RelationshipDto
                 {
-                    Ukprn = 10005077,
-                    EmployerAccountId = 1516,
-                    EmployerAccountPublicHashedId = _publicHashingService.HashValue(1516),
-                    EmployerAccountLegalEntityName = "SAINSBURY'S LIMITED",
-                    EmployerAccountLegalEntityId = 353,
-                    EmployerAccountLegalEntityPublicHashedId = _publicHashingService.HashValue(353),
-                    EmployerAccountName = "SAINSBURY'S LIMITED"
+                    EmployerAccountLegalEntityName = apprenticeship.LegalEntityName,
+                    EmployerAccountId = apprenticeship.EmployerAccountId,
+                    EmployerAccountLegalEntityId =
+                        _publicHashingService.DecodeValue(apprenticeship.AccountLegalEntityPublicHashedId),
+                    EmployerAccountLegalEntityPublicHashedId = apprenticeship.AccountLegalEntityPublicHashedId,
+                    EmployerAccountName = apprenticeship.LegalEntityName + " (Account)",
+                    EmployerAccountProviderId = 10005077,
+                    EmployerAccountPublicHashedId = _publicHashingService.HashValue(apprenticeship.EmployerAccountId),
+                    Ukprn = 10005077
+                };
+
+                if (!result.Any(x =>
+                    x.EmployerAccountId == relationship.EmployerAccountId && x.EmployerAccountLegalEntityId ==
+                    relationship.EmployerAccountLegalEntityId))
+                {
+                    result.Add(relationship);
                 }
-            };
+            }
+
+            return result;
+
         }
 
         public Task<bool> HasPermission(PermissionRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            return Task.Run(() => _relationships.Any(r => r.Ukprn == request.Ukprn), cancellationToken);
+            return Task.Run(() => GetStubRelationships().Result.Any(r => r.Ukprn == request.Ukprn), cancellationToken);
         }
 
         public async Task<bool> HasRelationshipWithPermission(RelationshipsRequest request, CancellationToken token)
@@ -42,7 +64,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 
         public Task<RelationshipsResponse> GetRelationshipsWithPermission(RelationshipsRequest request, CancellationToken token)
         {
-            return Task.Run(() =>  new RelationshipsResponse { Relationships = _relationships }, token);
+            return Task.Run(() =>  new RelationshipsResponse { Relationships = GetStubRelationships().Result }, token);
         }
     }
 }
