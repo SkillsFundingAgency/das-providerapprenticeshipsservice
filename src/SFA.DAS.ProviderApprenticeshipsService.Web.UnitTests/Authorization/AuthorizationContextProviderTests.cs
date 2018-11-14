@@ -6,6 +6,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Routing;
@@ -34,11 +35,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
         #region Invalid AccountLegalEntityPublicHashedId
 
         [Test]
-        public void WhenGettingAuthorizationContextAndRequiredRouteValuesAreAvailableButAccountLegalEntityPublicHashedIdIsNotAValidHash_ThenShouldThrowException()
+        public void WhenGettingAuthorizationContextAndRequiredRouteValuesAreAvailableButAccountLegalEntityPublicHashedIdIsNotAValidHash_ThenShouldReturnAuthorizationContextWithNullAccountLegalEntityId()
         {
             Run(f => f.SetInvalidHashAccountLegalEntityPublicHashedId().SetValidProviderId(),
                 f => f.GetAuthorizationContext(),
-                (f, r) => r.Should().Throw<Exception>());
+                (f, r) =>
+                {
+                    r.Should().NotBeNull();
+                    r.Get<long?>(Fix.ContextKeys.AccountLegalEntityId).Should().BeNull();
+                    r.Get<long?>(Fix.ContextKeys.Ukprn).Should().Be(f.ProviderId);
+                });
         }
 
         [Test]
@@ -124,7 +130,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
             HttpContext.Setup(c => c.Request.Params).Returns(Params);
 
             PublicHashingService = new Mock<IPublicHashingService>();
-            AuthorizationContextProvider = new AuthorizationContextProvider(HttpContext.Object, PublicHashingService.Object);
+            AuthorizationContextProvider = new AuthorizationContextProvider(HttpContext.Object, PublicHashingService.Object, Mock.Of<ILog>());
         }
 
         public IAuthorizationContext GetAuthorizationContext()

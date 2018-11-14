@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Specialized;
 using System.Web;
 using System.Web.Routing;
 using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.ProviderPermissions;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Routing;
 
@@ -12,17 +14,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
     {
         private readonly HttpContextBase _httpContext;
         private readonly IPublicHashingService _publicHashingService;
+        private readonly ILog _log;
 
-        private static class Keys
-        {
-            public const string AccountLegalEntityId = "AccountLegalEntityId";
-            public const string ProviderId = "ProviderId";
-        }
-
-        public AuthorizationContextProvider(HttpContextBase httpContext, IPublicHashingService publicHashingService)
+        public AuthorizationContextProvider(HttpContextBase httpContext, IPublicHashingService publicHashingService, ILog log)
         {
             _httpContext = httpContext;
             _publicHashingService = publicHashingService;
+            _log = log;
         }
 
         public IAuthorizationContext GetAuthorizationContext()
@@ -44,8 +42,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
 
         private long? GetAccountLegalEntityId(NameValueCollection parameters)
         {
-            var accountLegalEntityPublicHashedId = parameters[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId];
-            return accountLegalEntityPublicHashedId != null ? _publicHashingService.DecodeValue(accountLegalEntityPublicHashedId) : (long?)null;
+            try
+            {
+                var accountLegalEntityPublicHashedId = parameters[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId];
+                return accountLegalEntityPublicHashedId != null
+                    ? _publicHashingService.DecodeValue(accountLegalEntityPublicHashedId)
+                    : (long?) null;
+            }
+            catch (Exception ex)
+            {
+                _log.Warn(ex, "Unable to extract AccountLegalEntityId");
+                return null;
+            }
         }
 
         private long? GetProviderId(RouteValueDictionary routeValueDictionary)
