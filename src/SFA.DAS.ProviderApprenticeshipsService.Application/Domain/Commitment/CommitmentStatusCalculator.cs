@@ -22,11 +22,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
             if (editStatus == EditStatus.Both)
                 return RequestStatus.Approved;
 
-            //if (string.IsNullOrWhiteSpace(providerLastUpdateInfo?.Name))
-            //{
-            //    return RequestStatus.NewRequest;
-            //}
-
             if (editStatus == EditStatus.ProviderOnly)
             {
                 return GetProviderOnlyStatus(lastAction, overallAgreementStatus);

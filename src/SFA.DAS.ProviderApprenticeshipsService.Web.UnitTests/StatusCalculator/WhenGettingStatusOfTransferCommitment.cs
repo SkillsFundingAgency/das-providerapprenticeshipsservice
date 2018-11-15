@@ -16,7 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.StatusCalculator
     [TestFixture]
     public sealed class WhenGettingStatusOfTransferCommitment
     {
-        [TestCase(RequestStatus.ReadyForReview, EditStatus.ProviderOnly, TransferApprovalStatus.Pending, TestName = "With provider")]
+        [TestCase(RequestStatus.NewRequest, EditStatus.ProviderOnly, TransferApprovalStatus.Pending, TestName = "With provider")]
         [TestCase(RequestStatus.WithSenderForApproval, EditStatus.Both, TransferApprovalStatus.Pending, TestName = "With sender but not yet actioned by them")]
         [TestCase(RequestStatus.RejectedBySender, EditStatus.EmployerOnly, TransferApprovalStatus.Rejected, TestName = "With sender, rejected by them, but not yet saved or edited")]
         [TestCase(RequestStatus.None, EditStatus.Both, TransferApprovalStatus.Approved, TestName = "Approved by all 3 parties")]
