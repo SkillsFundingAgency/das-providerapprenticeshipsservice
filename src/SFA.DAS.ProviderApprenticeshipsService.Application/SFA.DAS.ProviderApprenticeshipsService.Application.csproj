@@ -349,9 +349,6 @@
     <Compile Include="Commands\UpdateApprenticeship\UpdateApprenticeshipCommand.cs" />
     <Compile Include="Commands\UpdateApprenticeship\UpdateApprenticeshipCommandHandler.cs" />
     <Compile Include="Commands\UpdateApprenticeship\UpdateApprenticeshipCommandValidator.cs" />
-    <Compile Include="Commands\UpdateRelationship\UpdateRelationshipCommand.cs" />
-    <Compile Include="Commands\UpdateRelationship\UpdateRelationshipCommandHandler.cs" />
-    <Compile Include="Commands\UpdateRelationship\UpdateRelationshipCommandValidator.cs" />
     <Compile Include="InvalidRequestException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetProviderAgreement\GetProviderAgreementQueryHandler.cs" />
@@ -387,9 +384,6 @@
     <Compile Include="Queries\GetProvider\GetProviderQueryHandler.cs" />
     <Compile Include="Queries\GetProvider\GetProviderQueryRequest.cs" />
     <Compile Include="Queries\GetProvider\GetProviderQueryResponse.cs" />
-    <Compile Include="Queries\GetRelationshipByCommitment\GetRelationshipByCommitmentQueryHandler.cs" />
-    <Compile Include="Queries\GetRelationshipByCommitment\GetRelationshipByCommitmentQueryRequest.cs" />
-    <Compile Include="Queries\GetRelationshipByCommitment\GetRelationshipByCommitmentQueryResponse.cs" />
     <Compile Include="Queries\GetAccountUsers\GetAccountUsersQuery.cs" />
     <Compile Include="Queries\GetTrainingProgrammes\GetTrainingProgrammesQueryHandler.cs" />
     <Compile Include="Queries\GetTrainingProgrammes\GetTrainingProgrammesQueryRequest.cs" />

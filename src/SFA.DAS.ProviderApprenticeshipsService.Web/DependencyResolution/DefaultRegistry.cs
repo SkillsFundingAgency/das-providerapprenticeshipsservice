@@ -119,10 +119,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 .Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi)
                 .Ctor<HttpClient>().Is(httpClient);
 
-            For<IRelationshipApi>().Use<RelationshipApi>()
-                .Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi)
-                .Ctor<HttpClient>().Is(httpClient);
-
             For<IValidationApi>().Use<ValidationApi>()
                 .Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi)
                 .Ctor<HttpClient>().Is(httpClient);
