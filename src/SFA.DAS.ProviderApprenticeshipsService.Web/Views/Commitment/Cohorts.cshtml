@@ -62,7 +62,7 @@
                 }
             </div>
 
-            if(@Model.ShowDrafts)
+            @if(@Model.ShowDrafts)
             {
                 <div class="bingo-box @GetClickableClass(Model.DraftCount)">
                     @if (Model.DraftCount > 0)
