@@ -25,7 +25,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
             Run(f => f.SetValidAccountLegalEntityPublicHashedId().SetValidProviderId(), f => f.GetAuthorizationContext(), (f, r) =>
             {
                 r.Should().NotBeNull();
-                //todo: now that we use the extension method to set the values, we probably shouldn't be looking for the individual keys
+                // now that we use the extension method AddProviderPermissionValues() to set the values,
+                // ideally we shouldn't be looking for the individual keys like this (as it's peering into a black box)
+                // but it's the best alternative for now!
                 r.Get<long?>(Fix.ContextKeys.AccountLegalEntityId).Should().Be(f.AccountLegalEntityId);
                 r.Get<long?>(Fix.ContextKeys.Ukprn).Should().Be(f.ProviderId);
             });
