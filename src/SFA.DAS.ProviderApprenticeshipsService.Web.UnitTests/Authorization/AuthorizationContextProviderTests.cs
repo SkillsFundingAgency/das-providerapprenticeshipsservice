@@ -26,7 +26,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
             {
                 r.Should().NotBeNull();
                 //todo: now that we use the extension method to set the values, we probably shouldn't be looking for the individual keys
-                // but we're probably going to switch to magic marker anyway
                 r.Get<long?>(Fix.ContextKeys.AccountLegalEntityId).Should().Be(f.AccountLegalEntityId);
                 r.Get<long?>(Fix.ContextKeys.Ukprn).Should().Be(f.ProviderId);
             });
