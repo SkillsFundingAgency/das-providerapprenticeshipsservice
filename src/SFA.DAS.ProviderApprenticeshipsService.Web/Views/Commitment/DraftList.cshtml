@@ -1,0 +1,58 @@
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CommitmentListViewModel
+@{
+    ViewBag.Title = Model.PageTitle;
+    ViewBag.PageId = Model.PageId;
+}
+
+<div class="grid-row">
+    <div class="column-full">
+
+        <h1 class="heading-xlarge">@Model.PageHeading</h1>
+
+        <p class="dynamic-heading">@Html.Raw(Model.PageHeading2)</p>
+
+        @if (!Model.Commitments.Any())
+        {
+            <div class="panel panel-border-wide alert-default">
+
+                <p>You don’t have any drafts in progress.</p>
+
+            </div>
+        }
+        else
+        {
+            <table class="tableResponsive employerListing">
+                <thead>
+                    <tr>
+                        <th scope="col">Employer</th>
+                        <th scope="col">Reference</th>
+                        <th scope="col"><span class="vh">Action</span></th>
+                    </tr>
+                </thead>
+                <tbody>                 
+                    @foreach (var commitment in Model.Commitments)
+                    {
+                        <tr>
+                            <td>
+                                @commitment.LegalEntityName &nbsp;
+                            </td>
+                            <td>
+                                @commitment.Reference &nbsp;
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Details", new {Model.ProviderId, commitment.HashedCommitmentId})" title="View  @commitment.LegalEntityName" aria-label="View  @commitment.LegalEntityName">Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Cohorts")" aria-label="Back to your cohorts" class="back-link">Back to your cohorts</a>
+    </div>
+}

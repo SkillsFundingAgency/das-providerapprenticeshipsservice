@@ -4,7 +4,8 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
 using SFA.DAS.ProviderRelationships.Api.Client;
-using SFA.DAS.ProviderRelationships.Types;
+using SFA.DAS.ProviderRelationships.Types.Dtos;
+using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.GetProviderHasRelationshipWithPermission
 {
@@ -20,12 +21,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         {
             _validRequest = new GetProviderHasRelationshipWithPermissionQueryRequest
             {
-                Permission = PermissionEnumDto.CreateCohort,
+                Permission = Operation.CreateCohort,
                 ProviderId = 12345
             };
 
             _apiClient = new Mock<IProviderRelationshipsApiClient>();
-            _apiClient.Setup(x => x.HasRelationshipWithPermission(It.IsAny<ProviderRelationshipRequest>()))
+            _apiClient.Setup(x => x.HasRelationshipWithPermission(It.IsAny<RelationshipsRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
             _handler = new GetProviderHasRelationshipWithPermissionQueryHandler(_apiClient.Object);
@@ -40,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             //Assert
             _apiClient.Verify(x =>
                 x.HasRelationshipWithPermission(
-                    It.Is<ProviderRelationshipRequest>(r => r.Ukprn == _validRequest.ProviderId),It.IsAny<CancellationToken>()));
+                    It.Is<RelationshipsRequest>(r => r.Ukprn == _validRequest.ProviderId),It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -52,7 +53,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             //Assert
             _apiClient.Verify(x =>
                 x.HasRelationshipWithPermission(
-                    It.Is<ProviderRelationshipRequest>(r => r.Permission == _validRequest.Permission), It.IsAny<CancellationToken>()));
+                    It.Is<RelationshipsRequest>(r => r.Operation == _validRequest.Permission), It.IsAny<CancellationToken>()));
         }
 
         [TestCase(true, true)]
@@ -60,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         public async Task TheResultIsReturnedFromTheRelationshipsApiClient(bool apiResponse, bool expectResult)
         {
             //Arrange
-            _apiClient.Setup(x => x.HasRelationshipWithPermission(It.IsAny<ProviderRelationshipRequest>(), It.IsAny<CancellationToken>()))
+            _apiClient.Setup(x => x.HasRelationshipWithPermission(It.IsAny<RelationshipsRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(apiResponse);
 
             //Act

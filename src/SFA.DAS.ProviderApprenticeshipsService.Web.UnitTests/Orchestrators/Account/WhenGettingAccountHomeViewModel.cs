@@ -11,9 +11,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
-using SFA.DAS.ProviderRelationships.Types;
+using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Account
 {
@@ -43,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
 
             _mediator.Setup(x =>
                     x.Send(It.Is<GetProviderHasRelationshipWithPermissionQueryRequest>(r =>
-                            r.Permission == PermissionEnumDto.CreateCohort),
+                            r.Permission == Operation.CreateCohort),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => new GetProviderHasRelationshipWithPermissionQueryResponse());
 
@@ -82,7 +81,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
 
             _mediator.Setup(x =>
                     x.Send(It.Is<GetProviderHasRelationshipWithPermissionQueryRequest>(r =>
-                            r.Permission == PermissionEnumDto.CreateCohort),
+                            r.Permission == Operation.CreateCohort),
                         It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => new GetProviderHasRelationshipWithPermissionQueryResponse{ HasPermission = hasPermission});
 

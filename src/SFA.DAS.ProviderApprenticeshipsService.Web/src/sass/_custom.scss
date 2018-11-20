@@ -190,6 +190,58 @@
   .clickable{cursor:pointer;}
 }
 
+.bingo-boxes {
+    @include media(tablet) {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -15px;
+    }
+}
+
+.bingo-box {
+    box-sizing: border-box;
+    border-bottom: 1px solid $border-colour;
+    background: $purple;
+    color: #fff;
+    padding: 15px;
+    margin-bottom: 15px;
+
+    @include media(tablet) {
+        margin: 15px;
+        width: calc(50% - 31px);
+    }
+
+    h2 {
+        margin: 0;
+    }
+
+    p.heading-small {
+        margin: 0;
+
+        @include media(tablet) {
+            font-size: 24px;
+        }
+    }
+
+    &.clickable {
+        padding: 0;
+
+        a {
+            padding: 15px;
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            background: $purple;
+            box-sizing: border-box;
+            height: 100%;
+
+            &:hover {
+                background: darken($purple, 10%);
+            }
+        }
+    }
+}
+
 #cohorts-landing-page{
 .bingo-background{
           background:$purple;
@@ -880,9 +932,6 @@ width: 100%;
  }
 
 
-.user-menu{
-    li{margin-bottom:0;}
-}
   
 /* Floating menu styles*/
 .phase-banner-beta{border-bottom:0;}
@@ -919,339 +968,398 @@ width: 100%;
     }
 }
 
-#floating-menu{  
+#floating-menu.fixed-header p {
+    padding: 0 15px;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.user-menu {
+    li {
+        margin-bottom: 0;
+    }
+}
+
+#global-header-bar {
+    margin: 0;
+}
+
+#floating-menu {
     clear: both;
-    width: 100%; 
+    width: 100%;
     background: #F47738;
     color: #fff;
     z-index: 1;
-    max-width: 960px;
     margin: 0 auto;
-    a{color:#fff;}
-    p{
-          @include media(tablet){margin:0 auto;}
-    float:left; 
-    margin:0 0 0 15px;
-    font-weight:bold;
-    font-size:19px;  
-    max-width: 960px;
-    }
-
-    #service-info-list{
-        float:left;  
-        margin-left:15px; 
-          @include media(tablet){
-             float:right;  
-             margin-left:0; 
-          }  
-        #service-info-list li{
-	        float: left;
-            margin-right: 20px;
-	    }
-    }
-}
-//End floating menu styles
-
-
-
-#no-search-results{
-    text-align:center;
-
-
-}
-
-.error-summary{
-     .error-summary-heading{margin-bottom:0;}
-}
-
-#finish-editing{
-      .alert-blue{
-          border:5px solid $govuk-blue;
-          padding: 20px 15px 15px;
-          margin-top:30px;
-          p.heading-medium{margin-top:0;}
-          ul.list-bullet{
-              margin-bottom:0;
-        }
-      }
-}
-
-#cont-cancel{
-    .continue{
-        float:left;
-    }
-    .cancel{
-        float:left;
-        margin: 10px 0 0 30px;
-    }
-}
-
-
-
-//all mobile media query breakpoints
-@media only screen and (max-device-width: 640px),
-only screen and (max-device-width: 667px),
-only screen and (max-width: 480px) { 
-
-#apprentice-details {
-  .tableResponsive
-  {
-      margin-top:30px;
-      .funding-cap-alert
-      {
-          border-left:10px solid $govuk-blue;
-          background:#fff;
-            a{
-              text-decoration:none;
-              color:$text-colour;
-              cursor:pointer;
-              }          
-       }
-       .overlap-alert
-       {
-          border-left:10px solid $error-colour;
-          background:#fff;
-            a{
-              text-decoration:none;
-              color:$text-colour;
-              cursor:pointer;
-          }          
-        }
-  }  
-}
-
-
-.bubble-arrow, .overlap-arrow {display:none;}    
-  
-  
-  
-     
-.employerListing { 
-      td:nth-of-type(1):before {
-      content: "Employer";
-      font-weight: normal;
-      margin-top: 5px;
-      min-height: 30px;
-      }
-      td:nth-of-type(2):before {
-      content: "Cohort reference";
-      font-weight: normal;
-      margin-top: 5px;
-      }
-      td:nth-of-type(3):before {
-      content: "Last message";
-      font-weight: normal;
-      margin-top: 5px;
-      } 
-  }
-.provider-list-view { 
-      td:nth-of-type(1):before {
-      content: "Name";
-      font-weight: normal;
-      margin-top: 5px;
-      min-height: 30px;
-      }
-      td:nth-of-type(2):before {
-      content: "Date of birth";
-      font-weight: normal;
-      margin-top: 5px;
-      }
-      td:nth-of-type(3):before {
-      content: "ULN";
-      font-weight: normal;
-      margin-top: 5px;
-      word-wrap:break-word;
-      } 
-      td:nth-of-type(4):before {
-      content: "Status";
-      font-weight: normal;
-      margin-top: 5px;
-      } 
-      td:nth-of-type(5):before {
-      content: "Alerts";
-      font-weight: normal;
-      margin-top: 5px;
-      } 
-}
-
-
-
-#bulk-upload-errors{
-  
-   td:nth-of-type(1):before {
-      content: "Row";
-      font-weight: normal;
-      margin-top: 5px;
-      min-height: 30px;
-      }
-      td:nth-of-type(2):before {
-      content: "ULN";
-      font-weight: normal;
-      margin-top: 5px;
-      }
-      td:nth-of-type(3):before {
-      content: "Name";
-      font-weight: normal;
-      margin-top: 5px;
-      word-wrap:break-word;
-      } 
-      td:nth-of-type(4):before {
-      content: "Date of Birth";
-      font-weight: normal;
-      margin-top: 5px;
-      } 
-      td:nth-of-type(5):before {
-      content: "Error(s)";
-      font-weight: normal;
-      margin-top: 5px;
-      } 
-  }
-
-
-}
-
-
-
-
-
-
-
-
-
-
-$info-colour: $purple;
-$success-colour: $turquoise;
-$warning-colour: $orange;
-
-// Container for notifications, to reduce space between them wehen there are multiple
-.notifications {
-    .error-summary, .warning-summary, .success-summary, .info-summary {
-        margin-bottom: 0px !important;
-
-        &:last-child {
-            margin-bottom: 100px;
-        }
-    }
-}
-
-// Share notification styles
-.error-summary, .info-summary, .success-summary, .warning-summary {
-    border-width: 4px;
-    border-style: solid;
-    margin-top: $gutter-half;
-    margin-bottom: $gutter-half;
-    padding: $gutter-half 10px;
+    padding: 0 15px;
+    box-sizing: border-box;
 
     @include media(tablet) {
-        border-width: 5px;
-        border-style: solid;
-        margin-top: $gutter;
-        margin-bottom: $gutter;
-        padding: $gutter-two-thirds $gutter-half $gutter-half;
+        padding: 0 30px;
     }
 
-    @include ie-lte(6) {
-        zoom: 1;
+    @include media(1020px) {
+        padding: 0;
+        max-width: 960px;
     }
-    // Use the GOV.UK outline focus style
-    &:focus {
-        outline: 3px solid $focus-colour;
+
+    a {
+        color: #fff;
     }
 
     p {
-        margin-bottom: 10px;
-    }
+        font-weight: bold;
+        font-size: 19px;
+        max-width: 960px;
+        margin: 0;
 
-    &-heading {
-        margin-top: 0;
-    }
-
-    @for $index from 1 through 6 {
-        h#{$index} {
+        @include media(tablet) {
+            float: left;
+            margin-bottom: 0;
         }
 
-        h#{$index}[class^="heading-"] {
-            margin: 0;
+        @include media(1020px) {
+            margin-left: 0;
         }
     }
 
-    &-list {
-        padding-left: 0;
+    #service-info-list {
+        margin-top: 5px;
 
         li {
-            @include media(tablet) {
-                margin-bottom: 5px;
+            display: block;
+            margin: 0 10px 5px 0;
+        }
+
+        @include media(tablet) {
+            float: right;
+
+            li {
+                margin: 0 0 5px 15px;
             }
         }
 
-        a {
-            font-weight: bold;
-            text-decoration: underline;
+        @include media(desktop) {
+            margin-left: 0;
+            margin-right: 0;
+
+            li {
+                float: left;
+            }
         }
     }
 }
 
-.info-dismiss, .success-dismiss, .warning-dismiss {
-    font-weight: bold;
-    text-decoration: underline;
+
+
+
+//End floating menu styles
+#no-search-results {
+    text-align: center;
 }
 
-// Info notification styles
-.info-summary {
-    border-color: $info-colour;
-
-    @include media(tablet) {
-        border-color: $info-colour;
+    .error-summary {
+        .error-summary-heading {
+            margin-bottom: 0;
+        }
     }
 
-    .info-summary-list {
-        a {
+    #finish-editing {
+        .alert-blue {
+            border: 5px solid $govuk-blue;
+            padding: 20px 15px 15px;
+            margin-top: 30px;
+
+            p.heading-medium {
+                margin-top: 0;
+            }
+
+            ul.list-bullet {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    #cont-cancel {
+        .continue {
+            float: left;
+        }
+
+        .cancel {
+            float: left;
+            margin: 10px 0 0 30px;
+        }
+    }
+    //all mobile media query breakpoints
+    @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
+
+        #apprentice-details {
+            .tableResponsive {
+                margin-top: 30px;
+
+                .funding-cap-alert {
+                    border-left: 10px solid $govuk-blue;
+                    background: #fff;
+
+                    a {
+                        text-decoration: none;
+                        color: $text-colour;
+                        cursor: pointer;
+                    }
+                }
+
+                .overlap-alert {
+                    border-left: 10px solid $error-colour;
+                    background: #fff;
+
+                    a {
+                        text-decoration: none;
+                        color: $text-colour;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+
+
+        .bubble-arrow, .overlap-arrow {
+            display: none;
+        }
+
+
+
+
+        .employerListing {
+            td:nth-of-type(1):before {
+                content: "Employer";
+                font-weight: normal;
+                margin-top: 5px;
+                min-height: 30px;
+            }
+
+            td:nth-of-type(2):before {
+                content: "Cohort reference";
+                font-weight: normal;
+                margin-top: 5px;
+            }
+
+            td:nth-of-type(3):before {
+                content: "Last message";
+                font-weight: normal;
+                margin-top: 5px;
+            }
+        }
+
+        .provider-list-view {
+            td:nth-of-type(1):before {
+                content: "Name";
+                font-weight: normal;
+                margin-top: 5px;
+                min-height: 30px;
+            }
+
+            td:nth-of-type(2):before {
+                content: "Date of birth";
+                font-weight: normal;
+                margin-top: 5px;
+            }
+
+            td:nth-of-type(3):before {
+                content: "ULN";
+                font-weight: normal;
+                margin-top: 5px;
+                word-wrap: break-word;
+            }
+
+            td:nth-of-type(4):before {
+                content: "Status";
+                font-weight: normal;
+                margin-top: 5px;
+            }
+
+            td:nth-of-type(5):before {
+                content: "Alerts";
+                font-weight: normal;
+                margin-top: 5px;
+            }
+        }
+
+
+
+        #bulk-upload-errors {
+
+            td:nth-of-type(1):before {
+                content: "Row";
+                font-weight: normal;
+                margin-top: 5px;
+                min-height: 30px;
+            }
+
+            td:nth-of-type(2):before {
+                content: "ULN";
+                font-weight: normal;
+                margin-top: 5px;
+            }
+
+            td:nth-of-type(3):before {
+                content: "Name";
+                font-weight: normal;
+                margin-top: 5px;
+                word-wrap: break-word;
+            }
+
+            td:nth-of-type(4):before {
+                content: "Date of Birth";
+                font-weight: normal;
+                margin-top: 5px;
+            }
+
+            td:nth-of-type(5):before {
+                content: "Error(s)";
+                font-weight: normal;
+                margin-top: 5px;
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+    $info-colour: $purple;
+    $success-colour: $turquoise;
+    $warning-colour: $orange;
+
+    // Container for notifications, to reduce space between them wehen there are multiple
+    .notifications {
+        .error-summary, .warning-summary, .success-summary, .info-summary {
+            margin-bottom: 0px !important;
+
+            &:last-child {
+                margin-bottom: 100px;
+            }
+        }
+    }
+    // Share notification styles
+    .error-summary, .info-summary, .success-summary, .warning-summary {
+        border-width: 4px;
+        border-style: solid;
+        margin-top: $gutter-half;
+        margin-bottom: $gutter-half;
+        padding: $gutter-half 10px;
+
+        @include media(tablet) {
+            border-width: 5px;
+            border-style: solid;
+            margin-top: $gutter;
+            margin-bottom: $gutter;
+            padding: $gutter-two-thirds $gutter-half $gutter-half;
+        }
+
+        @include ie-lte(6) {
+            zoom: 1;
+        }
+        // Use the GOV.UK outline focus style
+        &:focus {
+            outline: 3px solid $focus-colour;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        &-heading {
+            margin-top: 0;
+        }
+
+        @for $index from 1 through 6 {
+            h#{$index} {
+            }
+
+            h#{$index}[class^="heading-"] {
+                margin: 0;
+            }
+        }
+
+        &-list {
+            padding-left: 0;
+
+            li {
+                @include media(tablet) {
+                    margin-bottom: 5px;
+                }
+            }
+
+            a {
+                font-weight: bold;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .info-dismiss, .success-dismiss, .warning-dismiss {
+        font-weight: bold;
+        text-decoration: underline;
+    }
+    // Info notification styles
+    .info-summary {
+        border-color: $info-colour;
+
+        @include media(tablet) {
+            border-color: $info-colour;
+        }
+
+        .info-summary-list {
+            a {
+                color: $info-colour;
+            }
+        }
+
+        .info-dismiss {
             color: $info-colour;
         }
     }
-
-    .info-dismiss {
-        color: $info-colour;
-    }
-}
-
-// Success notification styles
-.success-summary {
-    border-color: $success-colour;
-
-    @include media(tablet) {
+    // Success notification styles
+    .success-summary {
         border-color: $success-colour;
-    }
 
-    .success-summary-list {
-        a {
+        @include media(tablet) {
+            border-color: $success-colour;
+        }
+
+        .success-summary-list {
+            a {
+                color: $success-colour;
+            }
+        }
+
+        .success-dismiss {
             color: $success-colour;
         }
     }
-
-    .success-dismiss {
-        color: $success-colour;
-    }
-}
-
-// Warning notification styles
-.warning-summary {
-    border-color: $warning-colour;
-
-    @include media(tablet) {
+    // Warning notification styles
+    .warning-summary {
         border-color: $warning-colour;
-    }
 
-    .warning-summary-list {
-        a {
+        @include media(tablet) {
+            border-color: $warning-colour;
+        }
+
+        .warning-summary-list {
+            a {
+                color: $warning-colour;
+            }
+        }
+
+        .warning-dismiss {
             color: $warning-colour;
         }
     }
-
-    .warning-dismiss {
-        color: $warning-colour;
-    }
-}
 
 
 
@@ -1273,3 +1381,27 @@ $warning-colour: $orange;
 }
 
 
+dl.inline-secondary {
+    color: $grey-1;
+    margin-bottom: 30px;
+
+    dt {
+        margin-top: 5px;
+    }
+
+    @include media(tablet) {
+        margin-top: -15px;
+
+        dt:after {
+            content: ":"
+        }
+
+        dt, dd {
+            display: inline-block
+        }
+
+        dd {
+            margin-right: 10px
+        }
+    }
+}

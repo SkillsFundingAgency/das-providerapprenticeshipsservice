@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.ProviderRelationships.Api.Client;
-using SFA.DAS.ProviderRelationships.Types;
+using SFA.DAS.ProviderRelationships.Types.Dtos;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission
 {
@@ -25,9 +25,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider
                 return new GetProviderHasRelationshipWithPermissionQueryResponse();
             }
 
-            var apiRequest = new ProviderRelationshipRequest
+            var apiRequest = new RelationshipsRequest
             {
-                Permission = request.Permission,
+                Operation = request.Permission,
                 Ukprn = request.ProviderId
             };
 

@@ -3,40 +3,44 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.ProviderRelationships.Api.Client;
-using SFA.DAS.ProviderRelationships.Types;
+using SFA.DAS.ProviderRelationships.Types.Dtos;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 {
     public class StubProviderRelationshipsApiClient : IProviderRelationshipsApiClient
     {
-        private readonly List<ProviderRelationshipResponse.ProviderRelationship> _relationships;
+        private readonly List<RelationshipDto> _relationships;
 
         public StubProviderRelationshipsApiClient()
         {
-            _relationships = new List<ProviderRelationshipResponse.ProviderRelationship>
+            _relationships = new List<RelationshipDto>
             {
-                new ProviderRelationshipResponse.ProviderRelationship
+                new RelationshipDto
                 {
                     Ukprn = 10005077,
-                    EmployerAccountId = 1516,
-                    EmployerAccountLegalEntityName = "SAINSBURY'S LIMITED",
-                    EmployerAccountLegalEntityPublicHashedId = "DY3GKY",
-                    EmployerName = "SAINSBURY'S LIMITED"
-
+                    EmployerAccountId = 15623,
+                    EmployerAccountPublicHashedId = "74449P",
+                    EmployerAccountLegalEntityName = "RED DIAMONDS",
+                    EmployerAccountLegalEntityId = 8004,
+                    EmployerAccountLegalEntityPublicHashedId = "XPBMMX",
+                    EmployerAccountName = "RED DIAMONDS (ACCOUNT)"
                 }
             };
         }
 
-        public Task<bool> HasRelationshipWithPermission(ProviderRelationshipRequest request)
+        public Task<bool> HasPermission(PermissionRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            return Task.Run(() => _relationships.Any(r => r.Ukprn == request.Ukprn));
+            return Task.Run(() => _relationships.Any(r => r.Ukprn == request.Ukprn), cancellationToken);
         }
 
-        public Task<bool> HasRelationshipWithPermission(ProviderRelationshipRequest request, CancellationToken token) => HasRelationshipWithPermission(request);
-
-        public Task<ProviderRelationshipResponse> ListRelationshipsWithPermission(ProviderRelationshipRequest request)
+        public async Task<bool> HasRelationshipWithPermission(RelationshipsRequest request, CancellationToken token)
         {
-            return Task.Run(() =>  new ProviderRelationshipResponse { ProviderRelationships = _relationships });
+            return (await GetRelationshipsWithPermission(request, token)).Relationships.Any();
+        }
+
+        public Task<RelationshipsResponse> GetRelationshipsWithPermission(RelationshipsRequest request, CancellationToken token)
+        {
+            return Task.Run(() => new RelationshipsResponse { Relationships = _relationships.Where(r => r.Ukprn == request.Ukprn) }, token);
         }
     }
 }

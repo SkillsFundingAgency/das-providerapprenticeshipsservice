@@ -11,41 +11,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.StatusCalculator
     [TestFixture]
     public sealed class WhenEditStatusIsWithEmployer
     {
-        [TestCase(RequestStatus.SentForReview, LastAction.Amend, AgreementStatus.NotAgreed, TestName = "Sent request for review to employer")]
-        [TestCase(RequestStatus.SentForReview, LastAction.Amend, AgreementStatus.EmployerAgreed, TestName = "Sent back approved request for review")]
-        [TestCase(RequestStatus.WithEmployerForApproval, LastAction.Approve, AgreementStatus.ProviderAgreed, TestName = "Approved and sent to employer")]
-        public void WhenThereAreApprentices(RequestStatus expectedResult, LastAction lastAction, AgreementStatus agreementStatus)
+        [TestCase(LastAction.None, AgreementStatus.NotAgreed, RequestStatus.None, Description = "Employer draft not visible to provider")]
+        [TestCase(LastAction.Amend, AgreementStatus.NotAgreed, RequestStatus.SentForReview)]
+        [TestCase(LastAction.Approve, AgreementStatus.ProviderAgreed, RequestStatus.WithEmployerForApproval)]
+        [TestCase(LastAction.Amend, AgreementStatus.EmployerAgreed, RequestStatus.SentForReview, TestName = "Sent back approved request for review")]
+        public void ThenTheRequestHasTheCorrectStatus(LastAction lastAction, AgreementStatus agreementStatus, RequestStatus expectRequestStatus)
         {
             var commitment = new CommitmentListItem
             {
                 LastAction = lastAction,
                 AgreementStatus = agreementStatus,
-
                 EditStatus = EditStatus.EmployerOnly,
-                ApprenticeshipCount = 2,
-                ProviderLastUpdateInfo = new LastUpdateInfo
-                {
-                    EmailAddress = "test@testcorp",
-                    Name = "Test"
-                }
-            };
-
-            var status = commitment.GetStatus();
-
-            status.Should().Be(expectedResult);
-        }
-
-        [TestCase(LastAction.None, AgreementStatus.NotAgreed)]
-        [TestCase(LastAction.Amend, AgreementStatus.NotAgreed)]
-        [TestCase(LastAction.Approve, AgreementStatus.ProviderAgreed)]
-        public void WhenTheEmployerHasNeverModifiedTheCommitmentItIsClassedAsNew(LastAction lastAction, AgreementStatus agreementStatus)
-        {
-            var commitment = new CommitmentListItem
-            {
-                LastAction = lastAction,
-                AgreementStatus = agreementStatus,
-
-                EditStatus = EditStatus.ProviderOnly,
                 ApprenticeshipCount = 2
             };
 
@@ -53,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.StatusCalculator
             var status = commitment.GetStatus();
 
             //Assert
-            Assert.AreEqual(RequestStatus.NewRequest, status);
+            Assert.AreEqual(expectRequestStatus, status);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.ProviderRelationships.Api.Client;
-using SFA.DAS.ProviderRelationships.Types;
+using SFA.DAS.ProviderRelationships.Types.Dtos;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderRelationshipsWithPermission
 {
@@ -23,19 +23,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider
             {
                 return new GetProviderRelationshipsWithPermissionQueryResponse
                 {
-                    ProviderRelationships = new List<ProviderRelationshipResponse.ProviderRelationship>()
+                    ProviderRelationships = new List<RelationshipDto>()
                 };
             }
 
-            var result = await _providerRelationshipsApiClient.ListRelationshipsWithPermission(new ProviderRelationshipRequest
+            var result = await _providerRelationshipsApiClient.GetRelationshipsWithPermission(new RelationshipsRequest
             {
-                Permission = request.Permission,
+                Operation = request.Permission,
                 Ukprn = request.ProviderId
-            });
+            }, cancellationToken);
 
             return new GetProviderRelationshipsWithPermissionQueryResponse
             {
-                ProviderRelationships = result.ProviderRelationships
+                ProviderRelationships = result.Relationships
             };
         }
     }

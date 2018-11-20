@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
@@ -28,8 +30,36 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             return View(model);
         }
+
+        [HttpGet]
+        [Route("cohorts/create/confirm-employer")]
+        public ActionResult ConfirmEmployer(long providerId, ConfirmEmployerViewModel confirmViewModel)
+        {
+            ModelState.Clear();
+            if (!confirmViewModel.IsComplete)
+            {
+                return RedirectToAction("Create");
+            }
+
+            return View(confirmViewModel);
+        }
+
+        [HttpPost]
+        [Route("cohorts/create/confirm-employer")]
+        public async Task<ActionResult> ConfirmEmployer(int providerId, ConfirmEmployerViewModel confirmViewModel)
+        {
+            if (confirmViewModel.Confirm.HasValue && !confirmViewModel.Confirm.Value)
+            {
+                return RedirectToAction("Create");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(confirmViewModel);
+            }
+
+            var hashedCommitmentId = await _orchestrator.CreateCohort(providerId, confirmViewModel, CurrentUserId, GetSignedInUser());
+            return RedirectToAction("Details", "Commitment", new { providerId, hashedCommitmentId });
+        }
     }
 }
-
-
-

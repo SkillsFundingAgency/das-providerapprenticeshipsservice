@@ -66,7 +66,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
                 await _commitmentsApi.ApproveCohort(message.ProviderId, message.CommitmentId, submission);
             }
 
-            if (_configuration.EnableEmailNotifications && message.LastAction != LastAction.None)
+            if (_configuration.EnableEmailNotifications &&
+                message.LastAction != LastAction.None &&
+                !string.IsNullOrWhiteSpace(commitment.EmployerLastUpdateInfo.EmailAddress))
             {
                 await SendEmailNotification(message, commitment);
             }
