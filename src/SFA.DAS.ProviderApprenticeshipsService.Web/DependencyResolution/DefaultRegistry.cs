@@ -204,13 +204,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             return configurationService.Get<ProviderApprenticeshipsServiceConfiguration>();
         }
 
+        /// <remarks>
+        /// For MVS, the read store config will come from SFA.DAS.ProviderRelationships.ReadStore,
+        ///          as the ProviderRelationships config bootstrapper will get its own config from there
+        /// post MVS, ProviderRelationships will allow clients to override the central config by placing the config in the structuremap container
+        ///
+        /// As of now, the bootstrapping has not yet been implemented, so we manually fetch the centralised config
+        /// and put it in the container, which ProviderRelationships will pick up
+        /// </remarks>
         private ProviderRelationshipsReadStoreConfiguration GetProviderPermissionsReadStoreConfiguration(string environment, IConfigurationRepository configurationRepository)
         {
-            //todo: need to add config to das-employer-config
-            // could pick up SFA.DAS.ProviderRelationships.ReadStore, but probably better for each site to have its own config
-            // (unless falling back to default bootstrap in auth service) : if dependency missing, pick ConfigurationStorageConnectionString from standard env variable (central config) and use that
+            //var configurationService = new ConfigurationService(configurationRepository,
+            //    new ConfigurationOptions("SFA.DAS.ProviderApprenticeshipsService.ProviderRelationships.ReadStore", environment, "1.0"));
+
             var configurationService = new ConfigurationService(configurationRepository,
-                new ConfigurationOptions("SFA.DAS.ProviderApprenticeshipsService.ProviderRelationships.ReadStore", environment, "1.0"));
+                new ConfigurationOptions("SFA.DAS.ProviderRelationships.ReadStore", environment, "1.0"));
 
             return configurationService.Get<ProviderRelationshipsReadStoreConfiguration>();
         }
