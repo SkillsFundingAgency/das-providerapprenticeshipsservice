@@ -75,12 +75,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     $"Error creating cohort - operation not permitted for Provider: {providerId}, Employer Account {employerAccountId}, Legal Entity {confirmEmployerViewModel.EmployerAccountLegalEntityPublicHashedId} ");
             }
 
-            var providerResponse = await Mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });           
+            var providerResponse = await Mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });
+
+            var employerAccountHashedId = HashingService.HashValue(employerAccountId);
 
             var accountResponse = await Mediator.Send(new GetEmployerAccountLegalEntitiesRequest
             {
                 UserId = userId,
-                HashedAccountId = confirmEmployerViewModel.EmployerAccountPublicHashedId
+                HashedAccountId = employerAccountHashedId
             });
 
             var legalEntity = accountResponse.LegalEntities.SingleOrDefault(x =>

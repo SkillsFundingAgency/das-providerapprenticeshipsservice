@@ -379,13 +379,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return View(viewModel);
         }
 
-        [HttpGet]
-        [Route("cohorts/create")]
-        public ActionResult Create(long providerId)
-        {
-            throw new NotImplementedException();
-        }
-
         private string GetReturnToListUrl(long providerId)
         {
             switch (GetRequestStatusFromCookie())

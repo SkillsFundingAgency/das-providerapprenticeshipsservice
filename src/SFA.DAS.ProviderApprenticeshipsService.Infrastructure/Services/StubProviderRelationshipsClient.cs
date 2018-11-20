@@ -9,23 +9,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 {
     public class StubProviderRelationshipsApiClient : IProviderRelationshipsApiClient
     {
-        private readonly IPublicHashingService _publicHashingService;
         private readonly List<RelationshipDto> _relationships;
 
-        public StubProviderRelationshipsApiClient(IPublicHashingService publicHashingService)
+        public StubProviderRelationshipsApiClient()
         {
-            _publicHashingService = publicHashingService;
             _relationships = new List<RelationshipDto>
             {
                 new RelationshipDto
                 {
                     Ukprn = 10005077,
-                    EmployerAccountId = 1516,
-                    EmployerAccountPublicHashedId = _publicHashingService.HashValue(1516),
-                    EmployerAccountLegalEntityName = "SAINSBURY'S LIMITED",
-                    EmployerAccountLegalEntityId = 353,
-                    EmployerAccountLegalEntityPublicHashedId = _publicHashingService.HashValue(353),
-                    EmployerAccountName = "SAINSBURY'S LIMITED"
+                    EmployerAccountId = 15623,
+                    EmployerAccountPublicHashedId = "74449P",
+                    EmployerAccountLegalEntityName = "RED DIAMONDS",
+                    EmployerAccountLegalEntityId = 8004,
+                    EmployerAccountLegalEntityPublicHashedId = "XPBMMX",
+                    EmployerAccountName = "RED DIAMONDS (ACCOUNT)"
                 }
             };
         }
@@ -42,7 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 
         public Task<RelationshipsResponse> GetRelationshipsWithPermission(RelationshipsRequest request, CancellationToken token)
         {
-            return Task.Run(() =>  new RelationshipsResponse { Relationships = _relationships }, token);
+            return Task.Run(() => new RelationshipsResponse { Relationships = _relationships }, token);
         }
     }
 }
