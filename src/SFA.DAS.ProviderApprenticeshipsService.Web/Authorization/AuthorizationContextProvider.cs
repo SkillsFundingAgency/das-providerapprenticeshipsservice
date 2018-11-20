@@ -27,15 +27,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
         {
             var request = _httpContext.Request;
 
-            //todo: insert everything we calc into here... or use magic binding
-            //_httpContext.Items["accountId"] = 123;
-
             var authorizationContext = new AuthorizationContext();
 
-            //todo: fetch case-insensitively?
             authorizationContext.AddProviderPermissionValues(
                 GetAccountLegalEntityId(request.Params),
-                GetProviderId(request.RequestContext.RouteData.Values));                // alternative source: long.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
+                GetProviderId(request.RequestContext.RouteData.Values));    // alternative source: long.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
 
             return authorizationContext;
         }
