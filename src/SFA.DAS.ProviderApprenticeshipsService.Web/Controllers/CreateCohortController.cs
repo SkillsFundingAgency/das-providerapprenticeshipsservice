@@ -33,7 +33,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
-        //todo: we could use the model binding so that the context is filled in automagically (would need to have 1 model class in derived from I??)
         [HttpGet]
         [Route("cohorts/create/confirm-employer")]
         [DasAuthorize(ProviderOperation.CreateCohort)]
@@ -50,6 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("cohorts/create/confirm-employer")]
+        [DasAuthorize(ProviderOperation.CreateCohort)]
         public async Task<ActionResult> ConfirmEmployer(int providerId, ConfirmEmployerViewModel confirmViewModel)
         {
             if (confirmViewModel.Confirm.HasValue && !confirmViewModel.Confirm.Value)
