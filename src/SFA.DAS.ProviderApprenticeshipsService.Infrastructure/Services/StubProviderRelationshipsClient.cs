@@ -40,7 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 
         public Task<RelationshipsResponse> GetRelationshipsWithPermission(RelationshipsRequest request, CancellationToken token)
         {
-            return Task.Run(() => new RelationshipsResponse { Relationships = _relationships }, token);
+            return Task.Run(() => new RelationshipsResponse { Relationships = _relationships.Where(r => r.Ukprn == request.Ukprn) }, token);
         }
     }
 }
