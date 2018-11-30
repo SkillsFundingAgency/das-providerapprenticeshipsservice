@@ -29,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
         {
             _permissionsResponse = new GetProviderRelationshipsWithPermissionQueryResponse
             {
-                ProviderRelationships = new List<RelationshipDto>()
+                ProviderRelationships = new List<AccountProviderLegalEntityDto>()
             };
 
             _mediator = new Mock<IMediator>();
@@ -40,7 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
             _cohortViewModel = new CreateCohortViewModel();
             _createCohortMapper = new Mock<ICreateCohortMapper>();
             _createCohortMapper.Setup(x =>
-                    x.Map(It.IsAny<IEnumerable<RelationshipDto>>()))
+                    x.Map(It.IsAny<IEnumerable<AccountProviderLegalEntityDto>>()))
                 .Returns(_cohortViewModel);
 
             _orchestrator = new CreateCohortOrchestrator(_mediator.Object,
@@ -56,7 +56,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
             await _orchestrator.GetCreateCohortViewModel(1);
 
             _createCohortMapper.Verify(x =>
-                x.Map(It.Is<IEnumerable<RelationshipDto>>(r =>
+                x.Map(It.Is<IEnumerable<AccountProviderLegalEntityDto>>(r =>
                     r.Equals(_permissionsResponse.ProviderRelationships))));
         }
 

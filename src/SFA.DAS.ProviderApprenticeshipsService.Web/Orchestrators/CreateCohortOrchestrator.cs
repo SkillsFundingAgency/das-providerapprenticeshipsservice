@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
@@ -65,8 +64,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             //Check that the relationship is a valid selection
             var relationship = relationshipData.ProviderRelationships.SingleOrDefault(x =>
-                x.EmployerAccountPublicHashedId == confirmEmployerViewModel.EmployerAccountPublicHashedId
-                && x.EmployerAccountLegalEntityPublicHashedId == confirmEmployerViewModel.EmployerAccountLegalEntityPublicHashedId
+                x.AccountPublicHashedId == confirmEmployerViewModel.EmployerAccountPublicHashedId
+                && x.AccountLegalEntityPublicHashedId == confirmEmployerViewModel.EmployerAccountLegalEntityPublicHashedId
             );
 
             if (relationship == null)

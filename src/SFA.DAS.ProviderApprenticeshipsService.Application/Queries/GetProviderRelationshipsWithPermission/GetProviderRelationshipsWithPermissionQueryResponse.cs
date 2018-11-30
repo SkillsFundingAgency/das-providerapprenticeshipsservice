@@ -5,6 +5,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider
 {
     public class GetProviderRelationshipsWithPermissionQueryResponse
     {
-        public IEnumerable<RelationshipDto> ProviderRelationships { get; set; }
+        public IEnumerable<AccountProviderLegalEntityDto> ProviderRelationships { get; set; }
     }
 }

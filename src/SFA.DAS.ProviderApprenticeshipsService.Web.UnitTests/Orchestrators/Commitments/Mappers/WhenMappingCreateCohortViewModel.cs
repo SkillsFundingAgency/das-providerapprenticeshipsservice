@@ -4,7 +4,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
-using SFA.DAS.ProviderRelationships.Types;
 using SFA.DAS.ProviderRelationships.Types.Dtos;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments.Mappers
@@ -13,7 +12,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     public class WhenMappingCreateCohortViewModel
     {
         private CreateCohortMapper _mapper;
-        private List<RelationshipDto> _source;
+        private List<AccountProviderLegalEntityDto> _source;
         private Mock<IHashingService> _hashingService;
 
         [SetUp]
@@ -22,16 +21,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.HashValue(It.IsAny<long>())).Returns("EmployerAccountPublicHashedId");
 
-            _source = new List<RelationshipDto>
+            _source = new List<AccountProviderLegalEntityDto>
             {
-                new RelationshipDto
+                new AccountProviderLegalEntityDto
                 {
-                    EmployerAccountId = 1,
-                    EmployerAccountPublicHashedId = "EmployerAccountPublicHashedId",
-                    EmployerAccountLegalEntityName = "EmployerAccountLegalEntityName",
-                    EmployerAccountLegalEntityPublicHashedId = "EmployerAccountLegalEntityName",
-                    EmployerAccountName = "EmployerName",
-                    Ukprn = 2
+                    AccountId = 1,
+                    AccountPublicHashedId = "EmployerAccountPublicHashedId",
+                    AccountLegalEntityName = "EmployerAccountLegalEntityName",
+                    AccountLegalEntityPublicHashedId = "EmployerAccountLegalEntityName",
+                    AccountName = "EmployerName"
                 }
             };
 
@@ -51,7 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var result = _mapper.Map(TestHelper.Clone(_source)).LegalEntities.First();
 
             var source = _source.First();
-            Assert.AreEqual(source.EmployerAccountLegalEntityName, result.EmployerAccountLegalEntityName);
+            Assert.AreEqual(source.AccountLegalEntityName, result.EmployerAccountLegalEntityName);
         }
 
         [Test]
@@ -60,7 +58,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var result = _mapper.Map(TestHelper.Clone(_source)).LegalEntities.First();
 
             var source = _source.First();
-            Assert.AreEqual(source.EmployerAccountLegalEntityPublicHashedId, result.EmployerAccountLegalEntityPublicHashedId);
+            Assert.AreEqual(source.AccountLegalEntityPublicHashedId, result.EmployerAccountLegalEntityPublicHashedId);
         }
 
         [Test]
@@ -69,17 +67,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var result = _mapper.Map(TestHelper.Clone(_source)).LegalEntities.First();
 
             var source = _source.First();
-            Assert.AreEqual(source.EmployerAccountName, result.EmployerAccountName);
+            Assert.AreEqual(source.AccountName, result.EmployerAccountName);
         }
 
         [Test]
         public void ThenAllProviderRelationshipsAreMapped()
         {
-            _source = new List<RelationshipDto>
+            _source = new List<AccountProviderLegalEntityDto>
             {
-                new RelationshipDto(),
-                new RelationshipDto(),
-                new RelationshipDto()               
+                new AccountProviderLegalEntityDto(),
+                new AccountProviderLegalEntityDto(),
+                new AccountProviderLegalEntityDto()               
             };
 
             var result = _mapper.Map(TestHelper.Clone(_source));

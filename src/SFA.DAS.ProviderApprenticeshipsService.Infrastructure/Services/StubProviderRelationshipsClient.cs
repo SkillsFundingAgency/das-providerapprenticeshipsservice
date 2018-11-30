@@ -9,38 +9,44 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 {
     public class StubProviderRelationshipsApiClient : IProviderRelationshipsApiClient
     {
-        private readonly List<RelationshipDto> _relationships;
+        private readonly List<KeyValuePair<long /*ukprn*/, AccountProviderLegalEntityDto>> _accountProviderLegalEntitiesByUkprn;
 
         public StubProviderRelationshipsApiClient()
         {
-            _relationships = new List<RelationshipDto>
+            _accountProviderLegalEntitiesByUkprn = new List<KeyValuePair<long, AccountProviderLegalEntityDto>>
             {
-                new RelationshipDto
+                new KeyValuePair<long, AccountProviderLegalEntityDto>(10005077, new AccountProviderLegalEntityDto
                 {
-                    Ukprn = 10005077,
-                    EmployerAccountId = 15623,
-                    EmployerAccountPublicHashedId = "74449P",
-                    EmployerAccountLegalEntityName = "RED DIAMONDS",
-                    EmployerAccountLegalEntityId = 8004,
-                    EmployerAccountLegalEntityPublicHashedId = "XPBMMX",
-                    EmployerAccountName = "RED DIAMONDS (ACCOUNT)"
-                }
+                    AccountId = 15623,
+                    AccountPublicHashedId = "74449P",
+                    AccountLegalEntityName = "RED DIAMONDS",
+                    AccountLegalEntityId = 8004,
+                    AccountLegalEntityPublicHashedId = "XPBMMX",
+                    AccountName = "RED DIAMONDS (ACCOUNT)"
+                })
             };
+        }
+
+        public Task<AccountProviderLegalEntitiesResponse> GetAccountProviderLegalEntitiesWithPermission(
+            AccountProviderLegalEntitiesRequest request,
+            CancellationToken cancellationToken = new CancellationToken())
+        {
+            return Task.FromResult(new AccountProviderLegalEntitiesResponse {AccountProviderLegalEntities = _accountProviderLegalEntitiesByUkprn.Where(kvp => kvp.Key == request.Ukprn).Select(kvp => kvp.Value)});
         }
 
         public Task<bool> HasPermission(PermissionRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            return Task.Run(() => _relationships.Any(r => r.Ukprn == request.Ukprn), cancellationToken);
+            return Task.FromResult(_accountProviderLegalEntitiesByUkprn.Any(r => r.Key == request.Ukprn));
         }
 
         public async Task<bool> HasRelationshipWithPermission(RelationshipsRequest request, CancellationToken token)
         {
-            return (await GetRelationshipsWithPermission(request, token)).Relationships.Any();
+            return (await GetAccountProviderLegalEntitiesWithPermission(new AccountProviderLegalEntitiesRequest {Ukprn = request.Ukprn, Operation = request.Operation}, token)).AccountProviderLegalEntities.Any();
         }
 
-        public Task<RelationshipsResponse> GetRelationshipsWithPermission(RelationshipsRequest request, CancellationToken token)
+        public Task HealthCheck()
         {
-            return Task.Run(() => new RelationshipsResponse { Relationships = _relationships.Where(r => r.Ukprn == request.Ukprn) }, token);
+            throw new System.NotImplementedException();
         }
     }
 }
