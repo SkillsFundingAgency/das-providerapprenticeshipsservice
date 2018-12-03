@@ -25,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider
                 return new GetProviderHasRelationshipWithPermissionQueryResponse();
             }
 
-            var apiRequest = new RelationshipsRequest
+            var apiRequest = new HasRelationshipWithPermissionRequest
             {
                 Operation = request.Permission,
                 Ukprn = request.ProviderId

@@ -26,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             };
 
             _apiClient = new Mock<IProviderRelationshipsApiClient>();
-            _apiClient.Setup(x => x.HasRelationshipWithPermission(It.IsAny<RelationshipsRequest>(), It.IsAny<CancellationToken>()))
+            _apiClient.Setup(x => x.HasRelationshipWithPermission(It.IsAny<HasRelationshipWithPermissionRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
             _handler = new GetProviderHasRelationshipWithPermissionQueryHandler(_apiClient.Object);
@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             //Assert
             _apiClient.Verify(x =>
                 x.HasRelationshipWithPermission(
-                    It.Is<RelationshipsRequest>(r => r.Ukprn == _validRequest.ProviderId),It.IsAny<CancellationToken>()));
+                    It.Is<HasRelationshipWithPermissionRequest>(r => r.Ukprn == _validRequest.ProviderId),It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             //Assert
             _apiClient.Verify(x =>
                 x.HasRelationshipWithPermission(
-                    It.Is<RelationshipsRequest>(r => r.Operation == _validRequest.Permission), It.IsAny<CancellationToken>()));
+                    It.Is<HasRelationshipWithPermissionRequest>(r => r.Operation == _validRequest.Permission), It.IsAny<CancellationToken>()));
         }
 
         [TestCase(true, true)]
@@ -61,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         public async Task TheResultIsReturnedFromTheRelationshipsApiClient(bool apiResponse, bool expectResult)
         {
             //Arrange
-            _apiClient.Setup(x => x.HasRelationshipWithPermission(It.IsAny<RelationshipsRequest>(), It.IsAny<CancellationToken>()))
+            _apiClient.Setup(x => x.HasRelationshipWithPermission(It.IsAny<HasRelationshipWithPermissionRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(apiResponse);
 
             //Act

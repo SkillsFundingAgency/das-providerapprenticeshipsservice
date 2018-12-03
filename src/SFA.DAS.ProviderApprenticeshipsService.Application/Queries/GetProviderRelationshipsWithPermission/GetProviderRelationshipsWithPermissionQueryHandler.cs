@@ -27,7 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider
                 };
             }
 
-            var result = await _providerRelationshipsApiClient.GetAccountProviderLegalEntitiesWithPermission(new AccountProviderLegalEntitiesRequest
+            var result = await _providerRelationshipsApiClient.GetAccountProviderLegalEntitiesWithPermission(new GetAccountProviderLegalEntitiesWithPermissionRequest
             {
                 Operation = request.Permission,
                 Ukprn = request.ProviderId

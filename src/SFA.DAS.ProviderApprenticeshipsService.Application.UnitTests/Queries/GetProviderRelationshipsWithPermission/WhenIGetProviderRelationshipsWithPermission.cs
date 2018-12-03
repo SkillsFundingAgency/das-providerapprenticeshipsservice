@@ -27,8 +27,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             };
 
             _apiClient = new Mock<IProviderRelationshipsApiClient>();
-            _apiClient.Setup(x => x.GetAccountProviderLegalEntitiesWithPermission(It.IsAny<AccountProviderLegalEntitiesRequest>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(() => new AccountProviderLegalEntitiesResponse
+            _apiClient.Setup(x => x.GetAccountProviderLegalEntitiesWithPermission(It.IsAny<GetAccountProviderLegalEntitiesWithPermissionRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => new GetAccountProviderLegalEntitiesWithPermissionResponse
                 {
                     AccountProviderLegalEntities = new List<AccountProviderLegalEntityDto>()
                 });
@@ -46,7 +46,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             //Assert
             _apiClient.Verify(x =>
                 x.GetAccountProviderLegalEntitiesWithPermission(
-                    It.Is<AccountProviderLegalEntitiesRequest>(r => r.Ukprn == _validRequest.ProviderId), It.IsAny<CancellationToken>()));
+                    It.Is<GetAccountProviderLegalEntitiesWithPermissionRequest>(r => r.Ukprn == _validRequest.ProviderId), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -58,19 +58,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             //Assert
             _apiClient.Verify(x =>
                 x.GetAccountProviderLegalEntitiesWithPermission(
-                    It.Is<AccountProviderLegalEntitiesRequest>(r => r.Operation == _validRequest.Permission), It.IsAny<CancellationToken>()));
+                    It.Is<GetAccountProviderLegalEntitiesWithPermissionRequest>(r => r.Operation == _validRequest.Permission), It.IsAny<CancellationToken>()));
         }
 
         [Test]
         public async Task TheResultIsReturnedFromTheRelationshipsApiClient()
         {
             //Arrange
-            var apiResponse = new AccountProviderLegalEntitiesResponse
+            var apiResponse = new GetAccountProviderLegalEntitiesWithPermissionResponse
             {
                 AccountProviderLegalEntities = new List<AccountProviderLegalEntityDto>()
             };
 
-            _apiClient.Setup(x => x.GetAccountProviderLegalEntitiesWithPermission(It.IsAny<AccountProviderLegalEntitiesRequest>(), It.IsAny<CancellationToken>()))
+            _apiClient.Setup(x => x.GetAccountProviderLegalEntitiesWithPermission(It.IsAny<GetAccountProviderLegalEntitiesWithPermissionRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(apiResponse);
 
             //Act

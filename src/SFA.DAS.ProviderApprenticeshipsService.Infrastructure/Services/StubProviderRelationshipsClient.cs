@@ -27,21 +27,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
             };
         }
 
-        public Task<AccountProviderLegalEntitiesResponse> GetAccountProviderLegalEntitiesWithPermission(
-            AccountProviderLegalEntitiesRequest request,
+        public Task<GetAccountProviderLegalEntitiesWithPermissionResponse> GetAccountProviderLegalEntitiesWithPermission(
+            GetAccountProviderLegalEntitiesWithPermissionRequest request,
             CancellationToken cancellationToken = new CancellationToken())
         {
-            return Task.FromResult(new AccountProviderLegalEntitiesResponse {AccountProviderLegalEntities = _accountProviderLegalEntitiesByUkprn.Where(kvp => kvp.Key == request.Ukprn).Select(kvp => kvp.Value)});
+            return Task.FromResult(new GetAccountProviderLegalEntitiesWithPermissionResponse
+                { AccountProviderLegalEntities = _accountProviderLegalEntitiesByUkprn.Where(kvp => kvp.Key == request.Ukprn).Select(kvp => kvp.Value) });
         }
 
-        public Task<bool> HasPermission(PermissionRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public Task<bool> HasPermission(HasPermissionRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             return Task.FromResult(_accountProviderLegalEntitiesByUkprn.Any(r => r.Key == request.Ukprn));
         }
 
-        public async Task<bool> HasRelationshipWithPermission(RelationshipsRequest request, CancellationToken token)
+        public async Task<bool> HasRelationshipWithPermission(HasRelationshipWithPermissionRequest request,
+            CancellationToken cancellationToken = new CancellationToken())
         {
-            return (await GetAccountProviderLegalEntitiesWithPermission(new AccountProviderLegalEntitiesRequest {Ukprn = request.Ukprn, Operation = request.Operation}, token)).AccountProviderLegalEntities.Any();
+            return (await GetAccountProviderLegalEntitiesWithPermission(new GetAccountProviderLegalEntitiesWithPermissionRequest
+                { Ukprn = request.Ukprn, Operation = request.Operation }, cancellationToken)).AccountProviderLegalEntities.Any();
         }
 
         public Task HealthCheck()
