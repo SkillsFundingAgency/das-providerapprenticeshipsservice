@@ -21,6 +21,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string AllowedHashstringCharacters { get; set; }
         public string PublicHashstring { get; set; }
         public string PublicAllowedHashstringCharacters { get; set; }
+        public string PublicAllowedAccountLegalEntityHashstringSalt { get; set; }
+        public string PublicAllowedAccountLegalEntityHashstringCharacters { get; set; }
     }
 
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration, IJwtClientConfiguration

@@ -350,6 +350,7 @@
     <Compile Include="Services\CurrentDateTime.cs" />
     <Compile Include="Services\EmployerAccountService.cs" />
     <Compile Include="Services\FeatureToggleService.cs" />
+    <Compile Include="Services\IAccountLegalEntityPublicHashingService.cs" />
     <Compile Include="Services\IPublicHashingService.cs" />
     <Compile Include="Services\PublicHashingService.cs" />
     <Compile Include="Services\StubProviderRelationshipsClient.cs" />

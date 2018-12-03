@@ -113,7 +113,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
 
         public IAuthorizationContextProvider AuthorizationContextProvider { get; set; }
         public Mock<HttpContextBase> HttpContext { get; set; }
-        public Mock<IPublicHashingService> PublicHashingService { get; set; }
+        public Mock<IAccountLegalEntityPublicHashingService> AccountLegalEntityPublicHashingService { get; set; }
         public string AccountLegalEntityPublicHashedIdRouteValue { get; set; }
         public long AccountLegalEntityId { get; set; }
         public string ProviderIdRouteValue { get; set; }
@@ -130,8 +130,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
             HttpContext.Setup(c => c.Request.RequestContext.RouteData).Returns(RouteData);
             HttpContext.Setup(c => c.Request.Params).Returns(Params);
 
-            PublicHashingService = new Mock<IPublicHashingService>();
-            AuthorizationContextProvider = new AuthorizationContextProvider(HttpContext.Object, PublicHashingService.Object, Mock.Of<ILog>());
+            AccountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
+            AuthorizationContextProvider = new AuthorizationContextProvider(HttpContext.Object, AccountLegalEntityPublicHashingService.Object, Mock.Of<ILog>());
         }
 
         public IAuthorizationContext GetAuthorizationContext()
@@ -148,7 +148,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
 
             Params[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId] = AccountLegalEntityPublicHashedIdRouteValue;
 
-            PublicHashingService.Setup(h => h.DecodeValue(AccountLegalEntityPublicHashedIdRouteValue)).Returns(AccountLegalEntityId);
+            AccountLegalEntityPublicHashingService.Setup(h => h.DecodeValue(AccountLegalEntityPublicHashedIdRouteValue)).Returns(AccountLegalEntityId);
 
             return this;
         }
@@ -159,7 +159,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
 
             Params[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId] = AccountLegalEntityPublicHashedIdRouteValue;
 
-            PublicHashingService.Setup(h => h.DecodeValue(AccountLegalEntityPublicHashedIdRouteValue)).Throws<Exception>();
+            AccountLegalEntityPublicHashingService.Setup(h => h.DecodeValue(AccountLegalEntityPublicHashedIdRouteValue)).Throws<Exception>();
 
             return this;
         }

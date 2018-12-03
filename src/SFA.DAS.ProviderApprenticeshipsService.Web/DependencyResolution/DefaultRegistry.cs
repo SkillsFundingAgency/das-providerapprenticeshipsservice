@@ -173,6 +173,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         {
             For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
             For<IPublicHashingService>().Use(x => new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring));
+            For<IAccountLegalEntityPublicHashingService>().Use(x => new PublicHashingService(config.PublicAllowedAccountLegalEntityHashstringCharacters, config.PublicAllowedAccountLegalEntityHashstringSalt));
         }
 
         private IProviderCommitmentsLogger GetBaseLogger(IContext x)

@@ -13,13 +13,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
     public class AuthorizationContextProvider : IAuthorizationContextProvider
     {
         private readonly HttpContextBase _httpContext;
-        private readonly IPublicHashingService _publicHashingService;
+        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
         private readonly ILog _log;
 
-        public AuthorizationContextProvider(HttpContextBase httpContext, IPublicHashingService publicHashingService, ILog log)
+        public AuthorizationContextProvider(HttpContextBase httpContext, IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService, ILog log)
         {
             _httpContext = httpContext;
-            _publicHashingService = publicHashingService;
+            _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
             _log = log;
         }
 
@@ -42,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
             {
                 var accountLegalEntityPublicHashedId = parameters[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId];
                 return accountLegalEntityPublicHashedId != null
-                    ? _publicHashingService.DecodeValue(accountLegalEntityPublicHashedId)
+                    ? _accountLegalEntityPublicHashingService.DecodeValue(accountLegalEntityPublicHashedId)
                     : (long?) null;
             }
             catch (Exception ex)
