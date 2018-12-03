@@ -120,13 +120,13 @@
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.2.0.0.35919\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.ProviderRelationships.Api.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ProviderRelationships.Api.Client.0.1.777\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Api.Client.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.ProviderRelationships.Api.Client.1.0.1\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Api.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.ProviderRelationships.ReadStore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ProviderRelationships.ReadStore.0.1.777\lib\netstandard2.0\SFA.DAS.ProviderRelationships.ReadStore.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.ProviderRelationships.ReadStore.1.0.1\lib\netstandard2.0\SFA.DAS.ProviderRelationships.ReadStore.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.ProviderRelationships.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ProviderRelationships.Types.0.1.777\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Types.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.ProviderRelationships.Types.1.0.1\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Providers.Api.Client, Version=0.10.29.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Providers.Api.Client.0.10.29-prerelease\lib\net45\SFA.DAS.Providers.Api.Client.dll</HintPath>
