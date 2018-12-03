@@ -235,13 +235,13 @@
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.11.75\lib\net462\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Authorization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Authorization.0.2.10\lib\netstandard2.0\SFA.DAS.Authorization.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Authorization.1.0.4\lib\netstandard2.0\SFA.DAS.Authorization.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Authorization.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Authorization.Mvc.0.2.10\lib\net462\SFA.DAS.Authorization.Mvc.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Authorization.Mvc.1.0.4\lib\net462\SFA.DAS.Authorization.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Authorization.ProviderPermissions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Authorization.ProviderPermissions.0.2.10\lib\netstandard2.0\SFA.DAS.Authorization.ProviderPermissions.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Authorization.ProviderPermissions.1.0.4\lib\netstandard2.0\SFA.DAS.Authorization.ProviderPermissions.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.AutoConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.AutoConfiguration.1.0.12\lib\netstandard2.0\SFA.DAS.AutoConfiguration.dll</HintPath>
