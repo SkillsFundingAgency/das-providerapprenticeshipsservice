@@ -12,7 +12,7 @@ using StructureMap.Pipeline;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 {
-    public class ConfigurationPolicy<T> : ConfiguredInstancePolicy where T : IConfiguration
+    public class ConfigurationPolicy<T> : ConfiguredInstancePolicy where T : Domain.Interfaces.IConfiguration
     {
         private readonly string _serviceName;
 

@@ -119,17 +119,14 @@
     <Reference Include="SFA.DAS.Common.Domain, Version=1.4.43.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.43\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Configuration, Version=1.0.0.6634, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Configuration.1.0.0.6634\lib\net45\SFA.DAS.Configuration.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.Configuration, Version=1.0.0.53229, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Configuration.1.0.0.53229\lib\net45\SFA.DAS.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Configuration.AzureTableStorage, Version=1.0.0.6634, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Configuration.AzureTableStorage.1.0.0.6634\lib\net45\SFA.DAS.Configuration.AzureTableStorage.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.Configuration.AzureTableStorage, Version=1.0.0.53229, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Configuration.AzureTableStorage.1.0.0.53229\lib\net45\SFA.DAS.Configuration.AzureTableStorage.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Configuration.FileStorage, Version=1.0.0.6634, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Configuration.FileStorage.1.0.0.6634\lib\net45\SFA.DAS.Configuration.FileStorage.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.Configuration.FileStorage, Version=1.0.0.53229, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Configuration.FileStorage.1.0.0.53229\lib\net45\SFA.DAS.Configuration.FileStorage.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.CookieService, Version=1.0.0.27423, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.CookieService.1.0.0.27423\lib\net45\SFA.DAS.CookieService.dll</HintPath>

@@ -83,7 +83,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             ConfigureNotificationsApi(config);
 
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
-            For<IConfiguration>().Use(config);
+            For<Domain.Interfaces.IConfiguration>().Use(config);
             For<ICache>().Use<InMemoryCache>(); //RedisCache
             For<IAgreementStatusQueryRepository>().Use<ProviderAgreementStatusRepository>();
             For<IApprenticeshipValidationErrorText>().Use<WebApprenticeshipValidationText>();
