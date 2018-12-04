@@ -9,8 +9,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using System.Security.Claims;
-using SFA.DAS.Authorization.Mvc;
-using SFA.DAS.Authorization.ProviderPermissions;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
