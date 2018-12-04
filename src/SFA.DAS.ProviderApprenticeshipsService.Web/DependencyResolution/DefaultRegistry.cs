@@ -23,6 +23,8 @@ using FluentValidation;
 using MediatR;
 using FeatureToggle;
 using Microsoft.Azure;
+using StructureMap;
+using SFA.DAS.Authorization;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -41,15 +43,16 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
-using StructureMap;
 using SFA.DAS.Learners.Validators;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.ProviderRelationships.Api.Client;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.ProviderRelationships.ReadStore.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -67,14 +70,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 });
 
-            var config = GetConfiguration();
+            var environment = GetAndStoreEnvironment();
+            var configurationRepository = GetConfigurationRepository();
+
+            var config = GetConfiguration(environment, configurationRepository);
+
+            // to override auto config (when supported!)
+            //var providerPermissionsReadStoreConfig = GetProviderPermissionsReadStoreConfiguration(environment, configurationRepository);
+            //For<ProviderRelationshipsReadStoreConfiguration>().Use(providerPermissionsReadStoreConfig);
 
             ConfigureHashingService(config);
             ConfigureCommitmentsApi(config);
             ConfigureNotificationsApi(config);
 
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
-            For<IConfiguration>().Use(config);
+            For<Domain.Interfaces.IConfiguration>().Use(config);
             For<ICache>().Use<InMemoryCache>(); //RedisCache
             For<IAgreementStatusQueryRepository>().Use<ProviderAgreementStatusRepository>();
             For<IApprenticeshipValidationErrorText>().Use<WebApprenticeshipValidationText>();
@@ -87,6 +97,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
+            For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
+            
             ConfigureFeatureToggle();
 
             RegisterMediator();
@@ -162,6 +174,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         {
             For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
             For<IPublicHashingService>().Use(x => new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring));
+            For<IAccountLegalEntityPublicHashingService>().Use(x => new PublicHashingService(config.PublicAllowedAccountLegalEntityHashstringCharacters, config.PublicAllowedAccountLegalEntityHashstringSalt));
         }
 
         private IProviderCommitmentsLogger GetBaseLogger(IContext x)
@@ -170,7 +183,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             return new ProviderCommitmentsLogger(new NLogLogger(parentType, x.GetInstance<IRequestContext>()));
         }
 
-        private ProviderApprenticeshipsServiceConfiguration GetConfiguration()
+        private string GetAndStoreEnvironment()
         {
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
@@ -182,14 +195,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 PopulateSystemDetails(environment);
             }
 
-            var configurationRepository = GetConfigurationRepository();
+            return environment;
+        }
+
+        private ProviderApprenticeshipsServiceConfiguration GetConfiguration(string environment, IConfigurationRepository configurationRepository)
+        {
             var configurationService = new ConfigurationService(configurationRepository,
                 new ConfigurationOptions(ServiceName, environment, "1.0"));
 
-            var result = configurationService.Get<ProviderApprenticeshipsServiceConfiguration>();
-
-            return result;
+            return configurationService.Get<ProviderApprenticeshipsServiceConfiguration>();
         }
+
+        /// <remarks>
+        /// For MVS, the read store config will come from SFA.DAS.ProviderRelationships.ReadStore,
+        ///          as the ProviderRelationships config bootstrapper will get its own config from there
+        /// post MVS, ProviderRelationships will allow clients to override the central config by placing the config in the structuremap container
+        /// </remarks>
+        //private ProviderRelationshipsReadStoreConfiguration GetProviderPermissionsReadStoreConfiguration(string environment, IConfigurationRepository configurationRepository)
+        //{
+        //    var configurationService = new ConfigurationService(configurationRepository,
+        //        new ConfigurationOptions("SFA.DAS.ProviderRelationships.ReadStore", environment, "1.0"));   // sensible override: "SFA.DAS.ProviderApprenticeshipsService.ProviderRelationships.ReadStore"
+
+        //    return configurationService.Get<ProviderRelationshipsReadStoreConfiguration>();
+        //}
 
         private static IConfigurationRepository GetConfigurationRepository()
         {

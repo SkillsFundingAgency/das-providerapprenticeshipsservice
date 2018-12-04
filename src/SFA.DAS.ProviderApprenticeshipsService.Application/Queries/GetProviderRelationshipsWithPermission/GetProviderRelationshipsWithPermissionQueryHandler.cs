@@ -23,11 +23,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider
             {
                 return new GetProviderRelationshipsWithPermissionQueryResponse
                 {
-                    ProviderRelationships = new List<RelationshipDto>()
+                    ProviderRelationships = new List<AccountProviderLegalEntityDto>()
                 };
             }
 
-            var result = await _providerRelationshipsApiClient.GetRelationshipsWithPermission(new RelationshipsRequest
+            var result = await _providerRelationshipsApiClient.GetAccountProviderLegalEntitiesWithPermission(new GetAccountProviderLegalEntitiesWithPermissionRequest
             {
                 Operation = request.Permission,
                 Ukprn = request.ProviderId
@@ -35,7 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider
 
             return new GetProviderRelationshipsWithPermissionQueryResponse
             {
-                ProviderRelationships = result.Relationships
+                ProviderRelationships = result.AccountProviderLegalEntities
             };
         }
     }

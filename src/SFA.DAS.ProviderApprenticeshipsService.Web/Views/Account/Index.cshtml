@@ -38,32 +38,27 @@
                     <p>Create new cohorts on behalf of an employer.</p>
                 </div>
             }
-                <div class="box">
-                    <h2 class="heading-medium">
-                        <a href="@Url.Action("Cohorts", "Commitment", new {providerId = Model.ProviderId})">Your cohorts</a>
-                    </h2>
-                    <p>Review, edit, approve and add apprentices to new cohorts.</p>
-                </div>
-
-                <div class="box">
-                    <h2 class="heading-medium">
-                        <a href="@Url.Action("Index", "ManageApprentices", new {providerId = Model.ProviderId})">Manage your apprentices</a>
-                    </h2>
-                    <p>View and update approved apprentice records.</p>
-                </div>
-                <div class="box">
-                    <h2 class="heading-medium">
-                        <a href="@Url.Action("Agreements", "Agreement", new {providerId = Model.ProviderId})">Organisations and agreements</a>
-                    </h2>
-                    <p>Find and view organisations and their agreement IDs.</p>
-                </div>
+            <div class="box">
+                <h2 class="heading-medium">
+                    <a href="@Url.Action("Cohorts", "Commitment", new {providerId = Model.ProviderId})">Your cohorts</a>
+                </h2>
+                <p>Review, edit, approve and add apprentices to new cohorts.</p>
             </div>
 
-      
+            <div class="box">
+                <h2 class="heading-medium">
+                    <a href="@Url.Action("Index", "ManageApprentices", new {providerId = Model.ProviderId})">Manage your apprentices</a>
+                </h2>
+                <p>View and update approved apprentice records.</p>
+            </div>
+            <div class="box">
+                <h2 class="heading-medium">
+                    <a href="@Url.Action("Agreements", "Agreement", new {providerId = Model.ProviderId})">Organisations and agreements</a>
+                </h2>
+                <p>Find and view organisations and their agreement IDs.</p>
+            </div>
+        </div>
     </div>
-
-
-
 
 @if (@Model.ShowAcademicYearBanner)
 {

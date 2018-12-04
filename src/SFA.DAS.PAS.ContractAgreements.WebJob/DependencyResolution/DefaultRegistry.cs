@@ -15,6 +15,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 
 using StructureMap;
 using StructureMap.Graph;
+using IConfiguration = SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.IConfiguration;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution
 {

@@ -37,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         {
             var errors = _sut.ValidateCohortReference(new ApprenticeshipUploadModel[0], "ABBA123").ToList();
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("No apprentice details found. Please check your file and upload again.");
+            errors.FirstOrDefault().ToString().Should().BeEquivalentTo("No apprentice details found. Please check your file and upload again.");
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         {
             var errors = _sut.ValidateRecords(GetTestData(), new List<ITrainingProgramme>()).ToList();
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("Row:1 - Not a valid <strong>Training code</strong>");
+            errors.FirstOrDefault().ToString().Should().BeEquivalentTo("Row:1 - Not a valid <strong>Training code</strong>");
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
 
             var errors = _sut.ValidateRecords(testData, TrainingProgrammes()).ToList();
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo("Row:1 - You must enter the <strong>start date</strong>, for example 2017-09");
+            errors.FirstOrDefault().ToString().Should().BeEquivalentTo("Row:1 - You must enter the <strong>start date</strong>, for example 2017-09");
         }
 
         [TestCase(2018, 12, "This training course is only available to apprentices with a start date after 05 2019", Description = "Start date before (month numerically higher)")]
@@ -78,7 +78,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             }).ToList();
 
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().ToString().ShouldBeEquivalentTo($"Row:1 - {expectedErrorMessage}");
+            errors.FirstOrDefault().ToString().Should().BeEquivalentTo($"Row:1 - {expectedErrorMessage}");
         }
 
         [TestCase(2019, 06, Description = "Start date first valid")]

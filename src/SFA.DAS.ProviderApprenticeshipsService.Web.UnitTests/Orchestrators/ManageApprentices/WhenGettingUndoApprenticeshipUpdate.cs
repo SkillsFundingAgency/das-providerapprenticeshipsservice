@@ -82,7 +82,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
 
             //Act
             Func<Task> act = async () => await _orchestrator.GetUndoApprenticeshipUpdateModel(0, "");
-            act.ShouldThrow<ValidationException>();
+            act.Should().Throw<ValidationException>();
         }
 
         [Test]

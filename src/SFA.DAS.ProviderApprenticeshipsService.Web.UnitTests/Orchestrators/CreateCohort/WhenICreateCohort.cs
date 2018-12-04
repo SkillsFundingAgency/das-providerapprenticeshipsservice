@@ -48,14 +48,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
         {
             _permissionsResponse = new GetProviderRelationshipsWithPermissionQueryResponse
             {
-                ProviderRelationships = new List<RelationshipDto>
+                ProviderRelationships = new List<AccountProviderLegalEntityDto>
                 {
-                    new RelationshipDto
+                    new AccountProviderLegalEntityDto
                     {
-                        EmployerAccountPublicHashedId = _employerAccountPublicHashedId,
-                        EmployerAccountId = _employerAccountId,
-                        EmployerAccountLegalEntityId = _employerAccountLegalEntityId,
-                        EmployerAccountLegalEntityPublicHashedId = _employerAccountLegalEntityPublicHashedId
+                        AccountPublicHashedId = _employerAccountPublicHashedId,
+                        AccountId = _employerAccountId,
+                        AccountLegalEntityId = _employerAccountLegalEntityId,
+                        AccountLegalEntityPublicHashedId = _employerAccountLegalEntityPublicHashedId
                     }
                 }
             };

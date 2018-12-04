@@ -15,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             var result = Validator.Validate(ValidModel);
             result.Errors.Count.Should().Be(1);
 
-            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("First name must be entered");
+            result.Errors[0].ErrorMessage.Should().Be("First name must be entered");
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             var result = Validator.Validate(ValidModel);
             result.Errors.Count.Should().Be(1);
 
-            result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("First name must be entered");
+            result.Errors[0].ErrorMessage.Should().Be("First name must be entered");
         }
 
         [TestCase(99, 0)]
@@ -42,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
 
             if (expectedErrorCount > 0)
             {
-                result.Errors[0].ErrorMessage.ShouldBeEquivalentTo("You must enter a first name that's no longer than 100 characters");
+                result.Errors[0].ErrorMessage.Should().Be("You must enter a first name that's no longer than 100 characters");
             }
         }
     }

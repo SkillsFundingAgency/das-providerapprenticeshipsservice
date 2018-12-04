@@ -42,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             SetUpOrchestrator();
             var result = await _orchestrator.GetCommitmentDetails(1L, "ABBA123");
 
-            result.PendingChanges.ShouldBeEquivalentTo(false);
+            result.PendingChanges.Should().BeFalse();
         }
 
         [Test(Description = "Should return true on PendingChanges overall agreement status isn't EmployerAgreed")]
@@ -64,7 +64,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             SetUpOrchestrator();
             var result = await _orchestrator.GetCommitmentDetails(1L, "ABBA213");
 
-            result.PendingChanges.ShouldBeEquivalentTo(true);
+            result.PendingChanges.Should().BeTrue();
         }
 
         [TestCase(EditStatus.EmployerOnly, true)]
@@ -84,7 +84,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             SetUpOrchestrator();
             var result = await _orchestrator.GetCommitmentDetails(1L, "ABBA213");
 
-            result.IsReadOnly.ShouldBeEquivalentTo(expectedIsReadOnly);
+            result.IsReadOnly.Should().Be(expectedIsReadOnly);
         }
 
         [Test]

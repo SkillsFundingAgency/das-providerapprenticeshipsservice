@@ -14,7 +14,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             _hashingService = hashingService;
         }
 
-        public CreateCohortViewModel Map(IEnumerable<RelationshipDto> source)
+        public CreateCohortViewModel Map(IEnumerable<AccountProviderLegalEntityDto> source)
         {
             var result = new CreateCohortViewModel();
 
@@ -24,10 +24,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             {
                 legalEntities.Add(new LegalEntityViewModel
                 {
-                    EmployerAccountPublicHashedId = relationship.EmployerAccountPublicHashedId,
-                    EmployerAccountName = relationship.EmployerAccountName,
-                    EmployerAccountLegalEntityPublicHashedId = relationship.EmployerAccountLegalEntityPublicHashedId,
-                    EmployerAccountLegalEntityName = relationship.EmployerAccountLegalEntityName,  
+                    EmployerAccountPublicHashedId = relationship.AccountPublicHashedId,
+                    EmployerAccountName = relationship.AccountName,
+                    EmployerAccountLegalEntityPublicHashedId = relationship.AccountLegalEntityPublicHashedId,
+                    EmployerAccountLegalEntityName = relationship.AccountLegalEntityName  
                 });
             }
 

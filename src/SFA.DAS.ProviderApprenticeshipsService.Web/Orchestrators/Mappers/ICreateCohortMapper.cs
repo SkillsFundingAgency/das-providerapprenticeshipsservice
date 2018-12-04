@@ -6,6 +6,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
     public interface ICreateCohortMapper
     {
-        CreateCohortViewModel Map(IEnumerable<RelationshipDto> source);
+        CreateCohortViewModel Map(IEnumerable<AccountProviderLegalEntityDto> source);
     }
 }
