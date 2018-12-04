@@ -74,9 +74,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             var configurationRepository = GetConfigurationRepository();
 
             var config = GetConfiguration(environment, configurationRepository);
-            var providerPermissionsReadStoreConfig = GetProviderPermissionsReadStoreConfiguration(environment, configurationRepository);
 
-            For<ProviderRelationshipsReadStoreConfiguration>().Use(providerPermissionsReadStoreConfig);
+            // to override auto config (when supported!)
+            //var providerPermissionsReadStoreConfig = GetProviderPermissionsReadStoreConfiguration(environment, configurationRepository);
+            //For<ProviderRelationshipsReadStoreConfiguration>().Use(providerPermissionsReadStoreConfig);
 
             ConfigureHashingService(config);
             ConfigureCommitmentsApi(config);
@@ -209,20 +210,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         /// For MVS, the read store config will come from SFA.DAS.ProviderRelationships.ReadStore,
         ///          as the ProviderRelationships config bootstrapper will get its own config from there
         /// post MVS, ProviderRelationships will allow clients to override the central config by placing the config in the structuremap container
-        ///
-        /// As of now, the bootstrapping has not yet been implemented, so we manually fetch the centralised config
-        /// and put it in the container, which ProviderRelationships will pick up
         /// </remarks>
-        private ProviderRelationshipsReadStoreConfiguration GetProviderPermissionsReadStoreConfiguration(string environment, IConfigurationRepository configurationRepository)
-        {
-            //var configurationService = new ConfigurationService(configurationRepository,
-            //    new ConfigurationOptions("SFA.DAS.ProviderApprenticeshipsService.ProviderRelationships.ReadStore", environment, "1.0"));
+        //private ProviderRelationshipsReadStoreConfiguration GetProviderPermissionsReadStoreConfiguration(string environment, IConfigurationRepository configurationRepository)
+        //{
+        //    var configurationService = new ConfigurationService(configurationRepository,
+        //        new ConfigurationOptions("SFA.DAS.ProviderRelationships.ReadStore", environment, "1.0"));   // sensible override: "SFA.DAS.ProviderApprenticeshipsService.ProviderRelationships.ReadStore"
 
-            var configurationService = new ConfigurationService(configurationRepository,
-                new ConfigurationOptions("SFA.DAS.ProviderRelationships.ReadStore", environment, "1.0"));
-
-            return configurationService.Get<ProviderRelationshipsReadStoreConfiguration>();
-        }
+        //    return configurationService.Get<ProviderRelationshipsReadStoreConfiguration>();
+        //}
 
         private static IConfigurationRepository GetConfigurationRepository()
         {
