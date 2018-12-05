@@ -53,6 +53,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.ProviderRelationships.Api.Client;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.ProviderRelationships.ReadStore.Configuration;
+using SFA.DAS.ProviderRelationships.Api.Client.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -75,9 +76,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             var config = GetConfiguration(environment, configurationRepository);
 
-            // to override auto config (when supported!)
-            //var providerPermissionsReadStoreConfig = GetProviderPermissionsReadStoreConfiguration(environment, configurationRepository);
-            //For<ProviderRelationshipsReadStoreConfiguration>().Use(providerPermissionsReadStoreConfig);
+            var providerPermissionsReadStoreConfig = GetProviderPermissionsReadStoreConfiguration(environment, configurationRepository);
+            For<ProviderRelationshipsReadStoreConfiguration>().ClearAll();
+            For<ProviderRelationshipsReadStoreConfiguration>().Use(providerPermissionsReadStoreConfig);
+
+            var providerRelationshipsApiClientConfiguration =
+                GetProviderRelationshipsApiClientConfiguration(environment, configurationRepository);
+            For<ProviderRelationshipsApiClientConfiguration>().ClearAll();
+            For<ProviderRelationshipsApiClientConfiguration>().Use(providerRelationshipsApiClientConfiguration);
 
             ConfigureHashingService(config);
             ConfigureCommitmentsApi(config);
@@ -206,18 +212,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             return configurationService.Get<ProviderApprenticeshipsServiceConfiguration>();
         }
 
-        /// <remarks>
-        /// For MVS, the read store config will come from SFA.DAS.ProviderRelationships.ReadStore,
-        ///          as the ProviderRelationships config bootstrapper will get its own config from there
-        /// post MVS, ProviderRelationships will allow clients to override the central config by placing the config in the structuremap container
-        /// </remarks>
-        //private ProviderRelationshipsReadStoreConfiguration GetProviderPermissionsReadStoreConfiguration(string environment, IConfigurationRepository configurationRepository)
-        //{
-        //    var configurationService = new ConfigurationService(configurationRepository,
-        //        new ConfigurationOptions("SFA.DAS.ProviderRelationships.ReadStore", environment, "1.0"));   // sensible override: "SFA.DAS.ProviderApprenticeshipsService.ProviderRelationships.ReadStore"
+        private ProviderRelationshipsReadStoreConfiguration GetProviderPermissionsReadStoreConfiguration(string environment, IConfigurationRepository configurationRepository)
+        {
+            var configurationService = new ConfigurationService(configurationRepository,
+                new ConfigurationOptions("SFA.DAS.ProviderRelationships.ReadStore", environment, "1.0"));
 
-        //    return configurationService.Get<ProviderRelationshipsReadStoreConfiguration>();
-        //}
+            return configurationService.Get<ProviderRelationshipsReadStoreConfiguration>();
+        }
+
+        private ProviderRelationshipsApiClientConfiguration GetProviderRelationshipsApiClientConfiguration(string environment, IConfigurationRepository configurationRepository)
+        {
+            var configurationService = new ConfigurationService(configurationRepository,
+                new ConfigurationOptions("SFA.DAS.ProviderRelationships.Api.Client", environment, "1.0"));
+
+            return configurationService.Get<ProviderRelationshipsApiClientConfiguration>();
+        }
 
         private static IConfigurationRepository GetConfigurationRepository()
         {
@@ -243,10 +252,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             if (useStub)
             {
                 For<IProviderRelationshipsApiClient>().Use<StubProviderRelationshipsApiClient>();
-            }
-            else
-            {
-                For<IProviderRelationshipsApiClient>().Use<ProviderRelationshipsApiClient>();
             }
         }
 
