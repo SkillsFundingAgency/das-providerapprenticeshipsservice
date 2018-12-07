@@ -76,6 +76,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             var config = GetConfiguration(environment, configurationRepository);
 
+            #region uncomment to override the auto config of the ProviderRelationships Api Client
+
             //var providerPermissionsReadStoreConfig = GetProviderPermissionsReadStoreConfiguration(environment, configurationRepository);
             //For<ProviderRelationshipsReadStoreConfiguration>().ClearAll();
             //For<ProviderRelationshipsReadStoreConfiguration>().Use(providerPermissionsReadStoreConfig);
@@ -84,6 +86,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             //    GetProviderRelationshipsApiClientConfiguration(environment, configurationRepository);
             //For<ProviderRelationshipsApiClientConfiguration>().ClearAll();
             //For<ProviderRelationshipsApiClientConfiguration>().Use(providerRelationshipsApiClientConfiguration);
+
+            #endregion
 
             ConfigureHashingService(config);
             ConfigureCommitmentsApi(config);
