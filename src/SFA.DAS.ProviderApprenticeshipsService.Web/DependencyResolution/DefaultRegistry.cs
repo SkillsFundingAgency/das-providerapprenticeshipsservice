@@ -76,14 +76,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             var config = GetConfiguration(environment, configurationRepository);
 
-            var providerPermissionsReadStoreConfig = GetProviderPermissionsReadStoreConfiguration(environment, configurationRepository);
-            For<ProviderRelationshipsReadStoreConfiguration>().ClearAll();
-            For<ProviderRelationshipsReadStoreConfiguration>().Use(providerPermissionsReadStoreConfig);
+            #region uncomment to override the auto config of the ProviderRelationships Api Client
 
-            var providerRelationshipsApiClientConfiguration =
-                GetProviderRelationshipsApiClientConfiguration(environment, configurationRepository);
-            For<ProviderRelationshipsApiClientConfiguration>().ClearAll();
-            For<ProviderRelationshipsApiClientConfiguration>().Use(providerRelationshipsApiClientConfiguration);
+            //var providerPermissionsReadStoreConfig = GetProviderPermissionsReadStoreConfiguration(environment, configurationRepository);
+            //For<ProviderRelationshipsReadStoreConfiguration>().ClearAll();
+            //For<ProviderRelationshipsReadStoreConfiguration>().Use(providerPermissionsReadStoreConfig);
+
+            //var providerRelationshipsApiClientConfiguration =
+            //    GetProviderRelationshipsApiClientConfiguration(environment, configurationRepository);
+            //For<ProviderRelationshipsApiClientConfiguration>().ClearAll();
+            //For<ProviderRelationshipsApiClientConfiguration>().Use(providerRelationshipsApiClientConfiguration);
+
+            #endregion
 
             ConfigureHashingService(config);
             ConfigureCommitmentsApi(config);
@@ -212,21 +216,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             return configurationService.Get<ProviderApprenticeshipsServiceConfiguration>();
         }
 
-        private ProviderRelationshipsReadStoreConfiguration GetProviderPermissionsReadStoreConfiguration(string environment, IConfigurationRepository configurationRepository)
-        {
-            var configurationService = new ConfigurationService(configurationRepository,
-                new ConfigurationOptions("SFA.DAS.ProviderRelationships.ReadStore", environment, "1.0"));
+        //private ProviderRelationshipsReadStoreConfiguration GetProviderPermissionsReadStoreConfiguration(string environment, IConfigurationRepository configurationRepository)
+        //{
+        //    var configurationService = new ConfigurationService(configurationRepository,
+        //        new ConfigurationOptions("SFA.DAS.ProviderRelationships.ReadStore", environment, "1.0"));
 
-            return configurationService.Get<ProviderRelationshipsReadStoreConfiguration>();
-        }
+        //    return configurationService.Get<ProviderRelationshipsReadStoreConfiguration>();
+        //}
 
-        private ProviderRelationshipsApiClientConfiguration GetProviderRelationshipsApiClientConfiguration(string environment, IConfigurationRepository configurationRepository)
-        {
-            var configurationService = new ConfigurationService(configurationRepository,
-                new ConfigurationOptions("SFA.DAS.ProviderRelationships.Api.Client", environment, "1.0"));
+        //private ProviderRelationshipsApiClientConfiguration GetProviderRelationshipsApiClientConfiguration(string environment, IConfigurationRepository configurationRepository)
+        //{
+        //    var configurationService = new ConfigurationService(configurationRepository,
+        //        new ConfigurationOptions("SFA.DAS.ProviderRelationships.Api.Client", environment, "1.0"));
 
-            return configurationService.Get<ProviderRelationshipsApiClientConfiguration>();
-        }
+        //    return configurationService.Get<ProviderRelationshipsApiClientConfiguration>();
+        //}
 
         private static IConfigurationRepository GetConfigurationRepository()
         {
