@@ -10,7 +10,6 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.Sql.Client;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
@@ -20,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         private readonly ILog _logger;
         private readonly ICurrentDateTime _currentDateTime;
 
-        public ProviderAgreementStatusRepository(ProviderApprenticeshipsServiceConfiguration config, ILog logger, ICurrentDateTime currentDateTime) : base(config.DatabaseConnectionString, logger)
+        public ProviderAgreementStatusRepository(IConfiguration config, ILog logger, ICurrentDateTime currentDateTime) : base(config.DatabaseConnectionString, logger)
         {
             _logger = logger;
             _currentDateTime = currentDateTime;
