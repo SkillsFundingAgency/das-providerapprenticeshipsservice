@@ -8,7 +8,7 @@ using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderRelationshipsWithPermission;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.ProviderRelationships.Types.Dtos;
@@ -22,7 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
         private Mock<IMediator> _mediator;
         private Mock<ICreateCohortMapper> _createCohortMapper;
         private GetProviderRelationshipsWithPermissionQueryResponse _permissionsResponse;
-        private CreateCohortViewModel _cohortViewModel;
+        private ChooseEmployerViewModel _cohortViewModel;
 
         [SetUp]
         public void Arrange()
@@ -37,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
                     new CancellationToken()))
                 .ReturnsAsync(_permissionsResponse);
 
-            _cohortViewModel = new CreateCohortViewModel();
+            _cohortViewModel = new ChooseEmployerViewModel();
             _createCohortMapper = new Mock<ICreateCohortMapper>();
             _createCohortMapper.Setup(x =>
                     x.Map(It.IsAny<IEnumerable<AccountProviderLegalEntityDto>>()))

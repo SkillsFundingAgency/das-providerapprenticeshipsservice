@@ -16,7 +16,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvide
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Organisation;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.ProviderRelationships.Types.Dtos;

@@ -13,7 +13,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderRela
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.ProviderRelationships.Types.Models;
 
@@ -35,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _publicHashingService = publicHashingService;
         }
 
-        public async Task<CreateCohortViewModel> GetCreateCohortViewModel(long providerId)
+        public async Task<ChooseEmployerViewModel> GetCreateCohortViewModel(long providerId)
         {
             Logger.Info($"Getting create cohort view model", providerId);
 

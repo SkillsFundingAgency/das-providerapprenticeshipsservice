@@ -19,6 +19,7 @@ using StructureMap;
 using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.ProviderPermissions;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -27,6 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         public static IContainer Initialize() {
             return new Container(c =>
             {
+                c.Policies.Add(new ConfigurationPolicy<AccountApiConfiguration>("SFA.DAS.EmployerAccountAPI"));
                 c.Policies.Add(new ConfigurationPolicy<ProviderApprenticeshipsServiceConfiguration>("SFA.DAS.ProviderApprenticeshipsService"));
                 c.Policies.Add<CurrentDatePolicy>();
                 c.AddRegistry<ValidationRegistry>();

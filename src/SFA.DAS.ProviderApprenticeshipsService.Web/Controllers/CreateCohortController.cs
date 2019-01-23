@@ -5,7 +5,7 @@ using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.Authorization.ProviderPermissions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
@@ -30,12 +30,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var model = await _orchestrator.GetCreateCohortViewModel(providerId);
 
-            return View(model);
+            return View("ChooseEmployer", model);
         }
 
         [HttpGet]
         [Route("cohorts/create/confirm-employer")]
-        [DasAuthorize(ProviderOperation.CreateCohort)]
+        //[DasAuthorize(ProviderOperation.CreateCohort)]
         public ActionResult ConfirmEmployer(long providerId, ConfirmEmployerViewModel confirmViewModel)
         {
             ModelState.Clear();
@@ -44,12 +44,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return RedirectToAction("Create");
             }
 
-            return View(confirmViewModel);
+            return View("ConfirmEmployer", confirmViewModel);
         }
 
         [HttpPost]
         [Route("cohorts/create/confirm-employer")]
-        [DasAuthorize(ProviderOperation.CreateCohort)]
+        //[DasAuthorize(ProviderOperation.CreateCohort)]
         public async Task<ActionResult> ConfirmEmployer(int providerId, ConfirmEmployerViewModel confirmViewModel)
         {
             if (confirmViewModel.Confirm.HasValue && !confirmViewModel.Confirm.Value)
@@ -59,7 +59,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View(confirmViewModel);
+                //return View(confirmViewModel);
             }
 
             var hashedCommitmentId = await _orchestrator.CreateCohort(providerId, confirmViewModel, CurrentUserId, GetSignedInUser());

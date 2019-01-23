@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.HashingService;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderRelationships.Types.Dtos;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
@@ -14,9 +14,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             _hashingService = hashingService;
         }
 
-        public CreateCohortViewModel Map(IEnumerable<AccountProviderLegalEntityDto> source)
+        public ChooseEmployerViewModel Map(IEnumerable<AccountProviderLegalEntityDto> source)
         {
-            var result = new CreateCohortViewModel();
+            var result = new ChooseEmployerViewModel();
 
             var legalEntities = new List<LegalEntityViewModel>();
 
