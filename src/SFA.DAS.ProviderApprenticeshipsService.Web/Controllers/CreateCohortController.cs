@@ -35,7 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("cohorts/create/confirm-employer")]
-        [DasAuthorize(ProviderOperation.CreateCohort)]
+        //[DasAuthorize(ProviderOperation.CreateCohort)]
         public ActionResult ConfirmEmployer(long providerId, ConfirmEmployerViewModel confirmViewModel)
         {
             ModelState.Clear();
@@ -49,7 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("cohorts/create/confirm-employer")]
-        [DasAuthorize(ProviderOperation.CreateCohort)]
+        //[DasAuthorize(ProviderOperation.CreateCohort)]
         public async Task<ActionResult> ConfirmEmployer(int providerId, ConfirmEmployerViewModel confirmViewModel)
         {
             if (confirmViewModel.Confirm.HasValue && !confirmViewModel.Confirm.Value)
