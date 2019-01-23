@@ -15,6 +15,7 @@
       <Setting name="RedisSessionProviderConnectionString" value="127.0.0.1" />
       <Setting name="CurrentTime" value="" />
       <Setting name="FeatureToggle.ProviderRelationships" value="false" />
+      <Setting name="FeatureToggle.ManageReservations" value="false" />
       <Setting name="UseStubProviderRelationships" value="true" />
     </ConfigurationSettings>
     <Certificates>
