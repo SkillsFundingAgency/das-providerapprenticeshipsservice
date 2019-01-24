@@ -11,7 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     [TestFixture]
     public class WhenMappingCreateCohortViewModel
     {
-        private CreateCohortMapper _mapper;
+        private SelectEmployerMapper _mapper;
         private List<AccountProviderLegalEntityDto> _source;
         private Mock<IHashingService> _hashingService;
 
@@ -33,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 }
             };
 
-            _mapper = new CreateCohortMapper(_hashingService.Object);
+            _mapper = new SelectEmployerMapper(_hashingService.Object);
         }
 
         [Test]

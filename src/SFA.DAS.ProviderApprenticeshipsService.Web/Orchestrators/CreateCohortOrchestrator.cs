@@ -20,17 +20,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public class CreateCohortOrchestrator : BaseCommitmentOrchestrator
     {
-        private readonly ICreateCohortMapper _createCohortMapper;
+        private readonly ISelectEmployerMapper _selectEmployerMapper;
         private readonly IPublicHashingService _publicHashingService;
 
         public CreateCohortOrchestrator(
             IMediator mediator,
-            ICreateCohortMapper createCohortMapper,
+            ISelectEmployerMapper selectEmployerMapper,
             IHashingService hashingService,
             IProviderCommitmentsLogger logger,
             IPublicHashingService publicHashingService) : base(mediator, hashingService, logger)
         {
-            _createCohortMapper = createCohortMapper;
+            _selectEmployerMapper = selectEmployerMapper;
             _publicHashingService = publicHashingService;
         }
 
@@ -44,7 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Permission = Operation.CreateCohort
             });
 
-            var result = _createCohortMapper.Map(relationshipsWithPermission.ProviderRelationships);
+            var result = _selectEmployerMapper.Map(relationshipsWithPermission.ProviderRelationships);
 
             return result;
         }

@@ -3,6 +3,6 @@
     public enum EmployerSelectionAction
     {
         CreateCohort = 1,
-        Createreservation = 2
+        CreateReservation = 2
     }
 }

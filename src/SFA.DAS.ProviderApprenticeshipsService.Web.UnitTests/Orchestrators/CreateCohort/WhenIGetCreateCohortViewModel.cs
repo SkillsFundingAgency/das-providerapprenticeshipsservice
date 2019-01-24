@@ -20,7 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
     {
         private CreateCohortOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<ICreateCohortMapper> _createCohortMapper;
+        private Mock<ISelectEmployerMapper> _createCohortMapper;
         private GetProviderRelationshipsWithPermissionQueryResponse _permissionsResponse;
         private ChooseEmployerViewModel _cohortViewModel;
 
@@ -38,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
                 .ReturnsAsync(_permissionsResponse);
 
             _cohortViewModel = new ChooseEmployerViewModel();
-            _createCohortMapper = new Mock<ICreateCohortMapper>();
+            _createCohortMapper = new Mock<ISelectEmployerMapper>();
             _createCohortMapper.Setup(x =>
                     x.Map(It.IsAny<IEnumerable<AccountProviderLegalEntityDto>>()))
                 .Returns(_cohortViewModel);

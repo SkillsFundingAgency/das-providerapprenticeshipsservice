@@ -1,20 +1,21 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderRelationships.Types.Dtos;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
-    public class CreateCohortMapper : ICreateCohortMapper
+    public class SelectEmployerMapper : ISelectEmployerMapper
     {
         private readonly IHashingService _hashingService;
 
-        public CreateCohortMapper(IHashingService hashingService)
+        public SelectEmployerMapper(IHashingService hashingService)
         {
             _hashingService = hashingService;
         }
 
-        public ChooseEmployerViewModel Map(IEnumerable<AccountProviderLegalEntityDto> source)
+        public ChooseEmployerViewModel Map(IEnumerable<AccountProviderLegalEntityDto> source, EmployerSelectionAction action)
         {
             var result = new ChooseEmployerViewModel();
 
@@ -32,6 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             }
 
             result.LegalEntities = legalEntities;
+            result.EmployerSelectionAction = action;
 
             return result;
         }

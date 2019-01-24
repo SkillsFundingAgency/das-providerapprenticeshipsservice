@@ -1,13 +1,32 @@
-﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ChooseEmployerViewModel
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ChooseEmployerViewModel
 @{
-    ViewBag.Title = "Create Cohort";
+    switch (Model.EmployerSelectionAction)
+    {
+        case EmployerSelectionAction.CreateCohort:
+            ViewBag.Title = "Create Cohort";
+            break;
+        case EmployerSelectionAction.CreateReservation:
+            ViewBag.Title = "Reserve Funds";
+            break;
+    }
 }
 
 <div class="grid-row">
     <div class="column-two-thirds">
 
         <h1 class="heading-xlarge">Choose an employer</h1>
-        <p>Choose an employer you want to create a new cohort on behalf of.</p>
+        @switch (Model.EmployerSelectionAction)
+        {
+            case EmployerSelectionAction.CreateCohort:
+                <p>Choose an employer you want to create a new cohort on behalf of.</p>
+                break;
+            case EmployerSelectionAction.CreateReservation:
+                <p>Choose an employer you want to reserve funds on behalf of.</p>
+                break;
+        }
+       
         <p>@Model.LegalEntities.Count() result@(Model.LegalEntities.Count() != 1 ? "s" : null) found.</p>
         <table class="table">
             <thead>
@@ -21,12 +40,22 @@
             <tbody>
                 @foreach (var legalEntity in Model.LegalEntities)
                 {
-                    <tr>
-                        <td>@legalEntity.EmployerAccountLegalEntityName</td>
-                        <td>@legalEntity.EmployerAccountName</td>
-                        <td>@legalEntity.EmployerAccountLegalEntityPublicHashedId</td>
-                        <td class="link-right"><a href="@Url.Action("ConfirmEmployer", legalEntity)">Select <span class="vh">@legalEntity.EmployerAccountLegalEntityName</span></a></td>
-                    </tr>
+                <tr>
+                    <td>@legalEntity.EmployerAccountLegalEntityName</td>
+                    <td>@legalEntity.EmployerAccountName</td>
+                    <td>@legalEntity.EmployerAccountLegalEntityPublicHashedId</td>
+                    <td class="link-right">
+                        @switch (Model.EmployerSelectionAction)
+                        {
+                            case EmployerSelectionAction.CreateCohort:
+                                <a href="@Url.Action("ConfirmEmployer", "CreateCohort", new ConfirmEmployerViewModel(legalEntity, Model.EmployerSelectionAction))">Select <span class="vh">@legalEntity.EmployerAccountLegalEntityName</span></a>
+                                break;
+                            case EmployerSelectionAction.CreateReservation:
+                                <a href="@Url.Action("ConfirmEmployer", "Reservation", new ConfirmEmployerViewModel(legalEntity, Model.EmployerSelectionAction))">Select <span class="vh">@legalEntity.EmployerAccountLegalEntityName</span></a>
+                                break;
+                        }
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
@@ -34,9 +63,9 @@
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="@Url.Action("Index", "Account")" aria-label="Back to account home" class="back-link">Back</a>
-    </div>
+<div class="breadcrumbs">
+    <a href="@Url.Action("Index", "Account")" aria-label="Back to account home" class="back-link">Back</a>
+</div>
 }
 
 

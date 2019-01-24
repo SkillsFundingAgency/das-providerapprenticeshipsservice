@@ -116,7 +116,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
             };
 
             _orchestrator = new CreateCohortOrchestrator(_mediator.Object,
-                Mock.Of<ICreateCohortMapper>(),
+                Mock.Of<ISelectEmployerMapper>(),
                 _hashingService.Object,
                 Mock.Of<IProviderCommitmentsLogger>(),
                 _publicHashingService.Object);
