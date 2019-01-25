@@ -8,13 +8,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
     public class SelectEmployerMapper : ISelectEmployerMapper
     {
-        private readonly IHashingService _hashingService;
-
-        public SelectEmployerMapper(IHashingService hashingService)
-        {
-            _hashingService = hashingService;
-        }
-
         public ChooseEmployerViewModel Map(IEnumerable<AccountProviderLegalEntityDto> source, EmployerSelectionAction action)
         {
             var result = new ChooseEmployerViewModel();

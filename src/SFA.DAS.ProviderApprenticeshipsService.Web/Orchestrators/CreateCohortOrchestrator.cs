@@ -20,33 +20,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public class CreateCohortOrchestrator : BaseCommitmentOrchestrator
     {
-        private readonly ISelectEmployerMapper _selectEmployerMapper;
         private readonly IPublicHashingService _publicHashingService;
 
         public CreateCohortOrchestrator(
             IMediator mediator,
-            ISelectEmployerMapper selectEmployerMapper,
             IHashingService hashingService,
             IProviderCommitmentsLogger logger,
             IPublicHashingService publicHashingService) : base(mediator, hashingService, logger)
         {
-            _selectEmployerMapper = selectEmployerMapper;
             _publicHashingService = publicHashingService;
-        }
-
-        public async Task<ChooseEmployerViewModel> GetCreateCohortViewModel(long providerId)
-        {
-            Logger.Info($"Getting create cohort view model", providerId);
-
-            var relationshipsWithPermission = await Mediator.Send(new GetProviderRelationshipsWithPermissionQueryRequest
-            {
-                ProviderId = providerId,
-                Permission = Operation.CreateCohort
-            });
-
-            var result = _selectEmployerMapper.Map(relationshipsWithPermission.ProviderRelationships);
-
-            return result;
         }
 
         public async Task<string> CreateCohort(int providerId, ConfirmEmployerViewModel confirmEmployerViewModel, string userId, SignInUserModel signinUser)
