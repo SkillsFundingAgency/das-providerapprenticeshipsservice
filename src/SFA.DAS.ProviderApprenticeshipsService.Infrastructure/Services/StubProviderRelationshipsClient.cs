@@ -17,12 +17,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
             {
                 new KeyValuePair<long, AccountProviderLegalEntityDto>(10005077, new AccountProviderLegalEntityDto
                 {
-                    AccountId = 15623,
-                    AccountPublicHashedId = "74449P",
-                    AccountLegalEntityName = "RED DIAMONDS",
-                    AccountLegalEntityId = 8004,
-                    AccountLegalEntityPublicHashedId = "XPBMMX",
-                    AccountName = "RED DIAMONDS (ACCOUNT)"
+                    AccountId = 8194,
+                    AccountPublicHashedId = "9V6JWR",
+                    AccountLegalEntityName = "ASAP CATERING LIMITED (Stub)",
+                    AccountLegalEntityId = 3884,
+                    AccountLegalEntityPublicHashedId = "94DVK9",
+                    AccountName = "ASAP CATERING LIMITED (Stub) (ACCOUNT)"
                 })
             };
         }
