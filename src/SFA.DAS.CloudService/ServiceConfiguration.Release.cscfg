@@ -15,7 +15,7 @@
       <Setting name="RedisSessionProviderConnectionString" value="__RedisSessionProviderConnectionString__" />
       <Setting name="CurrentTime" value="" />
       <Setting name="FeatureToggle.ProviderRelationships" value="__FeatureToggle.ProviderRelationships__" />
-      <Setting name="FeatureToggle.ProviderRelationships" value="__FeatureToggle.ManageReservations__" />
+      <Setting name="FeatureToggle.ManageReservations" value="__FeatureToggle.ManageReservations__" />
       <Setting name="UseStubProviderRelationships" value="__UseStubProviderRelationships__" />
     </ConfigurationSettings>
     <Certificates>
