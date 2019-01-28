@@ -52,6 +52,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.ProviderRelationships.Api.Client;
 using SFA.DAS.EAS.Account.Api.Client;
+using IConfiguration = SFA.DAS.Configuration.IConfiguration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -90,6 +91,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             ConfigureHashingService(config);
             ConfigureCommitmentsApi(config);
             ConfigureNotificationsApi(config);
+
+            For<IProviderAgreementStatusConfiguration>().Use(config);
 
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
             For<ICache>().Use<InMemoryCache>(); //RedisCache
