@@ -66,25 +66,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         }
 
         [Test]
-        public async Task ThenDraftsAreNotShownIfProviderRelationshipsFeatureNotToggledOn()
-        {
-            //Arrange
-            MockFeatureToggleOn.Setup(x => x.FeatureEnabled).Returns(false);
-
-            _mockMediator.Setup(x => x.Send(It.IsAny<GetCommitmentsQueryRequest>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new GetCommitmentsQueryResponse
-                {
-                    Commitments = new List<CommitmentListItem>()
-                });
-
-            //Act
-            var result = await _orchestrator.GetCohorts(1234567);
-
-            //Assert
-            Assert.IsFalse(result.ShowDrafts);
-        }
-
-        [Test]
         public async Task ThenDraftsAreNotShownIfProviderHasNoPermissions()
         {
             //Arrange
