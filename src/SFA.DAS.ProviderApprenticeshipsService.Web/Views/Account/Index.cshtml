@@ -1,4 +1,6 @@
-﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.AccountHomeViewModel
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
+
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.AccountHomeViewModel
 
 @{
     ViewBag.Title = Model.ProviderName;
@@ -27,7 +29,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        
+
         <div class="boxes">
             @if (Model.ShowCreateCohortLink)
             {
@@ -37,6 +39,15 @@
                     </h2>
                     <p>Create new cohorts on behalf of an employer.</p>
                 </div>
+                if (Html.IsManageReservationsEnabled(Model.ProviderId))
+                {
+                    <div class="box">
+                        <h2 class="heading-medium">
+                            <a href="@Url.Action("Index", "ManageReservations", new {providerId = Model.ProviderId})">Manage reservations</a>
+                        </h2>
+                        <p>Manage reservations on behalf of an employer.</p>
+                    </div>
+                }
             }
             <div class="box">
                 <h2 class="heading-medium">
@@ -60,17 +71,17 @@
         </div>
     </div>
 
-@if (@Model.ShowAcademicYearBanner)
-{
-    <div class="column-one-third academic-banner">
-        <div class="panel alert-default">
-            <h4 class="heading-small">ILR data from 2017 to 2018</h4>
-            <p>It is critical that you make any amendments to your ILR data and apprenticeship service records for the 2017 to 2018 academic year before the hard close at <strong>18:00 on 18 October 2018</strong>.</p>
-            <p>You will not be able to fix any mismatches in your ILR data or apprenticeship service records for the 2017 to 2018 academic year after 18 October 2018.</p>
-            <p>All data must be correct in order to receive payment for activity up to and including 31 July 2018.</p>
+    @if (@Model.ShowAcademicYearBanner)
+    {
+        <div class="column-one-third academic-banner">
+            <div class="panel alert-default">
+                <h4 class="heading-small">ILR data from 2017 to 2018</h4>
+                <p>It is critical that you make any amendments to your ILR data and apprenticeship service records for the 2017 to 2018 academic year before the hard close at <strong>18:00 on 18 October 2018</strong>.</p>
+                <p>You will not be able to fix any mismatches in your ILR data or apprenticeship service records for the 2017 to 2018 academic year after 18 October 2018.</p>
+                <p>All data must be correct in order to receive payment for activity up to and including 31 July 2018.</p>
+            </div>
         </div>
-    </div>
-}
+    }
 </div>
 
 <div class="grid-row">

@@ -10,8 +10,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
         {
             var service = DependencyResolver.Current
                 .GetService<IFeatureToggleService>();
-            var blah = service.Get<Domain.Models.FeatureToggles.ManageReservations>().FeatureEnabled;
-            return blah;
+            var isEnabled = service.Get<Domain.Models.FeatureToggles.ManageReservations>().FeatureEnabled;
+            return isEnabled;
         }
     }
 }
