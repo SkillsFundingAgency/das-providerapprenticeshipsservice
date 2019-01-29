@@ -28,6 +28,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             result.LegalEntities = legalEntities;
             result.EmployerSelectionAction = action;
 
+            switch (action)
+            {
+                case EmployerSelectionAction.CreateCohort:
+                    result.ControllerName = "CreateCohort";
+                    result.Title = "Create Cohort";
+                    result.Description = "Choose an employer you want to create a new cohort on behalf of.";
+                    break;
+                case EmployerSelectionAction.CreateReservation:
+                    result.ControllerName = "Reservation";
+                    result.Title = "Reserve Funds";
+                    result.Description = "Choose an employer you want to reserve funds on behalf of.";
+                    break;
+            }
+
             return result;
         }
     }

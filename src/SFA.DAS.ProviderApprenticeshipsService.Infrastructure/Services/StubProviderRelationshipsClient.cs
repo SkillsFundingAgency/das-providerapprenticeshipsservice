@@ -27,6 +27,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
                     AccountLegalEntityId = stubAccountLegalEntityId,
                     AccountLegalEntityPublicHashedId = "GEGZK5", //accountLegalEntityPublicHashingService.HashValue(stubAccountLegalEntityId),
                     AccountName = "TEST (ACCOUNT)"
+                }),
+                new KeyValuePair<long, AccountProviderLegalEntityDto>(10005077, new AccountProviderLegalEntityDto
+                {
+                    AccountId = 8194,
+                    AccountPublicHashedId = "9V6JWR",
+                    AccountLegalEntityName = "ASAP CATERING LIMITED (Stub)",
+                    AccountLegalEntityId = 3884,
+                    AccountLegalEntityPublicHashedId = "94DVK9",
+                    AccountName = "ASAP CATERING LIMITED (Stub) (ACCOUNT)"
                 })
             };
         }

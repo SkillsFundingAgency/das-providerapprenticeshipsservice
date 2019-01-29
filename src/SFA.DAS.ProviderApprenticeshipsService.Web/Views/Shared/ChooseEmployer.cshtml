@@ -1,31 +1,14 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ChooseEmployerViewModel
 @{
-    switch (Model.EmployerSelectionAction)
-    {
-        case EmployerSelectionAction.CreateCohort:
-            ViewBag.Title = "Create Cohort";
-            break;
-        case EmployerSelectionAction.CreateReservation:
-            ViewBag.Title = "Reserve Funds";
-            break;
-    }
+    ViewBag.Title = Model.Title;
 }
 
 <div class="grid-row">
     <div class="column-two-thirds">
 
         <h1 class="heading-xlarge">Choose an employer</h1>
-        @switch (Model.EmployerSelectionAction)
-        {
-            case EmployerSelectionAction.CreateCohort:
-                <p>Choose an employer you want to create a new cohort on behalf of.</p>
-                break;
-            case EmployerSelectionAction.CreateReservation:
-                <p>Choose an employer you want to reserve funds on behalf of.</p>
-                break;
-        }
+        <p>@Model.Description</p>
        
         <p>@Model.LegalEntities.Count() result@(Model.LegalEntities.Count() != 1 ? "s" : null) found.</p>
         <table class="table">
@@ -45,15 +28,7 @@
                     <td>@legalEntity.EmployerAccountName</td>
                     <td>@legalEntity.EmployerAccountLegalEntityPublicHashedId</td>
                     <td class="link-right">
-                        @switch (Model.EmployerSelectionAction)
-                        {
-                            case EmployerSelectionAction.CreateCohort:
-                                <a href="@Url.Action("ConfirmEmployer", "CreateCohort", new ConfirmEmployerViewModel(legalEntity, Model.EmployerSelectionAction))">Select <span class="vh">@legalEntity.EmployerAccountLegalEntityName</span></a>
-                                break;
-                            case EmployerSelectionAction.CreateReservation:
-                                <a href="@Url.Action("ConfirmEmployer", "Reservation", new ConfirmEmployerViewModel(legalEntity, Model.EmployerSelectionAction))">Select <span class="vh">@legalEntity.EmployerAccountLegalEntityName</span></a>
-                                break;
-                        }
+                        <a href="@Url.Action("ConfirmEmployer", Model.ControllerName, new ConfirmEmployerViewModel(legalEntity, Model.EmployerSelectionAction))">Select <span class="vh">@legalEntity.EmployerAccountLegalEntityName</span></a>
                     </td>
                 </tr>
                 }

@@ -57,5 +57,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Map
             Assert.AreEqual(_legalEntity1.AccountLegalEntityName, result.LegalEntities.First().EmployerAccountLegalEntityName);
             Assert.AreEqual(action, result.EmployerSelectionAction);
         }
+
+        [TestCase(EmployerSelectionAction.CreateCohort, "CreateCohort")]
+        [TestCase(EmployerSelectionAction.CreateReservation, "Reservation")]
+        public void ThenViewModelContainsControllerName(EmployerSelectionAction action, string controllerName)
+        {
+            var result = _selectEmployerMapper.Map(_listOfLegalEntities, action);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(controllerName, result.ControllerName);
+        }
     }
 }

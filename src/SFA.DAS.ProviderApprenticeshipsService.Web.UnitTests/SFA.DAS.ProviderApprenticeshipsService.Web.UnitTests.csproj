@@ -360,7 +360,6 @@
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeshipDetails.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeshipFilters.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeshipSearchQuery.cs" />
-    <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingCreateCohortViewModel.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingDataLocks.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingAcknowledgementViewModel.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingApprenticeship.cs" />

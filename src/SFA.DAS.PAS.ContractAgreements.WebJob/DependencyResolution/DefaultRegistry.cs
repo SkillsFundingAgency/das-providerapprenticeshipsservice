@@ -32,6 +32,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution
 
             var config = GetConfiguration("SFA.DAS.ContractAgreements");
             For<IConfiguration>().Use(config);
+            For<IProviderAgreementStatusConfiguration>().Use(config);
             For<ContractFeedConfiguration>().Use(config);
             For<ICurrentDateTime>().Use(x => new CurrentDateTime());
             For<IContractFeedProcessorHttpClient>().Use<ContractFeedProcessorHttpClient>();

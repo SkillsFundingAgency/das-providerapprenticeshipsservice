@@ -1,6 +1,4 @@
-﻿@using System.Diagnostics.Eventing.Reader
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ConfirmEmployerViewModel
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 
@@ -26,27 +24,17 @@
             @Html.HiddenFor(model => model.EmployerAccountLegalEntityPublicHashedId)
             @Html.HiddenFor(model => model.EmployerAccountName)
             @Html.HiddenFor(model => model.EmployerAccountPublicHashedId)
-            @Html.HiddenFor(model => model.EmployerSelectionAction)
+            @Html.HiddenFor(model => model.Question)
+            @Html.HiddenFor(model => model.ControllerName)
 
             <div class="form-group" @Html.AddClassIfPropertyInError(x => x.Confirm, "error")>
                 <fieldset>
 
                     <legend>
                         @Html.ValidationMessageFor(m => m.Confirm, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.Confirm) })
-
-                        @switch (Model.EmployerSelectionAction)
-                        {
-                            case EmployerSelectionAction.CreateCohort:
-                                <span class="heading-small">
-                                    Is this the employer you'd like to add a cohort for?
-                                </span>
-                                break;
-                            case EmployerSelectionAction.CreateReservation:
-                                <span class="heading-small">
-                                    Is this the employer you'd like to reserve funds for?
-                                </span>
-                                break;
-                        }
+                        <span class="heading-small">
+                            @Model.Question
+                        </span>
                     </legend>
 
                     <label for="confirm-yes" class="block-label selection-button-radio">
@@ -68,14 +56,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        @switch (Model.EmployerSelectionAction)
-        {
-            case EmployerSelectionAction.CreateCohort:
-                <a href="@Url.Action("Create", "CreateCohort")" aria-label="Back" class="back-link">Back</a>
-                break;
-            case EmployerSelectionAction.CreateReservation:
-                <a href="@Url.Action("Create", "Reservation")" aria-label="Back" class="back-link">Back</a>
-                break;
-        }
+       <a href="@Url.Action("Create", @Model.ControllerName)" aria-label="Back" class="back-link">Back</a>
     </div>
 }

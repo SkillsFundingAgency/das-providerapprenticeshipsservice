@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.Configuration
 {
-    public class ContractFeedConfiguration : IConfiguration
+    public class ContractFeedConfiguration : IProviderAgreementStatusConfiguration
     {
         public string AADInstance { get; set; }
 
