@@ -48,15 +48,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
 
             _featureToggle = new Mock<IFeatureToggle>();
             _featureToggleService = new Mock<IFeatureToggleService>();
-            _featureToggleService.Setup(x => x.Get<Domain.Models.FeatureToggles.ProviderRelationships>()).Returns(_featureToggle.Object);
-            
+            _featureToggleService.Setup(x => x.Get<Domain.Models.FeatureToggles.ManageReservations>()).Returns(_featureToggle.Object);
+
             _currentDateTime = new Mock<ICurrentDateTime>();
 
             _orchestrator = new AccountOrchestrator(
                 _mediator.Object,
                 Mock.Of<ILog>(),
-                _currentDateTime.Object,
-                _featureToggleService.Object
+                _currentDateTime.Object
             );
         }
 
@@ -70,6 +69,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
             model.ShowAcademicYearBanner.Should().Be(expectShowBanner);
         }
 
+        //REQUIRES REWORK FOR MANAGERESERVATIONS
         [TestCase(true, true, true, Description = "Show link if feature is enabled and provider has relevant permission" )]
         [TestCase(true, false, false, Description = "Hide link if feature is enabled but provider does not have relevant permission")]
         [TestCase(false, true, false, Description = "Hide link if feature is disabled but provider has relevant permission")]

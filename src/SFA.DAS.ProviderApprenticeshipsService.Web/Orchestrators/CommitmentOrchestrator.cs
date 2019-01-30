@@ -42,7 +42,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly ApprenticeshipViewModelUniqueUlnValidator _uniqueUlnValidator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
-        private readonly IFeatureToggleService _featureToggleService;
         private readonly Func<int, string> _addSSuffix = i => i > 1 ? "s" : "";
 
         public CommitmentOrchestrator(IMediator mediator,
@@ -50,31 +49,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             ApprenticeshipViewModelUniqueUlnValidator uniqueUlnValidator,
             ProviderApprenticeshipsServiceConfiguration configuration,
             IApprenticeshipCoreValidator apprenticeshipCoreValidator,
-            IApprenticeshipMapper apprenticeshipMapper,
-            IFeatureToggleService featureToggleService)
+            IApprenticeshipMapper apprenticeshipMapper)
             : base(mediator, hashingService, logger)
         {
             _uniqueUlnValidator = uniqueUlnValidator;
             _configuration = configuration;
             _apprenticeshipCoreValidator = apprenticeshipCoreValidator;
             _apprenticeshipMapper = apprenticeshipMapper;
-            _featureToggleService = featureToggleService;
         }
 
         public async Task<CohortsViewModel> GetCohorts(long providerId)
         {
             Logger.Info($"Getting cohorts :{providerId}", providerId);
 
-            var showDrafts = _featureToggleService.Get<Domain.Models.FeatureToggles.ProviderRelationships>().FeatureEnabled;
-            if (showDrafts)
+            var relationshipResponse = await Mediator.Send(new GetProviderHasRelationshipWithPermissionQueryRequest
             {
-                var relationshipResponse = await Mediator.Send(new GetProviderHasRelationshipWithPermissionQueryRequest
-                {
-                    ProviderId = providerId,
-                    Permission = Operation.CreateCohort
-                });
-                showDrafts = relationshipResponse.HasPermission;
-            }
+                ProviderId = providerId,
+                Permission = Operation.CreateCohort
+            });
+            var showDrafts = relationshipResponse.HasPermission;
+            
 
             var data = await Mediator.Send(new GetCommitmentsQueryRequest
             {

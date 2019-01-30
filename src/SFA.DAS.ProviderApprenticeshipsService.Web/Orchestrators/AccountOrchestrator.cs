@@ -25,17 +25,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly ILog _logger;
         private readonly ICurrentDateTime _currentDateTime;
-        private readonly IFeatureToggleService _featureToggleService;
 
         public AccountOrchestrator(IMediator mediator,
             ILog logger,
-            ICurrentDateTime currentDateTime,
-            IFeatureToggleService featureToggleService)
+            ICurrentDateTime currentDateTime)
         {
             _mediator = mediator;
             _logger = logger;
             _currentDateTime = currentDateTime;
-            _featureToggleService = featureToggleService;
         }
 
         public async Task<AccountHomeViewModel> GetAccountHomeViewModel(int providerId)
@@ -46,11 +43,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
                 var providerResponse = await _mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });
 
-                var showCreateCohortLink = false;
-                if (_featureToggleService.Get<Domain.Models.FeatureToggles.ProviderRelationships>().FeatureEnabled)
-                {
-                    showCreateCohortLink = await ProviderHasPermission(providerId, Operation.CreateCohort);
-                }                  
+                var showCreateCohortLink = await ProviderHasPermission(providerId, Operation.CreateCohort);
 
                 return new AccountHomeViewModel
                 {
