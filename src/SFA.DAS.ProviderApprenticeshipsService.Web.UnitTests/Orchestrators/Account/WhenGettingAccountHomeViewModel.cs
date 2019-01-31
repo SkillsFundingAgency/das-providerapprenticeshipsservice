@@ -22,8 +22,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
         private AccountOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ICurrentDateTime> _currentDateTime;
-        private Mock<IFeatureToggleService> _featureToggleService;
-        private Mock<IFeatureToggle> _featureToggle;
 
         [SetUp]
         public void Arrange()
@@ -46,10 +44,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => new GetProviderHasRelationshipWithPermissionQueryResponse());
 
-            _featureToggle = new Mock<IFeatureToggle>();
-            _featureToggleService = new Mock<IFeatureToggleService>();
-            _featureToggleService.Setup(x => x.Get<Domain.Models.FeatureToggles.ManageReservations>()).Returns(_featureToggle.Object);
-
             _currentDateTime = new Mock<ICurrentDateTime>();
 
             _orchestrator = new AccountOrchestrator(
@@ -67,29 +61,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
             var model = await _orchestrator.GetAccountHomeViewModel(1);
 
             model.ShowAcademicYearBanner.Should().Be(expectShowBanner);
-        }
-
-        //REQUIRES REWORK FOR MANAGERESERVATIONS
-        [TestCase(true, true, true, Description = "Show link if feature is enabled and provider has relevant permission" )]
-        [TestCase(true, false, false, Description = "Hide link if feature is enabled but provider does not have relevant permission")]
-        [TestCase(false, true, false, Description = "Hide link if feature is disabled but provider has relevant permission")]
-        [TestCase(false, false, false, Description = "Hide link if feature is disabled and provider does not has relevant permission")]
-        public async Task ThenDisplayOfCreateCohortLinkIsDetermined(bool featureEnabled, bool hasPermission, bool expectShowLink)
-        {
-            //Arrange
-            _featureToggle.Setup(x => x.FeatureEnabled).Returns(featureEnabled);
-
-            _mediator.Setup(x =>
-                    x.Send(It.Is<GetProviderHasRelationshipWithPermissionQueryRequest>(r =>
-                            r.Permission == Operation.CreateCohort),
-                        It.IsAny<CancellationToken>()))
-                .ReturnsAsync(() => new GetProviderHasRelationshipWithPermissionQueryResponse{ HasPermission = hasPermission});
-
-            //Act
-            var model = await _orchestrator.GetAccountHomeViewModel(1);
-
-            //Assert
-            model.ShowCreateCohortLink.Should().Be(expectShowLink);
         }
     }
 }
