@@ -68,6 +68,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 };
 
             _mockMediator = GetMediator(_testCommitment);
+            SetUpOrchestrator();
             var result = _orchestrator.GetFinishEditing(1L, "ABBA123").Result;
 
             result.IsApproveAndSend.Should().BeTrue();

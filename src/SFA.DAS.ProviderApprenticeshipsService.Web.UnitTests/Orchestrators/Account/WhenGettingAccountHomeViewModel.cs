@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using FeatureToggle;
 using FluentAssertions;
 using MediatR;
 using Moq;
