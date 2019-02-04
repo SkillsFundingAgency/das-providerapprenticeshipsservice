@@ -11,10 +11,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
     {
         private readonly List<KeyValuePair<long /*ukprn*/, AccountProviderLegalEntityDto>> _accountProviderLegalEntitiesByUkprn;
 
-        public StubProviderRelationshipsApiClient()
+        public StubProviderRelationshipsApiClient(IPublicHashingService publicHashingService, IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService)
         {
+
+            const long stubAccountId = 103380;
+            const long stubAccountLegalEntityId = 36637;
+
             _accountProviderLegalEntitiesByUkprn = new List<KeyValuePair<long, AccountProviderLegalEntityDto>>
             {
+                new KeyValuePair<long, AccountProviderLegalEntityDto>(10005077, new AccountProviderLegalEntityDto
+                {
+                    AccountId = stubAccountId,
+                    AccountPublicHashedId = publicHashingService.HashValue(stubAccountId),
+                    AccountLegalEntityName = "TEST LEGAL ENTITY ACCOUNT",
+                    AccountLegalEntityId = stubAccountLegalEntityId,
+                    AccountLegalEntityPublicHashedId = "GEGZK5", //accountLegalEntityPublicHashingService.HashValue(stubAccountLegalEntityId),
+                    AccountName = "TEST (ACCOUNT)"
+                }),
                 new KeyValuePair<long, AccountProviderLegalEntityDto>(10005077, new AccountProviderLegalEntityDto
                 {
                     AccountId = 8194,

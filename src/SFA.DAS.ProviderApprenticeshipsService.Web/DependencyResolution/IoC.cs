@@ -28,6 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         public static IContainer Initialize() {
             return new Container(c =>
             {
+                c.Policies.Add(new ConfigurationPolicy<AccountApiConfiguration>("SFA.DAS.EmployerAccountAPI"));
                 c.Policies.Add(new ConfigurationPolicy<ProviderApprenticeshipsServiceConfiguration>("SFA.DAS.ProviderApprenticeshipsService"));
                 c.Policies.Add(new ConfigurationPolicy<AccountApiConfiguration>("SFA.DAS.EmployerAccountAPI"));
                 c.Policies.Add<CurrentDatePolicy>();

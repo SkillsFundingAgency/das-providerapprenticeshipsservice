@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
     public class LegalEntityViewModel
     {

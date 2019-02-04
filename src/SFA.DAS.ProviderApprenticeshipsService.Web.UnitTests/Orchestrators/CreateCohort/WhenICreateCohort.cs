@@ -16,9 +16,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvide
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Organisation;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.ProviderRelationships.Types.Dtos;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.CreateCohort
@@ -117,7 +115,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
             };
 
             _orchestrator = new CreateCohortOrchestrator(_mediator.Object,
-                Mock.Of<ICreateCohortMapper>(),
                 _hashingService.Object,
                 Mock.Of<IProviderCommitmentsLogger>(),
                 _publicHashingService.Object);
@@ -251,7 +248,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Cre
             var result = await _orchestrator.CreateCohort(_providerId, TestHelper.Clone(_confirmEmployerViewModel), _userId, _signInUserModel);
             Assert.AreEqual("CohortRef", result);
         }
-
 
         [Test]
         public void ThenTheProviderMustHavePermission()

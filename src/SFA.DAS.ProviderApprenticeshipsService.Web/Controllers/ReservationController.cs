@@ -14,30 +14,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     [Authorize]
     [ProviderUkPrnCheck]
     [RoutePrefix("{providerId}/apprentices")]
-    public class CreateCohortController : BaseController
+    public class ReservationController : BaseController
     {
-        private readonly CreateCohortOrchestrator _createCohortOrchestrator;
         private readonly SelectEmployerOrchestrator _selectEmployerOrchestrator;
 
-        public CreateCohortController(ICookieStorageService<FlashMessageViewModel> flashMessage,
-            SelectEmployerOrchestrator selectEmployerOrchestrator, CreateCohortOrchestrator createCohortOrchestrator) : base(flashMessage)
+        public ReservationController(ICookieStorageService<FlashMessageViewModel> flashMessage,
+            SelectEmployerOrchestrator selectEmployerOrchestrator) : base(flashMessage)
         {
             _selectEmployerOrchestrator = selectEmployerOrchestrator;
-            _createCohortOrchestrator = createCohortOrchestrator;
         }
 
-
         [HttpGet]
-        [Route("cohorts/create")]
+        [Route("reservations/create")]
         public async Task<ActionResult> Create(long providerId)
         {
-            var model = await _selectEmployerOrchestrator.GetChooseEmployerViewModel(providerId, EmployerSelectionAction.CreateCohort);
+            var model = await _selectEmployerOrchestrator.GetChooseEmployerViewModel(providerId, EmployerSelectionAction.CreateReservation);
 
             return View("ChooseEmployer", model);
         }
 
         [HttpGet]
-        [Route("cohorts/create/confirm-employer")]
+        [Route("reservations/create/confirm-employer")]
         [DasAuthorize(ProviderOperation.CreateCohort)]
         public ActionResult ConfirmEmployer(long providerId, ConfirmEmployerViewModel confirmViewModel)
         {
@@ -51,9 +48,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        [Route("cohorts/create/confirm-employer")]
+        [Route("reservations/create/confirm-employer")]
         [DasAuthorize(ProviderOperation.CreateCohort)]
-        public async Task<ActionResult> ConfirmEmployer(int providerId, ConfirmEmployerViewModel confirmViewModel)
+        public ActionResult ConfirmEmployer(int providerId, ConfirmEmployerViewModel confirmViewModel)
         {
             if (confirmViewModel.Confirm.HasValue && !confirmViewModel.Confirm.Value)
             {
@@ -65,8 +62,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return View(confirmViewModel);
             }
 
-            var hashedCommitmentId = await _createCohortOrchestrator.CreateCohort(providerId, confirmViewModel, CurrentUserId, GetSignedInUser());
-            return RedirectToAction("Details", "Commitment", new { providerId, hashedCommitmentId });
+            return RedirectToRoute("account-home");
         }
     }
 }
