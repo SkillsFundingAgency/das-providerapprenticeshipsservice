@@ -1,6 +1,7 @@
 ﻿@using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
+@using SFA.DAS.Authorization.Mvc
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -135,7 +136,7 @@
                         <nav class="header-inner">
                             <ul role="menubar" id="global-nav-links">
                                 <li><a href="@Url.Action("Index", "Account")" role="menuitem" class="@(controllerName == "Account" ? "selected" : "")">Home</a></li>
-                                @if (Html.IsManageReservationsEnabled(providerId))
+                                @if (Html.IsManageReservationsEnabled(providerId) && Html.IsAuthorized())
                                 {
                                     <li><a href="@Url.Action("Index", "ManageReservations", new {providerId = providerId})" role="menuitem" class="@(controllerName == "ManageReservations" ? "selected" : "")">Manage reservations</a></li>
                                 }
