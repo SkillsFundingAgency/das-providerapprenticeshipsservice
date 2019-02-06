@@ -1,4 +1,5 @@
-﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+﻿using System.Threading.Tasks;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using System.Web;
 using System.Web.Mvc;
 using MediatR;
@@ -18,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
             return isEnabled;
         }
 
-        public static bool IsCreateCohortAuthorised(this HtmlHelper htmlHelper)
+        public static async Task<bool> IsCreateCohortAuthorised(this HtmlHelper htmlHelper)
         {
             var httpContext = DependencyResolver.Current.GetService<HttpContextBase>();
             var ukprn = httpContext?.User?.Identity?.GetClaim("http://schemas.portal.com/ukprn");
@@ -29,13 +30,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
             }
 
             var mediator = DependencyResolver.Current.GetService<IMediator>();
-            var response = mediator.Send(new GetProviderHasRelationshipWithPermissionQueryRequest
+            var response = await mediator.Send(new GetProviderHasRelationshipWithPermissionQueryRequest
             {
                 Permission = Operation.CreateCohort,
                 ProviderId = long.Parse(ukprn)
             });
 
-            return response.Result.HasPermission;
+            return response.HasPermission;
         }
     }
 }
