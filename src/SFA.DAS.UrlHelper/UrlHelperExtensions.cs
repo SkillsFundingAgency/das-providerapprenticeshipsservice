@@ -1,11 +1,10 @@
-﻿//#define NET462
-using System;
-using System.Web.Mvc;
+﻿using System;
 using SFA.DAS.AutoConfiguration;
-#if NET462
+#if NETFRAMEWORK
+using System.Web.Mvc;
 using UrlHelper=System.Web.Mvc.UrlHelper;
-#else
-using UrlHelper =Microsoft.AspNetCore.Mvc.Routing.UrlHelper;
+#elif NETCOREAPP
+using UrlHelper=Microsoft.AspNetCore.Mvc.Routing .UrlHelper;
 #endif
 
 namespace SFA.DAS.ProviderUrlHelper
@@ -32,7 +31,7 @@ namespace SFA.DAS.ProviderUrlHelper
 
         private static ProviderUrlConfiguration LoadProviderUrlConfiguration()
         {
-            var autoConfigurationService = DependencyResolver.Current.GetService<IAutoConfigurationService>();
+            var autoConfigurationService = ServiceLocator.Get<IAutoConfigurationService>();
 
             var configuration = autoConfigurationService.Get<ProviderUrlConfiguration>();
 
