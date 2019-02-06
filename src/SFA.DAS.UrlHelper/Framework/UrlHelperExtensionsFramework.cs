@@ -1,11 +1,8 @@
 ﻿using System;
 using SFA.DAS.AutoConfiguration;
-#if NETFRAMEWORK
 using System.Web.Mvc;
+using SFA.DAS.ProviderUrlHelper.Framework;
 using UrlHelper=System.Web.Mvc.UrlHelper;
-#elif NETCOREAPP
-using UrlHelper=Microsoft.AspNetCore.Mvc.Routing .UrlHelper;
-#endif
 
 namespace SFA.DAS.ProviderUrlHelper
 {
