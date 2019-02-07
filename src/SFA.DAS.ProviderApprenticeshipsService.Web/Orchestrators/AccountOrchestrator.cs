@@ -23,15 +23,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ILog _logger;
-        private readonly ICurrentDateTime _currentDateTime;
 
         public AccountOrchestrator(IMediator mediator,
-            ILog logger,
-            ICurrentDateTime currentDateTime)
+            ILog logger)
         {
             _mediator = mediator;
             _logger = logger;
-            _currentDateTime = currentDateTime;
         }
 
         public async Task<AccountHomeViewModel> GetAccountHomeViewModel(int providerId)

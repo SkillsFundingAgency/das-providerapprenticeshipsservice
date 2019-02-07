@@ -47,8 +47,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
 
             _orchestrator = new AccountOrchestrator(
                 _mediator.Object,
-                Mock.Of<ILog>(),
-                _currentDateTime.Object
+                Mock.Of<ILog>()
             );
         }
 

@@ -39,7 +39,7 @@
                     </h2>
                     <p>Create new cohorts on behalf of an employer.</p>
                 </div>
-                if (Html.IsManageReservationsEnabled(Model.ProviderId))
+                if (Html.CanShowReservationsLink())
                 {
                     <div class="box">
                         <h2 class="heading-medium">
