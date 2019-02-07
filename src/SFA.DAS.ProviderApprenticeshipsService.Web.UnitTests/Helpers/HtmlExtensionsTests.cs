@@ -44,19 +44,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Helpers
                 DependencyResolver.SetResolver(TestServiceLocator);
             }
 
-            [TestCase(true)]
-            [TestCase(false)]
-            public void ThenReturnsTheExpectedPermission(bool expected)
+            [TestCase(true, true)]
+            [TestCase(false, false)]
+            public void ThenReturnsTheExpectedPermission(bool userPermission, bool expectedResult)
             {
-                FeatureToggleMock.Setup(x => x.FeatureEnabled).Returns(expected);
-                FakeHttpContextBase.User = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { new Claim(DasClaimTypes.ShowReservations, expected.ToString(), "bool") }));
+                //Following line resolves to true in all cases as it is lazy loaded, so parameterising it leads to failing tests
+                FeatureToggleMock.Setup(x => x.FeatureEnabled).Returns(true);
+                FakeHttpContextBase.User = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { new Claim(DasClaimTypes.ShowReservations, userPermission.ToString(), "bool") }));
                 var result = HtmlExtensions.CanShowReservationsLink(null);
-                Assert.AreEqual(expected, result);
+                Assert.AreEqual(expectedResult, result);
             }
 
             [Test]
             public void ThenReturnsFalseIfNoUserLoggedIn()
             {
+                FeatureToggleMock.Setup(x => x.FeatureEnabled).Returns(true);
                 FakeHttpContextBase.User = null;
                 var result = HtmlExtensions.CanShowReservationsLink(null);
                 Assert.IsFalse(result);
