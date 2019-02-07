@@ -369,9 +369,9 @@
     <Compile Include="AcademicYear\WhenValidatingAcademicYear.cs" />
     <Compile Include="Authorization\AuthorizationContextProviderTests.cs" />
     <Compile Include="Extensions\IEnumerableCommitmentAgreementTests.cs" />
-    <Compile Include="Helpers\FakeHttpContext.cs" />
+    <Compile Include="FakeHttpContext.cs" />
     <Compile Include="Helpers\HtmlExtensionsTests.cs" />
-    <Compile Include="Helpers\TestServiceLocator.cs" />
+    <Compile Include="TestServiceLocator.cs" />
     <Compile Include="Models\DataLockSummaryViewModelTests.cs" />
     <Compile Include="MoqCustomisedAutoData.cs" />
     <Compile Include="Orchestrators\Account\WhenGettingAccountHomeViewModel.cs" />

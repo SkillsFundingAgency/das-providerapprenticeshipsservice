@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Practices.ServiceLocation;
 using StructureMap;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Helpers
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
 {
     public class TestServiceLocator : ServiceLocatorImplBase
     {

@@ -1,12 +1,8 @@
-﻿using System.Threading.Tasks;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using System.Web;
 using System.Web.Mvc;
-using MediatR;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
-using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
 {
@@ -19,24 +15,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
             return isEnabled;
         }
 
-        public static async Task<bool> IsCreateCohortAuthorised(this HtmlHelper htmlHelper)
+        public static bool CanShowReservationsLink(this HtmlHelper htmlHelper)
         {
             var httpContext = DependencyResolver.Current.GetService<HttpContextBase>();
-            var ukprn = httpContext?.User?.Identity?.GetClaim("http://schemas.portal.com/ukprn");
+            var show = httpContext?.User?.Identity?.GetClaim(DasClaimTypes.ShowReservations);
 
-            if (ukprn is null)
-            {
-                return false;
-            }
+            if(show?.ToLower() == "true")
+                return true;
 
-            var mediator = DependencyResolver.Current.GetService<IMediator>();
-            var response = await mediator.Send(new GetProviderHasRelationshipWithPermissionQueryRequest
-            {
-                Permission = Operation.CreateCohort,
-                ProviderId = long.Parse(ukprn)
-            });
-
-            return response.HasPermission;
+            return false;
         }
     }
 }

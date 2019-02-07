@@ -1,15 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Web;
 using NUnit.Framework;
 using StructureMap;
 using System.Web.Mvc;
 using FeatureToggle;
-using MediatR;
 using Moq;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Helpers;
@@ -60,22 +56,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Helpers
         }
 
         [TestFixture]
-        public class WhenCallingIsCreateCohortAuthorised
-        {
+        public class WhenCallingCanShowReservationsLink
+        { 
             public HttpContextBase FakeHttpContextBase;
-            public Mock<IMediator> MockMediator;
             public TestServiceLocator TestServiceLocator;
 
             [SetUp]
             public void SetUp()
             {
                 FakeHttpContextBase = new FakeHttpContext();
-                MockMediator = new Mock<IMediator>();
 
                 IContainer container = new Container(c =>
                 {
                     c.For<HttpContextBase>().Use(FakeHttpContextBase);
-                    c.For<IMediator>().Use(MockMediator.Object);
                 });
 
                 TestServiceLocator = new TestServiceLocator(container);
@@ -84,24 +77,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Helpers
 
             [TestCase(true)]
             [TestCase(false)]
-            public async Task ThenReturnsThePermission(bool expected)
+            public void ThenReturnsTheExpectedPermission(bool expected)
             {
-                FakeHttpContextBase.User = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { new Claim("http://schemas.portal.com/ukprn", "1234", "string") }));
-                MockMediator
-                    .Setup(x => x.Send(It.IsAny<GetProviderHasRelationshipWithPermissionQueryRequest>(), It.IsAny<CancellationToken>()))
-                    .ReturnsAsync(new GetProviderHasRelationshipWithPermissionQueryResponse
-                    {
-                        HasPermission = expected
-                    });
-                var result = await HtmlExtensions.IsCreateCohortAuthorised(null);
-                Assert.AreEqual(result, expected);
+                FakeHttpContextBase.User = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { new Claim(DasClaimTypes.ShowReservations, expected.ToString(), "bool") }));
+                var result = HtmlExtensions.CanShowReservationsLink(null);
+                Assert.AreEqual(expected, result);
             }
 
             [Test]
-            public async Task ThenReturnsFalseIfNoUserLoggedIn()
+            public void ThenReturnsFalseIfNoUserLoggedIn()
             {
                 FakeHttpContextBase.User = null;
-                var result = await HtmlExtensions.IsCreateCohortAuthorised(null);
+                var result = HtmlExtensions.CanShowReservationsLink(null);
                 Assert.IsFalse(result);
             }
 

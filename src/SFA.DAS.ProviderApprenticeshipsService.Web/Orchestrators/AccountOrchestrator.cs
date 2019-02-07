@@ -141,7 +141,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        private async Task<bool> ProviderHasPermission(long providerId, Operation permission)
+        public async Task<bool> ProviderHasPermission(long providerId, Operation permission)
         {
             var permissionResponse = await _mediator.Send(new GetProviderHasRelationshipWithPermissionQueryRequest
             {

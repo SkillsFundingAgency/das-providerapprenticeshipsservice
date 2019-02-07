@@ -137,7 +137,7 @@
                         <nav class="header-inner">
                             <ul role="menubar" id="global-nav-links">
                                 <li><a href="@Url.Action("Index", "Account")" role="menuitem" class="@(controllerName == "Account" ? "selected" : "")">Home</a></li>
-                                @if (Html.IsManageReservationsEnabled(providerId) && Html.IsCreateCohortAuthorised().Result)
+                                @if (Html.IsManageReservationsEnabled(providerId) && Html.CanShowReservationsLink())
                                 {
                                     <li><a href="@Url.Action("Index", "ManageReservations", new {providerId = providerId})" role="menuitem" class="@(controllerName == "ManageReservations" ? "selected" : "")">Manage reservations</a></li>
                                 }
