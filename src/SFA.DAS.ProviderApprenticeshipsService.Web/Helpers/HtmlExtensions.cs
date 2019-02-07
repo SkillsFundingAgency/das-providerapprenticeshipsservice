@@ -9,7 +9,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
 {
     public static class HtmlExtensions
     {
-        private readonly static Lazy<bool> _lazyIsEnabled = new Lazy<bool>(InitIsEnabled);
+        private static readonly Lazy<bool> _lazyIsEnabled = new Lazy<bool>(InitIsEnabled);
         private static bool InitIsEnabled()
         {
             var service = DependencyResolver.Current.GetService<IFeatureToggleService>();
@@ -18,12 +18,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
 
         public static bool CanShowReservationsLink(this HtmlHelper htmlHelper)
         {
-            var httpContext = DependencyResolver.Current.GetService<HttpContextBase>();
-            var show = httpContext?.User?.Identity?.GetClaim(DasClaimTypes.ShowReservations);
+            if (_lazyIsEnabled.Value)
+            {
+                var httpContext = DependencyResolver.Current.GetService<HttpContextBase>();
+                var show = httpContext?.User?.Identity?.GetClaim(DasClaimTypes.ShowReservations);
 
-            if(show?.ToLower() == "true" && _lazyIsEnabled.Value)
-                return true;
-
+                if (show?.ToLower() == "true")
+                    return true;
+            }
             return false;
         }
     }
