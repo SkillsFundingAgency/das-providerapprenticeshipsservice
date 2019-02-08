@@ -12,6 +12,15 @@
     <PackageReference Include="SFA.DAS.Testing" Version="2.0.5" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.6" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2'">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.0" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.UrlHelper\SFA.DAS.ProviderUrlHelper.csproj" />
   </ItemGroup>
