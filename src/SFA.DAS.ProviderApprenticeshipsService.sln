@@ -47,7 +47,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PAS.Account.Api.Cli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PAS.Account.Api.UnitTests", "SFA.DAS.PAS.Account.Api.UnitTests\SFA.DAS.PAS.Account.Api.UnitTests.csproj", "{ADE1D3CC-9B6A-4BF0-AF80-A8E568249A60}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.ProviderUrlHelper", "SFA.DAS.UrlHelper\SFA.DAS.ProviderUrlHelper.csproj", "{72A3F1C7-A664-4ACE-8770-70773D82019F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.ProviderUrlHelper", "SFA.DAS.ProviderUrlHelper\SFA.DAS.ProviderUrlHelper.csproj", "{72A3F1C7-A664-4ACE-8770-70773D82019F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderUrlHelperTests", "SFA.DAS.ProviderUrlHelperTests\SFA.DAS.ProviderUrlHelperTests.csproj", "{322438A5-6F96-465E-8661-93F1DC4A87A7}"
 EndProject
