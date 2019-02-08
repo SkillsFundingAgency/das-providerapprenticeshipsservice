@@ -1,0 +1,37 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Http;
+
+using SFA.DAS.PAS.Account.Api.Attributes;
+using SFA.DAS.PAS.Account.Api.Orchestrator;
+using SFA.DAS.PAS.Account.Api.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+
+namespace SFA.DAS.PAS.Account.Api.Controllers
+{
+    [RoutePrefix("api/email")]
+    public class EmailController : ApiController
+    {
+        private readonly EmailOrchestrator _emailOrchestrator;
+
+        private readonly IProviderCommitmentsLogger _logger;
+
+        public EmailController(EmailOrchestrator emailOrchestrator, IProviderCommitmentsLogger logger)
+        {
+            _emailOrchestrator = emailOrchestrator;
+            _logger = logger;
+        }
+
+        [Route("{ukprn}/send")]
+        [HttpGet] //todo might need to be a post
+        [ApiAuthorize(Roles = "ReadAccountUsers")]
+        public async Task<IHttpActionResult> SendEmailToAllProviderRecipients(long ukprn, ProviderEmailRequest request)
+        {
+            await _emailOrchestrator.SendEmailToAllProviderRecipients(ukprn, request);
+
+            _logger.Info($"Sent email to all provider recipients for ukprn: {ukprn}", ukprn);
+
+            return Ok();
+        }
+    }
+}

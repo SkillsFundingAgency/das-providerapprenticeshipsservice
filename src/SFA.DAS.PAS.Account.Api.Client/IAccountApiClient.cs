@@ -10,5 +10,7 @@ namespace SFA.DAS.PAS.Account.Api.Client
         Task<User> GetUser(string userRef);
 
         Task<IEnumerable<User>> GetAccountUsers(long ukprn);
+
+        Task SendEmailToAllProviderRecipients(long ukprn, ProviderEmailRequest message);
     }
 }

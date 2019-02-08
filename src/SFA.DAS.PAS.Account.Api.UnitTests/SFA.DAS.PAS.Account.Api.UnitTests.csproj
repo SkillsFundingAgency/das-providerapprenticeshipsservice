@@ -63,6 +63,9 @@
     <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.Notifications.Api.Types, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.2.0.0.35919\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -74,6 +77,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Orchestrator\WhenGettingAccountUsers.cs" />
+    <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients.cs" />
+    <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients_ExplicitEmailAddresses.cs" />
+    <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients_IdamsEmails.cs" />
+    <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients_IdamsSuperUserEmails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +99,10 @@
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj">
       <Project>{B3484618-78A0-411E-BC02-AC84C8694C3D}</Project>
       <Name>SFA.DAS.ProviderApprenticeshipsService.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Infrastructure\SFA.DAS.ProviderApprenticeshipsService.Infrastructure.csproj">
+      <Project>{380868C8-FA69-4DA7-B054-45AC924EC48E}</Project>
+      <Name>SFA.DAS.ProviderApprenticeshipsService.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

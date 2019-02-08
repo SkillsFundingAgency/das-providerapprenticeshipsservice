@@ -10,7 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.PAS.Account.Api.Orchestrator
 {
-    public class AccountOrchestrator
+    public class AccountOrchestrator : IAccountOrchestrator
     {
         private readonly IMediator _mediator;
 
@@ -30,5 +30,10 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
                 m =>
                 new User { EmailAddress = m.User.Email, ReceiveNotifications = m.Setting?.ReceiveNotifications ?? true, UserRef = m.User.UserRef });
         }
+    }
+
+    public interface IAccountOrchestrator
+    {
+        Task<IEnumerable<User>> GetAccountUsers(long ukprn);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
@@ -34,6 +35,11 @@ namespace SFA.DAS.PAS.Account.Api.Client
 
             var json = await _httpClient.GetAsync(url);
             return JsonConvert.DeserializeObject<IEnumerable<User>>(json);
+        }
+
+        public async Task SendEmailToAllProviderRecipients(long ukprn, ProviderEmailRequest message)
+        {
+            await _httpClient.PostAsync(Path.Combine(GetBaseUrl(), $"api/email/{ukprn}/send"), message);
         }
 
         private string GetBaseUrl()

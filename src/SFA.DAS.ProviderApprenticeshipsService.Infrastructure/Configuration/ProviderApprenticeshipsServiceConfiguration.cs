@@ -46,5 +46,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string ClientSecret { get; }
         public string IdentifierUri { get; }
         public string Tenant { get; }
+
+        public string IdamsListUsersUrl { get; set; }
+        public string DasUserRoleId { get; set; }
+        public string SuperUserRoleId { get; set; }
     }
 }
