@@ -9,7 +9,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
         {
             var claimsPrincipal = new ClaimsPrincipal(identity);
 
-            return claimsPrincipal.FindFirst(c => c.Type == claim).Value;
+            return claimsPrincipal.FindFirst(c => c.Type == claim)?.Value;
         }
     }
 }

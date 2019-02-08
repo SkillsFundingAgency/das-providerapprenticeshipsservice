@@ -6,12 +6,12 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Notifications;
 using Microsoft.Owin.Security.WsFederation;
-using NLog;
 using Owin;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using System.Security.Claims;
+using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
@@ -21,8 +21,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
         {
             var logger = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<IProviderCommitmentsLogger>();
 
-            var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope
-                .Container.GetInstance<AuthenticationOrchestrator>();
+            var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
+            var accountOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AccountOrchestrator>();
 
             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
 
@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                 MetadataAddress = adfsMetadata,
                 Notifications = new WsFederationAuthenticationNotifications
                 {
-                    SecurityTokenValidated = notification => SecurityTokenValidated(notification, logger, authenticationOrchestrator)
+                    SecurityTokenValidated = notification => SecurityTokenValidated(notification, logger, authenticationOrchestrator, accountOrchestrator)
                 }
                 //,Wreply = "?"
                 //,SignOutWreply = "?"
@@ -50,7 +50,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             app.UseWsFederationAuthentication(options);
         }
         
-        private async Task SecurityTokenValidated(SecurityTokenValidatedNotification<WsFederationMessage, WsFederationAuthenticationOptions> notification, IProviderCommitmentsLogger logger, AuthenticationOrchestrator orchestrator)
+        private async Task SecurityTokenValidated(SecurityTokenValidatedNotification<WsFederationMessage, WsFederationAuthenticationOptions> notification, IProviderCommitmentsLogger logger, 
+            AuthenticationOrchestrator orchestrator, AccountOrchestrator accountOrchestrator)
         {
             logger.Info("SecurityTokenValidated notification called");
 
@@ -67,6 +68,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                 logger.Info($"Unable to parse Ukprn \"{ukprn}\" from claims for user \"{id}\"");
                 return;
             }
+
+            var showReservations = await accountOrchestrator.ProviderHasPermission(parsedUkprn, Operation.CreateCohort);
+
+            identity.AddClaim(new Claim(DasClaimTypes.ShowReservations, showReservations.ToString(), "bool"));
 
             await orchestrator.SaveIdentityAttributes(id, parsedUkprn, displayName, email);
         }
