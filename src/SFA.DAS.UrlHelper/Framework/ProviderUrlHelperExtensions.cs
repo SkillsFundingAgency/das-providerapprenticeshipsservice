@@ -1,12 +1,11 @@
-﻿using System;
+﻿#if NETFRAMEWORK
+using System;
 using SFA.DAS.AutoConfiguration;
-using System.Web.Mvc;
-using SFA.DAS.ProviderUrlHelper.Framework;
 using UrlHelper=System.Web.Mvc.UrlHelper;
 
-namespace SFA.DAS.ProviderUrlHelper
+namespace SFA.DAS.ProviderUrlHelper.Framework
 {
-    public static class UrlHelperExtensions
+    public static class ProviderUrlHelperExtensions
     {
         private static readonly Lazy<ProviderUrlConfiguration> LazyProviderConfiguration = new Lazy<ProviderUrlConfiguration>(LoadProviderUrlConfiguration);
 
@@ -38,8 +37,10 @@ namespace SFA.DAS.ProviderUrlHelper
         private static string Action(string baseUrl, string path)
         {
             var trimmedBaseUrl = baseUrl.TrimEnd('/');
+            var trimmedPath = path.Trim('/');
 
-            return $"{trimmedBaseUrl}/{path}".TrimEnd('/');
+            return $"{trimmedBaseUrl}/{trimmedPath}";
         }
     }
 }
+#endif

@@ -1,21 +1,22 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿#if NETCOREAPP
+using Microsoft.AspNetCore.Http;
 using SFA.DAS.AutoConfiguration;
-using UrlHelper=Microsoft.AspNetCore.Mvc.Routing .UrlHelper;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace SFA.DAS.ProviderUrlHelper.Core
 {
-    public static class UrlHelperExtensions
+    public static class ProviderUrlHelperExtensions
     {
         private static ProviderUrlConfiguration _providerUrlConfiguration;
 
-        public static string ProviderCommitmentsLink(this UrlHelper helper, string path)
+        public static string ProviderCommitmentsLink(this UrlHelperBase helper, string path)
         {
             var config = GetProviderUrlConfiguration(helper.ActionContext.HttpContext);
 
             return Action(config.ProviderCommitmentsBaseUrl, path);
         }
 
-        public static string ProviderApprenticeshipServiceLink(this UrlHelper helper, string path)
+        public static string ProviderApprenticeshipServiceLink(this UrlHelperBase helper, string path)
         {
             var config = GetProviderUrlConfiguration(helper.ActionContext.HttpContext);
 
@@ -37,8 +38,10 @@ namespace SFA.DAS.ProviderUrlHelper.Core
         private static string Action(string baseUrl, string path)
         {
             var trimmedBaseUrl = baseUrl.TrimEnd('/');
+            var trimmedPath = path.Trim('/');
 
-            return $"{trimmedBaseUrl}/{path}".TrimEnd('/');
+            return $"{trimmedBaseUrl}/{trimmedPath}";
         }
     }
 }
+#endif

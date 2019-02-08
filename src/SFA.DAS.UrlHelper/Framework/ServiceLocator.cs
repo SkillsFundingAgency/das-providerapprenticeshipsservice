@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿#if NETFRAMEWORK
+using System.Web.Mvc;
 
 namespace SFA.DAS.ProviderUrlHelper.Framework
 {
@@ -10,3 +11,4 @@ namespace SFA.DAS.ProviderUrlHelper.Framework
         }
     }
 }
+#endif

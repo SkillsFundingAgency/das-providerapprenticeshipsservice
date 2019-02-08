@@ -1,7 +1,7 @@
 ﻿ <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net462;netcoreapp2.2</TargetFrameworks>
+    <TargetFrameworks>net462;netcoreapp2.2</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -27,20 +27,4 @@
   <ItemGroup>
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
   </ItemGroup>
-
-   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2'">
-     <Folder Include="Core\" />
-     <Compile Remove="Framework\*" />
-   </ItemGroup>
-
-   <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
-     <Folder Include="Framework\" />
-     <Compile Remove="Core\*" />
-   </ItemGroup>
-
-   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-     <Compile Remove="Core\*" />
-     <Compile Remove="Framework\*" />
-  </ItemGroup>
-
 </Project>

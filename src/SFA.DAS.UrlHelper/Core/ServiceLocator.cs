@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿#if NETCOREAPP
+using Microsoft.AspNetCore.Http;
 
 namespace SFA.DAS.ProviderUrlHelper.Core
 {
@@ -9,5 +10,5 @@ namespace SFA.DAS.ProviderUrlHelper.Core
             return httpContext.RequestServices.GetService(typeof(T)) as T;
         }
     }
-
 }
+#endif
