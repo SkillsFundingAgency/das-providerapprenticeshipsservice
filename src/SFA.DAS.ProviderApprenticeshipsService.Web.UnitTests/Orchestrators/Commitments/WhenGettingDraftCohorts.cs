@@ -69,8 +69,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
                 Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
                 Mock.Of<IApprenticeshipCoreValidator>(),
-                Mock.Of<IApprenticeshipMapper>(),
-                Mock.Of<IFeatureToggleService>()
+                Mock.Of<IApprenticeshipMapper>()
             );
         }
 
