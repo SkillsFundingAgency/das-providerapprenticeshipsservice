@@ -1,45 +1,37 @@
 ﻿#if NETFRAMEWORK
-using System;
-using SFA.DAS.AutoConfiguration;
+
 using UrlHelper=System.Web.Mvc.UrlHelper;
 
 namespace SFA.DAS.ProviderUrlHelper.Framework
 {
     public static class ProviderUrlHelperExtensions
     {
-        private static readonly Lazy<ProviderUrlConfiguration> LazyProviderConfiguration = new Lazy<ProviderUrlConfiguration>(LoadProviderUrlConfiguration);
-
         public static string ProviderCommitmentsLink(this UrlHelper helper, string path)
         {
-            var configuration = LazyProviderConfiguration.Value;
-            var baseUrl = configuration.ProviderCommitmentsBaseUrl;
-
-            return Action(baseUrl, path);
+            var linkGenerator = GetLinkGenerator();
+            
+            return linkGenerator.ProviderCommitmentsLink(path);
         }
 
         public static string ProviderApprenticeshipServiceLink(this UrlHelper helper, string path)
         {
-            var configuration = LazyProviderConfiguration.Value;
-            var baseUrl = configuration.ProviderApprenticeshipServiceBaseUrl;
+            var linkGenerator = GetLinkGenerator();
 
-            return Action(baseUrl, path);
+            return linkGenerator.ProviderApprenticeshipServiceLink(path);
         }
 
-        private static ProviderUrlConfiguration LoadProviderUrlConfiguration()
+        public static string ReservationsLink(this UrlHelper helper, string path)
         {
-            var autoConfigurationService = ServiceLocator.Get<IAutoConfigurationService>();
+            var linkGenerator = GetLinkGenerator();
 
-            var configuration = autoConfigurationService.Get<ProviderUrlConfiguration>();
-
-            return configuration;
+            return linkGenerator.ReservationsLink(path);
         }
 
-        private static string Action(string baseUrl, string path)
+        private static ILinkGenerator GetLinkGenerator()
         {
-            var trimmedBaseUrl = baseUrl.TrimEnd('/');
-            var trimmedPath = path.Trim('/');
+            var linkGenerator = ServiceLocator.Get<ILinkGenerator>();
 
-            return $"{trimmedBaseUrl}/{trimmedPath}";
+            return linkGenerator;
         }
     }
 }
