@@ -1,4 +1,4 @@
-﻿#if NETFRAMEWORK
+﻿#if NET462
 
 using UrlHelper=System.Web.Mvc.UrlHelper;
 
