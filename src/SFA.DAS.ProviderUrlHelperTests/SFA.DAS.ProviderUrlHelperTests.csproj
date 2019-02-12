@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.2;net462</TargetFrameworks>
+    <TargetFramework>net462</TargetFramework>
+    <!--<TargetFrameworks>netcoreapp2.2;net462</TargetFrameworks>-->
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.ProviderUrlHelper\SFA.DAS.ProviderUrlHelper.csproj" />
-    <ProjectReference Include="..\SFA.DAS.UrlHelper\SFA.DAS.ProviderUrlHelper.csproj" />
   </ItemGroup>
 
 </Project>

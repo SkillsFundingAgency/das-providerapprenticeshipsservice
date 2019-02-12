@@ -32,8 +32,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         protected Mock<IHashingService> _mockHashingService = new Mock<IHashingService>();
         protected Mock<IApprenticeshipCoreValidator> _mockApprenticeshipCoreValidator = new Mock<IApprenticeshipCoreValidator>();
         protected Mock<IApprenticeshipMapper> _mockMapper = new Mock<IApprenticeshipMapper>();
-        protected Mock<IFeatureToggleService> MockFeatureToggleService;
-        protected Mock<IFeatureToggle> MockFeatureToggleOn;
 
         private Mock<ApprenticeshipViewModelUniqueUlnValidator> _ulnValidator;
 
@@ -48,12 +46,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 .Setup(m => m.ValidateAsyncOverride(It.IsAny<ApprenticeshipViewModel>()))
                 .ReturnsAsync(new ValidationResult());
 
-            MockFeatureToggleOn = new Mock<IFeatureToggle>();
-            MockFeatureToggleOn.Setup(x => x.FeatureEnabled).Returns(true);
-            MockFeatureToggleService = new Mock<IFeatureToggleService>();
-            MockFeatureToggleService.Setup(x => x.Get<Domain.Models.FeatureToggles.ProviderRelationships>())
-                .Returns(MockFeatureToggleOn.Object);           
-
             SetUpOrchestrator();
         }
 
@@ -66,8 +58,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                        _ulnValidator.Object,
                        Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
                        _mockApprenticeshipCoreValidator.Object,
-                       _mockMapper.Object,
-                       MockFeatureToggleService.Object);
+                       _mockMapper.Object);
         }
 
         protected CommitmentListItem GetTestCommitmentOfStatus(long id, RequestStatus requestStatus)

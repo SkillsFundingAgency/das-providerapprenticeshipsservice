@@ -1,46 +1,36 @@
 ﻿#if NETCOREAPP
 using Microsoft.AspNetCore.Http;
-using SFA.DAS.AutoConfiguration;
 using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace SFA.DAS.ProviderUrlHelper.Core
 {
     public static class ProviderUrlHelperExtensions
     {
-        private static ProviderUrlConfiguration _providerUrlConfiguration;
-
         public static string ProviderCommitmentsLink(this UrlHelperBase helper, string path)
         {
-            var config = GetProviderUrlConfiguration(helper.ActionContext.HttpContext);
+            var linkGenerator = GetLinkGenerator(helper.ActionContext.HttpContext);
 
-            return Action(config.ProviderCommitmentsBaseUrl, path);
+            return linkGenerator.ProviderCommitmentsLink(path);
         }
 
         public static string ProviderApprenticeshipServiceLink(this UrlHelperBase helper, string path)
         {
-            var config = GetProviderUrlConfiguration(helper.ActionContext.HttpContext);
+            var linkGenerator = GetLinkGenerator(helper.ActionContext.HttpContext);
 
-            return Action(config.ProviderApprenticeshipServiceBaseUrl, path);
+            return linkGenerator.ProviderApprenticeshipServiceLink(path);
+
         }
 
-        private static ProviderUrlConfiguration GetProviderUrlConfiguration(HttpContext httpContext)
+        public static string ReservationsLink(this UrlHelperBase helper, string path)
         {
-            // Remarks: don't need to lock - last write wins.
-            if (_providerUrlConfiguration == null)
-            {
-                var autoConfigurationService = ServiceLocator.Get<IAutoConfigurationService>(httpContext);
-                _providerUrlConfiguration = autoConfigurationService.Get<ProviderUrlConfiguration>();
-            }
+            var linkGenerator = GetLinkGenerator(helper.ActionContext.HttpContext);
 
-            return _providerUrlConfiguration;
+            return linkGenerator.ReservationsLink(path);
         }
 
-        private static string Action(string baseUrl, string path)
+        private static ILinkGenerator GetLinkGenerator(HttpContext httpContext)
         {
-            var trimmedBaseUrl = baseUrl.TrimEnd('/');
-            var trimmedPath = path.Trim('/');
-
-            return $"{trimmedBaseUrl}/{trimmedPath}";
+            return ServiceLocator.Get<ILinkGenerator>(httpContext);
         }
     }
 }
