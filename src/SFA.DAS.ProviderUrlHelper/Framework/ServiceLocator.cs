@@ -3,7 +3,7 @@ using System.Web.Mvc;
 
 namespace SFA.DAS.ProviderUrlHelper.Framework
 {
-    public static class ServiceLocator
+    internal static class ServiceLocator
     {
         public static T Get<T>() where T : class
         {

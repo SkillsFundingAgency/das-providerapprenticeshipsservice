@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace SFA.DAS.ProviderUrlHelper.Core
 {
-    public static class ServiceLocator
+    internal static class ServiceLocator
     {
         public static T Get<T>(HttpContext httpContext) where T : class
         {
