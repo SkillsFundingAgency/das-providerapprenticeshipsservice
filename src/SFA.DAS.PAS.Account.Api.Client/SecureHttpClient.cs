@@ -11,9 +11,9 @@ namespace SFA.DAS.PAS.Account.Api.Client
 {
     internal class SecureHttpClient
     {
-        private readonly IAccountApiConfiguration _configuration;
+        private readonly IPasAccountApiConfiguration _configuration;
 
-        public SecureHttpClient(IAccountApiConfiguration configuration)
+        public SecureHttpClient(IPasAccountApiConfiguration configuration)
         {
             _configuration = configuration;
         }
