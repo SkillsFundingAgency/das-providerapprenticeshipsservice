@@ -8,6 +8,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.ProviderUrlHelper;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -17,11 +18,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     public class ReservationController : BaseController
     {
         private readonly SelectEmployerOrchestrator _selectEmployerOrchestrator;
+        private readonly ILinkGenerator _linkGenerator;
 
         public ReservationController(ICookieStorageService<FlashMessageViewModel> flashMessage,
-            SelectEmployerOrchestrator selectEmployerOrchestrator) : base(flashMessage)
+            SelectEmployerOrchestrator selectEmployerOrchestrator, ILinkGenerator linkGenerator) : base(flashMessage)
         {
             _selectEmployerOrchestrator = selectEmployerOrchestrator;
+            _linkGenerator = linkGenerator;
         }
 
         [HttpGet]
@@ -62,7 +65,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return View(confirmViewModel);
             }
 
-            return RedirectToRoute("account-home");
+            var account = confirmViewModel.EmployerAccountPublicHashedId;
+            var legalEntity = confirmViewModel.EmployerAccountLegalEntityPublicHashedId;
+            return Redirect(_linkGenerator.ReservationsLink($"{providerId}/account/{account}/legalentity/{legalEntity}"));
         }
     }
 }

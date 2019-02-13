@@ -1,56 +1,47 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using SFA.DAS.ProviderRelationships.Api.Client;
 using SFA.DAS.ProviderRelationships.Types.Dtos;
+using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 {
     public class StubProviderRelationshipsApiClient : IProviderRelationshipsApiClient
     {
-        private readonly List<KeyValuePair<long /*ukprn*/, AccountProviderLegalEntityDto>> _accountProviderLegalEntitiesByUkprn;
+        private readonly HttpClient _httpClient;
 
-        public StubProviderRelationshipsApiClient(IPublicHashingService publicHashingService, IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService)
+        public StubProviderRelationshipsApiClient()
         {
-
-            const long stubAccountId = 103380;
-            const long stubAccountLegalEntityId = 36637;
-
-            _accountProviderLegalEntitiesByUkprn = new List<KeyValuePair<long, AccountProviderLegalEntityDto>>
-            {
-                new KeyValuePair<long, AccountProviderLegalEntityDto>(10005077, new AccountProviderLegalEntityDto
-                {
-                    AccountId = stubAccountId,
-                    AccountPublicHashedId = publicHashingService.HashValue(stubAccountId),
-                    AccountLegalEntityName = "TEST LEGAL ENTITY ACCOUNT",
-                    AccountLegalEntityId = stubAccountLegalEntityId,
-                    AccountLegalEntityPublicHashedId = "GEGZK5", //accountLegalEntityPublicHashingService.HashValue(stubAccountLegalEntityId),
-                    AccountName = "TEST (ACCOUNT)"
-                }),
-                new KeyValuePair<long, AccountProviderLegalEntityDto>(10005077, new AccountProviderLegalEntityDto
-                {
-                    AccountId = 8194,
-                    AccountPublicHashedId = "9V6JWR",
-                    AccountLegalEntityName = "ASAP CATERING LIMITED (Stub)",
-                    AccountLegalEntityId = 3884,
-                    AccountLegalEntityPublicHashedId = "94DVK9",
-                    AccountName = "ASAP CATERING LIMITED (Stub) (ACCOUNT)"
-                })
-            };
+            _httpClient = new HttpClient {BaseAddress = new System.Uri("https://sfa-stub-providerrelationships.herokuapp.com/api/data")};
         }
 
-        public Task<GetAccountProviderLegalEntitiesWithPermissionResponse> GetAccountProviderLegalEntitiesWithPermission(
+        private async Task<IList<AccountProviderLegalEntityDto>> GetPermissionsForProvider(long providerId, Operation operation, CancellationToken cancellationToken)
+        {
+            var response = await _httpClient.GetAsync($"{providerId}", cancellationToken);
+            var content = await response.Content.ReadAsStringAsync();
+            var items = JsonConvert.DeserializeObject<List<AccountProviderLegalEntityDtoWrapper>>(content);
+
+            return items.Where(x => x.Permissions.Contains(operation)).Select(item => (AccountProviderLegalEntityDto)item).ToList();
+        }
+
+        public async Task<GetAccountProviderLegalEntitiesWithPermissionResponse> GetAccountProviderLegalEntitiesWithPermission(
             GetAccountProviderLegalEntitiesWithPermissionRequest request,
             CancellationToken cancellationToken = new CancellationToken())
         {
-            return Task.FromResult(new GetAccountProviderLegalEntitiesWithPermissionResponse
-                { AccountProviderLegalEntities = _accountProviderLegalEntitiesByUkprn.Where(kvp => kvp.Key == request.Ukprn).Select(kvp => kvp.Value) });
+            return new GetAccountProviderLegalEntitiesWithPermissionResponse
+            {
+                AccountProviderLegalEntities = await GetPermissionsForProvider(request.Ukprn, request.Operation, cancellationToken)
+            };
         }
 
-        public Task<bool> HasPermission(HasPermissionRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<bool> HasPermission(HasPermissionRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            return Task.FromResult(_accountProviderLegalEntitiesByUkprn.Any(r => r.Key == request.Ukprn));
+            var result = await GetPermissionsForProvider(request.Ukprn, request.Operation, cancellationToken);
+            return result.Any();
         }
 
         public async Task<bool> HasRelationshipWithPermission(HasRelationshipWithPermissionRequest request,
@@ -63,6 +54,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
         public Task HealthCheck()
         {
             throw new System.NotImplementedException();
+        }
+
+        public class AccountProviderLegalEntityDtoWrapper : AccountProviderLegalEntityDto
+        {
+            public List<Operation> Permissions { get; set; }          
         }
     }
 }
