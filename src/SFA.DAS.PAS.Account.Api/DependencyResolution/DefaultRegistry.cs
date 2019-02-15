@@ -85,8 +85,7 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
 
         private void RegisterMediator()
         {
-            //For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
-            //For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
+            For<ServiceFactory>().Use<ServiceFactory>(ctx => t => ctx.GetInstance(t));
             For<IMediator>().Use<Mediator>();
         }
 
