@@ -33,6 +33,11 @@ using StructureMap;
 
 using IConfiguration = SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.IConfiguration;
 
+using System.Net.Http;
+using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.Http.TokenGenerators;
+using SFA.DAS.Notifications.Api.Client.Configuration;
+
 namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
     using StructureMap.Graph;
 
@@ -55,8 +60,12 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
             var config = GetConfiguration();
 
             For<IConfiguration>().Use(config);
+            For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
+
+            ConfigureNotificationsApi(config);
 
             RegisterMediator();
+            RegisterExecutionPolicies();
             ConfigureLogging();
         }
 
@@ -89,6 +98,18 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
             For<IMediator>().Use<Mediator>();
         }
 
+        private void RegisterExecutionPolicies()
+        {
+            For<ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies.ExecutionPolicy>()
+                .Use<ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies.IdamsExecutionPolicy>()
+                .Named(ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies.IdamsExecutionPolicy.Name);
+        }
+
+        //private void RegisterHttpTypes()
+        //{
+        //    For<SFA.DAS.ProviderApprenticeshipsService.Domain.Http.IHttpClientWrapper>().Use<>()
+        //}
+
         private void ConfigureLogging()
         {
             For<IRequestContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
@@ -103,6 +124,28 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
         {
             var parentType = x.ParentType;
             return new ProviderCommitmentsLogger(new NLogLogger(parentType, x.GetInstance<IRequestContext>()));
+        }
+
+        private void ConfigureNotificationsApi(ProviderApprenticeshipsServiceConfiguration config)
+        {
+            HttpClient httpClient;
+
+            if (string.IsNullOrWhiteSpace(config.NotificationApi.ClientId))
+            {
+                httpClient = new Http.HttpClientBuilder()
+                    .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config.NotificationApi))
+                    .Build();
+            }
+            else
+            {
+                httpClient = new Http.HttpClientBuilder()
+                    .WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config.NotificationApi))
+                    .Build();
+            }
+
+            For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(httpClient);
+
+            For<INotificationsApiClientConfiguration>().Use(config.NotificationApi);
         }
     }
 }

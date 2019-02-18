@@ -23,7 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
         private readonly ILog _logger;
         
-        private readonly NotificationsApiClientConfiguration _configuration;
+        private readonly ProviderNotificationConfiguration _configuration;
 
         private readonly IHttpClientWrapper _httpClientWrapper;
 
@@ -36,7 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             [RequiredPolicy(IdamsExecutionPolicy.Name)]ExecutionPolicy executionPolicy)
         {
             _logger = logger;
-            _configuration = configuration.NotificationApi;
+            _configuration = configuration.CommitmentNotification;
             _httpClientWrapper = httpClient;
             _executionPolicy = executionPolicy;
         }

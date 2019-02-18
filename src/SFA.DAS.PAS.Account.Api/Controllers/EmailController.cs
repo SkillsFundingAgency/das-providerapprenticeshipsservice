@@ -23,7 +23,7 @@ namespace SFA.DAS.PAS.Account.Api.Controllers
         }
 
         [Route("{ukprn}/send")]
-        [HttpGet] //todo might need to be a post
+        [HttpPost]
         [ApiAuthorize(Roles = "ReadAccountUsers")]
         public async Task<IHttpActionResult> SendEmailToAllProviderRecipients(long ukprn, ProviderEmailRequest request)
         {
