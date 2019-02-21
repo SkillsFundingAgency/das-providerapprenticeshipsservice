@@ -13,7 +13,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderRela
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.ProviderRelationships.Types.Models;
 
@@ -21,33 +20,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public class CreateCohortOrchestrator : BaseCommitmentOrchestrator
     {
-        private readonly ICreateCohortMapper _createCohortMapper;
         private readonly IPublicHashingService _publicHashingService;
 
         public CreateCohortOrchestrator(
             IMediator mediator,
-            ICreateCohortMapper createCohortMapper,
             IHashingService hashingService,
             IProviderCommitmentsLogger logger,
             IPublicHashingService publicHashingService) : base(mediator, hashingService, logger)
         {
-            _createCohortMapper = createCohortMapper;
             _publicHashingService = publicHashingService;
-        }
-
-        public async Task<CreateCohortViewModel> GetCreateCohortViewModel(long providerId)
-        {
-            Logger.Info($"Getting create cohort view model", providerId);
-
-            var relationshipsWithPermission = await Mediator.Send(new GetProviderRelationshipsWithPermissionQueryRequest
-            {
-                ProviderId = providerId,
-                Permission = Operation.CreateCohort
-            });
-
-            var result = _createCohortMapper.Map(relationshipsWithPermission.ProviderRelationships);
-
-            return result;
         }
 
         public async Task<string> CreateCohort(int providerId, ConfirmEmployerViewModel confirmEmployerViewModel, string userId, SignInUserModel signinUser)

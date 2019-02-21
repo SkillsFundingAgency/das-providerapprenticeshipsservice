@@ -1,5 +1,5 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
-@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.CreateCohort.ConfirmEmployerViewModel
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ConfirmEmployerViewModel
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 
 @{
@@ -24,14 +24,16 @@
             @Html.HiddenFor(model => model.EmployerAccountLegalEntityPublicHashedId)
             @Html.HiddenFor(model => model.EmployerAccountName)
             @Html.HiddenFor(model => model.EmployerAccountPublicHashedId)
+            @Html.HiddenFor(model => model.Question)
+            @Html.HiddenFor(model => model.ControllerName)
 
-            <div class="form-group" @Html.AddClassIfPropertyInError(x => x.Confirm, "error")">
+            <div class="form-group" @Html.AddClassIfPropertyInError(x => x.Confirm, "error")>
                 <fieldset>
 
                     <legend>
                         @Html.ValidationMessageFor(m => m.Confirm, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.Confirm) })
                         <span class="heading-small">
-                            Is this the employer you'd like to add a cohort for?
+                            @Model.Question
                         </span>
                     </legend>
 
@@ -54,6 +56,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("Create")" aria-label="Back" class="back-link">Back</a>
+       <a href="@Url.Action("Create", @Model.ControllerName)" aria-label="Back" class="back-link">Back</a>
     </div>
 }

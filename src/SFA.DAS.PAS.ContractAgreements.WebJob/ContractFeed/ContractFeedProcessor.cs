@@ -115,6 +115,8 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             {
                 var id = element.Element(_nsAtom + "id")?.Value.Split(':').ElementAt(1);
 
+                _logger.Info($"Bookmark Id: {id}");
+
                 var contract = element
                     .Element(_nsAtom + "content")?
                     .Descendants(_nsUrn + "contract")?.First()

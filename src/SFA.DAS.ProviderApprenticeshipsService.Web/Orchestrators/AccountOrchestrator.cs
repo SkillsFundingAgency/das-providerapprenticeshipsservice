@@ -15,7 +15,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotifica
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
-using SFA.DAS.ProviderRelationships.Types;
 using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
@@ -24,18 +23,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ILog _logger;
-        private readonly ICurrentDateTime _currentDateTime;
-        private readonly IFeatureToggleService _featureToggleService;
 
         public AccountOrchestrator(IMediator mediator,
-            ILog logger,
-            ICurrentDateTime currentDateTime,
-            IFeatureToggleService featureToggleService)
+            ILog logger)
         {
             _mediator = mediator;
             _logger = logger;
-            _currentDateTime = currentDateTime;
-            _featureToggleService = featureToggleService;
         }
 
         public async Task<AccountHomeViewModel> GetAccountHomeViewModel(int providerId)
@@ -46,11 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
                 var providerResponse = await _mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });
 
-                var showCreateCohortLink = false;
-                if (_featureToggleService.Get<Domain.Models.FeatureToggles.ProviderRelationships>().FeatureEnabled)
-                {
-                    showCreateCohortLink = await ProviderHasPermission(providerId, Operation.CreateCohort);
-                }                  
+                var showCreateCohortLink = await ProviderHasPermission(providerId, Operation.CreateCohort);
 
                 return new AccountHomeViewModel
                 {
@@ -149,7 +138,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        private async Task<bool> ProviderHasPermission(long providerId, Operation permission)
+        public async Task<bool> ProviderHasPermission(long providerId, Operation permission)
         {
             var permissionResponse = await _mediator.Send(new GetProviderHasRelationshipWithPermissionQueryRequest
             {
