@@ -39,22 +39,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string BaseUrl { get; set; }
     }
 
-    //public class NotificationsApiClientConfiguration : INotificationsApiClientConfiguration
-    //{
-    //    public string ApiBaseUrl { get; set; }
-    //    public string ClientToken { get; set; }
-
-
-    //    public string ClientId { get; set; }
-    //    public string ClientSecret { get; }
-    //    public string IdentifierUri { get; }
-    //    public string Tenant { get; }
-
-    //    public string IdamsListUsersUrl { get; set; }
-    //    public string DasUserRoleId { get; set; }
-    //    public string SuperUserRoleId { get; set; }
-    //}
-
     public class ProviderNotificationConfiguration
     {
         public bool UseProviderEmail { get; set; }

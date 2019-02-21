@@ -105,11 +105,6 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
                 .Named(ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies.IdamsExecutionPolicy.Name);
         }
 
-        //private void RegisterHttpTypes()
-        //{
-        //    For<SFA.DAS.ProviderApprenticeshipsService.Domain.Http.IHttpClientWrapper>().Use<>()
-        //}
-
         private void ConfigureLogging()
         {
             For<IRequestContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));

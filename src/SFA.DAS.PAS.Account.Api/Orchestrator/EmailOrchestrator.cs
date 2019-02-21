@@ -69,7 +69,7 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
                 RecipientsAddress = recipient,
                 TemplateId = source.TemplateId,
                 Tokens = new Dictionary<string, string>(source.Tokens),
-                ReplyToAddress = "noreply@sfa.gov.uk", //todo do we want to set this in configuration?
+                ReplyToAddress = "noreply@sfa.gov.uk",
                 Subject = "x",
                 SystemId = "x"
             };

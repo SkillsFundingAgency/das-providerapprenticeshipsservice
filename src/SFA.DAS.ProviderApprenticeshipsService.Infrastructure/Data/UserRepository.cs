@@ -15,7 +15,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
     {
         private readonly ILog _logger;
 
-        //todo before lunch - config coming through as null, suspect problem with startup / config / DI
         public UserRepository(ProviderApprenticeshipsServiceConfiguration config, ILog logger) : base(config.DatabaseConnectionString, logger)
         {
             _logger = logger;

@@ -31,9 +31,4 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
                 new User { EmailAddress = m.User.Email, ReceiveNotifications = m.Setting?.ReceiveNotifications ?? true, UserRef = m.User.UserRef });
         }
     }
-
-    public interface IAccountOrchestrator
-    {
-        Task<IEnumerable<User>> GetAccountUsers(long ukprn);
-    }
 }

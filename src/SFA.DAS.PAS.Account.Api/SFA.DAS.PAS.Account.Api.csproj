@@ -345,6 +345,7 @@
     <Compile Include="DependencyResolution\StructureMapWebApiDependencyScope.cs" />
     <Compile Include="Orchestrator\AccountOrchestrator.cs" />
     <Compile Include="Orchestrator\EmailOrchestrator.cs" />
+    <Compile Include="Orchestrator\IAccountOrchestrator.cs" />
     <Compile Include="Orchestrator\UserOrchestrator.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
