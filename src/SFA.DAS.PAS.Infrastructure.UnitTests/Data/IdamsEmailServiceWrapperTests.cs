@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Http;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
@@ -19,12 +20,13 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Data
         {
             var config = new ProviderApprenticeshipsServiceConfiguration
             {
-                NotificationApi = new NotificationsApiClientConfiguration()
+                CommitmentNotification = new ProviderNotificationConfiguration
                 {
                     IdamsListUsersUrl =
                         "https://url.to/users/ukprn={0}",
                     ClientToken = "AbbA-Rules-4.Ever"
-                }
+                },
+                
             };
             _mockHttpClientWrapper = new Mock<IHttpClientWrapper>();
             _sut = new IdamsEmailServiceWrapper(Mock.Of<ILog>(), config, _mockHttpClientWrapper.Object, new NoopExecutionPolicy());
