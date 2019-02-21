@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -15,7 +14,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
 {
     [TestFixture]
-    public class WhenSendingEmailToAllProviderRecipients_AccountUsers
+    public class WhenSendingEmailToAllProviderRecipients_OptOut
     {
         private EmailOrchestrator _sut;
         private Mock<IAccountOrchestrator> _accountOrchestrator;
@@ -47,7 +46,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
 
             _accountOrchestrator
                 .Setup(x => x.GetAccountUsers(_ukprn))
-                .ReturnsAsync(_emailAddresses.Select(x => new User { EmailAddress = x, ReceiveNotifications = true }));
+                .ReturnsAsync(_emailAddresses.Select(x => new User { EmailAddress = x, ReceiveNotifications = false }));
 
             _idamsEmailServiceWrapper
                 .Setup(x => x.GetEmailsAsync(It.IsAny<long>()))
@@ -67,18 +66,10 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
             await _sut.SendEmailToAllProviderRecipients(_ukprn, _request);
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
-        public void ShouldSendCommandForEachAddress(int index)
+        [Test]
+        public void ShouldNotSendCommandForOptedOutAddress()
         {
-            _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(y 
-                => y.Email.RecipientsAddress == _emailAddresses[index]
-                && y.Email.TemplateId == _templateId
-                && y.Email.Tokens.SequenceEqual(_tokens)
-                && y.Email.ReplyToAddress == "noreply@sfa.gov.uk"
-                && y.Email.Subject == "x"
-                && y.Email.SystemId == "x"
-            ), It.IsAny<CancellationToken>()));
+            _mediator.Verify(x => x.Send(It.IsAny<SendNotificationCommand>(), It.IsAny<CancellationToken>()), Times.Never);
         }
     }
 }

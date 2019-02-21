@@ -81,6 +81,7 @@
     <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients_ExplicitEmailAddresses.cs" />
     <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients_IdamsEmails.cs" />
     <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients_IdamsSuperUserEmails.cs" />
+    <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients_OptOut.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

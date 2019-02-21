@@ -38,10 +38,8 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
             if(!recipients.Any())
             {
                 var accountUsers = await _accountOrchestrator.GetAccountUsers(ukprn);
-                recipients = accountUsers.Select(x => x.EmailAddress).ToList();
+                recipients = accountUsers.Where(x => x.ReceiveNotifications).Select(x => x.EmailAddress).ToList();
             }
-
-            //todo log warning no recipients + logging in generalement
 
             var commands = recipients.Select(x => new SendNotificationCommand{ Email = CreateEmailForRecipient(x, message) });
             await Task.WhenAll(commands.Select(x => _mediator.Send(x)));
