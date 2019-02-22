@@ -37,12 +37,17 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
 
             if(!recipients.Any())
             {
-                var accountUsers = await _accountOrchestrator.GetAccountUsers(ukprn);
-                recipients = accountUsers.Where(x => x.ReceiveNotifications).Select(x => x.EmailAddress).ToList();
+                recipients = await GetAccountUserRecipients(ukprn);
             }
 
             var commands = recipients.Select(x => new SendNotificationCommand{ Email = CreateEmailForRecipient(x, message) });
             await Task.WhenAll(commands.Select(x => _mediator.Send(x)));
+        }
+
+        private async Task<List<string>> GetAccountUserRecipients(long ukprn)
+        {
+            var accountUsers = await _accountOrchestrator.GetAccountUsers(ukprn);
+            return accountUsers.Where(x => x.ReceiveNotifications).Select(x => x.EmailAddress).ToList();
         }
 
         private async Task<List<string>> GetIdamsRecipients(long ukprn)
