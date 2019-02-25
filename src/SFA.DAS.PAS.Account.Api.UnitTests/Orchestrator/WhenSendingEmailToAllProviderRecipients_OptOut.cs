@@ -67,7 +67,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
         }
 
         [Test]
-        public void ShouldNotSendCommandForOptedOutAddress()
+        public void ShouldNotSendNotificationForOptedOutAddress()
         {
             _mediator.Verify(x => x.Send(It.IsAny<SendNotificationCommand>(), It.IsAny<CancellationToken>()), Times.Never);
         }

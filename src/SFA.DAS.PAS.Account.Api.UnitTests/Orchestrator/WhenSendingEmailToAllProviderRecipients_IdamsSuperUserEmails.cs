@@ -64,7 +64,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
 
         [TestCase(0)]
         [TestCase(1)]
-        public void ShouldSendCommandForEachAddress(int index)
+        public void ShouldSendCommandToEachAddress(int index)
         {
             _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(y
                 => y.Email.RecipientsAddress == _emailAddresses[index]
@@ -77,7 +77,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
         }
 
         [Test]
-        public void ShouldNotCallAccountOrchestrator()
+        public void ShouldNotMakeACallToGetUsersForTheProviderAccount()
         {
             _accountOrchestrator.Verify(x => x.GetAccountUsers(It.IsAny<long>()), Times.Never);
         }
