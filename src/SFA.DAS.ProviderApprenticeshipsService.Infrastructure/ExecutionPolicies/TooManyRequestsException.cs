@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Http
+﻿using System.Web;
+
+namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies
 {
     public class TooManyRequestsException : HttpException
     {

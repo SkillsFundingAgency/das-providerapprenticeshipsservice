@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Http;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Models;
@@ -32,12 +30,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         public IdamsEmailServiceWrapper(
             ILog logger,
             ProviderApprenticeshipsServiceConfiguration configuration,
-            IHttpClientWrapper httpClient,
+            IHttpClientWrapper httpClientWrapper,
             [RequiredPolicy(IdamsExecutionPolicy.Name)]ExecutionPolicy executionPolicy)
         {
             _logger = logger;
             _configuration = configuration.CommitmentNotification;
-            _httpClientWrapper = httpClient;
+            _httpClientWrapper = httpClientWrapper;
             _executionPolicy = executionPolicy;
         }
 
@@ -98,8 +96,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 await _executionPolicy.ExecuteAsync(
                     async () =>
                     {
-                        _httpClientWrapper.AuthScheme = "Bearer";
-                        result = await _httpClientWrapper.GetString(url, accessToken);
+                        result = await _httpClientWrapper.GetStringAsync(url);
                     });
             }
             catch (Exception ex)

@@ -158,10 +158,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\AccountApiConfiguration.cs" />
-    <Compile Include="Http\HttpException.cs" />
-    <Compile Include="Http\IHttpClientWrapper.cs" />
-    <Compile Include="Http\ServiceUnavailableException.cs" />
-    <Compile Include="Http\TooManyRequestsException.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceMapper.cs" />
     <Compile Include="Interfaces\IBackgroundNotificationService.cs" />
     <Compile Include="Interfaces\IEmployerAccountService.cs" />

@@ -1,7 +1,6 @@
 ﻿using System;
 using Polly;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Http;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies
 {

@@ -39,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string BaseUrl { get; set; }
     }
 
-    public class ProviderNotificationConfiguration
+    public class ProviderNotificationConfiguration : IJwtClientConfiguration
     {
         public bool UseProviderEmail { get; set; }
 

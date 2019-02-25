@@ -37,6 +37,8 @@ using System.Net.Http;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
+using SFA.DAS.Http;
 
 namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
     using StructureMap.Graph;
@@ -63,6 +65,7 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
             For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
 
             ConfigureNotificationsApi(config);
+            ConfigureHttpClient(config);
 
             RegisterMediator();
             RegisterExecutionPolicies();
@@ -127,13 +130,13 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
 
             if (string.IsNullOrWhiteSpace(config.NotificationApi.ClientId))
             {
-                httpClient = new Http.HttpClientBuilder()
+                httpClient = new HttpClientBuilder()
                     .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config.NotificationApi))
                     .Build();
             }
             else
             {
-                httpClient = new Http.HttpClientBuilder()
+                httpClient = new HttpClientBuilder()
                     .WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config.NotificationApi))
                     .Build();
             }
@@ -141,6 +144,17 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
             For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(httpClient);
 
             For<INotificationsApiClientConfiguration>().Use(config.NotificationApi);
+        }
+
+        private void ConfigureHttpClient(ProviderApprenticeshipsServiceConfiguration config)
+        {
+            For<IHttpClientWrapper>()
+                .Use<HttpClientWrapper>()
+                .Ctor<HttpClient>()
+                .Is(new HttpClientBuilder()
+                    .WithDefaultHeaders()
+                    .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config.CommitmentNotification))
+                    .Build());
         }
     }
 }
