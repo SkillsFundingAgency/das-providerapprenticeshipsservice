@@ -9,6 +9,7 @@ using NUnit.Framework;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.PAS.Account.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
@@ -25,6 +26,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
         private ProviderEmailRequest _request;
         private string _templateId;
         private Dictionary<string, string> _tokens;
+        private ProviderApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
         public async Task Setup()
@@ -43,6 +45,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
             _accountOrchestrator = new Mock<IAccountOrchestrator>();
             _mediator = new Mock<IMediator>();
             _idamsEmailServiceWrapper = new Mock<IIdamsEmailServiceWrapper>();
+            _configuration = new ProviderApprenticeshipsServiceConfiguration { CommitmentNotification = new ProviderNotificationConfiguration { UseProviderEmail = true } };
 
             _idamsEmailServiceWrapper
                 .Setup(x => x.GetEmailsAsync(It.IsAny<long>()))
@@ -54,7 +57,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
                 Tokens = _tokens
             };
 
-            _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, _idamsEmailServiceWrapper.Object);
+            _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, _idamsEmailServiceWrapper.Object, _configuration);
             await _sut.SendEmailToAllProviderRecipients(_ukprn, _request);
         }
 

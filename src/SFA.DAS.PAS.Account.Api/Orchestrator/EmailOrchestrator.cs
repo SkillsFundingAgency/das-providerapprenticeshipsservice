@@ -5,6 +5,7 @@ using MediatR;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.PAS.Account.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 namespace SFA.DAS.PAS.Account.Api.Orchestrator
@@ -14,18 +15,26 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
         private readonly IAccountOrchestrator _accountOrchestrator;
         private readonly IMediator _mediator;
         private readonly IIdamsEmailServiceWrapper _idamsEmailServiceWrapper;
+        private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
 
-        public EmailOrchestrator(IAccountOrchestrator accountOrchestrator, IMediator mediator, IIdamsEmailServiceWrapper idamsEmailServiceWrapper)
+        public EmailOrchestrator(IAccountOrchestrator accountOrchestrator, IMediator mediator, IIdamsEmailServiceWrapper idamsEmailServiceWrapper, ProviderApprenticeshipsServiceConfiguration configuration)
         {
             _accountOrchestrator = accountOrchestrator;
             _mediator = mediator;
             _idamsEmailServiceWrapper = idamsEmailServiceWrapper;
+            _configuration = configuration;
         }
 
         public async Task SendEmailToAllProviderRecipients(long ukprn, ProviderEmailRequest message)
         {
             List<string> recipients = new List<string>();
-            if (message.ExplicitEmailAddresses != null)
+
+            if (!_configuration.CommitmentNotification.UseProviderEmail)
+            {
+                recipients = _configuration.CommitmentNotification.ProviderTestEmails;
+            }
+
+            if (!recipients.Any() && message.ExplicitEmailAddresses != null)
             {
                 recipients = message.ExplicitEmailAddresses.ToList();
             }
