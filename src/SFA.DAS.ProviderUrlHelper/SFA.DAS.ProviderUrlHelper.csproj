@@ -1,8 +1,7 @@
 ﻿ <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
-    <!--<TargetFrameworks>net462;netcoreapp2.2</TargetFrameworks>-->
+    <TargetFrameworks>net462;netcoreapp2.2</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
