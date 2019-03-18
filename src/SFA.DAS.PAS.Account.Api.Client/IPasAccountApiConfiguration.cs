@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.PAS.Account.Api.Client
 {
-    public interface IAccountApiConfiguration
+    public interface IPasAccountApiConfiguration
     {
         /// <summary>
         /// The base url (schema, server, port and application path as appropriate)

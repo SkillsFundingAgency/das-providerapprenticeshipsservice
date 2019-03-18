@@ -33,6 +33,13 @@ using StructureMap;
 
 using IConfiguration = SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.IConfiguration;
 
+using System.Net.Http;
+using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.Http.TokenGenerators;
+using SFA.DAS.Notifications.Api.Client.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
+using SFA.DAS.Http;
+
 namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
     using StructureMap.Graph;
 
@@ -55,8 +62,13 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
             var config = GetConfiguration();
 
             For<IConfiguration>().Use(config);
+            For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
+
+            ConfigureNotificationsApi(config);
+            ConfigureHttpClient(config);
 
             RegisterMediator();
+            RegisterExecutionPolicies();
             ConfigureLogging();
         }
 
@@ -85,9 +97,15 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
 
         private void RegisterMediator()
         {
-            //For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
-            //For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
+            For<ServiceFactory>().Use<ServiceFactory>(ctx => t => ctx.GetInstance(t));
             For<IMediator>().Use<Mediator>();
+        }
+
+        private void RegisterExecutionPolicies()
+        {
+            For<ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies.ExecutionPolicy>()
+                .Use<ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies.IdamsExecutionPolicy>()
+                .Named(ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies.IdamsExecutionPolicy.Name);
         }
 
         private void ConfigureLogging()
@@ -104,6 +122,39 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
         {
             var parentType = x.ParentType;
             return new ProviderCommitmentsLogger(new NLogLogger(parentType, x.GetInstance<IRequestContext>()));
+        }
+
+        private void ConfigureNotificationsApi(ProviderApprenticeshipsServiceConfiguration config)
+        {
+            HttpClient httpClient;
+
+            if (string.IsNullOrWhiteSpace(config.NotificationApi.ClientId))
+            {
+                httpClient = new HttpClientBuilder()
+                    .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config.NotificationApi))
+                    .Build();
+            }
+            else
+            {
+                httpClient = new HttpClientBuilder()
+                    .WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config.NotificationApi))
+                    .Build();
+            }
+
+            For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(httpClient);
+
+            For<INotificationsApiClientConfiguration>().Use(config.NotificationApi);
+        }
+
+        private void ConfigureHttpClient(ProviderApprenticeshipsServiceConfiguration config)
+        {
+            For<IHttpClientWrapper>()
+                .Use<HttpClientWrapper>()
+                .Ctor<HttpClient>()
+                .Is(new HttpClientBuilder()
+                    .WithDefaultHeaders()
+                    .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config.CommitmentNotification))
+                    .Build());
         }
     }
 }

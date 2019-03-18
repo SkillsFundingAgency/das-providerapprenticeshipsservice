@@ -10,7 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.PAS.Account.Api.Orchestrator
 {
-    public class AccountOrchestrator
+    public class AccountOrchestrator : IAccountOrchestrator
     {
         private readonly IMediator _mediator;
 
