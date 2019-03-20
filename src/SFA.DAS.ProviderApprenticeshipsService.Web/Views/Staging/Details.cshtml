@@ -1,0 +1,155 @@
+﻿@model StagedBulkUpload
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
+@{
+    ViewBag.Title = "title";
+}
+
+<div class="grid-row">
+    <div class="column-full">
+
+        <h1 class="heading-xlarge">Bulk Upload Details</h1>
+
+        @if (!Model.IsStructurallyValid || !Model.StagedBulkUploadRows.All(x => x.IsValid))
+        {
+        <div class='error-summary' role="group" data-valmsg-summary="true">
+
+            <h1 id="error-summary" class="heading-medium error-summary-heading">
+                There are errors in your file. You will need to correct them and upload again before you
+                can make use of this data.
+            </h1>
+            <p>
+                @Html.ActionLink("Try again", "Upload")
+            </p>
+        </div>
+        }
+        
+        @if (Model.IsStructurallyValid && Model.StagedBulkUploadRows.All(x => x.IsValid) && !Model.AutoReservation && Model.StagedBulkUploadRows.Any(x => !x.HasReservation))
+        {
+            <div class='error-summary' role="group" data-valmsg-summary="true">
+
+                <h1 id="error-summary" class="heading-medium error-summary-heading">
+                    All records in your uploaded file must be linked to a reservation before you can make use of this data.
+                </h1>
+            </div>
+        }
+
+        @if (Model.IsStructurallyValid && (Model.StagedBulkUploadRows.All(x => x.HasReservation) || Model.AutoReservation) && Model.StagedBulkUploadRows.All(x => x.IsValid))
+        {
+        <div class="green-box-alert">This file is valid and can now be imported into new or existing cohorts.</div>
+        <button type="submit" class="button" id="submit-edit-apprentice">Create Cohort</button>
+        <br /><br />
+        }
+
+        @if (Model.IsStructurallyValid && (!Model.StagedBulkUploadRows.All(x => x.HasReservation) && !Model.AutoReservation))
+        {
+        <button type="submit" class="button" id="submit-edit-apprentice">Auto-allocate reservations</button>
+        <br /><br />
+        }
+
+        @if (!Model.IsStructurallyValid)
+        {
+            <span>The file you uploaded is invalid and here's why: blah blah blah</span>
+        <br /><br />
+        }
+        else
+        {
+
+        <table class="tableResponsive employerListing">
+            <thead>
+                <tr>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">ULN</th>
+                    <th scope="col">Course</th>
+                    <th scope="col">Start Date</th>
+
+                    @if (Model.StagedBulkUploadRows.Any(x => !x.IsValid))
+                    {
+                    <th scope="col">Errors</th>
+                    }
+                    else
+                    {
+                         if (!Model.AutoReservation)
+                         {
+                    <th scope="col">Reservation</th>
+                    <th scope="col"></th>
+                         }
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Model.StagedBulkUploadRows)
+                {
+                <tr>
+                    <td>
+                        @row.FirstName
+                    </td>
+                    <td>
+                        @row.LastName
+                    </td>
+                    <td>
+                        @row.Uln
+                    </td>
+                    @if (row.IsValid)
+                    {
+                    <td>
+                        @row.Course
+                    </td>
+                    }
+                    else
+                    {
+                    <td style="border-bottom: 3px solid #b10e1e;">
+                        @row.Course
+                    </td>
+                    }
+
+                    <td>
+                        @row.StartDate
+                    </td>
+
+                    @if (Model.StagedBulkUploadRows.Any(x => !x.IsValid))
+                    {
+                    <td>
+                        Training Course must be supplied
+                    </td>
+                    }
+                    else
+                    {
+
+                        if (!Model.AutoReservation)
+                         {
+                             if (row.HasReservation)
+                             {
+                    <td>@row.Reservation</td>
+                             }
+                             else
+                             {
+                    <td style="border-bottom: 3px solid #b10e1e;">
+                        Not selected
+                    </td>
+                             }
+                    <td>
+                        @if (row.HasReservation)
+                                 {
+                                     <a href="@Url.Action("SelectReservation")" title="View" aria-label="View">Change reservation</a>
+                                 }
+                                 else
+                                 {
+                                     <a href="@Url.Action("SelectReservation")" title="View" aria-label="View">Select reservation</a>
+                                 }
+                    </td>
+                         }
+                    }
+
+
+                </tr>
+                }
+            </tbody>
+        </table>
+
+        }
+
+        <a class="button delete-button" href="http://google.com" aria-label="Cancel" style="background-color: #b10e1e;">Delete</a>
+
+    </div>
+</div>

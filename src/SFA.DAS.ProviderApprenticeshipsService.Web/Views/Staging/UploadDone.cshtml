@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "Files Submitted";
+    ViewBag.PageId = "instructions-sent-end";
+}
+
+
+<div class="grid-row">
+    <div class="column-full">
+        <div class="govuk-box-highlight">
+            <h1 class="heading-xlarge" id="changeHeadline">
+                Files Submitted
+            </h1>
+        </div>
+    </div>
+
+</div>
+
+<div class="grid-row">
+    <div class="column-full">
+
+        <p>Your file(s) will be processed and the results available <a href="@Url.Action("Index")" aria-label="Go back">here</a> when complete.</p>
+       
+        <p>
+            <a href="@Url.Action("Index")" aria-label="Go back">Back</a>
+        </p>
+
+    </div>
+</div>

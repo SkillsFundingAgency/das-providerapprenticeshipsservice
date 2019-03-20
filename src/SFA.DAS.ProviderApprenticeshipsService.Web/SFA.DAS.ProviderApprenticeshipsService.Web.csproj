@@ -582,6 +582,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageApprenticesController.cs" />
+    <Compile Include="Controllers\StagingController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
@@ -841,6 +842,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Staging\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -905,6 +907,11 @@
     <Content Include="Views\Shared\ChooseEmployer.cshtml" />
     <Content Include="Views\Shared\ConfirmEmployer.cshtml" />
     <Content Include="Views\Commitment\DraftList.cshtml" />
+    <Content Include="Views\Staging\Details.cshtml" />
+    <Content Include="Views\Staging\Upload.cshtml" />
+    <Content Include="Views\Commitment\ImportBulk.cshtml" />
+    <Content Include="Views\Staging\UploadDone.cshtml" />
+    <Content Include="Views\Staging\SelectReservation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

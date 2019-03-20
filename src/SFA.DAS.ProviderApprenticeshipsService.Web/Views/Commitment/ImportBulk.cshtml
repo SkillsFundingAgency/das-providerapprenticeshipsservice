@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Bulk Upload";
+}
+
+
+<h1 class="heading-xlarge">Import bulk-uploaded data</h1>
+
+<div class="grid-row">
+    <label class="block-label selection-button-radio" for="SelectedRoute-Employer">
+        @Html.RadioButton("option1", "something") 3 apprentices imported from megacorp1.csv
+    </label>
+
+    <label class="block-label selection-button-radio" for="SelectedRoute-Employer">
+        @Html.RadioButton("option1", "something") 2 apprentices imported from megacorp2.csv
+    </label>
+</div>
+
+<div class="grid-row">
+    <br /><br />
+    Or,@Html.ActionLink("Bulk upload new files", "Upload", "Staging")
+</div>

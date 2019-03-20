@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Bulk upload apprentices";
+    ViewBag.PageId = "upload-apprenticeships";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Bulk upload apprentices</h1>
+        <p>You can add details of multiple apprentices at the same time (bulk upload) using csv files.</p>
+
+        <div class="panel panel-border-wide">
+            <p>
+                You can add more than one file at a time.
+            </p>
+        </div>
+
+        <details>
+            <summary><span class="summary">Help with bulk upload</span></summary>
+            <div class="panel panel-border-narrow">
+                <p>
+                    You must use a csv file to upload apprentice details.
+                </p>
+                <p>
+                    If you have a management information system, it may be able to create a csv file for you.
+                </p>
+                <p>
+                    Alternatively, a bulk upload template and further details of each field are available - <a href="https://www.gov.uk/government/publications/apprenticeship-service-bulk-upload-specification">view apprenticeship service bulk upload guidance</a>.
+                </p>
+            </div>
+        </details>
+
+        <form method="POST" action="" enctype="multipart/form-data">
+            <label class="form-label hidden" for="files-upload">Upload file</label>
+            <input id="files-upload" accept=".csv" type="file" name="" multiple="multiple">
+            <br/><br/>
+            <a href="@Url.Action("UploadDone")" class="button delete-button">Upload files</a>
+        </form>
+
+
+    </div>
+</div>
+
+

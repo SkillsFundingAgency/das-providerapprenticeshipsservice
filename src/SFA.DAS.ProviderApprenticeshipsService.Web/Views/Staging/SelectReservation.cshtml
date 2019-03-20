@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Select Reservation";
+}
+
+
+<h1 class="heading-xlarge">Select Reservation</h1>
+
+<p>Choose a reservation for this employer</p>
+
+<div class="grid-row">
+    <label class="block-label selection-button-radio" for="SelectedRoute-Employer">
+        @Html.RadioButton("option1", "something") Engineering Oct - Dec 2019 
+    </label>
+
+    <label class="block-label selection-button-radio" for="SelectedRoute-Employer">
+        @Html.RadioButton("option1", "something") Forest Management Sep - Nov 2019
+    </label>
+    
+    <label class="block-label selection-button-radio" for="SelectedRoute-Employer">
+        @Html.RadioButton("option1", "something") Any Course Feb - Apr 2020
+    </label>
+</div>
+<br/><br/>
+<a class="button delete-button" href="http://google.com" aria-label="Cancel" style="">Select</a>
+<br/><br/>
+<p>
+    Or, <a href="@Url.Action("Index")" aria-label="Go back">Create a new reservation</a>
+</p>
+

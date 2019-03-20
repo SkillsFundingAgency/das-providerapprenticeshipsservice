@@ -1,0 +1,58 @@
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
+@{
+    ViewBag.Title = "title";
+}
+
+<div class="grid-row">
+    <div class="column-full">
+
+        <h1 class="heading-xlarge">Bulk Uploads</h1>
+        
+        @Html.ActionLink("Bulk upload more files", "Upload")
+        <br/><br/>
+
+        
+        <table class="tableResponsive employerListing">
+                <thead>
+                <tr>
+                    <th scope="col">Filename</th>
+                    <th scope="col">Employer</th>
+                    <th scope="col">Contents</th>
+                    <th scope="col">Created</th>
+                    <th scope="col"><span class="vh">Action</span></th>
+                </tr>
+                </thead>
+            <tbody>        
+            @foreach (var upload in StagingData.StagedBulkUploads)
+            {
+                <tr>
+                    <td>
+                        @upload.FileName
+                    </td>
+                    <td>
+                        @upload.Employer
+                    </td>
+                    <td>
+                        @if (upload.IsStructurallyValid)
+                        {
+                            <span>@upload.Rows apprentices</span>
+                        }
+                        else
+                        {
+                            <span>Invalid</span>
+                        }
+                    </td>
+                    <td>
+                        @upload.Created
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Details", new {providerId = 10005077, uploadId = upload.Id})" title="View" aria-label="View">Details</a>
+                    </td>
+                </tr>
+            }
+            <tr>
+                </tbody>
+            </table>
+        
+    </div>
+</div>

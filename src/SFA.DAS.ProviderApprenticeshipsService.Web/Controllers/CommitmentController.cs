@@ -462,6 +462,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 model.FlashMessage = flashMessage;
             }
         }
+
+        public ActionResult ImportBulk()
+        {
+            return View();
+        }
     }
 }
 
