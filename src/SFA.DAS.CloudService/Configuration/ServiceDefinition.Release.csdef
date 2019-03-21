@@ -22,6 +22,7 @@
       <Setting name="CurrentTime" />
       <Setting name="FeatureToggle.ManageReservations" />
       <Setting name="UseStubProviderRelationships" />
+      <Setting name="FeatureToggle.Recruit" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Httpsin" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-prd-pas-ilb"/>
