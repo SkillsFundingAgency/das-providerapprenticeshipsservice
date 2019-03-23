@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
@@ -7,12 +8,12 @@ using SFA.DAS.PAS.Account.Api.Types;
 
 namespace SFA.DAS.PAS.Account.Api.Client
 {
-    public class AccountApiClient : IAccountApiClient
+    public class PasAccountApiClient : IPasAccountApiClient
     {
-        private readonly IAccountApiConfiguration _configuration;
+        private readonly IPasAccountApiConfiguration _configuration;
         private readonly SecureHttpClient _httpClient;
 
-        public AccountApiClient(IAccountApiConfiguration configuration)
+        public PasAccountApiClient(IPasAccountApiConfiguration configuration)
         {
             _configuration = configuration;
             _httpClient = new SecureHttpClient(configuration);
@@ -34,6 +35,11 @@ namespace SFA.DAS.PAS.Account.Api.Client
 
             var json = await _httpClient.GetAsync(url);
             return JsonConvert.DeserializeObject<IEnumerable<User>>(json);
+        }
+
+        public async Task SendEmailToAllProviderRecipients(long ukprn, ProviderEmailRequest message)
+        {
+            await _httpClient.PostAsync(Path.Combine(GetBaseUrl(), $"api/email/{ukprn}/send"), message);
         }
 
         private string GetBaseUrl()
