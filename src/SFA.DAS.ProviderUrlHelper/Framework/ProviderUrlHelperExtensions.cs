@@ -27,6 +27,13 @@ namespace SFA.DAS.ProviderUrlHelper.Framework
             return linkGenerator.ReservationsLink(path);
         }
 
+        public static string RecruitLink(this UrlHelper helper, string path)
+        {
+            var linkGenerator = GetLinkGenerator();
+
+            return linkGenerator.RecruitLink(path);
+        }
+
         private static ILinkGenerator GetLinkGenerator()
         {
             var linkGenerator = ServiceLocator.Get<ILinkGenerator>();

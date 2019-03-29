@@ -5,5 +5,6 @@
         public string ProviderApprenticeshipServiceBaseUrl { get; set; }
         public string ProviderCommitmentsBaseUrl { get; set; }
         public string ReservationsBaseUrl { get; set; }
+        public string RecruitBaseUrl { get; set; }
     }
 }

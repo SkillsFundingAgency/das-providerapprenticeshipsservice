@@ -8,6 +8,7 @@ namespace SFA.DAS.ProviderUrlHelper
         string ProviderCommitmentsLink(string path);
         string ProviderApprenticeshipServiceLink(string path);
         string ReservationsLink(string path);
+        string RecruitLink(string path);
     }
 }
 #endif

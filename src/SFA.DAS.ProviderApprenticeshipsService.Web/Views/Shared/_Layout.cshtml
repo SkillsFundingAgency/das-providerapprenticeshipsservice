@@ -3,6 +3,9 @@
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.Authorization.ProviderPermissions
+@using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
+@using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles
+@using SFA.DAS.ProviderUrlHelper.Framework
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -130,6 +133,7 @@
         {
             var controllerName = ViewContext.RouteData.Values["Controller"].ToString(); ;
             var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
+            var featureToggleService = DependencyResolver.Current.GetService<IFeatureToggleService>();
 
             <div class="grid-row">
                 <div class="column-full">
@@ -139,6 +143,10 @@
                                 <li><a href="@Url.Action("Index", "Account")" role="menuitem" class="@(controllerName == "Account" ? "selected" : "")">Home</a></li>
                                 <li><a href="@Url.Action("Cohorts", "Commitment", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Commitment" ? "selected" : "")">Your cohorts</a></li>
                                 <li><a href="@Url.Action("Index", "ManageApprentices", new {providerId = providerId})" role="menuitem" class="@(controllerName == "ManageApprentices" ? "selected" : "")">Manage your apprentices</a></li>
+                                @if (featureToggleService.Get<Recruit>().FeatureEnabled)
+                                {
+                                    <li><a href="@Url.RecruitLink($"{providerId}")">Recruit apprentices</a></li>
+                                }
                                 <li><a href="@Url.Action("Agreements", "Agreement", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Agreement" ? "selected" : "")">Organisations and agreements</a></li>
                             </ul>
                         </nav>

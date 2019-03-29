@@ -18,7 +18,7 @@ namespace SFA.DAS.ProviderUrlHelperTests
             var fixtures = new LinkGeneratorTestFixtures()
                 .WithProviderApprenticeshipServiceBaseUrl(providerApprenticeshipServiceUrl);
 
-            var actualUrl = fixtures.GetProviderfApprenticeshipServiceLink(path);
+            var actualUrl = fixtures.GetProviderApprenticeshipServiceLink(path);
 
             Assert.AreEqual(expectedUrl, actualUrl);
         }
@@ -46,7 +46,7 @@ namespace SFA.DAS.ProviderUrlHelperTests
             return this;
         }
 
-        public string GetProviderfApprenticeshipServiceLink(string path)
+        public string GetProviderApprenticeshipServiceLink(string path)
         {
             var linkGenerator = new LinkGenerator(AutoConfigurationService);
             return linkGenerator.ProviderApprenticeshipServiceLink(path);

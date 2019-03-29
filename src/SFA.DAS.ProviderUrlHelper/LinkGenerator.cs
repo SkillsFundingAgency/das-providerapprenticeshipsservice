@@ -37,6 +37,14 @@ namespace SFA.DAS.ProviderUrlHelper
             return Action(baseUrl, path);
         }
 
+        public string RecruitLink(string path)
+        {
+            var configuration = _lazyProviderConfiguration.Value;
+            var baseUrl = configuration.RecruitBaseUrl;
+
+            return Action(baseUrl, path);
+        }
+
         private ProviderUrlConfiguration LoadProviderUrlConfiguration(IAutoConfigurationService autoConfigurationService)
         {
             var configuration = autoConfigurationService.Get<ProviderUrlConfiguration>();
