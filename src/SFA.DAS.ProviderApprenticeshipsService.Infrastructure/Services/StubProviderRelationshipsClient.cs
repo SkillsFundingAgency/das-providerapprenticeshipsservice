@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,10 +23,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
         private async Task<IList<AccountProviderLegalEntityDto>> GetPermissionsForProvider(long providerId, Operation operation, CancellationToken cancellationToken)
         {
             var response = await _httpClient.GetAsync($"{providerId}", cancellationToken);
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return new List<AccountProviderLegalEntityDto>();
+            }
             var content = await response.Content.ReadAsStringAsync();
             var items = JsonConvert.DeserializeObject<List<AccountProviderLegalEntityDtoWrapper>>(content);
-
-            return items.Where(x => x.Permissions.Contains(operation)).Select(item => (AccountProviderLegalEntityDto)item).ToList();
+            return items.Where(x => x.Permissions.Contains(operation))
+                .Select(item => (AccountProviderLegalEntityDto) item).ToList();
         }
 
         public async Task<GetAccountProviderLegalEntitiesWithPermissionResponse> GetAccountProviderLegalEntitiesWithPermission(
