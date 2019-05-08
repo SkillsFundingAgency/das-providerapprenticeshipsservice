@@ -21,8 +21,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 
         private async Task<IList<AccountProviderLegalEntityDto>> GetPermissionsForProvider(long providerId, Operation operation, CancellationToken cancellationToken)
         {
-            var response = await _httpClient.GetAsync($"{providerId}", cancellationToken);
-            var content = await response.Content.ReadAsStringAsync();
+            var response = await _httpClient.GetAsync($"{providerId}", cancellationToken).ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var items = JsonConvert.DeserializeObject<List<AccountProviderLegalEntityDtoWrapper>>(content);
 
             return items.Where(x => x.Permissions.Contains(operation)).Select(item => (AccountProviderLegalEntityDto)item).ToList();
@@ -34,13 +34,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
         {
             return new GetAccountProviderLegalEntitiesWithPermissionResponse
             {
-                AccountProviderLegalEntities = await GetPermissionsForProvider(request.Ukprn, request.Operation, cancellationToken)
+                AccountProviderLegalEntities = await GetPermissionsForProvider(request.Ukprn, request.Operation, cancellationToken).ConfigureAwait(false)
             };
         }
 
         public async Task<bool> HasPermission(HasPermissionRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            var result = await GetPermissionsForProvider(request.Ukprn, request.Operation, cancellationToken);
+            var result = await GetPermissionsForProvider(request.Ukprn, request.Operation, cancellationToken).ConfigureAwait(false);
             return result.Any();
         }
 
