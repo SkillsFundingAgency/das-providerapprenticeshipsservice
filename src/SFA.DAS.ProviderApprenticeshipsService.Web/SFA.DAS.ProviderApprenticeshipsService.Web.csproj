@@ -576,7 +576,6 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BulkUploadController.cs" />
     <Compile Include="Controllers\CommitmentController.cs" />
-    <Compile Include="Controllers\ReservationController.cs" />
     <Compile Include="Controllers\CreateCohortController.cs" />
     <Compile Include="Controllers\DataLockController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
