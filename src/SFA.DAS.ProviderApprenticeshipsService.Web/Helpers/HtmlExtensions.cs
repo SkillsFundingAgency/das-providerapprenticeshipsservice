@@ -3,18 +3,15 @@ using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
+using SFA.DAS.Authorization.ProviderPermissions;
 using System;
+using SFA.DAS.Authorization;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
 {
     public static class HtmlExtensions
     {
         private static readonly Lazy<bool> _lazyIsEnabled = new Lazy<bool>(InitIsEnabled);
-        private static bool InitIsEnabled()
-        {
-            var service = DependencyResolver.Current.GetService<IFeatureToggleService>();
-            return service.Get<ManageReservations>().FeatureEnabled;
-        }
 
         public static bool CanShowReservationsLink(this HtmlHelper htmlHelper)
         {
@@ -27,6 +24,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
                     return true;
             }
             return false;
+        }
+
+        private static bool InitIsEnabled()
+        {
+            var service = DependencyResolver.Current.GetService<IFeatureToggleService>();
+            return service.Get<ManageReservations>().FeatureEnabled;
         }
     }
 }
