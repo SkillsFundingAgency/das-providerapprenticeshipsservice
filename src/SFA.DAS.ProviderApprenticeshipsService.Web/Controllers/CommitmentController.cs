@@ -12,6 +12,8 @@ using System.Security.Claims;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -22,15 +24,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     {
         private const string LastCohortPageCookieKey = "sfa-das-providerapprenticeshipsservice-lastCohortPage";
         private readonly ICookieStorageService<string> _lastCohortCookieStorageService;
+        private readonly IFeatureToggleService _featureToggleService;
+        private readonly ProviderUrlHelper.ILinkGenerator _providerUrlhelper;
+        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
 
         private readonly CommitmentOrchestrator _commitmentOrchestrator;
         private readonly ILog _logger;
 
-        public CommitmentController(CommitmentOrchestrator commitmentOrchestrator, ILog logger, ICookieStorageService<FlashMessageViewModel> flashMessage, ICookieStorageService<string> lastCohortCookieStorageService) : base(flashMessage)
+        public CommitmentController(CommitmentOrchestrator commitmentOrchestrator, ILog logger, ICookieStorageService<FlashMessageViewModel> flashMessage, 
+            ICookieStorageService<string> lastCohortCookieStorageService, IFeatureToggleService featureToggleService, ProviderUrlHelper.LinkGenerator providerUrlhelper,
+            IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService) : base(flashMessage)
         {
             _commitmentOrchestrator = commitmentOrchestrator;
             _logger = logger;
             _lastCohortCookieStorageService = lastCohortCookieStorageService;
+            _featureToggleService = featureToggleService;
+            _providerUrlhelper = providerUrlhelper;
+            _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
         }
 
         [HttpGet]
@@ -259,10 +269,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedCommitmentId}/AddApprentice")]
         public async Task<ActionResult> AddApprentice(long providerId, string hashedCommitmentId)
         {
-            var model = await _commitmentOrchestrator.GetCreateApprenticeshipViewModel(providerId, hashedCommitmentId);
-            ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
+            string nextPage;
 
-            return View(model.Apprenticeship);
+            if (_featureToggleService.Get<ManageReservations>().FeatureEnabled)
+            {
+                string employerAccountLegalEntityPublicHashedId = _accountLegalEntityPublicHashingService.HashValue((await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId)).EmployerAccountId);
+                nextPage = _providerUrlhelper.ReservationsLink($"{providerId}/reservations/{employerAccountLegalEntityPublicHashedId}/select?cohortReference={hashedCommitmentId}");
+            }
+            else
+            {
+                nextPage = _providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/{hashedCommitmentId}/add-apprentice");
+            }
+
+            return Redirect(nextPage);
         }
 
         [HttpPost]
