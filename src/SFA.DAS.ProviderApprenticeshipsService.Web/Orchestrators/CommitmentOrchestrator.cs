@@ -32,6 +32,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
@@ -40,6 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
     {
         private readonly IApprenticeshipCoreValidator _apprenticeshipCoreValidator;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
+        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
         private readonly ApprenticeshipViewModelUniqueUlnValidator _uniqueUlnValidator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
         private readonly Func<int, string> _addSSuffix = i => i > 1 ? "s" : "";
@@ -49,13 +51,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             ApprenticeshipViewModelUniqueUlnValidator uniqueUlnValidator,
             ProviderApprenticeshipsServiceConfiguration configuration,
             IApprenticeshipCoreValidator apprenticeshipCoreValidator,
-            IApprenticeshipMapper apprenticeshipMapper)
+            IApprenticeshipMapper apprenticeshipMapper, 
+            IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService)
             : base(mediator, hashingService, logger)
         {
             _uniqueUlnValidator = uniqueUlnValidator;
             _configuration = configuration;
             _apprenticeshipCoreValidator = apprenticeshipCoreValidator;
             _apprenticeshipMapper = apprenticeshipMapper;
+            _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
         }
 
         public async Task<CohortsViewModel> GetCohorts(long providerId)
@@ -337,6 +341,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipTrainingProgrammes = programmeSummary
             };
         }
+
+        public async Task<string> GetEmployerAccountLegalEntityPublicHashedIdFromCommitment(long providerId, string hashedCommitmentId)
+        {
+            var commitment = await GetCommitment(providerId, hashedCommitmentId);
+            return _accountLegalEntityPublicHashingService.HashValue(commitment.EmployerAccountId);
+        }
+
 
         public async Task<CommitmentListItemViewModel> GetCommitmentCheckState(long providerId, string hashedCommitmentId)
         {

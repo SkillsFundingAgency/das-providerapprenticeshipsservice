@@ -26,21 +26,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         private readonly ICookieStorageService<string> _lastCohortCookieStorageService;
         private readonly IFeatureToggleService _featureToggleService;
         private readonly ProviderUrlHelper.ILinkGenerator _providerUrlhelper;
-        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
 
         private readonly CommitmentOrchestrator _commitmentOrchestrator;
         private readonly ILog _logger;
 
         public CommitmentController(CommitmentOrchestrator commitmentOrchestrator, ILog logger, ICookieStorageService<FlashMessageViewModel> flashMessage, 
-            ICookieStorageService<string> lastCohortCookieStorageService, IFeatureToggleService featureToggleService, ProviderUrlHelper.LinkGenerator providerUrlhelper,
-            IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService) : base(flashMessage)
+            ICookieStorageService<string> lastCohortCookieStorageService, IFeatureToggleService featureToggleService, ProviderUrlHelper.LinkGenerator providerUrlhelper) : base(flashMessage)
         {
             _commitmentOrchestrator = commitmentOrchestrator;
             _logger = logger;
             _lastCohortCookieStorageService = lastCohortCookieStorageService;
             _featureToggleService = featureToggleService;
             _providerUrlhelper = providerUrlhelper;
-            _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
         }
 
         [HttpGet]
@@ -272,7 +269,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (_featureToggleService.Get<ManageReservations>().FeatureEnabled)
             {
-                string employerAccountLegalEntityPublicHashedId = _accountLegalEntityPublicHashingService.HashValue((await _commitmentOrchestrator.GetCommitment(providerId, hashedCommitmentId)).EmployerAccountId);
+                var employerAccountLegalEntityPublicHashedId = await _commitmentOrchestrator.GetEmployerAccountLegalEntityPublicHashedIdFromCommitment(providerId, hashedCommitmentId);
                 nextPage = _providerUrlhelper.ReservationsLink($"{providerId}/reservations/{employerAccountLegalEntityPublicHashedId}/select?cohortReference={hashedCommitmentId}");
             }
             else

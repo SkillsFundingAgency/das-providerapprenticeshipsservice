@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using FeatureToggle;
 using FluentValidation.Results;
 
 using MediatR;
@@ -34,6 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         protected Mock<IApprenticeshipMapper> _mockMapper = new Mock<IApprenticeshipMapper>();
 
         private Mock<ApprenticeshipViewModelUniqueUlnValidator> _ulnValidator;
+        private Mock<IAccountLegalEntityPublicHashingService> _mockAccountLegalEntityPublicHashingService;
 
         [SetUp]
         public virtual void SetUp()
@@ -45,6 +45,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _ulnValidator
                 .Setup(m => m.ValidateAsyncOverride(It.IsAny<ApprenticeshipViewModel>()))
                 .ReturnsAsync(new ValidationResult());
+
+            _mockAccountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
+            _mockAccountLegalEntityPublicHashingService.Setup(x => x.HashValue(It.IsAny<long>()))
+                .Returns((long valueToHash) => $"X{valueToHash}X");
 
             SetUpOrchestrator();
         }
@@ -58,7 +62,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                        _ulnValidator.Object,
                        Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
                        _mockApprenticeshipCoreValidator.Object,
-                       _mockMapper.Object);
+                       _mockMapper.Object,
+                       _mockAccountLegalEntityPublicHashingService.Object);
         }
 
         protected CommitmentListItem GetTestCommitmentOfStatus(long id, RequestStatus requestStatus)
