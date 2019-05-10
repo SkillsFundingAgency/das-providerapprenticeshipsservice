@@ -265,7 +265,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/AddApprentice")]
         public async Task<ActionResult> AddApprentice(long providerId, string hashedCommitmentId)
         {
