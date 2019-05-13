@@ -3,9 +3,7 @@ using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
-using SFA.DAS.Authorization.ProviderPermissions;
 using System;
-using SFA.DAS.Authorization;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
 {
