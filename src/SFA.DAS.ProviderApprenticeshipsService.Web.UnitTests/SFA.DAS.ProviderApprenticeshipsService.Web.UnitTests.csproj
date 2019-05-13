@@ -376,7 +376,7 @@
     <Compile Include="Extensions\IEnumerableCommitmentAgreementTests.cs" />
     <Compile Include="FakeHttpContext.cs" />
     <Compile Include="Helpers\HtmlExtensionsTests.cs" />
-    <Compile Include="Orchestrators\Commitments\WhenGettingLegalEntityPublicHashedIdFromCommitmentDetails.cs" />
+    <Compile Include="Orchestrators\Commitments\WhenGettingHashedIdsFromCommitmentDetails.cs" />
     <Compile Include="TestServiceLocator.cs" />
     <Compile Include="Models\DataLockSummaryViewModelTests.cs" />
     <Compile Include="MoqCustomisedAutoData.cs" />

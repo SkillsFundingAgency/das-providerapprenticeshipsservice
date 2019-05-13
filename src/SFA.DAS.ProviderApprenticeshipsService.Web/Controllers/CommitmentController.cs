@@ -269,8 +269,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (_featureToggleService.Get<ManageReservations>().FeatureEnabled)
             {
-                var employerAccountLegalEntityPublicHashedId = await _commitmentOrchestrator.GetEmployerAccountLegalEntityPublicHashedIdFromCommitment(providerId, hashedCommitmentId);
-                nextPage = _providerUrlhelper.ReservationsLink($"{providerId}/reservations/{employerAccountLegalEntityPublicHashedId}/select?cohortReference={hashedCommitmentId}");
+                var hashedIds = await _commitmentOrchestrator.GetHashedIdsFromCommitment(providerId, hashedCommitmentId);
+                nextPage = _providerUrlhelper.ReservationsLink($"{providerId}/reservations/{hashedIds.HashedLegalEntityId}/select?cohortReference={hashedCommitmentId}");
+                if (hashedIds.HashedTransferSenderId != null)
+                {
+                    nextPage += $"&transferSenderId={hashedIds.HashedTransferSenderId}";
+                }
+
             }
             else
             {

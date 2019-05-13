@@ -342,12 +342,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<string> GetEmployerAccountLegalEntityPublicHashedIdFromCommitment(long providerId, string hashedCommitmentId)
+        public async Task<(string HashedLegalEntityId, string HashedTransferSenderId)> GetHashedIdsFromCommitment(long providerId, string hashedCommitmentId)
         {
-            var commitment = await GetCommitment(providerId, hashedCommitmentId);
-            return _accountLegalEntityPublicHashingService.HashValue(commitment.EmployerAccountId);
-        }
+            string HashedLegalEntityId(CommitmentView commitment1)
+            {
+                return _accountLegalEntityPublicHashingService.HashValue(commitment1.EmployerAccountId);
+            }
 
+            string HashedTransferSenderId(CommitmentView commitmentView)
+            {
+                if (commitmentView.TransferSender?.Id != null)
+                {
+                    return _accountLegalEntityPublicHashingService.HashValue(commitmentView.TransferSender.Id.Value);
+                } 
+                return null;
+            }
+
+            var commitment = await GetCommitment(providerId, hashedCommitmentId);
+            return (HashedLegalEntityId: HashedLegalEntityId(commitment), HashedTransferSenderId: HashedTransferSenderId(commitment));
+        }
 
         public async Task<CommitmentListItemViewModel> GetCommitmentCheckState(long providerId, string hashedCommitmentId)
         {
