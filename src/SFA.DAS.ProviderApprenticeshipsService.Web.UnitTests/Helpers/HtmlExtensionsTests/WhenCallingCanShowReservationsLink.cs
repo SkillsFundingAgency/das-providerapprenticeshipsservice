@@ -1,19 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Web;
-using NUnit.Framework;
-using StructureMap;
 using System.Web.Mvc;
 using FeatureToggle;
 using Moq;
+using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Helpers;
+using StructureMap;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Helpers
 {
-    [TestFixture]
-    public class HtmlExtensionsTests
+    public partial class HtmlExtensionsTests
     {
         [TestFixture]
         public class WhenCallingCanShowReservationsLink

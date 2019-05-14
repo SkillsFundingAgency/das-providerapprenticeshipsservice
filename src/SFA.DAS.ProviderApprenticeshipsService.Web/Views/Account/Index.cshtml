@@ -38,7 +38,7 @@
                 </div>
             }
 
-            @if (Html.CanShowReservationsLink()) // is reservations feature enabled?
+            @if (Html.IsReservationsEnabled()) // is reservations feature enabled?
             {
                 <div class="box">
                     <h2 class="heading-medium">
@@ -55,7 +55,7 @@
                 <p>Review, edit, approve and add apprentices to new cohorts.</p>
             </div>
 
-            @if (Html.CanShowReservationsLink())
+            @if (Html.IsReservationsEnabled())
             {
                 <div class="box">
                     <h2 class="heading-medium">

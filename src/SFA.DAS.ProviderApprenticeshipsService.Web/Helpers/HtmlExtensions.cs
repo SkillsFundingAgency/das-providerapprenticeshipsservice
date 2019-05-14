@@ -11,6 +11,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
     {
         private static readonly Lazy<bool> _lazyIsEnabled = new Lazy<bool>(InitIsEnabled);
 
+        public static bool IsReservationsEnabled(this HtmlHelper htmlHelper)
+        {
+            return _lazyIsEnabled.Value;
+        }
+
         public static bool CanShowReservationsLink(this HtmlHelper htmlHelper)
         {
             if (_lazyIsEnabled.Value)
