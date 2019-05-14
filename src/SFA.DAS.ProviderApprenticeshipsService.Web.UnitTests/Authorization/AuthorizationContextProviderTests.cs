@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Routing;
 using FluentAssertions;
@@ -129,6 +130,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
             HttpContext = new Mock<HttpContextBase>();
             HttpContext.Setup(c => c.Request.RequestContext.RouteData).Returns(RouteData);
             HttpContext.Setup(c => c.Request.Params).Returns(Params);
+            HttpContext.Setup(c => c.User).Returns(new GenericPrincipal(new Mock<IIdentity>().Object, new string[0]));
 
             AccountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
             AuthorizationContextProvider = new AuthorizationContextProvider(HttpContext.Object, AccountLegalEntityPublicHashingService.Object, Mock.Of<ILog>());
