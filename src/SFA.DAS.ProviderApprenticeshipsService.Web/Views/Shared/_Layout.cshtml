@@ -144,7 +144,7 @@
 
                                 @if (Html.IsReservationsEnabled())
                                 {
-                                    <li><a href="@Url.ReservationsLink($"{Model.ProviderId}/reservations/manage")" role="menuitem" class="@(controllerName == "ManageReservations" ? "selected" : "")">Manage funding</a></li>
+                                    <li><a href="@Url.ReservationsLink($"{providerId}/reservations/manage")" role="menuitem" class="@(controllerName == "ManageReservations" ? "selected" : "")">Manage funding</a></li>
                                 }
 
                                 <li><a href="@Url.Action("Index", "ManageApprentices", new {providerId = providerId})" role="menuitem" class="@(controllerName == "ManageApprentices" ? "selected" : "")">Manage your apprentices</a></li>
