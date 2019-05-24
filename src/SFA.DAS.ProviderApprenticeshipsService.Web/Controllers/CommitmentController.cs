@@ -279,7 +279,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
             else
             {
-                nextPage = _providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/{hashedCommitmentId}/add-apprentice");
+                nextPage = _providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/{hashedCommitmentId}/apprentices/add");
             }
 
             return Redirect(nextPage);
