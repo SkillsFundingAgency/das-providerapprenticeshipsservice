@@ -3,6 +3,7 @@
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
+@using SFA.DAS.ProviderUrlHelper.Framework
 @model CommitmentDetailsViewModel
 
 @{
@@ -290,7 +291,7 @@
                                         }
                                         else
                                         {
-                                            <a href="@Url.Action("Edit", new {Model.HashedCommitmentId, apprenticeship.HashedApprenticeshipId})"
+                                            <a  href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved/{Model.HashedCommitmentId}/apprentices/{apprenticeship.HashedApprenticeshipId}/edit")"
                                                title="Edit @apprenticeship.ApprenticeshipName" aria-label="Edit @apprenticeship.ApprenticeshipName">Edit</a>
                                         }
                                     </td>
