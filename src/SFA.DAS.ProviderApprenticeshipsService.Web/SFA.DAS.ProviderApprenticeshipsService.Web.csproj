@@ -931,7 +931,7 @@
       <Name>SFA.DAS.ProviderApprenticeshipsService.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.ProviderUrlHelper.StructureMap\SFA.DAS.ProviderUrlHelper.StructureMap.csproj">
-      <Project>{31f2ce93-0318-415f-86d3-e3a85ab298f5}</Project>
+      <Project>{070458db-2a4f-4a20-90ab-a46603fed6ef}</Project>
       <Name>SFA.DAS.ProviderUrlHelper.StructureMap</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.ProviderUrlHelper\SFA.DAS.ProviderUrlHelper.csproj">
