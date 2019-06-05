@@ -1,4 +1,4 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.ChooseEmployerViewModel
 @{
     ViewBag.Title = Model.Title;
@@ -28,7 +28,7 @@
                     <td>@legalEntity.EmployerAccountName</td>
                     <td>@legalEntity.EmployerAccountLegalEntityPublicHashedId</td>
                     <td class="link-right">
-                        <a href="@Url.Action("ConfirmEmployer", Model.ControllerName, new ConfirmEmployerViewModel(legalEntity, Model.EmployerSelectionAction))">Select <span class="vh">@legalEntity.EmployerAccountLegalEntityName</span></a>
+                        <a href="@Url.Action("ConfirmEmployer", Model.ControllerName, new ConfirmEmployerViewModel(legalEntity, Model.EmployerSelectionAction))">Select<span class="vh"> @legalEntity.EmployerAccountLegalEntityName</span></a>
                     </td>
                 </tr>
                 }
