@@ -1,7 +1,4 @@
-﻿using System;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.AutoConfiguration;
+﻿using NUnit.Framework;
 using SFA.DAS.ProviderUrlHelper;
 
 namespace SFA.DAS.ProviderUrlHelperTests
@@ -27,18 +24,10 @@ namespace SFA.DAS.ProviderUrlHelperTests
     {
         public LinkGeneratorTestFixtures()
         {
-            AutoConfigurationServiceMock = new Mock<IAutoConfigurationService>();
-
             ProviderUrlConfiguration = new ProviderUrlConfiguration();
-
-            AutoConfigurationServiceMock.Setup(acs => acs.Get<ProviderUrlConfiguration>()).Returns(ProviderUrlConfiguration);
         }
 
         public ProviderUrlConfiguration ProviderUrlConfiguration { get; }
-
-        public Mock<IAutoConfigurationService> AutoConfigurationServiceMock { get; }
-        public IAutoConfigurationService AutoConfigurationService => AutoConfigurationServiceMock.Object;
-
 
         public LinkGeneratorTestFixtures WithProviderApprenticeshipServiceBaseUrl(string baseUrl)
         {
@@ -48,7 +37,7 @@ namespace SFA.DAS.ProviderUrlHelperTests
 
         public string GetProviderApprenticeshipServiceLink(string path)
         {
-            var linkGenerator = new LinkGenerator(AutoConfigurationService);
+            var linkGenerator = new LinkGenerator(ProviderUrlConfiguration);
             return linkGenerator.ProviderApprenticeshipServiceLink(path);
         }
     }

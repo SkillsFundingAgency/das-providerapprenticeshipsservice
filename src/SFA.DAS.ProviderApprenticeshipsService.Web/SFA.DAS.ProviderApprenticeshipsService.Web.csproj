@@ -586,7 +586,6 @@
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="DependencyResolution\StructureMapValidatorFactory.cs" />
-    <Compile Include="DependencyResolution\LinkGeneratorRegistry.cs" />
     <Compile Include="DependencyResolution\ValidationRegistry.cs" />
     <Compile Include="Exceptions\InvalidStateExceptionFilter.cs" />
     <Compile Include="Extensions\DecimalExtensions.cs" />
@@ -930,6 +929,10 @@
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Infrastructure\SFA.DAS.ProviderApprenticeshipsService.Infrastructure.csproj">
       <Project>{380868c8-fa69-4da7-b054-45ac924ec48e}</Project>
       <Name>SFA.DAS.ProviderApprenticeshipsService.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.ProviderUrlHelper.StructureMap\SFA.DAS.ProviderUrlHelper.StructureMap.csproj">
+      <Project>{31f2ce93-0318-415f-86d3-e3a85ab298f5}</Project>
+      <Name>SFA.DAS.ProviderUrlHelper.StructureMap</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.ProviderUrlHelper\SFA.DAS.ProviderUrlHelper.csproj">
       <Project>{72a3f1c7-a664-4ace-8770-70773d82019f}</Project>

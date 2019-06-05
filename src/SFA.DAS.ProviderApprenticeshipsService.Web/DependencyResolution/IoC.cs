@@ -20,6 +20,7 @@ using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.ProviderPermissions;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.ProviderUrlHelper.StructureMap;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {

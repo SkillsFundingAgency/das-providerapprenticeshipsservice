@@ -1,55 +1,38 @@
 ﻿using System;
-using SFA.DAS.AutoConfiguration;
 
 namespace SFA.DAS.ProviderUrlHelper
 {
     public class LinkGenerator : ILinkGenerator
     {
-        private readonly Lazy<ProviderUrlConfiguration> _lazyProviderConfiguration;
+        private readonly ProviderUrlConfiguration _configuration;
 
-        public LinkGenerator(IAutoConfigurationService autoConfigurationService)
+        public LinkGenerator(ProviderUrlConfiguration configuration)
         {
-            _lazyProviderConfiguration =
-                new Lazy<ProviderUrlConfiguration>(() => LoadProviderUrlConfiguration(autoConfigurationService));
+            _configuration = configuration;
         }
 
         public string ProviderCommitmentsLink(string path)
         {
-            var configuration = _lazyProviderConfiguration.Value;
-            var baseUrl = configuration.ProviderCommitmentsBaseUrl;
-
+            var baseUrl = _configuration.ProviderCommitmentsBaseUrl;
             return Action(baseUrl, path);
         }
 
         public string ProviderApprenticeshipServiceLink(string path)
         {
-            var configuration = _lazyProviderConfiguration.Value;
-            var baseUrl = configuration.ProviderApprenticeshipServiceBaseUrl;
-
+            var baseUrl = _configuration.ProviderApprenticeshipServiceBaseUrl;
             return Action(baseUrl, path);
         }
 
         public string ReservationsLink(string path)
         {
-            var configuration = _lazyProviderConfiguration.Value;
-            var baseUrl = configuration.ReservationsBaseUrl;
-
+            var baseUrl = _configuration.ReservationsBaseUrl;
             return Action(baseUrl, path);
         }
 
         public string RecruitLink(string path)
         {
-            var configuration = _lazyProviderConfiguration.Value;
-            var baseUrl = configuration.RecruitBaseUrl;
-
+            var baseUrl = _configuration.RecruitBaseUrl;
             return Action(baseUrl, path);
-        }
-
-        private ProviderUrlConfiguration LoadProviderUrlConfiguration(IAutoConfigurationService autoConfigurationService)
-        {
-            var configuration = autoConfigurationService.Get<ProviderUrlConfiguration>();
-
-            return configuration;
         }
 
         private static string Action(string baseUrl, string path)

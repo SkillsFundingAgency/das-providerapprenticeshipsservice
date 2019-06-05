@@ -17,8 +17,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
-  </ItemGroup>
 </Project>

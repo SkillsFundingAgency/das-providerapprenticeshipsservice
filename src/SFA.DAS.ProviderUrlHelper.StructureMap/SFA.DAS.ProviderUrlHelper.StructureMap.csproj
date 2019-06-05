@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.ProviderUrlHelper\SFA.DAS.ProviderUrlHelper.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\..\..\..\Users\foste\.nuget\packages\structuremap\4.5.0\lib\net45\StructureMap.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
