@@ -148,10 +148,7 @@
                                 }
 
                                 <li><a href="@Url.Action("Index", "ManageApprentices", new {providerId = providerId})" role="menuitem" class="@(controllerName == "ManageApprentices" ? "selected" : "")">Manage your apprentices</a></li>
-                                @if (Html.IsReservationsEnabled())
-                                {
-                                    <li><a href="@Url.RecruitLink($"{providerId}")">Recruit apprentices</a></li>
-                                }
+                                <li><a href="@Url.RecruitLink($"{providerId}")">Recruit apprentices</a></li>
                                 <li><a href="@Url.Action("Agreements", "Agreement", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Agreement" ? "selected" : "")">Organisations and agreements</a></li>
                             </ul>
                         </nav>
