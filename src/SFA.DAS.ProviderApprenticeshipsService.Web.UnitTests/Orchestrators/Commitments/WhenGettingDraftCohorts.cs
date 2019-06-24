@@ -15,6 +15,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderAgre
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
@@ -69,7 +70,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Mock.Of<ApprenticeshipViewModelUniqueUlnValidator>(),
                 Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
                 Mock.Of<IApprenticeshipCoreValidator>(),
-                Mock.Of<IApprenticeshipMapper>()
+                Mock.Of<IApprenticeshipMapper>(),
+                Mock.Of<IAccountLegalEntityPublicHashingService>()
             );
         }
 
