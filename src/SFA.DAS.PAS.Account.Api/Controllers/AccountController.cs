@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
-
 using SFA.DAS.PAS.Account.Api.Attributes;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -32,6 +31,19 @@ namespace SFA.DAS.PAS.Account.Api.Controllers
             var result = await _orchestrator.GetAccountUsers(ukprn);
 
             _logger.Info($"Found {result.Count()} user accounts for ukprn: {ukprn}", providerId: ukprn);
+
+            return Ok(result);
+        }
+
+        [Route("{ukprn}/agreement")]
+        [HttpGet]
+        [ApiAuthorize(Roles = "ReadAccountUsers")]
+        public async Task<IHttpActionResult> GetAgreement(long ukprn)
+        {
+            _logger.Info($"Getting agreement for ukprn: {ukprn}", providerId: ukprn);
+            var result = await _orchestrator.GetAgreement(ukprn);
+
+            _logger.Info($"Ukprn: {ukprn} has agreement status: {result.Status}", providerId: ukprn);
 
             return Ok(result);
         }

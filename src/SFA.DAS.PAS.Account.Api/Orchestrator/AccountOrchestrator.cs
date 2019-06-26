@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using MediatR;
-
 using SFA.DAS.PAS.Account.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAccountUsers;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.PAS.Account.Api.Orchestrator
@@ -29,6 +28,20 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
             return result.UserSettings.Select(
                 m =>
                 new User { EmailAddress = m.User.Email, ReceiveNotifications = m.Setting?.ReceiveNotifications ?? true, UserRef = m.User.UserRef });
+        }
+
+        public async Task<ProviderAgreement> GetAgreement(long providerId)
+        {
+            var data = await _mediator.Send(
+                new GetProviderAgreementQueryRequest
+                {
+                    ProviderId = providerId
+                });
+
+            return new ProviderAgreement
+            {
+                Status = data.HasAgreement.ToString()
+            };
         }
     }
 }

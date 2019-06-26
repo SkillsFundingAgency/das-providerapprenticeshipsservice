@@ -37,10 +37,13 @@ using System.Net.Http;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.Http;
 
 namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
+    
     using StructureMap.Graph;
 
 
@@ -57,13 +60,17 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
                     //scan.ConnectImplementationsToTypesClosing(typeof(IAsyncRequestHandler<,>));
                     scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
                     //scan.ConnectImplementationsToTypesClosing(typeof(IAsyncNotificationHandler<>));
+                    scan.AddAllTypesOf<IAgreementStatusQueryRepository>();
                 });
 
             var config = GetConfiguration();
 
             For<IConfiguration>().Use(config);
+            For<IProviderAgreementStatusConfiguration>().Use(config);
             For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
 
+            For<ICurrentDateTime>().Use(x => new CurrentDateTime());
+            
             ConfigureNotificationsApi(config);
             ConfigureHttpClient(config);
 
