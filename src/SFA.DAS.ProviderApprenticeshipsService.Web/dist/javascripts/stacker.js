@@ -50,7 +50,7 @@
 
     STACKable.prototype.magic = function () {
         this.resetStack();
-        this.containerWidth = this.e.parent().width() - 15;
+        this.containerWidth = this.e.parent().width();
 
         var match = 0, tc = 0;
 
