@@ -8,7 +8,6 @@
         public string Message { get; set; }
         public bool ShowAcademicYearBanner { get; set; }
         public bool ShowCreateCohortLink { get; set; }
-        public bool ShowRecruitLink { get; set; }
     }
 
     public enum AccountStatus
