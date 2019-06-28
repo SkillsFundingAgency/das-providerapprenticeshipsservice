@@ -65,7 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             _file = new Mock<HttpPostedFileBase>();
             _file.Setup(m => m.FileName).Returns("APPDATA-20051030-213855.csv");
             _file.Setup(m => m.ContentLength).Returns(400);
-            var textStream = new MemoryStream(Encoding.UTF8.GetBytes(_testData));
+            var textStream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(_testData));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
             _sut = new BulkUploadFileParser(Mock.Of<IProviderCommitmentsLogger>());
@@ -117,7 +117,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             _file = new Mock<HttpPostedFileBase>();
             _file.Setup(m => m.FileName).Returns("APPDATA-20051030-213855.csv");
             _file.Setup(m => m.ContentLength).Returns(inputData.Length);
-            var textStream = new MemoryStream(Encoding.UTF8.GetBytes(inputData));
+            var textStream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(inputData));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
             var result = _sut.CreateViewModels(123, commitment, inputData);
@@ -147,7 +147,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             _file = new Mock<HttpPostedFileBase>();
             _file.Setup(m => m.FileName).Returns("APPDATA-20051030-213855.csv");
             _file.Setup(m => m.ContentLength).Returns(inputData.Length);
-            var textStream = new MemoryStream(Encoding.UTF8.GetBytes(inputData));
+            var textStream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(inputData));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
            var result = _sut.CreateViewModels(123, commitment, inputData);

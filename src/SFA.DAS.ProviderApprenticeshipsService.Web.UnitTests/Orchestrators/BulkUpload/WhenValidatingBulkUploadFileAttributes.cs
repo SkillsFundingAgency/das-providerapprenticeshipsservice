@@ -14,6 +14,7 @@ using SFA.DAS.Learners.Validators;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
+using static System.Text.Encoding;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.BulkUpload
 {
@@ -30,7 +31,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             _file = new Mock<HttpPostedFileBase>();
             _file.Setup(m => m.FileName).Returns("APPDATA-20051030-213855.csv");
             _file.Setup(m => m.ContentLength).Returns(400);
-            var textStream = new MemoryStream(Encoding.UTF8.GetBytes("hello world"));
+            var textStream = new MemoryStream(UTF8.GetBytes("hello world"));
 
             _file.Setup(m => m.InputStream).Returns(textStream);
             _sut = BulkUploadTestHelper.GetBulkUploadValidator(512);

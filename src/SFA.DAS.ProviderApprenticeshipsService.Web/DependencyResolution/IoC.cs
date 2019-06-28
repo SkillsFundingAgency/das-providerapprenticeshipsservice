@@ -18,6 +18,8 @@
 using StructureMap;
 using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.ProviderPermissions;
+using SFA.DAS.Configuration;
+using SFA.DAS.Encoding;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Configuration;
 
