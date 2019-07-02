@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -40,7 +41,7 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
 
             return new ProviderAgreement
             {
-                Status = data.HasAgreement.ToString()
+                Status = (ProviderAgreementStatus)Enum.Parse(typeof(ProviderAgreementStatus), data.HasAgreement.ToString())
             };
         }
     }

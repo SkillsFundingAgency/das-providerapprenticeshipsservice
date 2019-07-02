@@ -2,6 +2,6 @@
 {
     public class ProviderAgreement
     {
-        public string Status { get; set; }
+        public ProviderAgreementStatus Status { get; set; }
     }
 }

@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="EmailMessage.cs" />
     <Compile Include="ProviderAgreement.cs" />
+    <Compile Include="ProviderAgreementStatus.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoFixture;
 using FluentAssertions;
 using MediatR;
 using Moq;
@@ -47,7 +43,9 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
 
             var result = await _sut.GetAgreement(Ukprn);
 
-            result.Status.Should().Be(expectedStatus.ToString());
+            var apiAgreementStatus = (Types.ProviderAgreementStatus) Enum.Parse(typeof(Types.ProviderAgreementStatus), expectedStatus.ToString());
+
+            result.Status.Should().Be(apiAgreementStatus);
         }
     }
 }
