@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using FeatureToggle;
 using FluentAssertions;
 using MediatR;
 using Moq;
@@ -11,7 +10,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderRelationships.Types.Models;
 
@@ -23,17 +21,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
         private AccountOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ICurrentDateTime> _currentDateTime;
-        private Mock<IFeatureToggleService> _featureToggleService;
-        private Mock<IFeatureToggle> _recruitFeatureToggle;
 
         [SetUp]
         public void Arrange()
         {
-            _recruitFeatureToggle = new Mock<IFeatureToggle>();
-            _recruitFeatureToggle.Setup(x => x.FeatureEnabled).Returns(true);
-            _featureToggleService = new Mock<IFeatureToggleService>();
-            _featureToggleService.Setup(x => x.Get<Recruit>()).Returns(() => _recruitFeatureToggle.Object);
-
             _mediator = new Mock<IMediator>();
             _mediator
                 .Setup(x => x.Send(It.IsAny<GetProviderQueryRequest>(), It.IsAny<CancellationToken>()))
@@ -56,8 +47,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
 
             _orchestrator = new AccountOrchestrator(
                 _mediator.Object,
-                Mock.Of<ILog>(),
-                _featureToggleService.Object
+                Mock.Of<ILog>()
             );
         }
 
@@ -69,15 +59,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
             var model = await _orchestrator.GetAccountHomeViewModel(1);
 
             model.ShowAcademicYearBanner.Should().Be(expectShowBanner);
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public async Task ThenDisplayOfRecruitmentLinkIsSubjectToFeatureToggle(bool toggled)
-        {
-            _recruitFeatureToggle.Setup(x => x.FeatureEnabled).Returns(toggled);
-            var model = await _orchestrator.GetAccountHomeViewModel(1);
-            Assert.AreEqual(toggled, model.ShowRecruitLink);
         }
     }
 }

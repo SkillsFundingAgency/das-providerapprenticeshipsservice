@@ -72,15 +72,12 @@
                 <p>View and update approved apprentice records.</p>
             </div>
 
-            @if (Model.ShowRecruitLink)
-            {
-                <div class="box">
-                    <h2 class="heading-medium">
-                        <a href="@Url.RecruitLink($"{Model.ProviderId}")">Recruit apprentices</a>
-                    </h2>
-                    <p>Create a vacancy to recruit an apprentice and manage applications.</p>
-                </div>
-            }
+            <div class="box">
+                <h2 class="heading-medium">
+                    <a href="@Url.RecruitLink($"{Model.ProviderId}")">Recruit apprentices</a>
+                </h2>
+                <p>Create a vacancy to recruit an apprentice and manage applications.</p>
+            </div>
 
             <div class="box">
                 <h2 class="heading-medium">
