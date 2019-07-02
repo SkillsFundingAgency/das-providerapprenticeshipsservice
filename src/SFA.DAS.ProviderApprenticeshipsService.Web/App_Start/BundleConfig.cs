@@ -13,6 +13,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                               "~/dist/javascripts/select2.min.js",
                               "~/dist/javascripts/govuk-template.js",
                               "~/dist/javascripts/selection-buttons.js",
+                              "~/dist/javascripts/stacker.js",
                               "~/dist/javascripts/app.js"
                               ));
 

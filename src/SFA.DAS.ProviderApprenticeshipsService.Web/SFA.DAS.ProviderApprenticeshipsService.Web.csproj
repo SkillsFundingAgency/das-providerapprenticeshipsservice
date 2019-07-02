@@ -812,6 +812,7 @@
     <Content Include="dist\javascripts\jquery-1.11.0.min.js" />
     <Content Include="dist\javascripts\respond.min.js" />
     <Content Include="dist\javascripts\selection-buttons.js" />
+    <Content Include="dist\javascripts\stacker.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -908,6 +909,20 @@
     <Content Include="Views\Shared\ChooseEmployer.cshtml" />
     <Content Include="Views\Shared\ConfirmEmployer.cshtml" />
     <Content Include="Views\Commitment\DraftList.cshtml" />
+    <Content Include="src\sass\screen-ie6.scss" />
+    <Content Include="src\sass\screen-ie7.scss" />
+    <Content Include="src\sass\screen-ie8.scss" />
+    <Content Include="src\sass\screen.scss" />
+    <Content Include="src\sass\_forms.scss" />
+    <Content Include="src\sass\_header.scss" />
+    <Content Include="src\sass\_helpers.scss" />
+    <Content Include="src\sass\_layouts.scss" />
+    <Content Include="src\sass\_mixins.scss" />
+    <Content Include="src\sass\_panels.scss" />
+    <Content Include="src\sass\_provider.scss" />
+    <Content Include="src\sass\_tables.scss" />
+    <Content Include="src\sass\_typography.scss" />
+    <Content Include="src\sass\_navigation.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
