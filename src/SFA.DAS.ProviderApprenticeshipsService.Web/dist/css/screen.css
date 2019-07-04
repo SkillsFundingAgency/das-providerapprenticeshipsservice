@@ -2280,6 +2280,10 @@ table.top-border {
   }
 }
 
+#global-header {
+  border-bottom: 10px solid #6f777b;
+}
+
 @media (min-width: 641px) {
   #global-header.with-proposition .header-wrapper .header-global {
     float: left;
@@ -2292,10 +2296,18 @@ table.top-border {
   }
 }
 
+#global-header .header-proposition #proposition-name {
+  font-size: 24px;
+  margin: 0 0 10px 0;
+  display: inline-block;
+}
+
 @media (min-width: 641px) {
   #global-header .header-proposition #proposition-name {
     margin-top: 5px;
     display: inline-block;
+    font-size: 32px;
+    margin: 15px 0;
   }
 }
 
