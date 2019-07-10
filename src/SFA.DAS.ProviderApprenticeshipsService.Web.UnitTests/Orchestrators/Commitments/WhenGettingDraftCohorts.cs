@@ -8,6 +8,7 @@ using MediatR;
 using Moq;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.Encoding;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
@@ -15,7 +16,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderAgre
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
@@ -71,7 +71,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
                 Mock.Of<IApprenticeshipCoreValidator>(),
                 Mock.Of<IApprenticeshipMapper>(),
-                Mock.Of<IAccountLegalEntityPublicHashingService>()
+                Mock.Of<IEncodingService>()
             );
         }
 

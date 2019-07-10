@@ -16,7 +16,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             var commitment = new CommitmentView
             {
-                EmployerAccountId = 1L
+                EmployerAccountId = 1L,
+                AccountLegalEntityPublicHashedId = "X1X"
             };
 
             _mockMediator.Setup(x => x.Send(It.IsAny<GetCommitmentQueryRequest>(), It.IsAny<CancellationToken>()))
@@ -33,6 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var commitment = new CommitmentView
             {
                 EmployerAccountId = 1L,
+                AccountLegalEntityPublicHashedId = "X1X",
                 TransferSender = new TransferSender {  Id = 2L }
             };
 

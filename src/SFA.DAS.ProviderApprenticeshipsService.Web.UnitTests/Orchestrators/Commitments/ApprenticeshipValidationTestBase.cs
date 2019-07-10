@@ -9,6 +9,7 @@ using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.Encoding;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -33,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         protected Mock<IApprenticeshipMapper> _mockMapper = new Mock<IApprenticeshipMapper>();
 
         private Mock<ApprenticeshipViewModelUniqueUlnValidator> _ulnValidator;
-        private Mock<IAccountLegalEntityPublicHashingService> _mockAccountLegalEntityPublicHashingService;
+        private Mock<IEncodingService> _mockEncodingService;
 
         [SetUp]
         public virtual void SetUp()
@@ -46,9 +47,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 .Setup(m => m.ValidateAsyncOverride(It.IsAny<ApprenticeshipViewModel>()))
                 .ReturnsAsync(new ValidationResult());
 
-            _mockAccountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
-            _mockAccountLegalEntityPublicHashingService.Setup(x => x.HashValue(It.IsAny<long>()))
-                .Returns((long valueToHash) => $"X{valueToHash}X");
+            _mockEncodingService = new Mock<IEncodingService>();
+            _mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(),
+                    It.IsAny<EncodingType>()))
+                .Returns((long valueToHash, EncodingType encodingType) => $"X{valueToHash}X");
 
             SetUpOrchestrator();
         }
@@ -63,7 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                        Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
                        _mockApprenticeshipCoreValidator.Object,
                        _mockMapper.Object,
-                       _mockAccountLegalEntityPublicHashingService.Object);
+                       _mockEncodingService.Object);
         }
 
         protected CommitmentListItem GetTestCommitmentOfStatus(long id, RequestStatus requestStatus)

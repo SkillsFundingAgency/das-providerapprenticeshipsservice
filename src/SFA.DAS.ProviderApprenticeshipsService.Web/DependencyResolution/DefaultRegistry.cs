@@ -52,7 +52,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.ProviderRelationships.Api.Client;
 using SFA.DAS.EAS.Account.Api.Client;
-using IConfiguration = SFA.DAS.Configuration.IConfiguration;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -118,6 +118,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             ConfigureLogging();
 
             ConfigureInstrumentedTypes();
+
+            For<EncodingConfig>().Use(x => GetEncodingConfig(environment, configurationRepository));
         }
 
         private void ConfigureFeatureToggle()
@@ -214,6 +216,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 new ConfigurationOptions(ServiceName, environment, "1.0"));
 
             return configurationService.Get<ProviderApprenticeshipsServiceConfiguration>();
+        }
+
+        private EncodingConfig GetEncodingConfig(string environment, IConfigurationRepository configurationRepository)
+        {
+            var configurationService = new ConfigurationService(configurationRepository,
+                new ConfigurationOptions("SFA.DAS.Encoding", environment, "1.0"));
+
+            return configurationService.Get<EncodingConfig>();
         }
 
         //private ProviderRelationshipsReadStoreConfiguration GetProviderPermissionsReadStoreConfiguration(string environment, IConfigurationRepository configurationRepository)

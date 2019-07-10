@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -29,6 +28,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.BulkUpl
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
+using static System.Text.Encoding;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
@@ -108,7 +108,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             }
             var str = HeaderLine + string.Join("", testData);
 
-            var textStream = new MemoryStream(Encoding.UTF8.GetBytes(str));
+            var textStream = new MemoryStream(UTF8.GetBytes(str));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
             var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 1234L };
@@ -124,7 +124,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             const string dataLine = "\n\rABBA123,Chris,Froberg,1998-12-08,,,25,2,2020-08,2025-08,1500,,Employer ref,Provider ref,1113335559";
             const string fileContents = HeaderLine + dataLine;
-            var textStream = new MemoryStream(Encoding.UTF8.GetBytes(fileContents));
+            var textStream = new MemoryStream(UTF8.GetBytes(fileContents));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
             BulkUploadApprenticeshipsCommand commandArgument = null;
@@ -173,7 +173,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             const string dataLine = "\n\rABBA123,Chris,Froberg,1998-12-08,,,25,2,2020-08,2025-08,1500,,Employer ref,Provider ref,1113335559";
             const string fileContents = HeaderLine + dataLine;
-            var textStream = new MemoryStream(Encoding.UTF8.GetBytes(fileContents));
+            var textStream = new MemoryStream(UTF8.GetBytes(fileContents));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
             BulkUploadApprenticeshipsCommand commandArgument = null;
@@ -221,7 +221,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task ThenIfFileIsEmptyReturnError()
         {
-            var textStream = new MemoryStream(Encoding.UTF8.GetBytes(""));
+            var textStream = new MemoryStream(UTF8.GetBytes(""));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
             BulkUploadApprenticeshipsCommand commandArgument = null;
@@ -278,7 +278,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                             @"
                             Abba123,1113335559,Froberg,Chris,1998-12-08,SE123321C,25,,,2,2120-08,2125-08,1500,,Employer ref,Provider ref";
 
-            var textStream = new MemoryStream(Encoding.UTF8.GetBytes(inputData));
+            var textStream = new MemoryStream(UTF8.GetBytes(inputData));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
             BulkUploadApprenticeshipsCommand commandArgument = null;
