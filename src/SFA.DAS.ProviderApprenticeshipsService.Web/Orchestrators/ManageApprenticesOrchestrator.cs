@@ -22,6 +22,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetReservationValidation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
@@ -179,31 +180,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var result = new Dictionary<string, string>();
 
-            var overlappingErrors = await _mediator.Send(
-                new GetOverlappingApprenticeshipsQueryRequest
-                {
-                    Apprenticeship = new List<Apprenticeship> { await _apprenticeshipMapper.MapApprenticeship(model) }
-                });
+            var apprentice = await _apprenticeshipMapper.MapApprenticeship(model);
 
-            foreach (var overlap in _approvedApprenticeshipValidator.MapOverlappingErrors(overlappingErrors))
-            {
-                result.Add(overlap.Key, overlap.Value);
-            }
+            var overlapTask = GetOverlapErrors(apprentice);
+            var reservationValidationTask = GetReservationValidationErrors(apprentice, model);
 
-            foreach (var error in _approvedApprenticeshipValidator.ValidateToDictionary(model))
-            {
-                result.AddIfNotExists(error.Key, error.Value);
-            }
+            AddNewEntries(result, _approvedApprenticeshipValidator.ValidateToDictionary(model));
+            AddNewEntries(result, _approvedApprenticeshipValidator.ValidateAcademicYear(updateViewModel));
+            AddNewEntries(result, _approvedApprenticeshipValidator.ValidateApprovedEndDate(updateViewModel));
 
-            foreach (var error in _approvedApprenticeshipValidator.ValidateAcademicYear(updateViewModel))
-            {
-                result.AddIfNotExists(error.Key, error.Value);
-            }
+            await Task.WhenAll(overlapTask, reservationValidationTask);
 
-            foreach (var error in _approvedApprenticeshipValidator.ValidateApprovedEndDate(updateViewModel))
-            {
-                result.AddIfNotExists(error.Key, error.Value);
-            }
+            AddNewEntries(result, overlapTask.Result);
+            AddNewEntries(result, reservationValidationTask.Result);
 
             return result;
         }
@@ -342,6 +331,57 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 throw new FluentValidation.ValidationException("Unable to review a provider-originated update");
             }
+        }
+        private void AddNewEntries(Dictionary<string, string> existing, Dictionary<string, string> values)
+        {
+            AddNewEntries(existing, values.Select(kvp => (kvp.Key, kvp.Value)));
+        }
+
+        private void AddNewEntries(Dictionary<string, string> existing, IEnumerable<(string key, string value)> values)
+        {
+            foreach (var keyValue in values)
+            {
+                existing.AddIfNotExists(keyValue.key, keyValue.value);
+            }
+        }
+
+        private Task<List<(string key, string value)>> GetOverlapErrors(Apprenticeship apprenticeship)
+        {
+            return _mediator
+                .Send(
+                    new GetOverlappingApprenticeshipsQueryRequest
+                    {
+                        Apprenticeship = new List<Apprenticeship> { apprenticeship }
+                    })
+                .ContinueWith(t =>
+                {
+                    var result = new List<(string, string)>();
+                    var overlappingErrors = t.Result;
+
+                    foreach (var overlap in _approvedApprenticeshipValidator.MapOverlappingErrors(overlappingErrors))
+                    {
+                        result.Add((overlap.Key, overlap.Value));
+                    }
+
+                    return result;
+                });
+        }
+
+        private Task<List<(string key, string value)>> GetReservationValidationErrors(Apprenticeship apprenticeship, ApprenticeshipViewModel model)
+        {
+            return _mediator
+                .Send(
+                    new GetReservationValidationRequest
+                    {
+                        ApprenticeshipId = apprenticeship.Id,
+                        ProposedStartDate = model.StartDate.DateTime,
+                        ProposedTrainingCode = model.TrainingCode
+                    }
+                )
+                .ContinueWith(t =>
+                {
+                    return t.Result.Data.Errors.Select(e => (e.PropertyName, e.Reason)).ToList();
+                });
         }
     }
 }
