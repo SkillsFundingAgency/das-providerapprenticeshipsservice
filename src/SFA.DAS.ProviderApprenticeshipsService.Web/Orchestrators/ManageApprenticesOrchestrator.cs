@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,6 +39,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IDataLockMapper _dataLockMapper;
         private readonly IFiltersCookieManager _filtersCookieManager;
         private readonly string _searchPlaceholderText;
+
+        private static readonly Task<List<(string key, string value)>> NoValidationRequiredResponse = Task.FromResult(new List<(string, string)>());
 
         public ManageApprenticesOrchestrator(
             IMediator mediator,
@@ -369,18 +372,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private Task<List<(string key, string value)>> GetReservationValidationErrors(Apprenticeship apprenticeship, ApprenticeshipViewModel model)
         {
+            if (apprenticeship.ReservationId == null)
+            {
+                _logger.Info($"Commitment:{apprenticeship.CommitmentId} Apprenticeship: {apprenticeship.Id} Reservation-id:null - no reservation validation required");
+                return NoValidationRequiredResponse;
+            }
+
+            DateTime startDate = model.StartDate.DateTime ?? apprenticeship.StartDate ?? throw new InvalidOperationException($"Unable to validate the reservation because the start date is absent");
+
             return _mediator
                 .Send(
                     new GetReservationValidationRequest
                     {
                         ApprenticeshipId = apprenticeship.Id,
-                        ProposedStartDate = model.StartDate.DateTime,
-                        ProposedTrainingCode = model.TrainingCode
+                        StartDate = startDate,
+                        TrainingCode = model.TrainingCode ?? apprenticeship.TrainingCode,
+                        ReservationId = apprenticeship.ReservationId.Value
                     }
                 )
                 .ContinueWith(t =>
                 {
-                    return t.Result.Data.Errors.Select(e => (e.PropertyName, e.Reason)).ToList();
+                    return t.Result.Data.ValidationErrors.Select(e => (e.PropertyName, e.Reason)).ToList();
                 });
         }
     }

@@ -35,15 +35,14 @@ using IConfiguration = SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.
 
 using System.Net.Http;
 using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
-using SFA.DAS.Http;
 
 namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
     
+    using SFA.DAS.Http.TokenGenerators;
     using StructureMap.Graph;
 
 
@@ -57,9 +56,7 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
                     scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
                     scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
-                    //scan.ConnectImplementationsToTypesClosing(typeof(IAsyncRequestHandler<,>));
                     scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
-                    //scan.ConnectImplementationsToTypesClosing(typeof(IAsyncNotificationHandler<>));
                     scan.AddAllTypesOf<IAgreementStatusQueryRepository>();
                 });
 
@@ -117,18 +114,18 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
 
         private void ConfigureLogging()
         {
-            For<IRequestContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
+            For<ILoggingContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
             For<IProviderCommitmentsLogger>().Use(x => GetBaseLogger(x)).AlwaysUnique();
             For<ILog>().Use(x => new NLogLogger(
                 x.ParentType,
-                x.GetInstance<IRequestContext>(),
+                x.GetInstance<ILoggingContext>(),
                 null)).AlwaysUnique();
         }
 
         private IProviderCommitmentsLogger GetBaseLogger(IContext x)
         {
             var parentType = x.ParentType;
-            return new ProviderCommitmentsLogger(new NLogLogger(parentType, x.GetInstance<IRequestContext>()));
+            return new ProviderCommitmentsLogger(new NLogLogger(parentType, x.GetInstance<ILoggingContext>()));
         }
 
         private void ConfigureNotificationsApi(ProviderApprenticeshipsServiceConfiguration config)

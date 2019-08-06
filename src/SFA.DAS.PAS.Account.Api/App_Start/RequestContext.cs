@@ -4,7 +4,7 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.PAS.Account.Api
 {
-    public sealed class RequestContext : IRequestContext
+    public sealed class RequestContext : ILoggingContext
     {
         public RequestContext(HttpContextBase context)
         {

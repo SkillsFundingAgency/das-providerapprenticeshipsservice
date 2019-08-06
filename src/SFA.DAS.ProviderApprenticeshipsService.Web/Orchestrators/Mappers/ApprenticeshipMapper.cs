@@ -116,7 +116,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 IsLockedForUpdate = isLockedForUpdate,
                 IsPaidForByTransfer = commitment.IsTransfer(),
                 IsUpdateLockedForStartDateAndCourse = isUpdateLockedForStartDateAndCourse,
-                IsEndDateLockedForUpdate = isEndDateLockedForUpdate
+                IsEndDateLockedForUpdate = isEndDateLockedForUpdate,
+                ReservationId = apprenticeship.ReservationId
             };
         }
 
@@ -142,7 +143,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 PaymentStatus = vm.PaymentStatus,
                 AgreementStatus = vm.AgreementStatus,
                 ProviderRef = vm.ProviderRef,
-                EmployerRef = vm.EmployerRef
+                EmployerRef = vm.EmployerRef,
+                ReservationId = vm.ReservationId
             };
 
             if (!string.IsNullOrWhiteSpace(vm.TrainingCode))
@@ -240,7 +242,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                     : edited.ProviderRef ?? "",
                 OriginalApprenticeship = original,
                 ProviderName = original.ProviderName,
-                LegalEntityName = original.LegalEntityName
+                LegalEntityName = original.LegalEntityName,
+                ReservationId = original.ReservationId
             };
 
             if (!string.IsNullOrWhiteSpace(edited.TrainingCode) && original.TrainingCode != edited.TrainingCode)

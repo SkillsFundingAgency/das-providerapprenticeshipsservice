@@ -1,4 +1,5 @@
-﻿using FluentValidation.Attributes;
+﻿using System;
+using FluentValidation.Attributes;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -54,5 +55,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool IsUpdateLockedForStartDateAndCourse { get; set; }
         public bool IsEndDateLockedForUpdate { get; set; }
         public string StartDateTransfersMinDateAltDetailMessage { get; set; }
+        public Guid? ReservationId { get; set; }
     }
 }

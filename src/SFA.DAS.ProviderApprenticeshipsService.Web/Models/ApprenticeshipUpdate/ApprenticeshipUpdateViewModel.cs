@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
@@ -31,5 +32,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate
         public Apprenticeship OriginalApprenticeship { get; set; }
         public string LegalEntityName { get; set; }
         public string ProviderName { get; set; }
+        public Guid? ReservationId { get; set; }
     }
 }

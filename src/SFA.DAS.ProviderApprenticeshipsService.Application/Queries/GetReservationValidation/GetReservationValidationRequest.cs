@@ -1,13 +1,14 @@
 ﻿using System;
 using MediatR;
-using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetReservationValidation
 {
     public class GetReservationValidationRequest : IRequest<GetReservationValidationResponse>
     {
+        public long AccountId { get; set; }
         public long ApprenticeshipId { get; set; }
-        public string ProposedTrainingCode { get; set; }
-        public DateTime? ProposedStartDate { get; set; }
+        public string TrainingCode { get; set; }
+        public DateTime StartDate { get; set; }
+        public Guid ReservationId { get; set; }
     }
 }

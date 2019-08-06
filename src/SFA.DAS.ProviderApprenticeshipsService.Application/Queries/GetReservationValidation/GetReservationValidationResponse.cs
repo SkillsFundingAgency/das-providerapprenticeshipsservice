@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Commitments.Api.Types.Validation;
+﻿using SFA.DAS.Reservations.Api.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetReservationValidation
 {

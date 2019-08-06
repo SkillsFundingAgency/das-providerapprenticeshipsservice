@@ -53,6 +53,9 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.ProviderRelationships.Api.Client;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.Encoding;
+using SFA.DAS.Reservations.Api.Types;
+using SFA.DAS.Reservations.Api.Client;
+using SFA.DAS.Reservations.Api.Types.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -91,6 +94,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             ConfigureHashingService(config);
             ConfigureCommitmentsApi(config);
             ConfigureNotificationsApi(config);
+            ConfigureReservationsApi(environment, configurationRepository);
 
             For<IProviderAgreementStatusConfiguration>().Use(config);
 
@@ -166,6 +170,31 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<INotificationsApiClientConfiguration>().Use(config.NotificationApi);
         }
 
+        public class ReservationsClientApiConfiguration : Reservations.Api.Types.Configuration.ReservationsClientApiConfiguration, IAzureADClientConfiguration
+        {
+        }
+
+        private void ConfigureReservationsApi(string environment, IConfigurationRepository configurationRepository)
+        {
+            var configurationService = new ConfigurationService(configurationRepository,
+                new ConfigurationOptions(ConfigurationKeys.ReservationsClientApiConfiguration, environment, "1.0"));
+
+            var config = configurationService.Get<ReservationsClientApiConfiguration>();
+
+            var bearerToken = new AzureADBearerTokenGenerator(config);
+
+            var httpClient = new HttpClientBuilder()
+                .WithBearerAuthorisationHeader(bearerToken)
+                .WithHandler(new NLog.Logger.Web.MessageHandlers.RequestIdMessageRequestHandler())
+                .WithHandler(new NLog.Logger.Web.MessageHandlers.SessionIdMessageRequestHandler())
+                .WithDefaultHeaders()
+                .Build();
+
+            For<ReservationsClientApiConfiguration>().Use(config);
+            For<IReservationsApiClient>().Use<ReservationsApiClient>().Ctor<HttpClient>().Is(httpClient).Singleton();
+            For<IReservationHelper>().Use<ReservationsHelper>().Singleton();
+        }
+
         private void ConfigureInstrumentedTypes()
         {
             For<IBulkUploadValidator>().Use(x => new InstrumentedBulkUploadValidator(x.GetInstance<ILog>(), x.GetInstance<BulkUploadValidator>(), x.GetInstance<IUlnValidator>(), x.GetInstance<IAcademicYearDateProvider>()));
@@ -174,11 +203,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
         private void ConfigureLogging()
         {
-            For<IRequestContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
+            For<ILoggingContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
             For<IProviderCommitmentsLogger>().Use(x => GetBaseLogger(x)).AlwaysUnique();
             For<ILog>().Use(x => new NLogLogger(
                 x.ParentType,
-                x.GetInstance<IRequestContext>(),
+                x.GetInstance<ILoggingContext>(),
                 null)).AlwaysUnique();
         }
 
@@ -192,7 +221,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         private IProviderCommitmentsLogger GetBaseLogger(IContext x)
         {
             var parentType = x.ParentType;
-            return new ProviderCommitmentsLogger(new NLogLogger(parentType, x.GetInstance<IRequestContext>()));
+            return new ProviderCommitmentsLogger(new NLogLogger(parentType, x.GetInstance<ILoggingContext>()));
         }
 
         private string GetAndStoreEnvironment()

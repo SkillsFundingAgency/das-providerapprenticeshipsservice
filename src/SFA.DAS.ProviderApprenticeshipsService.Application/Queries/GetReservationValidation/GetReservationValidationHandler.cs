@@ -1,30 +1,30 @@
-﻿using System.Threading;
+﻿using MediatR;
+using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.Commitments.Api.Types.Validation;
+using SFA.DAS.Reservations.Api.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetReservationValidation
 {
     public class GetReservationValidationHandler : IRequestHandler<GetReservationValidationRequest, GetReservationValidationResponse>
     {
-        private readonly IValidationApi _validationApi;
+        private readonly IReservationsApiClient _reservationClient;
 
-        public GetReservationValidationHandler(IValidationApi validationApi)
+        public GetReservationValidationHandler(IReservationsApiClient reservationClient)
         {
-            _validationApi = validationApi;
+            _reservationClient = reservationClient;
         }
 
         public async Task<GetReservationValidationResponse> Handle(GetReservationValidationRequest request, CancellationToken cancellationToken)
         {
-            var validationRequest = new ReservationValidationRequest
+            var validationReservationMessage = new ValidationReservationMessage
             {
-                ApprenticeshipId = request.ApprenticeshipId,
-                ProposedCourseCode = request.ProposedTrainingCode,
-                ProposedStartDate = request.ProposedStartDate
+                AccountId = request.AccountId,
+                StartDate = request.StartDate,
+                CourseCode = request.TrainingCode,
+                ReservationId = request.ReservationId
             };
 
-            var result = await _validationApi.ValidateReservation(validationRequest);
+            var result = await _reservationClient.ValidateReservation(validationReservationMessage, CancellationToken.None);
 
             return new GetReservationValidationResponse
             {
