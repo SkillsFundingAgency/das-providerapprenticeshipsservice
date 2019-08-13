@@ -320,11 +320,11 @@
       <HintPath>..\packages\SFA.DAS.Providers.Api.Client.0.10.29-prerelease\lib\net45\SFA.DAS.Providers.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Reservations.Api.Client, Version=4.1.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Reservations.Api.Client.4.1.8\lib\net462\SFA.DAS.Reservations.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Reservations.Api.Client, Version=4.1.65.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Reservations.Api.Client.4.1.65\lib\net462\SFA.DAS.Reservations.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Reservations.Api.Types, Version=4.1.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Reservations.Api.Types.4.1.8\lib\netstandard2.0\SFA.DAS.Reservations.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Reservations.Api.Types, Version=4.1.65.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Reservations.Api.Types.4.1.65\lib\netstandard2.0\SFA.DAS.Reservations.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.32930, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Sql.Client.1.0.0.32930\lib\net45\SFA.DAS.Sql.Client.dll</HintPath>

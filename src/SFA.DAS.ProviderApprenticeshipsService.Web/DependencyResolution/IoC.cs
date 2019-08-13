@@ -22,6 +22,7 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Encoding;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.Reservations.Api.Client.DependencyResolution;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -38,6 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 c.AddRegistry<AuthorizationRegistry>();
                 c.AddRegistry<ProviderPermissionsAuthorizationRegistry>();
                 c.AddRegistry<DefaultRegistry>();
+                c.AddRegistry<ReservationsApiClientRegistry>();
                 c.AddRegistry<LinkGeneratorRegistry>();
             });
         }

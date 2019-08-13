@@ -18,7 +18,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetReservat
         {
             var validationReservationMessage = new ValidationReservationMessage
             {
-                AccountId = request.AccountId,
                 StartDate = request.StartDate,
                 CourseCode = request.TrainingCode,
                 ReservationId = request.ReservationId

@@ -76,6 +76,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             var environment = GetAndStoreEnvironment();
             var configurationRepository = GetConfigurationRepository();
 
+            For<IConfigurationRepository>().Use(configurationRepository);
+
             var config = GetConfiguration(environment, configurationRepository);
 
             #region uncomment to override the auto config of the ProviderRelationships Api Client
@@ -94,7 +96,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             ConfigureHashingService(config);
             ConfigureCommitmentsApi(config);
             ConfigureNotificationsApi(config);
-            ConfigureReservationsApi(environment, configurationRepository);
 
             For<IProviderAgreementStatusConfiguration>().Use(config);
 
@@ -168,31 +169,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(httpClient);
 
             For<INotificationsApiClientConfiguration>().Use(config.NotificationApi);
-        }
-
-        public class ReservationsClientApiConfiguration : Reservations.Api.Types.Configuration.ReservationsClientApiConfiguration, IAzureADClientConfiguration
-        {
-        }
-
-        private void ConfigureReservationsApi(string environment, IConfigurationRepository configurationRepository)
-        {
-            var configurationService = new ConfigurationService(configurationRepository,
-                new ConfigurationOptions(ConfigurationKeys.ReservationsClientApiConfiguration, environment, "1.0"));
-
-            var config = configurationService.Get<ReservationsClientApiConfiguration>();
-
-            var bearerToken = new AzureADBearerTokenGenerator(config);
-
-            var httpClient = new HttpClientBuilder()
-                .WithBearerAuthorisationHeader(bearerToken)
-                .WithHandler(new NLog.Logger.Web.MessageHandlers.RequestIdMessageRequestHandler())
-                .WithHandler(new NLog.Logger.Web.MessageHandlers.SessionIdMessageRequestHandler())
-                .WithDefaultHeaders()
-                .Build();
-
-            For<ReservationsClientApiConfiguration>().Use(config);
-            For<IReservationsApiClient>().Use<ReservationsApiClient>().Ctor<HttpClient>().Is(httpClient).Singleton();
-            For<IReservationHelper>().Use<ReservationsHelper>().Singleton();
         }
 
         private void ConfigureInstrumentedTypes()
