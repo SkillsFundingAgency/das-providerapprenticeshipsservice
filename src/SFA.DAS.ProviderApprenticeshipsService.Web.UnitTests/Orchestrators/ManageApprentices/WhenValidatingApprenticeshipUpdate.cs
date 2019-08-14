@@ -66,7 +66,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
 
             _mockMapper
                 .Setup(m => m.MapApprenticeship(It.IsAny<ApprenticeshipViewModel>()))
-                .ReturnsAsync(new Apprenticeship());
+                .ReturnsAsync(new Apprenticeship{ReservationId = Guid.NewGuid(), StartDate = DateTime.Today});
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>(), It.IsAny<CancellationToken>()))
@@ -87,14 +87,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
         }
 
         [Test]
-        public async Task ShouldAppendErrorsToGether()
+        public async Task ShouldAppendErrorsTogether()
         {
             var viewModel = new ApprenticeshipViewModel();
             var updateModel = new CreateApprenticeshipUpdateViewModel();
 
             _mockMapper
                 .Setup(m => m.MapApprenticeship(It.IsAny<ApprenticeshipViewModel>()))
-                .ReturnsAsync(new Apprenticeship());
+                .ReturnsAsync(new Apprenticeship{ReservationId = Guid.NewGuid(), StartDate = DateTime.Today});
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>(), It.IsAny<CancellationToken>()))

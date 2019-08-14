@@ -15,15 +15,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Net.Http;
-using System.Reflection;
-using System.Web;
+using FeatureToggle;
 using FluentValidation;
 using MediatR;
-using FeatureToggle;
 using Microsoft.Azure;
-using StructureMap;
 using SFA.DAS.Authorization;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Configuration;
@@ -31,8 +26,12 @@ using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.CookieService;
+using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.Encoding;
+using SFA.DAS.HashingService;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
+using SFA.DAS.Learners.Validators;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
@@ -46,16 +45,14 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
-using SFA.DAS.Learners.Validators;
-using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.ProviderRelationships.Api.Client;
-using SFA.DAS.EAS.Account.Api.Client;
-using SFA.DAS.Encoding;
-using SFA.DAS.Reservations.Api.Types;
-using SFA.DAS.Reservations.Api.Client;
-using SFA.DAS.Reservations.Api.Types.Configuration;
+using StructureMap;
+using System;
+using System.Net.Http;
+using System.Reflection;
+using System.Web;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -230,22 +227,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             return configurationService.Get<EncodingConfig>();
         }
-
-        //private ProviderRelationshipsReadStoreConfiguration GetProviderPermissionsReadStoreConfiguration(string environment, IConfigurationRepository configurationRepository)
-        //{
-        //    var configurationService = new ConfigurationService(configurationRepository,
-        //        new ConfigurationOptions("SFA.DAS.ProviderRelationships.ReadStore", environment, "1.0"));
-
-        //    return configurationService.Get<ProviderRelationshipsReadStoreConfiguration>();
-        //}
-
-        //private ProviderRelationshipsApiClientConfiguration GetProviderRelationshipsApiClientConfiguration(string environment, IConfigurationRepository configurationRepository)
-        //{
-        //    var configurationService = new ConfigurationService(configurationRepository,
-        //        new ConfigurationOptions("SFA.DAS.ProviderRelationships.Api.Client", environment, "1.0"));
-
-        //    return configurationService.Get<ProviderRelationshipsApiClientConfiguration>();
-        //}
 
         private static IConfigurationRepository GetConfigurationRepository()
         {
