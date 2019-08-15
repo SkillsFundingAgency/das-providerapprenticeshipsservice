@@ -114,11 +114,11 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
 
         private void ConfigureLogging()
         {
-            For<ILoggingContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
+            For<IWebLoggingContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
             For<IProviderCommitmentsLogger>().Use(x => GetBaseLogger(x)).AlwaysUnique();
             For<ILog>().Use(x => new NLogLogger(
                 x.ParentType,
-                x.GetInstance<ILoggingContext>(),
+                x.GetInstance<IWebLoggingContext>(),
                 null)).AlwaysUnique();
         }
 
