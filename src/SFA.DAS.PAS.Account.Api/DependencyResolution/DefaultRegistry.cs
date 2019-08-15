@@ -41,7 +41,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
-    
+    using SFA.DAS.Http;
     using SFA.DAS.Http.TokenGenerators;
     using StructureMap.Graph;
 
