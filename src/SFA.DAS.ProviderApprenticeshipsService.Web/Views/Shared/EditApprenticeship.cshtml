@@ -93,7 +93,6 @@ else
             <span class="form-hint">Start typing in the name of the course or choose an option from the list</span>
         }
 
-        @*@Html.ValidationMessageFor(m => m.CourseCode, "Choose a training course for this apprentice", new { id = "error-message-" + Html.IdFor(m => m.CourseCode), @class = "error-message" })*@
         @Html.ValidationMessageFor(m => m.CourseCode, null, new { id = "error-message-" + Html.IdFor(m => m.CourseCode), @class = "error-message" })
         <select name="CourseCode" id="CourseCode" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
             <option value="">Please select</option>
