@@ -64,9 +64,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             Assert.AreEqual("LastName", result.LastName);
             Assert.AreEqual(new DateTime(2000,1,1), result.DateOfBirth.DateTime);
             Assert.AreEqual("2222222222", result.ULN);
-            Assert.AreEqual(Domain.TrainingType.Framework, result.TrainingType);
-            Assert.AreEqual("TrainingName", result.TrainingName);
-            Assert.AreEqual("TrainingCode", result.TrainingCode);
+            Assert.AreEqual(Domain.TrainingType.Framework, result.CourseType);
+            Assert.AreEqual("TrainingName", result.CourseName);
+            Assert.AreEqual("TrainingCode", result.CourseCode);
             Assert.AreEqual("1000", result.Cost);
             Assert.AreEqual(new DateTime(2020, 1, 1), result.StartDate.DateTime);
             Assert.AreEqual(new DateTime(2021, 1, 1), result.EndDate.DateTime);

@@ -7,7 +7,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetReservat
     {
         public long AccountId { get; set; }
         public long ApprenticeshipId { get; set; }
-        public string TrainingCode { get; set; }
+        public string CourseCode { get; set; }
         public DateTime StartDate { get; set; }
         public Guid ReservationId { get; set; }
     }

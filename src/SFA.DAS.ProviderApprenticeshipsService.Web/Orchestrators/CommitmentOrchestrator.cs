@@ -284,7 +284,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var errors = new Dictionary<string, string>();
             var warnings = new Dictionary<string, string>();
 
-            var apprenticeshipGroups = apprenticeships.OrderBy(x => x.TrainingName).GroupBy(x => x.TrainingCode)
+            var apprenticeshipGroups = apprenticeships.OrderBy(x => x.CourseName).GroupBy(x => x.CourseCode)
                 .Select(g => new ApprenticeshipListItemGroupViewModel(g.OrderBy(x => x.CanBeApproved).ToList(), trainingProgrammes.FirstOrDefault(x => x.Id == g.Key)))
                     .ToList();
 
@@ -589,8 +589,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     ApprenticeshipName = x.ApprenticeshipName,
                     ApprenticeDateOfBirth = x.DateOfBirth,
                     ULN = x.ULN,
-                    TrainingCode = x.TrainingCode,
-                    TrainingName = x.TrainingName,
+                    CourseCode = x.TrainingCode,
+                    CourseName = x.TrainingName,
                     StartDate = x.StartDate,
                     EndDate = x.EndDate,
                     Cost = x.Cost,

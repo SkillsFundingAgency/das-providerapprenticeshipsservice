@@ -18,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         public void IfTheTrainingProgrammeIsValidThenShouldPassValidation()
         {
             //Arrange
-            ValidModel.TrainingCode = "TESTCOURSE";
+            ValidModel.CourseCode = "TESTCOURSE";
             ValidModel.StartDate = new DateTimeViewModel(1, 6, 2018);
 
             //Act
@@ -32,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         public void IfTheTrainingProgrammeHasNotStartedThenShouldFailValidation()
         {
             //Arrange
-            ValidModel.TrainingCode = "TESTCOURSE";
+            ValidModel.CourseCode = "TESTCOURSE";
             ValidModel.StartDate = new DateTimeViewModel(1, 4, 2018);
 
             //Act
@@ -47,7 +47,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         public void IfTheTrainingProgrammeHasExpiredThenShouldFailValidation()
         {
             //Arrange
-            ValidModel.TrainingCode = "TESTCOURSE";
+            ValidModel.CourseCode = "TESTCOURSE";
             ValidModel.StartDate = new DateTimeViewModel(1, 8, 2018);
 
             //Act
@@ -59,10 +59,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         }
 
         [Test]
-        public void IfTrainingCodeIsNotSuppliedThenShouldNotCheckCourseValidity()
+        public void IfCourseCodeIsNotSuppliedThenShouldNotCheckCourseValidity()
         {
             //Arrange
-            ValidModel.TrainingCode = "";
+            ValidModel.CourseCode = "";
             ValidModel.StartDate = new DateTimeViewModel(1, 4, 2018);
 
             //Act

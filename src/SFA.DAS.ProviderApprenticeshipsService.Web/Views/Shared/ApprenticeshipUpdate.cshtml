@@ -50,15 +50,15 @@
         </tr>
     }
 
-    @if (!string.IsNullOrWhiteSpace(Model.TrainingName))
+    @if (!string.IsNullOrWhiteSpace(Model.CourseName))
     {
         <tr>
             <td>Apprenticeship training course</td>
             <td>@Model.OriginalApprenticeship.TrainingName </td>
-            <td>@Model.TrainingName</td>
-            @Html.Hidden("TrainingCode", Model.TrainingCode)
-            @Html.Hidden("TrainingName", Model.TrainingName)
-            @Html.Hidden("TrainingType", Model.TrainingType)
+            <td>@Model.CourseName</td>
+            @Html.Hidden("CourseCode", Model.CourseCode)
+            @Html.Hidden("CourseName", Model.CourseName)
+            @Html.Hidden("CourseType", Model.CourseType)
         </tr>
     }
 

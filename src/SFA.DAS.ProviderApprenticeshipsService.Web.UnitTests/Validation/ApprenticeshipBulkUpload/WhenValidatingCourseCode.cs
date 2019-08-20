@@ -4,12 +4,12 @@ using NUnit.Framework;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.ApprenticeshipBulkUpload
 {
     [TestFixture]
-    public class WhenValidatingTrainingCode : ApprenticeshipBulkUploadValidationTestBase
+    public class WhenValidatingCourseCode : ApprenticeshipBulkUploadValidationTestBase
     {
         [Test]
-        public void ShouldBeInValidIfNoTrainingCodeValuesSet()
+        public void ShouldBeInValidIfNoCourseCodeValuesSet()
         {
-            ValidModel.ApprenticeshipViewModel.TrainingCode = null;
+            ValidModel.ApprenticeshipViewModel.CourseCode = null;
 
             var result = Validator.Validate(ValidModel);
 
@@ -17,9 +17,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         }
 
         [Test]
-        public void ShouldBeValidIfTrainingCodeValuesSet()
+        public void ShouldBeValidIfCourseCodeValuesSet()
         {
-            ValidModel.ApprenticeshipViewModel.TrainingCode = "123";
+            ValidModel.ApprenticeshipViewModel.CourseCode = "123";
 
             var result = Validator.Validate(ValidModel);
 

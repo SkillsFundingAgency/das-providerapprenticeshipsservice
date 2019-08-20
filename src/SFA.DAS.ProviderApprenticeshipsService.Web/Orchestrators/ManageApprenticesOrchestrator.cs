@@ -386,7 +386,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     {
                         ApprenticeshipId = apprenticeship.Id,
                         StartDate = startDate,
-                        TrainingCode = model.TrainingCode ?? apprenticeship.TrainingCode,
+                        CourseCode = model.CourseCode ?? apprenticeship.TrainingCode,
                         ReservationId = apprenticeship.ReservationId.Value
                     }
                 )

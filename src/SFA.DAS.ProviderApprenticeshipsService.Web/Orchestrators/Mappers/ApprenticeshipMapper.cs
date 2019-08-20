@@ -101,9 +101,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 DateOfBirth = new DateTimeViewModel(dateOfBirth?.Day, dateOfBirth?.Month, dateOfBirth?.Year),
                 NINumber = apprenticeship.NINumber,
                 ULN = apprenticeship.ULN,
-                TrainingType = apprenticeship.TrainingType,
-                TrainingName = apprenticeship.TrainingName,
-                TrainingCode = apprenticeship.TrainingCode,
+                CourseType = apprenticeship.TrainingType,
+                CourseName = apprenticeship.TrainingName,
+                CourseCode = apprenticeship.TrainingCode,
                 Cost = NullableDecimalToString(apprenticeship.Cost),
                 StartDate = new DateTimeViewModel(apprenticeship.StartDate),
                 StopDate = new DateTimeViewModel(apprenticeship.StopDate),
@@ -147,21 +147,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 ReservationId = vm.ReservationId
             };
 
-            if (!string.IsNullOrWhiteSpace(vm.TrainingCode))
+            if (!string.IsNullOrWhiteSpace(vm.CourseCode))
             {
-                var training = await GetTrainingProgramme(vm.TrainingCode);
+                var training = await GetTrainingProgramme(vm.CourseCode);
 
                 if (training != null)
                 {
                     apprenticeship.TrainingType = (CommitmentTrainingType)(training is Standard ? TrainingType.Standard : TrainingType.Framework);
-                    apprenticeship.TrainingCode = vm.TrainingCode;
+                    apprenticeship.TrainingCode = vm.CourseCode;
                     apprenticeship.TrainingName = training.Title;
                 }
                 else
                 {
-                    apprenticeship.TrainingType = vm.TrainingType;
-                    apprenticeship.TrainingCode = vm.TrainingCode;
-                    apprenticeship.TrainingName = vm.TrainingName;
+                    apprenticeship.TrainingType = vm.CourseType;
+                    apprenticeship.TrainingCode = vm.CourseCode;
+                    apprenticeship.TrainingName = vm.CourseName;
 
                     _logger.Warn($"Apprentice training course has expired. TrainingName: {apprenticeship.TrainingName}, TrainingCode: {apprenticeship.TrainingCode}, Employer Ref: {apprenticeship.EmployerRef}, ApprenticeshipId: {apprenticeship.Id}, Apprenticeship ULN: {apprenticeship.ULN}");
                 }
@@ -184,9 +184,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 EndDate = viewModel.EndDate?.DateTime,
                 Originator = Originator.Provider,
                 Status = ApprenticeshipUpdateStatus.Pending,
-                TrainingName = viewModel.TrainingName,
-                TrainingCode = viewModel.TrainingCode,
-                TrainingType = (Commitments.Api.Types.Apprenticeship.Types.TrainingType?)viewModel.TrainingType,
+                TrainingName = viewModel.CourseName,
+                TrainingCode = viewModel.CourseCode,
+                TrainingType = (Commitments.Api.Types.Apprenticeship.Types.TrainingType?)viewModel.CourseType,
                 ProviderRef = viewModel.ProviderRef
             };
         }
@@ -200,11 +200,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 LastName = update.LastName,
                 DateOfBirth = new DateTimeViewModel(update.DateOfBirth),
                 ULN = update.ULN,
-                TrainingType = update.TrainingType.HasValue
+                CourseType = update.TrainingType.HasValue
                     ? (TrainingType)update.TrainingType.Value
                     : default(TrainingType?),
-                TrainingCode = update.TrainingCode,
-                TrainingName = update.TrainingName,
+                CourseCode = update.TrainingCode,
+                CourseName = update.TrainingName,
                 Cost = update.Cost.HasValue ? update.Cost.ToString() : string.Empty,
                 StartDate = new DateTimeViewModel(update.StartDate),
                 EndDate = new DateTimeViewModel(update.EndDate),
@@ -246,23 +246,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 ReservationId = original.ReservationId
             };
 
-            if (!string.IsNullOrWhiteSpace(edited.TrainingCode) && original.TrainingCode != edited.TrainingCode)
+            if (!string.IsNullOrWhiteSpace(edited.CourseCode) && original.TrainingCode != edited.CourseCode)
             {
-                var training = await GetTrainingProgramme(edited.TrainingCode);
+                var training = await GetTrainingProgramme(edited.CourseCode);
 
                 if (training != null)
                 {
-                    model.TrainingType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
-                    model.TrainingCode = edited.TrainingCode;
-                    model.TrainingName = training.Title;
+                    model.CourseType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
+                    model.CourseCode = edited.CourseCode;
+                    model.CourseName = training.Title;
                 }
                 else
                 {
-                    model.TrainingType = edited.TrainingType == CommitmentTrainingType.Standard ? TrainingType.Standard : TrainingType.Framework; 
-                    model.TrainingCode = edited.TrainingCode;
-                    model.TrainingName = edited.TrainingName;
+                    model.CourseType = edited.CourseType == CommitmentTrainingType.Standard ? TrainingType.Standard : TrainingType.Framework; 
+                    model.CourseCode = edited.CourseCode;
+                    model.CourseName = edited.CourseName;
 
-                    _logger.Warn($"Apprentice training course has expired. TrainingName: {edited.TrainingName}, TrainingCode: {edited.TrainingCode}, Employer Ref: {edited.EmployerRef}, Apprenticeship ULN: {edited.ULN}");
+                    _logger.Warn($"Apprentice training course has expired. TrainingName: {edited.CourseName}, TrainingCode: {edited.CourseCode}, Employer Ref: {edited.EmployerRef}, Apprenticeship ULN: {edited.ULN}");
                 }
             }
 

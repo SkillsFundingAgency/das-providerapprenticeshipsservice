@@ -32,9 +32,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public string ULN { get; set; }
 
-        public TrainingType TrainingType { get; set; }
-        public string TrainingCode { get; set; }
-        public string TrainingName { get; set; }
+        public TrainingType CourseType { get; set; }
+        public string CourseCode { get; set; }
+        public string CourseName { get; set; }
         public string Cost { get; set; }
 
         public DateTimeViewModel StartDate { get; set; }

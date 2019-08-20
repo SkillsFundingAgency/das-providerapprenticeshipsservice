@@ -100,7 +100,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 {
                     FromDate = s.FromDate,
                     ToDate = s.ToDate,
-                    TrainingName = dasRecordViewModel.TrainingName,
+                    TrainingName = dasRecordViewModel.CourseName,
                     ApprenticeshipStartDate = dasRecordViewModel.StartDate,
                     IlrTrainingName = datalock.IlrTrainingCourseName,
                     IlrEffectiveFromDate = datalock.IlrEffectiveFromDate,
@@ -196,9 +196,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         }
 
 
-        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
+        private async Task<ITrainingProgramme> GetTrainingProgramme(string courseCode)
         {
-            return (await GetTrainingProgrammes()).Single(x => x.Id == trainingCode);
+            return (await GetTrainingProgrammes()).Single(x => x.Id == courseCode);
         }
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()

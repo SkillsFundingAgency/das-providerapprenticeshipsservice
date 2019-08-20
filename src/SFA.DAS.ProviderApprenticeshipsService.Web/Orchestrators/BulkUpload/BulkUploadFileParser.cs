@@ -66,7 +66,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             var learnerStartDate = GetValidDate(record.StartDate, "yyyy-MM");
             var learnerEndDate = GetValidDate(record.EndDate, "yyyy-MM");
 
-            var trainingCode = record.ProgType == "25"
+            var courseCode = record.ProgType == "25"
                                    ? record.StdCode
                                    : $"{record.FworkCode}-{record.ProgType}-{record.PwayCode}";
 
@@ -83,7 +83,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 StartDate = new DateTimeViewModel(learnerStartDate),
                 EndDate = new DateTimeViewModel(learnerEndDate),
                 ProgType = record.ProgType.TryParse(),
-                TrainingCode = trainingCode,
+                CourseCode = courseCode,
                 IsPaidForByTransfer = commitment.IsTransfer()
             };
             return new ApprenticeshipUploadModel
