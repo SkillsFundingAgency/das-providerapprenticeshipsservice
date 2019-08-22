@@ -12,6 +12,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [ProviderUkPrnCheck]
     [RoutePrefix("{providerId}/apprentices")]
+    [RequiresAutoReservation]
     public class BulkUploadController : BaseController
     {
         private readonly BulkUploadOrchestrator _bulkUploadOrchestrator;
@@ -35,6 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [Route("{hashedCommitmentId}/UploadApprenticeships")]
         [ValidateAntiForgeryToken]
+        [RequiresAutoReservation("model.HashedCommitmentId", "model.ProviderId")]
         public async Task<ActionResult> UploadApprenticeships(UploadApprenticeshipsViewModel model)
         {
             if (!ModelState.IsValid)

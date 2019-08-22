@@ -575,7 +575,9 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\TrimStringModelBinder.cs" />
+    <Compile Include="Attributes\RequiresAutoReservationActionFilter.cs" />
     <Compile Include="Attributes\DasRoleCheckActionFilter.cs" />
+    <Compile Include="Attributes\RequiresAutoReservationAttribute.cs" />
     <Compile Include="Attributes\DasRoleCheckAttribute.cs" />
     <Compile Include="Attributes\DasRoleCheckExemptAttribute.cs" />
     <Compile Include="Attributes\ProviderUkPrnCheckActionFilter.cs" />
@@ -592,6 +594,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageApprenticesController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
+    <Compile Include="DependencyResolution\EncodingRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
