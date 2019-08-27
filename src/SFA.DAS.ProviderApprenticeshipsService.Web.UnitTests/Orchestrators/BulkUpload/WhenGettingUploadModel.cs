@@ -24,6 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
 
         private Mock<IMediator> _mediator;
         private CommitmentView _commitmentView;
+        private Mock<IReservationsService> _reservationsService;
 
         [SetUp]
         public void Arrange()
@@ -41,6 +42,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                     Commitment = _commitmentView
                 });
 
+            _reservationsService = new Mock<IReservationsService>();
+            _reservationsService.Setup(rs => rs.IsAutoReservationEnabled(It.IsAny<long>())).ReturnsAsync(true);
+
             var bulkUploader = new BulkUploader(_mediator.Object, Mock.Of<IBulkUploadValidator>(),
                 Mock.Of<IBulkUploadFileParser>(), Mock.Of<IProviderCommitmentsLogger>());
 
@@ -50,7 +54,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                 Mock.Of<IHashingService>(),
                 new BulkUploadMapper(_mediator.Object),
                 Mock.Of<IProviderCommitmentsLogger>(),
-                Mock.Of<IBulkUploadFileParser>());
+                Mock.Of<IBulkUploadFileParser>(),
+                _reservationsService.Object
+                );
         }
 
         [Test]
@@ -64,7 +70,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         public async Task AndHasTransferSender_ThenIsPaidByTransferIsTrue(TransferSender transferSender)
         {
             _commitmentView.TransferSender = transferSender;
-             var result = await _bulkUploadOrchestrator.GetUploadModel(123L, "HashedCmtId");
+            var result = await _bulkUploadOrchestrator.GetUploadModel(123L, "HashedCmtId");
             result.IsPaidByTransfer.Should().BeTrue();
         }
 

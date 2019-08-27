@@ -17,7 +17,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             filters.Add(new DasRoleCheckActionFilter());
             filters.Add(new RequestIdActionFilter());
             filters.Add(new SessionIdActionFilter(HttpContext.Current));
-            filters.Add(new RequiresAutoReservationActionFilter());
             filters.AddAuthorizationFilter();
         }
     }

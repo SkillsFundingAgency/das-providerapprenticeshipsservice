@@ -38,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 
         public async Task<bool> IsAutoReservationEnabled(long accountId, CancellationToken cancellationToken)
         {
-            var request = new ReservationAllocationStatusMessage {AccountId = accountId};
+            var request = new ReservationAllocationStatusMessage { AccountId = accountId };
 
             var result = await _reservationsApiClient.GetReservationAllocationStatus(request, cancellationToken);
 

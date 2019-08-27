@@ -575,9 +575,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\TrimStringModelBinder.cs" />
-    <Compile Include="Attributes\RequiresAutoReservationActionFilter.cs" />
     <Compile Include="Attributes\DasRoleCheckActionFilter.cs" />
-    <Compile Include="Attributes\RequiresAutoReservationAttribute.cs" />
     <Compile Include="Attributes\DasRoleCheckAttribute.cs" />
     <Compile Include="Attributes\DasRoleCheckExemptAttribute.cs" />
     <Compile Include="Attributes\ProviderUkPrnCheckActionFilter.cs" />

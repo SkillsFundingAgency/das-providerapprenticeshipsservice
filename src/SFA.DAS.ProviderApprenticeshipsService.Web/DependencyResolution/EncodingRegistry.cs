@@ -10,7 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
     {
         public EncodingRegistry()
         {
-            For<EncodingConfig>().Use<EncodingConfig>(ctx => GetConfig(ctx));
+            For<EncodingConfig>().Use(ctx => GetConfig(ctx)).Singleton();
             For<IEncodingService>().Use<EncodingService>().Singleton();
         }
 
@@ -18,16 +18,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         {
             var configRepo = ctx.GetInstance<IConfigurationRepository>();
 
+            var environment = GetEnvironment();
+
+            var configurationService = new ConfigurationService(configRepo,
+                new ConfigurationOptions("SFA.DAS.Encoding", environment, "1.0"));
+
+            return configurationService.Get<EncodingConfig>();
+        }
+
+        private static string GetEnvironment()
+        {
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
             {
                 environment = CloudConfigurationManager.GetSetting("EnvironmentName");
             }
 
-            var configurationService = new ConfigurationService(configRepo,
-                new ConfigurationOptions("SFA.DAS.Encoding", environment, "1.0"));
-
-            return configurationService.Get<EncodingConfig>();
+            return environment;
         }
     }
 }

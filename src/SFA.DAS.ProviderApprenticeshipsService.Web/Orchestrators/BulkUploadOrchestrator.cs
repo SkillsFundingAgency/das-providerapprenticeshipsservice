@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Validation;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
@@ -15,11 +18,9 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
-
-using ApiTrainingType = SFA.DAS.Commitments.Api.Types.Apprenticeship.Types.TrainingType;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
+
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -28,6 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly BulkUploader _bulkUploader;
         private readonly BulkUploadMapper _mapper;
         private readonly IBulkUploadFileParser _fileParser;
+        private readonly IReservationsService _reservationsService;
 
         public BulkUploadOrchestrator(
             IMediator mediator,
@@ -35,21 +37,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             IHashingService hashingService,
             BulkUploadMapper mapper,
             IProviderCommitmentsLogger logger,
-            IBulkUploadFileParser fileParser) : base(mediator, hashingService, logger)
+            IBulkUploadFileParser fileParser,
+            IReservationsService reservationsService) : base(mediator, hashingService, logger)
         {
             _bulkUploader = bulkUploader;
             _mapper = mapper;
             _fileParser = fileParser;
+            _reservationsService = reservationsService ?? throw new ArgumentNullException(nameof(reservationsService));
+
         }
 
         public async Task<BulkUploadResultViewModel> UploadFile(string userId, UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel, SignInUserModel signInUser)
         {
             var commitmentId = HashingService.DecodeValue(uploadApprenticeshipsViewModel.HashedCommitmentId);
             var providerId = uploadApprenticeshipsViewModel.ProviderId;
-            var fileName = uploadApprenticeshipsViewModel?.Attachment?.FileName ?? "<unknown>";
+            var fileName = uploadApprenticeshipsViewModel.Attachment?.FileName ?? "<unknown>";
 
             var commitment = await GetCommitment(providerId, commitmentId);
 			AssertCommitmentStatus(commitment);
+            await AssertAutoReservationEnabled(commitment);
+
             Logger.Info($"Uploading File - Filename:{fileName}", uploadApprenticeshipsViewModel.ProviderId, commitmentId);
 
             var fileValidationResult = await _bulkUploader.ValidateFileStructure(uploadApprenticeshipsViewModel, providerId, commitment);
@@ -170,45 +177,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return result;
         }
 
-		
-		private async Task<IList<Apprenticeship>> MapFrom(long commitmentId, IEnumerable<ApprenticeshipUploadModel> data)
-        {
-            var trainingProgrammes = await GetTrainingProgrammes();
-
-            return data.Select(x => MapFrom(commitmentId, x.ApprenticeshipViewModel, trainingProgrammes)).ToList();
-        }
-
-        private Apprenticeship MapFrom(long commitmentId, ApprenticeshipViewModel viewModel, IList<ITrainingProgramme> trainingProgrammes)
-        {
-            var apprenticeship = new Apprenticeship
-            {
-                CommitmentId = commitmentId,
-                FirstName = viewModel.FirstName,
-                LastName = viewModel.LastName,
-                DateOfBirth = viewModel.DateOfBirth.DateTime,
-                NINumber = viewModel.NINumber,
-                ULN = viewModel.ULN,
-                Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
-                StartDate = viewModel.StartDate.DateTime,
-                EndDate = viewModel.EndDate.DateTime,
-                ProviderRef = viewModel.ProviderRef
-            };
-
-            if (!string.IsNullOrWhiteSpace(viewModel.CourseCode))
-            {
-                var training = trainingProgrammes.Single(x => x.Id == viewModel.CourseCode);
-                apprenticeship.TrainingType = training is Standard ? ApiTrainingType.Standard : ApiTrainingType.Framework;
-                apprenticeship.TrainingCode = viewModel.CourseCode;
-                apprenticeship.TrainingName = training.Title;
-            }
-
-            return apprenticeship;
-        }
-
         public async Task<UploadApprenticeshipsViewModel> GetUploadModel(long providerid, string hashedcommitmentid)
         {
             var commitment = await GetCommitment(providerid, hashedcommitmentid);
             AssertCommitmentStatus(commitment);
+            await AssertAutoReservationEnabled(commitment);
 
             return new UploadApprenticeshipsViewModel
             {
@@ -226,6 +199,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var commitment = await GetCommitment(providerId, commitmentId);
             AssertCommitmentStatus(commitment);
+            await AssertAutoReservationEnabled(commitment);
 
             var fileContentResult = await Mediator.Send(new GetBulkUploadFileQueryRequest
             {
@@ -274,6 +248,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                                };
             }
             return Enumerable.Empty<UploadError>();
+        }
+
+        private async Task AssertAutoReservationEnabled(CommitmentView commitment)
+        {
+            if (!await _reservationsService.IsAutoReservationEnabled(commitment.EmployerAccountId))
+            {
+                throw new HttpException((int)HttpStatusCode.Forbidden, "Current account is not authorized for automatic reservations");
+            }
         }
     }
 }
