@@ -92,14 +92,17 @@
     <Reference Include="SFA.DAS.AutoConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.AutoConfiguration.2.0.1\lib\net462\SFA.DAS.AutoConfiguration.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=2.1.716.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.2.1.716\lib\net462\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=3.0.125.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.3.0.125\lib\net462\SFA.DAS.Commitments.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.1.1507.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.1.1507\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=3.0.125.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.3.0.125\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Common.Domain, Version=1.4.43.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.43\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Configuration, Version=1.0.0.53229, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Configuration.1.0.0.53229\lib\net45\SFA.DAS.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.CosmosDb, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.CosmosDb.1.0.47\lib\netstandard2.0\SFA.DAS.CosmosDb.dll</HintPath>
@@ -113,8 +116,8 @@
     <Reference Include="SFA.DAS.Http, Version=1.2.112.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Http.1.2.112\lib\net45\SFA.DAS.Http.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.39208, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.39208\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
+    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.43242, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.43242\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Client, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.2.0.0.35919\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
@@ -133,6 +136,12 @@
     </Reference>
     <Reference Include="SFA.DAS.Providers.Api.Client, Version=0.10.29.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Providers.Api.Client.0.10.29-prerelease\lib\net45\SFA.DAS.Providers.Api.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Reservations.Api.Client, Version=4.1.65.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Reservations.Api.Client.4.1.65\lib\net462\SFA.DAS.Reservations.Api.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Reservations.Api.Types, Version=4.1.65.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Reservations.Api.Types.4.1.65\lib\netstandard2.0\SFA.DAS.Reservations.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.7.0\lib\net45\StructureMap.dll</HintPath>
@@ -326,6 +335,9 @@
     <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesHandler.cs" />
     <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesResponse.cs" />
+    <Compile Include="Queries\GetReservationValidation\GetReservationValidationHandler.cs" />
+    <Compile Include="Queries\GetReservationValidation\GetReservationValidationRequest.cs" />
+    <Compile Include="Queries\GetReservationValidation\GetReservationValidationResponse.cs" />
     <Compile Include="Queries\GetProviderHasRelationshipWithPermission\GetProviderHasRelationshipWithPermissionQueryHandler.cs" />
     <Compile Include="Queries\GetProviderHasRelationshipWithPermission\GetProviderHasRelationshipWithPermissionQueryRequest.cs" />
     <Compile Include="Queries\GetProviderHasRelationshipWithPermission\GetProviderHasRelationshipWithPermissionQueryResponse.cs" />

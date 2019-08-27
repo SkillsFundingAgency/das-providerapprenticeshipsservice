@@ -71,24 +71,24 @@
     {
         <div class="form-group">
             <hr />
-            <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
-            <span>@Model.TrainingName</span>
+            <label class="form-label-bold" for="CourseCode">Apprenticeship training course</label>
+            <span>@Model.CourseName</span>
         </div>
-        @Html.HiddenFor(m => m.TrainingCode)
-        @Html.HiddenFor(m => m.TrainingName)
+        @Html.HiddenFor(m => m.CourseCode)
+        @Html.HiddenFor(m => m.CourseName)
     }
     else
     {
-        <div class="form-group @Html.AddClassIfPropertyInError(x => x.TrainingCode, "error")">
+        <div class="form-group @Html.AddClassIfPropertyInError(x => x.CourseCode, "error")">
             <hr />
-            <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
+            <label class="form-label-bold" for="CourseCode">Apprenticeship training course</label>
             <span class="form-hint">Start typing in the name of the course or choose an option from the list</span>
-            @Html.ValidationMessageFor(m => m.TrainingCode, "Choose a training course for this apprentice", new { id = "error-message-" + Html.IdFor(m => m.TrainingCode), @class = "error-message" })
-            <select name="TrainingCode" id="TrainingCode" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
+            @Html.ValidationMessageFor(m => m.CourseCode, "Choose a training course for this apprentice", new { id = "error-message-" + Html.IdFor(m => m.CourseCode), @class = "error-message" })
+            <select name="CourseCode" id="CourseCode" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
                 <option value="">Please select</option>
                 @foreach (var programme in ViewBag.ApprenticeshipProgrammes)
                 {
-                    <option value="@programme.Id" @if (programme.Id.ToString() == Model.TrainingCode) { @Html.Raw("selected") }>
+                    <option value="@programme.Id" @if (programme.Id.ToString() == Model.CourseCode) { @Html.Raw("selected") }>
                         @programme.Title
                     </option>
                 }

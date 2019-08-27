@@ -26,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
         protected override void ValidateTraining()
         {
-            When(x => !string.IsNullOrEmpty(x.TrainingCode), () =>
+            When(x => !string.IsNullOrEmpty(x.CourseCode), () =>
             {
                 base.ValidateTraining();
             });

@@ -85,8 +85,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
         protected virtual void ValidateTraining()
         {
-            RuleFor(x => x.TrainingCode)
-                .NotEmpty().WithMessage(ValidationText.TrainingCode01.Text).WithErrorCode(ValidationText.TrainingCode01.ErrorCode); ;
+            RuleFor(x => x.CourseCode)
+                .NotEmpty().WithMessage(ValidationText.CourseCode01.Text).WithErrorCode(ValidationText.CourseCode01.ErrorCode); ;
         }
 
         protected virtual void ValidateDateOfBirth()
@@ -255,7 +255,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
         private async Task<bool> TrainingCourseValidOnStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel startDate, PropertyValidatorContext context)
         {
-            if (string.IsNullOrWhiteSpace(viewModel.TrainingCode) || (!startDate.DateTime.HasValue))
+            if (string.IsNullOrWhiteSpace(viewModel.CourseCode) || (!startDate.DateTime.HasValue))
                 return true;
 
             var result = await Mediator.Send(new GetTrainingProgrammesQueryRequest
@@ -264,7 +264,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 IncludeFrameworks = true
             });
 
-            var course = result.TrainingProgrammes.Single(x => x.Id == viewModel.TrainingCode);
+            var course = result.TrainingProgrammes.Single(x => x.Id == viewModel.CourseCode);
 
             var courseStatus = course.GetStatusOn(startDate.DateTime.Value);
 

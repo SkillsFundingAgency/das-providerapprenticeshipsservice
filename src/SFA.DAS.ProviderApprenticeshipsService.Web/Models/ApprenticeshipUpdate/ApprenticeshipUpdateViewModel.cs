@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
@@ -16,9 +17,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate
 
         public string ULN { get; set; }
 
-        public TrainingType? TrainingType { get; set; }
-        public string TrainingCode { get; set; }
-        public string TrainingName { get; set; }
+        public TrainingType? CourseType { get; set; }
+        public string CourseCode { get; set; }
+        public string CourseName { get; set; }
         public string Cost { get; set; }
 
         public DateTimeViewModel StartDate { get; set; }
@@ -31,5 +32,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate
         public Apprenticeship OriginalApprenticeship { get; set; }
         public string LegalEntityName { get; set; }
         public string ProviderName { get; set; }
+        public Guid? ReservationId { get; set; }
     }
 }

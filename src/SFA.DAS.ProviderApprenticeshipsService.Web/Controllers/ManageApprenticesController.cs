@@ -191,7 +191,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 || !string.IsNullOrWhiteSpace(data.FirstName)
                 || !string.IsNullOrWhiteSpace(data.LastName)
                 || data.DateOfBirth != null
-                || !string.IsNullOrWhiteSpace(data.TrainingName)
+                || !string.IsNullOrWhiteSpace(data.CourseName)
                 || data.StartDate != null
                 || data.EndDate != null
                 || data.Cost != null
@@ -204,7 +204,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                    !string.IsNullOrEmpty(model.FirstName)
                 || !string.IsNullOrEmpty(model.LastName)
                 || model.DateOfBirth?.DateTime != null
-                || !string.IsNullOrEmpty(model.TrainingCode)
+                || !string.IsNullOrEmpty(model.CourseCode)
                 || model.StartDate?.DateTime != null
                 || model.EndDate?.DateTime != null
                 || !string.IsNullOrEmpty(model.Cost)

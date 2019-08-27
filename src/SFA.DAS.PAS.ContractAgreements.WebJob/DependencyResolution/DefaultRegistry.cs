@@ -80,7 +80,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution
         }
     }
 
-    public class DummyRequestContext : IRequestContext
+    public class DummyRequestContext : ILoggingContext
     {
         public string Url { get; }
 

@@ -118,7 +118,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             viewModel.StartDate.DateTime.Should().BeCloseTo(new DateTimeViewModel(DateTime.Now.AddMonths(2)).DateTime.Value, 100 * 1000);
             viewModel.StopDate.DateTime.Should().BeCloseTo(new DateTimeViewModel(DateTime.Now.AddMonths(6)).DateTime.Value, 100 * 1000);
             viewModel.EndDate.DateTime.Should().BeCloseTo(new DateTimeViewModel(DateTime.Now.AddMonths(26)).DateTime.Value, 10 * 1000);
-            viewModel.TrainingName.Should().Be("Training name");
+            viewModel.CourseName.Should().Be("Training name");
             viewModel.Cost.Should().Be("1700");
 
             viewModel.ProviderRef.Should().Be("Provider ref");

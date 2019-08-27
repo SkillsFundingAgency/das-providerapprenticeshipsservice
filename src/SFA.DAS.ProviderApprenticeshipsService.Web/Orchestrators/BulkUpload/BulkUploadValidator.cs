@@ -112,16 +112,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
         private ValidationMessage? ValidateTrainingInConjunctionWithStartDate(ApprenticeshipViewModel viewModel, List<ITrainingProgramme> trainingProgrammes)
         {
             //todo: the validation messages belong in BulkUploadApprenticeshipValidationText (IApprenticeshipValidationErrorText), but...
-            // the validationtext classes already contain a TrainingCode01 but that has an errorCode of "DefaultErrorCode"
+            // the validationtext classes already contain a CourseCode01 but that has an errorCode of "DefaultErrorCode"
             // and the "Training_01" errorCode below already existed, and we can't change existing error codes, as external systems will probably rely on them.
             // also the different implementations of IApprenticeshipValidationErrorText contain their own subset of error messages so not entirely convinced we need the interface
             // and it's not injected as a dependency either, so might be best to just have seperate centralised validation message containers
             // but don't want to tackle it as a refactor now as the risk/reward ratio is not good
 
-            if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
+            if (!string.IsNullOrWhiteSpace(viewModel.CourseCode))
             {
                 // not as safe as single, but quicker
-                var trainingProgram = trainingProgrammes.Find(tp => tp.Id == viewModel.TrainingCode);
+                var trainingProgram = trainingProgrammes.Find(tp => tp.Id == viewModel.CourseCode);
                 if (trainingProgram == null)
                     return new ValidationMessage("Not a valid <strong>Training code</strong>", "Training_01");
 

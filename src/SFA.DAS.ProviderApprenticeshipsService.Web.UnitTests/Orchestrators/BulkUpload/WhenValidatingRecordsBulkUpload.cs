@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         }
 
         [Test]
-        public void AndMissingTrainingCodeThenFailsValidation()
+        public void AndMissingCourseCodeThenFailsValidation()
         {
             var errors = _sut.ValidateRecords(GetTestData(), new List<ITrainingProgramme>()).ToList();
             errors.Count.Should().Be(1);
@@ -65,7 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [TestCase(2020, 10, "This training course is only available to apprentices with a start date before 10 2020", Description = "Start date just after")]
         [TestCase(2020, 11, "This training course is only available to apprentices with a start date before 10 2020", Description = "Start date after")]
         [TestCase(2021, 01, "This training course is only available to apprentices with a start date before 10 2020", Description = "Start date after (month numerically lower)")]
-        public void AndTrainingCodeIsPendingOrExpiredThenValidationFails(int startYear, int startMonth, string expectedErrorMessage)
+        public void AndCourseCodeIsPendingOrExpiredThenValidationFails(int startYear, int startMonth, string expectedErrorMessage)
         {
             var errors = _sut.ValidateRecords(GetTestData(startYear, startMonth, 2021, 09), new List<ITrainingProgramme>
             {
@@ -84,7 +84,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [TestCase(2019, 06, Description = "Start date first valid")]
         [TestCase(2019, 07, Description = "Start date valid")]
         [TestCase(2019, 09, Description = "Start date last valid")]
-        public void AndTrainingCodeIsActiveThenValidationPasses(int startYear, int startMonth)
+        public void AndCourseCodeIsActiveThenValidationPasses(int startYear, int startMonth)
         {
             var errors = _sut.ValidateRecords(GetTestData(startYear, startMonth, 2021, 09), new List<ITrainingProgramme>
             {
@@ -176,7 +176,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             {
                 new ApprenticeshipViewModel
                 {
-                    FirstName = "Bob", LastName = "The cat", DateOfBirth = new DateTimeViewModel(8, 12, 1998), TrainingCode = "2", ULN = "1234567890", ProgType = 25,
+                    FirstName = "Bob", LastName = "The cat", DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567890", ProgType = 25,
                     StartDate = new DateTimeViewModel(null, startMonth, startYear), EndDate = new DateTimeViewModel(null, endMonth, endYear), Cost = "15000", EmployerRef = "Abba123"
                 }
             };
@@ -195,12 +195,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             {
                 new ApprenticeshipViewModel
                 {
-                    FirstName = " ", LastName = new string('*', 101), DateOfBirth = new DateTimeViewModel(8, 12, 1998), TrainingCode = "2", ULN = "1234567890", ProgType = 25,
+                    FirstName = " ", LastName = new string('*', 101), DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567890", ProgType = 25,
                     StartDate = new DateTimeViewModel(null, 8, 2120), EndDate = new DateTimeViewModel(null, 12, 2125), Cost = "15000", EmployerRef = "Ab123"
                 },
                 new ApprenticeshipViewModel
                 {
-                    FirstName = new string('*', 101), LastName = "", DateOfBirth = new DateTimeViewModel(8, 12, 1998), TrainingCode = "2", ULN = "1234567891", ProgType = 25,
+                    FirstName = new string('*', 101), LastName = "", DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567891", ProgType = 25,
                     StartDate = new DateTimeViewModel(null, 8, 2120), EndDate = new DateTimeViewModel(null, 12, 2125), Cost = "15000", EmployerRef = "Abba123"
                 }
             };

@@ -34,7 +34,7 @@
         ValidationMessage StdCode01 { get; }
         ValidationMessage StdCode02 { get; }
         ValidationMessage StdCode03 { get; }
-        ValidationMessage TrainingCode01 { get; }
+        ValidationMessage CourseCode01 { get; }
         ValidationMessage TrainingPrice01 { get; }
         ValidationMessage TrainingPrice02 { get; }
         ValidationMessage Uln01 { get; }

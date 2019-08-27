@@ -16,8 +16,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public decimal? Cost { get; set; }
         public DateTime? EndDate { get; internal set; }
         public DateTime? StartDate { get; set; }
-        public string TrainingCode { get; internal set; }
-        public string TrainingName { get; internal set; }
+        public string CourseCode { get; internal set; }
+        public string CourseName { get; internal set; }
         public string ULN { get; internal set; }
         public bool CanBeApproved { get; internal set; }
 

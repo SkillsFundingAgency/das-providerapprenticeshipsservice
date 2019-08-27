@@ -23,8 +23,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             RuleFor(x => x.ULN).NotEmpty().OverridePropertyName("ULN")
                 .WithMessage(_errorText.Uln01.Text);
 
-            RuleFor(x => x.TrainingCode).NotEmpty().OverridePropertyName("TrainingCode")
-                .WithMessage(_errorText.TrainingCode01.Text);
+            RuleFor(x => x.CourseCode).NotEmpty()
+                .WithMessage(_errorText.CourseCode01.Text);
 
             RuleFor(x=> x.StartDate).Must(NotEmptyDate)
                 .WithMessage(_errorText.LearnStartDate01.Text);

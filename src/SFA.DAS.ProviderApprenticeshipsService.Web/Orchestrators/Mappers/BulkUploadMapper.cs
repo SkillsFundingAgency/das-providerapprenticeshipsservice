@@ -42,11 +42,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                                          ProviderRef = viewModel.ProviderRef
                                      };
 
-            if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
+            if (!string.IsNullOrWhiteSpace(viewModel.CourseCode))
             {
-                var training = trainingProgrammes.Single(x => x.Id == viewModel.TrainingCode);
+                var training = trainingProgrammes.Single(x => x.Id == viewModel.CourseCode);
                 apprenticeship.TrainingType = training is Standard ? ApiTrainingType.Standard : ApiTrainingType.Framework;
-                apprenticeship.TrainingCode = viewModel.TrainingCode;
+                apprenticeship.TrainingCode = viewModel.CourseCode;
                 apprenticeship.TrainingName = training.Title;
             }
 

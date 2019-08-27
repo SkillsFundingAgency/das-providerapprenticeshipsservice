@@ -38,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
                     ULN = "1001234567",
                     FirstName = "TestFirstName",
                     LastName = "TestLastName",
-                    TrainingCode = "12",
+                    CourseCode = "12",
                     DateOfBirth = new DateTimeViewModel(DateTime.UtcNow.AddYears(-18)),
                     StartDate = new DateTimeViewModel(new DateTime(2017, 06, 20)),
                     EndDate = new DateTimeViewModel(new DateTime(2018, 05, 15)),

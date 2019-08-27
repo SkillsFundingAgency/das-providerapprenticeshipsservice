@@ -2,8 +2,8 @@
 
     // https://select2.github.io/examples.html
     var init = function () {
-        if ($("select#TrainingCode")) {
-            $("select#TrainingCode").select2();
+        if ($("select#CourseCode")) {
+            $("select#CourseCode").select2();
         }
     };
 
@@ -17,22 +17,22 @@
      });
 
     // retain tabbed order after selection
-    $('select#TrainingCode').on('select2:select', function () {
+    $('select#CourseCode').on('select2:select', function () {
         $("#StartMonth").focus();
     });
 
     // retain tabbed order on close without selection
-    $('select#TrainingCode').on('select2:close', function () {
+    $('select#CourseCode').on('select2:close', function () {
         $("#StartMonth").focus();
     });
 
     // retain tabbed order after selection
-    $('select#TrainingCode').on('select2:select', function () {
+    $('select#CourseCode').on('select2:select', function () {
         $("#StartDate_Month").focus();
     });
 
     // retain tabbed order on close without selection
-    $('select#TrainingCode').on('select2:close', function () {
+    $('select#CourseCode').on('select2:close', function () {
         $("#StartDate_Month").focus();
     });
 
