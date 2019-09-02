@@ -23,11 +23,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
             return IsAutoReservationEnabledWithLog(accountId);
         }
 
-        public Task<bool> IsAutoReservationEnabledWithLog(long accountId)
+        public async Task<bool> IsAutoReservationEnabledWithLog(long accountId)
         {
             try
             {
-                return IsAutoReservationEnabled(accountId, CancellationToken.None);
+                return await IsAutoReservationEnabled(accountId, CancellationToken.None);
             }
             catch (Exception ex)
             {
