@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 LastAction = LastAction.Approve,
                 UserDisplayName = "Test User",
                 UserEmailAddress = "Test@test.com",
-                UserId = "user123",
+                UserId = "user123"
             };
 
             _mockCommitmentsApi = new Mock<IProviderCommitmentsApi>();
@@ -54,10 +54,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                     EmployerLastUpdateInfo = new LastUpdateInfo
                     {
                         EmailAddress = "EmployerTestEmail"
-                    }
+                    },
+                    ProviderName = "ProviderName",
+                    EmployerAccountId = 100
                 });
 
             _mockHashingService = new Mock<IHashingService>();
+            _mockHashingService.Setup(x => x.HashValue(It.IsAny<long>())).Returns<long>((p) => "HS"+p.ToString());
 
             var configuration = new ProviderApprenticeshipsServiceConfiguration { EnableEmailNotifications = true };
             _mockMediator = new Mock<IMediator>();
@@ -93,9 +96,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             _mockMediator.Verify(x => x.Send(It.IsAny<SendNotificationCommand>(), It.IsAny<CancellationToken>()), Times.Once);
 
             arg.Email.RecipientsAddress.Should().Be("EmployerTestEmail");
-            arg.Email.TemplateId.Should().Be("EmployerCommitmentNotification");
-            arg.Email.Tokens["type"].Should().Be("approval");
+            arg.Email.TemplateId.Should().Be("EmployerCommitmentNotificationV2");
             arg.Email.Tokens["cohort_reference"].Should().Be("ABC123");
+            arg.Email.Tokens["provider_name"].Should().Be("ProviderName");
+            arg.Email.Tokens["employer_hashed_account"].Should().Be("HS100");
         }
 
         [Test]
