@@ -20,29 +20,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 
         public Task<bool> IsAutoReservationEnabled(long accountId)
         {
-            return IsAutoReservationEnabledWithLog(accountId);
+            return IsAutoReservationEnabledWithLog(accountId, CancellationToken.None);
         }
 
-        public async Task<bool> IsAutoReservationEnabledWithLog(long accountId)
+        public Task<bool> IsAutoReservationEnabled(long accountId, CancellationToken cancellationToken)
+        {
+            return IsAutoReservationEnabledWithLog(accountId, cancellationToken);
+        }
+
+        private async Task<bool> IsAutoReservationEnabledWithLog(long accountId, CancellationToken cancellationToken)
         {
             try
             {
-                return await IsAutoReservationEnabled(accountId, CancellationToken.None);
+                var request = new ReservationAllocationStatusMessage { AccountId = accountId };
+
+                var result = await _reservationsApiClient.GetReservationAllocationStatus(request, cancellationToken);
+
+                return result.AutoReservations;
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, $"Getting auto reservation status for account {accountId}");
                 throw;
             }
-        }
-
-        public async Task<bool> IsAutoReservationEnabled(long accountId, CancellationToken cancellationToken)
-        {
-            var request = new ReservationAllocationStatusMessage { AccountId = accountId };
-
-            var result = await _reservationsApiClient.GetReservationAllocationStatus(request, cancellationToken);
-
-            return result.AutoReservations;
         }
     }
 }
