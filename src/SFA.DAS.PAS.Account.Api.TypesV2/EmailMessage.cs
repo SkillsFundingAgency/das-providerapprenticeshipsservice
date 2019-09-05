@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SFA.DAS.PAS.Account.Api.Types
+namespace SFA.DAS.PAS.Account.Api.TypesV2
 {
     public class ProviderEmailRequest
     {

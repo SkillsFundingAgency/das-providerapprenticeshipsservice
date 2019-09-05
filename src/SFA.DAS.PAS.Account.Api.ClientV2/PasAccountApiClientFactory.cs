@@ -1,14 +1,15 @@
 ﻿using Microsoft.Extensions.Logging;
 using SFA.DAS.Http;
+using SFA.DAS.Http.Configuration;
 
-namespace SFA.DAS.PAS.Account.Api.Client
+namespace SFA.DAS.PAS.Account.Api.ClientV2
 {
-    public class PasAccountApiClientFactory
+    public class PasAccountApiClientFactory : IPasAccountApiClientFactory
     {
-        private readonly IPasAccountApiConfiguration _configuration;
+        private readonly IAzureActiveDirectoryClientConfiguration _configuration;
         private readonly ILoggerFactory _loggerFactory;
 
-        public PasAccountApiClientFactory(IPasAccountApiConfiguration configuration, ILoggerFactory loggerFactory)
+        public PasAccountApiClientFactory(IAzureActiveDirectoryClientConfiguration configuration, ILoggerFactory loggerFactory)
         {
             _configuration = configuration;
             _loggerFactory = loggerFactory;

@@ -5,7 +5,8 @@ using AutoFixture;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Http;
-using SFA.DAS.PAS.Account.Api.Types;
+using SFA.DAS.PAS.Account.Api.ClientV2;
+using SFA.DAS.PAS.Account.Api.TypesV2;
 
 namespace SFA.DAS.PAS.Account.Api.Client.UnitTests
 {

@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using SFA.DAS.PAS.Account.Api.TypesV2;
 
-using SFA.DAS.PAS.Account.Api.Types;
-
-namespace SFA.DAS.PAS.Account.Api.Client
+namespace SFA.DAS.PAS.Account.Api.ClientV2
 {
     public interface IPasAccountApiClient
     {
