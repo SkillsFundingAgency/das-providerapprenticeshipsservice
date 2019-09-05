@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="SFA.DAS.Http" Version="3.2.28" />
+    <PackageReference Include="structuremap" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>

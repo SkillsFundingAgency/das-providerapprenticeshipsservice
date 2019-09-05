@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.Http;
-using SFA.DAS.PAS.Account.Api.TypesV2;
+using SFA.DAS.PAS.Account.Api.Types;
 
 namespace SFA.DAS.PAS.Account.Api.ClientV2
 {
