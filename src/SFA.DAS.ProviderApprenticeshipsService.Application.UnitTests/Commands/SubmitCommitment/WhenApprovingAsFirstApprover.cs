@@ -96,7 +96,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             _mockMediator.Verify(x => x.Send(It.IsAny<SendNotificationCommand>(), It.IsAny<CancellationToken>()), Times.Once);
 
             arg.Email.RecipientsAddress.Should().Be("EmployerTestEmail");
-            arg.Email.TemplateId.Should().Be("EmployerCommitmentNotificationV2");
+            arg.Email.TemplateId.Should().Be("EmployerCohortNotification");
             arg.Email.Tokens["cohort_reference"].Should().Be("ABC123");
             arg.Email.Tokens["provider_name"].Should().Be("ProviderName");
             arg.Email.Tokens["employer_hashed_account"].Should().Be("HS100");
