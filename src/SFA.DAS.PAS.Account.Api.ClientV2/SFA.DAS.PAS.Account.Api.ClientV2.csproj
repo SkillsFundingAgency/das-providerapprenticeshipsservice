@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.PAS.Account.Api.TypesV2\SFA.DAS.PAS.Account.Api.TypesV2.csproj" />
+    <ProjectReference Include="..\SFA.DAS.PAS.Account.Api.Types\SFA.DAS.PAS.Account.Api.Types.csproj" />
   </ItemGroup>
 
 </Project>
