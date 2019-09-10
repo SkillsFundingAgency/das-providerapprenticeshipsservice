@@ -36,7 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 
                 var result = await _reservationsApiClient.GetReservationAllocationStatus(request, cancellationToken);
 
-                return result.AutoReservations;
+                return result.CanAutoCreateReservations;
             }
             catch (Exception ex)
             {
