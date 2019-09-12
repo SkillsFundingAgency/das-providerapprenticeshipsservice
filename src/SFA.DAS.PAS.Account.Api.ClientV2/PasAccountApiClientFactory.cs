@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using SFA.DAS.Http;
 using SFA.DAS.PAS.Account.Api.ClientV2.Configuration;
 
@@ -8,8 +6,6 @@ namespace SFA.DAS.PAS.Account.Api.ClientV2
 {
     internal class PasAccountApiClientFactory
     {
-        const string StubBase = "https://127.0.0.1:44378/";
-
         private readonly PasAccountApiConfiguration _configuration;
         private readonly ILoggerFactory _loggerFactory;
 
@@ -21,18 +17,8 @@ namespace SFA.DAS.PAS.Account.Api.ClientV2
 
         public IPasAccountApiClient CreateClient()
         {
-            HttpClient httpClient;
-
-            if (_configuration.UseStub)
-            {
-                httpClient = new HttpClient();
-                httpClient.BaseAddress = new Uri(StubBase);
-            }
-            else
-            {
-                var httpClientFactory = new AzureActiveDirectoryHttpClientFactory(_configuration, _loggerFactory);
-                httpClient = httpClientFactory.CreateHttpClient();
-            }
+            var httpClientFactory = new AzureActiveDirectoryHttpClientFactory(_configuration, _loggerFactory);
+            var httpClient = httpClientFactory.CreateHttpClient();
 
             var restHttpClient = new RestHttpClient(httpClient);
             var apiClient = new PasAccountApiClient(restHttpClient);

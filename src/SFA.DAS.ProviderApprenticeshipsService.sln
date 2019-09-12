@@ -53,7 +53,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PAS.Account.Api.Cli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PAS.Account.Api.Types", "SFA.DAS.PAS.Account.Api.Types\SFA.DAS.PAS.Account.Api.Types.csproj", "{0720D9AF-EDDB-4813-855A-EE9192CEA7A5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PAS.Account.Api.Client.UnitTests", "SFA.DAS.PAS.Account.Api.Client.UnitTests\SFA.DAS.PAS.Account.Api.Client.UnitTests.csproj", "{FAE3391F-E970-499E-8C39-AA1BAFB498BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PAS.Account.Api.ClientV2.UnitTests", "SFA.DAS.PAS.Account.Api.ClientV2.UnitTests\SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj", "{FAE3391F-E970-499E-8C39-AA1BAFB498BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
