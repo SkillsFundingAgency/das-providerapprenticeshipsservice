@@ -319,7 +319,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipGroups = apprenticeshipGroups,
                 IsReadOnly = commitment.EditStatus != EditStatus.ProviderOnly,
                 IsFundedByTransfer = commitment.IsTransfer(),
-                IsAutoReservationEnabled = await _reservationsService.IsAutoReservationEnabled(commitment.EmployerAccountId),
+                IsAutoReservationEnabled = await _reservationsService.IsAutoReservationEnabled(commitment.EmployerAccountId, commitment.TransferSender?.Id),
                 Errors = errors,
                 Warnings = warnings
             };

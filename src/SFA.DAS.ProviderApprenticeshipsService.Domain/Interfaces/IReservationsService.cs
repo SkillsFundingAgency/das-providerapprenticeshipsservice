@@ -5,7 +5,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
     public interface IReservationsService
     {
-        Task<bool> IsAutoReservationEnabled(long accountId);
-        Task<bool> IsAutoReservationEnabled(long accountId, CancellationToken cancellationToken);
+        Task<bool> IsAutoReservationEnabled(long accountId, long? transferSenderId);
+        Task<bool> IsAutoReservationEnabled(long accountId, long? transferSenderId, CancellationToken cancellationToken);
     }
 }

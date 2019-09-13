@@ -18,21 +18,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
             _logger = logger;
         }
 
-        public Task<bool> IsAutoReservationEnabled(long accountId)
+        public Task<bool> IsAutoReservationEnabled(long accountId, long? transferSenderId)
         {
-            return IsAutoReservationEnabledWithLog(accountId, CancellationToken.None);
+            return IsAutoReservationEnabledWithLog(accountId, transferSenderId, CancellationToken.None);
         }
 
-        public Task<bool> IsAutoReservationEnabled(long accountId, CancellationToken cancellationToken)
+        public Task<bool> IsAutoReservationEnabled(long accountId, long? transferSenderId, CancellationToken cancellationToken)
         {
-            return IsAutoReservationEnabledWithLog(accountId, cancellationToken);
+            return IsAutoReservationEnabledWithLog(accountId, transferSenderId, cancellationToken);
         }
 
-        private async Task<bool> IsAutoReservationEnabledWithLog(long accountId, CancellationToken cancellationToken)
+        private async Task<bool> IsAutoReservationEnabledWithLog(long accountId, long? transferSenderId, CancellationToken cancellationToken)
         {
             try
             {
-                var request = new ReservationAllocationStatusMessage { AccountId = accountId };
+                var request = new ReservationAllocationStatusMessage
+                {
+                    AccountId = accountId,
+                    TransferSenderId = transferSenderId
+                };
 
                 var result = await _reservationsApiClient.GetReservationAllocationStatus(request, cancellationToken);
 

@@ -40,6 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         private const long ProviderId = 789;
         private const long CohortId = 456;
         private const long AccountId = 123;
+        private long? TransferSenderId = null;
         private const string HashedCohortId = "ABC456";
 
         [SetUp]
@@ -80,7 +81,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void AndHasAutoReservationsDisabledWhenGettingUploadModel_ThenShouldGetException()
         {
-            _reservationsService.Setup(rs => rs.IsAutoReservationEnabled(AccountId)).ReturnsAsync(false);
+            _reservationsService.Setup(rs => rs.IsAutoReservationEnabled(AccountId, TransferSenderId)).ReturnsAsync(false);
 
             Assert.ThrowsAsync<HttpException>(() =>_bulkUploadOrchestrator.GetUploadModel(ProviderId, HashedCohortId));
         }
@@ -88,7 +89,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void AndHasAutoReservationsEnabledWhenGettingUploadModel_ThenShouldNotGetException()
         {
-            _reservationsService.Setup(rs => rs.IsAutoReservationEnabled(AccountId)).ReturnsAsync(true);
+            _reservationsService.Setup(rs => rs.IsAutoReservationEnabled(AccountId, TransferSenderId)).ReturnsAsync(true);
 
             Assert.DoesNotThrowAsync(() => _bulkUploadOrchestrator.GetUploadModel(ProviderId, HashedCohortId));
         }
@@ -96,7 +97,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void AndHasAutoReservationsDisabledWhenUploadingModel_ThenShouldGetException()
         {
-            _reservationsService.Setup(rs => rs.IsAutoReservationEnabled(AccountId)).ReturnsAsync(false);
+            _reservationsService.Setup(rs => rs.IsAutoReservationEnabled(AccountId, TransferSenderId)).ReturnsAsync(false);
 
             Assert.ThrowsAsync<HttpException>(CallUploadFile);
         }
@@ -104,7 +105,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void AndHasAutoReservationsEnabledWhenUploadingModel_ThenShouldNotGetException()
         {
-            _reservationsService.Setup(rs => rs.IsAutoReservationEnabled(AccountId)).ReturnsAsync(true);
+            _reservationsService.Setup(rs => rs.IsAutoReservationEnabled(AccountId, TransferSenderId)).ReturnsAsync(true);
 
             Assert.DoesNotThrowAsync(CallUploadFile);
         }
@@ -113,14 +114,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void AndHasAutoReservationsDisabledWhenGettingUnsuccessfulUpload_ThenShouldGetException()
         {
-            _reservationsService.Setup(rs => rs.IsAutoReservationEnabled(AccountId)).ReturnsAsync(false);
+            _reservationsService.Setup(rs => rs.IsAutoReservationEnabled(AccountId, TransferSenderId)).ReturnsAsync(false);
             Assert.ThrowsAsync<HttpException>(CallGetUnsuccessfulUpload);
         }
 
         [Test]
         public void AndHasAutoReservationsEnabledWhenGettingUnsuccessfulUpload_ThenShouldNotGetException()
         {
-            _reservationsService.Setup(rs => rs.IsAutoReservationEnabled(AccountId)).ReturnsAsync(true);
+            _reservationsService.Setup(rs => rs.IsAutoReservationEnabled(AccountId, TransferSenderId)).ReturnsAsync(true);
             Assert.DoesNotThrowAsync(CallGetUnsuccessfulUpload);
         }
 

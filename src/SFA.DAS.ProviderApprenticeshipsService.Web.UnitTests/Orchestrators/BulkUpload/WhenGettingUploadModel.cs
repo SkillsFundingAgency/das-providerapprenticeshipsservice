@@ -43,7 +43,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                 });
 
             _reservationsService = new Mock<IReservationsService>();
-            _reservationsService.Setup(rs => rs.IsAutoReservationEnabled(It.IsAny<long>())).ReturnsAsync(true);
+            _reservationsService.Setup(rs => rs.IsAutoReservationEnabled(It.IsAny<long>(), It.IsAny<long?>())).ReturnsAsync(true);
 
             var bulkUploader = new BulkUploader(_mediator.Object, Mock.Of<IBulkUploadValidator>(),
                 Mock.Of<IBulkUploadFileParser>(), Mock.Of<IProviderCommitmentsLogger>());

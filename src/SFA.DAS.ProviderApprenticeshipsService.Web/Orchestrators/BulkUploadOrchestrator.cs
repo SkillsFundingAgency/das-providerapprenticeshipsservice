@@ -252,7 +252,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private async Task AssertAutoReservationEnabled(CommitmentView commitment)
         {
-            if (!await _reservationsService.IsAutoReservationEnabled(commitment.EmployerAccountId))
+            if (!await _reservationsService.IsAutoReservationEnabled(commitment.EmployerAccountId, commitment.TransferSender?.Id))
             {
                 throw new HttpException((int)HttpStatusCode.Forbidden, "Current account is not authorized for automatic reservations");
             }

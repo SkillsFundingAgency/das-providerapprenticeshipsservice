@@ -73,7 +73,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                             }));
 
             _mockReservationsService = new Mock<IReservationsService>();
-            _mockReservationsService.Setup(rs => rs.IsAutoReservationEnabled(It.IsAny<long>())).ReturnsAsync(true);
+            _mockReservationsService.Setup(rs => rs.IsAutoReservationEnabled(It.IsAny<long>(), It.IsAny<long?>())).ReturnsAsync(true);
 
             var uploadValidator = BulkUploadTestHelper.GetBulkUploadValidator(512);
 
