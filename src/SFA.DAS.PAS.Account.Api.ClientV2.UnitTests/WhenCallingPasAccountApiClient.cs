@@ -10,7 +10,7 @@ using SFA.DAS.PAS.Account.Api.Types;
 namespace SFA.DAS.PAS.Account.Api.ClientV2.UnitTests
 {
     [TestFixture]
-    [Parallelizable(ParallelScope.Children)]
+    [Parallelizable(ParallelScope.All)]
     public class WhenCallingPasAccountApiClient
     {
         [Test]
@@ -24,8 +24,8 @@ namespace SFA.DAS.PAS.Account.Api.ClientV2.UnitTests
         [Test]
         public async Task GetUserRef_VerifyUserIsReturned()
         {
-            var fixture = new WhenCallingPasAccountApiClientFixture();
-            var result = await fixture.SetupResponseForGetUser().PasAccountApiClient.GetUser(fixture.UserRef, CancellationToken.None);
+            var fixture = new WhenCallingPasAccountApiClientFixture().SetupResponseForGetUser();
+            var result = await fixture.PasAccountApiClient.GetUser(fixture.UserRef, CancellationToken.None);
             Assert.AreEqual(fixture.User, result);
         }
 
@@ -40,8 +40,8 @@ namespace SFA.DAS.PAS.Account.Api.ClientV2.UnitTests
         [Test]
         public async Task GetAccountUsers_VerifyUserListIsReturned()
         {
-            var fixture = new WhenCallingPasAccountApiClientFixture();
-            var result = await fixture.SetupResponseForGetAccountUsers().PasAccountApiClient.GetAccountUsers(fixture.ProviderId, CancellationToken.None);
+            var fixture = new WhenCallingPasAccountApiClientFixture().SetupResponseForGetAccountUsers();
+            var result = await fixture.PasAccountApiClient.GetAccountUsers(fixture.ProviderId, CancellationToken.None);
             Assert.AreEqual(fixture.Users, result);
         }
 
