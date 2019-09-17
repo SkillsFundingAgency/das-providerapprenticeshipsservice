@@ -12,8 +12,6 @@ using System.Security.Claims;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -267,19 +265,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             string nextPage;
 
-            if (_featureToggleService.Get<ManageReservations>().FeatureEnabled)
+            var hashedIds = await _commitmentOrchestrator.GetHashedIdsFromCommitment(providerId, hashedCommitmentId);
+            nextPage = _providerUrlhelper.ReservationsLink($"{providerId}/reservations/{hashedIds.HashedLegalEntityId}/select?cohortReference={hashedCommitmentId}");
+            if (hashedIds.HashedTransferSenderId != null)
             {
-                var hashedIds = await _commitmentOrchestrator.GetHashedIdsFromCommitment(providerId, hashedCommitmentId);
-                nextPage = _providerUrlhelper.ReservationsLink($"{providerId}/reservations/{hashedIds.HashedLegalEntityId}/select?cohortReference={hashedCommitmentId}");
-                if (hashedIds.HashedTransferSenderId != null)
-                {
-                    nextPage += $"&transferSenderId={hashedIds.HashedTransferSenderId}";
-                }
-
-            }
-            else
-            {
-                nextPage = _providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/{hashedCommitmentId}/apprentices/add");
+                nextPage += $"&transferSenderId={hashedIds.HashedTransferSenderId}";
             }
 
             return Redirect(nextPage);
