@@ -1,19 +1,19 @@
 ﻿#if NETCOREAPP
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace SFA.DAS.ProviderUrlHelper.Core
 {
     public static class ProviderUrlHelperExtensions
     {
-        public static string ProviderCommitmentsLink(this UrlHelperBase helper, string path)
+        public static string ProviderCommitmentsLink(this IUrlHelper helper, string path)
         {
             var linkGenerator = GetLinkGenerator(helper.ActionContext.HttpContext);
 
             return linkGenerator.ProviderCommitmentsLink(path);
         }
 
-        public static string ProviderApprenticeshipServiceLink(this UrlHelperBase helper, string path)
+        public static string ProviderApprenticeshipServiceLink(this IUrlHelper helper, string path)
         {
             var linkGenerator = GetLinkGenerator(helper.ActionContext.HttpContext);
 
@@ -21,14 +21,14 @@ namespace SFA.DAS.ProviderUrlHelper.Core
 
         }
 
-        public static string ReservationsLink(this UrlHelperBase helper, string path)
+        public static string ReservationsLink(this IUrlHelper helper, string path)
         {
             var linkGenerator = GetLinkGenerator(helper.ActionContext.HttpContext);
 
             return linkGenerator.ReservationsLink(path);
         }
 
-        public static string RecruitLink(this UrlHelperBase helper, string path)
+        public static string RecruitLink(this IUrlHelper helper, string path)
         {
             var linkGenerator = GetLinkGenerator(helper.ActionContext.HttpContext);
 
