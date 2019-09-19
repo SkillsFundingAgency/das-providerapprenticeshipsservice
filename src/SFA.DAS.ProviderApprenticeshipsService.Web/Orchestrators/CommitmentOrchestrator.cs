@@ -21,7 +21,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.Encoding;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
@@ -33,7 +32,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
@@ -45,6 +43,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IEncodingService _encodingService;
         private readonly ApprenticeshipViewModelUniqueUlnValidator _uniqueUlnValidator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
+        private readonly IReservationsService _reservationsService;
+
         private readonly Func<int, string> _addSSuffix = i => i > 1 ? "s" : "";
 
         public CommitmentOrchestrator(IMediator mediator,
@@ -53,7 +53,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             ProviderApprenticeshipsServiceConfiguration configuration,
             IApprenticeshipCoreValidator apprenticeshipCoreValidator,
             IApprenticeshipMapper apprenticeshipMapper,
-            IEncodingService encodingService)
+            IEncodingService encodingService,
+            IReservationsService reservationsService)
             : base(mediator, hashingService, logger)
         {
             _uniqueUlnValidator = uniqueUlnValidator;
@@ -61,6 +62,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _apprenticeshipCoreValidator = apprenticeshipCoreValidator;
             _apprenticeshipMapper = apprenticeshipMapper;
             _encodingService = encodingService;
+            _reservationsService = reservationsService;
         }
 
         public async Task<CohortsViewModel> GetCohorts(long providerId)
@@ -304,6 +306,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             return new CommitmentDetailsViewModel
             {
+                AccountId = commitment.EmployerAccountId,
                 ProviderId = providerId,
                 HashedCommitmentId = hashedCommitmentId,
                 LegalEntityName = commitment.LegalEntityName,
@@ -316,6 +319,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ApprenticeshipGroups = apprenticeshipGroups,
                 IsReadOnly = commitment.EditStatus != EditStatus.ProviderOnly,
                 IsFundedByTransfer = commitment.IsTransfer(),
+                IsAutoReservationEnabled = await _reservationsService.IsAutoReservationEnabled(commitment.EmployerAccountId, commitment.TransferSender?.Id),
                 Errors = errors,
                 Warnings = warnings
             };

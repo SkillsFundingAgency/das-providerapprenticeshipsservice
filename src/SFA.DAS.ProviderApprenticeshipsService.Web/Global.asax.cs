@@ -13,6 +13,7 @@ using Microsoft.Azure;
 using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 using System.Linq;
 using System.Net;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 using SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution;
 using SFA.DAS.Web.Policy;
 

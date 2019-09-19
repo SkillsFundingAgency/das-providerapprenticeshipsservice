@@ -30,7 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             IHashingService hashingService,
             IProviderCommitmentsLogger logger,
             IApprenticeshipMapper apprenticeshipMapper,
-            IDataLockMapper dataLockMapper): base(mediator, hashingService, logger)
+            IDataLockMapper dataLockMapper) : base(mediator, hashingService, logger)
         {
             _mediator = mediator;
             _hashingService = hashingService;
