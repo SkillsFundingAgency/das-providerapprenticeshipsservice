@@ -39,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         private BulkUploadOrchestrator _sut;
         private Mock<HttpPostedFileBase> _file;
         private Mock<IMediator> _mockMediator;
-
+        private Mock<IReservationsService> _mockReservationsService;
         private Mock<IProviderCommitmentsLogger> _logger;
 
         [SetUp]
@@ -72,6 +72,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                                 Overlaps = new List<ApprenticeshipOverlapValidationResult>()
                             }));
 
+            _mockReservationsService = new Mock<IReservationsService>();
+            _mockReservationsService.Setup(rs => rs.IsAutoReservationEnabled(It.IsAny<long>(), It.IsAny<long?>())).ReturnsAsync(true);
+
             var uploadValidator = BulkUploadTestHelper.GetBulkUploadValidator(512);
 
             _logger = new Mock<IProviderCommitmentsLogger>();
@@ -83,7 +86,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var bulkUploadMapper = new BulkUploadMapper(_mockMediator.Object);
 
             _sut = new BulkUploadOrchestrator(_mockMediator.Object, bulkUploader, mockHashingService.Object,
-                bulkUploadMapper, Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<IBulkUploadFileParser>());
+                bulkUploadMapper, Mock.Of<IProviderCommitmentsLogger>(), Mock.Of<IBulkUploadFileParser>(), _mockReservationsService.Object);
         }
 
         [Test]
