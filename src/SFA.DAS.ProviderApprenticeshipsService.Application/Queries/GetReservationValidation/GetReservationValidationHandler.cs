@@ -16,7 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetReservat
 
         public async Task<GetReservationValidationResponse> Handle(GetReservationValidationRequest request, CancellationToken cancellationToken)
         {
-            var validationReservationMessage = new ValidationReservationMessage
+            var validationReservationMessage = new ReservationValidationMessage
             {
                 StartDate = request.StartDate,
                 CourseCode = request.CourseCode,

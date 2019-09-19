@@ -173,6 +173,12 @@
     <Reference Include="SFA.DAS.ProviderRelationships.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.ProviderRelationships.Types.2.0.1\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Types.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.Reservations.Api.Client, Version=4.1.204.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Reservations.Api.Client.4.1.204\lib\net462\SFA.DAS.Reservations.Api.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Reservations.Api.Types, Version=4.1.204.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Reservations.Api.Types.4.1.204\lib\netstandard2.0\SFA.DAS.Reservations.Api.Types.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.32930, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Sql.Client.1.0.0.32930\lib\net45\SFA.DAS.Sql.Client.dll</HintPath>
     </Reference>
@@ -371,6 +377,7 @@
     <Compile Include="Services\IAccountLegalEntityPublicHashingService.cs" />
     <Compile Include="Services\IPublicHashingService.cs" />
     <Compile Include="Services\PublicHashingService.cs" />
+    <Compile Include="Services\ReservationsService.cs" />
     <Compile Include="Services\StubProviderRelationshipsClient.cs" />
   </ItemGroup>
   <ItemGroup>

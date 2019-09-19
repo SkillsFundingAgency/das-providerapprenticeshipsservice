@@ -162,6 +162,7 @@
     <Compile Include="Interfaces\IBackgroundNotificationService.cs" />
     <Compile Include="Interfaces\IEmployerAccountService.cs" />
     <Compile Include="Interfaces\IProviderAgreementStatusConfiguration.cs" />
+    <Compile Include="Interfaces\IReservationsService.cs" />
     <Compile Include="Models\AcademicYear\AcademicYearValidationResult.cs" />
     <Compile Include="Models\ApprenticeshipCourse\FundingPeriod.cs" />
     <Compile Include="Models\ApprenticeshipCourse\TrainingProgrammeStatus.cs" />
