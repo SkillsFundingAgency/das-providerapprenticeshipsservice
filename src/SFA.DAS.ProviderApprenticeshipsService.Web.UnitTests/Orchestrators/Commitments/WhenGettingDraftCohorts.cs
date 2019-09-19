@@ -71,7 +71,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 Mock.Of<ProviderApprenticeshipsServiceConfiguration>(),
                 Mock.Of<IApprenticeshipCoreValidator>(),
                 Mock.Of<IApprenticeshipMapper>(),
-                Mock.Of<IEncodingService>()
+                Mock.Of<IEncodingService>(),
+                Mock.Of<IReservationsService>()
             );
         }
 

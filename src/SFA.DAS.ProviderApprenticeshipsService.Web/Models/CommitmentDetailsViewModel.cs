@@ -5,6 +5,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
     public sealed class CommitmentDetailsViewModel : ViewModelBase
     {
+        public long AccountId { get; set; }
         public long ProviderId { get; set; }
         public string HashedCommitmentId { get; set; }
         public string LegalEntityName { get; set; }
@@ -19,6 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public bool IsReadOnly { get; set; }
         public bool IsFundedByTransfer { get; set; }
+        public bool IsAutoReservationEnabled { get; set; }
 
         public Dictionary<string, string> Errors { get; set; }
         public Dictionary<string, string> Warnings { get; set; }
