@@ -95,7 +95,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitComm
             switch (commitment.AgreementStatus)
             {
                 case AgreementStatus.NotAgreed:
-                    template = "EmployerCommitmentNotification";
+                    template = "EmployerCohortNotification";
+                    tokens["provider_name"] = commitment.ProviderName;
+                    tokens["employer_hashed_account"] = _hashingService.HashValue(commitment.EmployerAccountId);
                     break;
                 case AgreementStatus.EmployerAgreed when commitment.TransferSender != null && action == LastAction.Approve:
                     template = "EmployerTransferPendingFinalApproval";
