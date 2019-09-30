@@ -59,16 +59,16 @@
     <Compile Include="SecureHttpClient.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.PAS.Account.Api.Types\SFA.DAS.PAS.Account.Api.Types.csproj">
-      <Project>{bfc176d2-d99a-4582-8e86-a11530af2986}</Project>
-      <Name>SFA.DAS.PAS.Account.Api.Types</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="SFA.DAS.PAS.Account.Api.Client.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.PAS.Account.Api.Types\SFA.DAS.PAS.Account.Api.Types.csproj">
+      <Project>{0720d9af-eddb-4813-855a-ee9192cea7a5}</Project>
+      <Name>SFA.DAS.PAS.Account.Api.Types</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
