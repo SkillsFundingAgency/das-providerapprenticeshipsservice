@@ -1,5 +1,4 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Helpers
-@using SFA.DAS.ProviderUrlHelper.Framework;
+﻿@using SFA.DAS.ProviderUrlHelper.Framework;
 
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.AccountHomeViewModel
 
@@ -38,15 +37,12 @@
                 </div>
             }
 
-            @if (Html.IsReservationsEnabled()) // is reservations feature enabled?
-            {
-                <div class="box">
-                    <h2 class="heading-medium">
-                        <a href="@Url.ReservationsLink($"{Model.ProviderId}/reservations")">Get funding for non-levy employers</a>
-                    </h2>
-                    <p>Secure funding for a non-levy employer to train an apprentice.</p>
-                </div>
-            }
+            <div class="box">
+                <h2 class="heading-medium">
+                    <a href="@Url.ReservationsLink($"{Model.ProviderId}/reservations")">Get funding for non-levy employers</a>
+                </h2>
+                <p>Secure funding for a non-levy employer to train an apprentice.</p>
+            </div>
 
             <div class="box">
                 <h2 class="heading-medium">
@@ -55,15 +51,12 @@
                 <p>Review, edit, approve and add apprentices to new cohorts.</p>
             </div>
 
-            @if (Html.IsReservationsEnabled())
-            {
-                <div class="box">
-                    <h2 class="heading-medium">
-                        <a href="@Url.ReservationsLink($"{Model.ProviderId}/reservations/manage")">Manage your funding reserved for non-levy employers</a>
-                    </h2>
-                    <p>Add apprentice information to funding you have already reserved for non-levy employers.</p>
-                </div>
-            }
+            <div class="box">
+                <h2 class="heading-medium">
+                    <a href="@Url.ReservationsLink($"{Model.ProviderId}/reservations/manage")">Manage your funding reserved for non-levy employers</a>
+                </h2>
+                <p>Add apprentice information to funding you have already reserved for non-levy employers.</p>
+            </div>
 
             <div class="box">
                 <h2 class="heading-medium">

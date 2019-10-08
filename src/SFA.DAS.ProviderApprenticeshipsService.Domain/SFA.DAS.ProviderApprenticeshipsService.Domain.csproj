@@ -186,7 +186,6 @@
     <Compile Include="Interfaces\IUserSettingsRepository.cs" />
     <Compile Include="Models\ApprenticeshipCourse\ITrainingProgramme.cs" />
     <Compile Include="Models\Apprenticeship\FundingStatus.cs" />
-    <Compile Include="Models\FeatureToggles\ManageReservations.cs" />
     <Compile Include="Models\Organisation\LegalEntity.cs" />
     <Compile Include="Models\Settings\UserNotificationSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
