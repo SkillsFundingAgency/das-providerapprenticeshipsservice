@@ -367,6 +367,7 @@
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="DependencyResolution\StructureMapWebApiDependencyResolver.cs" />
     <Compile Include="DependencyResolution\StructureMapWebApiDependencyScope.cs" />
+    <Compile Include="Formatters\ChunkJsonMediaTypeFormatter.cs" />
     <Compile Include="Orchestrator\AccountOrchestrator.cs" />
     <Compile Include="Orchestrator\EmailOrchestrator.cs" />
     <Compile Include="Orchestrator\IAccountOrchestrator.cs" />
@@ -406,7 +407,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.PAS.Account.Api.Types\SFA.DAS.PAS.Account.Api.Types.csproj">
-      <Project>{BFC176D2-D99A-4582-8E86-A11530AF2986}</Project>
+      <Project>{0720d9af-eddb-4813-855a-ee9192cea7a5}</Project>
       <Name>SFA.DAS.PAS.Account.Api.Types</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Application\SFA.DAS.ProviderApprenticeshipsService.Application.csproj">
