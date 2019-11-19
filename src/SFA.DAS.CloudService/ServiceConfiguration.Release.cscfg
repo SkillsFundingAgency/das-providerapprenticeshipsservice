@@ -17,7 +17,7 @@
       <Setting name="UseStubProviderRelationships" value="__UseStubProviderRelationships__" />
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="WebSslCert" thumbprint="944BFAF38AFEC78475AB5CF9FD9175B0EB6D31F7" thumbprintAlgorithm="sha1" />
+      <Certificate name="WebSslCert" thumbprint="6A1D17199708FD4528C7F48DF4806385D0B92DEF" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
   <NetworkConfiguration>
