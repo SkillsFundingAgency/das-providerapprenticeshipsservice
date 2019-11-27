@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.Commitments.Api.Client.Configuration;
-using SFA.DAS.Http;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
@@ -8,7 +7,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 {
     public class ProviderApprenticeshipsServiceConfiguration : IProviderAgreementStatusConfiguration
     {
-        public bool UseFakeIdentity { get; set; }
         public string DatabaseConnectionString { get; set; }
         public string ServiceBusConnectionString { get; set; }
         public CommitmentsApiClientConfiguration CommitmentsApi { get; set; }
@@ -28,10 +26,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         
     }
 
-    public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration, IJwtClientConfiguration
+    public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
     {
         public string BaseUrl { get; set; }
         public string ClientToken { get; set; }
+        public string ApiBaseUrl { get; }
+        public string Tenant { get; }
+        public string ClientId { get; }
+        public string ClientSecret { get; }
+        public string IdentifierUri { get; }
     }
 
     public class ApprenticeshipInfoServiceConfiguration : IApprenticeshipInfoServiceConfiguration
@@ -39,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string BaseUrl { get; set; }
     }
 
-    public class ProviderNotificationConfiguration : IJwtClientConfiguration
+    public class ProviderNotificationConfiguration 
     {
         public bool UseProviderEmail { get; set; }
 
