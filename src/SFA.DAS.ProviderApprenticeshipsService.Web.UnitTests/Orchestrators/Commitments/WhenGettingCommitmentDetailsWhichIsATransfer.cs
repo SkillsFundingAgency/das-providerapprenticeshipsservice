@@ -38,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         }
 
         [TestCase(TransferApprovalStatus.Pending, EditStatus.Both, RequestStatus.WithSenderForApproval, Description = "Should return a Request status of WithSenderForApproval")]
-        [TestCase(TransferApprovalStatus.Rejected, EditStatus.EmployerOnly, RequestStatus.RejectedBySender, Description = "Should return a Request status of Pending  RejectedBySender")]
+        [TestCase(TransferApprovalStatus.Rejected, EditStatus.EmployerOnly, RequestStatus.SentForReview, Description = "Should return a Request status of Pending  RejectedBySender")]
         public void ShouldReturnARequestStatus(TransferApprovalStatus transferApprovalStatus, EditStatus editStatus, RequestStatus requestStatus)
         {
             var commitment = new CommitmentView

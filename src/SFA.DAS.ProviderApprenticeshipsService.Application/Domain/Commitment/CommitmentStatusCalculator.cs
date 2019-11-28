@@ -67,7 +67,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
                 case TransferApprovalStatus.Rejected:
                     if (edit != EditStatus.EmployerOnly)
                         throw new InvalidStateException($"{invalidStateExceptionMessagePrefix}If just rejected by sender, must be with receiver");
-                    return RequestStatus.RejectedBySender;
+                    return RequestStatus.SentForReview;
 
                 default:
                     throw new Exception("Unexpected TransferApprovalStatus");

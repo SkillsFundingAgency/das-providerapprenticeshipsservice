@@ -87,10 +87,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var result = await _orchestrator.GetAllTransferFunded(12222);
 
             result.ProviderId.Should().Be(12222);
-            result.Commitments.Count().Should().Be(2);
+            result.Commitments.Count().Should().Be(1);
             var list = result.Commitments.ToList();
             list[0].HashedCommitmentId.Should().Be("RST1");
-            list[1].HashedCommitmentId.Should().Be("RST2");
         }
 
 
@@ -102,8 +101,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             var list = result.Commitments.ToList();
             list[0].ReceivingEmployerName.Should().Be("LEName");
             list[0].Status.Should().Be(TransferApprovalStatus.Pending);
-            list[1].ReceivingEmployerName.Should().Be("LEName2");
-            list[1].Status.Should().Be(TransferApprovalStatus.Rejected);
         }
     }
 }

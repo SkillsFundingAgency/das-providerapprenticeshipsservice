@@ -101,7 +101,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [TestCase(/*expectedReadyForReviewCount=*/0, /*expectedWithEmployerCount=*/0, /*expectedTransferFundedCohortsCount=*/1, /*expectedDraftCount=*/0,
             ValidTransferSenderId, TransferApprovalStatus.Pending, AgreementStatus.BothAgreed,
             EditStatus.Both, LastAction.Approve, 1, true, CommitmentStatus.Active, TestName = "With sender but not yet actioned by them")]
-        [TestCase(/*expectedReadyForReviewCount=*/0, /*expectedWithEmployerCount=*/0, /*expectedTransferFundedCohortsCount=*/1, /*expectedDraftCount=*/0,
+        [TestCase(/*expectedReadyForReviewCount=*/0, /*expectedWithEmployerCount=*/1, /*expectedTransferFundedCohortsCount=*/0, /*expectedDraftCount=*/0,
             ValidTransferSenderId, TransferApprovalStatus.Rejected, AgreementStatus.NotAgreed,
             EditStatus.EmployerOnly, LastAction.Amend, 1, true, CommitmentStatus.Active, TestName = "With sender, rejected by them, but not yet saved or edited")]
         [TestCase(/*expectedReadyForReviewCount=*/0, /*expectedWithEmployerCount=*/0, /*expectedTransferFundedCohortsCount=*/0, /*expectedDraftCount=*/0,
