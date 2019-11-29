@@ -46,8 +46,8 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
                 });
 
             var config = GetConfiguration();
-            For<IConfiguration>().Use(config);
-            For<IProviderAgreementStatusConfiguration>().Use(config);
+            For<IConfiguration>().Use<ProviderApprenticeshipsServiceConfiguration>();
+            For<IProviderAgreementStatusConfiguration>().Use(config.ContractAgreementsUrl);
             For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
             For<ICurrentDateTime>().Use(x => new CurrentDateTime());
             RegisterMediator();

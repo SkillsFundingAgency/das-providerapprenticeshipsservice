@@ -1,17 +1,14 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.Commitments.Api.Client.Configuration;
-using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 {
-    public class ProviderApprenticeshipsServiceConfiguration : IProviderAgreementStatusConfiguration
+    public class ProviderApprenticeshipsServiceConfiguration : IConfiguration
     {
         public string DatabaseConnectionString { get; set; }
         public string ServiceBusConnectionString { get; set; }
-        public CommitmentsApiClientConfiguration CommitmentsApi { get; set; }
         public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }
-        public NotificationsApiClientConfiguration NotificationApi { get; set; }
         public ProviderNotificationConfiguration CommitmentNotification { get; set; }
         public string Hashstring { get; set; }
         public int MaxBulkUploadFileSize { get; set; } // Size of file in kilobytes
