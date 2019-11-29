@@ -83,9 +83,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             #endregion
 
             ConfigureHashingService(config);
-            //ConfigureCommitmentsApi(config);
-            //ConfigureNotificationsApi(config);
-
             For<IProviderAgreementStatusConfiguration>().Use(config.ContractAgreementsUrl);
 
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
