@@ -307,7 +307,7 @@
         </div>
     }
 
-    @if (!Model.IsReadOnly && !Model.IsFundedByTransfer)
+    @if (!Model.IsReadOnly)
     {
         <a class="button delete-button" href="@Url.Action("DeleteCohort", new { Model.ProviderId, Model.HashedCommitmentId })" aria-label="Delete">Delete cohort</a>
     }
