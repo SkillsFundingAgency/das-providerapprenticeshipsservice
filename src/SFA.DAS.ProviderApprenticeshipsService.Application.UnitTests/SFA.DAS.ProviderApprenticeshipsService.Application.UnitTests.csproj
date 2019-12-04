@@ -351,8 +351,6 @@
     <Compile Include="Commands\BulkUploadApprenticeships\WhenValidatingCommand.cs" />
     <Compile Include="Commands\CreateApprenticeshipUpdate\WhenCreatingApprenticeshipUpdate.cs" />
     <Compile Include="Commands\CreateApprenticeshipUpdate\WhenValidatingCommand.cs" />
-    <Compile Include="Commands\CreateApprenticeship\WhenCreatingAnApprentice.cs" />
-    <Compile Include="Commands\CreateApprenticeship\WhenValidatingCommand.cs" />
     <Compile Include="Commands\CreateCommitment\WhenCreatingCommitment.cs" />
     <Compile Include="Commands\CreateCommitment\WhenValidatingCommand.cs" />
     <Compile Include="Commands\DeleteApprenticeship\WhenDeletingApprentice.cs" />

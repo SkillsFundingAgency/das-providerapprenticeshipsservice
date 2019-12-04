@@ -181,54 +181,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return Redirect(GetReturnToListUrl(viewModel.ProviderId));
         }
 
-        [HttpGet]
-        [OutputCache(CacheProfile = "NoCache")]
-        [Route("{hashedCommitmentId}/View/{hashedApprenticeshipId}", Name = "ViewApprenticeship")]
-        public async Task<ActionResult> View(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
-        {
-            var model = await _commitmentOrchestrator.GetApprenticeshipViewModel(providerId, hashedCommitmentId, hashedApprenticeshipId);
-            return View(model);
-        }
-
-
-        [HttpGet]
-        [OutputCache(CacheProfile = "NoCache")]
-        [Route("{hashedCommitmentId}/Edit/{hashedApprenticeshipId}", Name = "EditApprenticeship")]
-        public async Task<ActionResult> Edit(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
-        {
-            var model = await _commitmentOrchestrator.GetApprenticeship(providerId, hashedCommitmentId, hashedApprenticeshipId);
-            AddErrorsToModelState(model.ValidationErrors);
-            
-            ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
-
-            return View(model.Apprenticeship);
-        }
-
-        [HttpPost]
-        [Route("{hashedCommitmentId}/Edit/{hashedApprenticeshipId}")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(ApprenticeshipViewModel apprenticeship)
-        {
-            try
-            {
-                AddErrorsToModelState(await _commitmentOrchestrator.ValidateApprenticeship(apprenticeship));
-                if (!ModelState.IsValid)
-                {
-                    return await RedisplayApprenticeshipView(apprenticeship);
-                }
-
-                await _commitmentOrchestrator.UpdateApprenticeship(CurrentUserId, apprenticeship, GetSignedInUser());
-            }
-            catch (InvalidRequestException ex)
-            {
-                AddErrorsToModelState(ex);
-
-                return await RedisplayApprenticeshipView(apprenticeship);
-            }
-
-            return RedirectToAction("Details", new { apprenticeship.ProviderId, apprenticeship.HashedCommitmentId });
-        }
-
         [Route("{hashedCommitmentId}/{hashedApprenticeshipId}/Delete")]
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> DeleteConfirmation(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
@@ -257,47 +209,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             SetInfoMessage($"Apprentice record for {deletedApprenticeshipName} deleted", FlashMessageSeverityLevel.Okay);
 
             return RedirectToRoute("CohortDetails", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
-        }
-
-        [HttpGet]
-        [Route("{hashedCommitmentId}/AddApprentice")]
-        public async Task<ActionResult> AddApprentice(long providerId, string hashedCommitmentId)
-        {
-            string nextPage;
-
-            var hashedIds = await _commitmentOrchestrator.GetHashedIdsFromCommitment(providerId, hashedCommitmentId);
-            nextPage = _providerUrlhelper.ReservationsLink($"{providerId}/reservations/{hashedIds.HashedLegalEntityId}/select?cohortReference={hashedCommitmentId}");
-            if (hashedIds.HashedTransferSenderId != null)
-            {
-                nextPage += $"&transferSenderId={hashedIds.HashedTransferSenderId}";
-            }
-
-            return Redirect(nextPage);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("{hashedCommitmentId}/AddApprentice")]
-        public async Task<ActionResult> AddApprentice(ApprenticeshipViewModel apprenticeship)
-        {
-            try
-            {
-                AddErrorsToModelState(await _commitmentOrchestrator.ValidateApprenticeship(apprenticeship));
-                if (!ModelState.IsValid)
-                {
-                    return await RedisplayApprenticeshipView(apprenticeship);
-                }
-
-                await _commitmentOrchestrator.CreateApprenticeship(CurrentUserId, apprenticeship, GetSignedInUser());
-            }
-            catch (InvalidRequestException ex)
-            {
-                AddErrorsToModelState(ex);
-
-                return await RedisplayApprenticeshipView(apprenticeship);
-            }
-
-            return RedirectToAction("Details", new { apprenticeship.ProviderId, apprenticeship.HashedCommitmentId });
         }
 
         [HttpGet]

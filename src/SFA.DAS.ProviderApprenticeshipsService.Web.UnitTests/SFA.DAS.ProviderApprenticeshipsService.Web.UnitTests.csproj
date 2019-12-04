@@ -414,7 +414,6 @@
     <Compile Include="Orchestrators\Formatters\GivenAnExcelFormatter.cs" />
     <Compile Include="Orchestrators\ManageApprentices\GivenAFiltersCookieManager.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenCreatingApprenticeshipUpdate.cs" />
-    <Compile Include="Orchestrators\Commitments\WhenCreatingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingDeleteApprenticeshipConfirmation.cs" />
     <Compile Include="Orchestrators\Commitments\WhenDeletingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGetCohorts.cs" />
