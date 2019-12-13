@@ -4,6 +4,7 @@ using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Http;
+using SFA.DAS.Http.Configuration;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.NLog.Logger.Web.MessageHandlers;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -17,8 +18,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         {
             For<CommitmentsApiClientConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<CommitmentsApiClientConfiguration>(ConfigurationKeys.CommitmentsApiClient)).Singleton();
             For<ICommitmentsApiClientConfiguration>().Use(c => c.GetInstance<CommitmentsApiClientConfiguration>());
-            For<IEmployerCommitmentApi>().Use<EmployerCommitmentApi>().Ctor<HttpClient>().Is(c => GetHttpClient(c));
-            For<IValidationApi>().Use<ValidationApi>();
+
+            For<IProviderCommitmentsApi>().Use<ProviderCommitmentsApi>()
+              .Ctor<HttpClient>().Is(c => GetHttpClient(c));
+
+            For<IValidationApi>().Use<ValidationApi>()
+                .Ctor<HttpClient>().Is(c => GetHttpClient(c));
         }
 
         private HttpClient GetHttpClient(IContext context)
@@ -26,8 +31,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             var config = context.GetInstance<CommitmentsApiClientConfiguration>();
 
             var httpClientBuilder = string.IsNullOrWhiteSpace(config.ClientId)
-                ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config))
-                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config));
+                ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config as IJwtClientConfiguration))
+                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config as IAzureActiveDirectoryClientConfiguration));
 
             return httpClientBuilder
                 .WithDefaultHeaders()

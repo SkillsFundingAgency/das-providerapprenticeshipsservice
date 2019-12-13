@@ -191,7 +191,7 @@
     <Reference Include="SFA.DAS.Configuration.FileStorage, Version=1.0.0.53229, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Configuration.FileStorage.1.0.0.53229\lib\net45\SFA.DAS.Configuration.FileStorage.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Http">
+    <Reference Include="SFA.DAS.Http, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Http.3.2.28\lib\netstandard2.0\SFA.DAS.Http.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.43242, Culture=neutral, processorArchitecture=MSIL">
@@ -202,10 +202,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.2.2.37\lib\netstandard2.0\SFA.DAS.Notifications.Api.Client.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.2.2.43\lib\netstandard2.0\SFA.DAS.Notifications.Api.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.2.2.37\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.2.2.43\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="StackExchange.Redis, Version=1.2.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StackExchange.Redis.1.2.6\lib\net46\StackExchange.Redis.dll</HintPath>

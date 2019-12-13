@@ -20,6 +20,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Context;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.CookieService;
@@ -99,7 +100,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
             For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
-            
+
             ConfigureFeatureToggle();
 
             RegisterMediator();
