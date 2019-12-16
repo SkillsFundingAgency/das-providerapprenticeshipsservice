@@ -39,6 +39,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{hashedCommitmentId}/AddApprentice")]
+        public async Task<ActionResult> AddApprentice(long providerId, string hashedCommitmentId)
+        {
+            string nextPage;
+
+            var hashedIds = await _commitmentOrchestrator.GetHashedIdsFromCommitment(providerId, hashedCommitmentId);
+            nextPage = _providerUrlhelper.ReservationsLink($"{providerId}/reservations/{hashedIds.HashedLegalEntityId}/select?cohortReference={hashedCommitmentId}");
+            if (hashedIds.HashedTransferSenderId != null)
+            {
+                nextPage += $"&transferSenderId={hashedIds.HashedTransferSenderId}";
+            }
+
+            return Redirect(nextPage);
+        }
+
+        [HttpGet]
         [Route("Cohorts")]
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> Cohorts(long providerId)
