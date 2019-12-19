@@ -5,22 +5,29 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.WsFederation;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.ProviderUrlHelper;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     public class AccountController : BaseController
     {
         private readonly AccountOrchestrator _accountOrchestrator;
+        private readonly IFeatureToggleService _featureToggleService;
+        private readonly ILinkGenerator _providerUrlhelper;
 
-        public AccountController(AccountOrchestrator accountOrchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
+        public AccountController(AccountOrchestrator accountOrchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage,
+            ILinkGenerator providerUrlHelper, IFeatureToggleService featureToggleService) : base(flashMessage)
         {
             _accountOrchestrator = accountOrchestrator;
+            _providerUrlhelper = providerUrlHelper;
+            _featureToggleService = featureToggleService;
         }
 
         [DasRoleCheckExempt]
@@ -66,8 +73,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
 
             var model = await _accountOrchestrator.GetAccountHomeViewModel(providerId);
-            if(!string.IsNullOrEmpty(message))
+            model.CreateCohortUrl = Url.Action("Create", "CreateCohort", new { providerId });
+            
+            if (!string.IsNullOrEmpty(message))
                 model.Message = HttpUtility.UrlDecode(message);
+
+            if (_featureToggleService.Get<ProviderCreateCohortV2>().FeatureEnabled)
+                model.CreateCohortUrl = _providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/add/select-employer");
 
             switch (model.AccountStatus)
             {
