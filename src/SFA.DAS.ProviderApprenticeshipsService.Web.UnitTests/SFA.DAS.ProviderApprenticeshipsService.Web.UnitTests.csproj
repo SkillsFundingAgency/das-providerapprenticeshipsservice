@@ -405,7 +405,6 @@
     <Compile Include="Orchestrators\Commitments\WhenGettingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingApprovedViewModel.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingCommitmentDetailsWhichIsATransfer.cs" />
-    <Compile Include="Orchestrators\Commitments\WhenGettingCreateApprenticeshipViewModel.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingDraftCohorts.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingTransferFundedCohorts.cs" />
     <Compile Include="Orchestrators\Commitments\WhenValidatingApprenticeshipViewModel.cs" />
@@ -414,7 +413,6 @@
     <Compile Include="Orchestrators\Formatters\GivenAnExcelFormatter.cs" />
     <Compile Include="Orchestrators\ManageApprentices\GivenAFiltersCookieManager.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenCreatingApprenticeshipUpdate.cs" />
-    <Compile Include="Orchestrators\Commitments\WhenCreatingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingDeleteApprenticeshipConfirmation.cs" />
     <Compile Include="Orchestrators\Commitments\WhenDeletingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGetCohorts.cs" />
