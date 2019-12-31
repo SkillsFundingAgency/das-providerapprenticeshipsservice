@@ -73,13 +73,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
 
             var model = await _accountOrchestrator.GetAccountHomeViewModel(providerId);
-            model.CreateCohortUrl = Url.Action("Create", "CreateCohort", new { providerId });
-            
+                       
             if (!string.IsNullOrEmpty(message))
                 model.Message = HttpUtility.UrlDecode(message);
 
-            if (_featureToggleService.Get<ProviderCreateCohortV2>().FeatureEnabled)
-                model.CreateCohortUrl = _providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/add/select-employer");
+            model.CreateCohortUrl = (_featureToggleService.Get<ProviderCreateCohortV2>().FeatureEnabled) 
+                    ? _providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/add/select-employer")
+                    : Url.Action("Create", "CreateCohort", new { providerId });
 
             switch (model.AccountStatus)
             {
