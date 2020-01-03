@@ -157,6 +157,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             _logger.Trace("User claims", new Dictionary<string, object> { { "providerClaims", logValue } });
         }
 
+        [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("{hashedCommitmentId}/View/{hashedApprenticeshipId}", Name = "ViewApprenticeship")]
+        public async Task<ActionResult> View(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            var model = await _commitmentOrchestrator.GetApprenticeshipViewModel(providerId, hashedCommitmentId, hashedApprenticeshipId);
+            return View(model);
+        }
+
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/details/delete")]
         public async Task<ActionResult> DeleteCohort(long providerId, string hashedCommitmentId)
