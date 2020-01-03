@@ -19,15 +19,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     public class AccountController : BaseController
     {
         private readonly AccountOrchestrator _accountOrchestrator;
-        private readonly IFeatureToggleService _featureToggleService;
-        private readonly ILinkGenerator _providerUrlhelper;
 
-        public AccountController(AccountOrchestrator accountOrchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage,
-            ILinkGenerator providerUrlHelper, IFeatureToggleService featureToggleService) : base(flashMessage)
+        public AccountController(AccountOrchestrator accountOrchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
         {
             _accountOrchestrator = accountOrchestrator;
-            _providerUrlhelper = providerUrlHelper;
-            _featureToggleService = featureToggleService;
         }
 
         [DasRoleCheckExempt]
@@ -76,10 +71,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                        
             if (!string.IsNullOrEmpty(message))
                 model.Message = HttpUtility.UrlDecode(message);
-
-            model.CreateCohortUrl = (_featureToggleService.Get<ProviderCreateCohortV2>().FeatureEnabled) 
-                    ? _providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/add/select-employer")
-                    : Url.Action("Create", "CreateCohort", new { providerId });
 
             switch (model.AccountStatus)
             {
