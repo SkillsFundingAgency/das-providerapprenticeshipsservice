@@ -29,6 +29,10 @@ using StructureMap;
 using IConfiguration = SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.IConfiguration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+using System.Net.Http;
+using SFA.DAS.Http.TokenGenerators;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
+using SFA.DAS.Http;
 
 namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
     public class DefaultRegistry : Registry {
@@ -50,9 +54,11 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
             For<IProviderAgreementStatusConfiguration>().Use(config.ContractAgreementsUrl);
             For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
             For<ICurrentDateTime>().Use(x => new CurrentDateTime());
+            ConfigureHttpClient(config);
             RegisterMediator();
             RegisterExecutionPolicies();
             ConfigureLogging();
+            
         }
 
         private ProviderApprenticeshipsServiceConfiguration GetConfiguration()
@@ -105,6 +111,24 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
         {
             var parentType = x.ParentType;
             return new ProviderCommitmentsLogger(new NLogLogger(parentType, x.GetInstance<ILoggingContext>()));
+        }
+
+        private void ConfigureHttpClient(ProviderApprenticeshipsServiceConfiguration config)
+        {
+            For<ProviderApprenticeshipsService.Infrastructure.Data.IHttpClientWrapper>()
+                .Use<ProviderApprenticeshipsService.Infrastructure.Data.HttpClientWrapper>()
+                .Ctor<HttpClient>()
+                .Is(c => GetHttpClient(c));
+        }
+
+        private HttpClient GetHttpClient(IContext context)
+        {
+            var config = context.GetInstance<ProviderApprenticeshipsServiceConfiguration>();
+
+            return new HttpClientBuilder()
+                    .WithDefaultHeaders()
+                    .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config.CommitmentNotification))
+                    .Build();
         }
     }
 }

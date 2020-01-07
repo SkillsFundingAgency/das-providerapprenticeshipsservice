@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.Commitments.Api.Client.Configuration;
+using SFA.DAS.Http.Configuration;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
@@ -43,7 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string BaseUrl { get; set; }
     }
 
-    public class ProviderNotificationConfiguration 
+    public class ProviderNotificationConfiguration : IJwtClientConfiguration
     {
         public bool UseProviderEmail { get; set; }
 
