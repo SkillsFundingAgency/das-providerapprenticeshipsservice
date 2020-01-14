@@ -155,6 +155,9 @@
       <HintPath>..\packages\Microsoft.Data.Services.Client.5.8.0\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.DotNet.PlatformAbstractions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.DotNet.PlatformAbstractions.2.1.0\lib\net45\Microsoft.DotNet.PlatformAbstractions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Caching.Abstractions.2.1.0\lib\netstandard2.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
     </Reference>
@@ -175,6 +178,9 @@
     </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyModel, Version=2.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyModel.2.1.0\lib\net451\Microsoft.Extensions.DependencyModel.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.Logging, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Logging.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
@@ -264,6 +270,9 @@
     <Reference Include="Polly, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Polly.5.1.0\lib\net45\Polly.dll</HintPath>
     </Reference>
+    <Reference Include="Scrutor, Version=3.0.2.0, Culture=neutral, PublicKeyToken=167d3117ac9a6821, processorArchitecture=MSIL">
+      <HintPath>..\packages\Scrutor.3.1.0\lib\net461\Scrutor.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Apprenticeships.Api.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Client.0.11.75\lib\net462\SFA.DAS.Apprenticeships.Api.Client.dll</HintPath>
     </Reference>
@@ -274,13 +283,13 @@
       <HintPath>..\packages\SFA.DAS.Authentication.Extensions.Legacy.1.0.29\lib\netstandard2.0\SFA.DAS.Authentication.Extensions.Legacy.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Authorization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Authorization.6.0.46\lib\net462\SFA.DAS.Authorization.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Authorization.6.0.54\lib\net462\SFA.DAS.Authorization.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Authorization.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Authorization.Mvc.6.0.46\lib\net462\SFA.DAS.Authorization.Mvc.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Authorization.Mvc.6.0.54\lib\net462\SFA.DAS.Authorization.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Authorization.ProviderPermissions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Authorization.ProviderPermissions.6.0.46\lib\netstandard2.0\SFA.DAS.Authorization.ProviderPermissions.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Authorization.ProviderPermissions.6.0.54\lib\netstandard2.0\SFA.DAS.Authorization.ProviderPermissions.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.AutoConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.AutoConfiguration.2.2.6\lib\net462\SFA.DAS.AutoConfiguration.dll</HintPath>

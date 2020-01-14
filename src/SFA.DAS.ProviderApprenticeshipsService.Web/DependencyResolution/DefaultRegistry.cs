@@ -19,8 +19,9 @@ using FeatureToggle;
 using FluentValidation;
 using MediatR;
 using Microsoft.Azure;
-using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.Context;
+using SFA.DAS.Authorization.Handlers;
+using SFA.DAS.Authorization.ProviderPermissions.Handlers;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.CookieService;
@@ -99,7 +100,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
+            
             For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
+            For<IAuthorizationHandler>().Use<AuthorizationHandler>();
 
             ConfigureFeatureToggle();
 
