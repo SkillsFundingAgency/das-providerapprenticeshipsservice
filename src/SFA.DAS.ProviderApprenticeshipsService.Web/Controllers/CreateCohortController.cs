@@ -4,10 +4,12 @@ using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.Authorization.ProviderPermissions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.ProviderUrlHelper;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -18,19 +20,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     {
         private readonly CreateCohortOrchestrator _createCohortOrchestrator;
         private readonly SelectEmployerOrchestrator _selectEmployerOrchestrator;
+        private readonly IFeatureToggleService _featureToggleService;
+        private readonly ILinkGenerator _providerUrlhelper;
 
         public CreateCohortController(ICookieStorageService<FlashMessageViewModel> flashMessage,
-            SelectEmployerOrchestrator selectEmployerOrchestrator, CreateCohortOrchestrator createCohortOrchestrator) : base(flashMessage)
+            SelectEmployerOrchestrator selectEmployerOrchestrator, CreateCohortOrchestrator createCohortOrchestrator, 
+            IFeatureToggleService featureToggleService, ILinkGenerator providerUrlhelper) : base(flashMessage)
         {
             _selectEmployerOrchestrator = selectEmployerOrchestrator;
             _createCohortOrchestrator = createCohortOrchestrator;
+            _featureToggleService = featureToggleService;
+            _providerUrlhelper = providerUrlhelper;
         }
-
 
         [HttpGet]
         [Route("cohorts/create")]
         public async Task<ActionResult> Create(long providerId)
         {
+            if (_featureToggleService.Get<ProviderCreateCohortV2>().FeatureEnabled)
+                return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/add/select-employer"));
+
             var model = await _selectEmployerOrchestrator.GetChooseEmployerViewModel(providerId, EmployerSelectionAction.CreateCohort);
 
             return View("ChooseEmployer", model);
