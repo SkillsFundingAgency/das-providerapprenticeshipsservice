@@ -13,7 +13,7 @@ namespace SFA.DAS.ProviderUrlHelper
                 new Lazy<ProviderUrlConfiguration>(() => LoadProviderUrlConfiguration(autoConfigurationService));
         }
 
-        public string ProviderCommitmentsLink(string path)
+        public virtual string ProviderCommitmentsLink(string path)
         {
             var configuration = _lazyProviderConfiguration.Value;
             var baseUrl = configuration.ProviderCommitmentsBaseUrl;
