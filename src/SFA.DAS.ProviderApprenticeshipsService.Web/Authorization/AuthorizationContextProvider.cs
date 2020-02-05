@@ -3,9 +3,7 @@ using System.Collections.Specialized;
 using System.Web;
 using System.Web.Routing;
 using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.ProviderPermissions;
-using SFA.DAS.Authorization.ProviderPermissions.Context;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
@@ -32,13 +30,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
 
             var authorizationContext = new AuthorizationContext();
 
-            var accountLegalEntityId = GetAccountLegalEntityId(request.Params);
-            var ukprn = GetProviderId(request.RequestContext.RouteData.Values);
+            authorizationContext.AddProviderPermissionValues(
+                GetAccountLegalEntityId(request.Params),
+                GetProviderId(request.RequestContext.RouteData.Values));    // alternative source: long.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
 
-            if (accountLegalEntityId != null && ukprn != null)
-            {
-                authorizationContext.AddProviderPermissionValues(accountLegalEntityId.Value, ukprn.Value);
-            }
             return authorizationContext;
         }
 

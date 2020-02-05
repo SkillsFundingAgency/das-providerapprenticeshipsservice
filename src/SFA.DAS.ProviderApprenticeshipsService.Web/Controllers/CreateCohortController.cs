@@ -2,9 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc;
-using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Authorization.ProviderPermissions;
-using SFA.DAS.Authorization.ProviderPermissions.Options;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;

@@ -20,7 +20,6 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.Context;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Commitments.Api.Client.Interfaces;

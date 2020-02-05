@@ -19,8 +19,8 @@ using StructureMap;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.Reservations.Api.Client.DependencyResolution;
-using SFA.DAS.Authorization.DependencyResolution.StructureMap;
-using SFA.DAS.Authorization.ProviderPermissions.DependencyResolution.StructureMap;
+using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.ProviderPermissions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
