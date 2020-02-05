@@ -16,13 +16,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using StructureMap;
-using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.ProviderPermissions;
-using SFA.DAS.Configuration;
-using SFA.DAS.Encoding;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.Reservations.Api.Client.DependencyResolution;
+using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.ProviderPermissions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {

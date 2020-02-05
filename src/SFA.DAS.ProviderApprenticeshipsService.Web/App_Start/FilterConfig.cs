@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.NLog.Logger.Web;
