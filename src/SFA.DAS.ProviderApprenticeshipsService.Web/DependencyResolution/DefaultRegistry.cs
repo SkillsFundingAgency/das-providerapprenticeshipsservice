@@ -154,7 +154,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         {
             var bearerToken = string.IsNullOrWhiteSpace(config.NotificationApi.ClientId)
                     ? (IGenerateBearerToken)new JwtBearerTokenGenerator(config.NotificationApi)
-                    : new AzureADBearerTokenGenerator(config.NotificationApi);
+                    : new AzureActiveDirectoryBearerTokenGenerator(config.NotificationApi);
 
             var httpClient = new HttpClientBuilder()
                 .WithBearerAuthorisationHeader(bearerToken)

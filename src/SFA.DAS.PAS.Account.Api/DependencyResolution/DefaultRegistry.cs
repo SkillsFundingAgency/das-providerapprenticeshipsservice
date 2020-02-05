@@ -141,7 +141,7 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
             else
             {
                 httpClient = new HttpClientBuilder()
-                    .WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config.NotificationApi))
+                    .WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config.NotificationApi))
                     .Build();
             }
 
@@ -157,7 +157,7 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
                 .Ctor<HttpClient>()
                 .Is(new HttpClientBuilder()
                     .WithDefaultHeaders()
-                    .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config.CommitmentNotification))
+                    .WithBearerAuthorisationHeader(new GenericJwtBearerTokenGenerator(config.CommitmentNotification))
                     .Build());
         }
     }

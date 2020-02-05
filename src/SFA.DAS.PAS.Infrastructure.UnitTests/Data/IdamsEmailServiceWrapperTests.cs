@@ -23,7 +23,9 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Data
                 {
                     IdamsListUsersUrl =
                         "https://url.to/users/ukprn={0}",
-                    ClientToken = "AbbA-Rules-4.Ever"
+                    Audience = "some-audience",
+                    ClientSecret = "some-secret",
+                    Issuer = "someissuer"
                 },
                 
             };

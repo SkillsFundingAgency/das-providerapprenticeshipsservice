@@ -43,7 +43,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         {
             var url = string.Format(_configuration.IdamsListUsersUrl, _configuration.DasUserRoleId, ukprn);
             _logger.Info($"Getting 'DAS' emails for provider {ukprn}");
-            var result = await GetString(url, _configuration.ClientToken);
+            var result = await GetString(url);
             return ParseIdamsResult(result, ukprn);
         }
 
@@ -51,7 +51,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         {
             var url = string.Format(_configuration.IdamsListUsersUrl, _configuration.SuperUserRoleId, ukprn);
             _logger.Info($"Getting 'super user' emails for provider {ukprn}");
-            var result = GetString(url, _configuration.ClientToken);
+            var result = GetString(url);
             return ParseIdamsResult(await result, ukprn);
 
         }
@@ -88,7 +88,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             return new List<string>();
         }
 
-        private async Task<string> GetString(string url, string accessToken)
+        private async Task<string> GetString(string url)
         {
             var result = string.Empty;
             try

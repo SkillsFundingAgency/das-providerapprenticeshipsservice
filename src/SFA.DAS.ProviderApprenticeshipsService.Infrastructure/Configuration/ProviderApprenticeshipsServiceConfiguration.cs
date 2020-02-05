@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Http;
+using SFA.DAS.Http.Configuration;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
@@ -39,7 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string BaseUrl { get; set; }
     }
 
-    public class ProviderNotificationConfiguration : IJwtClientConfiguration
+    public class ProviderNotificationConfiguration : IGenericJwtClientConfiguration
     {
         public bool UseProviderEmail { get; set; }
 
@@ -51,9 +52,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 
         public string DasUserRoleId { get; set; }
 
-        public string SuperUserRoleId { get; set; }
+        public string SuperUserRoleId { get; set; } 
 
-        public string ClientToken { get; set; }
+        public string Issuer { get; set; }
 
+        public string Audience { get; set; }
+
+        public string ClientSecret { get; set; }
+
+        public int TokenExpirySeconds { get; set; } = 300;
     }
 }
