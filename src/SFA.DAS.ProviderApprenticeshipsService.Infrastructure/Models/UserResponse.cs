@@ -5,16 +5,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Models
 {
     public class UserResponse
     {
-        [JsonProperty("name.familyname")]
-        public List<string> FamilyNames { get; set; }
+        [JsonProperty("ukprn")]
+        public string Ukprn { get; set; }
 
-        [JsonProperty("name.givenname")]
-        public List<string> GivenNames { get; set; }
+        [JsonProperty("users")]
+        public List<UkprnUser> Users { get; set; }
+    }
 
-        [JsonProperty("emails")]
-        public List<string> Emails { get; set; }
+    public class UkprnUser
+    {
+        [JsonProperty("email")]
+        public string Email { get; set; }
 
-        [JsonProperty("Title")]
-        public List<string> Titles { get; set; }
+        [JsonProperty("firstName")]
+        public string FirstName { get; set; }
+
+        [JsonProperty("lastName")]
+        public string LastName { get; set; }
+
+        [JsonProperty("roles")]
+        public List<string> Roles { get; set; }
     }
 }

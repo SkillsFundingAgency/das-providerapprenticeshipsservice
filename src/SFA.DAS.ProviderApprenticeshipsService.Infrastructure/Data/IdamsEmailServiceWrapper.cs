@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -66,16 +67,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
             try
             {
-                var result = JObject.Parse(jsonResult).SelectToken("result");
-
-                if (result.Type == JTokenType.Array)
-                {
-                    var items = result.ToObject<IEnumerable<UserResponse>>();
-                    return items.SelectMany(m => m.Emails).ToList();
-                }
-
-                var item = result.ToObject<UserResponse>();
-                return item?.Emails ?? new List<string>(0);
+                var result = JsonConvert.DeserializeObject<UserResponse>(jsonResult);
+                return result.Users.Select(u => u.Email).ToList();
             }
             catch (Exception exception)
             {
