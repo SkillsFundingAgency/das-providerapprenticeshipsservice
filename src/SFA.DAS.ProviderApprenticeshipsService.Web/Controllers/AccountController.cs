@@ -92,6 +92,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var u = User.Identity.GetClaim(DasClaimTypes.Upn);
             var model = await _accountOrchestrator.GetNotificationSettings(u);
+            model.Email = User.Identity.GetClaim(DasClaimTypes.Email);
+
             var flashMesssage = GetFlashMessageViewModelFromCookie();
             if (flashMesssage != null)
             {

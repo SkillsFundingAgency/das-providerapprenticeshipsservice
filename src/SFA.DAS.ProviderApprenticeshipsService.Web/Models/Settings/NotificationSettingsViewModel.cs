@@ -6,6 +6,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings
     {
         public string HashedId { get; set; }
 
+        public string Email { get; set; }
+
         public IList<UserNotificationSetting> NotificationSettings { get; set; }
     }
 }
