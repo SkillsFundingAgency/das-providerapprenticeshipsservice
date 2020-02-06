@@ -15,6 +15,7 @@
       <Setting name="CurrentTime" value="" />
       <Setting name="FeatureToggle.ManageReservations" value="__FeatureToggle.ManageReservations__" />
       <Setting name="UseStubProviderRelationships" value="__UseStubProviderRelationships__" />
+      <Setting name="FeatureToggle.ProviderCreateCohortV2" value="__FeatureToggle.ProviderCreateCohortV2__"  />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="6A1D17199708FD4528C7F48DF4806385D0B92DEF" thumbprintAlgorithm="sha1" />
