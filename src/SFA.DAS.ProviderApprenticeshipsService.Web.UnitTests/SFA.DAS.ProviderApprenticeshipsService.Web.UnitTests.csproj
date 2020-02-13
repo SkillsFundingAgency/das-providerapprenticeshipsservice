@@ -37,14 +37,14 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoFixture, Version=4.5.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoFixture.4.5.0\lib\net452\AutoFixture.dll</HintPath>
+    <Reference Include="AutoFixture, Version=4.8.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.4.8.0\lib\net452\AutoFixture.dll</HintPath>
     </Reference>
-    <Reference Include="AutoFixture.AutoMoq, Version=4.5.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoFixture.AutoMoq.4.5.0\lib\net452\AutoFixture.AutoMoq.dll</HintPath>
+    <Reference Include="AutoFixture.AutoMoq, Version=4.8.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.AutoMoq.4.8.0\lib\net452\AutoFixture.AutoMoq.dll</HintPath>
     </Reference>
-    <Reference Include="AutoFixture.NUnit3, Version=4.5.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoFixture.NUnit3.4.5.0\lib\net452\AutoFixture.NUnit3.dll</HintPath>
+    <Reference Include="AutoFixture.NUnit3, Version=4.8.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.NUnit3.4.8.0\lib\net452\AutoFixture.NUnit3.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
@@ -189,6 +189,9 @@
     </Reference>
     <Reference Include="SFA.DAS.Testing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Testing.2.0.19\lib\netstandard2.0\SFA.DAS.Testing.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Testing.AutoFixture, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Testing.AutoFixture.3.0.165\lib\netstandard2.0\SFA.DAS.Testing.AutoFixture.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.7.0\lib\net45\StructureMap.dll</HintPath>
@@ -379,6 +382,7 @@
     <Compile Include="AcademicYear\WhenDeterminingTheAcademicYear.cs" />
     <Compile Include="AcademicYear\WhenValidatingAcademicYear.cs" />
     <Compile Include="Authorization\AuthorizationContextProviderTests.cs" />
+    <Compile Include="Controllers\ManageApprenticesControllerTests.cs" />
     <Compile Include="Extensions\IEnumerableCommitmentAgreementTests.cs" />
     <Compile Include="FakeHttpContext.cs" />
     <Compile Include="Helpers\HtmlExtensionsTests\WhenCallingCanShowReservationsLink.cs" />
@@ -497,6 +501,10 @@
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Web\SFA.DAS.ProviderApprenticeshipsService.Web.csproj">
       <Project>{94E473E1-2217-43C3-A228-00B8BE2BE0F1}</Project>
       <Name>SFA.DAS.ProviderApprenticeshipsService.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.ProviderUrlHelper\SFA.DAS.ProviderUrlHelper.csproj">
+      <Project>{72A3F1C7-A664-4ACE-8770-70773D82019F}</Project>
+      <Name>SFA.DAS.ProviderUrlHelper</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
