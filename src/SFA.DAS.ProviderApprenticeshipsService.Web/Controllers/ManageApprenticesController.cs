@@ -49,6 +49,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> Details(long providerid, string hashedApprenticeshipId)
         {
+            if (_featureToggleService.Get<ProviderManageApprenticesV2>().FeatureEnabled)
+                return Redirect(_providerUrlHelper.ProviderCommitmentsLink($"{providerid}/apprentices/{hashedApprenticeshipId}"));
+
             var model = await _orchestrator.GetApprenticeshipViewModel(providerid, hashedApprenticeshipId);
 
             var flashMesssage = GetFlashMessageViewModelFromCookie();
