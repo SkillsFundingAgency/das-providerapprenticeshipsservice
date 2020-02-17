@@ -97,7 +97,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.ViewModels
         [TestFixture]
         public class WhenCallingToQueryString
         {
-            private const string DefaultQueryString = "PageNumber=1&ResetFilter=False";
+            private const string DefaultQueryString = "ResetFilter=True&PageNumber=1";
 
             [Test]
             public void AndNoValuesThenReturnsReset()

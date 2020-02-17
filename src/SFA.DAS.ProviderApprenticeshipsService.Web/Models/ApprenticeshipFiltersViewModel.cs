@@ -9,8 +9,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
     {
         public ApprenticeshipFiltersViewModel()
         {
-            PageNumber = 1;
-
             Status = new List<string>();
             RecordStatus = new List<string>();
             Employer = new List<string>();
@@ -24,6 +22,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
             FundingStatusOptions = new List<KeyValuePair<string, string>>();
         }
 
+        public void Clear()
+        {
+            Status.Clear();
+            RecordStatus.Clear();
+            Employer.Clear();
+            Course.Clear();
+            FundingStatus.Clear();
+        }
+
         public List<KeyValuePair<string, string>> ApprenticeshipStatusOptions { get; set; }
         public List<KeyValuePair<string, string>> TrainingCourseOptions { get; set; }
         public List<KeyValuePair<string, string>> RecordStatusOptions { get; set; }
@@ -35,10 +42,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public List<string> Employer { get; set; }
         public List<string> Course { get; set; }
         public List<string> FundingStatus { get; set; }
+        public bool ResetFilter { get; set; } = true;
 
-        public int PageNumber { get; set; }
+        public int PageNumber { get; set; } = 1;
         public string SearchInput { get; set; }
-        public bool ResetFilter { get; set; }
         
         public bool HasValues()
         {
@@ -47,7 +54,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
                    || Employer.Count > 0
                    || Course.Count > 0
                    || FundingStatus.Count > 0
-                   || !string.IsNullOrWhiteSpace(SearchInput);
+                   || !string.IsNullOrWhiteSpace(SearchInput)
+                   || PageNumber > 1;
         }
 
         public string ToQueryString()
