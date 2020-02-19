@@ -13,11 +13,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
     {
         public ApprenticeshipSearchQuery MapToApprenticeshipSearchQuery(ApprenticeshipFiltersViewModel filters)
         {
-            if (filters.ResetFilter)
-            {
-                return new ApprenticeshipSearchQuery { SearchKeyword = filters.SearchInput };
-            }
-
             var selectedEmployers = new List<string>();
             if (filters.Employer != null)
             {

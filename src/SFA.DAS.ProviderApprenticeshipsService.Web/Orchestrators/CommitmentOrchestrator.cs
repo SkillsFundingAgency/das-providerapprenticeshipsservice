@@ -4,11 +4,9 @@ using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.CreateApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SubmitCommitment;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
@@ -450,41 +448,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Apprenticeship = apprenticeship,
                 ApprenticeshipProgrammes = await GetTrainingProgrammes(!commitment.IsTransfer())
             };
-        }
-
-        public async Task CreateApprenticeship(string userId, ApprenticeshipViewModel apprenticeshipViewModel, SignInUserModel signInUser)
-        {
-            var apprenticeship = await _apprenticeshipMapper.MapApprenticeship(apprenticeshipViewModel);
-
-            await AssertCommitmentStatus(apprenticeship.CommitmentId, apprenticeship.ProviderId);
-
-            await Mediator.Send(new CreateApprenticeshipCommand
-            {
-                UserId = userId,
-                ProviderId = apprenticeshipViewModel.ProviderId,
-                Apprenticeship = apprenticeship,
-                UserEmailAddress = signInUser.Email,
-                UserDisplayName = signInUser.DisplayName
-            });
-
-            Logger.Info($"Created apprenticeship for provider:{apprenticeshipViewModel.ProviderId} commitment:{apprenticeship.CommitmentId}", providerId: apprenticeship.ProviderId, commitmentId: apprenticeship.CommitmentId);
-        }
-
-        public async Task UpdateApprenticeship(string userId, ApprenticeshipViewModel apprenticeshipViewModel, SignInUserModel currentUser)
-        {
-            var apprenticeship = await _apprenticeshipMapper.MapApprenticeship(apprenticeshipViewModel);
-            await AssertCommitmentStatus(apprenticeship.CommitmentId, apprenticeship.ProviderId);
-
-            await Mediator.Send(new UpdateApprenticeshipCommand
-            {
-                UserId = userId,
-                ProviderId = apprenticeshipViewModel.ProviderId,
-                Apprenticeship = apprenticeship,
-                UserEmailAddress = currentUser.Email,
-                UserDisplayName = currentUser.DisplayName
-            });
-
-            Logger.Info($"Updated apprenticeship for provider:{apprenticeshipViewModel.ProviderId} commitment:{apprenticeship.CommitmentId}", providerId: apprenticeship.ProviderId, commitmentId: apprenticeship.CommitmentId);
         }
 
         public async Task<bool> AnyCohortsForStatus(long providerId, RequestStatus requestStatus)
