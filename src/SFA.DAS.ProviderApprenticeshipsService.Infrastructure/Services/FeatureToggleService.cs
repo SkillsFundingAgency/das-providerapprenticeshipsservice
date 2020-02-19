@@ -12,7 +12,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
             _booleanToggleValueProvider = booleanToggleValueProvider;
         }
 
-        public IFeatureToggle Get<T>() where T : SimpleFeatureToggle, new()
+        public virtual IFeatureToggle Get<T>() where T : SimpleFeatureToggle, new()
         {
             var result = new T() as SimpleFeatureToggle;
             result.ToggleValueProvider = _booleanToggleValueProvider;

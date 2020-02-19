@@ -429,62 +429,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return apprenticeship;
         }
 
-        //public async Task<ExtendedApprenticeshipViewModel> GetCreateApprenticeshipViewModel(long providerId, string hashedCommitmentId)
-        //{
-        //    Logger.Info("Getting info for creating apprenticeship");
-
-        //    var commitment = await GetCommitment(providerId, hashedCommitmentId);
-        //    AssertCommitmentStatus(commitment);
-
-        //    var apprenticeship = new ApprenticeshipViewModel
-        //    {
-        //        ProviderId = providerId,
-        //        HashedCommitmentId = hashedCommitmentId,
-        //        IsPaidForByTransfer = commitment.IsTransfer()
-        //    };
-
-        //    return new ExtendedApprenticeshipViewModel
-        //    {
-        //        Apprenticeship = apprenticeship,
-        //        ApprenticeshipProgrammes = await GetTrainingProgrammes(!commitment.IsTransfer())
-        //    };
-        //}
-
-        //public async Task CreateApprenticeship(string userId, ApprenticeshipViewModel apprenticeshipViewModel, SignInUserModel signInUser)
-        //{
-        //    var apprenticeship = await _apprenticeshipMapper.MapApprenticeship(apprenticeshipViewModel);
-
-        //    await AssertCommitmentStatus(apprenticeship.CommitmentId, apprenticeship.ProviderId);
-
-        //    await Mediator.Send(new CreateApprenticeshipCommand
-        //    {
-        //        UserId = userId,
-        //        ProviderId = apprenticeshipViewModel.ProviderId,
-        //        Apprenticeship = apprenticeship,
-        //        UserEmailAddress = signInUser.Email,
-        //        UserDisplayName = signInUser.DisplayName
-        //    });
-
-        //    Logger.Info($"Created apprenticeship for provider:{apprenticeshipViewModel.ProviderId} commitment:{apprenticeship.CommitmentId}", providerId: apprenticeship.ProviderId, commitmentId: apprenticeship.CommitmentId);
-        //}
-
-        //public async Task UpdateApprenticeship(string userId, ApprenticeshipViewModel apprenticeshipViewModel, SignInUserModel currentUser)
-        //{
-        //    var apprenticeship = await _apprenticeshipMapper.MapApprenticeship(apprenticeshipViewModel);
-        //    await AssertCommitmentStatus(apprenticeship.CommitmentId, apprenticeship.ProviderId);
-
-        //    await Mediator.Send(new UpdateApprenticeshipCommand
-        //    {
-        //        UserId = userId,
-        //        ProviderId = apprenticeshipViewModel.ProviderId,
-        //        Apprenticeship = apprenticeship,
-        //        UserEmailAddress = currentUser.Email,
-        //        UserDisplayName = currentUser.DisplayName
-        //    });
-
-        //    Logger.Info($"Updated apprenticeship for provider:{apprenticeshipViewModel.ProviderId} commitment:{apprenticeship.CommitmentId}", providerId: apprenticeship.ProviderId, commitmentId: apprenticeship.CommitmentId);
-        //}
-
         public async Task<bool> AnyCohortsForStatus(long providerId, RequestStatus requestStatus)
         {
             var data = await GetAllCommitmentsWithTheseStatuses(providerId, requestStatus);
