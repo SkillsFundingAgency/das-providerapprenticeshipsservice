@@ -23,6 +23,7 @@
       <Setting name="UseStubProviderRelationships" />
       <Setting name="FeatureToggle.ProviderCreateCohortV2" />
       <Setting name="FeatureToggle.ProviderManageApprenticesV2" />
+      <Setting name="FeatureToggle.ApprenticeDetailsV2" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Httpsin" protocol="https" port="443" certificate="WebSslCert" />

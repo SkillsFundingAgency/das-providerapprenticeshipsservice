@@ -38,5 +38,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
             //Assert
             Assert.IsInstanceOf<RedirectResult>(actual.Result);
         }
+
+        [Test, MoqAutoData]
+        public void WhenApprenticeDetailsV2FeatureToggleIsTurnedOnThenRoutesToProviderCommitments(
+            ManageApprenticesOrchestrator orchestrator,
+            [Frozen]Mock<FeatureToggleService> featureToggleService,
+            [Frozen]Mock<LinkGenerator> linkGenerator,
+            [Frozen]Mock<CookieStorageService<FlashMessageViewModel>> flashMessage)
+
+        {
+            //Arrange
+            var controller = new ManageApprenticesController(orchestrator, flashMessage.Object, featureToggleService.Object, linkGenerator.Object);
+
+            var providerId = 1;
+
+            featureToggleService.Setup(x => x.Get<ApprenticeDetailsV2>().FeatureEnabled).Returns(true);
+
+            //Act
+            var actual = controller.Details(providerId, "XXXX");
+
+            //Assert
+            Assert.IsInstanceOf<RedirectResult>(actual.Result);
+        }
     }
 }
