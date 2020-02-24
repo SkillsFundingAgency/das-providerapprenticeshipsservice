@@ -429,27 +429,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return apprenticeship;
         }
 
-        public async Task<ExtendedApprenticeshipViewModel> GetCreateApprenticeshipViewModel(long providerId, string hashedCommitmentId)
-        {
-            Logger.Info("Getting info for creating apprenticeship");
-
-            var commitment = await GetCommitment(providerId, hashedCommitmentId);
-            AssertCommitmentStatus(commitment);
-
-            var apprenticeship = new ApprenticeshipViewModel
-            {
-                ProviderId = providerId,
-                HashedCommitmentId = hashedCommitmentId,
-                IsPaidForByTransfer = commitment.IsTransfer()
-            };
-
-            return new ExtendedApprenticeshipViewModel
-            {
-                Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes(!commitment.IsTransfer())
-            };
-        }
-
         public async Task<bool> AnyCohortsForStatus(long providerId, RequestStatus requestStatus)
         {
             var data = await GetAllCommitmentsWithTheseStatuses(providerId, requestStatus);

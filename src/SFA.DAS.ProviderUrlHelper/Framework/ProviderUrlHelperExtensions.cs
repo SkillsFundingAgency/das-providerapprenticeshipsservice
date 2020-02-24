@@ -1,6 +1,6 @@
 ﻿#if NET462
 
-using UrlHelper=System.Web.Mvc.UrlHelper;
+using UrlHelper = System.Web.Mvc.UrlHelper;
 
 namespace SFA.DAS.ProviderUrlHelper.Framework
 {
@@ -32,6 +32,13 @@ namespace SFA.DAS.ProviderUrlHelper.Framework
             var linkGenerator = GetLinkGenerator();
 
             return linkGenerator.RecruitLink(path);
+        }
+
+        public static string RegistrationLink(this UrlHelper helper, string path)
+        {
+            var linkGenerator = GetLinkGenerator();
+
+            return linkGenerator.RegistrationLink(path);
         }
 
         private static ILinkGenerator GetLinkGenerator()

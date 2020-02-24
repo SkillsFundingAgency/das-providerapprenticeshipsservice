@@ -39,22 +39,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{hashedCommitmentId}/AddApprentice")]
-        public async Task<ActionResult> AddApprentice(long providerId, string hashedCommitmentId)
-        {
-            string nextPage;
-
-            var hashedIds = await _commitmentOrchestrator.GetHashedIdsFromCommitment(providerId, hashedCommitmentId);
-            nextPage = _providerUrlhelper.ReservationsLink($"{providerId}/reservations/{hashedIds.HashedLegalEntityId}/select?cohortReference={hashedCommitmentId}");
-            if (hashedIds.HashedTransferSenderId != null)
-            {
-                nextPage += $"&transferSenderId={hashedIds.HashedTransferSenderId}";
-            }
-
-            return Redirect(nextPage);
-        }
-
-        [HttpGet]
         [Route("Cohorts")]
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> Cohorts(long providerId)
@@ -157,15 +141,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             _logger.Trace("User claims", new Dictionary<string, object> { { "providerClaims", logValue } });
         }
 
-        [HttpGet]
-        [OutputCache(CacheProfile = "NoCache")]
-        [Route("{hashedCommitmentId}/View/{hashedApprenticeshipId}", Name = "ViewApprenticeship")]
-        public async Task<ActionResult> View(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
-        {
-            var model = await _commitmentOrchestrator.GetApprenticeshipViewModel(providerId, hashedCommitmentId, hashedApprenticeshipId);
-            return View(model);
-        }
-
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/details/delete")]
         public async Task<ActionResult> DeleteCohort(long providerId, string hashedCommitmentId)
@@ -206,6 +181,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return Redirect(GetReturnToListUrl(viewModel.ProviderId));
         }
 
+        [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("{hashedCommitmentId}/View/{hashedApprenticeshipId}", Name = "ViewApprenticeship")]
+        public async Task<ActionResult> View(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            var model = await _commitmentOrchestrator.GetApprenticeshipViewModel(providerId, hashedCommitmentId, hashedApprenticeshipId);
+            return View(model);
+        }
+
         [Route("{hashedCommitmentId}/{hashedApprenticeshipId}/Delete")]
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> DeleteConfirmation(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
@@ -234,6 +218,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             SetInfoMessage($"Apprentice record for {deletedApprenticeshipName} deleted", FlashMessageSeverityLevel.Okay);
 
             return RedirectToRoute("CohortDetails", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
+        }
+
+        [HttpGet]
+        [Route("{hashedCommitmentId}/AddApprentice")]
+        public async Task<ActionResult> AddApprentice(long providerId, string hashedCommitmentId)
+        {
+            string nextPage;
+
+            var hashedIds = await _commitmentOrchestrator.GetHashedIdsFromCommitment(providerId, hashedCommitmentId);
+            nextPage = _providerUrlhelper.ReservationsLink($"{providerId}/reservations/{hashedIds.HashedLegalEntityId}/select?cohortReference={hashedCommitmentId}");
+            if (hashedIds.HashedTransferSenderId != null)
+            {
+                nextPage += $"&transferSenderId={hashedIds.HashedTransferSenderId}";
+            }
+
+            return Redirect(nextPage);
         }
 
         [HttpGet]
@@ -371,32 +371,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             _lastCohortCookieStorageService.Delete(LastCohortPageCookieKey);
             _lastCohortCookieStorageService.Create(status.ToString(), LastCohortPageCookieKey);
-        }
-
-        private void AddErrorsToModelState(InvalidRequestException ex)
-        {
-            foreach (var error in ex.ErrorMessages)
-            {
-                ModelState.AddModelError(error.Key, error.Value);
-            }
-        }
-
-        private void AddErrorsToModelState(Dictionary<string, string> dict)
-        {
-            foreach (var error in dict)
-            {
-                if (ModelState.ContainsKey(error.Key)) continue;
-                ModelState.AddModelError(error.Key, error.Value);
-            }
-        }
-
-        private async Task<ActionResult> RedisplayApprenticeshipView(ApprenticeshipViewModel apprenticeship)
-        {
-            var model = await _commitmentOrchestrator.GetCreateApprenticeshipViewModel(apprenticeship.ProviderId, apprenticeship.HashedCommitmentId);
-            model.Apprenticeship = apprenticeship;
-            ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
-
-            return View(model.Apprenticeship);
         }
 
         private void AddFlashMessageToViewModel(ViewModelBase model)

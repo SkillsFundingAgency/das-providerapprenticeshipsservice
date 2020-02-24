@@ -409,7 +409,6 @@
     <Compile Include="Orchestrators\Commitments\WhenGettingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingApprovedViewModel.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingCommitmentDetailsWhichIsATransfer.cs" />
-    <Compile Include="Orchestrators\Commitments\WhenGettingCreateApprenticeshipViewModel.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingDraftCohorts.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingTransferFundedCohorts.cs" />
     <Compile Include="Orchestrators\Commitments\WhenValidatingApprenticeshipViewModel.cs" />
