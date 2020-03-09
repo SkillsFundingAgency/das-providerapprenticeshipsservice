@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -44,19 +45,18 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
                 recipients = await GetIdamsRecipients(ukprn);
             }
 
-            if(!recipients.Any())
+            var accountUsers = (await _accountOrchestrator.GetAccountUsers(ukprn)).Select(x => new { x.EmailAddress, x.ReceiveNotifications }).ToList();
+
+            if (!recipients.Any())
             {
-                recipients = await GetAccountUserRecipients(ukprn);
+                recipients = accountUsers.Select(x=>x.EmailAddress).ToList();
             }
 
-            var commands = recipients.Select(x => new SendNotificationCommand{ Email = CreateEmailForRecipient(x, message) });
-            await Task.WhenAll(commands.Select(x => _mediator.Send(x)));
-        }
+            var optedOutList = accountUsers.Where(x => !x.ReceiveNotifications).Select(x => x.EmailAddress).ToList();
 
-        private async Task<List<string>> GetAccountUserRecipients(long ukprn)
-        {
-            var accountUsers = await _accountOrchestrator.GetAccountUsers(ukprn);
-            return accountUsers.Where(x => x.ReceiveNotifications).Select(x => x.EmailAddress).ToList();
+            var commands = recipients.Where(x => !optedOutList.Any(y => x.Equals(y, StringComparison.CurrentCultureIgnoreCase)))
+                .Select(x => new SendNotificationCommand{ Email = CreateEmailForRecipient(x, message) });
+            await Task.WhenAll(commands.Select(x => _mediator.Send(x)));
         }
 
         private async Task<List<string>> GetIdamsRecipients(long ukprn)

@@ -19,6 +19,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
     {
         private EmailOrchestrator _sut;
         private Mock<IAccountOrchestrator> _accountOrchestrator;
+        private List<User> _accountUsers;
         private Mock<IMediator> _mediator;
         private Mock<IIdamsEmailServiceWrapper> _idamsEmailServiceWrapper;
         private long _ukprn;
@@ -35,14 +36,31 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
             _emailAddresses = new List<string>
             {
                 "test1@example.com",
-                "test2@example.com"
+                "test2@example.com",
+                "test3@example.com",
+                "test4@example.com"
             };
             _templateId = Guid.NewGuid().ToString();
             _tokens = new Dictionary<string, string>();
             _tokens.Add("key1", "value1");
             _tokens.Add("key2", "value2");
+            _accountUsers = new List<User>
+            {
+                new User
+                {
+                    EmailAddress = "test3@example.com",
+                    ReceiveNotifications = false
+                },
+                new User
+                {
+                    EmailAddress = "test4@example.com",
+                    ReceiveNotifications = true
+                }
+            };
 
             _accountOrchestrator = new Mock<IAccountOrchestrator>();
+            _accountOrchestrator.Setup(x => x.GetAccountUsers(It.IsAny<long>())).ReturnsAsync(_accountUsers);
+
             _mediator = new Mock<IMediator>();
             _idamsEmailServiceWrapper = new Mock<IIdamsEmailServiceWrapper>();
             _configuration = new ProviderApprenticeshipsServiceConfiguration { CommitmentNotification = new ProviderNotificationConfiguration { UseProviderEmail = true } };
@@ -67,6 +85,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
 
         [TestCase(0)]
         [TestCase(1)]
+        [TestCase(3)]
         public void ShouldSendCommandToEachAddress(int index)
         {
             _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(y
@@ -79,10 +98,12 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
             ), It.IsAny<CancellationToken>()));
         }
 
-        [Test]
-        public void ShouldNotMakeACallToGetUsersForTheProviderAccount()
+        [TestCase(2)]
+        public void ShouldNotSendNotificationToEachAddress(int index)
         {
-            _accountOrchestrator.Verify(x => x.GetAccountUsers(It.IsAny<long>()), Times.Never);
+            _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(y
+                => y.Email.RecipientsAddress == _emailAddresses[index]
+            ), It.IsAny<CancellationToken>()), Times.Never);
         }
     }
 }
