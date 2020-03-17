@@ -1,7 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-
-using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -80,26 +78,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 It.Is<CommitmentSubmission>(y =>
                     y.Message == _validCommand.Message && y.UserId == _validCommand.UserId && y.LastUpdatedByInfo.EmailAddress == _validCommand.UserEmailAddress &&
                     y.LastUpdatedByInfo.Name == _validCommand.UserDisplayName)));
-        }
-
-        [Test]
-        public async Task ShouldSendRequestToApproveToEmployer()
-        {
-            SendNotificationCommand arg = null;
-
-            _mockMediator.Setup(x => x.Send(It.IsAny<SendNotificationCommand>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new Unit())
-                .Callback<SendNotificationCommand, CancellationToken>((command, token) => arg = command);
-
-            await _handler.Handle(_validCommand, new CancellationToken());
-
-            _mockMediator.Verify(x => x.Send(It.IsAny<SendNotificationCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-
-            arg.Email.RecipientsAddress.Should().Be("EmployerTestEmail");
-            arg.Email.TemplateId.Should().Be("EmployerCohortNotification");
-            arg.Email.Tokens["cohort_reference"].Should().Be("ABC123");
-            arg.Email.Tokens["provider_name"].Should().Be("ProviderName");
-            arg.Email.Tokens["employer_hashed_account"].Should().Be("HS100");
         }
 
         [Test]

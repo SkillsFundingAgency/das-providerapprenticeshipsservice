@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.ProviderUrlHelper;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -17,13 +19,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     public class ManageApprenticesController : BaseController
     {
         private readonly ManageApprenticesOrchestrator _orchestrator;
+        private readonly IFeatureToggleService _featureToggleService;
+        private readonly ILinkGenerator _providerUrlHelper;
 
-        public ManageApprenticesController(ManageApprenticesOrchestrator orchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
+        public ManageApprenticesController(ManageApprenticesOrchestrator orchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage, IFeatureToggleService featureToggleService, ILinkGenerator providerUrlHelper) : base(flashMessage)
         {
             if (orchestrator == null)
                 throw new ArgumentNullException(nameof(orchestrator));
 
             _orchestrator = orchestrator;
+            _featureToggleService = featureToggleService;
+            _providerUrlHelper = providerUrlHelper;
         }
 
         [HttpGet]
@@ -31,6 +37,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> Index(long providerId, ApprenticeshipFiltersViewModel filtersViewModel)
         {
+            if (_featureToggleService.Get<ProviderManageApprenticesV2>().FeatureEnabled)
+                return Redirect(_providerUrlHelper.ProviderCommitmentsLink($"{providerId}/apprentices"));
+
             var model = await _orchestrator.GetApprenticeships(providerId, filtersViewModel);
             return View(model);
         }
@@ -40,6 +49,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> Details(long providerid, string hashedApprenticeshipId)
         {
+            if (_featureToggleService.Get<ApprenticeDetailsV2>().FeatureEnabled)
+                return Redirect(_providerUrlHelper.ProviderCommitmentsLink($"{providerid}/apprentices/{hashedApprenticeshipId}"));
+
             var model = await _orchestrator.GetApprenticeshipViewModel(providerid, hashedApprenticeshipId);
 
             var flashMesssage = GetFlashMessageViewModelFromCookie();

@@ -402,9 +402,6 @@
     <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommand.cs" />
     <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommandHandler.cs" />
     <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommandValidator.cs" />
-    <Compile Include="Commands\CreateApprenticeship\CreateApprenticeshipCommand.cs" />
-    <Compile Include="Commands\CreateApprenticeship\CreateApprenticeshipCommandHandler.cs" />
-    <Compile Include="Commands\CreateApprenticeship\CreateApprenticeshipCommandValidator.cs" />
     <Compile Include="Commands\DeleteApprenticeship\DeleteApprenticeshipCommand.cs" />
     <Compile Include="Commands\DeleteApprenticeship\DeleteApprenticeshipCommandHandler.cs" />
     <Compile Include="Commands\DeleteApprenticeship\DeleteApprenticeshipCommandValidator.cs" />
@@ -441,9 +438,6 @@
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommand.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommandHandler.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommandValidator.cs" />
-    <Compile Include="Commands\UpdateApprenticeship\UpdateApprenticeshipCommand.cs" />
-    <Compile Include="Commands\UpdateApprenticeship\UpdateApprenticeshipCommandHandler.cs" />
-    <Compile Include="Commands\UpdateApprenticeship\UpdateApprenticeshipCommandValidator.cs" />
     <Compile Include="InvalidRequestException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetProviderAgreement\GetProviderAgreementQueryHandler.cs" />
