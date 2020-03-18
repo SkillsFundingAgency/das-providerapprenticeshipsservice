@@ -25,13 +25,7 @@ namespace SFA.DAS.PAS.Account.Api.Controllers
         [ApiAuthorize(Roles = "ReadAccountUsers")]
         public async Task<IHttpActionResult> SendEmailToAllProviderRecipients(long ukprn, ProviderEmailRequest request)
         {
-            //string result = await Request.Content.ReadAsStringAsync();
-
-            //ProviderEmailRequest request = JsonConvert.DeserializeObject<ProviderEmailRequest>(result);
             await _emailOrchestrator.SendEmailToAllProviderRecipients(ukprn, request);
-
-            _logger.Info($"Sent email to all provider recipients for ukprn: {ukprn}", ukprn);
-
             return Ok();
         }
     }

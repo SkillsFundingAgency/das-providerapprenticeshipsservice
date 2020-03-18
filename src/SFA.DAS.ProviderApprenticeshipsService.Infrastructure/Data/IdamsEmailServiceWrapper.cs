@@ -60,8 +60,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         {
             if (string.IsNullOrWhiteSpace(jsonResult))
             {
-                _logger.Debug($"Not possible to parse empty string to {typeof(UserResponse)} for provider: {ukprn}");
-                return new List<string>();
+                throw new InvalidOperationException($"Not possible to parse empty string to {typeof(UserResponse)} for provider: {ukprn}");
             }
 
             try
@@ -83,27 +82,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 _logger.Error(
                     exception,
                     $"Not possible to parse result to {typeof(UserResponse)} for provider: {ukprn}");
+                throw;
             }
-
-            return new List<string>();
         }
 
         private async Task<string> GetString(string url, string accessToken)
         {
-            var result = string.Empty;
-            try
-            {
-                await _executionPolicy.ExecuteAsync(
-                    async () =>
-                    {
-                        result = await _httpClientWrapper.GetStringAsync(url);
-                    });
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Error getting idams emails");
-            }
-            return result;
+            return await _httpClientWrapper.GetStringAsync(url);
         }
     }
 }
