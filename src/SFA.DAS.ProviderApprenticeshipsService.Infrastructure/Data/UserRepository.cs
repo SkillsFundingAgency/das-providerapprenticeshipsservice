@@ -71,5 +71,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 return results;
             });
         }
+
+        public async Task DeleteUser(string userRef)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@userRef", userRef, DbType.String);
+
+                return await c.QueryAsync<User>(
+                    sql: "UPDATE [dbo].[User] set [IsDeleted]=1 WHERE UserRef = @userRef",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+        }
     }
 }

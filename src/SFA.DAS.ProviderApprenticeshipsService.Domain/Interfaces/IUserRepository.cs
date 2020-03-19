@@ -11,5 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
         Task<User> GetUser(string userRef);
 
         Task<IEnumerable<User>>  GetUsers(long ukprn);
+
+        Task DeleteUser(string userRef);
     }
 }

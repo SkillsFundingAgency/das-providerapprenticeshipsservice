@@ -60,7 +60,13 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
             if (!idamsError)
             {
                 //todo: soft-delete anyone no longer in idams as well
-
+                foreach (var accountUser in accountUsers)
+                {
+                    if (!allIdamsUsers.Contains(accountUser.EmailAddress, StringComparer.CurrentCultureIgnoreCase))
+                    {
+                        //soft-delete
+                    }
+                }
             }
 
             if (!_configuration.CommitmentNotification.UseProviderEmail)

@@ -329,6 +329,9 @@
     <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandHandler.cs" />
     <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandResponse.cs" />
     <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandValidator.cs" />
+    <Compile Include="Commands\DeleteRegisteredUser\DeleteRegisteredUserCommand.cs" />
+    <Compile Include="Commands\DeleteRegisteredUser\DeleteRegisteredUserCommandHandler.cs" />
+    <Compile Include="Commands\DeleteRegisteredUser\DeleteRegisteredUserCommandValidator.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\ITrainingProgrammeExtensions.cs" />
     <Compile Include="Mappers\ApprenticeshipInfoServiceMapper.cs" />
