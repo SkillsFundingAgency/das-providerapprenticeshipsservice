@@ -25,6 +25,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
         private Mock<IIdamsEmailServiceWrapper> _idamsEmailServiceWrapper;
         private long _ukprn;
         private List<string> _emailAddresses;
+        private List<string> _idamsUsers;
         private ProviderEmailRequest _request;
         private string _templateId;
         private Dictionary<string, string> _tokens;
@@ -35,6 +36,14 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
         {
             _ukprn = 228987165;
             _emailAddresses = new List<string>
+            {
+                "test1@example.com",
+                "test2@example.com",
+                "test3@example.com",
+                "test4@example.com",
+                "nobody@idams.com"
+            };
+            _idamsUsers = new List<string>
             {
                 "test1@example.com",
                 "test2@example.com",
@@ -64,8 +73,8 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
 
             _mediator = new Mock<IMediator>();
             _idamsEmailServiceWrapper = new Mock<IIdamsEmailServiceWrapper>();
-            _idamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>())).ReturnsAsync(() => _emailAddresses);
-            _idamsEmailServiceWrapper.Setup(x => x.GetSuperUserEmailsAsync(It.IsAny<long>())).ReturnsAsync(() => _emailAddresses);
+            _idamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>())).ReturnsAsync(() => _idamsUsers);
+            _idamsEmailServiceWrapper.Setup(x => x.GetSuperUserEmailsAsync(It.IsAny<long>())).ReturnsAsync(() => _idamsUsers);
             _configuration = new ProviderApprenticeshipsServiceConfiguration{ CommitmentNotification = new ProviderNotificationConfiguration{ UseProviderEmail = true }};
 
             _request = new ProviderEmailRequest
@@ -101,6 +110,20 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
                 => y.Email.RecipientsAddress == _emailAddresses[index]
             ), It.IsAny<CancellationToken>()), Times.Never);
         }
+
+        [Test]
+        public void ShouldNotSendNotificationToUsersNotInIdams()
+        {
+            _mediator.Verify(x =>
+                    x.Send(It.Is<SendNotificationCommand>(y => y.Email.RecipientsAddress == "nobody@idams.com"),
+                        It.IsAny<CancellationToken>()),
+                Times.Never);
+
+            _mediator.Verify(x =>
+                    x.Send(It.IsAny<SendNotificationCommand>(),It.IsAny<CancellationToken>()),
+                Times.Exactly(3));
+        }
+
     }
 
     [TestFixture]

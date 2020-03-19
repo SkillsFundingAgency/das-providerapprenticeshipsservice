@@ -76,7 +76,7 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
 
                 if (idamsError)
                 {
-                    _logger.Info("Due to a failure, absence from IDAMS cannot be ascertained so presence is assumed - email message will not be suppressed");
+                    _logger.Info("Absence from IDAMS cannot be ascertained so presence is assumed - email message will not be suppressed");
                     return;
                 }
 
