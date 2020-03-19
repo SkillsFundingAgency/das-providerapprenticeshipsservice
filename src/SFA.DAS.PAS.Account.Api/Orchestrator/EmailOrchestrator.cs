@@ -55,6 +55,14 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
             var allIdamsUsers = idamsUsers.Concat(idamsSuperUsers).Distinct().ToList();
             _logger.Info($"{allIdamsUsers.Count} total users retrieved from IDAMS for Provider {providerId} ({idamsUsers.Count} DAS Users; {idamsSuperUsers.Count} Super Users)");
 
+            var accountUsers = (await _accountOrchestrator.GetAccountUsers(providerId)).Select(x => new { x.EmailAddress, x.ReceiveNotifications }).ToList();
+
+            if (!idamsError)
+            {
+                //todo: soft-delete anyone no longer in idams as well
+
+            }
+
             if (!_configuration.CommitmentNotification.UseProviderEmail)
             {
                 recipients = _configuration.CommitmentNotification.ProviderTestEmails;
@@ -84,8 +92,6 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
             {
                 recipients = idamsUsers.Any() ? idamsUsers : idamsSuperUsers;
             }
-
-            var accountUsers = (await _accountOrchestrator.GetAccountUsers(providerId)).Select(x => new { x.EmailAddress, x.ReceiveNotifications }).ToList();
 
             if (!recipients.Any())
             {

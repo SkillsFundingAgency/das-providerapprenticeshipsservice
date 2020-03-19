@@ -9,6 +9,7 @@ using NUnit.Framework;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.PAS.Account.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
@@ -65,9 +66,9 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
             _idamsEmailServiceWrapper = new Mock<IIdamsEmailServiceWrapper>();
             _configuration = new ProviderApprenticeshipsServiceConfiguration { CommitmentNotification = new ProviderNotificationConfiguration { UseProviderEmail = true } };
 
-            _idamsEmailServiceWrapper
-                .Setup(x => x.GetEmailsAsync(It.IsAny<long>()))
-                .ReturnsAsync(_emailAddresses);
+            _idamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>())).ReturnsAsync(() => _emailAddresses);
+            _idamsEmailServiceWrapper.Setup(x => x.GetSuperUserEmailsAsync(It.IsAny<long>())).ReturnsAsync(() => _emailAddresses);
+
 
             _request = new ProviderEmailRequest
             {
@@ -75,7 +76,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
                 Tokens = _tokens
             };
 
-            _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, _idamsEmailServiceWrapper.Object, _configuration);
+            _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, _idamsEmailServiceWrapper.Object, _configuration, Mock.Of<IProviderCommitmentsLogger>());
             await _sut.SendEmailToAllProviderRecipients(_ukprn, _request);
         }
 
@@ -100,13 +101,6 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
             _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(y
                 => y.Email.RecipientsAddress == _emailAddresses[index]
             ), It.IsAny<CancellationToken>()), Times.Never);
-        }
-
-
-        [Test]
-        public void ShouldNotCallGetSuperUserEmailsAsync()
-        {
-            _idamsEmailServiceWrapper.Verify(x => x.GetSuperUserEmailsAsync(It.IsAny<long>()), Times.Never);
         }
     }
 }
