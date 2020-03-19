@@ -79,7 +79,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@userRef", userRef, DbType.String);
 
-                return await c.QueryAsync<User>(
+                return await c.ExecuteAsync(
                     sql: "UPDATE [dbo].[User] set [IsDeleted]=1 WHERE UserRef = @userRef",
                     param: parameters,
                     commandType: CommandType.Text);

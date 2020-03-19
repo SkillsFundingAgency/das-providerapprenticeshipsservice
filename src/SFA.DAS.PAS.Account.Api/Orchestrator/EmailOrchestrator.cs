@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.Owin.Security.Provider;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.PAS.Account.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 namespace SFA.DAS.PAS.Account.Api.Orchestrator
@@ -35,11 +32,16 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
             var recipients = new List<string>();
 
             _logger.Info($"Retrieving DAS Users and Super Users from Provider IDAMS for Provider {providerId}");
-            var idamsUsersTask = _idamsEmailServiceWrapper.GetEmailsAsync(providerId);
-            var idamsSuperUsersTask = _idamsEmailServiceWrapper.GetSuperUserEmailsAsync(providerId);
+
+            Task<List<string>> idamsUsersTask;
+            Task<List<string>> idamsSuperUsersTask;
+
             var idamsError = false;
             try
             {
+                idamsUsersTask = _idamsEmailServiceWrapper.GetEmailsAsync(providerId);
+                idamsSuperUsersTask = _idamsEmailServiceWrapper.GetSuperUserEmailsAsync(providerId);
+
                 await Task.WhenAll(idamsUsersTask, idamsSuperUsersTask);
             }
             catch (Exception ex)
@@ -68,14 +70,15 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
                 if (idamsError)
                 {
                     _logger.Info("Absence from IDAMS cannot be ascertained so presence is assumed - email message will not be suppressed");
-                    return;
                 }
-
-                recipients.RemoveAll(x => !allIdamsUsers.Contains(x));
-                if (!recipients.Any())
+                else
                 {
-                    _logger.Warn("All recipients explicitly requested for email are absent from Provider IDAMS - email message will be suppressed");
-                    return;
+                    recipients.RemoveAll(x => !allIdamsUsers.Contains(x));
+                    if (!recipients.Any())
+                    {
+                        _logger.Warn("All recipients explicitly requested for email are absent from Provider IDAMS - email message will be suppressed");
+                        return;
+                    }
                 }
             }
 
@@ -116,7 +119,7 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
 
             foreach (var user in removedUsers)
             {
-                _logger.Info($"User {user.UserRef} not found IDAMS will be marked as deleted");
+                _logger.Info($"User {user.UserRef} not found in IDAMS will be marked as deleted");
                 await _mediator.Send(new DeleteRegisteredUserCommand { UserRef = user.UserRef });
                 accountUsers.Remove(user);
             }
