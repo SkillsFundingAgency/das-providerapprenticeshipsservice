@@ -64,7 +64,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
 
             _mediator = new Mock<IMediator>();
             _idamsEmailServiceWrapper = new Mock<IIdamsEmailServiceWrapper>();
-            _configuration = new ProviderApprenticeshipsServiceConfiguration { CommitmentNotification = new ProviderNotificationConfiguration { UseProviderEmail = true } };
+            _configuration = new ProviderApprenticeshipsServiceConfiguration { CommitmentNotification = new ProviderNotificationConfiguration() };
 
             _idamsEmailServiceWrapper
                 .Setup(x => x.GetEmailsAsync(It.IsAny<long>()))
@@ -80,7 +80,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
                 Tokens = _tokens
             };
 
-            _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, _idamsEmailServiceWrapper.Object, _configuration, Mock.Of<IProviderCommitmentsLogger>());
+            _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, _idamsEmailServiceWrapper.Object, Mock.Of<IProviderCommitmentsLogger>());
             await _sut.SendEmailToAllProviderRecipients(_ukprn, _request);
         }
 

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Owin.Security.Provider;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.PAS.Account.Api.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -18,15 +20,13 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
         private readonly IAccountOrchestrator _accountOrchestrator;
         private readonly IMediator _mediator;
         private readonly IIdamsEmailServiceWrapper _idamsEmailServiceWrapper;
-        private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
         private readonly IProviderCommitmentsLogger _logger;
 
-        public EmailOrchestrator(IAccountOrchestrator accountOrchestrator, IMediator mediator, IIdamsEmailServiceWrapper idamsEmailServiceWrapper, ProviderApprenticeshipsServiceConfiguration configuration, IProviderCommitmentsLogger logger)
+        public EmailOrchestrator(IAccountOrchestrator accountOrchestrator, IMediator mediator, IIdamsEmailServiceWrapper idamsEmailServiceWrapper, IProviderCommitmentsLogger logger)
         {
             _accountOrchestrator = accountOrchestrator;
             _mediator = mediator;
             _idamsEmailServiceWrapper = idamsEmailServiceWrapper;
-            _configuration = configuration;
             _logger = logger;
         }
 
@@ -55,24 +55,9 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
             var allIdamsUsers = idamsUsers.Concat(idamsSuperUsers).Distinct().ToList();
             _logger.Info($"{allIdamsUsers.Count} total users retrieved from IDAMS for Provider {providerId} ({idamsUsers.Count} DAS Users; {idamsSuperUsers.Count} Super Users)");
 
-            var accountUsers = (await _accountOrchestrator.GetAccountUsers(providerId)).Select(x => new { x.EmailAddress, x.ReceiveNotifications }).ToList();
+            var accountUsers = (await _accountOrchestrator.GetAccountUsers(providerId)).ToList();
 
-            if (!idamsError)
-            {
-                //todo: soft-delete anyone no longer in idams as well
-                foreach (var accountUser in accountUsers)
-                {
-                    if (!allIdamsUsers.Contains(accountUser.EmailAddress, StringComparer.CurrentCultureIgnoreCase))
-                    {
-                        //soft-delete
-                    }
-                }
-            }
-
-            if (!_configuration.CommitmentNotification.UseProviderEmail)
-            {
-                recipients = _configuration.CommitmentNotification.ProviderTestEmails;
-            }
+            if (!idamsError) {  await RemoveAccountUsersNotInIdams(accountUsers, allIdamsUsers); }
 
             if (!recipients.Any() && message.ExplicitEmailAddresses != null)
             {
@@ -115,6 +100,26 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
             await Task.WhenAll(commands.Select(x => _mediator.Send(x)));
 
             _logger.Info($"Sent email to {finalRecipients.Count} recipients for ukprn: {providerId}", providerId);
+        }
+
+        private async Task RemoveAccountUsersNotInIdams(List<User> accountUsers, List<string> allIdamsUsers)
+        {
+            var removedUsers = new List<User>();
+
+            foreach (var accountUser in accountUsers)
+            {
+                if (!allIdamsUsers.Contains(accountUser.EmailAddress, StringComparer.CurrentCultureIgnoreCase))
+                {
+                    removedUsers.Add(accountUser);
+                }
+            }
+
+            foreach (var user in removedUsers)
+            {
+                _logger.Info($"User {user.UserRef} not found IDAMS will be marked as deleted");
+                await _mediator.Send(new DeleteRegisteredUserCommand { UserRef = user.UserRef });
+                accountUsers.Remove(user);
+            }
         }
 
         private Email CreateEmailForRecipient(string recipient, ProviderEmailRequest source)

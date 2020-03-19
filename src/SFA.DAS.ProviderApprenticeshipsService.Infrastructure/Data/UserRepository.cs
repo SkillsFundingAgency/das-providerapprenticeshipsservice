@@ -64,7 +64,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 var results =
                     await
                     c.QueryAsync<User>(
-                        sql: "SELECT * FROM [dbo].[User] WHERE Ukprn = @ukprn",
+                        sql: "SELECT * FROM [dbo].[User] WHERE Ukprn = @ukprn AND IsDeleted=0",
                         param: parameters,
                         commandType: CommandType.Text);
 
