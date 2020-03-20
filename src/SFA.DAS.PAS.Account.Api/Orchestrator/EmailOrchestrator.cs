@@ -31,14 +31,13 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
         {
             var recipients = new List<string>();
 
-            _logger.Info($"Retrieving DAS Users and Super Users from Provider IDAMS for Provider {providerId}");
-
             Task<List<string>> idamsUsersTask;
             Task<List<string>> idamsSuperUsersTask;
 
             var idamsError = false;
             try
             {
+                _logger.Info($"Retrieving DAS Users and Super Users from Provider IDAMS for Provider {providerId}");
                 idamsUsersTask = _idamsEmailServiceWrapper.GetEmailsAsync(providerId);
                 idamsSuperUsersTask = _idamsEmailServiceWrapper.GetSuperUserEmailsAsync(providerId);
 
@@ -119,7 +118,7 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
 
             foreach (var user in removedUsers)
             {
-                _logger.Info($"User {user.UserRef} not found in IDAMS will be marked as deleted");
+                _logger.Info($"Account User {user.UserRef} not found in IDAMS and will be marked as deleted");
                 await _mediator.Send(new DeleteRegisteredUserCommand { UserRef = user.UserRef });
                 accountUsers.Remove(user);
             }

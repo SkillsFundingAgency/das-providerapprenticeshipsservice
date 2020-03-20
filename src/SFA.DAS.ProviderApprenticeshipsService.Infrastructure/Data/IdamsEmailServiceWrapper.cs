@@ -65,7 +65,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             }
             catch (Exception exception)
             {
-                throw new ArgumentException($"Not possible to parse {jsonResult} to {typeof(UserResponse)} for provider: {providerId}", exception);
+                var resultDescription = string.IsNullOrWhiteSpace(jsonResult) ? "empty string" : $"\"{jsonResult}\"";
+                throw new ArgumentException($"Not possible to parse {resultDescription} to {typeof(UserResponse)} for provider: {providerId}", exception);
             }
         }
 

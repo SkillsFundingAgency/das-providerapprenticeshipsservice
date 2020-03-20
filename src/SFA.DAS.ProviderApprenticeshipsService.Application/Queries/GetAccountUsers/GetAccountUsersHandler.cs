@@ -32,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAccountU
                 throw new ValidationException($"Ukprn must be more than 0 when getting account users.");
 
             var response = new GetAccountUsersResponse();
-            _logger.Info($"Getting users from reposotory for {request.Ukprn}", providerId:request.Ukprn);
+            _logger.Info($"Getting users from repository for {request.Ukprn}", providerId:request.Ukprn);
             var providerUsers = await _userRepository.GetUsers(request.Ukprn);
             foreach (var user in providerUsers)
             {
@@ -40,7 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAccountU
                 response.Add(user, settings.FirstOrDefault());
             }
 
-            _logger.Info($"Found {providerUsers.Count()} users from reposotory for {request.Ukprn}", providerId: request.Ukprn);
+            _logger.Info($"Retrieved {providerUsers.Count()} users from repository for {request.Ukprn}", providerId: request.Ukprn);
 
             return response;
         }
