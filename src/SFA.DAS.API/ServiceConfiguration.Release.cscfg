@@ -14,7 +14,7 @@
       <Setting name="InstrumentationKey" value="__AccInstrumentationKey__"/>
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="WebSslCert" thumbprint="3312BA19AE91C1177A1E52E367CA11B079B104F4" thumbprintAlgorithm="sha1" />
+      <Certificate name="WebSslCert" thumbprint="E14FC507F494FE99D0E943B1F5F99A8EBB03CA77" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
   <NetworkConfiguration>
