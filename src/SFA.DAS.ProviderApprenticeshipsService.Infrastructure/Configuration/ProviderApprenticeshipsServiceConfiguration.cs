@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.Commitments.Api.Client.Configuration;
-using SFA.DAS.Http;
+using SFA.DAS.Http.Configuration;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
@@ -25,13 +25,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string PublicAllowedHashstringCharacters { get; set; }
         public string PublicAllowedAccountLegalEntityHashstringSalt { get; set; }
         public string PublicAllowedAccountLegalEntityHashstringCharacters { get; set; }
-        
+
     }
 
-    public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration, IJwtClientConfiguration
+    public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
     {
         public string BaseUrl { get; set; }
         public string ClientToken { get; set; }
+        public string ApiBaseUrl { get; }
+        public string Tenant { get; }
+        public string ClientId { get; }
+        public string ClientSecret { get; }
+        public string IdentifierUri { get; }
     }
 
     public class ApprenticeshipInfoServiceConfiguration : IApprenticeshipInfoServiceConfiguration

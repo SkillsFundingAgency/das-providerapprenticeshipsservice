@@ -2,8 +2,8 @@ using System;
 using System.Collections.Specialized;
 using System.Web;
 using System.Web.Routing;
-using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.ProviderPermissions;
+using SFA.DAS.Authorization.Context;
+using SFA.DAS.Authorization.ProviderPermissions.Context;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
@@ -37,23 +37,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
             return authorizationContext;
         }
 
-        private long? GetAccountLegalEntityId(NameValueCollection parameters)
+        private long GetAccountLegalEntityId(NameValueCollection parameters)
         {
             try
             {
                 var accountLegalEntityPublicHashedId = parameters[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId];
-                return accountLegalEntityPublicHashedId != null
-                    ? _accountLegalEntityPublicHashingService.DecodeValue(accountLegalEntityPublicHashedId)
-                    : (long?) null;
+
+                if(accountLegalEntityPublicHashedId == null)
+                {
+                    throw new Exception("AuthorizationContextProvider error - Unable to extract AccountLegalEntityId");
+                }
+                return _accountLegalEntityPublicHashingService.DecodeValue(accountLegalEntityPublicHashedId);
+                
             }
             catch (Exception ex)
             {
                 _log.Warn(ex, "Unable to extract AccountLegalEntityId");
-                return null;
             }
+
+            throw new Exception("AuthorizationContextProvider error - Unable to extract AccountLegalEntityId");
         }
 
-        private long? GetProviderId(RouteValueDictionary routeValueDictionary)
+        private long GetProviderId(RouteValueDictionary routeValueDictionary)
         {
             long providerId;
 
@@ -63,7 +68,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
             if (long.TryParse((string) routeValueDictionary[RouteDataKeys.ProviderId], out providerId))
                 return providerId;
 
-            return null;
+            throw new Exception("AuthorizationContextProvider error - Unable to extract ProviderId");
         }
     }
 }

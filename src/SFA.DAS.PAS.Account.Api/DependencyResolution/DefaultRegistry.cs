@@ -17,35 +17,24 @@
 
 using System;
 using System.Web;
-
 using MediatR;
-
 using Microsoft.Azure;
-
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
-
 using StructureMap;
-
 using IConfiguration = SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.IConfiguration;
-
-using System.Net.Http;
-using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+using System.Net.Http;
+using SFA.DAS.Http.TokenGenerators;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
+using SFA.DAS.Http;
 
 namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
-    using SFA.DAS.Http;
-    using SFA.DAS.Http.TokenGenerators;
-    using StructureMap.Graph;
-
-
     public class DefaultRegistry : Registry {
         private const string ServiceName = "SFA.DAS.ProviderApprenticeshipsService";
         private const string ServiceNamespace = "SFA.DAS";
@@ -61,19 +50,15 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
                 });
 
             var config = GetConfiguration();
-
-            For<IConfiguration>().Use(config);
-            For<IProviderAgreementStatusConfiguration>().Use(config);
+            For<IConfiguration>().Use<ProviderApprenticeshipsServiceConfiguration>();
+            For<IProviderAgreementStatusConfiguration>().Use(config.ContractAgreementsUrl);
             For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
-
             For<ICurrentDateTime>().Use(x => new CurrentDateTime());
-            
-            ConfigureNotificationsApi(config);
             ConfigureHttpClient(config);
-
             RegisterMediator();
             RegisterExecutionPolicies();
             ConfigureLogging();
+            
         }
 
         private ProviderApprenticeshipsServiceConfiguration GetConfiguration()
@@ -128,37 +113,22 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
             return new ProviderCommitmentsLogger(new NLogLogger(parentType, x.GetInstance<ILoggingContext>()));
         }
 
-        private void ConfigureNotificationsApi(ProviderApprenticeshipsServiceConfiguration config)
-        {
-            HttpClient httpClient;
-
-            if (string.IsNullOrWhiteSpace(config.NotificationApi.ClientId))
-            {
-                httpClient = new HttpClientBuilder()
-                    .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config.NotificationApi))
-                    .Build();
-            }
-            else
-            {
-                httpClient = new HttpClientBuilder()
-                    .WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config.NotificationApi))
-                    .Build();
-            }
-
-            For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(httpClient);
-
-            For<INotificationsApiClientConfiguration>().Use(config.NotificationApi);
-        }
-
         private void ConfigureHttpClient(ProviderApprenticeshipsServiceConfiguration config)
         {
-            For<IHttpClientWrapper>()
-                .Use<HttpClientWrapper>()
+            For<ProviderApprenticeshipsService.Infrastructure.Data.IHttpClientWrapper>()
+                .Use<ProviderApprenticeshipsService.Infrastructure.Data.HttpClientWrapper>()
                 .Ctor<HttpClient>()
-                .Is(new HttpClientBuilder()
+                .Is(c => GetHttpClient(c));
+        }
+
+        private HttpClient GetHttpClient(IContext context)
+        {
+            var config = context.GetInstance<ProviderApprenticeshipsServiceConfiguration>();
+
+            return new HttpClientBuilder()
                     .WithDefaultHeaders()
                     .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config.CommitmentNotification))
-                    .Build());
+                    .Build();
         }
     }
 }

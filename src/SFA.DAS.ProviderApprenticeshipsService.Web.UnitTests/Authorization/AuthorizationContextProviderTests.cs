@@ -4,9 +4,10 @@ using System.Security.Principal;
 using System.Web;
 using System.Web.Routing;
 using FluentAssertions;
+using FluentAssertions.Specialized;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Context;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
@@ -37,32 +38,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
         #region Invalid AccountLegalEntityPublicHashedId
 
         [Test]
-        public void WhenGettingAuthorizationContextAndRequiredRouteValuesAreAvailableButAccountLegalEntityPublicHashedIdIsNotAValidHash_ThenShouldReturnAuthorizationContextWithNullAccountLegalEntityId()
+        public void WhenGettingAuthorizationContextAndRequiredRouteValuesAreAvailableButAccountLegalEntityPublicHashedIdIsNotAValidHash_ThenShouldThrowException()
         {
-            Run(f => f.SetInvalidHashAccountLegalEntityPublicHashedId().SetValidProviderId(),
+            Run<Exception>(f => f.SetInvalidHashAccountLegalEntityPublicHashedId().SetValidProviderId(),
                 f => f.GetAuthorizationContext(),
-                (f, r) =>
-                {
-                    r.Should().NotBeNull();
-                    r.Get<long?>(Fix.ContextKeys.AccountLegalEntityId).Should().BeNull();
-                    r.Get<long?>(Fix.ContextKeys.Ukprn).Should().Be(f.ProviderId);
-                });
+                (f, a) => a.Should().ThrowExactly<Exception>().WithMessage("AuthorizationContextProvider error - Unable to extract AccountLegalEntityId"));
         }
 
         [Test]
-        public void WhenGettingAuthorizationContextAndRequiredRouteValuesAreAvailableButAccountLegalEntityPublicHashedIdIsNotAvailable_ThenShouldReturnAuthorizationContextWithAllValuesSetExceptAccountLegalEntityId()
+        public void WhenGettingAuthorizationContextAndRequiredRouteValuesAreAvailableButAccountLegalEntityPublicHashedIdIsNotAvailable_ThenShouldThrowException()
         {
             Run(f => f.SetValidProviderId(),
                 f => f.GetAuthorizationContext(),
-                (f, r) =>
-                {
-                    r.Should().NotBeNull();
-                    r.Get<long?>(Fix.ContextKeys.Ukprn).Should().Be(f.ProviderId);
-
-                    var exists = r.TryGet<long?>(Fix.ContextKeys.AccountLegalEntityId, out var value);
-                    exists.Should().BeTrue();
-                    value.Should().BeNull();
-                });
+                (f, a) => a.Should().ThrowExactly<Exception>().WithMessage("AuthorizationContextProvider error - Unable to extract AccountLegalEntityId"));
         }
 
         #endregion Invalid AccountLegalEntityPublicHashedId
@@ -70,35 +58,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
         #region Invalid ProviderId
 
         [Test]
-        public void WhenGettingAuthorizationContextAndRequiredRouteValuesAreAvailableButProviderIdIsNotValid_ThenShouldReturnAuthorizationContextWithAllValuesSetExceptProviderId()
+        public void WhenGettingAuthorizationContextAndRequiredRouteValuesAreAvailableButProviderIdIsNotValid_ThenShouldThrowException()
         {
             Run(f => f.SetValidAccountLegalEntityPublicHashedId().SetInvalidProviderId(),
                 f => f.GetAuthorizationContext(),
-                (f, r) =>
-                {
-                    r.Should().NotBeNull();
-                    r.Get<long?>(Fix.ContextKeys.AccountLegalEntityId).Should().Be(f.AccountLegalEntityId);
-
-                    var exists = r.TryGet<long?>(Fix.ContextKeys.Ukprn, out var value);
-                    exists.Should().BeTrue();
-                    value.Should().BeNull();
-                });
+                (f, a) => a.Should().ThrowExactly<Exception>().WithMessage("AuthorizationContextProvider error - Unable to extract ProviderId"));
         }
 
         [Test]
-        public void WhenGettingAuthorizationContextAndRequiredRouteValuesAreAvailableButProviderIdIsNotAvailable_ThenShouldReturnAuthorizationContextWithAllValuesSetExceptProviderId()
+        public void WhenGettingAuthorizationContextAndRequiredRouteValuesAreAvailableButProviderIdIsNotAvailable_ThenShouldThrowException()
         {
             Run(f => f.SetValidAccountLegalEntityPublicHashedId(),
                 f => f.GetAuthorizationContext(),
-                (f, r) =>
-                {
-                    r.Should().NotBeNull();
-                    r.Get<long?>(Fix.ContextKeys.AccountLegalEntityId).Should().Be(f.AccountLegalEntityId);
-
-                    var exists = r.TryGet<long?>(Fix.ContextKeys.Ukprn, out var value);
-                    exists.Should().BeTrue();
-                    value.Should().BeNull();
-                });
+                (f, a) => a.Should().ThrowExactly<Exception>().WithMessage("AuthorizationContextProvider error - Unable to extract ProviderId"));
         }
 
         #endregion Invalid ProviderId
@@ -189,6 +161,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
             return this;
         }
 
-        #endregion Set ProviderId
+        #endregion Set ProviderId        
     }
 }
