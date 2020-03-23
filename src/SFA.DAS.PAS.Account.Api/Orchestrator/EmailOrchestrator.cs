@@ -31,6 +31,58 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
         {
             var recipients = new List<string>();
 
+            var idamsResult = await GetIdamsUsers(providerId);
+
+            var accountUsers = (await _accountOrchestrator.GetAccountUsers(providerId)).ToList();
+
+            if (!idamsResult.Error) {  await RemoveAccountUsersNotInIdams(accountUsers, idamsResult.AllUsers); }
+
+            if (!recipients.Any() && message.ExplicitEmailAddresses != null)
+            {
+                _logger.Info("Explicit recipients requested for email");
+
+                recipients = message.ExplicitEmailAddresses.ToList();
+
+                if (idamsResult.Error)
+                {
+                    _logger.Info("Absence from IDAMS cannot be ascertained so presence is assumed - email message will not be suppressed");
+                }
+                else
+                {
+                    recipients.RemoveAll(x => !idamsResult.AllUsers.Contains(x));
+                    if (!recipients.Any())
+                    {
+                        _logger.Warn("All recipients explicitly requested for email are absent from Provider IDAMS - email message will be suppressed");
+                        return;
+                    }
+                }
+            }
+
+            if (!recipients.Any())
+            {
+                recipients = idamsResult.Users.Any() ? idamsResult.Users : idamsResult.SuperUsers;
+            }
+
+            if (!recipients.Any())
+            {
+                recipients = accountUsers.Select(x=>x.EmailAddress).ToList();
+            }
+
+            var optedOutList = accountUsers.Where(x => !x.ReceiveNotifications).Select(x => x.EmailAddress).ToList();
+
+            var finalRecipients = recipients.Where(x =>
+                !optedOutList.Any(y => x.Equals(y, StringComparison.CurrentCultureIgnoreCase)))
+                .ToList();
+
+            var commands = finalRecipients
+                .Select(x => new SendNotificationCommand{ Email = CreateEmailForRecipient(x, message) });
+            await Task.WhenAll(commands.Select(x => _mediator.Send(x)));
+
+            _logger.Info($"Sent email to {finalRecipients.Count} recipients for ukprn: {providerId}", providerId);
+        }
+
+        private async Task<(bool Error, List<string> Users, List<string> SuperUsers, List<string> AllUsers)> GetIdamsUsers(long providerId)
+        {
             Task<List<string>> idamsUsersTask;
             Task<List<string>> idamsSuperUsersTask;
 
@@ -55,53 +107,7 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
             var idamsSuperUsers = await idamsSuperUsersTask;
             var allIdamsUsers = idamsUsers.Concat(idamsSuperUsers).Distinct().ToList();
             _logger.Info($"{allIdamsUsers.Count} total users retrieved from IDAMS for Provider {providerId} ({idamsUsers.Count} DAS Users; {idamsSuperUsers.Count} Super Users)");
-
-            var accountUsers = (await _accountOrchestrator.GetAccountUsers(providerId)).ToList();
-
-            if (!idamsError) {  await RemoveAccountUsersNotInIdams(accountUsers, allIdamsUsers); }
-
-            if (!recipients.Any() && message.ExplicitEmailAddresses != null)
-            {
-                _logger.Info("Explicit recipients requested for email");
-
-                recipients = message.ExplicitEmailAddresses.ToList();
-
-                if (idamsError)
-                {
-                    _logger.Info("Absence from IDAMS cannot be ascertained so presence is assumed - email message will not be suppressed");
-                }
-                else
-                {
-                    recipients.RemoveAll(x => !allIdamsUsers.Contains(x));
-                    if (!recipients.Any())
-                    {
-                        _logger.Warn("All recipients explicitly requested for email are absent from Provider IDAMS - email message will be suppressed");
-                        return;
-                    }
-                }
-            }
-
-            if (!recipients.Any())
-            {
-                recipients = idamsUsers.Any() ? idamsUsers : idamsSuperUsers;
-            }
-
-            if (!recipients.Any())
-            {
-                recipients = accountUsers.Select(x=>x.EmailAddress).ToList();
-            }
-
-            var optedOutList = accountUsers.Where(x => !x.ReceiveNotifications).Select(x => x.EmailAddress).ToList();
-
-            var finalRecipients = recipients.Where(x =>
-                !optedOutList.Any(y => x.Equals(y, StringComparison.CurrentCultureIgnoreCase)))
-                .ToList();
-
-            var commands = finalRecipients
-                .Select(x => new SendNotificationCommand{ Email = CreateEmailForRecipient(x, message) });
-            await Task.WhenAll(commands.Select(x => _mediator.Send(x)));
-
-            _logger.Info($"Sent email to {finalRecipients.Count} recipients for ukprn: {providerId}", providerId);
+            return (idamsError, idamsUsers, idamsSuperUsers, allIdamsUsers);
         }
 
         private async Task RemoveAccountUsersNotInIdams(List<User> accountUsers, List<string> allIdamsUsers)
