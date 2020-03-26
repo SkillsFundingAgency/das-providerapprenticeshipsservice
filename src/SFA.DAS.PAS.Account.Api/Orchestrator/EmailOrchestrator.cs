@@ -86,7 +86,6 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
             Task<List<string>> idamsUsersTask;
             Task<List<string>> idamsSuperUsersTask;
 
-            var idamsError = false;
             try
             {
                 _logger.Info($"Retrieving DAS Users and Super Users from Provider IDAMS for Provider {providerId}");
@@ -94,20 +93,18 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
                 idamsSuperUsersTask = _idamsEmailServiceWrapper.GetSuperUserEmailsAsync(providerId);
 
                 await Task.WhenAll(idamsUsersTask, idamsSuperUsersTask);
+
+                var idamsUsers = await idamsUsersTask;
+                var idamsSuperUsers = await idamsSuperUsersTask;
+                var allIdamsUsers = idamsUsers.Concat(idamsSuperUsers).Distinct().ToList();
+                _logger.Info($"{allIdamsUsers.Count} total users retrieved from IDAMS for Provider {providerId} ({idamsUsers.Count} DAS Users; {idamsSuperUsers.Count} Super Users)");
+                return (false, idamsUsers, idamsSuperUsers, allIdamsUsers);
             }
             catch (Exception ex)
             {
-                idamsError = true;
                 _logger.Error(ex, "An error occurred retrieving users from Provider IDAMS");
-                idamsUsersTask = Task.FromResult(new List<string>());
-                idamsSuperUsersTask = Task.FromResult(new List<string>());
+                return (true, new List<string>(), new List<string>(), new List<string>());
             }
-
-            var idamsUsers = await idamsUsersTask;
-            var idamsSuperUsers = await idamsSuperUsersTask;
-            var allIdamsUsers = idamsUsers.Concat(idamsSuperUsers).Distinct().ToList();
-            _logger.Info($"{allIdamsUsers.Count} total users retrieved from IDAMS for Provider {providerId} ({idamsUsers.Count} DAS Users; {idamsSuperUsers.Count} Super Users)");
-            return (idamsError, idamsUsers, idamsSuperUsers, allIdamsUsers);
         }
 
         private async Task RemoveAccountUsersNotInIdams(List<User> accountUsers, List<string> allIdamsUsers)
