@@ -1,4 +1,4 @@
-﻿using System.Net.Http;
+﻿using System;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -28,27 +28,21 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Data
                 
             };
             _mockHttpClientWrapper = new Mock<IHttpClientWrapper>();
-            _sut = new IdamsEmailServiceWrapper(Mock.Of<ILog>(), config, _mockHttpClientWrapper.Object, new NoopExecutionPolicy());
+            _sut = new IdamsEmailServiceWrapper(Mock.Of<ILog>(), config, _mockHttpClientWrapper.Object);
         }
 
         [Test]
-        public async Task ShouldReturnEmpltyListIfResponseIsEmpty()
+        public void ShouldThrowIfGetUsersResponseIsEmpty()
         {
-            var res = await _sut.GetEmailsAsync(10005143L);
-
-            Assert.That(res.Count, Is.EqualTo(0));
+            Assert.ThrowsAsync<ArgumentException>(() => _sut.GetEmailsAsync(10005143L));
         }
 
         [Test]
-        public async Task ShouldReturnEmpltyListIfResponseNotInCorrctFormat()
+        public void ShouldThrowIfGetUsersResponseIsInvalid()
         {
-
-            var mockResponse = "{\"result\": {\"name.family.name\": [\"James\"],\"name.given.name\": [\"Sally\"],\"name.title\": [\"Miss\"]}}";
+            var mockResponse = "THIS-IS-NOT-JSON";
             _mockHttpClientWrapper.Setup(m => m.GetStringAsync(It.IsAny<string>())).ReturnsAsync(mockResponse);
-
-            var res = await _sut.GetEmailsAsync(10005143L);
-
-            Assert.That(res.Count, Is.EqualTo(0));
+            Assert.ThrowsAsync<ArgumentException>(() => _sut.GetEmailsAsync(10005143L));
         }
 
         [Test]
@@ -89,23 +83,17 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Data
         }
 
         [Test]
-        public async Task ShouldReturnEmpltyListIfResponseIsEmptyForSuperUser()
+        public void ShouldThrowIfGetSupersUsersResponseIsEmpty()
         {
-            var res = await _sut.GetSuperUserEmailsAsync(10005143L);
-
-            Assert.That(res.Count, Is.EqualTo(0));
+            Assert.ThrowsAsync<ArgumentException>(() => _sut.GetSuperUserEmailsAsync(10005143L));
         }
 
         [Test]
-        public async Task ShouldReturnEmpltyListIfResponseNotInCorrctFormatSuperUser()
+        public void ShouldThrowIGetSuperUserResponseIsInvalid()
         {
-
-            var mockResponse = "{\"result\": {\"name.family.name\": [\"James\"],\"name.given.name\": [\"Sally\"],\"name.title\": [\"Miss\"]}}";
+            var mockResponse = "THIS-IS-NOT-JSON";
             _mockHttpClientWrapper.Setup(m => m.GetStringAsync(It.IsAny<string>())).ReturnsAsync(mockResponse);
-
-            var res = await _sut.GetSuperUserEmailsAsync(10005143L);
-
-            Assert.That(res.Count, Is.EqualTo(0));
+            Assert.ThrowsAsync<ArgumentException>(() => _sut.GetSuperUserEmailsAsync(10005143L));
         }
 
         [Test]

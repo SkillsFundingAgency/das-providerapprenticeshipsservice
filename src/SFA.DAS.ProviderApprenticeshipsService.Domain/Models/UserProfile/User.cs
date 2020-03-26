@@ -7,5 +7,6 @@
         public string DisplayName { get; set; }
         public long Ukprn { get; set; }
         public string Email { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

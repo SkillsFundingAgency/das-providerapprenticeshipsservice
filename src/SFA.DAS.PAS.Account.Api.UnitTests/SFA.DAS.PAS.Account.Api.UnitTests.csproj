@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="Orchestrator\WhenGettingAccountUsers.cs" />
     <Compile Include="Orchestrator\WhenGettingAgreement.cs" />
+    <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients _IdamsError.cs" />
     <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients.cs" />
     <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients_ExplicitEmailAddresses.cs" />
     <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients_IdamsEmails.cs" />
