@@ -16,7 +16,7 @@
       <Setting name="FeatureToggle.ManageReservations" value="true" />
       <Setting name="UseStubProviderRelationships" value="true" />
       <Setting name="FeatureToggle.ProviderCreateCohortV2" value="true"  />
-      <Setting name="FeatureToggle.ProviderManageApprenticesV2" value="false"  />
+      <Setting name="FeatureToggle.ProviderManageApprenticesV2" value="true"  />
       <Setting name="FeatureToggle.ApprenticeDetailsV2" value="true"  />
     </ConfigurationSettings>
     <Certificates>
