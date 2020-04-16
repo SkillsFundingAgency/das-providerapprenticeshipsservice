@@ -124,7 +124,7 @@
                 <nav class="header-inner">
                     <ul role="menubar" id="global-nav-links">
                         <li><a href="@Url.Action("Index", "Account")" role="menuitem" class="@(controllerName == "Account" ? "selected" : "")">Home</a></li>
-                        <li><a href="@Url.Action("Cohorts", "Commitment", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Commitment" ? "selected" : "")">Apprentice Requests</a></li>
+                        <li><a href="@Url.Action("Cohorts", "Commitment", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Commitment" ? "selected" : "")">Apprentice requests</a></li>
                         <li><a href="@Url.ReservationsLink($"{providerId}/reservations/manage")" role="menuitem" class="@(controllerName == "ManageReservations" ? "selected" : "")">Manage funding</a></li>
                         <li><a href="@Url.Action("Index", "ManageApprentices", new {providerId = providerId})" role="menuitem" class="@(controllerName == "ManageApprentices" ? "selected" : "")">Manage your apprentices</a></li>
                         <li><a href="@Url.RecruitLink($"{providerId}")">Recruit apprentices</a></li>
