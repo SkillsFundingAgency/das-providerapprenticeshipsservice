@@ -80,8 +80,9 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
             await _sut.SendEmailToAllProviderRecipients(_ukprn, _request);
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
+        //Temporarily removed IDAMS call
+        //[TestCase(0)]
+        //[TestCase(1)]
         [TestCase(3)]
         public void ShouldSendNotificationToEachAddress(int index)
         {
