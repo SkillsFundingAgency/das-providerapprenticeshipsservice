@@ -112,6 +112,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
         }
 
         [Test]
+        [Ignore("Temporarily removed IDAMS call")]
         public void ShouldNotSendNotificationToUsersNotInIdams()
         {
             _mediator.Verify(x =>
