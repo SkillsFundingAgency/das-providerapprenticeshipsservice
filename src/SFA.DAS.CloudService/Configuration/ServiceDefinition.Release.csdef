@@ -24,6 +24,7 @@
       <Setting name="FeatureToggle.ProviderCreateCohortV2" />
       <Setting name="FeatureToggle.ProviderManageApprenticesV2" />
       <Setting name="FeatureToggle.ApprenticeDetailsV2" />
+      <Setting name="FeatureToggle.CohortSummariesV2" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Httpsin" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-prd-pas-ilb"/>

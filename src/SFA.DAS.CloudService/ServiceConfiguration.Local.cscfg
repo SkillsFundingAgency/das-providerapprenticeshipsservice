@@ -18,6 +18,7 @@
       <Setting name="FeatureToggle.ProviderCreateCohortV2" value="true"  />
       <Setting name="FeatureToggle.ProviderManageApprenticesV2" value="true"  />
       <Setting name="FeatureToggle.ApprenticeDetailsV2" value="true"  />
+      <Setting name="FeatureToggle.CohortSummariesV2" value="true"  />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="87A28DF77BBA73983918DF4288A132588AE820F4" thumbprintAlgorithm="sha1" />
