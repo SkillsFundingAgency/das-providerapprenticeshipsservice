@@ -12,7 +12,5 @@ namespace SFA.DAS.PAS.Account.Api.Client
         Task<IEnumerable<User>> GetAccountUsers(long ukprn);
 
         Task SendEmailToAllProviderRecipients(long ukprn, ProviderEmailRequest message);
-
-        Task<ProviderAgreement> GetAgreement(long ukprn);
     }
 }

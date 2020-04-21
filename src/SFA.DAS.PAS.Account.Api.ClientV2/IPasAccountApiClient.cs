@@ -12,5 +12,7 @@ namespace SFA.DAS.PAS.Account.Api.ClientV2
         Task<IEnumerable<User>> GetAccountUsers(long ukprn, CancellationToken cancellationToken = default);
 
         Task SendEmailToAllProviderRecipients(long ukprn, ProviderEmailRequest message, CancellationToken cancellationToken = default);
+
+        Task<ProviderAgreement> GetAgreement(long ukprn, CancellationToken cancellationToken = default);
     }
 }

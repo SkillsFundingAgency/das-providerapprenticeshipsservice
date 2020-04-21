@@ -42,16 +42,6 @@ namespace SFA.DAS.PAS.Account.Api.Client
             await _httpClient.PostAsync(Path.Combine(GetBaseUrl(), $"api/email/{ukprn}/send"), message);
         }
 
-        public async Task<ProviderAgreement> GetAgreement(long ukprn)
-        {
-            var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/account/{ukprn}/agreement";
-
-            var json = await _httpClient.GetAsync(url);
-            return JsonConvert.DeserializeObject<ProviderAgreement>(json);
-        }
-
-
         private string GetBaseUrl()
         {
             return _configuration.ApiBaseUrl.EndsWith("/")
