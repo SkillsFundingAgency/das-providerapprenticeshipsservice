@@ -50,7 +50,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             app.UseWsFederationAuthentication(options);
         }
         
-        private async Task SecurityTokenValidated(SecurityTokenValidatedNotification<WsFederationMessage, WsFederationAuthenticationOptions> notification, IProviderCommitmentsLogger logger, 
+        private async Task SecurityTokenValidated(SecurityTokenValidatedNotification<Microsoft.IdentityModel.Protocols.WsFederation.WsFederationMessage, WsFederationAuthenticationOptions> notification, IProviderCommitmentsLogger logger, 
             AuthenticationOrchestrator orchestrator, AccountOrchestrator accountOrchestrator)
         {
             logger.Info("SecurityTokenValidated notification called");

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Azure;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Owin.Security.ActiveDirectory;
-
 using Owin;
 
 namespace SFA.DAS.PAS.Account.Api
@@ -12,7 +12,7 @@ namespace SFA.DAS.PAS.Account.Api
             app.UseWindowsAzureActiveDirectoryBearerAuthentication(
                new WindowsAzureActiveDirectoryBearerAuthenticationOptions
                {
-                   TokenValidationParameters = new System.IdentityModel.Tokens.TokenValidationParameters
+                   TokenValidationParameters = new TokenValidationParameters
                    {
                        ValidAudience = CloudConfigurationManager.GetSetting("idaAudience"),
                        RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"

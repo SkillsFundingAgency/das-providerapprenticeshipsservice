@@ -23,7 +23,9 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Data
                 {
                     IdamsListUsersUrl =
                         "https://url.to/users/ukprn={0}",
-                    ClientToken = "AbbA-Rules-4.Ever"
+                    Audience = "some-audience",
+                    ClientSecret = "some-secret",
+                    Issuer = "some-issuer"
                 },
                 
             };
@@ -48,38 +50,26 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Data
         [Test]
         public async Task ShouldReturnEmailFromResult()
         {
-            var mockResponse = "{\"result\": {\"name.familyname\": [\"James\"],\"emails\": [\"abba@email.uk\"],\"name.givenname\": [\"Sally\"],\"Title\": [\"Miss\"]}}";
+            var mockResponse = "{\"ukprn\":\"10005143\",\"users\":[{\"email\":\"test.user1@education.gov.uk\",\"firstName\":\"test\",\"lastName\":\"user1\",\"roles\":[\"DAA\",\"FAA\"]}]}";
             _mockHttpClientWrapper.Setup(m => m.GetStringAsync(It.IsAny<string>())).ReturnsAsync(mockResponse);
             var res = await _sut.GetEmailsAsync(10005143L);
 
             Assert.That(res.Count, Is.EqualTo(1));
-            Assert.That(res[0], Is.EqualTo("abba@email.uk"));
-        }
+            Assert.That(res[0], Is.EqualTo("test.user1@education.gov.uk"));
+        }     
 
         [Test]
         public async Task ShouldReturnEmailFromResultWithMultiResult()
         {
-            var mockResponse = "{\"result\": [{\"name.familyname\": [\"James\"],\"emails\": [\"abba@email.uk\"],\"name.givenname\": [\"Sally\"],\"Title\": [\"Miss\"]}]}";
-            _mockHttpClientWrapper.Setup(m => m.GetStringAsync(It.IsAny<string>())).ReturnsAsync(mockResponse);
-            var res = await _sut.GetEmailsAsync(10005143L);
-
-            Assert.That(res.Count, Is.EqualTo(1));
-            Assert.That(res[0], Is.EqualTo("abba@email.uk"));
-        }
-
-        [Test, Ignore("Fixing")]
-        public async Task ShouldReturnEmailsFromResult()
-        {
-            var mockResponse = "{\"result\": {\"name.familyname\": [\"James\", \"Octavo\"],\"emails\": "
-                               + "[\"abba@email.uk\", \"test@email.uk\"],\"name.givenname\": [\"Sally\", \"Chris\"],\"Title\": [\"Miss\", \"Mr\"]}}";
+            var mockResponse = "{\"ukprn\":\"10005143\",\"users\":[{\"email\":\"test.user1@education.gov.uk\",\"firstName\":\"test\",\"lastName\":\"user1\",\"roles\":[\"DAA\",\"FAA\"]},{\"email\":\"test.user2@education.gov.uk\",\"firstName\":\"test\",\"lastName\":\"user2\",\"roles\":[\"DAA\"]}]}";
 
             _mockHttpClientWrapper.Setup(m => m.GetStringAsync(It.IsAny<string>())).ReturnsAsync(mockResponse);
 
             var res = await _sut.GetEmailsAsync(10005143L);
 
             Assert.That(res.Count, Is.EqualTo(2));
-            Assert.That(res[0], Is.EqualTo("abba@email.uk"));
-            Assert.That(res[1], Is.EqualTo("test@email.uk"));
+            Assert.That(res[0], Is.EqualTo("test.user1@education.gov.uk"));
+            Assert.That(res[1], Is.EqualTo("test.user2@education.gov.uk"));
         }
 
         [Test]
@@ -99,27 +89,26 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Data
         [Test]
         public async Task ShouldReturnEmailFromResultSuperUser()
         {
-            var mockResponse = "{\"result\": {\"name.familyname\": [\"James\"],\"emails\": [\"abba@email.uk\"],\"name.givenname\": [\"Sally\"],\"Title\": [\"Miss\"]}}";
+            var mockResponse = "{\"ukprn\":\"10005143\",\"users\":[{\"email\":\"test.user1@education.gov.uk\",\"firstName\":\"test\",\"lastName\":\"user1\",\"roles\":[\"DAA\",\"FAA\"]}]}";
             _mockHttpClientWrapper.Setup(m => m.GetStringAsync(It.IsAny<string>())).ReturnsAsync(mockResponse);
             var res = await _sut.GetSuperUserEmailsAsync(10005143L);
 
             Assert.That(res.Count, Is.EqualTo(1));
-            Assert.That(res[0], Is.EqualTo("abba@email.uk"));
+            Assert.That(res[0], Is.EqualTo("test.user1@education.gov.uk"));
         }
 
         [Test]
         public async Task ShouldReturnEmailsFromResultSuperUser()
         {
-            var mockResponse = "{\"result\": {\"name.familyname\": [\"James\", \"Octavo\"],\"emails\": "
-                               + "[\"abba@email.uk\", \"test@email.uk\"],\"name.givenname\": [\"Sally\", \"Chris\"],\"Title\": [\"Miss\", \"Mr\"]}}";
+            var mockResponse = "{\"ukprn\":\"10005143\",\"users\":[{\"email\":\"test.user1@education.gov.uk\",\"firstName\":\"test\",\"lastName\":\"user1\",\"roles\":[\"DAA\",\"FAA\"]},{\"email\":\"test.user2@education.gov.uk\",\"firstName\":\"test\",\"lastName\":\"user2\",\"roles\":[\"DAA\"]}]}";
 
             _mockHttpClientWrapper.Setup(m => m.GetStringAsync(It.IsAny<string>())).ReturnsAsync(mockResponse);
 
             var res = await _sut.GetSuperUserEmailsAsync(10005143L);
 
             Assert.That(res.Count, Is.EqualTo(2));
-            Assert.That(res[0], Is.EqualTo("abba@email.uk"));
-            Assert.That(res[1], Is.EqualTo("test@email.uk"));
+            Assert.That(res[0], Is.EqualTo("test.user1@education.gov.uk"));
+            Assert.That(res[1], Is.EqualTo("test.user2@education.gov.uk"));
         }
     }
 }

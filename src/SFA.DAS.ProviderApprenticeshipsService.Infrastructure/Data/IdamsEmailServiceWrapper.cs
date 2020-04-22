@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -36,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         {
             var url = string.Format(_configuration.IdamsListUsersUrl, _configuration.DasUserRoleId, providerId);
             _logger.Info($"Getting 'DAS' emails for provider {providerId}");
-            var result = await GetString(url, _configuration.ClientToken);
+            var result = await GetString(url);
             return ParseIdamsResult(result, providerId);
         }
 
@@ -44,7 +45,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         {
             var url = string.Format(_configuration.IdamsListUsersUrl, _configuration.SuperUserRoleId, providerId);
             _logger.Info($"Getting 'super user' emails for provider {providerId}");
-            var result = GetString(url, _configuration.ClientToken);
+            var result = GetString(url);
             return ParseIdamsResult(await result, providerId);
         }
 
@@ -52,16 +53,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         {
             try
             {
-                var result = JObject.Parse(jsonResult).SelectToken("result");
+                var result = JsonConvert.DeserializeObject<UserResponse>(jsonResult);
+                return result.Users.Select(u => u.Email).ToList();
 
-                if (result.Type == JTokenType.Array)
-                {
-                    var items = result.ToObject<IEnumerable<UserResponse>>();
-                    return items.SelectMany(m => m.Emails).ToList();
-                }
+                //var result = JObject.Parse(jsonResult).SelectToken("result");
 
-                var item = result.ToObject<UserResponse>();
-                return item?.Emails ?? new List<string>(0);
+                //if (result.Type == JTokenType.Array)
+                //{
+                //    var items = result.ToObject<IEnumerable<UserResponse>>();
+                //    return items.SelectMany(m => m.Emails).ToList();
+                //}
+
+                //var item = result.ToObject<UserResponse>();
+                //return item?.Emails ?? new List<string>(0);
             }
             catch (Exception exception)
             {
@@ -70,7 +74,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             }
         }
 
-        private async Task<string> GetString(string url, string accessToken)
+        private async Task<string> GetString(string url)
         {
             return await _httpClientWrapper.GetStringAsync(url);
         }

@@ -28,8 +28,7 @@
 
                         <tr>
                             <td class="notification-row">
-                                @setting.UserRef
-
+                                @Model.Email
                                 @Html.Hidden($"NotificationSettings[{i}].UserRef", setting.UserRef)
                             </td>
 
