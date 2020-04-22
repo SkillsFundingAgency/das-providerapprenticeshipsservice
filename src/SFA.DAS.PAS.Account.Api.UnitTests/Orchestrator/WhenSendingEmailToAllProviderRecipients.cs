@@ -92,6 +92,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
         }
 
         [Test]
+        [Ignore("Temporarily removed IDAMS call")]
         public void ShouldDeleteAllUserAccountsNotFoundInIdams()
         {
             _mediator.Verify(x => x.Send(It.Is<DeleteRegisteredUserCommand>(c => c.UserRef == "ref-nobody@idams.com"),

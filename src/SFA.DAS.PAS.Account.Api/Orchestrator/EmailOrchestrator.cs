@@ -83,28 +83,31 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
 
         private async Task<(bool Error, List<string> Users, List<string> SuperUsers, List<string> AllUsers)> GetIdamsUsers(long providerId)
         {
-            Task<List<string>> idamsUsersTask;
-            Task<List<string>> idamsSuperUsersTask;
+            _logger.Warn("Call to Provider IDAMS API prevented");
+            return (true, new List<string>(), new List<string>(), new List<string>());
 
-            try
-            {
-                _logger.Info($"Retrieving DAS Users and Super Users from Provider IDAMS for Provider {providerId}");
-                idamsUsersTask = _idamsEmailServiceWrapper.GetEmailsAsync(providerId);
-                idamsSuperUsersTask = _idamsEmailServiceWrapper.GetSuperUserEmailsAsync(providerId);
+            //Task<List<string>> idamsUsersTask;
+            //Task<List<string>> idamsSuperUsersTask;
 
-                await Task.WhenAll(idamsUsersTask, idamsSuperUsersTask);
+            //try
+            //{
+            //    _logger.Info($"Retrieving DAS Users and Super Users from Provider IDAMS for Provider {providerId}");
+            //    idamsUsersTask = _idamsEmailServiceWrapper.GetEmailsAsync(providerId);
+            //    idamsSuperUsersTask = _idamsEmailServiceWrapper.GetSuperUserEmailsAsync(providerId);
 
-                var idamsUsers = await idamsUsersTask;
-                var idamsSuperUsers = await idamsSuperUsersTask;
-                var allIdamsUsers = idamsUsers.Concat(idamsSuperUsers).Distinct().ToList();
-                _logger.Info($"{allIdamsUsers.Count} total users retrieved from IDAMS for Provider {providerId} ({idamsUsers.Count} DAS Users; {idamsSuperUsers.Count} Super Users)");
-                return (false, idamsUsers, idamsSuperUsers, allIdamsUsers);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "An error occurred retrieving users from Provider IDAMS");
-                return (true, new List<string>(), new List<string>(), new List<string>());
-            }
+            //    await Task.WhenAll(idamsUsersTask, idamsSuperUsersTask);
+
+            //    var idamsUsers = await idamsUsersTask;
+            //    var idamsSuperUsers = await idamsSuperUsersTask;
+            //    var allIdamsUsers = idamsUsers.Concat(idamsSuperUsers).Distinct().ToList();
+            //    _logger.Info($"{allIdamsUsers.Count} total users retrieved from IDAMS for Provider {providerId} ({idamsUsers.Count} DAS Users; {idamsSuperUsers.Count} Super Users)");
+            //    return (false, idamsUsers, idamsSuperUsers, allIdamsUsers);
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logger.Error(ex, "An error occurred retrieving users from Provider IDAMS");
+            //    return (true, new List<string>(), new List<string>(), new List<string>());
+            //}
         }
 
         private async Task RemoveAccountUsersNotInIdams(List<User> accountUsers, List<string> allIdamsUsers)
