@@ -52,6 +52,22 @@ namespace SFA.DAS.PAS.Account.Api.ClientV2.UnitTests
             await fixture.PasAccountApiClient.SendEmailToAllProviderRecipients(fixture.ProviderId, fixture.ProviderEmailRequest, CancellationToken.None);
             fixture.MockRestHttpClient.Verify(x => x.PostAsJson<ProviderEmailRequest>($"api/email/{fixture.ProviderId}/send", fixture.ProviderEmailRequest, CancellationToken.None));
         }
+
+        [Test]
+        public async Task GetAgreement_VerifyUrlAndDataIsCorrectPassedIn()
+        {
+            var fixture = new WhenCallingPasAccountApiClientFixture();
+            await fixture.PasAccountApiClient.GetAgreement(fixture.ProviderId, CancellationToken.None);
+            fixture.MockRestHttpClient.Verify(x => x.Get<ProviderAgreement>($"api/account/{fixture.ProviderId}/agreement", null, CancellationToken.None));
+        }
+
+        [Test]
+        public async Task GetAccountUsers_VerifyProviderAgreementIsReturned()
+        {
+            var fixture = new WhenCallingPasAccountApiClientFixture().SetupResponseForGetAgreement();
+            var result = await fixture.PasAccountApiClient.GetAgreement(fixture.ProviderId, CancellationToken.None);
+            Assert.AreEqual(fixture.ProviderAgreementStatus, result.Status);
+        }
     }
 
     public class WhenCallingPasAccountApiClientFixture
@@ -63,6 +79,7 @@ namespace SFA.DAS.PAS.Account.Api.ClientV2.UnitTests
         public User User{ get; }
         public List<User> Users { get; }
         public ProviderEmailRequest ProviderEmailRequest { get; }
+        public ProviderAgreementStatus ProviderAgreementStatus { get; set; }
 
         public WhenCallingPasAccountApiClientFixture()
         {
@@ -73,6 +90,7 @@ namespace SFA.DAS.PAS.Account.Api.ClientV2.UnitTests
             Users = new List<User>();
             PasAccountApiClient = new PasAccountApiClient(MockRestHttpClient.Object);
             ProviderEmailRequest = autoFixture.Create<ProviderEmailRequest>();
+            ProviderAgreementStatus = ProviderAgreementStatus.Agreed ;
         }
 
         public WhenCallingPasAccountApiClientFixture SetupResponseForGetUser()
@@ -86,6 +104,13 @@ namespace SFA.DAS.PAS.Account.Api.ClientV2.UnitTests
         {
             MockRestHttpClient.Setup(x => x.Get<IEnumerable<User>>(It.IsAny<string>(), null, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Users);
+            return this;
+        }
+
+        public WhenCallingPasAccountApiClientFixture SetupResponseForGetAgreement()
+        {
+            MockRestHttpClient.Setup(x => x.Get<ProviderAgreement>(It.IsAny<string>(), null, It.IsAny<CancellationToken>()))
+               .ReturnsAsync(new ProviderAgreement { Status = ProviderAgreementStatus });
             return this;
         }
     }
