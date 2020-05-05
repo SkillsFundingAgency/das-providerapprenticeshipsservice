@@ -93,11 +93,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
-
         [HttpGet]
         [Route("cohorts/review")]
         public async Task<ActionResult> ReadyForReview(long providerId)
-        {           
+        {
+            if (_featureToggleService.Get<CohortSummariesV2>().FeatureEnabled)
+                return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/review"));
+
             SaveRequestStatusInCookie(RequestStatus.ReadyForReview);
 
             var model = await _commitmentOrchestrator.GetAllReadyForReview(providerId);

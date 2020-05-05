@@ -29,5 +29,10 @@ namespace SFA.DAS.PAS.Account.Api.ClientV2
         {
             return _httpClient.PostAsJson($"api/email/{providerId}/send", message, cancellationToken);
         }
+
+        public Task<ProviderAgreement> GetAgreement(long providerId, CancellationToken cancellationToken = default)
+        {
+            return _httpClient.Get<ProviderAgreement>($"api/account/{providerId}/agreement", null, cancellationToken);
+        }
     }
 }
