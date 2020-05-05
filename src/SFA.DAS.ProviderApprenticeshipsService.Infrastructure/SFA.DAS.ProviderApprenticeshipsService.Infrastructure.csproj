@@ -385,6 +385,7 @@
     <Compile Include="Data\HttpClientWrapper.cs" />
     <Compile Include="Data\IdamsEmailServiceWrapper.cs" />
     <Compile Include="Data\IHttpClientWrapper.cs" />
+    <Compile Include="Data\ImportProviderRepository.cs" />
     <Compile Include="Data\ProviderAgreementStatusRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
     <Compile Include="Data\UserSettingsRepository.cs" />
