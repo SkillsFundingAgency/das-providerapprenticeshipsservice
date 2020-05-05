@@ -1,6 +1,5 @@
 ﻿using MoreLinq;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.PAS.UpdateProvider.WebJob.Importer;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.Providers.Api.Client;
 using System.Data;
