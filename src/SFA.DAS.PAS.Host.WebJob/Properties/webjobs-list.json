@@ -3,6 +3,9 @@
   "WebJobs": [
     {
       "filePath": "../SFA.DAS.PAS.ContractAgreements.WebJob/SFA.DAS.PAS.ContractAgreements.WebJob.csproj"
+    },
+    {
+      "filePath": "../SFA.DAS.PAS.ImportProvider.WebJob/SFA.DAS.PAS.ImportProvider.WebJob.csproj"
     }
   ]
 }
