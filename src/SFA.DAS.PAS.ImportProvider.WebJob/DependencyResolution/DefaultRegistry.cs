@@ -27,7 +27,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.DependencyResolution
             For<IConfiguration>().Use(config);
             For<ImportProviderConfiguration>().Use(config);
             For<IImportProviderConfiguration>().Use(config);
-            For<IProviderApiClient>().Use<ProviderApiClient>().Ctor<string>("baseUrl").Is(ctx => ctx.GetInstance<ImportProviderConfiguration>().BaseUrl);
+            For<IProviderApiClient>().Use<ProviderApiClient>().Ctor<string>("baseUrl").Is(ctx => ctx.GetInstance<ImportProviderConfiguration>().ApprenticeshipInfoService.BaseUrl);
 
             For<ILog>().Use(x => new NLogLogger(
                x.ParentType,
