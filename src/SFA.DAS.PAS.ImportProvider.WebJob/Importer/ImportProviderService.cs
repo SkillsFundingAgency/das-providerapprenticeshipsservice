@@ -25,7 +25,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Importer
         {
             _logger.Info("Import Provider - Started");
 
-             var providers = await _providerApiClient.FindAllAsync();
+            var providers = await _providerApiClient.FindAllAsync();
             var batches = providers.Batch(1000).Select(b => b.ToDataTable(p => p.Ukprn, p => p.ProviderName));
 
             foreach (var batch in batches)
