@@ -16,14 +16,14 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="SFA.DAS.Configuration" Version="1.0.0.53229" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="1.0.0.53229" />
-    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
-    <PackageReference Include="SFA.DAS.Providers.Api.Client" Version="0.11.233" />
-    <PackageReference Include="structuremap" Version="4.7.1" />
+    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.43242" />
+    <PackageReference Include="SFA.DAS.Providers.Api.Client" Version="0.10.129-prerelease" />
+    <PackageReference Include="structuremap" Version="4.7.0" />
     <PackageReference Include="System.Spatial" Version="5.8.4" />
     <PackageReference Include="Microsoft.Data.Edm" Version="5.8.4" />
     <PackageReference Include="Microsoft.Data.OData" Version="5.8.4" />
     <PackageReference Include="Microsoft.Data.Services.Client" Version="5.8.4" />
-    <PackageReference Include="Microsoft.WindowsAzure.ConfigurationManager" Version="3.2.1" />
+    <PackageReference Include="Microsoft.WindowsAzure.ConfigurationManager" Version="3.2.3" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.2" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Core" Version="1.1.2" />    
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="1.1.2" />

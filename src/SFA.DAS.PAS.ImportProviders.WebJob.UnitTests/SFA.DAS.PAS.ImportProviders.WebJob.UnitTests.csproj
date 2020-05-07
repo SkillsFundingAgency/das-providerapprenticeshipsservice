@@ -92,11 +92,11 @@
     <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=0.11.233.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.11.233\lib\netstandard2.0\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NLog.Logger, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.2.1\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
+    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.43242, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.43242\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Providers.Api.Client, Version=0.11.233.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Providers.Api.Client.0.11.233\lib\netstandard2.0\SFA.DAS.Providers.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Providers.Api.Client, Version=0.10.129.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Providers.Api.Client.0.10.129-prerelease\lib\net45\SFA.DAS.Providers.Api.Client.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
