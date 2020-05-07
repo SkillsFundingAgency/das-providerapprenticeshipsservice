@@ -23,12 +23,12 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob
                 service.Import().Wait();
                 timer.Stop();
 
-                logger.Info($"ImportProvider  job done, Took: {timer.ElapsedMilliseconds} milliseconds");
+                logger.Info($"ImportProvider job done, Took: {timer.ElapsedMilliseconds} milliseconds");
             }
             catch (Exception ex)
             {
                 ILog exLogger = new NLogLogger();
-                exLogger.Error(ex, "Error running ContractAgreements WebJob");
+                exLogger.Error(ex, "Error running ImportProvider WebJob");
                 throw;
             }
         }
