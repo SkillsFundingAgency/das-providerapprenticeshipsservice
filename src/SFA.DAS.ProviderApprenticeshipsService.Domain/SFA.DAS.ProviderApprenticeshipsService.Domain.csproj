@@ -189,6 +189,7 @@
     <Compile Include="Interfaces\IUserSettingsRepository.cs" />
     <Compile Include="Models\ApprenticeshipCourse\ITrainingProgramme.cs" />
     <Compile Include="Models\Apprenticeship\FundingStatus.cs" />
+    <Compile Include="Models\FeatureToggles\CohortSummariesV2.cs" />
     <Compile Include="Models\FeatureToggles\ProviderCreateCohortV2.cs" />
     <Compile Include="Models\FeatureToggles\ApprenticeDetailsV2.cs" />
     <Compile Include="Models\FeatureToggles\ProviderManageApprenticesV2.cs" />

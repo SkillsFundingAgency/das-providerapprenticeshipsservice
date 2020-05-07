@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using SFA.DAS.ProviderApprenticeshipsService.Application;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
@@ -12,6 +11,7 @@ using System.Security.Claims;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -43,6 +43,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> Cohorts(long providerId)
         {
+            if (_featureToggleService.Get<CohortSummariesV2>().FeatureEnabled)
+                return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved"));
+
             var model = await _commitmentOrchestrator.GetCohorts(providerId);
 
             AddFlashMessageToViewModel(model);
@@ -90,11 +93,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
-
         [HttpGet]
         [Route("cohorts/review")]
         public async Task<ActionResult> ReadyForReview(long providerId)
-        {           
+        {
+            if (_featureToggleService.Get<CohortSummariesV2>().FeatureEnabled)
+                return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/review"));
+
             SaveRequestStatusInCookie(RequestStatus.ReadyForReview);
 
             var model = await _commitmentOrchestrator.GetAllReadyForReview(providerId);
