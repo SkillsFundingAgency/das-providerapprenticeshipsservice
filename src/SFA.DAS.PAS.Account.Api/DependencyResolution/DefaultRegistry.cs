@@ -51,7 +51,7 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
 
             var config = GetConfiguration();
             For<IConfiguration>().Use<ProviderApprenticeshipsServiceConfiguration>();
-            For<IProviderAgreementStatusConfiguration>().Use(config.ContractAgreementsUrl);
+            For<IProviderAgreementStatusConfiguration>().Use(config);
             For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
             For<ICurrentDateTime>().Use(x => new CurrentDateTime());
             ConfigureHttpClient(config);
