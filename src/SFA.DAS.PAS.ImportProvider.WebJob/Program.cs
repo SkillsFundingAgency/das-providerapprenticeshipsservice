@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.PAS.ImportProvider.WebJob.DependencyResolution;
 using SFA.DAS.PAS.ImportProvider.WebJob.Importer;
@@ -9,7 +10,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob
     // To learn more about Microsoft Azure WebJobs SDK, please see https://go.microsoft.com/fwlink/?LinkID=320976
     class Program
     {
-        static void Main()
+        static async Task Main()
         {
             try
             {
@@ -20,7 +21,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob
 
                 var service = container.GetInstance<ImportProviderService>();
 
-                service.Import().Wait();
+                await service.Import();
                 timer.Stop();
 
                 logger.Info($"ImportProvider job done, Took: {timer.ElapsedMilliseconds} milliseconds");
