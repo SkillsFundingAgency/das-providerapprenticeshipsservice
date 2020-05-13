@@ -11,4 +11,4 @@ Instructions for use:
   + 'Insert into Providers ([Ukprn], [Name], [Created]) values' + char(13) + char(10)
   + '( ' + '''' +  convert(varchar,[Ukprn]) + ''''  + ', ' + '''' + convert(varchar,[Name]) + '''' +', ' + '''' + convert(NVARCHAR(MAX),[Created],121) + '''' + ');'  + char(13) + char(10) 
   + char(13) + char(10)
-  From [SFA.DAS.Commitments.Database].[dbo].[Providers]
+  From [dbo].[Providers]

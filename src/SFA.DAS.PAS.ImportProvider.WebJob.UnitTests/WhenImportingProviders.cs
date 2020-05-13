@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Apprenticeships.Api.Types.Providers;
@@ -9,8 +6,11 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.PAS.ImportProvider.WebJob.Importer;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.Providers.Api.Client;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
 
-namespace SFA.DAS.PAS.ImportProviders.WebJob.UnitTests
+namespace SFA.DAS.PAS.ImportProvider.WebJob.UnitTests
 {
     [TestFixture]
     public class WhenImportingProviders
