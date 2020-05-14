@@ -44,7 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string BaseUrl { get; set; }
     }
 
-    public class ProviderNotificationConfiguration : IJwtClientConfiguration
+    public class ProviderNotificationConfiguration : IGenericJwtClientConfiguration
     {
         public bool SendEmail { get; set; }
 
@@ -54,7 +54,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 
         public string SuperUserRoleId { get; set; }
 
+        public string Issuer { get; set; }
+
+        public string Audience { get; set; }
+
+        public string ClientSecret { get; set; }
+
         public string ClientToken { get; set; }
 
+        public int TokenExpirySeconds { get; set; } = 300;
     }
 }

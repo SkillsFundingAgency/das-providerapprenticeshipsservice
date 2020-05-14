@@ -26,6 +26,7 @@ namespace SFA.DAS.PAS.Account.Api.Controllers
         public async Task<IHttpActionResult> SendEmailToAllProviderRecipients(long ukprn, ProviderEmailRequest request)
         {
             await _emailOrchestrator.SendEmailToAllProviderRecipients(ukprn, request);
+            _logger.Info($"Sent email to all provider recipients for ukprn: {ukprn}", ukprn);
             return Ok();
         }
     }

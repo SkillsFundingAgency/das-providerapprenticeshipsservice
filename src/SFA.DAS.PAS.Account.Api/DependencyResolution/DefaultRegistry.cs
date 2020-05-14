@@ -127,7 +127,7 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
 
             return new HttpClientBuilder()
                     .WithDefaultHeaders()
-                    .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config.CommitmentNotification))
+                    .WithBearerAuthorisationHeader(new GenericJwtBearerTokenGenerator(config.CommitmentNotification))
                     .Build();
         }
     }
