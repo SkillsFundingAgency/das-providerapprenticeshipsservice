@@ -21,7 +21,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
         private ManageApprenticesOrchestrator _orchestrator;
         private Mock<IMediator> _mockMediator;
         private Mock<IApprenticeshipMapper> _mockApprenticeshipMapper;
-        private Mock<IApprenticeshipFiltersMapper> _mockApprenticeshipFiltersMapper;
         private Mock<IDataLockMapper> _mockDataLockMapper;
         
         [SetUp]
@@ -29,8 +28,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
         {
             _mockMediator = new Mock<IMediator>();
             _mockApprenticeshipMapper = new Mock<IApprenticeshipMapper>();
-
-            _mockApprenticeshipFiltersMapper = new Mock<IApprenticeshipFiltersMapper>();
 
             _mockDataLockMapper = new Mock<IDataLockMapper>();
 
@@ -40,9 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
                 Mock.Of<IProviderCommitmentsLogger>(),
                 _mockApprenticeshipMapper.Object,
                 Mock.Of<IApprovedApprenticeshipValidator>(),
-                _mockApprenticeshipFiltersMapper.Object,
-                _mockDataLockMapper.Object,
-                Mock.Of<IFiltersCookieManager>());
+                _mockDataLockMapper.Object);
         }
 
         [Test]

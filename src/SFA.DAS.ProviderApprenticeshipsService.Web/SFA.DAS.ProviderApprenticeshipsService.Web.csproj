@@ -627,6 +627,7 @@
     <Compile Include="Attributes\DasRoleCheckActionFilter.cs" />
     <Compile Include="Attributes\DasRoleCheckAttribute.cs" />
     <Compile Include="Attributes\DasRoleCheckExemptAttribute.cs" />
+    <Compile Include="Attributes\DeprecatedAttribute.cs" />
     <Compile Include="Attributes\ProviderUkPrnCheckActionFilter.cs" />
     <Compile Include="Attributes\ProviderUkPrnCheckAttribute.cs" />
     <Compile Include="Authorization\AuthorizationContextProvider.cs" />
@@ -739,7 +740,6 @@
     <Compile Include="Validation\IApprovedApprenticeshipValidator.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Orchestrators\DataLockOrchestrator.cs" />
-    <Compile Include="Orchestrators\Mappers\ApprenticeshipFiltersMapper.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipMapper.cs" />
     <Compile Include="Orchestrators\Mappers\BulkUploadMapper.cs" />
     <Compile Include="Orchestrators\BaseCommitmentOrchestrator.cs" />
@@ -756,7 +756,6 @@
     <Compile Include="Models\BulkUpload\CsvRecord.cs" />
     <Compile Include="Orchestrators\ManageApprenticesOrchestrator.cs" />
     <Compile Include="Orchestrators\Mappers\DataLockMapper.cs" />
-    <Compile Include="Orchestrators\Mappers\IApprenticeshipFiltersMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IApprenticeshipMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IDataLockMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -434,7 +434,6 @@
     <Compile Include="AcademicYear\WhenDeterminingTheAcademicYear.cs" />
     <Compile Include="AcademicYear\WhenValidatingAcademicYear.cs" />
     <Compile Include="Authorization\AuthorizationContextProviderTests.cs" />
-    <Compile Include="Controllers\ManageApprenticesControllerTests.cs" />
     <Compile Include="Extensions\IEnumerableCommitmentAgreementTests.cs" />
     <Compile Include="FakeHttpContext.cs" />
     <Compile Include="Helpers\HtmlExtensionsTests\WhenCallingCanShowReservationsLink.cs" />
@@ -454,8 +453,6 @@
     <Compile Include="Orchestrators\Commitments\ApprenticeshipValidationTestBase.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeshipDetails.cs" />
-    <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeshipFilters.cs" />
-    <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingApprenticeshipSearchQuery.cs" />
     <Compile Include="Orchestrators\Commitments\Mappers\WhenMappingDataLocks.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingAcknowledgementViewModel.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingApprenticeship.cs" />
@@ -467,14 +464,11 @@
     <Compile Include="Orchestrators\CreateCohort\WhenICreateCohort.cs" />
     <Compile Include="Orchestrators\Formatters\GivenACsvFormatter.cs" />
     <Compile Include="Orchestrators\Formatters\GivenAnExcelFormatter.cs" />
-    <Compile Include="Orchestrators\ManageApprentices\GivenAFiltersCookieManager.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenCreatingApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingDeleteApprenticeshipConfirmation.cs" />
     <Compile Include="Orchestrators\Commitments\WhenDeletingApprenticeship.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGetCohorts.cs" />
     <Compile Include="Orchestrators\DataLock\WhenGettingApprenticeshipDataLockMismatches.cs" />
-    <Compile Include="Orchestrators\ManageApprentices\WhenGettingApprenticeship.cs" />
-    <Compile Include="Orchestrators\ManageApprentices\WhenGettingApprenticeships.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenGettingReviewApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\ManageApprentices\WhenGettingUndoApprenticeshipUpdate.cs" />
     <Compile Include="Orchestrators\Commitments\WhenMappingApprenticeshipUpdate.cs" />
