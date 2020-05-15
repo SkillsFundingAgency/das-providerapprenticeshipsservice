@@ -57,7 +57,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PAS.Account.Api.Cli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PAS.ImportProvider.WebJob", "SFA.DAS.PAS.ImportProvider.WebJob\SFA.DAS.PAS.ImportProvider.WebJob.csproj", "{751CE567-1DA8-4D12-8351-3E4301E9F637}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PAS.ImportProvider.WebJob.UnitTests", "SFA.DAS.PAS.ImportProvider.WebJob.UnitTests\SFA.DAS.PAS.ImportProvider.WebJob.UnitTests.csproj", "{E0C7F90D-1E67-42F9-B1B2-93EACB084168}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PAS.ImportProvider.WebJob.UnitTests", "SFA.DAS.PAS.ImportProvider.WebJob.UnitTests\SFA.DAS.PAS.ImportProvider.WebJob.UnitTests.csproj", "{E0C7F90D-1E67-42F9-B1B2-93EACB084168}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PAS.UpdateUsersFromIdams.WebJob", "SFA.DAS.PAS.UpdateUsersFromIdams.WebJob\SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.csproj", "{A8882A6B-B963-4FB9-9694-660025B4D5D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -163,6 +165,10 @@ Global
 		{E0C7F90D-1E67-42F9-B1B2-93EACB084168}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0C7F90D-1E67-42F9-B1B2-93EACB084168}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0C7F90D-1E67-42F9-B1B2-93EACB084168}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8882A6B-B963-4FB9-9694-660025B4D5D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8882A6B-B963-4FB9-9694-660025B4D5D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8882A6B-B963-4FB9-9694-660025B4D5D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8882A6B-B963-4FB9-9694-660025B4D5D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
