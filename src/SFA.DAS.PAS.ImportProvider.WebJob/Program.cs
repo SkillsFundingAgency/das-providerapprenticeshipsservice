@@ -10,7 +10,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob
     // To learn more about Microsoft Azure WebJobs SDK, please see https://go.microsoft.com/fwlink/?LinkID=320976
     class Program
     {
-        static async Task Main()
+        static void Main()
         {
             try
             {
@@ -21,7 +21,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob
 
                 var service = container.GetInstance<ImportProviderService>();
 
-                await service.Import();
+                service.Import().Wait();
                 timer.Stop();
 
                 logger.Info($"ImportProvider job done, Took: {timer.ElapsedMilliseconds} milliseconds");
