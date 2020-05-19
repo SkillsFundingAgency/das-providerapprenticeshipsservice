@@ -8,7 +8,7 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
 {
     static class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             try
             {
@@ -19,7 +19,7 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
 
                 var service = container.GetInstance<IIdamsSyncService>();
 
-                await service.SyncUsers();
+                service.SyncUsers().Wait();
                 timer.Stop();
 
                 logger.Info($"UpdateUsersFromIdams job done, Took: {timer.ElapsedMilliseconds} milliseconds");
