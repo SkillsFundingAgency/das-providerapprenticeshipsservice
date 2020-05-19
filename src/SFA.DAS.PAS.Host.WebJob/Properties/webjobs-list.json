@@ -6,6 +6,9 @@
     },
     {
       "filePath": "../SFA.DAS.PAS.ImportProvider.WebJob/SFA.DAS.PAS.ImportProvider.WebJob.csproj"
+    },
+    {
+      "filePath": "../SFA.DAS.PAS.UpdateUsersFromIdams.WebJob/SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.csproj"
     }
   ]
 }
