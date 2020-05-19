@@ -1,8 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Library</OutputType>
     <TargetFramework>net472</TargetFramework>
+
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,8 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.PAS.ImportProvider.WebJob\SFA.DAS.PAS.ImportProvider.WebJob.csproj" />
-    <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Infrastructure\SFA.DAS.ProviderApprenticeshipsService.Infrastructure.csproj" />
+    <ProjectReference Include="..\SFA.DAS.PAS.UpdateUsersFromIdams.WebJob\SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.csproj" />
   </ItemGroup>
 
 </Project>

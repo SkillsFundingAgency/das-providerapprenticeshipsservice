@@ -59,7 +59,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PAS.ImportProvider.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PAS.ImportProvider.WebJob.UnitTests", "SFA.DAS.PAS.ImportProvider.WebJob.UnitTests\SFA.DAS.PAS.ImportProvider.WebJob.UnitTests.csproj", "{E0C7F90D-1E67-42F9-B1B2-93EACB084168}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PAS.UpdateUsersFromIdams.WebJob", "SFA.DAS.PAS.UpdateUsersFromIdams.WebJob\SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.csproj", "{A8882A6B-B963-4FB9-9694-660025B4D5D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PAS.UpdateUsersFromIdams.WebJob", "SFA.DAS.PAS.UpdateUsersFromIdams.WebJob\SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.csproj", "{A8882A6B-B963-4FB9-9694-660025B4D5D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests", "SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests\SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests.csproj", "{DD00F665-F000-47CA-9A98-5D253DE3235A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -169,6 +171,10 @@ Global
 		{A8882A6B-B963-4FB9-9694-660025B4D5D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8882A6B-B963-4FB9-9694-660025B4D5D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8882A6B-B963-4FB9-9694-660025B4D5D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD00F665-F000-47CA-9A98-5D253DE3235A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD00F665-F000-47CA-9A98-5D253DE3235A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD00F665-F000-47CA-9A98-5D253DE3235A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD00F665-F000-47CA-9A98-5D253DE3235A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -183,6 +189,7 @@ Global
 		{322438A5-6F96-465E-8661-93F1DC4A87A7} = {C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}
 		{FAE3391F-E970-499E-8C39-AA1BAFB498BB} = {C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}
 		{E0C7F90D-1E67-42F9-B1B2-93EACB084168} = {C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}
+		{DD00F665-F000-47CA-9A98-5D253DE3235A} = {C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3DD64861-62CA-4CDB-AC38-D40047EC39BC}

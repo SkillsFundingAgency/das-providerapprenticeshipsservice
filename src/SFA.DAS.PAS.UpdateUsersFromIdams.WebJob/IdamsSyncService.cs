@@ -38,13 +38,9 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"An error occurred retrieving users from Provider {provider.Ukprn}");
-                idamsUsers = new List<IdamsUser>();
-                idamsUsers.Add(new IdamsUser{ Email = "ABCd.com"});
-                idamsUsers.Add(new IdamsUser{ Email = "XXX.com", UserType = UserType.SuperUser});
-                
-                //await _providerRepository.MarkProviderIdamsUpdated(provider.Ukprn);
-                //throw;
+                _logger.Warn(ex, $"An error occurred retrieving users from Provider {provider.Ukprn}");
+                await _providerRepository.MarkProviderIdamsUpdated(provider.Ukprn);
+                throw;
             }
 
             _logger.Info($"Synchronise Users with IDAMS for Provider {provider.Ukprn}");
