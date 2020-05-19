@@ -14,15 +14,15 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
             {
                 var container = IoC.Initialize();
                 var logger = container.GetInstance<ILog>();
-                logger.Info("Update IDAMS Users Provider job started");
+                logger.Info("UpdateUsersFromIdams job started");
                 var timer = Stopwatch.StartNew();
 
-                //var service = container.GetInstance<ImportProviderService>();
+                var service = container.GetInstance<IIdamsSyncService>();
 
-                //await service.Import();
+                await service.SyncUsers();
                 timer.Stop();
 
-                logger.Info($"UpdateUsersFromIdams For Provider {0} job done, Took: {timer.ElapsedMilliseconds} milliseconds");
+                logger.Info($"UpdateUsersFromIdams job done, Took: {timer.ElapsedMilliseconds} milliseconds");
             }
             catch (Exception ex)
             {
@@ -30,7 +30,6 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
                 exLogger.Error(ex, "Error running UpdateUsersFromIdams WebJob");
                 throw;
             }
-
         }
     }
 }

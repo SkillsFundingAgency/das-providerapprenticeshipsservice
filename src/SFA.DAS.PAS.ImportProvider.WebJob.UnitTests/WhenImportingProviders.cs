@@ -27,7 +27,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.UnitTests
         {
             public ImportProviderService Sut { get; set; }
             public Mock<IProviderApiClient> providerApiClient { get; set; }
-            public Mock<IImportProviderRepository> importProviderRepository { get; set; }
+            public Mock<IProviderRepository> importProviderRepository { get; set; }
             public IEnumerable<ProviderSummary> providerApiClientResponse { get; set; }
 
             public WhenImportingProvidersFixture()
@@ -38,7 +38,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.UnitTests
                 providerApiClient = new Mock<IProviderApiClient>();
                 providerApiClient.Setup(x => x.FindAllAsync()).ReturnsAsync(providerApiClientResponse);
 
-                importProviderRepository = new Mock<IImportProviderRepository>();
+                importProviderRepository = new Mock<IProviderRepository>();
                 importProviderRepository.Setup(x => x.ImportProviders(It.IsAny<DataTable>()));
 
                 Sut = new ImportProviderService(providerApiClient.Object, importProviderRepository.Object, Mock.Of<ILog>());

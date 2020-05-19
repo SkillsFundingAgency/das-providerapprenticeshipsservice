@@ -73,6 +73,8 @@
     <Build Include="Tables\Providers.sql" />
     <Build Include="StoredProcedures\ImportProviders.sql" />
     <Build Include="UserDefinedTypes\Providers.sql" />
+    <Build Include="UserDefinedTypes\IdamsUsers.sql" />
+    <Build Include="StoredProcedures\SyncIdamsUsers.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SFA.DAS.ProviderAgreementStatus.Database.publish.xml" />

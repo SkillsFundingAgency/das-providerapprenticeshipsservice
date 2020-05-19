@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Application\SFA.DAS.ProviderApprenticeshipsService.Application.csproj" />
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj" />
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Infrastructure\SFA.DAS.ProviderApprenticeshipsService.Infrastructure.csproj" />
   </ItemGroup>

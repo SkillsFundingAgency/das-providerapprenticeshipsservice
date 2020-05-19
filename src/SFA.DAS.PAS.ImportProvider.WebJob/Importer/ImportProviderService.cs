@@ -11,13 +11,13 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Importer
     public class ImportProviderService : IImportProvider
     {
         private IProviderApiClient _providerApiClient;
-        private IImportProviderRepository _importProviderRepository;
+        private IProviderRepository _providerRepository;
         private ILog _logger;
 
-        public ImportProviderService(IProviderApiClient providerApiClient, IImportProviderRepository importProviderRepository, ILog logger)
+        public ImportProviderService(IProviderApiClient providerApiClient, IProviderRepository providerRepository, ILog logger)
         {
             _providerApiClient = providerApiClient;
-            _importProviderRepository = importProviderRepository;
+            _providerRepository = providerRepository;
             _logger = logger;
         }
 
@@ -38,7 +38,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Importer
 
         private Task ImportProviders(DataTable providersDataTable)
         {
-            return _importProviderRepository.ImportProviders(providersDataTable);
+            return _providerRepository.ImportProviders(providersDataTable);
         }
     }
 }

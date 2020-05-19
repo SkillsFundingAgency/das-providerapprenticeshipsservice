@@ -26,6 +26,7 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.DependencyResolution
                });
 
             var config = GetConfiguration();
+            For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
             For<IConfiguration>().Use<ProviderApprenticeshipsServiceConfiguration>();
             ConfigureHttpClient(config);
             RegisterExecutionPolicies();
@@ -34,6 +35,7 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.DependencyResolution
                x.ParentType,
                new DummyRequestContext(),
                null)).AlwaysUnique();
+            For<IIdamsSyncService>().Use<IdamsSyncService>();
         }
 
         private ProviderApprenticeshipsServiceConfiguration GetConfiguration()
