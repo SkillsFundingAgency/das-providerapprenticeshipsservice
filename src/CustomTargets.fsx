@@ -19,4 +19,10 @@ Target "Dotnet Restore" (fun _ ->
     DotNetCli.Restore(fun p ->
         { p with
                 Project = ".\\SFA.DAS.PAS.ImportProvider.WebJob.UnitTests" })
+    DotNetCli.Restore(fun p ->
+        { p with
+                Project = ".\\SFA.DAS.PAS.UpdateUsersFromIdams.WebJob" })
+    DotNetCli.Restore(fun p ->
+        { p with
+                Project = ".\\SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests" })
 )
