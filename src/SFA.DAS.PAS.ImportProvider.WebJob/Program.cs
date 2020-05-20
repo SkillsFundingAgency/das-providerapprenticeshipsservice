@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.PAS.ImportProvider.WebJob.DependencyResolution;
 using SFA.DAS.PAS.ImportProvider.WebJob.Importer;
