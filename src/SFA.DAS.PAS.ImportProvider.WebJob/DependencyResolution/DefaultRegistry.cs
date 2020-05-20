@@ -2,12 +2,10 @@
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.PAS.ImportProvider.WebJob.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.Providers.Api.Client;
 using StructureMap;
 using System;
-
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using IConfiguration = SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.IConfiguration;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.DependencyResolution
@@ -23,11 +21,10 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.DependencyResolution
                    scan.RegisterConcreteTypesAgainstTheFirstInterface();
                });
 
-            var config = GetConfiguration("SFA.DAS.ImportProviders");
-            For<IConfiguration>().Use(config);
-            For<ImportProviderConfiguration>().Use(config);
-            For<IImportProviderConfiguration>().Use(config);
-            For<IProviderApiClient>().Use<ProviderApiClient>().Ctor<string>("baseUrl").Is(ctx => ctx.GetInstance<ImportProviderConfiguration>().ApprenticeshipInfoService.BaseUrl);
+            var config = GetConfiguration("SFA.DAS.ProviderApprenticeshipsService");
+            For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
+            For<IConfiguration>().Use<ProviderApprenticeshipsServiceConfiguration>();
+            For<IProviderApiClient>().Use<ProviderApiClient>().Ctor<string>("baseUrl").Is(ctx => ctx.GetInstance<ProviderApprenticeshipsServiceConfiguration>().ApprenticeshipInfoService.BaseUrl);
 
             For<ILog>().Use(x => new NLogLogger(
                x.ParentType,
@@ -35,7 +32,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.DependencyResolution
                null)).AlwaysUnique();
         }
 
-        private ImportProviderConfiguration GetConfiguration(string serviceName)
+        private ProviderApprenticeshipsServiceConfiguration GetConfiguration(string serviceName)
         {
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
@@ -47,7 +44,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.DependencyResolution
             var configurationService = new ConfigurationService(configurationRepository,
                 new ConfigurationOptions(serviceName, environment, "1.0"));
 
-            var result = configurationService.Get<ImportProviderConfiguration>();
+            var result = configurationService.Get<ProviderApprenticeshipsServiceConfiguration>();
 
             return result;
         }

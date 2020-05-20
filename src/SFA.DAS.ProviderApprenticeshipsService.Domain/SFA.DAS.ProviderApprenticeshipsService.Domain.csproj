@@ -162,7 +162,6 @@
     <Compile Include="Interfaces\IApprenticeshipInfoServiceMapper.cs" />
     <Compile Include="Interfaces\IBackgroundNotificationService.cs" />
     <Compile Include="Interfaces\IEmployerAccountService.cs" />
-    <Compile Include="Interfaces\IImportProviderConfiguration.cs" />
     <Compile Include="Interfaces\IProviderRepository.cs" />
     <Compile Include="Interfaces\IProviderAgreementStatusConfiguration.cs" />
     <Compile Include="Interfaces\IReservationsService.cs" />
