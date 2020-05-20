@@ -29,6 +29,13 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
             List<IdamsUser> idamsUsers; 
 
             var provider = await _providerRepository.GetNextProviderForIdamsUpdate();
+
+            if (provider == null)
+            {
+                _logger.Info($"SyncUsers - No Provider Found");
+                return;
+            }
+
             _logger.Info($"SyncUsers For Provider {provider.Ukprn} has started");
 
             try

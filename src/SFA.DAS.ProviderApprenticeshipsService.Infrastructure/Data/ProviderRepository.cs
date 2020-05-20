@@ -40,7 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 var result = await c.QueryAsync<Provider>(
                     "SELECT TOP 1 [Ukprn], [Name], [Created], [Updated], [UpdatedFromIDAMS] FROM [dbo].[Providers] ORDER BY [UpdatedFromIDAMS];",
                     commandType: CommandType.Text);
-                return result.Single();
+                return result.SingleOrDefault();
             });
         }
 

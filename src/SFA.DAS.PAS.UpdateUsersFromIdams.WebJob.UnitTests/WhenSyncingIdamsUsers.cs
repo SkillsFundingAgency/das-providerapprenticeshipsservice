@@ -63,6 +63,14 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests
             f.VerifyItMarksProviderAsIdamsUpdated();
         }
 
+        [Test]
+        public async Task AndWhenThereAreNoProviders_Then_WeDontCallTheIdamsService()
+        {
+            var f = new WhenSyncingIdamsUsersFixture().WithNoProviders();
+            await f.Sut.SyncUsers();
+            f.VerifyIdamsServiceIsNotCalled();
+        }
+
         public class WhenSyncingIdamsUsersFixture
         {
             public Mock<IIdamsEmailServiceWrapper> IdamsEmailServiceWrapper { get; set; }
@@ -101,6 +109,13 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests
                 return this;
             }
 
+            public WhenSyncingIdamsUsersFixture WithNoProviders()
+            {
+                ProviderRepository.Setup(x => x.GetNextProviderForIdamsUpdate()).ReturnsAsync((Provider)null);
+                return this;
+            }
+
+
             public void VerifyItGetsTheNextProvider()
             {
                 ProviderRepository.Verify(x=>x.GetNextProviderForIdamsUpdate());
@@ -122,6 +137,12 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests
             public void VerifyItMarksProviderAsIdamsUpdated()
             {
                 ProviderRepository.Verify(x => x.MarkProviderIdamsUpdated(ProviderResponse.Ukprn));
+            }
+
+            public void VerifyIdamsServiceIsNotCalled()
+            {
+                IdamsEmailServiceWrapper.Verify(x => x.GetEmailsAsync(It.IsAny<long>()), Times.Never);
+                IdamsEmailServiceWrapper.Verify(x => x.GetSuperUserEmailsAsync(It.IsAny<long>()), Times.Never);
             }
         }
     }
