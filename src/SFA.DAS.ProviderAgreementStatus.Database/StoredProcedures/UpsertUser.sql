@@ -9,5 +9,5 @@ AS
 	MERGE [dbo].[User] as [Target]
 	USING (SELECT @userRef as UserRef) AS [SOURCE]
 	ON [Target].UserRef = [Source].UserRef
-	WHEN MATCHED THEN UPDATE SET [Target].DisplayName = @displayName, [Target].Ukprn = @ukprn, [Target].Email = @email, [Target].IsDeleted = 0
-	WHEN NOT MATCHED THEN INSERT (UserRef, DisplayName, Ukprn, Email, IsDeleted) VALUES (@userRef, @displayName, @ukprn, @email, @isDeleted);
+	WHEN MATCHED THEN UPDATE SET [Target].DisplayName = @displayName, [Target].Ukprn = @ukprn, [Target].Email = @email, [Target].IsDeleted = 0, [Target].LastLogin = GETDATE()
+	WHEN NOT MATCHED THEN INSERT (UserRef, DisplayName, Ukprn, Email, IsDeleted, LastLogin) VALUES (@userRef, @displayName, @ukprn, @email, @isDeleted, GETDATE());
