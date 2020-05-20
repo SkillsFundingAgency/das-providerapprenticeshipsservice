@@ -21,6 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool IsReadOnly { get; set; }
         public bool IsFundedByTransfer { get; set; }
         public bool IsAutoReservationEnabled { get; set; }
+        public bool IsLinkedToChangeOfPartyRequest { get; set; }
 
         public Dictionary<string, string> Errors { get; set; }
         public Dictionary<string, string> Warnings { get; set; }
