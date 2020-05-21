@@ -145,6 +145,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             Assert.AreEqual(expectedTransferFlag, result.IsFundedByTransfer);
         }
 
+        [TestCase(123L, true)]
+        [TestCase(null, false)]
+        public async Task ThenTheCommitmentIsMarkedAsLinkedToChangeOfPartyRequestCorrectly(long? changeOfPartyRequestId, bool expectIsLinkedToChangeOfParty)
+        {
+            var commitment = new CommitmentView
+            {
+                AgreementStatus = AgreementStatus.ProviderAgreed,
+                EditStatus = EditStatus.ProviderOnly,
+                Apprenticeships = new List<Apprenticeship>(),
+                Messages = new List<MessageView>(),
+                ChangeOfPartyRequestId = changeOfPartyRequestId
+            };
+
+            _mockMediator = GetMediator(commitment);
+            SetUpOrchestrator();
+            var result = await _orchestrator.GetCommitmentDetails(1L, "ABBA213");
+
+            Assert.AreEqual(expectIsLinkedToChangeOfParty, result.IsLinkedToChangeOfPartyRequest);
+        }
+
         [Test]
         public async Task AndApprenticeshipIsOverFundingLimitThenACostWarningShouldBeAddedToViewModel()
         {
