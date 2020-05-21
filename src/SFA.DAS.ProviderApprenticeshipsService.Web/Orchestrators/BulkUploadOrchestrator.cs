@@ -182,6 +182,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var commitment = await GetCommitment(providerid, hashedcommitmentid);
             AssertCommitmentStatus(commitment);
             await AssertAutoReservationEnabled(commitment);
+            AssertIsNotChangeOfParty(commitment);
 
             return new UploadApprenticeshipsViewModel
             {
@@ -255,6 +256,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             if (!await _reservationsService.IsAutoReservationEnabled(commitment.EmployerAccountId, commitment.TransferSender?.Id))
             {
                 throw new HttpException((int)HttpStatusCode.Forbidden, "Current account is not authorized for automatic reservations");
+
+            }
+        }
+
+        private void AssertIsNotChangeOfParty(CommitmentView commitment)
+        {
+            if (commitment.IsLinkedToChangeOfPartyRequest)
+            {
+                throw new HttpException((int)HttpStatusCode.Forbidden, "Cohort is linked to a ChangeOfParty Request - apprentices cannot be added to it");
             }
         }
     }
