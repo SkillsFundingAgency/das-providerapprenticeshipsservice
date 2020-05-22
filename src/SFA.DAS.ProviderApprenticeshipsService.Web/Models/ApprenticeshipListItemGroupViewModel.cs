@@ -66,15 +66,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
             if (!IsLinkedToChangeOfPartyRequest && Apprenticeships.Any(a => !a.StartDate.HasValue))
                 return null;
 
-            int firstFundingCap = 0;
-            if (IsLinkedToChangeOfPartyRequest)
-            {
-                firstFundingCap = TrainingProgramme.FundingCapOn(Apprenticeships.First().OriginalStartDate.Value);
-            }
-            else
-            {
-                firstFundingCap = TrainingProgramme.FundingCapOn(Apprenticeships.First().StartDate.Value);
-            }
+            int firstFundingCap = IsLinkedToChangeOfPartyRequest 
+                          ? TrainingProgramme.FundingCapOn(Apprenticeships.First().OriginalStartDate.Value)
+                          : TrainingProgramme.FundingCapOn(Apprenticeships.First().StartDate.Value);
 
             // check for magic 0, which means unable to calculate a funding cap (e.g. date out of bounds)
             if (firstFundingCap == 0)
