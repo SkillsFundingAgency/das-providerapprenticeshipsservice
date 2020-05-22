@@ -29,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
             if (trainingProgramme == null)
                 return false;
 
-            else if (!isLinkedToChangeOfPartyRequest && !StartDate.HasValue)
+            if (!isLinkedToChangeOfPartyRequest && !StartDate.HasValue)
                 return false;
 
             var fundingCapAtStartDate = trainingProgramme.FundingCapOn(isLinkedToChangeOfPartyRequest ? OriginalStartDate.Value : StartDate.Value);
