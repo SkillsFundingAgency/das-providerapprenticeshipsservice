@@ -71,6 +71,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("cohorts/employer")]
         public async Task<ActionResult> WithEmployer(long providerId)
         {
+            if (_featureToggleService.Get<CohortSummariesV2>().FeatureEnabled)
+                return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/with-employer"));
+
             SaveRequestStatusInCookie(RequestStatus.WithEmployerForApproval);
 
             var model = await _commitmentOrchestrator.GetAllWithEmployer(providerId);
@@ -84,6 +87,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("cohorts/transferfunded")]
         public async Task<ActionResult> TransferFunded(long providerId)
         {
+            if (_featureToggleService.Get<CohortSummariesV2>().FeatureEnabled)
+                return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/with-transfer-sender"));
+
             SaveRequestStatusInCookie(RequestStatus.WithSenderForApproval);
 
             var model = await _commitmentOrchestrator.GetAllTransferFunded(providerId);
@@ -112,6 +118,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 		        [Route("cohorts/drafts")]
         public async Task<ActionResult> DraftList(long providerId)
         {
+            if (_featureToggleService.Get<CohortSummariesV2>().FeatureEnabled)
+                return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/draft"));
             SaveRequestStatusInCookie(RequestStatus.NewRequest);
 
             var model = await _commitmentOrchestrator.GetAllDrafts(providerId);
