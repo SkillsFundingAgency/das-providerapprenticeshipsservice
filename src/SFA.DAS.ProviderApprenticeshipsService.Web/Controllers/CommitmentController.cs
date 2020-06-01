@@ -41,16 +41,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpGet]
         [Route("Cohorts")]
         [OutputCache(CacheProfile = "NoCache")]
-        public async Task<ActionResult> Cohorts(long providerId)
+        public ActionResult Cohorts(long providerId)
         {
-            if (_featureToggleService.Get<CohortSummariesV2>().FeatureEnabled)
-                return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved"));
-
-            var model = await _commitmentOrchestrator.GetCohorts(providerId);
-
-            AddFlashMessageToViewModel(model);
-
-            return View(model);
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved"));
         }
 
         [HttpGet]
@@ -69,65 +62,30 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("cohorts/employer")]
-        public async Task<ActionResult> WithEmployer(long providerId)
+        public ActionResult WithEmployer(long providerId)
         {
-            if (_featureToggleService.Get<CohortSummariesV2>().FeatureEnabled)
-                return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/with-employer"));
-
-            SaveRequestStatusInCookie(RequestStatus.WithEmployerForApproval);
-
-            var model = await _commitmentOrchestrator.GetAllWithEmployer(providerId);
-
-            AddFlashMessageToViewModel(model);
-
-            return View("RequestList", model);
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/with-employer"));
         }
 
         [HttpGet]
         [Route("cohorts/transferfunded")]
-        public async Task<ActionResult> TransferFunded(long providerId)
+        public ActionResult TransferFunded(long providerId)
         {
-            if (_featureToggleService.Get<CohortSummariesV2>().FeatureEnabled)
-                return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/with-transfer-sender"));
-
-            SaveRequestStatusInCookie(RequestStatus.WithSenderForApproval);
-
-            var model = await _commitmentOrchestrator.GetAllTransferFunded(providerId);
-
-            AddFlashMessageToViewModel(model);
-
-            return View(model);
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/with-transfer-sender"));
         }
 
         [HttpGet]
         [Route("cohorts/review")]
-        public async Task<ActionResult> ReadyForReview(long providerId)
+        public ActionResult ReadyForReview(long providerId)
         {
-            if (_featureToggleService.Get<CohortSummariesV2>().FeatureEnabled)
-                return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/review"));
-
-            SaveRequestStatusInCookie(RequestStatus.ReadyForReview);
-
-            var model = await _commitmentOrchestrator.GetAllReadyForReview(providerId);
-
-            AddFlashMessageToViewModel(model);
-
-            return View("RequestList", model);
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/review"));
         }
 		
-		        [Route("cohorts/drafts")]
-        public async Task<ActionResult> DraftList(long providerId)
+        [Route("cohorts/drafts")]
+        public ActionResult DraftList(long providerId)
         {
-            if (_featureToggleService.Get<CohortSummariesV2>().FeatureEnabled)
-                return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/draft"));
-            SaveRequestStatusInCookie(RequestStatus.NewRequest);
-
-            var model = await _commitmentOrchestrator.GetAllDrafts(providerId);
-
-            AddFlashMessageToViewModel(model);
-
-            return View("DraftList", model);
-        }
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/draft"));
+         }
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Details", Name = "CohortDetails")]
@@ -183,15 +141,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             await _commitmentOrchestrator.DeleteCommitment(CurrentUserId, viewModel.ProviderId, viewModel.HashedCommitmentId, GetSignedInUser());
 
-            SetInfoMessage("Cohort deleted", FlashMessageSeverityLevel.Okay);
-
-            var currentStatusCohortAny = 
-                await _commitmentOrchestrator.AnyCohortsForStatus(viewModel.ProviderId, GetRequestStatusFromCookie());
-
-            if (!currentStatusCohortAny)
-                return RedirectToAction("Cohorts", new { providerId = viewModel.ProviderId });
-
-            return Redirect(GetReturnToListUrl(viewModel.ProviderId));
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{viewModel.ProviderId}/unapproved"));
         }
 
         [HttpGet]
@@ -280,15 +230,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return RedirectToAction("Approved", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
             }
 
-            if (viewModel.SaveStatus == SaveStatus.Save)
-            {
-                SetInfoMessage("Cohort saved but not sent" ,FlashMessageSeverityLevel.None );
-                var currentStatusCohortAny = await _commitmentOrchestrator.AnyCohortsForStatus(viewModel.ProviderId, GetRequestStatusFromCookie());
-                if (currentStatusCohortAny)
-                    return Redirect(GetReturnToListUrl(viewModel.ProviderId));
-            }
-
-            return RedirectToAction("Cohorts", new { providerId = viewModel.ProviderId });
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{viewModel.ProviderId}/unapproved"));
         }
 
         [HttpGet]
