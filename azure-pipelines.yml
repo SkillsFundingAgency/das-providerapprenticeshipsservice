@@ -15,6 +15,10 @@ variables:
     value: 'release'
   - name: buildPlatform
     value: 'any cpu'  
+  - name: Build.MajorNumber
+    value: 1
+  - name: Build.MinorNumber
+    value: 1
 
 pool:
   name: 'Continuous Integration 02 - SSD - 160ACU'
