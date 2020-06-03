@@ -74,7 +74,7 @@ steps:
   inputs:
     solution: 'src/SFA.DAS.PAS.Account.Api/SFA.DAS.PAS.Account.Api.csproj'
     vsVersion: 15.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/SFA.DAS.PAS.Account.Api"'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/Provider Accounts API"'
     platform: 'anycpu'
     configuration: '$(buildConfiguration)'
     clean: true
@@ -84,7 +84,7 @@ steps:
   inputs:
     solution: 'src/SFA.DAS.ProviderApprenticeshipsService.Web/SFA.DAS.ProviderApprenticeshipsService.Web.csproj'
     vsVersion: 15.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/SFA.DAS.ProviderApprenticeshipsService.Web"'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/Provider Portal"'
     platform: 'anycpu'
     configuration: '$(buildConfiguration)'
     clean: true
@@ -94,7 +94,7 @@ steps:
   inputs:
     solution: 'src/SFA.DAS.PAS.Host.WebJob/SFA.DAS.PAS.Host.WebJob.csproj'
     vsVersion: 15.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/SFA.DAS.PAS.Host.WebJob"'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/WebJob"'
     platform: 'anycpu'
     configuration: '$(buildConfiguration)'
     clean: true        
