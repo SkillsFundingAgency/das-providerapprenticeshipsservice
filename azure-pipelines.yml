@@ -56,16 +56,14 @@ steps:
     restoreSolution: 'src/SFA.DAS.ProviderApprenticeshipsService.sln'
 
 - task: DotNetCoreCLI@2
-  displayName: 'dotnet restore all'
-  inputs:
-    command: restore
-    projects: "src/**/*.csproj"
-
-- task: DotNetCoreCLI@2
   displayName: 'dotnet restore'
   inputs:
     command: restore
-    projects: "src/SFA.DAS.ProviderUrlHelperTests/SFA.DAS.ProviderUrlHelperTests.csproj;src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj;src/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj"
+    projects: |
+      src/SFA.DAS.ProviderUrlHelper/SFA.DAS.ProviderUrlHelper.csproj
+      src/SFA.DAS.ProviderUrlHelperTests/SFA.DAS.ProviderUrlHelperTests.csproj
+      src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj
+      src/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj"
 
 - task: VSBuild@1
   displayName: 'Build solution'
