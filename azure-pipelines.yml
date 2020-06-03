@@ -15,10 +15,6 @@ variables:
     value: 'release'
   - name: buildPlatform
     value: 'any cpu'  
-  - name: Build.MajorNumber
-    value: 1
-  - name: Build.MinorNumber
-    value: 1
   - name: GitVersion.MajorMinorPatch
     value: ''
 
@@ -51,7 +47,7 @@ steps:
     versionSpec: 4.x
 
 - task: NuGetCommand@2
-  displayName: 'NuGet restore'
+  displayName: 'NuGet Restore SFA.DAS.ProviderApprenticeshipsService.sln'
   inputs:
     restoreSolution: 'src/SFA.DAS.ProviderApprenticeshipsService.sln'
 
@@ -62,7 +58,7 @@ steps:
     projects: "src/**/*.csproj"
 
 - task: VSBuild@1
-  displayName: 'Build solution'
+  displayName: 'Build SFA.DAS.ProviderApprenticeshipsService.sln'
   inputs:
     solution: 'src/SFA.DAS.ProviderApprenticeshipsService.sln'
     platform: '$(buildPlatform)'
