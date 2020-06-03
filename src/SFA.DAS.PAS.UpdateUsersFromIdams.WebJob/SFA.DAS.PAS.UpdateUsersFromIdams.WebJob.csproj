@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.NLogTarget" Version="2.4.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="1.0.1" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Core" Version="1.0.1" />
     <PackageReference Include="Microsoft.Web.WebJobs.Publish" Version="2.0.0" />
