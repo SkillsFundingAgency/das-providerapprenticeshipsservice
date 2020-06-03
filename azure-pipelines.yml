@@ -19,7 +19,7 @@ variables:
     value: 1
   - name: Build.MinorNumber
     value: 1
-  - name: GitVersion.SemVer
+  - name: GitVersion.MajorMinorPatch
     value: ''
 
 pool:
@@ -79,7 +79,7 @@ steps:
   displayName: 'dotnet build SFA.DAS.ProviderUrlHelper.csproj'
   inputs:
     projects: src/SFA.DAS.ProviderUrlHelper/SFA.DAS.ProviderUrlHelper.csproj
-    arguments: ' /p:AssemblyVersion=$(GitVersion.SemVer) /P:Configuration=$(buildConfiguration)'
+    arguments: ' /p:AssemblyVersion=$(GitVersion.MajorMinorPatch) /P:Configuration=$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore SFA.DAS.PAS.Account.Api.ClientV2.csproj'
@@ -91,7 +91,7 @@ steps:
   displayName: 'dotnet build SFA.DAS.PAS.Account.Api.ClientV2.csproj'
   inputs:
     projects: src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj
-    arguments: ' /p:AssemblyVersion=$(GitVersion.SemVer) /P:Configuration=$(buildConfiguration)'
+    arguments: ' /p:AssemblyVersion=$(GitVersion.MajorMinorPatch) /P:Configuration=$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore SFA.DAS.PAS.Account.Api.Types.csproj'
@@ -103,7 +103,7 @@ steps:
   displayName: 'dotnet build SFA.DAS.PAS.Account.Api.Types.csproj'
   inputs:
     projects: src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj
-    arguments: ' /p:AssemblyVersion=$(GitVersion.SemVer) /P:Configuration=$(buildConfiguration)'
+    arguments: ' /p:AssemblyVersion=$(GitVersion.MajorMinorPatch) /P:Configuration=$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
