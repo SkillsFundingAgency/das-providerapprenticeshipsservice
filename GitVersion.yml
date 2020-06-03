@@ -1,2 +1,2 @@
 mode: Mainline
-assembly-versioning-scheme: AssemblySemFileVer
+assembly-versioning-scheme: MajorMinorPatch
