@@ -66,9 +66,9 @@ steps:
       src/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj"
 
 - task: VSBuild@1
-  displayName: 'Build solution'
+  displayName: 'Build Projects'
   inputs:
-    solution: 'src/SFA.DAS.ProviderApprenticeshipsService.sln'
+    solution: 'src/**/*.csproj'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     clean: true
