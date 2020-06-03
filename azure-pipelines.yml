@@ -10,15 +10,12 @@ workspace:
   clean: all
 
 variables:
-  - group: 'Prod Management Resources'
-  - name: buildConfiguration
-    value: 'release'
-  - name: buildPlatform
-    value: 'any cpu'  
-  - name: Build.MajorNumber
-    value: 1
-  - name: Build.MinorNumber
-    value: 1
+  group: 'Prod Management Resources'
+  buildConfiguration: 'release'
+  buildPlatform: 'any cpu'
+  Build.MajorNumber: 1
+  Build.MinorNumber: 1
+  GitVersion.SemVer: ''
 
 pool:
   name: 'Continuous Integration 02 - SSD - 160ACU'
@@ -77,7 +74,7 @@ steps:
   displayName: 'dotnet build SFA.DAS.ProviderUrlHelper.csproj'
   inputs:
     projects: src/SFA.DAS.ProviderUrlHelper/SFA.DAS.ProviderUrlHelper.csproj
-    arguments: ' /p:AssemblyVersion=$(Build.BuildNumber) /P:Configuration=$(buildConfiguration)'
+    arguments: ' /p:AssemblyVersion=$(GitVersion.SemVer) /P:Configuration=$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore SFA.DAS.PAS.Account.Api.ClientV2.csproj'
@@ -89,7 +86,7 @@ steps:
   displayName: 'dotnet build SFA.DAS.PAS.Account.Api.ClientV2.csproj'
   inputs:
     projects: src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj
-    arguments: ' /p:AssemblyVersion=$(Build.BuildNumber) /P:Configuration=$(buildConfiguration)'
+    arguments: ' /p:AssemblyVersion=$(GitVersion.SemVer) /P:Configuration=$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore SFA.DAS.PAS.Account.Api.Types.csproj'
@@ -101,7 +98,7 @@ steps:
   displayName: 'dotnet build SFA.DAS.PAS.Account.Api.Types.csproj'
   inputs:
     projects: src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj
-    arguments: ' /p:AssemblyVersion=$(Build.BuildNumber) /P:Configuration=$(buildConfiguration)'
+    arguments: ' /p:AssemblyVersion=$(GitVersion.SemVer) /P:Configuration=$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
