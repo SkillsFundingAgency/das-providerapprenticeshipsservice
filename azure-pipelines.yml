@@ -56,10 +56,16 @@ steps:
     restoreSolution: 'src/SFA.DAS.ProviderApprenticeshipsService.sln'
 
 - task: DotNetCoreCLI@2
-  displayName: Restore
+  displayName: 'dotnet restore all'
   inputs:
     command: restore
-    projects: "src/**/*.csproj"   
+    projects: "src/**/*.csproj"
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: restore
+    projects: "src/SFA.DAS.ProviderUrlHelperTests/SFA.DAS.ProviderUrlHelperTests.csproj;src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj;src/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj"
 
 - task: VSBuild@1
   displayName: 'Build solution'
@@ -68,6 +74,26 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     clean: true
+
+- task: VSBuild@1
+  displayName: 'Publish Provider Accounts API'
+  inputs:
+    solution: 'src/SFA.DAS.PAS.Account.Api/SFA.DAS.PAS.Account.Api.csproj'
+    vsVersion: 15.0
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
+    platform: 'anycpu'
+    configuration: '$(buildConfiguration)'
+    clean: true
+
+- task: VSBuild@1
+  displayName: 'Publish Provider Portal'
+  inputs:
+    solution: 'src/SFA.DAS.ProviderApprenticeshipsService.Web/SFA.DAS.ProviderApprenticeshipsService.Web.csproj'
+    vsVersion: 15.0
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
+    platform: 'anycpu'
+    configuration: '$(buildConfiguration)'
+    clean: true          
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore SFA.DAS.ProviderUrlHelper.csproj'
