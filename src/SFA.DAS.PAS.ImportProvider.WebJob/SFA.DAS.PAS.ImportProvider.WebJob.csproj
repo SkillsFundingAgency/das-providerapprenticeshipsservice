@@ -47,5 +47,8 @@
       <IsTransformFile>true</IsTransformFile>
       <DependentUpon>App.config</DependentUpon>
     </None>
+    <None Update="settings.job">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
