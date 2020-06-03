@@ -70,10 +70,12 @@ steps:
     clean: true
 
 - task: NuGetCommand@2
+  displayName: 'NuGet Pack Provider Accounts API Client'
   inputs:
     command: 'pack'
     packagesToPack: 'src/SFA.DAS.PAS.Account.Api.Client/SFA.DAS.PAS.Account.Api.Client.csproj'
     packDestination: '$(Build.ArtifactStagingDirectory)'
+    versioningScheme: byBuildNumber
 
 - task: VSBuild@1
   displayName: 'Publish Provider Accounts API'
@@ -181,6 +183,7 @@ steps:
      SFA.DAS.API/**/*MO.cscfg
      **/bin/Release/SFA.DAS.ProviderAgreementStatus.Database.dacpac
      SFA.DAS.PAS.Account.Api.Client/Bin/Release/*.nupkg
+     SFA.DAS.PAS.Account.Api.Client.*.nupkg
      SFA.DAS.PAS.Account.Api.Types/Bin/Release/*.nupkg
      SFA.DAS.PAS.Host.WebJob/obj/Release/Package/**/*.*
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
