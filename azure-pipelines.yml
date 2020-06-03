@@ -94,7 +94,7 @@ steps:
   inputs:
     solution: 'src/SFA.DAS.PAS.Host.WebJob/SFA.DAS.PAS.Host.WebJob.csproj'
     vsVersion: 15.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/WebJob"'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/Provider WebJob"'
     platform: 'anycpu'
     configuration: '$(buildConfiguration)'
     clean: true        
@@ -109,6 +109,18 @@ steps:
   displayName: 'dotnet build SFA.DAS.ProviderUrlHelper.csproj'
   inputs:
     projects: src/SFA.DAS.ProviderUrlHelper/SFA.DAS.ProviderUrlHelper.csproj
+    arguments: ' /p:AssemblyVersion=$(GitVersion.MajorMinorPatch) /P:Configuration=$(buildConfiguration)'    
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore SFA.DAS.PAS.Account.Api.Client.csproj'
+  inputs:
+    command: restore
+    projects: src/SFA.DAS.PAS.Account.Api.Client/SFA.DAS.PAS.Account.Api.Client.csproj
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build SFA.DAS.PAS.Account.Api.Client.csproj'
+  inputs:
+    projects: src/SFA.DAS.PAS.Account.Api.Client/SFA.DAS.PAS.Account.Api.Client.csproj
     arguments: ' /p:AssemblyVersion=$(GitVersion.MajorMinorPatch) /P:Configuration=$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
