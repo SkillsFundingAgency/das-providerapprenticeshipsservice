@@ -168,24 +168,7 @@ steps:
      /Deploy/parameters.json
      /Deploy/template.json
      Tools/Nuget/NuGet.exe
-     Tools/FAKE/tools/*.*
-     Build.fsx
-     RunBuild.bat
-     SFA.DAS.CloudService/bin/**\*.cspkg
-     SFA.DAS.CloudService/bin/**\*.cscfg
-     SFA.DAS.CloudService/bin/**\*.csdef
-     SFA.DAS.CloudService/**/*Prod.cscfg
-     SFA.DAS.CloudService/**/*MO.cscfg
-     SFA.DAS.API/bin/**\*.cspkg
-     SFA.DAS.API/bin/**\*.cscfg
-     SFA.DAS.API/bin/**\*.csdef
-     SFA.DAS.API/**/*Prod.cscfg
-     SFA.DAS.API/**/*MO.cscfg
      **/bin/Release/SFA.DAS.ProviderAgreementStatus.Database.dacpac
-     SFA.DAS.PAS.Account.Api.Client/Bin/Release/*.nupkg
-     SFA.DAS.PAS.Account.Api.Client.*.nupkg
-     SFA.DAS.PAS.Account.Api.Types/Bin/Release/*.nupkg
-     SFA.DAS.PAS.Host.WebJob/obj/Release/Package/**/*.*
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
