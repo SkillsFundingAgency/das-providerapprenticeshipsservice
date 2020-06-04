@@ -161,8 +161,8 @@ steps:
   inputs:
     SourceFolder: src
     Contents: |
-     /azure/template.json
-     **/bin/Release/SFA.DAS.ProviderAgreementStatus.Database.dacpac
+     azure/**
+     src/**/*.dacpac
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
