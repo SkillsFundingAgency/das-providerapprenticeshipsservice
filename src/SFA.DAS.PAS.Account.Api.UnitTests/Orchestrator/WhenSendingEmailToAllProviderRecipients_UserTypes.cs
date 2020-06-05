@@ -56,9 +56,11 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
             };
         }
 
-        [Test]
-        public async Task ShouldOnlySendNotificationForNormaUser()
+        [TestCase(true)]
+        [TestCase(false)]
+        public async Task ShouldOnlySendNotificationForNormaUser(bool explicitListIsNull)
         {
+            _request.ExplicitEmailAddresses = explicitListIsNull ? null : new List<string>();
 
             _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, Mock.Of<IProviderCommitmentsLogger>());
             await _sut.SendEmailToAllProviderRecipients(_ukprn, _request);
@@ -66,9 +68,12 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
             _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c=>c.Email.RecipientsAddress == "normal@test.com"), It.IsAny<CancellationToken>()), Times.Once);
             _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress == "super@test.com"), It.IsAny<CancellationToken>()), Times.Never);
         }
-        [Test]
-        public async Task ShouldOnlySendNotificationForSuperUser()
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public async Task ShouldOnlySendNotificationForSuperUser(bool explicitListIsNull)
         {
+            _request.ExplicitEmailAddresses = explicitListIsNull ? null : new List<string>();
             _accountUsers.Remove(_normalUser);
 
             _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, Mock.Of<IProviderCommitmentsLogger>());

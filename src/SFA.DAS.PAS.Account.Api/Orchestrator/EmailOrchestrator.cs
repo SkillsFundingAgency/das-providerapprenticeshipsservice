@@ -30,7 +30,7 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
 
             var accountUsers = (await _accountOrchestrator.GetAccountUsers(providerId)).ToList();
 
-            if (message.ExplicitEmailAddresses != null)
+            if (message.ExplicitEmailAddresses != null && message.ExplicitEmailAddresses.Any())
             {
                 _logger.Info("Explicit recipients requested for email");
 
