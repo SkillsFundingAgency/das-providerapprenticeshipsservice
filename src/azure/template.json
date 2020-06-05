@@ -57,7 +57,7 @@
         "apiStorageConnectionString": {
             "type": "securestring"
         },
-        "apiLogLevel": {
+        "logLevel": {
             "type": "string"
         },
         "loggingRedisKey": {
@@ -104,7 +104,8 @@
             "type": "string"
         },
         "elasticPoolName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": ""
         },
         "logAnalyticsSubscriptionId": {
             "type": "string",
@@ -207,7 +208,7 @@
                             },
                             {
                                 "name": "LogLevel",
-                                "value": "[parameters('apiLogLevel')]"
+                                "value": "[parameters('logLevel')]"
                             },
                             {
                                 "name": "LoggingRedisKey",
