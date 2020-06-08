@@ -9,7 +9,7 @@ using System.Web.Routing;
 using FluentValidation.Mvc;
 using SFA.DAS.NLog.Logger;
 using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Azure;
+using System.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 using System.Linq;
 using System.Net;
@@ -37,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             var container = StructuremapMvc.StructureMapDependencyScope.Container;
             FluentValidationModelValidatorProvider.Configure(x => x.ValidatorFactory = new StructureMapValidatorFactory(container));
 
-            TelemetryConfiguration.Active.InstrumentationKey = CloudConfigurationManager.GetSetting("InstrumentationKey");
+            TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["InstrumentationKey"];
 
             Logger.Info("Starting up");
         }
