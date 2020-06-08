@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using MoreLinq;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.Sql.Client;
@@ -83,6 +85,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                     sql: "UPDATE [dbo].[User] set [IsDeleted]=1 WHERE UserRef = @userRef",
                     param: parameters,
                     commandType: CommandType.Text);
+            });
+        }
+
+        public async Task SyncIdamsUsers(long ukprn, List<IdamsUser> idamsUsers)
+        {
+            var sublist = idamsUsers.Select(x => new {x.Email, UserType = (short) x.UserType}).ToDataTable(u => u.Email, u => u.UserType);
+
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@ukprn", ukprn, DbType.Int64);
+                parameters.Add("@users", sublist.AsTableValuedParameter());
+
+                return await c.ExecuteAsync(
+                    sql: "[dbo].[SyncIdamsUsers]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
             });
         }
     }

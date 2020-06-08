@@ -81,6 +81,7 @@
       <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
@@ -161,6 +162,7 @@
     <Compile Include="Interfaces\IApprenticeshipInfoServiceMapper.cs" />
     <Compile Include="Interfaces\IBackgroundNotificationService.cs" />
     <Compile Include="Interfaces\IEmployerAccountService.cs" />
+    <Compile Include="Interfaces\IProviderRepository.cs" />
     <Compile Include="Interfaces\IProviderAgreementStatusConfiguration.cs" />
     <Compile Include="Interfaces\IReservationsService.cs" />
     <Compile Include="Models\AcademicYear\AcademicYearValidationResult.cs" />
@@ -190,8 +192,11 @@
     <Compile Include="Models\FeatureToggles\ProviderCreateCohortV2.cs" />
     <Compile Include="Models\FeatureToggles\ApprenticeDetailsV2.cs" />
     <Compile Include="Models\FeatureToggles\ProviderManageApprenticesV2.cs" />
+    <Compile Include="Models\UserType.cs" />
+    <Compile Include="Models\IdamsUser.cs" />
     <Compile Include="Models\Organisation\LegalEntity.cs" />
     <Compile Include="Models\Settings\UserNotificationSetting.cs" />
+    <Compile Include="Models\Provider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\ApprenticeshipProvider\Provider.cs" />
     <Compile Include="ProviderAgreementStatus.cs" />
