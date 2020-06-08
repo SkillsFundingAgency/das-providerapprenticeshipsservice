@@ -9,7 +9,6 @@ using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using StructureMap;
 using StructureMap.Pipeline;
-using System.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 {
