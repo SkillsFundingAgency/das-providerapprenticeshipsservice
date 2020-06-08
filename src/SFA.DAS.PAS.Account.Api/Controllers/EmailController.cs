@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Http;
 using SFA.DAS.PAS.Account.Api.Attributes;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
@@ -25,8 +26,17 @@ namespace SFA.DAS.PAS.Account.Api.Controllers
         [ApiAuthorize(Roles = "ReadAccountUsers")]
         public async Task<IHttpActionResult> SendEmailToAllProviderRecipients(long ukprn, ProviderEmailRequest request)
         {
-            await _emailOrchestrator.SendEmailToAllProviderRecipients(ukprn, request);
-            return Ok();
+            try
+            {
+                await _emailOrchestrator.SendEmailToAllProviderRecipients(ukprn, request);
+                _logger.Info($"Email template '{request?.TemplateId}' sent to Provider recipients successfully", ukprn);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, $"Error sending email template '{request?.TemplateId}' to Provider recipients", ukprn);
+                throw;
+            }
         }
     }
 }
