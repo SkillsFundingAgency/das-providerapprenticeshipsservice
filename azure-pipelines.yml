@@ -73,7 +73,7 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     resultsFolder: '$(Build.ArtifactStagingDirectory)/TestResults'
-    pathtoCustomTestAdapters: 'src/packages/NUnit.ConsoleRunner.3.4.0/tools'
+    pathtoCustomTestAdapters: 'src/packages/NUnit3TestAdapter.3.10.0/build/net35'
 
 - task: NuGetCommand@2
   displayName: 'NuGet Pack Provider Accounts API Client'
