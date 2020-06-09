@@ -66,7 +66,7 @@ steps:
     clean: true
 
 - task: VSTest@2
-  displayName: 'Run Other NUnit Tests'
+  displayName: 'Run NUnit Tests'
   inputs:
     testAssemblyVer2: |
       **/*UnitTests.dll
@@ -114,6 +114,13 @@ steps:
     clean: true        
 
 - task: DotNetCoreCLI@2
+  displayName: 'dotnet test SFA.DAS.ProviderUrlHelperTests.csproj'
+  inputs:
+    command: test
+    projects: src/SFA.DAS.ProviderUrlHelperTests/SFA.DAS.ProviderUrlHelperTests.csproj
+    testRunTitle: SFA.DAS.ProviderUrlHelperTests
+
+- task: DotNetCoreCLI@2
   displayName: 'dotnet restore SFA.DAS.ProviderUrlHelper.csproj'
   inputs:
     command: restore
@@ -126,6 +133,13 @@ steps:
     arguments: ' /p:AssemblyVersion=$(GitVersion.AssemblySemFileVer) /P:Configuration=$(buildConfiguration)'    
 
 - task: DotNetCoreCLI@2
+  displayName: 'dotnet test SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj'
+  inputs:
+    command: test
+    projects: src/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj
+    testRunTitle: SFA.DAS.PAS.Account.Api.ClientV2.UnitTests
+
+- task: DotNetCoreCLI@2
   displayName: 'dotnet restore SFA.DAS.PAS.Account.Api.ClientV2.csproj'
   inputs:
     command: restore
@@ -136,13 +150,6 @@ steps:
   inputs:
     projects: src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj
     arguments: ' /p:AssemblyVersion=$(GitVersion.AssemblySemFileVer) /P:Configuration=$(buildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet test SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj'
-  inputs:
-    command: test
-    projects: src/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj
-    testRunTitle: SFA.DAS.PAS.Account.Api.ClientV2.UnitTests
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore SFA.DAS.PAS.Account.Api.Types.csproj'
