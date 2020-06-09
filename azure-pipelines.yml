@@ -66,19 +66,11 @@ steps:
     clean: true
 
 - task: VSTest@2
-  displayName: 'Run ClientV2 NUnit Tests'
-  inputs:
-    testAssemblyVer2: |
-      **/*ClientV2.UnitTests.dll
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    resultsFolder: '$(Build.ArtifactStagingDirectory)/TestResults'
-
-- task: VSTest@2
   displayName: 'Run Other NUnit Tests'
   inputs:
     testAssemblyVer2: |
       **/*UnitTests.dll
+      !**/*ClientV2.UnitTests.dll
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     resultsFolder: '$(Build.ArtifactStagingDirectory)/TestResults'    
@@ -144,6 +136,12 @@ steps:
   inputs:
     projects: src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj
     arguments: ' /p:AssemblyVersion=$(GitVersion.AssemblySemFileVer) /P:Configuration=$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet test SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj'
+  inputs:
+    command: test
+    projects: src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj        
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore SFA.DAS.PAS.Account.Api.Types.csproj'
