@@ -65,6 +65,14 @@ steps:
     configuration: '$(buildConfiguration)'
     clean: true
 
+- task: VSTest@2
+  displayName: 'Run NUnit Tests'
+  inputs:
+    testAssemblyVer2: |
+      **/*UnitTests.dll
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'    
+
 - task: NuGetCommand@2
   displayName: 'NuGet Pack Provider Accounts API Client'
   inputs:
