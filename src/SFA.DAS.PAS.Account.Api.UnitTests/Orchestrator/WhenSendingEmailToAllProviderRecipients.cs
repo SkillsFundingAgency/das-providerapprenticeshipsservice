@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -9,11 +8,8 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.PAS.Account.Api.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
 {
@@ -23,10 +19,8 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
         private EmailOrchestrator _sut;
         private Mock<IAccountOrchestrator> _accountOrchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<IIdamsEmailServiceWrapper> _idamsEmailServiceWrapper;
         private long _ukprn;
         private List<string> _emailAddresses;
-        private List<string> _idamsUsers;
         private ProviderEmailRequest _request;
         private string _templateId;
         private Dictionary<string, string> _tokens;
@@ -41,11 +35,6 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
                 "test2@example.com",
                 "nobody@idams.com"
             };
-            _idamsUsers = new List<string>
-            {
-                "test1@example.com",
-                "test2@example.com"
-            };
             _templateId = Guid.NewGuid().ToString();
             _tokens = new Dictionary<string, string>();
             _tokens.Add("key1", "value1");
@@ -53,19 +42,10 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
 
             _accountOrchestrator = new Mock<IAccountOrchestrator>();
             _mediator = new Mock<IMediator>();
-            _idamsEmailServiceWrapper = new Mock<IIdamsEmailServiceWrapper>();
 
             _accountOrchestrator
                 .Setup(x => x.GetAccountUsers(_ukprn))
                 .ReturnsAsync(_emailAddresses.Select(x => new User { UserRef = $"ref-{x}", EmailAddress = x, ReceiveNotifications = true }));
-
-            _idamsEmailServiceWrapper
-                .Setup(x => x.GetEmailsAsync(It.IsAny<long>()))
-                .ReturnsAsync(_idamsUsers);
-
-            _idamsEmailServiceWrapper
-                .Setup(x => x.GetSuperUserEmailsAsync(It.IsAny<long>()))
-                .ReturnsAsync(new List<string>());
 
             _request = new ProviderEmailRequest
             {
@@ -73,7 +53,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
                 Tokens = _tokens
             };
 
-            _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, _idamsEmailServiceWrapper.Object, Mock.Of<IProviderCommitmentsLogger>());
+            _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, Mock.Of<IProviderCommitmentsLogger>());
             await _sut.SendEmailToAllProviderRecipients(_ukprn, _request);
         }
 
@@ -89,15 +69,6 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
                 && y.Email.Subject == "x"
                 && y.Email.SystemId == "x"
             ), It.IsAny<CancellationToken>()));
-        }
-
-        [Test]
-        [Ignore("Temporarily removed IDAMS call")]
-        public void ShouldDeleteAllUserAccountsNotFoundInIdams()
-        {
-            _mediator.Verify(x => x.Send(It.Is<DeleteRegisteredUserCommand>(c => c.UserRef == "ref-nobody@idams.com"),
-                    It.IsAny<CancellationToken>()),
-                Times.Once);
         }
     }
 }

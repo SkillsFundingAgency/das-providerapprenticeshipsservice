@@ -78,11 +78,9 @@
   <ItemGroup>
     <Compile Include="Orchestrator\WhenGettingAccountUsers.cs" />
     <Compile Include="Orchestrator\WhenGettingAgreement.cs" />
-    <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients _IdamsError.cs" />
     <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients.cs" />
     <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients_ExplicitEmailAddresses.cs" />
-    <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients_IdamsEmails.cs" />
-    <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients_IdamsSuperUserEmails.cs" />
+    <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients_UserTypes.cs" />
     <Compile Include="Orchestrator\WhenSendingEmailToAllProviderRecipients_OptOut.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
