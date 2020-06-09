@@ -66,14 +66,22 @@ steps:
     clean: true
 
 - task: VSTest@2
-  displayName: 'Run NUnit Tests'
+  displayName: 'Run ClientV2 NUnit Tests'
   inputs:
     testAssemblyVer2: |
       **/*UnitTests.dll
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     resultsFolder: '$(Build.ArtifactStagingDirectory)/TestResults'
-    pathtoCustomTestAdapters: 'src/packages/NUnit3TestAdapter.3.10.0/build/net35'
+
+- task: VSTest@2
+  displayName: 'Run Other NUnit Tests'
+  inputs:
+    testAssemblyVer2: |
+      **/*UnitTests.dll
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    resultsFolder: '$(Build.ArtifactStagingDirectory)/TestResults'    
 
 - task: NuGetCommand@2
   displayName: 'NuGet Pack Provider Accounts API Client'
