@@ -172,14 +172,6 @@ steps:
     versioningScheme: byBuildNumber
     verbosityPack: Diagnostic      
 
-- task: PublishTestResults@1
-  displayName: 'Publish Test Results src/TestResult.xml'
-  inputs:
-    testRunner: NUnit
-    testResultsFiles: '$(Build.ArtifactStagingDirectory)/TestResults/TestResult.xml'
-    testRunTitle: 'das-providerapprenticeshipservice'
-  condition: succeededOrFailed()
-
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:
