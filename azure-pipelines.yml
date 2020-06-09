@@ -66,10 +66,11 @@ steps:
     clean: true
 
 - task: VSTest@2
-  displayName: 'Run NUnit Tests'
+  displayName: 'Run NUnit & XUnit Tests'
   inputs:
     testAssemblyVer2: |
       **/*UnitTests.dll
+      **/*XUnitTests.dll
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'    
 
