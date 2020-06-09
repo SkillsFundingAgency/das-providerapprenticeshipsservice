@@ -69,7 +69,7 @@ steps:
   displayName: 'Run ClientV2 NUnit Tests'
   inputs:
     testAssemblyVer2: |
-      **/*UnitTests.dll
+      **/ClientV2.UnitTests.dll
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     resultsFolder: '$(Build.ArtifactStagingDirectory)/TestResults'
