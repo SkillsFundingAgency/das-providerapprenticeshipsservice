@@ -141,7 +141,8 @@ steps:
   displayName: 'dotnet test SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj'
   inputs:
     command: test
-    projects: src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj        
+    projects: src/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj
+    testRunTitle: SFA.DAS.PAS.Account.Api.ClientV2.UnitTests
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore SFA.DAS.PAS.Account.Api.Types.csproj'
