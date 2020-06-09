@@ -66,13 +66,13 @@ steps:
     clean: true
 
 - task: VSTest@2
-  displayName: 'Run NUnit & XUnit Tests'
+  displayName: 'Run NUnit Tests'
   inputs:
     testAssemblyVer2: |
       **/*UnitTests.dll
-      **/*XUnitTests.dll
     platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'    
+    configuration: '$(buildConfiguration)'
+    resultsFolder: '$(Build.ArtifactStagingDirectory)/TestResults'
 
 - task: NuGetCommand@2
   displayName: 'NuGet Pack Provider Accounts API Client'
@@ -161,7 +161,7 @@ steps:
   displayName: 'Publish Test Results src/TestResult.xml'
   inputs:
     testRunner: NUnit
-    testResultsFiles: src/TestResult.xml
+    testResultsFiles: '$(Build.ArtifactStagingDirectory)/TestResults/TestResult.xml'
     testRunTitle: 'das-providerapprenticeshipservice'
   condition: succeededOrFailed()
 
