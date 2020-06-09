@@ -69,7 +69,7 @@ steps:
   displayName: 'Run NUnit Tests'
   inputs:
     testAssemblyVer2: |
-      **/*UnitTests.dll
+      **/bin/Release/*UnitTests.dll
       !**/*ClientV2.UnitTests.dll
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
