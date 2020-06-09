@@ -72,8 +72,7 @@ steps:
       **/bin/Release/*UnitTests.dll
       !**/*ClientV2.UnitTests.dll
     platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    resultsFolder: '$(Build.ArtifactStagingDirectory)/TestResults'    
+    configuration: '$(buildConfiguration)'    
 
 - task: NuGetCommand@2
   displayName: 'NuGet Pack Provider Accounts API Client'
