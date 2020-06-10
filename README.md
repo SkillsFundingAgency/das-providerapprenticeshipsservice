@@ -125,10 +125,10 @@ confusion of different data sources.
 - Open the solution SFA.DAS.ProviderApprenticeshipService.sln
  
 - Set Startup projects as 'Multiple startup projects': 
-  - SFA.DAS.API (PAS Account API)
-  - SFA.DAS.CloudService (PAS Web UI)
+  - SFA.DAS.PAS.Accounts.Api (PAS Account API)
+  - SFA.DAS.ProviderApprenticeshipService.Web (PAS Web UI)
 
-**Note**: The above startup projects are Azure Cloud Service Definitions and the Service Configurations (*.cscfg) contain the per environment configuration settings; e.g. the 'EnvironmentName' which is used to locate the Azure Storage Configuration Settings.
+**Note**: The above startup projects are web projects and the Web.config files contain the per environment configuration settings; e.g. the 'EnvironmentName' which is used to locate the Azure Storage Configuration Settings.
 
 ## PAS Data Setup Guide
 
