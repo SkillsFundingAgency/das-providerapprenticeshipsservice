@@ -249,8 +249,7 @@
                 }
             },
             "dependsOn": [
-                "api-app-insights",
-                "api-app-service-certificate"
+                "api-app-insights"
             ]
         },
         {
@@ -400,8 +399,7 @@
                 }
             },
             "dependsOn": [
-                "ui-app-insights",
-                "ui-app-service-certificate"
+                "ui-app-insights"
             ]
         },
         {
