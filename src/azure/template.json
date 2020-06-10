@@ -98,6 +98,9 @@
                 "CohortSummariesV2": true
             }
         },
+        "useStubProviderRelationships": {
+            "type": "string"
+        },
         "sharedManagementResourceGroup": {
             "type": "string"
         },
@@ -362,12 +365,12 @@
                                 "value": ""
                             },
                             {
-                                "name": "FeatureToggle.ManageReservations",
-                                "value": "[parameters('FeatureToggle').ManageReservations]"
+                                "name": "UseStubProviderRelationships",
+                                "value": "[parameters('useStubProviderRelationships')]"
                             },
                             {
-                                "name": "UseStubProviderRelationships",
-                                "value": "[parameters('redisSessionProviderConnectionString')]"
+                                "name": "FeatureToggle.ManageReservations",
+                                "value": "[parameters('FeatureToggle').ManageReservations]"
                             },
                             {
                                 "name": "FeatureToggle.ProviderCreateCohortV2",
