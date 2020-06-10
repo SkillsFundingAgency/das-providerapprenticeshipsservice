@@ -129,7 +129,7 @@
             }
 
             @*todo: better for view to distill down to single flag similar to IsEndDateLockedForUpdate*@
-            @if (Model.IsLockedForUpdate || Model.IsUpdateLockedForStartDateAndCourse || Model.IsContinuation)
+            @if (Model.IsLockedForUpdate || Model.IsUpdateLockedForStartDateAndCourse)
             {
                 <div class="form-error-group form-group">
                     <hr />
