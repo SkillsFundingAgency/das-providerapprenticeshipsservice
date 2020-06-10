@@ -352,7 +352,7 @@
                             },
                             {
                                 "name": "InstrumentationKey",
-                                "value": "[reference('ui-api-app-insights').outputs.InstrumentationKey.value]"
+                                "value": "[reference('ui-app-insights').outputs.InstrumentationKey.value]"
                             },
                             {
                                 "name": "RedisSessionProviderConnectionString",
