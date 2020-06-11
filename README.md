@@ -42,6 +42,7 @@ See [Support Site]() for EFSA developer details.
 
 #### Requirements
 
+- Ensure you have the latest .pfx certificates for employer and provider in both Local Machine and Current User certificate stores (DevOps can assist)
 - Install [.NET Framework 4.6.2](https://dotnet.microsoft.com/download/dotnet-framework/net462)
 - Install [Visual Studio 2019](https://www.visualstudio.com/downloads/) with these workloads:
     - ASP.NET and web development
@@ -60,13 +61,27 @@ See [Support Site]() for EFSA developer details.
 ##### Publish Database
 
 - Build the solution SFA.DAS.ProviderApprenticeshipService.sln
-- Either use Visual Studio's `Publish Database` tool to publish the database project SFA.DAS.ProviderAgreementStatus.Database to name {{database name}} on {{local instance name}}
+- While running Visual studio in Administrator Mode: Either use Visual Studio's `Publish Database` tool to publish the database project SFA.DAS.ProviderAgreementStatus.Database to name {{database name}} on {{local instance name}}
 
 	or
 
 - Create a database manually named {{database name}} on {{local instance name}} and run each of the `.sql` scripts in the SFA.DAS.ProviderApprenticeshipService.Database project.
 
+## PAS Seed Data
+
+Insert the following record into the ProviderAgreementStatus database in order to simulate the given Provider (in this case, _10005077_) having signed their agreement with the SFA. This unlocks all of the approval functionality.
+
+```SQL
+insert into ContractFeedEvent (Id, ProviderId, HierarchyType, FundingTypeCode, [Status], ParentStatus, UpdatedInFeed, CreatedDate)
+values (NEWID(), '10005077', 'CONTRACT', 'LEVY', 'APPROVED', 'APPROVED', GETDATE(), GETDATE())
+```
+
 ##### Config
+
+(Recommended)
+- Use the [das-employer-config-updater](https://github.com/SkillsFundingAgency/das-employer-config-updater) to obtain the latest config
+
+or:
 
 - Get the following configuration json files (which are in non-public repositories):
   - [SFA.DAS.ProviderApprenticeshipService](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-providerapprenticeshipservice/SFA.DAS.ProviderApprenticeshipsService.json)
@@ -85,15 +100,7 @@ See [Support Site]() for EFSA developer details.
   - SFA.DAS.ProviderApprenticeshipService_1.0, Data : "Data Source={{local instance name}};Initial Catalog={{database name}};Integrated Security=True;Pooling=False;Connect Timeout=30" }
   - SFA.DAS.ContractAgreements_1.0, Data : "Data Source={{local instance name}};Initial Catalog={{database name}};Integrated Security=True;Pooling=False;Connect Timeout=30" }
 
-  or
-
-- Use the [das-employer-config-updater](https://github.com/SkillsFundingAgency/das-employer-config-updater)
-
 **Note:** The employer config updater will automatically update database connection strings; however it should be used with caution as it will overwrite **any** manual changes.
-
-##### Complete Data Setup
-
-Follow the [PAS Data Setup Guide]() to populate local database test data.
 
 #### To run a local copy you will also require 
 To run a fully operational local service you will also require the following fully operational local services or mocks:
@@ -130,11 +137,4 @@ confusion of different data sources.
 
 **Note**: The above startup projects are Azure Cloud Service Definitions and the Service Configurations (*.cscfg) contain the per environment configuration settings; e.g. the 'EnvironmentName' which is used to locate the Azure Storage Configuration Settings.
 
-## PAS Data Setup Guide
 
-Insert the following record into the ProviderAgreementStatus database in order to simulate the given Provider (in this case, _10005077_) having signed their agreement with the SFA. This unlocks all of the approval functionality.
-
-```SQL
-insert into ContractFeedEvent (Id, ProviderId, HierarchyType, FundingTypeCode, [Status], ParentStatus, UpdatedInFeed, CreatedDate)
-values (NEWID(), '10005077', 'CONTRACT', 'LEVY', 'APPROVED', 'APPROVED', GETDATE(), GETDATE())
-```
