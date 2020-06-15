@@ -10,6 +10,7 @@
     [LastLogin] DATETIME2 NULL
 )
 GO
-
 CREATE UNIQUE INDEX [IX_User_UserRef] ON [dbo].[User] ([UserRef])
+GO
+CREATE INDEX [IX_User_Ukprn] ON [dbo].[User] ([Ukprn])
 GO

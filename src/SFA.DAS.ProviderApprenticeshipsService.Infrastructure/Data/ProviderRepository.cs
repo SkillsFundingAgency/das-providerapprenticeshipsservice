@@ -38,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             return await WithConnection(async c =>
             {
                 var result = await c.QueryAsync<Provider>(
-                    "SELECT TOP 1 [Ukprn], [Name], [Created], [Updated], [UpdatedFromIDAMS] FROM [dbo].[Providers] ORDER BY [UpdatedFromIDAMS];",
+                    "SELECT TOP 1 [Ukprn], [Name], [Created], [Updated], [UpdatedFromIDAMS] FROM [dbo].[Providers] P WHERE EXISTS(SELECT * FROM [dbo].[User] U WHERE U.[Ukprn] = P.[Ukprn]) ORDER BY [UpdatedFromIDAMS];",
                     commandType: CommandType.Text);
                 return result.SingleOrDefault();
             });
