@@ -56,5 +56,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool IsEndDateLockedForUpdate { get; set; }
         public string StartDateTransfersMinDateAltDetailMessage { get; set; }
         public Guid? ReservationId { get; set; }
+        public bool IsContinuation { get; set; }
     }
 }
