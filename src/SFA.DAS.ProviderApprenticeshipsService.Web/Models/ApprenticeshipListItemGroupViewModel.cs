@@ -23,14 +23,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string GroupName => TrainingProgramme?.Title ?? "No training course";
 
         public int OverlapErrorCount => Apprenticeships.Count(x => x.OverlappingApprenticeships.Any());
+        public bool IsLinkedToChangeOfPartyRequest { get; set; }
 
         /// <remarks>
         /// ApprenticeshipsOverFundingLimit and CommonFundingCap are only guaraneteed to be correct if the ctor's params are not mutated after instantiation or on another thread during contruction
         /// </remarks>
-        public ApprenticeshipListItemGroupViewModel(IList<ApprenticeshipListItemViewModel> apprenticeships, ITrainingProgramme trainingProgramme = null)
+        public ApprenticeshipListItemGroupViewModel(IList<ApprenticeshipListItemViewModel> apprenticeships, ITrainingProgramme trainingProgramme = null, bool isLinkedToChangeOfPartyRequest = false)
         {
             TrainingProgramme = trainingProgramme;
             Apprenticeships = apprenticeships;
+            IsLinkedToChangeOfPartyRequest = isLinkedToChangeOfPartyRequest;
 
             // calculating up-front assumes apprenticeships list and training program are not mutated after being passed to ctor
             ApprenticeshipsOverFundingLimit = CalculateApprenticeshipsOverFundingLimit();
@@ -48,7 +50,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
             if (TrainingProgramme == null)
                 return 0;
 
-            return Apprenticeships.Count(x => x.IsOverFundingLimit(TrainingProgramme));
+            return Apprenticeships.Count(x => x.IsOverFundingLimit(TrainingProgramme, IsLinkedToChangeOfPartyRequest));
         }
 
         /// <summary>
@@ -61,15 +63,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
             if (TrainingProgramme == null || !Apprenticeships.Any())
                 return null;
 
-            if (Apprenticeships.Any(a => !a.StartDate.HasValue))
+            if (!IsLinkedToChangeOfPartyRequest && Apprenticeships.Any(a => !a.StartDate.HasValue))
                 return null;
 
-            var firstFundingCap = TrainingProgramme.FundingCapOn(Apprenticeships.First().StartDate.Value);
+            int firstFundingCap = IsLinkedToChangeOfPartyRequest 
+                          ? TrainingProgramme.FundingCapOn(Apprenticeships.First().OriginalStartDate.Value)
+                          : TrainingProgramme.FundingCapOn(Apprenticeships.First().StartDate.Value);
 
             // check for magic 0, which means unable to calculate a funding cap (e.g. date out of bounds)
             if (firstFundingCap == 0)
                 return null;
-
+            
             if (Apprenticeships.Skip(1).Any(a => TrainingProgramme.FundingCapOn(a.StartDate.Value) != firstFundingCap))
                 return null;
 
