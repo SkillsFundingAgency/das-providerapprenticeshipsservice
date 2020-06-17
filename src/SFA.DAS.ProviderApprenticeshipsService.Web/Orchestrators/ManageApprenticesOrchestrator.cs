@@ -327,20 +327,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private Task<List<(string key, string value)>> GetReservationValidationErrors(Apprenticeship apprenticeship, ApprenticeshipViewModel model)
         {
+            if (model.StartDate.DateTime == null)
+            {
+                _logger.Info($"Commitment:{apprenticeship.CommitmentId} Apprenticeship: {apprenticeship.Id} : Unable to validate the reservation because the start date is absent");
+                return NoValidationRequiredResponse;
+            }
+
             if (apprenticeship.ReservationId == null)
             {
                 _logger.Info($"Commitment:{apprenticeship.CommitmentId} Apprenticeship: {apprenticeship.Id} Reservation-id:null - no reservation validation required");
                 return NoValidationRequiredResponse;
             }
 
-            DateTime startDate = model.StartDate.DateTime ?? apprenticeship.StartDate ?? throw new InvalidOperationException($"Unable to validate the reservation because the start date is absent");
-
             return _mediator
                 .Send(
                     new GetReservationValidationRequest
                     {
                         ApprenticeshipId = apprenticeship.Id,
-                        StartDate = startDate,
+                        StartDate = model.StartDate.DateTime.Value,
                         CourseCode = model.CourseCode ?? apprenticeship.TrainingCode,
                         ReservationId = apprenticeship.ReservationId.Value
                     }
