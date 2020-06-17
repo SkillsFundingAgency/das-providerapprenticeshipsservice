@@ -117,7 +117,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 IsPaidForByTransfer = commitment.IsTransfer(),
                 IsUpdateLockedForStartDateAndCourse = isUpdateLockedForStartDateAndCourse,
                 IsEndDateLockedForUpdate = isEndDateLockedForUpdate,
-                ReservationId = apprenticeship.ReservationId
+                ReservationId = apprenticeship.ReservationId,
+                IsContinuation = apprenticeship.ContinuationOfId.HasValue
             };
         }
 

@@ -36,10 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IHashingService _hashingService;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly IApprovedApprenticeshipValidator _approvedApprenticeshipValidator;
-        private readonly IApprenticeshipFiltersMapper _apprenticeshipFiltersMapper;
         private readonly IDataLockMapper _dataLockMapper;
-        private readonly IFiltersCookieManager _filtersCookieManager;
-        private readonly string _searchPlaceholderText;
 
         private static readonly Task<List<(string key, string value)>> NoValidationRequiredResponse = Task.FromResult(new List<(string, string)>());
 
@@ -49,76 +46,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             IProviderCommitmentsLogger logger,
             IApprenticeshipMapper apprenticeshipMapper,
             IApprovedApprenticeshipValidator approvedApprenticeshipValidator,
-            IApprenticeshipFiltersMapper apprenticeshipFiltersMapper,
-            IDataLockMapper dataLockMapper,
-            IFiltersCookieManager filtersCookieManager) : base(mediator, hashingService, logger)
+            IDataLockMapper dataLockMapper) : base(mediator, hashingService, logger)
         {
             _mediator = mediator;
             _hashingService = hashingService;
             _logger = logger;
             _apprenticeshipMapper = apprenticeshipMapper;
             _approvedApprenticeshipValidator = approvedApprenticeshipValidator;
-            _apprenticeshipFiltersMapper = apprenticeshipFiltersMapper;
             _dataLockMapper = dataLockMapper;
-            _filtersCookieManager = filtersCookieManager;
-            _searchPlaceholderText = "Enter a name or ULN";
-        }
-
-        public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(long providerId, ApprenticeshipFiltersViewModel filters)
-        {
-            _logger.Info($"Getting On-programme apprenticeships for provider: {providerId}", providerId: providerId);
-
-            if (filters.SearchInput?.Trim() == _searchPlaceholderText.Trim())
-                filters.SearchInput = string.Empty;
-
-
-            if (filters.ResetFilter)
-            {
-                filters.Clear();
-                _filtersCookieManager.SetCookie(filters);
-            }
-            else
-            {
-                if (filters.HasValues())
-                {
-                    _filtersCookieManager.SetCookie(filters);
-                }
-                else
-                {
-                    filters = _filtersCookieManager.GetCookie();
-                }
-            }
-
-
-            var searchQuery = _apprenticeshipFiltersMapper.MapToApprenticeshipSearchQuery(filters);
-
-            var searchResponse = await _mediator.Send(new ApprenticeshipSearchQueryRequest
-            {
-                ProviderId = providerId,
-                Query = searchQuery
-            });
-
-            var apprenticeships = searchResponse.Apprenticeships
-                .OrderBy(m => m.ApprenticeshipName)
-                .Select(m => _apprenticeshipMapper.MapApprenticeshipDetails(m))
-                .ToList();
-
-            var filterOptions = _apprenticeshipFiltersMapper.Map(searchResponse.Facets);
-            filterOptions.SearchInput = searchResponse.SearchKeyword;
-            filterOptions.ResetFilter = false;
-
-            return new ManageApprenticeshipsViewModel
-            {
-                ProviderId = providerId,
-                Apprenticeships = apprenticeships,
-                Filters = filterOptions,
-                TotalResults = searchResponse.TotalApprenticeships,
-                TotalApprenticeshipsBeforeFilter = searchResponse.TotalApprenticeshipsBeforeFilter,
-                PageNumber = searchResponse.PageNumber,
-                TotalPages = searchResponse.TotalPages,
-                PageSize = searchResponse.PageSize,
-                SearchInputPlaceholder = _searchPlaceholderText
-            };
         }
 
         public async Task<ApprenticeshipDetailsViewModel> GetApprenticeshipViewModel(long providerId, string hashedApprenticeshipId)
@@ -137,7 +72,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var result = _apprenticeshipMapper.MapApprenticeshipDetails(data.Apprenticeship);
 
-            result.SearchFiltersForListView = _filtersCookieManager.GetCookie();
             result.DataLockSummaryViewModel = await _dataLockMapper.MapDataLockSummary(dataLockSummary.DataLockSummary, data.Apprenticeship.HasHadDataLockSuccess);
 
             return result;

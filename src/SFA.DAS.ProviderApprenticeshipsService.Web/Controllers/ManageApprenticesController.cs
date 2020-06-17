@@ -1,9 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
-
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
@@ -24,9 +21,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         public ManageApprenticesController(ManageApprenticesOrchestrator orchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage, IFeatureToggleService featureToggleService, ILinkGenerator providerUrlHelper) : base(flashMessage)
         {
-            if (orchestrator == null)
-                throw new ArgumentNullException(nameof(orchestrator));
-
             _orchestrator = orchestrator;
             _featureToggleService = featureToggleService;
             _providerUrlHelper = providerUrlHelper;
@@ -35,33 +29,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpGet]
         [Route("all")]
         [OutputCache(CacheProfile = "NoCache")]
-        public async Task<ActionResult> Index(long providerId, ApprenticeshipFiltersViewModel filtersViewModel)
+        [Deprecated]
+        public ActionResult Index(long providerId)
         {
-            if (_featureToggleService.Get<ProviderManageApprenticesV2>().FeatureEnabled)
-                return Redirect(_providerUrlHelper.ProviderCommitmentsLink($"{providerId}/apprentices"));
-
-            var model = await _orchestrator.GetApprenticeships(providerId, filtersViewModel);
-            return View(model);
+            return Redirect(_providerUrlHelper.ProviderCommitmentsLink($"{providerId}/apprentices"));
         }
 
         [HttpGet]
         [Route("{hashedApprenticeshipId}/details")]
         [OutputCache(CacheProfile = "NoCache")]
-        public async Task<ActionResult> Details(long providerid, string hashedApprenticeshipId)
+        [Deprecated]
+        public ActionResult Details(long providerid, string hashedApprenticeshipId)
         {
-            if (_featureToggleService.Get<ApprenticeDetailsV2>().FeatureEnabled)
-                return Redirect(_providerUrlHelper.ProviderCommitmentsLink($"{providerid}/apprentices/{hashedApprenticeshipId}"));
-
-            var model = await _orchestrator.GetApprenticeshipViewModel(providerid, hashedApprenticeshipId);
-
-            var flashMesssage = GetFlashMessageViewModelFromCookie();
-
-            if (flashMesssage != null)
-            {
-                model.FlashMessage = flashMesssage;
-            }
-            
-            return View(model);
+            return Redirect(_providerUrlHelper.ProviderCommitmentsLink($"{providerid}/apprentices/{hashedApprenticeshipId}"));
         }
 
         [HttpGet]

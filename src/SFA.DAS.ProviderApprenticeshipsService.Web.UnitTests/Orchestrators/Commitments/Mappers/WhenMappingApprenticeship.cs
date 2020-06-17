@@ -356,5 +356,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             if (unchanged)
                 Assert.AreEqual(viewModel.IsLockedForUpdate, viewModel.IsEndDateLockedForUpdate);
         }
+
+        [TestCase(null, false)]
+        [TestCase(1, true)]
+        public void ThenIsContinuationIsMapped(int? continuationOfId, bool expectIsContinuation)
+        {
+            var apprenticeship = new Apprenticeship { ContinuationOfId = continuationOfId };
+
+            var viewModel = _mapper.MapApprenticeship(apprenticeship, new CommitmentView());
+
+            Assert.AreEqual(expectIsContinuation, viewModel.IsContinuation);
+        }
     }
 }
