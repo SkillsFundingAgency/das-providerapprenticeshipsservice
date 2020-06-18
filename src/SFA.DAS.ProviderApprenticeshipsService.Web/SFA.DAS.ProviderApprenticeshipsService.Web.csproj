@@ -294,11 +294,11 @@
     <Reference Include="SFA.DAS.AutoConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.AutoConfiguration.2.2.6\lib\net462\SFA.DAS.AutoConfiguration.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=4.1.1466.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.4.1.1466\lib\netstandard2.0\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=4.1.1573.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.4.1.1573\lib\netstandard2.0\SFA.DAS.Commitments.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=4.1.1466.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.4.1.1466\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=4.1.1573.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.4.1.1573\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Common.Domain, Version=1.4.272.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.272\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
@@ -627,6 +627,7 @@
     <Compile Include="Attributes\DasRoleCheckActionFilter.cs" />
     <Compile Include="Attributes\DasRoleCheckAttribute.cs" />
     <Compile Include="Attributes\DasRoleCheckExemptAttribute.cs" />
+    <Compile Include="Attributes\DeprecatedAttribute.cs" />
     <Compile Include="Attributes\ProviderUkPrnCheckActionFilter.cs" />
     <Compile Include="Attributes\ProviderUkPrnCheckAttribute.cs" />
     <Compile Include="Authorization\AuthorizationContextProvider.cs" />
@@ -739,7 +740,6 @@
     <Compile Include="Validation\IApprovedApprenticeshipValidator.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Orchestrators\DataLockOrchestrator.cs" />
-    <Compile Include="Orchestrators\Mappers\ApprenticeshipFiltersMapper.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipMapper.cs" />
     <Compile Include="Orchestrators\Mappers\BulkUploadMapper.cs" />
     <Compile Include="Orchestrators\BaseCommitmentOrchestrator.cs" />
@@ -756,7 +756,6 @@
     <Compile Include="Models\BulkUpload\CsvRecord.cs" />
     <Compile Include="Orchestrators\ManageApprenticesOrchestrator.cs" />
     <Compile Include="Orchestrators\Mappers\DataLockMapper.cs" />
-    <Compile Include="Orchestrators\Mappers\IApprenticeshipFiltersMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IApprenticeshipMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IDataLockMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

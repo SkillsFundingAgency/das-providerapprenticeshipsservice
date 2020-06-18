@@ -285,7 +285,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var warnings = new Dictionary<string, string>();
 
             var apprenticeshipGroups = apprenticeships.OrderBy(x => x.CourseName).GroupBy(x => x.CourseCode)
-                .Select(g => new ApprenticeshipListItemGroupViewModel(g.OrderBy(x => x.CanBeApproved).ToList(), trainingProgrammes.FirstOrDefault(x => x.Id == g.Key)))
+                .Select(g => new ApprenticeshipListItemGroupViewModel(g.OrderBy(x => x.CanBeApproved).ToList(), trainingProgrammes.FirstOrDefault(x => x.Id == g.Key), commitment.IsLinkedToChangeOfPartyRequest))
                     .ToList();
 
             foreach (var apprenticeshipGroup in apprenticeshipGroups)
@@ -542,7 +542,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     EndDate = x.EndDate,
                     Cost = x.Cost,
                     CanBeApproved = x.CanBeApproved,
-                    OverlappingApprenticeships = overlaps?.GetOverlappingApprenticeships(x.Id)
+                    OverlappingApprenticeships = overlaps?.GetOverlappingApprenticeships(x.Id),
+                    OriginalStartDate = x.OriginalStartDate
                 }).ToList();
 
             return apprenticeViewModels;
