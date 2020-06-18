@@ -480,6 +480,14 @@
                             {
                                 "name": "LoggingRedisConnectionString",
                                 "value": "[parameters('apiStorageConnectionString')]"
+                            },
+                            {
+                                "name": "ConfigurationStorageConnectionString",
+                                "value": "[parameters('configurationStorageConnectionString')]"
+                            },
+                            {
+                                "name": "EnvironmentName",
+                                "value": "[parameters('environmentName')]"
                             }
                         ]
                     }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 
-using Microsoft.Azure;
 using System.Configuration;
 
 using SFA.DAS.Configuration;
