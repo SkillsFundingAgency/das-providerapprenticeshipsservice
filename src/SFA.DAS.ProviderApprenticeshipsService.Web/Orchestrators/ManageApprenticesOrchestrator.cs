@@ -145,7 +145,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             AddNewEntries(result, _approvedApprenticeshipValidator.ValidateToDictionary(model));
             AddNewEntries(result, _approvedApprenticeshipValidator.ValidateAcademicYear(updateViewModel));
-            AddNewEntries(result, _approvedApprenticeshipValidator.ValidateApprovedEndDate(updateViewModel));
 
             await Task.WhenAll(overlapTask, reservationValidationTask);
 
