@@ -145,15 +145,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             await _commitmentOrchestrator.DeleteCommitment(CurrentUserId, viewModel.ProviderId, viewModel.HashedCommitmentId, GetSignedInUser());
 
-            SetInfoMessage("Cohort deleted", FlashMessageSeverityLevel.Okay);
-
-            var currentStatusCohortAny = 
-                await _commitmentOrchestrator.AnyCohortsForStatus(viewModel.ProviderId, GetRequestStatusFromCookie());
-
-            if (!currentStatusCohortAny)
-                return RedirectToAction("Cohorts", new { providerId = viewModel.ProviderId });
-
-            return Redirect(GetReturnToListUrl(viewModel.ProviderId));
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{viewModel.ProviderId}/unapproved"));
         }
 
         [HttpGet]
@@ -242,15 +234,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                 return RedirectToAction("Approved", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
             }
 
-            if (viewModel.SaveStatus == SaveStatus.Save)
-            {
-                SetInfoMessage("Cohort saved but not sent" ,FlashMessageSeverityLevel.None );
-                var currentStatusCohortAny = await _commitmentOrchestrator.AnyCohortsForStatus(viewModel.ProviderId, GetRequestStatusFromCookie());
-                if (currentStatusCohortAny)
-                    return Redirect(GetReturnToListUrl(viewModel.ProviderId));
-            }
-
-            return RedirectToAction("Cohorts", new { providerId = viewModel.ProviderId });
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{viewModel.ProviderId}/unapproved"));
         }
 
         [HttpGet]
