@@ -47,9 +47,6 @@
         "sharedKeyVaultName": {
             "type": "string"
         },
-        "sharedKeyVaultResourceGroupName": {
-            "type": "string"
-        },
         "appServiceAllowedIPs": {
             "type": "array",
             "defaultValue": [
@@ -176,7 +173,7 @@
                         "value": "[parameters('sharedKeyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('sharedKeyVaultResourceGroupName')]"
+                        "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
             }
@@ -297,7 +294,7 @@
                         "value": "[parameters('sharedKeyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('sharedKeyVaultResourceGroupName')]"
+                        "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
             }
