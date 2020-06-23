@@ -44,9 +44,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
             _mockValidator.Setup(m => m.ValidateAcademicYear(It.IsAny<CreateApprenticeshipUpdateViewModel>()))
                 .Returns(new Dictionary<string, string>());
 
-            _mockValidator.Setup(m => m.ValidateApprovedEndDate(It.IsAny<CreateApprenticeshipUpdateViewModel>()))
-                .Returns(new Dictionary<string, string>());
-
             _orchestrator = new ManageApprenticesOrchestrator(
                 _mockMediator.Object,
                 Mock.Of<IHashingService>(),
@@ -81,7 +78,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
             _mockValidator.Verify(m => m.MapOverlappingErrors(It.IsAny<GetOverlappingApprenticeshipsQueryResponse>()), Times.Once, failMessage: "Should verify overlapping apprenticeship");
             _mockValidator.Verify(m => m.ValidateToDictionary(It.IsAny<ApprenticeshipViewModel>()), Times.Once, failMessage: "Should validate apprenticeship");
             _mockValidator.Verify(m => m.ValidateAcademicYear(It.IsAny<CreateApprenticeshipUpdateViewModel>()), Times.Once, failMessage: "Should validate academic year");
-            _mockValidator.Verify(m => m.ValidateApprovedEndDate(It.IsAny<CreateApprenticeshipUpdateViewModel>()), Times.Once, failMessage: "Should validate end date");
         }
 
         [Test]
@@ -107,10 +103,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
                 .Returns(BuildDictionary("VAY1=error3", "VAY2=error4"));
 
             _mockValidator
-                .Setup(v => v.ValidateApprovedEndDate(updateModel))
-                .Returns(BuildDictionary("VAE1=error5", "VAE2=error6"));
-
-            _mockValidator
                 .Setup(v => v.MapOverlappingErrors(It.IsAny<GetOverlappingApprenticeshipsQueryResponse>()))
                 .Returns(BuildDictionary("OLE1=error7", "OLE2=error8"));
 
@@ -131,8 +123,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Man
             TickoffError(errors, "VTD2", "error2");
             TickoffError(errors, "VAY1", "error3");
             TickoffError(errors, "VAY2", "error4");
-            TickoffError(errors, "VAE1", "error5");
-            TickoffError(errors, "VAE2", "error6");
             TickoffError(errors, "OLE1", "error7");
             TickoffError(errors, "OLE2", "error8");
             TickoffError(errors, "RVE1", "error9");

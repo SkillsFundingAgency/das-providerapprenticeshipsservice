@@ -11,7 +11,6 @@ using System.Security.Claims;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -41,6 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpGet]
         [Route("Cohorts")]
         [OutputCache(CacheProfile = "NoCache")]
+        [Deprecated]
         public ActionResult Cohorts(long providerId)
         {
             return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved"));
@@ -62,6 +62,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("cohorts/employer")]
+        [Deprecated]
         public ActionResult WithEmployer(long providerId)
         {
             return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/with-employer"));
@@ -69,6 +70,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("cohorts/transferfunded")]
+        [Deprecated]
         public ActionResult TransferFunded(long providerId)
         {
             return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/with-transfer-sender"));
@@ -76,16 +78,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("cohorts/review")]
+        [Deprecated]
         public ActionResult ReadyForReview(long providerId)
         {
             return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/review"));
         }
 		
-        [Route("cohorts/drafts")]
+		[Route("cohorts/drafts")]
+        [Deprecated]
         public ActionResult DraftList(long providerId)
         {
             return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/draft"));
-         }
+        }
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Details", Name = "CohortDetails")]
