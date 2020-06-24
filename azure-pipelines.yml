@@ -112,36 +112,22 @@ steps:
     clean: true        
 
 - task: DotNetCoreCLI@2
-  displayName: 'dotnet test SFA.DAS.ProviderUrlHelperTests.csproj'
+  displayName: 'dotnet test'
   inputs:
     command: test
-    projects: src/SFA.DAS.ProviderUrlHelperTests/SFA.DAS.ProviderUrlHelperTests.csproj
-    testRunTitle: SFA.DAS.ProviderUrlHelperTests
+    projects: |
+      'src/SFA.DAS.ProviderUrlHelperTests/SFA.DAS.ProviderUrlHelperTests.csproj'
+      'src/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj'
+    testRunTitle: dotnet test run
 
 - task: DotNetCoreCLI@2
-  displayName: 'dotnet build SFA.DAS.ProviderUrlHelper.csproj'
+  displayName: 'dotnet build'
   inputs:
-    projects: src/SFA.DAS.ProviderUrlHelper/SFA.DAS.ProviderUrlHelper.csproj
+    projects: |
+      'src/SFA.DAS.ProviderUrlHelper/SFA.DAS.ProviderUrlHelper.csproj'
+      'src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj'
+      'src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj'
     arguments: ' /p:AssemblyVersion=$(GitVersion.AssemblySemFileVer) /P:Configuration=$(buildConfiguration)'    
-
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet test SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj'
-  inputs:
-    command: test
-    projects: src/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj
-    testRunTitle: SFA.DAS.PAS.Account.Api.ClientV2.UnitTests
-
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet build SFA.DAS.PAS.Account.Api.ClientV2.csproj'
-  inputs:
-    projects: src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj
-    arguments: ' /p:AssemblyVersion=$(GitVersion.AssemblySemFileVer) /P:Configuration=$(buildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet build SFA.DAS.PAS.Account.Api.Types.csproj'
-  inputs:
-    projects: src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj
-    arguments: ' /p:AssemblyVersion=$(GitVersion.AssemblySemFileVer) /P:Configuration=$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
