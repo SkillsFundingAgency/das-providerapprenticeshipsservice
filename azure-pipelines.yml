@@ -116,17 +116,17 @@ steps:
   inputs:
     command: test
     projects: |
-      'src/SFA.DAS.ProviderUrlHelperTests/SFA.DAS.ProviderUrlHelperTests.csproj'
-      'src/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj'
+      src/SFA.DAS.ProviderUrlHelperTests/SFA.DAS.ProviderUrlHelperTests.csproj
+      src/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj
     testRunTitle: dotnet test run
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build'
   inputs:
     projects: |
-      'src/SFA.DAS.ProviderUrlHelper/SFA.DAS.ProviderUrlHelper.csproj'
-      'src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj'
-      'src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj'
+      src/SFA.DAS.ProviderUrlHelper/SFA.DAS.ProviderUrlHelper.csproj
+      src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj
+      src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj
     arguments: ' /p:AssemblyVersion=$(GitVersion.AssemblySemFileVer) /P:Configuration=$(buildConfiguration)'    
 
 - task: DotNetCoreCLI@2
