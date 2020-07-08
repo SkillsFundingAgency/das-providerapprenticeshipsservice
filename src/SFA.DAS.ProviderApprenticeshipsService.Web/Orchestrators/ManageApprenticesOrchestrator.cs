@@ -145,7 +145,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             AddNewEntries(result, _approvedApprenticeshipValidator.ValidateToDictionary(model));
             AddNewEntries(result, _approvedApprenticeshipValidator.ValidateAcademicYear(updateViewModel));
-            AddNewEntries(result, _approvedApprenticeshipValidator.ValidateApprovedEndDate(updateViewModel));
 
             await Task.WhenAll(overlapTask, reservationValidationTask);
 
@@ -327,13 +326,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         private Task<List<(string key, string value)>> GetReservationValidationErrors(Apprenticeship apprenticeship, ApprenticeshipViewModel model)
         {
+            if (model.StartDate.DateTime == null && apprenticeship.StartDate == null)
+            {
+                _logger.Info($"Commitment:{apprenticeship.CommitmentId} Apprenticeship: {apprenticeship.Id} : Unable to validate the reservation because the start date is absent");
+                return NoValidationRequiredResponse;
+            }
+
             if (apprenticeship.ReservationId == null)
             {
                 _logger.Info($"Commitment:{apprenticeship.CommitmentId} Apprenticeship: {apprenticeship.Id} Reservation-id:null - no reservation validation required");
                 return NoValidationRequiredResponse;
             }
 
-            DateTime startDate = model.StartDate.DateTime ?? apprenticeship.StartDate ?? throw new InvalidOperationException($"Unable to validate the reservation because the start date is absent");
+            DateTime startDate = (model.StartDate.DateTime ?? apprenticeship.StartDate).Value;
 
             return _mediator
                 .Send(

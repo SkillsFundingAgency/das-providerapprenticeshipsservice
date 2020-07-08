@@ -37,5 +37,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             return View();
         }
+
+        [Route("~/cookies", Name = "cookies")]
+        public ActionResult Cookies()
+        {
+            return View();
+        }
+
+        [Route("~/cookie-details", Name = "cookie-details")]
+        public ActionResult CookieDetails()
+        {
+            return View();
+        }
     }
 }

@@ -29,8 +29,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderAgreement;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
-using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -61,114 +59,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _apprenticeshipMapper = apprenticeshipMapper;
             _encodingService = encodingService;
             _reservationsService = reservationsService;
-        }
-
-        public async Task<CohortsViewModel> GetCohorts(long providerId)
-        {
-            Logger.Info($"Getting cohorts :{providerId}", providerId);
-
-            var relationshipResponse = await Mediator.Send(new GetProviderHasRelationshipWithPermissionQueryRequest
-            {
-                ProviderId = providerId,
-                Permission = Operation.CreateCohort
-            });
-            var showDrafts = relationshipResponse.HasPermission;
-            
-
-            var data = await Mediator.Send(new GetCommitmentsQueryRequest
-            {
-                ProviderId = providerId
-            });
-            var commitmentStatus = data.Commitments.Select(m => m.GetStatus()).ToList();
-
-            var model = new CohortsViewModel
-            {
-                DraftCount = commitmentStatus.Count(m =>
-                    m == RequestStatus.NewRequest ),
-
-                ReadyForReviewCount = commitmentStatus.Count(m =>
-                m == RequestStatus.ReadyForReview
-                || m == RequestStatus.ReadyForApproval),
-
-                WithEmployerCount = commitmentStatus.Count(m => m == RequestStatus.SentForReview || m == RequestStatus.WithEmployerForApproval),
-                TransferFundedCohortsCount = commitmentStatus.Count(m =>
-                        m == RequestStatus.WithSenderForApproval
-                        || m == RequestStatus.RejectedBySender),
-
-                HasSignedTheAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed,
-                SignAgreementUrl = _configuration.ContractAgreementsUrl,
-                ShowDrafts = showDrafts
-            };
-
-            return model;
-        }
-
-        public async Task<CommitmentListViewModel> GetAllReadyForReview(long providerId)
-        {
-            var data = (await GetAllCommitmentsWithTheseStatuses(providerId,
-                RequestStatus.ReadyForReview, RequestStatus.ReadyForApproval)).ToList();
-
-            Logger.Info($"Provider getting all new, ReadyForReview or ReadyForApproval ({data.Count}) :{providerId}", providerId);
-
-            return new CommitmentListViewModel
-            {
-                ProviderId = providerId,
-                Commitments = MapFrom(data, true),
-                PageTitle = "Cohorts to review, update or approve",
-                PageId = "review-cohorts-list",
-                PageHeading = "Cohorts to review, update or approve",
-                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSuffix(data.Count)} ready for you to review, update or approve:",
-                HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
-            };
-        }
-
-        public async Task<CommitmentListViewModel> GetAllWithEmployer(long providerId)
-        {
-            var data = (await GetAllCommitmentsWithTheseStatuses(providerId,
-                RequestStatus.SentForReview, RequestStatus.WithEmployerForApproval)).ToList();
-            Logger.Info($"Provider getting all with employer ({data.Count}) :{providerId}", providerId);
-
-            return new CommitmentListViewModel
-            {
-                ProviderId = providerId,
-                Commitments = MapFrom(data, false),
-                PageTitle = "Cohorts with employers",
-                PageId = "cohorts-with-employers",
-                PageHeading = "Cohorts with employers",
-                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSuffix(data.Count)} with an employer for them to add details, review or approve:",
-                HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
-            };
-        }
-
-        public async Task<TransferFundedViewModel> GetAllTransferFunded(long providerId)
-        {
-            var data = (await GetAllCommitmentsWithTheseStatuses(providerId, RequestStatus.WithSenderForApproval, RequestStatus.RejectedBySender)).ToList();
-            Logger.Info($"Provider getting all transfer funded ({data.Count}) :{providerId}", providerId);
-
-            return new TransferFundedViewModel
-            {
-                ProviderId = providerId,
-                Commitments = data.Select(MapToTransferFundedListItemViewModel)
-            };
-        }
-
-        public async Task<CommitmentListViewModel> GetAllDrafts(long providerId)
-        {
-            var data = (await GetAllCommitmentsWithTheseStatuses(providerId,
-                RequestStatus.NewRequest)).ToList();
-
-            Logger.Info($"Provider getting all New ({data.Count}) :{providerId}", providerId);
-
-            return new CommitmentListViewModel
-            {
-                ProviderId = providerId,
-                Commitments = MapFrom(data, true),
-                PageTitle = "Draft cohorts",
-                PageId = "draft-cohorts-list",
-                PageHeading = "Draft cohorts",
-                PageHeading2 = $"You have <strong>{data.Count}</strong> cohort{_addSSuffix(data.Count)} waiting to be sent to an employer:",
-                HasSignedAgreement = await IsSignedAgreement(providerId) == ProviderAgreementStatus.Agreed
-            };
         }
 
         public async Task<DeleteConfirmationViewModel> GetDeleteConfirmationModel(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
@@ -549,28 +439,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             return apprenticeViewModels;
         }
 
-        // TODO: Move mappers into own class
-        private IEnumerable<CommitmentListItemViewModel> MapFrom(IEnumerable<CommitmentListItem> commitments, bool showProviderMessage)
-        {
-            return commitments.Select(m => MapFrom(m, GetLatestMessage(m.Messages, showProviderMessage)?.Message));
-        }
-
         private MessageView GetLatestMessage(IEnumerable<MessageView> messages, bool showProviderMessage)
         {
             return messages.Where(x => x.CreatedBy == (showProviderMessage ? MessageCreator.Employer : MessageCreator.Provider)).OrderByDescending(x => x.CreatedDateTime).FirstOrDefault();
-        }
-
-        private CommitmentListItemViewModel MapFrom(CommitmentListItem listItem, string lastestMessage)
-        {
-            return new CommitmentListItemViewModel
-            {
-                HashedCommitmentId = HashingService.HashValue(listItem.Id),
-                Reference = listItem.Reference,
-                LegalEntityName = listItem.LegalEntityName,
-                ProviderName = listItem.ProviderName,
-                Status = listItem.GetStatus(),
-                LatestMessage = lastestMessage
-            };
         }
 
         private CommitmentListItemViewModel MapFrom(CommitmentView listItem, string latestMessage)
@@ -584,16 +455,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 Status = listItem.GetStatus(),
                 EmployerAccountId = listItem.EmployerAccountId,
                 LatestMessage = latestMessage
-            };
-        }
-
-        private TransferFundedListItemViewModel MapToTransferFundedListItemViewModel(CommitmentListItem listItem)
-        {
-            return new TransferFundedListItemViewModel
-            {
-                HashedCommitmentId = HashingService.HashValue(listItem.Id),
-                ReceivingEmployerName = listItem.LegalEntityName,
-                Status = listItem.TransferApprovalStatus
             };
         }
 

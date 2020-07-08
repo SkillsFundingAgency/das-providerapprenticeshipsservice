@@ -73,10 +73,31 @@
         </div>
     </div>
 
-    <div id="global-cookie-message">
-        <p>
-            GOV.UK uses cookies to make the site simpler. <a href="@Url.RouteUrl("privacy")"> Find out more about cookies</a>
-        </p>
+    <div data-module="cookie-banner" role="region" aria-label="cookie banner" class="das-cookie-banner__wrap">
+        <div class="das-cookie-banner">
+            <div class="das-cookie-banner__wrapper govuk-width-container">
+                <div class="grid-row">
+                    <div class="column-two-thirds">
+                        <h2 class="heading-medium das-cookie-banner__header">Tell us whether you accept cookies</h2>
+                        <p class="das-cookie-banner__message">We use <a href="/cookie-details" class="link">cookies to collect information</a> about how you use this service. We use this information to make the service work as well as possible and improve this service.</p>
+                        <div class="das-cookie-banner__buttons">
+                            <div class="das-cookie-banner__button-wrap das-cookie-banner__button-accept">
+                                <button class="button das-cookie-banner__button" type="submit" data-accept-cookies="true" id="btn-cookie-accept">Accept all cookies</button>
+                            </div>
+                            <div class="das-cookie-banner__button-wrap das-cookie-banner__button-settings">
+                                <a class="button das-cookie-banner__button" role="button" href="/cookies" id="btn-cookie-settings">Set cookie preferences</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="das-cookie-banner__confirmation govuk-width-container" tabindex="-1">
+                <p class="das-cookie-banner__confirmation-message">
+                    You've accepted all cookies. You can <a class="govuk-link" href="/cookies" id="link-cookie-settings">change your cookie settings</a> at any time.
+                </p>
+                <button class="das-cookie-banner__hide-button" data-hide-cookie-banner="true" id="btn-hide-cookie-banner">Hide</button>
+            </div>
+        </div>
     </div>
 
     <header role="banner" id="global-header" class="with-proposition">
@@ -151,7 +172,8 @@
                     <ul class="platform-help-links">
                         <li><a href="@Url.Action("Help", "Home")">Help</a></li>
                         <li><a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank" aria-label="Give feedback">Feedback </a></li>
-                        <li><a href="@Url.RouteUrl("privacy")">Privacy and cookies</a></li>
+                        <li><a href="@Url.RouteUrl("privacy")">Privacy</a></li>
+                        <li><a href="@Url.RouteUrl("cookies")">Cookies</a></li>
                         <li><a href="@Url.RouteUrl("terms")">Terms and conditions</a></li>
                         <li>Built by the <a href="http://gov.uk/sfa" target="_blank">Education and Skills Funding Agency</a></li>
                     </ul>
@@ -166,7 +188,9 @@
 
                     </div>
                 </div>
-
+				<div class="copyright">
+					<a href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/copyright-and-re-use/crown-copyright/">&copy; Crown copyright</a>
+				</div>
             </div>
         </div>
     </footer>

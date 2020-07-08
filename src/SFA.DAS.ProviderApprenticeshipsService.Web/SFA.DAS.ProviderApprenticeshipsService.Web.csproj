@@ -981,6 +981,8 @@
     <Content Include="src\sass\_tables.scss" />
     <Content Include="src\sass\_typography.scss" />
     <Content Include="src\sass\_navigation.scss" />
+    <Content Include="Views\Home\Cookies.cshtml" />
+    <Content Include="Views\Home\CookieDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
