@@ -372,7 +372,6 @@
     <Compile Include="Mappers\ApprenticeshipInfoServiceMapper.cs" />
     <Compile Include="Queries\GetClientContent\GetClientContentRequest.cs" />
     <Compile Include="Queries\GetClientContent\GetClientContentRequestHandler.cs" />
-    <Compile Include="Queries\GetClientContent\GetClientContentRequestValidator.cs" />
     <Compile Include="Queries\GetClientContent\GetClientContentResponse.cs" />
     <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesHandler.cs" />
     <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesRequest.cs" />
