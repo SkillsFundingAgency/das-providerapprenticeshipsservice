@@ -2,7 +2,10 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using MediatR;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Helpers;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientContent;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Helpers;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
@@ -63,6 +66,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
             builder.SetInnerText(errorMesage);
 
             return new MvcHtmlString(builder.ToString());
+        }
+
+        public static MvcHtmlString GetClientContentByType(this HtmlHelper html, string type, bool useLegacyStyles = false)
+        {
+            var mediator = DependencyResolver.Current.GetService<IMediator>();
+
+            IMediator Mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+
+            var userResponse = AsyncHelper.RunSync(() => mediator.Send(new GetClientContentRequest
+            {
+                UseLegacyStyles = useLegacyStyles,
+                ContentType = type
+            }));            
+
+            var content = userResponse;
+            return MvcHtmlString.Create(content.Content);
         }
     }
 }

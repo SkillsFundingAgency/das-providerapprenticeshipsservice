@@ -119,6 +119,9 @@
     <Reference Include="SFA.DAS.AutoConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.AutoConfiguration.2.2.6\lib\net462\SFA.DAS.AutoConfiguration.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.Caches, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Caches.1.1.4\lib\netstandard2.0\SFA.DAS.Caches.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Commitments.Api.Client, Version=4.1.1573.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.4.1.1573\lib\netstandard2.0\SFA.DAS.Commitments.Api.Client.dll</HintPath>
     </Reference>
@@ -169,6 +172,9 @@
     </Reference>
     <Reference Include="SFA.DAS.Reservations.Api.Types, Version=4.1.606.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Reservations.Api.Types.4.1.606\lib\netstandard2.0\SFA.DAS.Reservations.Api.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis, Version=1.2.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.1.2.6\lib\net46\StackExchange.Redis.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.7.0\lib\net45\StructureMap.dll</HintPath>
@@ -295,6 +301,7 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.1\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
@@ -361,7 +368,12 @@
     <Compile Include="Commands\DeleteRegisteredUser\DeleteRegisteredUserCommandValidator.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\ITrainingProgrammeExtensions.cs" />
+    <Compile Include="Helpers\AsyncHelper.cs" />
     <Compile Include="Mappers\ApprenticeshipInfoServiceMapper.cs" />
+    <Compile Include="Queries\GetClientContent\GetClientContentRequest.cs" />
+    <Compile Include="Queries\GetClientContent\GetClientContentRequestHandler.cs" />
+    <Compile Include="Queries\GetClientContent\GetClientContentRequestValidator.cs" />
+    <Compile Include="Queries\GetClientContent\GetClientContentResponse.cs" />
     <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesHandler.cs" />
     <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesResponse.cs" />
@@ -474,6 +486,9 @@
     <Compile Include="Queries\GetUser\GetUserHandler.cs" />
     <Compile Include="Queries\GetUser\GetUserQuery.cs" />
     <Compile Include="Queries\GetUser\GetUserResponse.cs" />
+    <Compile Include="Services\CacheStorageService.cs" />
+    <Compile Include="Services\ClientContentApiClient.cs" />
+    <Compile Include="Services\ClientContentService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

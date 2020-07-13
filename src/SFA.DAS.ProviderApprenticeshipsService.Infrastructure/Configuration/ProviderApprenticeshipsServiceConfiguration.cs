@@ -25,7 +25,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string PublicAllowedHashstringCharacters { get; set; }
         public string PublicAllowedAccountLegalEntityHashstringSalt { get; set; }
         public string PublicAllowedAccountLegalEntityHashstringCharacters { get; set; }
-
+        public ContentClientApiConfiguration ContentApi { get; set; }
+        public string ContentApplicationId { get; set; }
+        public int DefaultCacheExpirationInMinutes { get; set; }
     }
 
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
@@ -56,5 +58,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 
         public string ClientToken { get; set; }
 
+    }
+
+    public class ContentClientApiConfiguration : IContentClientApiConfiguration
+    {
+        public string ApiBaseUrl { get; set; }
+        public string Tenant { get; set; }
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
+        public string IdentifierUri { get; set; }
     }
 }
