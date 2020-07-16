@@ -71,63 +71,65 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         }
 
         [Test, RecursiveMoqAutoData]
-        public async Task Check_Cache_ReturnIfExists(GetClientContentRequest query1, string contentBanner1,
-            Mock<ICacheStorageService> cacheStorageService1,
-            GetClientContentRequestHandler requestHandler1,            
+        public async Task Check_Cache_ReturnIfExists(GetClientContentRequest query, 
+            string contentBanner,
+            Mock<ICacheStorageService> cacheStorageService,
+            GetClientContentRequestHandler requestHandler,            
             Mock<ILog> logger,
             Mock<IClientContentService> clientMockontentService)
         {
             //Arrange            
-            query1.ContentType = "Banner";
-            query1.UseLegacyStyles = false;
+            query.ContentType = "Banner";
+            query.UseLegacyStyles = false;
 
             var key = ProviderApprenticeshipsServiceConfiguration.ContentApplicationId;
 
             clientMockontentService.Setup(c => c.Get("banner", key));
 
-            requestHandler1 = new GetClientContentRequestHandler(logger.Object, clientMockontentService.Object,
-                cacheStorageService1.Object, ProviderApprenticeshipsServiceConfiguration);
+            requestHandler = new GetClientContentRequestHandler(logger.Object, clientMockontentService.Object,
+                cacheStorageService.Object, ProviderApprenticeshipsServiceConfiguration);
 
             var cacheKey = key + "_banner";
-            cacheStorageService1.Setup(c => c.TryGet(cacheKey, out contentBanner1))
+            cacheStorageService.Setup(c => c.TryGet(cacheKey, out contentBanner))
                 .Returns(true);
             
             //Act
-            var result = await requestHandler1.Handle(query1, new CancellationToken());
+            var result = await requestHandler.Handle(query, new CancellationToken());
 
             //assert
-            Assert.AreEqual(result.Content, contentBanner1);
-            cacheStorageService1.Verify(x => x.TryGet(cacheKey, out contentBanner1), Times.Once);
+            Assert.AreEqual(result.Content, contentBanner);
+            cacheStorageService.Verify(x => x.TryGet(cacheKey, out contentBanner), Times.Once);
         }
 
         [Test, RecursiveMoqAutoData]
-        public async Task Check_Cache_ReturnNull_CallFromClient(GetClientContentRequest query1, string contentBanner1,
-            Mock<ICacheStorageService> cacheStorageService1,
-            GetClientContentRequestHandler requestHandler1,            
+        public async Task Check_Cache_ReturnNull_CallFromClient(GetClientContentRequest query, 
+            string contentBanner,
+            Mock<ICacheStorageService> cacheStorageService,
+            GetClientContentRequestHandler requestHandler,            
             Mock<ILog> logger,
             Mock<IClientContentService> clientMockContentService)
         {
             //Arrange
             var key = ProviderApprenticeshipsServiceConfiguration.ContentApplicationId;
-            query1.ContentType = "Banner";
-            query1.UseLegacyStyles = false;
+            query.ContentType = "Banner";
+            query.UseLegacyStyles = false;
 
             string nullCacheString = null;
             var cacheKey = key + "_banner";
-            cacheStorageService1.Setup(c => c.TryGet(cacheKey, out nullCacheString))
+            cacheStorageService.Setup(c => c.TryGet(cacheKey, out nullCacheString))
                 .Returns(false);
 
-            clientMockContentService.Setup(c => c.Get(query1.ContentType, key))
-                .ReturnsAsync(contentBanner1);
+            clientMockContentService.Setup(c => c.Get(query.ContentType, key))
+                .ReturnsAsync(contentBanner);
 
-            requestHandler1 = new GetClientContentRequestHandler(logger.Object, clientMockContentService.Object,
-                cacheStorageService1.Object, ProviderApprenticeshipsServiceConfiguration);
+            requestHandler = new GetClientContentRequestHandler(logger.Object, clientMockContentService.Object,
+                cacheStorageService.Object, ProviderApprenticeshipsServiceConfiguration);
 
             //Act
-            var result = await requestHandler1.Handle(query1, new CancellationToken());
+            var result = await requestHandler.Handle(query, new CancellationToken());
 
             //assert
-            Assert.AreEqual(result.Content, contentBanner1);
+            Assert.AreEqual(result.Content, contentBanner);
         }
 
     }
