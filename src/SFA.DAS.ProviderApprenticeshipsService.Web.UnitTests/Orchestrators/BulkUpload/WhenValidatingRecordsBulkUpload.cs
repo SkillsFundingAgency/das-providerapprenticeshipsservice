@@ -170,7 +170,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                        };
         }
 
-        private IEnumerable<ApprenticeshipUploadModel> GetTestData(int startYear = 2120, int startMonth = 8, int endYear = 2125, int endMonth = 12)
+        private IEnumerable<ApprenticeshipUploadModel> GetTestData(int startYear = 2020, int startMonth = 8, int endYear = 2125, int endMonth = 12)
         {
             var apprenticeships = new List<ApprenticeshipViewModel>
             {
@@ -196,12 +196,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                 new ApprenticeshipViewModel
                 {
                     FirstName = " ", LastName = new string('*', 101), DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567890", ProgType = 25,
-                    StartDate = new DateTimeViewModel(null, 8, 2120), EndDate = new DateTimeViewModel(null, 12, 2125), Cost = "15000", EmployerRef = "Ab123"
+                    StartDate = new DateTimeViewModel(null, 8, 2019), EndDate = new DateTimeViewModel(null, 12, 2019), Cost = "15000", EmployerRef = "Ab123"
                 },
                 new ApprenticeshipViewModel
                 {
                     FirstName = new string('*', 101), LastName = "", DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567891", ProgType = 25,
-                    StartDate = new DateTimeViewModel(null, 8, 2120), EndDate = new DateTimeViewModel(null, 12, 2125), Cost = "15000", EmployerRef = "Abba123"
+                    StartDate = new DateTimeViewModel(null, 8, 2019), EndDate = new DateTimeViewModel(null, 12, 2019), Cost = "15000", EmployerRef = "Abba123"
                 }
             };
 

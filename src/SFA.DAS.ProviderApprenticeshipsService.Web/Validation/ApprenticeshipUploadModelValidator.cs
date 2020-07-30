@@ -105,7 +105,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 return CreateValidationFailure("DateOfBirth", _validationText.DateOfBirth01);
             }
 
-            if (!ApprenticeAgeMustBeGreaterThenMinimumAge(model.ApprenticeshipViewModel.DateOfBirth))
+            if (!ApprenticeDobMustBeGreaterThenMinimumDob(model.ApprenticeshipViewModel.DateOfBirth))
             {
                 return CreateValidationFailure("DateOfBirth", _validationText.DateOfBirth07);
             }
@@ -123,7 +123,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             return null;
         }
 
-        private bool ApprenticeAgeMustBeGreaterThenMinimumAge(DateTimeViewModel dob)
+        private bool ApprenticeDobMustBeGreaterThenMinimumDob(DateTimeViewModel dob)
         {
             DateTime? dobDate = dob?.DateTime;
             DateTime minimumDataOfBirth = new DateTime(1900, 01, 01, 0, 0, 0, DateTimeKind.Utc);
@@ -178,11 +178,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             if (model.ApprenticeshipViewModel.StartDate != null && model.ApprenticeshipViewModel.EndDate.DateTime <= model.ApprenticeshipViewModel.StartDate.DateTime)
             {
                 return CreateValidationFailure("EndDate", _validationText.LearnPlanEndDate02);
-            }
-
-            if (model.ApprenticeshipViewModel.EndDate.DateTime <= _currentDateTime.Now)
-            {
-                return CreateValidationFailure("EndDate", _validationText.LearnPlanEndDate03);
             }
 
             return null;

@@ -38,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             result.Errors[0].ErrorMessage.Should().Be(expected);
         }
 
-        [TestCase(5, 9, 2100)]
+        [TestCase(5, 9, 2050)]
         [TestCase(1, 1, 2023)]
         [TestCase(null, 9, 2067)]
         public void ShouldNotFailValidationForStartDate(int? day, int? month, int? year)
@@ -98,8 +98,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [Test]
         public void ShouldFailIfStartDateIsAfterEndDate()
         {
-            ValidModel.ApprenticeshipViewModel.StartDate = new DateTimeViewModel(DateTime.Parse("2121-05-10"));
-            ValidModel.ApprenticeshipViewModel.EndDate = new DateTimeViewModel(DateTime.Parse("2120-05-10"));
+            ValidModel.ApprenticeshipViewModel.StartDate = new DateTimeViewModel(DateTime.Parse("2020-05-10"));
+            ValidModel.ApprenticeshipViewModel.EndDate = new DateTimeViewModel(DateTime.Parse("2019-05-10"));
 
             var result = Validator.Validate(ValidModel);
 
