@@ -105,12 +105,32 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 return CreateValidationFailure("DateOfBirth", _validationText.DateOfBirth01);
             }
 
+            if (!ApprenticeAgeMustBeGreaterThenMinimumAge(model.ApprenticeshipViewModel.DateOfBirth))
+            {
+                return CreateValidationFailure("DateOfBirth", _validationText.DateOfBirth07);
+            }
+
             if (!WillApprenticeBeAtLeast15AtStartOfTraining(model.ApprenticeshipViewModel, model.ApprenticeshipViewModel.DateOfBirth))
             {
                 return CreateValidationFailure("DateOfBirth", _validationText.DateOfBirth02);
             }
 
+            if (!ApprenticeAgeMustBeLessThen115AtStartOfTraining(model.ApprenticeshipViewModel, model.ApprenticeshipViewModel.DateOfBirth))
+            {
+                return CreateValidationFailure("DateOfBirth", _validationText.DateOfBirth06);
+            }
+
             return null;
+        }
+
+        private bool ApprenticeAgeMustBeGreaterThenMinimumAge(DateTimeViewModel dob)
+        {
+            DateTime? dobDate = dob?.DateTime;
+            DateTime minimumDataOfBirth = new DateTime(1900, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+
+            if (dobDate == null) return true;
+
+            return dobDate > minimumDataOfBirth;
         }
 
         private ValidationFailure ValidateStartDate(ApprenticeshipUploadModel model)
@@ -307,6 +327,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             if (startDate < dobDate.Value.AddYears(age)) age--;
 
             return age >= 15;
+        }
+
+        private bool ApprenticeAgeMustBeLessThen115AtStartOfTraining(ApprenticeshipViewModel model, DateTimeViewModel dob)
+        {
+            DateTime? startDate = model?.StartDate?.DateTime;
+            DateTime? dobDate = dob?.DateTime;
+
+            if (startDate == null || dob == null) return true; // Don't fail validation if both fields not set
+
+            int age = startDate.Value.Year - dobDate.Value.Year;
+            if (startDate < dobDate.Value.AddYears(age)) age--;
+
+            return age < 115;
         }
 
     }
