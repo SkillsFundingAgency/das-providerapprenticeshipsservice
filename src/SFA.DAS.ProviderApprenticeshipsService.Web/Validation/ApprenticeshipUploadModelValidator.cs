@@ -19,14 +19,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         private readonly IApprenticeshipValidationErrorText _validationText;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IUlnValidator _ulnValidator;
+        private readonly IAcademicYearDateProvider _academicYearDateProvider;
 
         private static readonly Func<string, IEnumerable<string>, bool> InList = (v, l) => string.IsNullOrWhiteSpace(v) || l.Contains(v);
 
-        public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime, IUlnValidator ulnValidator)
+        public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime, IUlnValidator ulnValidator, IAcademicYearDateProvider academicYearDateProvider)
         {
             _validationText = validationText;
             _currentDateTime = currentDateTime;
             _ulnValidator = ulnValidator;
+            _academicYearDateProvider = academicYearDateProvider;
         }
 
         public ValidationResult Validate(ApprenticeshipUploadModel model)
@@ -147,7 +149,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             }
 
             var apprenticeshipAllowedStartDate = new DateTime(2017, 05, 01);
-            if (model.ApprenticeshipViewModel.StartDate.DateTime < apprenticeshipAllowedStartDate 
+            if (model.ApprenticeshipViewModel.StartDate.DateTime < apprenticeshipAllowedStartDate
                 && !model.ApprenticeshipViewModel.IsPaidForByTransfer)
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate02);
 
@@ -155,8 +157,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             if (model.ApprenticeshipViewModel.StartDate.DateTime < transfersAllowedStartDate
                 && model.ApprenticeshipViewModel.IsPaidForByTransfer)
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate06);
-                
-            
+
+            if (model.ApprenticeshipViewModel.StartDate.DateTime > _academicYearDateProvider.CurrentAcademicYearEndDate.AddYears(1))
+                return CreateValidationFailure("StartDate", _validationText.LearnStartDate05);
+
             // we could check the start date against the training programme here, but we'd have to pass the trainingprogrammes through the call stack, or refetch them, or make them available another way e.g. static.
             // none of these choices are appealing, so we'll wait until bulk upload is refactored
 

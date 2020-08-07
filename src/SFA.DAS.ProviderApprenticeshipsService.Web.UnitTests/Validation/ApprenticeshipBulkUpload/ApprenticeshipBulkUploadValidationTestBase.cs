@@ -29,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             MockAcademicYear = new Mock<IAcademicYearDateProvider>();
             MockAcademicYearValidator = new Mock<IAcademicYearValidator>();
 
-            Validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(MockAcademicYear.Object), MockCurrentDateTime.Object, MockUlnValidator.Object);
+            Validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(MockAcademicYear.Object), MockCurrentDateTime.Object, MockUlnValidator.Object, Mock.Of<IAcademicYearDateProvider>());
 
             ValidModel = new ApprenticeshipUploadModel
             {
