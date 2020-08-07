@@ -45,8 +45,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
             _mockAcademicYear = new Moq.Mock<IAcademicYearDateProvider>();
             _mockUlnValidator = new Moq.Mock<IUlnValidator>();
             _mockUlnValidator.Setup(m => m.Validate(_validModel.ApprenticeshipViewModel.ULN)).Returns(UlnValidationResult.Success);
+            _mockAcademicYear.Setup(m => m.CurrentAcademicYearEndDate).Returns(new DateTime(2030, 12, 1));
 
-            _validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(_mockAcademicYear.Object), new CurrentDateTime(), _mockUlnValidator.Object, Mock.Of<IAcademicYearDateProvider>());
+            _validator = new ApprenticeshipUploadModelValidator(new BulkUploadApprenticeshipValidationText(_mockAcademicYear.Object), new CurrentDateTime(), _mockUlnValidator.Object, _mockAcademicYear.Object);
         }
 
         [TestCase("1", "The <strong>Programme type</strong> you've added isn't valid", "ProgType_02")]
