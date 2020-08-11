@@ -19,14 +19,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         private readonly IApprenticeshipValidationErrorText _validationText;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IUlnValidator _ulnValidator;
+        private readonly IAcademicYearDateProvider _academicYearDateProvider;
 
         private static readonly Func<string, IEnumerable<string>, bool> InList = (v, l) => string.IsNullOrWhiteSpace(v) || l.Contains(v);
 
-        public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime, IUlnValidator ulnValidator)
+        public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime, IUlnValidator ulnValidator, IAcademicYearDateProvider academicYearDateProvider)
         {
             _validationText = validationText;
             _currentDateTime = currentDateTime;
             _ulnValidator = ulnValidator;
+            _academicYearDateProvider = academicYearDateProvider;
         }
 
         public ValidationResult Validate(ApprenticeshipUploadModel model)
@@ -105,12 +107,32 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 return CreateValidationFailure("DateOfBirth", _validationText.DateOfBirth01);
             }
 
+            if (!ApprenticeDobMustBeGreaterThenMinimumDob(model.ApprenticeshipViewModel.DateOfBirth))
+            {
+                return CreateValidationFailure("DateOfBirth", _validationText.DateOfBirth07);
+            }
+
             if (!WillApprenticeBeAtLeast15AtStartOfTraining(model.ApprenticeshipViewModel, model.ApprenticeshipViewModel.DateOfBirth))
             {
                 return CreateValidationFailure("DateOfBirth", _validationText.DateOfBirth02);
             }
 
+            if (!ApprenticeAgeMustBeLessThen115AtStartOfTraining(model.ApprenticeshipViewModel, model.ApprenticeshipViewModel.DateOfBirth))
+            {
+                return CreateValidationFailure("DateOfBirth", _validationText.DateOfBirth06);
+            }
+
             return null;
+        }
+
+        private bool ApprenticeDobMustBeGreaterThenMinimumDob(DateTimeViewModel dob)
+        {
+            DateTime? dobDate = dob?.DateTime;
+            DateTime minimumDataOfBirth = new DateTime(1900, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+
+            if (dobDate == null) return true;
+
+            return dobDate > minimumDataOfBirth;
         }
 
         private ValidationFailure ValidateStartDate(ApprenticeshipUploadModel model)
@@ -127,7 +149,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             }
 
             var apprenticeshipAllowedStartDate = new DateTime(2017, 05, 01);
-            if (model.ApprenticeshipViewModel.StartDate.DateTime < apprenticeshipAllowedStartDate 
+            if (model.ApprenticeshipViewModel.StartDate.DateTime < apprenticeshipAllowedStartDate
                 && !model.ApprenticeshipViewModel.IsPaidForByTransfer)
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate02);
 
@@ -135,8 +157,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             if (model.ApprenticeshipViewModel.StartDate.DateTime < transfersAllowedStartDate
                 && model.ApprenticeshipViewModel.IsPaidForByTransfer)
                 return CreateValidationFailure("StartDate", _validationText.LearnStartDate06);
-                
-            
+
+            if (model.ApprenticeshipViewModel.StartDate.DateTime > _academicYearDateProvider.CurrentAcademicYearEndDate.AddYears(1))
+                return CreateValidationFailure("StartDate", _validationText.LearnStartDate05);
+
             // we could check the start date against the training programme here, but we'd have to pass the trainingprogrammes through the call stack, or refetch them, or make them available another way e.g. static.
             // none of these choices are appealing, so we'll wait until bulk upload is refactored
 
@@ -158,11 +182,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             if (model.ApprenticeshipViewModel.StartDate != null && model.ApprenticeshipViewModel.EndDate.DateTime <= model.ApprenticeshipViewModel.StartDate.DateTime)
             {
                 return CreateValidationFailure("EndDate", _validationText.LearnPlanEndDate02);
-            }
-
-            if (model.ApprenticeshipViewModel.EndDate.DateTime <= _currentDateTime.Now)
-            {
-                return CreateValidationFailure("EndDate", _validationText.LearnPlanEndDate03);
             }
 
             return null;
@@ -307,6 +326,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             if (startDate < dobDate.Value.AddYears(age)) age--;
 
             return age >= 15;
+        }
+
+        private bool ApprenticeAgeMustBeLessThen115AtStartOfTraining(ApprenticeshipViewModel model, DateTimeViewModel dob)
+        {
+            DateTime? startDate = model?.StartDate?.DateTime;
+            DateTime? dobDate = dob?.DateTime;
+
+            if (startDate == null || dob == null) return true; // Don't fail validation if both fields not set
+
+            int age = startDate.Value.Year - dobDate.Value.Year;
+            if (startDate < dobDate.Value.AddYears(age)) age--;
+
+            return age < 115;
         }
 
     }
