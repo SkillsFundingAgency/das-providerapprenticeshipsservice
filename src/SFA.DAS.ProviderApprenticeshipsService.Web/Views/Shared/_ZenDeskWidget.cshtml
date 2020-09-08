@@ -1,0 +1,28 @@
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+
+@{
+    var label = !string.IsNullOrEmpty(ViewBag.ZenDeskLabel) ? ViewBag.ZenDeskLabel : ViewBag.Title;
+}
+
+<script type="text/javascript">
+    window.zESettings = {
+        webWidget: {
+            contactForm: {
+                attachments: false
+            },
+            chat: {
+                menuOptions: {
+                    emailTranscript: false
+                }
+            },
+            helpCenter: {
+                filter: {
+                    section: @Html.GetZenDeskSnippetSectionId()
+                }
+            }
+        }
+    };
+</script>
+<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=@Html.GetZenDeskSnippetKey()"></script>
+<script id="co-snippet" src="https://embed-euw1.rcrsv.io/@Html.GetZenDeskCobrowsingSnippetKey()?zwwi=1"></script>
+@Html.SetZendeskLabels($"matp-{label}")

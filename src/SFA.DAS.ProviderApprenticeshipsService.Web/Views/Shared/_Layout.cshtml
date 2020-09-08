@@ -55,7 +55,7 @@
         window.appInsights = appInsights;
         appInsights.trackPageView();
     </script>
-
+    @Html.Partial("_ZenDeskWidget")
 </head>
 <body id="@ViewBag.PageId">
     <!-- Google Tag Manager (noscript) -->
@@ -66,8 +66,7 @@
     <!-- End Google Tag Manager (noscript) -->
 
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
-
-    <div id="skiplink-container">
+<div id="skiplink-container">
         <div>
             <a href="#content" class="skiplink">Skip to main content</a>
         </div>

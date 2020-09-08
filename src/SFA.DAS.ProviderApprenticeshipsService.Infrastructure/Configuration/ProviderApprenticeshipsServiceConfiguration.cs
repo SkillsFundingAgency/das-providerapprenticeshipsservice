@@ -28,6 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public ContentClientApiConfiguration ContentApi { get; set; }
         public string ContentApplicationId { get; set; }
         public int DefaultCacheExpirationInMinutes { get; set; }
+        public ZenDeskConfiguration ZenDeskSettings { get; set; }
     }
 
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
@@ -67,5 +68,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         public string IdentifierUri { get; set; }
+    }
+
+    public class ZenDeskConfiguration
+    {
+        public string SectionId { get; set; }
+        public string SnippetKey { get; set; }
+        public string CobrowsingSnippetKey { get; set; }
     }
 }
