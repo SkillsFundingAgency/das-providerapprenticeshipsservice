@@ -85,25 +85,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
             return MvcHtmlString.Create(content.Content);
         }
 
-        public static MvcHtmlString SetZendeskLabels(this HtmlHelper html, params string[] labels)
+        public static MvcHtmlString SetZenDeskLabels(this HtmlHelper html, params string[] labels)
         {
-            var apiCallString = "<script type=\"text/javascript\">zE('webWidget', 'helpCenter:setSuggestions', { labels: [";
+            var keywords = string.Join(",", labels
+                .Where(label => !string.IsNullOrEmpty(label))
+                .Select(label => $"'{EscapeApostrophes(label)}'"));
 
-            var first = true;
-            foreach (var label in labels)
-            {
-                if (!string.IsNullOrEmpty(label))
-                {
-                    if (!first) apiCallString += ",";
-                    first = false;
+            // when there are no keywords default to empty string to prevent zen desk matching articles from the url
+            var apiCallString = "<script type=\"text/javascript\">zE('webWidget', 'helpCenter:setSuggestions', { labels: ["
+                                + (!string.IsNullOrEmpty(keywords) ? keywords : "''")
+                                + "] });</script>";
 
-                    apiCallString += $"'{ EscapeApostrophes(label) }'";
-                }
-            }
-
-            apiCallString += "] });</script>";
-
-            return new MvcHtmlString(apiCallString);
+            return MvcHtmlString.Create(apiCallString);
         }
 
         private static string EscapeApostrophes(string input)
