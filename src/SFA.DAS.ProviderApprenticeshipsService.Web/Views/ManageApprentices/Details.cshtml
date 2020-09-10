@@ -30,8 +30,6 @@
 
         @if (Model.DataLockSummaryViewModel.ShowChangesRequested)
         {
-            ViewBag.ZenDeskLabel = "matp-change request sent";
-
             <div class="purple-border blue-alerts">
                 <h2 class="heading-medium">
                     Change request sent
@@ -56,8 +54,6 @@
 
         @if (Model.DataLockSummaryViewModel.ShowIlrDataMismatch)
         {
-            ViewBag.ZenDeskLabel = "matp-ILR data mismatch";
-
             <div class="purple-border blue-alerts">
                 <h2 class="heading-medium">
                     ILR data mismatch
