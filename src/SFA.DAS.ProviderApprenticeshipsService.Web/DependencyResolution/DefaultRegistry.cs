@@ -91,7 +91,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             ConfigureHashingService(config);
             For<IProviderAgreementStatusConfiguration>().Use(config);
-
+            For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
             
             For<IContentClientApiConfiguration>().Use(config.ContentApi);
