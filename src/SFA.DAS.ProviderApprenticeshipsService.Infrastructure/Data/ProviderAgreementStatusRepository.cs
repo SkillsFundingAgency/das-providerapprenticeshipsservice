@@ -91,39 +91,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         {
             _logger.Info($"Updating latest bookmark to: {newLatestBookmark.ToString()}");
 
-            var previousBookmark = await GetLatestBookmark(conn, tran);
-
-            _logger.Info($"Previous bookmark: {previousBookmark?.ToString() ?? "NULL"}");
-
             var parameters = new DynamicParameters();
             parameters.Add("@latestBookmark", newLatestBookmark, DbType.Guid);
             parameters.Add("@updatedDate", _currentDateTime.Now, DbType.DateTime);
 
-            if (previousBookmark == null)
-            {
-                _logger.Info("Inserting new record into [ContractFeedEventRun]");
+            _logger.Info("Deleting existing record from [ContractFeedEventRun]");
 
-                await conn.ExecuteAsync(
-                    sql:
-                        "INSERT INTO [dbo].[ContractFeedEventRun]" +
-                        "(LatestBookmark, UpdatedDate)" +
-                        "VALUES(@latestBookmark, @updatedDate); ",
-                    param: parameters,
-                    commandType: CommandType.Text,
-                    transaction: tran);
-            }
-            else
-            {
-                _logger.Info("Updating existing record in [ContractFeedEventRun]");
+            await conn.ExecuteAsync(
+                sql:
+                "DELETE FROM [dbo].[ContractFeedEventRun]",
+                commandType: CommandType.Text,
+                transaction: tran);
 
-                await conn.ExecuteAsync(
-                    sql:
-                        "UPDATE [dbo].[ContractFeedEventRun]" +
-                        "SET LatestBookmark = @latestBookmark, UpdatedDate = @updatedDate; ",
-                    param: parameters,
-                    commandType: CommandType.Text,
-                    transaction: tran);
-            }
+            _logger.Info("Inserting new record into [ContractFeedEventRun]");
+
+            await conn.ExecuteAsync(
+                sql:
+                "INSERT INTO [dbo].[ContractFeedEventRun]" +
+                "(LatestBookmark, UpdatedDate)" +
+                "VALUES(@latestBookmark, @updatedDate); ",
+                param: parameters,
+                commandType: CommandType.Text,
+                transaction: tran);
         }
 
         private async Task InsertContract(IDbConnection conn, IDbTransaction tran, ContractFeedEvent contract)
