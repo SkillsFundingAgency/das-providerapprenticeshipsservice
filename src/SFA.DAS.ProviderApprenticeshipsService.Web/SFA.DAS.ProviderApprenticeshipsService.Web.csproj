@@ -984,6 +984,7 @@
     <Content Include="Views\Home\Cookies.cshtml" />
     <Content Include="Views\Home\CookieDetails.cshtml" />
     <Content Include="Views\Shared\_ZenDeskWidget.cshtml" />
+    <Content Include="Views\Shared\_CookieBanner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
