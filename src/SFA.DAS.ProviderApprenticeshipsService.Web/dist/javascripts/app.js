@@ -109,6 +109,31 @@ sfa.navigation = {
     }
 }
 
+sfa.forms = {
+    init: function () {
+        this.preventDoubleSubmit();
+    },
+    preventDoubleSubmit: function () {
+        var forms = $('form').not('.has-client-side-validation');
+        forms.on('submit', function (e) {
+            var button = $(this).find('.button');
+            button.attr('disabled', 'disabled');
+            setTimeout(function () {
+                button.removeAttr('disabled');
+            }, 20000);
+        });
+    },
+    removeDisabledAttr: function () {
+        var btns = $('form').not('.has-client-side-validation').find('.button');
+        btns.removeAttr('disabled');
+    }
+};
+
+window.onunload = function () {
+    sfa.forms.removeDisabledAttr();
+};
+
+sfa.forms.init();
 sfa.navigation.init();
 $('ul#global-nav-links').collapsableNav();
 
