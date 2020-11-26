@@ -506,6 +506,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 EmployerName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
                 IsTransfer = commitment.IsTransfer(),
+                ChangeOfPartyRequestId = commitment.ChangeOfPartyRequestId,
                 HasOtherCohortsAwaitingApproval = await AnyCohortsForStatus(providerId, RequestStatus.ReadyForApproval)
             };
         }
