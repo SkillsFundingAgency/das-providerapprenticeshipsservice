@@ -477,7 +477,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             switch (saveStatus)
             {
-                case SaveStatus.ApproveAndSend when commitment.IsTransfer():
+                case SaveStatus.ApproveAndSend when (commitment.IsTransfer() && commitment.ChangeOfPartyRequestId == null):
                     result.WhatHappensNext.AddRange(new[]
                     {
                         "The employer will receive your cohort and will either confirm the information is correct or contact you to suggest changes.",
@@ -506,6 +506,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 EmployerName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
                 IsTransfer = commitment.IsTransfer(),
+                ChangeOfPartyRequestId = commitment.ChangeOfPartyRequestId,
                 HasOtherCohortsAwaitingApproval = await AnyCohortsForStatus(providerId, RequestStatus.ReadyForApproval)
             };
         }

@@ -8,5 +8,6 @@
         public string ProviderName { get; internal set; }
         public bool HasOtherCohortsAwaitingApproval { get; internal set; }
         public bool IsTransfer { get; internal set; }
+        public long? ChangeOfPartyRequestId { get; internal set; }
     }
 }

@@ -37,7 +37,7 @@
 
         <h2 class="heading-medium">What happens next?</h2>
             
-        @if (Model.IsTransfer)
+        @if (Model.IsTransfer && Model.ChangeOfPartyRequestId == null)
         {
             <ul class="list list-bullet text">
                 <li>
