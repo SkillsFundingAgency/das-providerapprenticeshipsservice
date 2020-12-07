@@ -484,6 +484,10 @@
                                     "value": "[parameters('apiStorageConnectionString')]"
                                 },
                                 {
+                                    "name": "LoggingRedisKey",
+                                    "value": "[parameters('loggingRedisKey')]"
+                                },
+                                {
                                     "name": "ConfigurationStorageConnectionString",
                                     "value": "[parameters('configurationStorageConnectionString')]"
                                 },
