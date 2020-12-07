@@ -141,7 +141,6 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:
-    SourceFolder: src
     Contents: |
      azure/**
      **/*.dacpac
