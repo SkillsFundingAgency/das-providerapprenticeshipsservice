@@ -59,6 +59,7 @@ steps:
   displayName: 'Build SFA.DAS.ProviderApprenticeshipsService.sln'
   inputs:
     solution: 'src/SFA.DAS.ProviderApprenticeshipsService.sln'
+    msbuildArgs: '/m'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     clean: true
@@ -85,7 +86,7 @@ steps:
   displayName: 'Publish Provider Accounts API'
   inputs:
     solution: 'src/SFA.DAS.PAS.Account.Api/SFA.DAS.PAS.Account.Api.csproj'
-    vsVersion: 15.0
+    vsVersion: "15.0"
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/Provider Accounts API"'
     platform: 'anycpu'
     configuration: '$(buildConfiguration)'
@@ -95,7 +96,7 @@ steps:
   displayName: 'Publish Provider Portal'
   inputs:
     solution: 'src/SFA.DAS.ProviderApprenticeshipsService.Web/SFA.DAS.ProviderApprenticeshipsService.Web.csproj'
-    vsVersion: 15.0
+    vsVersion: "15.0"
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/Provider Portal"'
     platform: 'anycpu'
     configuration: '$(buildConfiguration)'
@@ -105,7 +106,7 @@ steps:
   displayName: 'Publish Provider WebJob'
   inputs:
     solution: 'src/SFA.DAS.PAS.Host.WebJob/SFA.DAS.PAS.Host.WebJob.csproj'
-    vsVersion: 15.0
+    vsVersion: "15.0"
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/Provider WebJob"'
     platform: 'anycpu'
     configuration: '$(buildConfiguration)'
