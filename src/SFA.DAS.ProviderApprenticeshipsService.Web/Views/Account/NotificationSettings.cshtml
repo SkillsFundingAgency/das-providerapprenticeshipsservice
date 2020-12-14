@@ -9,9 +9,9 @@
     <div class="column-two-thirds">
         <form method="post">
             @Html.AntiForgeryToken()
-            <h1 class="heading-xlarge">Notification Settings</h1>
-            <p>Choose whether you want to receive cohort and apprentice notification emails.</p>
-            <p>Changes to these settings won't affect service emails, such as password resets.</p>
+            <h1 class="heading-xlarge">Notification settings</h1>
+            <p>Choose whether you want to receive cohort, apprentice and recruitment notification emails.</p>
+            <p>Changing these settings will not affect service emails, like password resets.</p>
 
             <table>
                 <thead>
@@ -58,6 +58,7 @@
             </table>
 
             <button type="submit" class="button" id="submit-email-alerts">Update</button>
+            <br />
             <a href="/" class="button text-link">Cancel</a>
         </form>
     </div>

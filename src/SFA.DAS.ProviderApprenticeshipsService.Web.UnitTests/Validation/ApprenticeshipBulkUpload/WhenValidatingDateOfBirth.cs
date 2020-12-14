@@ -47,7 +47,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         }
 
         [TestCase(5, 9, 1998)]
-        [TestCase(1, 1, 1900)]
         public void ShouldNotFailValidationOnDateOfBirth(int? day, int? month, int? year)
         {
             ValidModel.ApprenticeshipViewModel.DateOfBirth = new DateTimeViewModel(day, month, year);
@@ -68,6 +67,32 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
 
             result.IsValid.Should().BeFalse();
             result.Errors[0].ErrorMessage.Should().Be("The apprentice's <strong>date of birth</strong> must show that they're at least 15 years old at the start of their training");
+        }
+
+        [Test]
+        public void ShouldFailIfAgeIs115AtStartOfTraining()
+        {
+            ValidModel.ApprenticeshipViewModel.DateOfBirth = new DateTimeViewModel(new DateTime(1904, 06, 01));
+            ValidModel.ApprenticeshipViewModel.StartDate = new DateTimeViewModel(null, 6, 2019);
+            ValidModel.ApprenticeshipViewModel.EndDate = new DateTimeViewModel(null, 6, 2020);
+
+            var result = Validator.Validate(ValidModel);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors[0].ErrorMessage.Should().Be("Enter a valid year - the apprentice must be younger than 115 at the start of the current teaching year");
+        }
+
+        [Test]
+        public void ShouldFailIfAgeIsMoreThenTheMinimumAllowedAge()
+        {
+            ValidModel.ApprenticeshipViewModel.DateOfBirth = new DateTimeViewModel(new DateTime(1899, 12, 31));
+            ValidModel.ApprenticeshipViewModel.StartDate = new DateTimeViewModel(null, 6, 2017);
+            ValidModel.ApprenticeshipViewModel.EndDate = new DateTimeViewModel(null, 6, 2020);
+
+            var result = Validator.Validate(ValidModel);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors[0].ErrorMessage.Should().Be("The Date of birth is not valid");
         }
     }
 }

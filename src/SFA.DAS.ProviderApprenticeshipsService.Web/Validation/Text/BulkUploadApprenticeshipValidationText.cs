@@ -44,6 +44,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
             new ValidationMessage("The apprentice's <strong>date of birth</strong> must show that they're at least 15 years old at the start of their training", "DateOfBirth_02");
         public ValidationMessage DateOfBirth06 =>
                     new ValidationMessage("Enter a valid year - the apprentice must be younger than 115 at the start of the current teaching year", "DateOfBirth_06");
+        public ValidationMessage DateOfBirth07 =>
+                   new ValidationMessage("The Date of birth is not valid", "DateOfBirth_07");
 
         public ValidationMessage LearnStartDate01 =>
             new ValidationMessage("You must enter the <strong>start date</strong>, for example 2017-09", "LearnStartDate_01");

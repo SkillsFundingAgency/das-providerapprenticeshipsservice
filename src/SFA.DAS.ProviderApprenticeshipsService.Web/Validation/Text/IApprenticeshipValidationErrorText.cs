@@ -8,6 +8,7 @@
         ValidationMessage DateOfBirth01 { get; }
         ValidationMessage DateOfBirth02 { get; }
         ValidationMessage DateOfBirth06 { get; }
+        ValidationMessage DateOfBirth07 { get; }
         ValidationMessage FamilyName01 { get; }
         ValidationMessage FamilyName02 { get; }
         ValidationMessage FworkCode01 { get; }

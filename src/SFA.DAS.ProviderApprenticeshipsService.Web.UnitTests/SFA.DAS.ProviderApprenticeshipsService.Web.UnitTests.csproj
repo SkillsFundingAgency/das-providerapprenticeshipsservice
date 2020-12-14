@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props')" />
   <Import Project="..\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -208,7 +208,7 @@
       <HintPath>..\packages\SFA.DAS.CosmosDb.Testing.1.0.1\lib\netstandard2.0\SFA.DAS.CosmosDb.Testing.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Encoding, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Encoding.1.1.57\lib\netstandard2.0\SFA.DAS.Encoding.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Encoding.1.1.61\lib\netstandard2.0\SFA.DAS.Encoding.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.HashingService, Version=1.0.0.42526, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.HashingService.1.0.0.42526\lib\net45\SFA.DAS.HashingService.dll</HintPath>

@@ -55,7 +55,7 @@
         window.appInsights = appInsights;
         appInsights.trackPageView();
     </script>
-
+    @Html.Partial("_ZenDeskWidget")
 </head>
 <body id="@ViewBag.PageId">
     <!-- Google Tag Manager (noscript) -->
@@ -66,39 +66,13 @@
     <!-- End Google Tag Manager (noscript) -->
 
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
-
     <div id="skiplink-container">
         <div>
             <a href="#content" class="skiplink">Skip to main content</a>
         </div>
     </div>
 
-    <div data-module="cookie-banner" role="region" aria-label="cookie banner" class="das-cookie-banner__wrap">
-        <div class="das-cookie-banner">
-            <div class="das-cookie-banner__wrapper govuk-width-container">
-                <div class="grid-row">
-                    <div class="column-two-thirds">
-                        <h2 class="heading-medium das-cookie-banner__header">Tell us whether you accept cookies</h2>
-                        <p class="das-cookie-banner__message">We use <a href="/cookie-details" class="link">cookies to collect information</a> about how you use this service. We use this information to make the service work as well as possible and improve this service.</p>
-                        <div class="das-cookie-banner__buttons">
-                            <div class="das-cookie-banner__button-wrap das-cookie-banner__button-accept">
-                                <button class="button das-cookie-banner__button" type="submit" data-accept-cookies="true" id="btn-cookie-accept">Accept all cookies</button>
-                            </div>
-                            <div class="das-cookie-banner__button-wrap das-cookie-banner__button-settings">
-                                <a class="button das-cookie-banner__button" role="button" href="/cookies" id="btn-cookie-settings">Set cookie preferences</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="das-cookie-banner__confirmation govuk-width-container" tabindex="-1">
-                <p class="das-cookie-banner__confirmation-message">
-                    You've accepted all cookies. You can <a class="govuk-link" href="/cookies" id="link-cookie-settings">change your cookie settings</a> at any time.
-                </p>
-                <button class="das-cookie-banner__hide-button" data-hide-cookie-banner="true" id="btn-hide-cookie-banner">Hide</button>
-            </div>
-        </div>
-    </div>
+    @Html.Partial("_CookieBanner")
 
     <header role="banner" id="global-header" class="with-proposition">
         <div class="header-wrapper">

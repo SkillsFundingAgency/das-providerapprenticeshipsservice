@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props')" />
   <Import Project="..\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -35,14 +35,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoFixture, Version=4.5.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoFixture.4.5.0\lib\net452\AutoFixture.dll</HintPath>
+    <Reference Include="AutoFixture, Version=4.8.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.4.8.0\lib\net452\AutoFixture.dll</HintPath>
     </Reference>
-    <Reference Include="AutoFixture.AutoMoq, Version=4.5.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoFixture.AutoMoq.4.5.0\lib\net452\AutoFixture.AutoMoq.dll</HintPath>
+    <Reference Include="AutoFixture.AutoMoq, Version=4.8.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.AutoMoq.4.8.0\lib\net452\AutoFixture.AutoMoq.dll</HintPath>
     </Reference>
-    <Reference Include="AutoFixture.NUnit3, Version=4.5.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoFixture.NUnit3.4.5.0\lib\net452\AutoFixture.NUnit3.dll</HintPath>
+    <Reference Include="AutoFixture.NUnit3, Version=4.8.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.NUnit3.4.8.0\lib\net452\AutoFixture.NUnit3.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
@@ -189,6 +189,9 @@
     </Reference>
     <Reference Include="SFA.DAS.ProviderRelationships.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.ProviderRelationships.Types.3.1.3\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Testing.AutoFixture, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Testing.AutoFixture.3.0.169\lib\netstandard2.0\SFA.DAS.Testing.AutoFixture.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.7.0\lib\net45\StructureMap.dll</HintPath>
@@ -408,6 +411,7 @@
     <Compile Include="Mappers\ApprenticeshipInfoServiceMapperTests\WhenIMapAStandard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\WhenSubmittingApprenticeshipSearch.cs" />
+    <Compile Include="Queries\GetClientContent\WhenIGetContentBanner.cs" />
     <Compile Include="Queries\GetCommitmentAgreements\WhenGettingCommitmentAgreements.cs" />
     <Compile Include="Queries\GetEmployerAccountLegalEntities\WhenIGetEmployerAccountLegalEntities.cs" />
     <Compile Include="Queries\GetProviderAgreement\WhenIGetProviderAgreement.cs" />
