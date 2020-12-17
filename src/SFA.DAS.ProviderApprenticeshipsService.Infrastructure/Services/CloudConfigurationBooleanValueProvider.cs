@@ -1,5 +1,5 @@
-﻿using FeatureToggle;
-using Microsoft.Azure;
+﻿using System.Configuration;
+using FeatureToggle;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
@@ -18,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
         {
             var toggleName = $"{TogglePrefix}.{toggle.GetType().Name}";
 
-            var value = CloudConfigurationManager.GetSetting(toggleName);
+            var value = ConfigurationManager.AppSettings[toggleName];
 
             if (value == null)
             {

@@ -1,5 +1,4 @@
-﻿using Microsoft.Azure;
-using SFA.DAS.Configuration;
+﻿using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Providers.Api.Client;
@@ -7,6 +6,7 @@ using StructureMap;
 using System;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using IConfiguration = SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.IConfiguration;
+using System.Configuration;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.DependencyResolution
 {
@@ -37,7 +37,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.DependencyResolution
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
             {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
+                environment = ConfigurationManager.AppSettings["EnvironmentName"];
             }
 
             var configurationRepository = GetConfigurationRepository();
@@ -51,7 +51,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.DependencyResolution
 
         private static IConfigurationRepository GetConfigurationRepository()
         {
-            return new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+            return new AzureTableStorageConfigurationRepository(ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"]);
         }
     }
 

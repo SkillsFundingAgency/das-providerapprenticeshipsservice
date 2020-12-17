@@ -1,5 +1,5 @@
-﻿using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Azure;
+﻿using System.Configuration;
+using Microsoft.ApplicationInsights.Extensibility;
 using System.Web.Http;
 
 namespace SFA.DAS.PAS.Account.Api
@@ -10,7 +10,7 @@ namespace SFA.DAS.PAS.Account.Api
         {
             // LoggingConfig.ConfigureLogging();
 
-            TelemetryConfiguration.Active.InstrumentationKey = CloudConfigurationManager.GetSetting("InstrumentationKey");
+            TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["InstrumentationKey"];
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
         }

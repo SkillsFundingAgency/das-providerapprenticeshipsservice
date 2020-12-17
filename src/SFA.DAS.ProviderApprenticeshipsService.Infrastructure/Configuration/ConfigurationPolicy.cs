@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Configuration;
-using System.Diagnostics;
 using System.Linq;
-using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using StructureMap;
 using StructureMap.Pipeline;
 
@@ -31,7 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
                 var environment = Environment.GetEnvironmentVariable("DASENV");
                 if (string.IsNullOrEmpty(environment))
                 {
-                    environment = CloudConfigurationManager.GetSetting("EnvironmentName");
+                    environment = ConfigurationManager.AppSettings["EnvironmentName"];
                 }
 
                 var configurationRepository = GetConfigurationRepository();
@@ -55,7 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
             }
             else
             {
-                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+                configurationRepository = new AzureTableStorageConfigurationRepository(ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"]);
             }
             return configurationRepository;
         }

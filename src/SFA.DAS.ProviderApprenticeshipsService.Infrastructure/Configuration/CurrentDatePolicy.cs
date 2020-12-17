@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Configuration;
 using System.Linq;
-using Microsoft.Azure;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using StructureMap;
@@ -25,7 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 
         private DateTime? GetCurrentTimeFromConfiguration()
         {
-            var cloudCurrentTime = CloudConfigurationManager.GetSetting("CurrentTime");
+            var cloudCurrentTime = ConfigurationManager.AppSettings["CurrentTime"];
 
             var result = default(DateTime?);
             DateTime parsedTime;

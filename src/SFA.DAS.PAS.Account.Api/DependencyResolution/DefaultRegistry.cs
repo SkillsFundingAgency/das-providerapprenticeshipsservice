@@ -16,9 +16,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Configuration;
 using System.Web;
 using MediatR;
-using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.NLog.Logger;
@@ -31,7 +31,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using System.Net.Http;
 using SFA.DAS.Http.TokenGenerators;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.Http;
 
 namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
@@ -66,7 +65,7 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
             {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
+                environment = ConfigurationManager.AppSettings["EnvironmentName"];
             }
             if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST"))
             {
@@ -75,7 +74,7 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
                 //SystemDetails.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
 
-            var configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+            var configurationRepository = new AzureTableStorageConfigurationRepository(ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"]);
             var configurationService = new ConfigurationService(configurationRepository,
                 new ConfigurationOptions(ServiceName, environment, "1.0"));
 

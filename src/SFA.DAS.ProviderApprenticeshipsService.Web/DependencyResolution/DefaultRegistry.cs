@@ -18,7 +18,6 @@
 using FeatureToggle;
 using FluentValidation;
 using MediatR;
-using Microsoft.Azure;
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.Handlers;
 using SFA.DAS.Authorization.ProviderPermissions.Handlers;
@@ -49,6 +48,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.ProviderRelationships.Api.Client;
 using StructureMap;
 using System;
+using System.Configuration;
 using System.Net.Http;
 using System.Reflection;
 using System.Web;
@@ -166,7 +166,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
             {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
+                environment = ConfigurationManager.AppSettings["EnvironmentName"];
             }
             if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST"))
             {
@@ -194,7 +194,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
         private static IConfigurationRepository GetConfigurationRepository()
         {
-            return new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+            return new AzureTableStorageConfigurationRepository(ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"]);
         }
 
         private void RegisterMediator()
@@ -221,7 +221,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
         private bool GetUseStubProviderRelationshipsSetting()
         {
-            var value = CloudConfigurationManager.GetSetting("UseStubProviderRelationships");
+            var value = ConfigurationManager.AppSettings["UseStubProviderRelationships"];
 
             if (value == null)
             {

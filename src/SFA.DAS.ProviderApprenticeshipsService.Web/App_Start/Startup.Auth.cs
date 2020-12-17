@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using System.Configuration;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Azure;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
@@ -31,8 +31,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                 CookieManager = new SystemWebCookieManager()
             });
 
-            var realm = CloudConfigurationManager.GetSetting("IdamsRealm");
-            var adfsMetadata = CloudConfigurationManager.GetSetting("IdamsADFSMetadata");
+            var realm = ConfigurationManager.AppSettings["IdamsRealm"];
+            var adfsMetadata = ConfigurationManager.AppSettings["IdamsADFSMetadata"];
 
             //todo: may need more options here
             var options = new WsFederationAuthenticationOptions
