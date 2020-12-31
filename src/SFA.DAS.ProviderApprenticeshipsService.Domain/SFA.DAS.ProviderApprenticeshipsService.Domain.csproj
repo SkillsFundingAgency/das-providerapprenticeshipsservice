@@ -249,7 +249,6 @@
     <Compile Include="Models\ApprenticeshipCourse\FrameworksView.cs" />
     <Compile Include="Interfaces\IAcademicYearDateProvider.cs" />
     <Compile Include="Interfaces\IAcademicYearValidator.cs" />
-    <Compile Include="Interfaces\IApprenticeshipInfoServiceConfiguration.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoService.cs" />
     <Compile Include="Interfaces\ICache.cs" />
     <Compile Include="Interfaces\ICookieStorageService.cs" />
