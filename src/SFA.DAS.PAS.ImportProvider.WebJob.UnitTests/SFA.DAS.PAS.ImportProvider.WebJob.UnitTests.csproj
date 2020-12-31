@@ -14,9 +14,7 @@
     <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
-    <PackageReference Include="SFA.DAS.Apprenticeships.Api.Client" Version="0.11.233" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.43242" />
-    <PackageReference Include="SFA.DAS.Providers.Api.Client" Version="0.11.233" />
   </ItemGroup>
 
   <ItemGroup>
