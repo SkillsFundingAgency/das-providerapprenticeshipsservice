@@ -360,9 +360,8 @@
     <Compile Include="Commands\DeleteRegisteredUser\DeleteRegisteredUserCommandHandler.cs" />
     <Compile Include="Commands\DeleteRegisteredUser\DeleteRegisteredUserCommandValidator.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
-    <Compile Include="Extensions\ITrainingProgrammeExtensions.cs" />
+    <Compile Include="Extensions\TrainingProgrammeExtensions.cs" />
     <Compile Include="Helpers\AsyncHelper.cs" />
-    <Compile Include="Mappers\ApprenticeshipInfoServiceMapper.cs" />
     <Compile Include="Queries\GetClientContent\GetClientContentRequest.cs" />
     <Compile Include="Queries\GetClientContent\GetClientContentRequestHandler.cs" />
     <Compile Include="Queries\GetClientContent\GetClientContentResponse.cs" />
@@ -500,7 +499,6 @@
       <Name>SFA.DAS.ProviderApprenticeshipsService.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Azure.DocumentDB.Core.2.2.1\build\Microsoft.Azure.DocumentDB.Core.targets" Condition="Exists('..\packages\Microsoft.Azure.DocumentDB.Core.2.2.1\build\Microsoft.Azure.DocumentDB.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

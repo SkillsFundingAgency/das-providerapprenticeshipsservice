@@ -402,9 +402,6 @@
     <Compile Include="Extensions\ITrainingProgrammeExtensionsTest\WhenDeterminingWhetherACourseIsActive.cs" />
     <Compile Include="Extensions\ITrainingProgrammeExtensionsTest\WhenDeterminingFundingCap.cs" />
     <Compile Include="Extensions\ITrainingProgrammeExtensionsTest\WhenDeterminingTheStatusOfACourseOnSpecificDate.cs" />
-    <Compile Include="Mappers\ApprenticeshipInfoServiceMapperTests\WhenIMapAFramework.cs" />
-    <Compile Include="Mappers\ApprenticeshipInfoServiceMapperTests\WhenIMapAProvider.cs" />
-    <Compile Include="Mappers\ApprenticeshipInfoServiceMapperTests\WhenIMapAStandard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\WhenSubmittingApprenticeshipSearch.cs" />
     <Compile Include="Queries\GetClientContent\WhenIGetContentBanner.cs" />

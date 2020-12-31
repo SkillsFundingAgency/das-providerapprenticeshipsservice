@@ -13,6 +13,7 @@ using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using SFA.DAS.Commitments.Api.Types.Validation;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.BulkUploadApprenticeships;
@@ -55,13 +56,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mockMediator = new Mock<IMediator>();
 
             _mockMediator.Setup(m => m.Send(It.IsAny<GetTrainingProgrammesQueryRequest>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new GetTrainingProgrammesQueryResponse { TrainingProgrammes = new List<ITrainingProgramme>
+                .ReturnsAsync(new GetTrainingProgrammesQueryResponse { TrainingProgrammes = new List<TrainingProgramme>
                 {
                     {
-                        new Standard {Id = "2", Title = "Hej" }
+                        new TrainingProgramme {CourseCode = "2", Name = "Hej" }
                     },
                     {
-                        new Framework { Id = "1-2-3" }
+                        new TrainingProgramme { CourseCode = "1-2-3" }
                     }
                 } });
 

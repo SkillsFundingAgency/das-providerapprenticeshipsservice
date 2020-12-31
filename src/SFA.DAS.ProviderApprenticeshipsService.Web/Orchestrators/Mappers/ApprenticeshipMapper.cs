@@ -8,6 +8,7 @@ using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
+using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -154,9 +155,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
                 if (training != null)
                 {
-                    apprenticeship.TrainingType = (CommitmentTrainingType)(training is Standard ? TrainingType.Standard : TrainingType.Framework);
+                    apprenticeship.TrainingType = int.TryParse(training.CourseCode, out _) ? CommitmentTrainingType.Standard : CommitmentTrainingType.Framework;
                     apprenticeship.TrainingCode = vm.CourseCode;
-                    apprenticeship.TrainingName = training.Title;
+                    apprenticeship.TrainingName = training.Name;
                 }
                 else
                 {
@@ -253,9 +254,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
                 if (training != null)
                 {
-                    model.CourseType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
+                    model.CourseType = int.TryParse(training.CourseCode,out _) ? TrainingType.Standard : TrainingType.Framework;
                     model.CourseCode = edited.CourseCode;
-                    model.CourseName = training.Title;
+                    model.CourseName = training.Name;
                 }
                 else
                 {
@@ -394,12 +395,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             }
         }
 
-        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
+        private async Task<TrainingProgramme> GetTrainingProgramme(string trainingCode)
         {
-            return (await GetTrainingProgrammes()).FirstOrDefault(x => x.Id == trainingCode);
+            return (await GetTrainingProgrammes()).FirstOrDefault(x => x.CourseCode == trainingCode);
         }
 
-        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
+        private async Task<List<TrainingProgramme>> GetTrainingProgrammes()
         {
             var programmes = await _mediator.Send(new GetTrainingProgrammesQueryRequest
             {

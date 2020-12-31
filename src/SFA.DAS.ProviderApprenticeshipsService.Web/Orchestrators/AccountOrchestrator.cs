@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Apprenticeships.Api.Types.Exceptions;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
@@ -12,7 +12,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 using SFA.DAS.ProviderRelationships.Types.Models;
@@ -50,7 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     ShowCreateCohortLink = showCreateCohortLink
                 };
             }
-            catch (EntityNotFoundException)
+            catch (Exception)
             {
                 _logger.Warn($"Provider {providerId} details not found in provider information service");
 

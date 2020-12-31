@@ -11,6 +11,7 @@ using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using SFA.DAS.Commitments.Api.Types.Validation;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetBulkUploadFile;
@@ -142,7 +143,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
 
             _mediator
                 .Setup(m => m.Send(It.IsAny<GetTrainingProgrammesQueryRequest>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(() => new GetTrainingProgrammesQueryResponse { TrainingProgrammes = new List<ITrainingProgramme>() });
+                .ReturnsAsync(() => new GetTrainingProgrammesQueryResponse { TrainingProgrammes = new List<TrainingProgramme>() });
 
             _mediator
                 .Setup(m => m.Send(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>(), It.IsAny<CancellationToken>()))

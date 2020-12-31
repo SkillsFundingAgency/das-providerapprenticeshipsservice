@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MediatR;
 
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
@@ -26,7 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             _mediator = mediator;
         }
 
-        public Apprenticeship MapFrom(long commitmentId, ApprenticeshipViewModel viewModel, IList<ITrainingProgramme> trainingProgrammes)
+        public Apprenticeship MapFrom(long commitmentId, ApprenticeshipViewModel viewModel, IList<TrainingProgramme> trainingProgrammes)
         {
             var apprenticeship = new Apprenticeship
                                      {
@@ -44,10 +45,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
             if (!string.IsNullOrWhiteSpace(viewModel.CourseCode))
             {
-                var training = trainingProgrammes.Single(x => x.Id == viewModel.CourseCode);
-                apprenticeship.TrainingType = training is Standard ? ApiTrainingType.Standard : ApiTrainingType.Framework;
+                var training = trainingProgrammes.Single(x => x.CourseCode == viewModel.CourseCode);
+                apprenticeship.TrainingType = int.TryParse(training.CourseCode,out _) ? ApiTrainingType.Standard : ApiTrainingType.Framework;
                 apprenticeship.TrainingCode = viewModel.CourseCode;
-                apprenticeship.TrainingName = training.Title;
+                apprenticeship.TrainingName = training.Name;
             }
 
             return apprenticeship;
@@ -75,7 +76,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         private UploadRowErrorViewModel MapError(IGrouping<int?, UploadError> arg)
         {
             var firstRecord = arg.FirstOrDefault();
-            Func<string, string> stringOrDefault = str => string.IsNullOrWhiteSpace(str) ? "–" : str;
+            Func<string, string> stringOrDefault = str => string.IsNullOrWhiteSpace(str) ? "ï¿½" : str;
             if (arg.Key != null && firstRecord != null)
             {
                 return new UploadRowErrorViewModel
@@ -91,7 +92,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             return null;
         }
 
-        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
+        private async Task<List<TrainingProgramme>> GetTrainingProgrammes()
         {
             var programmes = await _mediator.Send(new GetTrainingProgrammesQueryRequest
             {
