@@ -18,7 +18,6 @@
 using FeatureToggle;
 using FluentValidation;
 using MediatR;
-using Microsoft.Azure;
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.Handlers;
 using SFA.DAS.Authorization.ProviderPermissions.Handlers;
@@ -36,7 +35,6 @@ using SFA.DAS.NLog.Logger.Web.MessageHandlers;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Caching;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
@@ -53,6 +51,8 @@ using System.Configuration;
 using System.Net.Http;
 using System.Reflection;
 using System.Web;
+using SFA.DAS.AutoConfiguration;
+using SFA.DAS.Caches;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -97,7 +97,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IContentClientApiConfiguration>().Use(config.ContentApi);
             For<IClientContentApiClient>().Use<ClientContentApiClient>().Ctor<HttpClient>().Is(c => CreateClient(c, config));
 
-            For<ICache>().Use<InMemoryCache>(); //RedisCache
             For<IAgreementStatusQueryRepository>().Use<ProviderAgreementStatusRepository>();
             For<IApprenticeshipValidationErrorText>().Use<WebApprenticeshipValidationText>();
             For<IApprenticeshipCoreValidator>().Use<ApprenticeshipCoreValidator>().Singleton();
@@ -113,6 +112,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
             For<IAuthorizationHandler>().Use<AuthorizationHandler>();
 
+            
+            For<IDistributedCache>().Use(c => c.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL)
+                ? new LocalDevCache() as IDistributedCache
+                : new RedisCache(ConfigurationManager.AppSettings["RedisConnection"].ToString()) as IDistributedCache).Singleton();
+            
             ConfigureFeatureToggle();
 
             RegisterMediator();

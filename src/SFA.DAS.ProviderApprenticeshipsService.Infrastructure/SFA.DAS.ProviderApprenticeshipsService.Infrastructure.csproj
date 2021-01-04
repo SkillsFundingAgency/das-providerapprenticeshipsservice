@@ -152,6 +152,10 @@
     <Reference Include="SFA.DAS.AutoConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.AutoConfiguration.2.2.6\lib\net462\SFA.DAS.AutoConfiguration.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.Caches, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\SFA.DAS.Caches.1.1.4\lib\netstandard2.0\SFA.DAS.Caches.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.Commitments.Api.Client, Version=5.4.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.5.4.0\lib\netstandard2.0\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
@@ -414,9 +418,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Caching\InMemoryCache.cs" />
-    <Compile Include="Caching\RedisCache.cs" />
-    <Compile Include="Caching\TaskSynchronizationScope.cs" />
     <Compile Include="Configuration\ConfigurationPolicy.cs" />
     <Compile Include="Configuration\CurrentDatePolicy.cs" />
     <Compile Include="Configuration\ProviderApprenticeshipsServiceConfiguration.cs" />
@@ -464,7 +465,6 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Azure.DocumentDB.Core.2.2.1\build\Microsoft.Azure.DocumentDB.Core.targets" Condition="Exists('..\packages\Microsoft.Azure.DocumentDB.Core.2.2.1\build\Microsoft.Azure.DocumentDB.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
