@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.Caches;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -14,12 +13,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
     {
         private const string StandardsKey = "Standards";
 
-        private readonly IDistributedCache _cache;
+        private readonly ICache _cache;
         private readonly IProviderCommitmentsApi _providerCommitmentsApi;
         private readonly ITrainingProgrammeApi _trainingProgrammeApi;
         private readonly ILog _logger;
 
-        public ApprenticeshipInfoService(IDistributedCache cache,
+        public ApprenticeshipInfoService(ICache cache,
             IProviderCommitmentsApi providerCommitmentsApi,
             ITrainingProgrammeApi trainingProgrammeApi,
             ILog logger)
