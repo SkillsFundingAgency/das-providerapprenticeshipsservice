@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.Caches;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
@@ -16,14 +17,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
         private readonly IDistributedCache _cache;
         private readonly IProviderCommitmentsApi _providerCommitmentsApi;
         private readonly ITrainingProgrammeApi _trainingProgrammeApi;
-        
+        private readonly ILog _logger;
+
         public ApprenticeshipInfoService(IDistributedCache cache,
             IProviderCommitmentsApi providerCommitmentsApi,
-            ITrainingProgrammeApi trainingProgrammeApi)
+            ITrainingProgrammeApi trainingProgrammeApi,
+            ILog logger)
         {
             _cache = cache;
             _providerCommitmentsApi = providerCommitmentsApi;
             _trainingProgrammeApi = trainingProgrammeApi;
+            _logger = logger;
         }
 
         public async Task<StandardsView> GetStandards(bool refreshCache = false)
@@ -73,8 +77,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
                     }
                 };
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.Error(e, $"Failed to get UKPRN {ukprn} from api");
                 return null;
             }
         }
