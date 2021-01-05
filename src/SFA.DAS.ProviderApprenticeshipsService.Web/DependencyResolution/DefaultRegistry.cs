@@ -113,7 +113,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IAuthorizationHandler>().Use<AuthorizationHandler>();
 
             
-            For<IDistributedCache>().Use(environment.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)  
+            For<IDistributedCache>().Use(c => c.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL)
                 ? new LocalDevCache() as IDistributedCache
                 : new RedisCache(ConfigurationManager.AppSettings["RedisConnection"].ToString()) as IDistributedCache).Singleton();
             
