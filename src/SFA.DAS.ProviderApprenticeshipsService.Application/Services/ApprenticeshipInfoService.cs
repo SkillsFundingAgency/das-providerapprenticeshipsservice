@@ -16,17 +16,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
         private readonly ICache _cache;
         private readonly IProviderCommitmentsApi _providerCommitmentsApi;
         private readonly ITrainingProgrammeApi _trainingProgrammeApi;
-        private readonly ILog _logger;
-
+        
         public ApprenticeshipInfoService(ICache cache,
             IProviderCommitmentsApi providerCommitmentsApi,
-            ITrainingProgrammeApi trainingProgrammeApi,
-            ILog logger)
+            ITrainingProgrammeApi trainingProgrammeApi)
         {
             _cache = cache;
             _providerCommitmentsApi = providerCommitmentsApi;
             _trainingProgrammeApi = trainingProgrammeApi;
-            _logger = logger;
         }
 
         public async Task<StandardsView> GetStandards(bool refreshCache = false)
@@ -76,9 +73,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
                     }
                 };
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                _logger.Error(e, $"Failed to get UKPRN {ukprn} from api");
                 return null;
             }
         }
