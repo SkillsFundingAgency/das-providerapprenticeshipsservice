@@ -119,8 +119,8 @@
                         <option value="">Please select</option>
                         @foreach (var programme in ViewBag.ApprenticeshipProgrammes)
                         {
-                            <option value="@programme.Id"
-                                    @if (programme.Id.ToString() == Model.CourseCode) { @Html.Raw("selected")  }>
+                            <option value="@programme.CourseCode"
+                                    @if (programme.CourseCode.ToString() == Model.CourseCode) { @Html.Raw("selected")  }>
                                 @programme.Title
                             </option>
                         }
