@@ -24,6 +24,16 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
 
                 logger.Info($"ContractAgreements job done, Took: {timer.ElapsedMilliseconds} milliseconds");
             }
+            catch (AggregateException exc)
+            {
+                ILog exLogger = new NLogLogger();
+                exLogger.Error(exc, "Error running ContractAgreements WebJob");
+                exc.Handle(ex =>
+                {
+                    exLogger.Error(ex, "Inner exception running ContractAgreements WebJob");
+                    return false;
+                });
+            }
             catch (Exception ex)
             {
                 ILog exLogger = new NLogLogger();

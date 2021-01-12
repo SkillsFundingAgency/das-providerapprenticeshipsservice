@@ -7,7 +7,7 @@
 
     <Authors>DAS</Authors>
     <Description>SFA.DAS.CommitmentsV2.Api.Client library</Description>
-    <PackageLicenseUrl>https://github.com/SkillsFundingAgency/das-providerapprenticeshipsservice/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicense>https://github.com/SkillsFundingAgency/das-providerapprenticeshipsservice/blob/master/LICENSE</PackageLicense>
     <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-providerapprenticeshipsservice</PackageProjectUrl>
 
     <EmbedUntrackedSources>false</EmbedUntrackedSources>
