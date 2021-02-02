@@ -267,7 +267,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 IncludeFrameworks = true
             });
 
-            var course = result.TrainingProgrammes.Single(x => x.Id == viewModel.CourseCode);
+            var course = result.TrainingProgrammes.Single(x => x.CourseCode == viewModel.CourseCode);
 
             var courseStatus = course.GetStatusOn(startDate.DateTime.Value);
 

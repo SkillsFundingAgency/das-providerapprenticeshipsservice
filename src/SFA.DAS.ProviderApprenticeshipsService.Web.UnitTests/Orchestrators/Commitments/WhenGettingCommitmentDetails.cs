@@ -10,6 +10,7 @@ using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using SFA.DAS.Commitments.Api.Types.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetOverlappingApprenticeships;
@@ -189,13 +190,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mockMediator.Setup(m => m.Send(It.IsAny<GetTrainingProgrammesQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(new GetTrainingProgrammesQueryResponse
                 {
-                    TrainingProgrammes = new List<ITrainingProgramme>
+                    TrainingProgrammes = new List<TrainingProgramme>
                     {
-                        new Standard
+                        new TrainingProgramme
                         {
-                            FundingPeriods = new[]
+                            FundingPeriods = new List<TrainingProgrammeFundingPeriod>
                             {
-                                new FundingPeriod
+                                new TrainingProgrammeFundingPeriod
                                 {
                                     EffectiveFrom = new DateTime(2020, 2, 1),
                                     EffectiveTo = new DateTime(2020, 3, 1),
@@ -204,7 +205,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                             },
                             EffectiveFrom = new DateTime(2020, 2, 1),
                             EffectiveTo = new DateTime(2020, 3, 1),
-                            Title = "Tit"
+                            Name = "Tit"
                         }
                     }
                 });
@@ -234,7 +235,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 .Returns(Task.Factory.StartNew(() => respons));
 
             mockMediator.Setup(m => m.Send(It.IsAny<GetTrainingProgrammesQueryRequest>(), new CancellationToken()))
-                .ReturnsAsync(new GetTrainingProgrammesQueryResponse { TrainingProgrammes = new List<ITrainingProgramme>() });
+                .ReturnsAsync(new GetTrainingProgrammesQueryResponse { TrainingProgrammes = new List<TrainingProgramme>() });
 
             mockMediator.Setup(m => m.Send(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(() => new GetOverlappingApprenticeshipsQueryResponse

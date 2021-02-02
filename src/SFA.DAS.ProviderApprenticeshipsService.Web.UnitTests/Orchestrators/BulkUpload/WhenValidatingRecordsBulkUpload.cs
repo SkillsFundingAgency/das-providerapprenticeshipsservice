@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -43,7 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [Test]
         public void AndMissingCourseCodeThenFailsValidation()
         {
-            var errors = _sut.ValidateRecords(GetTestData(), new List<ITrainingProgramme>()).ToList();
+            var errors = _sut.ValidateRecords(GetTestData(), new List<TrainingProgramme>()).ToList();
             errors.Count.Should().Be(1);
             errors.FirstOrDefault().ToString().Should().BeEquivalentTo("Row:1 - Not a valid <strong>Training code</strong>");
         }
@@ -67,13 +68,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [TestCase(2021, 01, "This training course is only available to apprentices with a start date before 10 2020", Description = "Start date after (month numerically lower)")]
         public void AndCourseCodeIsPendingOrExpiredThenValidationFails(int startYear, int startMonth, string expectedErrorMessage)
         {
-            var errors = _sut.ValidateRecords(GetTestData(startYear, startMonth, 2021, 09), new List<ITrainingProgramme>
+            var errors = _sut.ValidateRecords(GetTestData(startYear, startMonth, 2021, 09), new List<TrainingProgramme>
             {
-                new Standard
+                new TrainingProgramme
                 {
                     EffectiveFrom = new DateTime(2019,6,1),
                     EffectiveTo = new DateTime(2020,9,1),
-                    Id = "2"
+                    CourseCode = "2"
                 }
             }).ToList();
 
@@ -86,13 +87,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         [TestCase(2019, 09, Description = "Start date last valid")]
         public void AndCourseCodeIsActiveThenValidationPasses(int startYear, int startMonth)
         {
-            var errors = _sut.ValidateRecords(GetTestData(startYear, startMonth, 2021, 09), new List<ITrainingProgramme>
+            var errors = _sut.ValidateRecords(GetTestData(startYear, startMonth, 2021, 09), new List<TrainingProgramme>
             {
-                new Standard
+                new TrainingProgramme
                 {
                     EffectiveFrom = new DateTime(2019,6,1),
                     EffectiveTo = new DateTime(2020,9,1),
-                    Id = "2"
+                    CourseCode = "2"
                 }
             }).ToList();
 
@@ -159,14 +160,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             messages.Should().Contain("The unique learner number must be unique within the cohort");
         }
 
-        private List<ITrainingProgramme> TrainingProgrammes()
+        private List<TrainingProgramme> TrainingProgrammes()
         {
-            return new List<ITrainingProgramme>
+            return new List<TrainingProgramme>
                        {
-                            new Framework { FrameworkName = "Framework1", Id = "1-2-3"},
-                            new Framework { FrameworkName = "Framework2", Id = "`4-5-6" },
-                            new Standard { Title = "Standard 1", Id = "1" },
-                            new Standard { Title = "Standard 2", Id = "2" }
+                            new TrainingProgramme { Name = "Framework1", CourseCode = "1-2-3"},
+                            new TrainingProgramme { Name = "Framework2", CourseCode = "`4-5-6" },
+                            new TrainingProgramme { Name = "Standard 1", CourseCode = "1" },
+                            new TrainingProgramme { Name = "Standard 2", CourseCode = "2" }
                        };
         }
 

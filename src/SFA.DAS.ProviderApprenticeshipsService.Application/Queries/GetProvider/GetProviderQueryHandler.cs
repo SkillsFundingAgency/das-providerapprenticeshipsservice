@@ -17,12 +17,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider
 
         public async Task<GetProviderQueryResponse> Handle(GetProviderQueryRequest message, CancellationToken cancellationToken)
         {
-            var provider = _apprenticeshipInfoService.GetProvider(message.UKPRN);
+            var provider = await _apprenticeshipInfoService.GetProvider(message.UKPRN);
 
-            return await Task.FromResult(new GetProviderQueryResponse
+            return new GetProviderQueryResponse
             {
                 ProvidersView = provider
-            });
+            };
         }
     }
 }

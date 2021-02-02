@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Ajax.Utilities;
+using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using WebGrease.Css.Extensions;
 using SFA.DAS.Learners.Validators;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
@@ -86,7 +87,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             return result;
         }
 
-        public IEnumerable<UploadError> ValidateRecords(IEnumerable<ApprenticeshipUploadModel> records, List<ITrainingProgramme> trainingProgrammes)
+        public IEnumerable<UploadError> ValidateRecords(IEnumerable<ApprenticeshipUploadModel> records, List<TrainingProgramme> trainingProgrammes)
         {
             var errors = new ConcurrentBag<UploadError>();
             var apprenticeshipUploadModels = records as ApprenticeshipUploadModel[] ?? records.ToArray();
@@ -109,7 +110,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             return errors;
         }
 
-        private ValidationMessage? ValidateTrainingInConjunctionWithStartDate(ApprenticeshipViewModel viewModel, List<ITrainingProgramme> trainingProgrammes)
+        private ValidationMessage? ValidateTrainingInConjunctionWithStartDate(ApprenticeshipViewModel viewModel, List<TrainingProgramme> trainingProgrammes)
         {
             //todo: the validation messages belong in BulkUploadApprenticeshipValidationText (IApprenticeshipValidationErrorText), but...
             // the validationtext classes already contain a CourseCode01 but that has an errorCode of "DefaultErrorCode"
@@ -121,7 +122,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             if (!string.IsNullOrWhiteSpace(viewModel.CourseCode))
             {
                 // not as safe as single, but quicker
-                var trainingProgram = trainingProgrammes.Find(tp => tp.Id == viewModel.CourseCode);
+                var trainingProgram = trainingProgrammes.Find(tp => tp.CourseCode == viewModel.CourseCode);
                 if (trainingProgram == null)
                     return new ValidationMessage("Not a valid <strong>Training code</strong>", "Training_01");
 

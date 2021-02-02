@@ -1,14 +1,14 @@
-﻿using AutoFixture;
+﻿using System.Collections.Generic;
+using AutoFixture;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Apprenticeships.Api.Types.Providers;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.PAS.ImportProvider.WebJob.Importer;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.Providers.Api.Client;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.UnitTests
 {
@@ -26,17 +26,17 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.UnitTests
         public class WhenImportingProvidersFixture
         {
             public ImportProviderService Sut { get; set; }
-            public Mock<IProviderApiClient> providerApiClient { get; set; }
+            public Mock<IProviderCommitmentsApi> providerApiClient { get; set; }
             public Mock<IProviderRepository> importProviderRepository { get; set; }
-            public IEnumerable<ProviderSummary> providerApiClientResponse { get; set; }
-
+            
             public WhenImportingProvidersFixture()
             {
                 var autoFixture = new Fixture();
-                providerApiClientResponse = autoFixture.CreateMany<ProviderSummary>(1600);
-
-                providerApiClient = new Mock<IProviderApiClient>();
-                providerApiClient.Setup(x => x.FindAllAsync()).ReturnsAsync(providerApiClientResponse);
+                var response = new GetProvidersResponse();
+                response.Providers = autoFixture.CreateMany<ProviderResponse>(1600);
+                
+                providerApiClient = new Mock<IProviderCommitmentsApi>();
+                providerApiClient.Setup(x => x.GetProviders()).ReturnsAsync(response);
 
                 importProviderRepository = new Mock<IProviderRepository>();
                 importProviderRepository.Setup(x => x.ImportProviders(It.IsAny<DataTable>()));
