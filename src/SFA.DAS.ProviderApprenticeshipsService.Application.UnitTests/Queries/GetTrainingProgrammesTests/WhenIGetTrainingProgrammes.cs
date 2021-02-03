@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
@@ -18,39 +20,43 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
 
         private Mock<IApprenticeshipInfoService> _apprenticeshipInfoServiceWrapper;
 
-        private List<Standard> _standards;
-        private List<Framework> _frameworks;
+        private List<TrainingProgramme> _standards;
+        private List<TrainingProgramme> _all;
 
         [SetUp]
         public void Arrange()
         {
-            _standards = new List<Standard>
+            _standards = new List<TrainingProgramme>
             {
-                new Standard
+                new TrainingProgramme
                 {
+                    CourseCode = "123",
                     EffectiveFrom = new DateTime(2016,01,01),
                     EffectiveTo = new DateTime(2016,12,31)
                 }
             };
-            _frameworks = new List<Framework>
+            _all = new List<TrainingProgramme>
             {
-                new Framework
+                new TrainingProgramme
                 {
+                    CourseCode = "123avc",
                     EffectiveFrom = new DateTime(2017,01,01),
                     EffectiveTo = new DateTime(2017,12,31)
                 }
             };
+            _all.AddRange(_standards);
+
 
             _apprenticeshipInfoServiceWrapper = new Mock<IApprenticeshipInfoService>();
 
-            _apprenticeshipInfoServiceWrapper.Setup(x => x.GetFrameworksAsync(It.IsAny<bool>()))
-                .ReturnsAsync(new FrameworksView
+            _apprenticeshipInfoServiceWrapper.Setup(x => x.GetAll(It.IsAny<bool>()))
+                .ReturnsAsync(new AllTrainingProgrammesView
                 {
                     CreatedDate = DateTime.UtcNow,
-                    Frameworks = _frameworks
+                    TrainingProgrammes = _all
                 });
 
-            _apprenticeshipInfoServiceWrapper.Setup(x => x.GetStandardsAsync(It.IsAny<bool>()))
+            _apprenticeshipInfoServiceWrapper.Setup(x => x.GetStandards(It.IsAny<bool>()))
                 .ReturnsAsync(new StandardsView
                 {
                     CreationDate = DateTime.UtcNow.Date,
@@ -70,7 +76,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             }, new CancellationToken());
 
             Assert.AreEqual(_standards.Count, result.TrainingProgrammes.Count);
-            Assert.IsInstanceOf<Standard>(result.TrainingProgrammes[0]);
+            result.TrainingProgrammes[0].ShouldBeEquivalentTo(_standards[0]);
         }
 
         [Test]
@@ -82,9 +88,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
                 EffectiveDate = null
             }, new CancellationToken());
 
-            Assert.AreEqual(_standards.Count + _frameworks.Count, result.TrainingProgrammes.Count);
-            Assert.IsTrue(result.TrainingProgrammes.Any(x => x is Standard));
-            Assert.IsTrue(result.TrainingProgrammes.Any(x => x is Framework));
+            Assert.AreEqual(_all.Count, result.TrainingProgrammes.Count);
+            result.TrainingProgrammes.ShouldBeEquivalentTo(_all);
         }
 
         [Test]
@@ -97,7 +102,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             }, new CancellationToken());
 
             Assert.AreEqual(1, result.TrainingProgrammes.Count);
-            Assert.IsInstanceOf<Standard>(result.TrainingProgrammes[0]);
+            result.TrainingProgrammes[0].ShouldBeEquivalentTo(_standards[0]);
         }
 
         [Test]

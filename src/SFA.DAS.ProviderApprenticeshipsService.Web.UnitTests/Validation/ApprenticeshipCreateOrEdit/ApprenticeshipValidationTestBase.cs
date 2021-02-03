@@ -4,6 +4,7 @@ using System.Threading;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -30,11 +31,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             MockMediator.Setup(x => x.Send(It.IsAny<GetTrainingProgrammesQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetTrainingProgrammesQueryResponse
                 {
-                    TrainingProgrammes = new List<ITrainingProgramme>
+                    TrainingProgrammes = new List<TrainingProgramme>
                     {
-                        new Standard
+                        new TrainingProgramme
                         {
-                            Id = "TESTCOURSE",
+                            CourseCode = "TESTCOURSE",
                             EffectiveFrom = new DateTime(2018, 5, 1),
                             EffectiveTo = new DateTime(2018, 7, 1)
                         }

@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Configuration;
 using System.Net.Http;
-using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Http;
@@ -43,7 +43,7 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.DependencyResolution
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
             {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
+                environment = ConfigurationManager.AppSettings["EnvironmentName"];
             }
 
             var configurationRepository = GetConfigurationRepository();
@@ -57,7 +57,7 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.DependencyResolution
 
         private static IConfigurationRepository GetConfigurationRepository()
         {
-            return new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+            return new AzureTableStorageConfigurationRepository(ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"]);
         }
 
         private void ConfigureHttpClient(ProviderApprenticeshipsServiceConfiguration config)

@@ -1,6 +1,7 @@
 ﻿using System;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
@@ -26,12 +27,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Extension
         public void ThenTheCourseEffectiveDatesAreUsedToDetermineTheStatus(DateTime? courseStart, DateTime? courseEnd, DateTime effectiveDate, TrainingProgrammeStatus expectStatus)
         {
             //Arrange
-            var course = new Mock<ITrainingProgramme>();
-            course.SetupGet(x => x.EffectiveFrom).Returns(courseStart);
-            course.SetupGet(x => x.EffectiveTo).Returns(courseEnd);
+            var course = new TrainingProgramme {EffectiveFrom = courseStart, EffectiveTo = courseEnd};
 
             //Act
-            var result = course.Object.GetStatusOn(effectiveDate);
+            var result = course.GetStatusOn(effectiveDate);
 
             //Assert
             Assert.AreEqual(expectStatus, result);

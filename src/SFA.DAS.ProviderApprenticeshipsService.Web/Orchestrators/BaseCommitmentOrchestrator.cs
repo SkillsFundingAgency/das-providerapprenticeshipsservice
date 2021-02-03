@@ -7,6 +7,7 @@ using MediatR;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
@@ -78,7 +79,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 throw new InvalidStateException($"Invalid commitment state (edit status is {commitment.EditStatus}, expected {string.Join(",", allowedEditStatuses)})");
         }
 
-        protected async Task<List<ITrainingProgramme>> GetTrainingProgrammes(bool includeFrameworks = true)
+        protected async Task<List<TrainingProgramme>> GetTrainingProgrammes(bool includeFrameworks = true)
         {
             var programmes = await Mediator.Send(new GetTrainingProgrammesQueryRequest
             {

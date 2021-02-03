@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
@@ -7,7 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
     public class ApprenticeshipListItemGroupViewModel
     {
-        public ITrainingProgramme TrainingProgramme { get; }
+        public TrainingProgramme TrainingProgramme { get; }
         public IList<ApprenticeshipListItemViewModel> Apprenticeships { get; }
 
         public int ApprenticeshipsOverFundingLimit { get; }
@@ -18,9 +19,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 
         public bool ShowCommonFundingCap => AllApprenticeshipsOverFundingLimit && CommonFundingCap != null;
 
-        public string GroupId => TrainingProgramme?.Id ?? "0";
+        public string GroupId => TrainingProgramme?.CourseCode ?? "0";
 
-        public string GroupName => TrainingProgramme?.Title ?? "No training course";
+        public string GroupName => TrainingProgramme?.Name ?? "No training course";
 
         public int OverlapErrorCount => Apprenticeships.Count(x => x.OverlappingApprenticeships.Any());
         public bool IsLinkedToChangeOfPartyRequest { get; set; }
@@ -28,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         /// <remarks>
         /// ApprenticeshipsOverFundingLimit and CommonFundingCap are only guaraneteed to be correct if the ctor's params are not mutated after instantiation or on another thread during contruction
         /// </remarks>
-        public ApprenticeshipListItemGroupViewModel(IList<ApprenticeshipListItemViewModel> apprenticeships, ITrainingProgramme trainingProgramme = null, bool isLinkedToChangeOfPartyRequest = false)
+        public ApprenticeshipListItemGroupViewModel(IList<ApprenticeshipListItemViewModel> apprenticeships, TrainingProgramme trainingProgramme = null, bool isLinkedToChangeOfPartyRequest = false)
         {
             TrainingProgramme = trainingProgramme;
             Apprenticeships = apprenticeships;

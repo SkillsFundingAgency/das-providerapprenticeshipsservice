@@ -19,6 +19,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<CommitmentsApiClientConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<CommitmentsApiClientConfiguration>(ConfigurationKeys.CommitmentsApiClient)).Singleton();
             For<ICommitmentsApiClientConfiguration>().Use(c => c.GetInstance<CommitmentsApiClientConfiguration>());
 
+            For<ITrainingProgrammeApi>().Use<TrainingProgrammeApi>()
+                .Ctor<HttpClient>().Is(c => GetHttpClient(c));
+            
             For<IProviderCommitmentsApi>().Use<ProviderCommitmentsApi>()
               .Ctor<HttpClient>().Is(c => GetHttpClient(c));
 

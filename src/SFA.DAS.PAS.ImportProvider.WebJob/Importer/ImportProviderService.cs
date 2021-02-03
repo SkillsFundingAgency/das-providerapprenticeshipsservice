@@ -1,20 +1,20 @@
 ﻿using MoreLinq;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.Providers.Api.Client;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.Importer
 {
     public class ImportProviderService : IImportProvider
     {
-        private IProviderApiClient _providerApiClient;
+        private IProviderCommitmentsApi _providerApiClient;
         private IProviderRepository _providerRepository;
         private ILog _logger;
 
-        public ImportProviderService(IProviderApiClient providerApiClient, IProviderRepository providerRepository, ILog logger)
+        public ImportProviderService(IProviderCommitmentsApi providerApiClient, IProviderRepository providerRepository, ILog logger)
         {
             _providerApiClient = providerApiClient;
             _providerRepository = providerRepository;
@@ -25,9 +25,9 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Importer
         {
             _logger.Info("Import Provider - Started");
 
-            var providers = await _providerApiClient.FindAllAsync();
-            var batches = providers.Batch(1000).Select(b => b.ToDataTable(p => p.Ukprn, p => p.ProviderName));
-
+            var providers = (await _providerApiClient.GetProviders()).Providers;
+            var batches = providers.Batch(1000).Select(b => b.ToDataTable(p => p.Ukprn, p => p.Name));
+            
             foreach (var batch in batches)
             {
                 await ImportProviders(batch);

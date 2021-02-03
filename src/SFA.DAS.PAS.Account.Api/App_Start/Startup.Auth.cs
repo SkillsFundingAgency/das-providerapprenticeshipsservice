@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure;
+﻿using System.Configuration;
 using Microsoft.Owin.Security.ActiveDirectory;
 
 using Owin;
@@ -14,10 +14,10 @@ namespace SFA.DAS.PAS.Account.Api
                {
                    TokenValidationParameters = new System.IdentityModel.Tokens.TokenValidationParameters
                    {
-                       ValidAudience = CloudConfigurationManager.GetSetting("idaAudience"),
+                       ValidAudience = ConfigurationManager.AppSettings["idaAudience"],
                        RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
                    },
-                   Tenant = CloudConfigurationManager.GetSetting("idaTenant")
+                   Tenant = ConfigurationManager.AppSettings["idaTenant"]
                });
         }
     }

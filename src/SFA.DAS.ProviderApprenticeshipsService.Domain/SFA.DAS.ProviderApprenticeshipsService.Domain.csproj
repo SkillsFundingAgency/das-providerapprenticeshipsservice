@@ -94,6 +94,14 @@
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.3.8\lib\net45\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=6.1.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.6.1.0\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Common.Domain, Version=1.4.272.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.272\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.EAS.Account.Api.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Account.Api.Client.1.3.928\lib\net45\SFA.DAS.EAS.Account.Api.Client.dll</HintPath>
     </Reference>
@@ -103,11 +111,8 @@
     <Reference Include="SFA.DAS.Http, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Http.3.2.32\lib\netstandard2.0\SFA.DAS.Http.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.43242, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.43242\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
-    </Reference>
-    <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.11.82\lib\net462\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.NLog.Logger, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.2.1\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.2.2.43\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
@@ -225,7 +230,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\AccountApiConfiguration.cs" />
-    <Compile Include="Interfaces\IApprenticeshipInfoServiceMapper.cs" />
     <Compile Include="Interfaces\IBackgroundNotificationService.cs" />
     <Compile Include="Interfaces\ICacheStorageService.cs" />
     <Compile Include="Interfaces\IClientContentApiClient.cs" />
@@ -236,16 +240,15 @@
     <Compile Include="Interfaces\IProviderAgreementStatusConfiguration.cs" />
     <Compile Include="Interfaces\IReservationsService.cs" />
     <Compile Include="Models\AcademicYear\AcademicYearValidationResult.cs" />
+    <Compile Include="Models\ApprenticeshipCourse\AllTrainingProgrammesView.cs" />
     <Compile Include="Models\ApprenticeshipCourse\FundingPeriod.cs" />
     <Compile Include="Models\ApprenticeshipCourse\TrainingProgrammeStatus.cs" />
     <Compile Include="Models\Apprenticeship\ApprenticeshipStatus.cs" />
     <Compile Include="ContractFeed\ContractFeedEvent.cs" />
     <Compile Include="Data\IAgreementStatusQueryRepository.cs" />
-    <Compile Include="Models\ApprenticeshipCourse\Framework.cs" />
     <Compile Include="Models\ApprenticeshipCourse\FrameworksView.cs" />
     <Compile Include="Interfaces\IAcademicYearDateProvider.cs" />
     <Compile Include="Interfaces\IAcademicYearValidator.cs" />
-    <Compile Include="Interfaces\IApprenticeshipInfoServiceConfiguration.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoService.cs" />
     <Compile Include="Interfaces\ICache.cs" />
     <Compile Include="Interfaces\ICookieStorageService.cs" />
@@ -256,7 +259,6 @@
     <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Interfaces\IUserSettingsRepository.cs" />
-    <Compile Include="Models\ApprenticeshipCourse\ITrainingProgramme.cs" />
     <Compile Include="Models\Apprenticeship\FundingStatus.cs" />
     <Compile Include="Models\FeatureToggles\ProviderCreateCohortV2.cs" />
     <Compile Include="Models\FeatureToggles\ApprenticeDetailsV2.cs" />
@@ -271,7 +273,6 @@
     <Compile Include="ProviderAgreementStatus.cs" />
     <Compile Include="Models\ApprenticeshipProvider\ProvidersView.cs" />
     <Compile Include="Models\Apprenticeship\RecordStatus.cs" />
-    <Compile Include="Models\ApprenticeshipCourse\Standard.cs" />
     <Compile Include="Models\ApprenticeshipCourse\StandardsView.cs" />
     <Compile Include="Training.cs" />
     <Compile Include="TrainingType.cs" />

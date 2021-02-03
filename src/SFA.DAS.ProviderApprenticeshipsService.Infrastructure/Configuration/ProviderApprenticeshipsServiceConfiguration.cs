@@ -12,7 +12,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string DatabaseConnectionString { get; set; }
         public string ServiceBusConnectionString { get; set; }
         public CommitmentsApiClientConfiguration CommitmentsApi { get; set; }
-        public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }
         public NotificationsApiClientConfiguration NotificationApi { get; set; }
         public ProviderNotificationConfiguration CommitmentNotification { get; set; }
         public string Hashstring { get; set; }
@@ -42,10 +41,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string IdentifierUri { get; }
     }
 
-    public class ApprenticeshipInfoServiceConfiguration : IApprenticeshipInfoServiceConfiguration
-    {
-        public string BaseUrl { get; set; }
-    }
 
     public class ProviderNotificationConfiguration : IJwtClientConfiguration
     {

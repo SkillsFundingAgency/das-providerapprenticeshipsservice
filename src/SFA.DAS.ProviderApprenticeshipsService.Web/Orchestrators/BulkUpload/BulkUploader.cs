@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SaveBulkUploadFile;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -102,7 +103,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             };
         }
 
-        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
+        private async Task<List<TrainingProgramme>> GetTrainingProgrammes()
         {
             var programmes = await _mediator.Send(new GetTrainingProgrammesQueryRequest
             {

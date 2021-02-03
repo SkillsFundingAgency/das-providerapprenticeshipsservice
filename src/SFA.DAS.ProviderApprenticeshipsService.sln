@@ -11,14 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderApprentices
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderApprenticeshipsService.Web", "SFA.DAS.ProviderApprenticeshipsService.Web\SFA.DAS.ProviderApprenticeshipsService.Web.csproj", "{94E473E1-2217-43C3-A228-00B8BE2BE0F1}"
 EndProject
-Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SFA.DAS.CloudService", "SFA.DAS.CloudService\SFA.DAS.CloudService.ccproj", "{DBE17740-1C0B-487B-9D0A-E3A691409F4D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8767EAF-3918-4289-BED9-5E369670043A}"
-	ProjectSection(SolutionItems) = preProject
-		Build.fsx = Build.fsx
-		RunBuild.bat = RunBuild.bat
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests", "SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests\SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.csproj", "{C4528A1E-2F4B-4DA1-A1EE-CAC2F2DE3AF5}"
@@ -38,8 +30,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PAS.Infrastructure.UnitTests", "SFA.DAS.PAS.Infrastructure.UnitTests\SFA.DAS.PAS.Infrastructure.UnitTests.csproj", "{ED70AD56-7C4C-4477-88CC-6CEE98E81F9A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PAS.Account.Api", "SFA.DAS.PAS.Account.Api\SFA.DAS.PAS.Account.Api.csproj", "{74B62020-23A0-49D8-805C-8AB655FD0BC0}"
-EndProject
-Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SFA.DAS.API", "SFA.DAS.API\SFA.DAS.API.ccproj", "{85BC1D45-D8AD-45C1-84D3-3CDAB05066B9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PAS.Account.Api.Client", "SFA.DAS.PAS.Account.Api.Client\SFA.DAS.PAS.Account.Api.Client.csproj", "{8EEB1A04-927D-4223-B70C-391934D14A04}"
 EndProject
@@ -85,10 +75,6 @@ Global
 		{94E473E1-2217-43C3-A228-00B8BE2BE0F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94E473E1-2217-43C3-A228-00B8BE2BE0F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94E473E1-2217-43C3-A228-00B8BE2BE0F1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DBE17740-1C0B-487B-9D0A-E3A691409F4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DBE17740-1C0B-487B-9D0A-E3A691409F4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DBE17740-1C0B-487B-9D0A-E3A691409F4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DBE17740-1C0B-487B-9D0A-E3A691409F4D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C4528A1E-2F4B-4DA1-A1EE-CAC2F2DE3AF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C4528A1E-2F4B-4DA1-A1EE-CAC2F2DE3AF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4528A1E-2F4B-4DA1-A1EE-CAC2F2DE3AF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -127,10 +113,6 @@ Global
 		{74B62020-23A0-49D8-805C-8AB655FD0BC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74B62020-23A0-49D8-805C-8AB655FD0BC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74B62020-23A0-49D8-805C-8AB655FD0BC0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{85BC1D45-D8AD-45C1-84D3-3CDAB05066B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{85BC1D45-D8AD-45C1-84D3-3CDAB05066B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{85BC1D45-D8AD-45C1-84D3-3CDAB05066B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{85BC1D45-D8AD-45C1-84D3-3CDAB05066B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8EEB1A04-927D-4223-B70C-391934D14A04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8EEB1A04-927D-4223-B70C-391934D14A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EEB1A04-927D-4223-B70C-391934D14A04}.Release|Any CPU.ActiveCfg = Release|Any CPU

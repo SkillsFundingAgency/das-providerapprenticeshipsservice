@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using SFA.DAS.Commitments.Api.Types.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
@@ -24,7 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
        
         public IEnumerable<OverlappingApprenticeship> OverlappingApprenticeships { get; set; }
 
-        public bool IsOverFundingLimit(ITrainingProgramme trainingProgramme, bool isLinkedToChangeOfPartyRequest = false)
+        public bool IsOverFundingLimit(TrainingProgramme trainingProgramme, bool isLinkedToChangeOfPartyRequest = false)
         {
             if (trainingProgramme == null)
                 return false;

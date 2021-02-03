@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 
@@ -15,7 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.ViewModels
         private const int TestTrainingProgrammeFundingCap = 100;
 
         private IList<ApprenticeshipListItemViewModel> _singleApprenticeship;
-        private ITrainingProgramme _testTrainingProgramme;
+        private TrainingProgramme _testTrainingProgramme;
 
         [SetUp]
         public void SetUp()
@@ -29,11 +30,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.ViewModels
                 }
             };
 
-            _testTrainingProgramme =  new Framework
+            _testTrainingProgramme =  new TrainingProgramme
             {
-                FundingPeriods = new[]
+                FundingPeriods = new List<TrainingProgrammeFundingPeriod>
                 {
-                    new FundingPeriod
+                    new TrainingProgrammeFundingPeriod
                     {
                         EffectiveFrom = new DateTime(2020, 2, 1),
                         EffectiveTo = new DateTime(2020, 3, 1),
@@ -60,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.ViewModels
         [Test]
         public void AndNoApprenticeshipsThenThereAreNoApprenticeshipsOverFundingLimit()
         {
-            var trainingProgram = new Framework();
+            var trainingProgram = new TrainingProgramme();
 
             var group = new ApprenticeshipListItemGroupViewModel(new ApprenticeshipListItemViewModel[0], trainingProgram);
 
@@ -87,11 +88,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.ViewModels
                 }
             };
 
-            var trainingProgram = new Framework
+            var trainingProgram = new TrainingProgramme
             {
-                FundingPeriods = new[]
+                FundingPeriods = new List<TrainingProgrammeFundingPeriod>
                 {
-                    new FundingPeriod
+                    new TrainingProgrammeFundingPeriod
                     {
                         EffectiveFrom = fundingPeriodFrom,
                         EffectiveTo = fundingPeriodTo,
@@ -243,17 +244,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.ViewModels
                 }
             };
 
-            _testTrainingProgramme = new Framework
+            _testTrainingProgramme = new TrainingProgramme
             {
-                FundingPeriods = new[]
+                FundingPeriods = new List<TrainingProgrammeFundingPeriod>
                 {
-                    new FundingPeriod
+                    new TrainingProgrammeFundingPeriod
                     {
                         EffectiveFrom = new DateTime(2020, 1, 1),
                         EffectiveTo = new DateTime(2020, 1, 31),
                         FundingCap = 100
                     },
-                    new FundingPeriod
+                    new TrainingProgrammeFundingPeriod
                     {
                         EffectiveFrom = new DateTime(2020, 2, 1),
                         EffectiveTo = new DateTime(2020, 2, 28),

@@ -7,6 +7,7 @@ using MediatR;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.DataLock;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
+using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
@@ -38,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
             foreach (var dataLock in datalocks)
             {
-                var training = trainingProgrammes.Single(x => x.Id == dataLock.IlrTrainingCourseCode);
+                var training = trainingProgrammes.Single(x => x.CourseCode == dataLock.IlrTrainingCourseCode);
                 result.Add(MapDataLockStatus(dataLock, training));
             }
 
@@ -123,7 +124,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
             foreach (var dataLock in source.DataLockWithCourseMismatch)
             {
-                var training = trainingProgrammes.SingleOrDefault(x => x.Id == dataLock.IlrTrainingCourseCode);
+                var training = trainingProgrammes.SingleOrDefault(x => x.CourseCode == dataLock.IlrTrainingCourseCode);
                 if (training == null)
                 {
                     throw new InvalidOperationException(
@@ -134,7 +135,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
             foreach (var dataLock in source.DataLockWithOnlyPriceMismatch)
             {
-                var training = trainingProgrammes.SingleOrDefault(x => x.Id == dataLock.IlrTrainingCourseCode);
+                var training = trainingProgrammes.SingleOrDefault(x => x.CourseCode == dataLock.IlrTrainingCourseCode);
                 if (training == null)
                 {
                     throw new InvalidOperationException(
@@ -175,7 +176,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 
 
 
-        private DataLockViewModel MapDataLockStatus(DataLockStatus dataLock, ITrainingProgramme training)
+        private DataLockViewModel MapDataLockStatus(DataLockStatus dataLock, TrainingProgramme training)
         {
             return new DataLockViewModel
             {
@@ -185,7 +186,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                 ApprenticeshipId = dataLock.ApprenticeshipId,
                 IlrTrainingCourseCode = dataLock.IlrTrainingCourseCode,
                 IlrTrainingType = (TrainingType)dataLock.IlrTrainingType,
-                IlrTrainingCourseName = training.Title,
+                IlrTrainingCourseName = training.Name,
                 IlrActualStartDate = dataLock.IlrActualStartDate,
                 IlrEffectiveFromDate = dataLock.IlrEffectiveFromDate,
                 IlrEffectiveToDate = dataLock.IlrEffectiveToDate,
@@ -196,12 +197,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
         }
 
 
-        private async Task<ITrainingProgramme> GetTrainingProgramme(string courseCode)
+        private async Task<TrainingProgramme> GetTrainingProgramme(string courseCode)
         {
-            return (await GetTrainingProgrammes()).Single(x => x.Id == courseCode);
+            return (await GetTrainingProgrammes()).Single(x => x.CourseCode == courseCode);
         }
 
-        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
+        private async Task<List<TrainingProgramme>> GetTrainingProgrammes()
         {
             var programmes = await _mediator.Send(new GetTrainingProgrammesQueryRequest
             {

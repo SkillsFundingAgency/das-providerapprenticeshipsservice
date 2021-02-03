@@ -33,6 +33,7 @@ using System.Net.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.Http;
+using System.Configuration;
 
 namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
     public class DefaultRegistry : Registry {
@@ -66,7 +67,7 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
             {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
+                environment = ConfigurationManager.AppSettings["EnvironmentName"];
             }
             if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST"))
             {
@@ -75,7 +76,7 @@ namespace SFA.DAS.PAS.Account.Api.DependencyResolution {
                 //SystemDetails.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
 
-            var configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+            var configurationRepository = new AzureTableStorageConfigurationRepository(ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"]);
             var configurationService = new ConfigurationService(configurationRepository,
                 new ConfigurationOptions(ServiceName, environment, "1.0"));
 
