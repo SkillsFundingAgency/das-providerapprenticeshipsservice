@@ -481,7 +481,7 @@
                             "array": [
                                 {
                                     "name": "LoggingRedisConnectionString",
-                                    "value": "[parameters('apiStorageConnectionString')]"
+                                    "value": "[parameters('loggingRedisConnectionString')]"
                                 },
                                 {
                                     "name": "LoggingRedisKey",
