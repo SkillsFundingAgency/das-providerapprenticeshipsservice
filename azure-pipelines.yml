@@ -10,7 +10,7 @@ workspace:
   clean: all
 
 variables:
-  - group: 'Prod Management Resources'
+  - group: 'BUILD Management Resources'
   - name: buildConfiguration
     value: 'release'
   - name: buildPlatform
