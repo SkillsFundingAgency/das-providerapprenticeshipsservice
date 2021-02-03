@@ -1,5 +1,5 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "resourceEnvironmentName": {
@@ -52,9 +52,6 @@
             "defaultValue": [
             ]
         },
-        "apiStorageConnectionString": {
-            "type": "securestring"
-        },
         "logLevel": {
             "type": "string"
         },
@@ -74,7 +71,7 @@
             "type": "string"
         },
         "redisConnection": {
-            "type": "securestring"
+            "type": "string"
         },
         "idamsRealm": {
             "type": "string"
@@ -119,6 +116,12 @@
         },
         "logAnalyticsWorkspaceName": {
             "type": "string"
+        },
+        "resourceGroupLocation": {
+            "type": "string"
+        },
+        "tags": {
+            "type": "object"
         }
     },
     "variables": {
@@ -128,13 +131,24 @@
         "uiAppServiceName": "[concat(variables('resourceNamePrefix'), 'ui-as')]",
         "workerAppServiceName": "[concat(variables('resourceNamePrefix'), 'wkr-as')]",
         "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
-        "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]"
+        "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]",
+        "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]"
     },
     "resources": [
         {
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('resourceGroupName')]",
+            "type": "Microsoft.Resources/resourceGroups",
+            "location": "[parameters('resourceGroupLocation')]",
+            "tags": "[parameters('tags')]",
+            "properties": {
+            }
+        },
+        {
+            "apiVersion": "2020-06-01",
             "name": "api-app-insights",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -155,7 +169,7 @@
         },
         {
             "condition": "[greater(length(parameters('apiCustomHostName')), 0)]",
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2020-06-01",
             "name": "api-app-service-certificate",
             "resourceGroup": "[parameters('sharedResourceGroupName')]",
             "type": "Microsoft.Resources/deployments",
@@ -179,9 +193,10 @@
             }
         },
         {
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2020-06-01",
             "name": "api-app-service",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -201,10 +216,6 @@
                     "appServiceAppSettings": {
                         "value": {
                             "array": [
-                                {
-                                    "name": "StorageConnectionString",
-                                    "value": "[parameters('apiStorageConnectionString')]"
-                                },
                                 {
                                     "name": "EnvironmentName",
                                     "value": "[parameters('environmentName')]"
@@ -255,9 +266,10 @@
             ]
         },
         {
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2020-06-01",
             "name": "ui-app-insights",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -278,7 +290,7 @@
         },
         {
             "condition": "[greater(length(parameters('uiCustomHostName')), 0)]",
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2017-06-01",
             "name": "ui-app-service-certificate",
             "resourceGroup": "[parameters('sharedResourceGroupName')]",
             "type": "Microsoft.Resources/deployments",
@@ -302,9 +314,10 @@
             }
         },
         {
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2020-06-01",
             "name": "ui-app-service",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -406,9 +419,10 @@
             ]
         },
         {
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2020-06-01",
             "name": "worker-app-service-plan",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -432,9 +446,10 @@
             }
         },
         {
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2020-06-01",
             "name": "worker-app-insights",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -454,9 +469,10 @@
             ]
         },
         {
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2020-06-01",
             "name": "worker-app-service",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -506,7 +522,7 @@
             ]
         },
         {
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2020-06-01",
             "name": "pas-sql-database",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[parameters('sharedResourceGroupName')]",
@@ -561,6 +577,10 @@
         "DatabaseName": {
             "type": "string",
             "value": "[variables('databaseName')]"
+        },
+        "ResourceGroupName": {
+            "type": "string",
+            "value": "[variables('resourceGroupName')]"
         }
     }
 }

@@ -14,9 +14,7 @@ variables:
   - name: buildConfiguration
     value: 'release'
   - name: buildPlatform
-    value: 'any cpu'  
-  - name: GitVersion.AssemblySemFileVer
-    value: ''
+    value: 'any cpu'
 
 pool:
   name: 'DAS - Continuous Integration'
@@ -43,7 +41,7 @@ steps:
     configFilePath: GitVersion.yml
 
 - template: azure-pipelines-templates/dependency-check.yml@das-platform-building-blocks
-  
+
 - task: NuGetToolInstaller@0
   displayName: 'Use NuGet 4.3.0'
   inputs:
@@ -77,7 +75,7 @@ steps:
       **/bin/Release/*/*UnitTests.dll
       !**/*ClientV2.UnitTests.dll
     platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'    
+    configuration: '$(buildConfiguration)'
 
 - task: NuGetCommand@2
   displayName: 'NuGet Pack Provider Accounts API Client'
@@ -115,7 +113,7 @@ steps:
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/Provider WebJob"'
     platform: 'anycpu'
     configuration: '$(buildConfiguration)'
-    clean: true        
+    clean: true
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet test'
@@ -133,7 +131,7 @@ steps:
       src/SFA.DAS.ProviderUrlHelper/SFA.DAS.ProviderUrlHelper.csproj
       src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj
       src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj
-    arguments: ' /p:AssemblyVersion=$(GitVersion.AssemblySemFileVer) /P:Configuration=$(buildConfiguration)'    
+    arguments: '/p:Configuration=$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
@@ -142,7 +140,7 @@ steps:
     packagesToPack: 'src/SFA.DAS.ProviderUrlHelper/SFA.DAS.ProviderUrlHelper.csproj;src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj;src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj'
     packDirectory: '$(Build.ArtifactStagingDirectory)/nuget-publish'
     versioningScheme: byBuildNumber
-    verbosityPack: Diagnostic      
+    verbosityPack: Diagnostic
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
