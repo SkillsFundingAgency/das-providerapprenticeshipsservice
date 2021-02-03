@@ -70,7 +70,7 @@
         "uiCertificateName": {
             "type": "string"
         },
-        "redisConnection": {
+        "redisConnectionType": {
             "type": "string"
         },
         "idamsRealm": {
@@ -355,7 +355,7 @@
                                 },
                                 {
                                     "name": "RedisConnection",
-                                    "value": "[parameters('redisConnection')]"
+                                    "value": "[parameters('redisConnectionType')]"
                                 },
                                 {
                                     "name": "IdamsRealm",
