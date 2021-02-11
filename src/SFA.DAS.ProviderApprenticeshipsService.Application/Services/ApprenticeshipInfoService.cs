@@ -16,14 +16,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
         private readonly ICache _cache;
         private readonly IProviderCommitmentsApi _providerCommitmentsApi;
         private readonly ITrainingProgrammeApi _trainingProgrammeApi;
+        private readonly IProviderCommitmentsLogger _logger;
         
         public ApprenticeshipInfoService(ICache cache,
             IProviderCommitmentsApi providerCommitmentsApi,
-            ITrainingProgrammeApi trainingProgrammeApi)
+            ITrainingProgrammeApi trainingProgrammeApi,
+            IProviderCommitmentsLogger logger)
         {
             _cache = cache;
             _providerCommitmentsApi = providerCommitmentsApi;
             _trainingProgrammeApi = trainingProgrammeApi;
+            _logger = logger;
         }
 
         public async Task<StandardsView> GetStandards(bool refreshCache = false)
@@ -73,8 +76,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
                     }
                 };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.Error(ex, $"Provider {ukprn} details not found in provider commitments api");
                 return null;
             }
         }
