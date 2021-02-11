@@ -49,9 +49,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     ShowCreateCohortLink = showCreateCohortLink
                 };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _logger.Warn($"Provider {providerId} details not found in provider information service");
+                _logger.Error(ex, $"Provider {providerId} details not found in provider information service");
 
                 return new AccountHomeViewModel {AccountStatus = AccountStatus.NoAgreement};
             }
