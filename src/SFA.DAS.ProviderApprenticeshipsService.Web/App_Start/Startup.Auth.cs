@@ -56,12 +56,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             logger.Info("SecurityTokenValidated notification called");
 
             var identity = notification.AuthenticationTicket.Identity;
+            
+            identity.AddClaim(new Claim(DasClaimTypes.Upn, "isp\\10005077s", "string"));
+            identity.AddClaim(new Claim(DasClaimTypes.DisplayName, "isp 10005077s", "string"));
+            identity.AddClaim(new Claim(DasClaimTypes.Ukprn, "10005077", "string"));
+            identity.AddClaim(new Claim(DasClaimTypes.Email, "10005077@gov.uk", "string"));
+            identity.AddClaim(new Claim("http://schemas.portal.com/service", "DAA", "string"));
 
             var id = identity.Claims.FirstOrDefault(claim => claim.Type == (DasClaimTypes.Upn))?.Value;
             var displayName = identity.Claims.FirstOrDefault(claim => claim.Type == (DasClaimTypes.DisplayName))?.Value;
             var ukprn = identity.Claims.FirstOrDefault(claim => claim.Type == (DasClaimTypes.Ukprn))?.Value;
             var email = identity.Claims.FirstOrDefault(claim => claim.Type == (DasClaimTypes.Email))?.Value;
-
+            
             long parsedUkprn;
             if (!long.TryParse(ukprn, out parsedUkprn))
             {
