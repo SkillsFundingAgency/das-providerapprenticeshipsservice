@@ -10,7 +10,7 @@ namespace SFA.DAS.PAS.Account.Api
         {
             // LoggingConfig.ConfigureLogging();
 
-            // TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["InstrumentationKey"];
+            TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["InstrumentationKey"];
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
         }
