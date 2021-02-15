@@ -56,12 +56,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             logger.Info("SecurityTokenValidated notification called");
 
             var identity = notification.AuthenticationTicket.Identity;
-
+         
             var id = identity.Claims.FirstOrDefault(claim => claim.Type == (DasClaimTypes.Upn))?.Value;
             var displayName = identity.Claims.FirstOrDefault(claim => claim.Type == (DasClaimTypes.DisplayName))?.Value;
             var ukprn = identity.Claims.FirstOrDefault(claim => claim.Type == (DasClaimTypes.Ukprn))?.Value;
             var email = identity.Claims.FirstOrDefault(claim => claim.Type == (DasClaimTypes.Email))?.Value;
-
+            
             long parsedUkprn;
             if (!long.TryParse(ukprn, out parsedUkprn))
             {
