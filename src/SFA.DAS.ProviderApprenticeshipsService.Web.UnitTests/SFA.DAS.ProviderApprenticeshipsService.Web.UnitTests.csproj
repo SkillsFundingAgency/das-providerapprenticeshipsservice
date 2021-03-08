@@ -435,6 +435,7 @@
   <ItemGroup>
     <Compile Include="AcademicYear\WhenDeterminingTheAcademicYear.cs" />
     <Compile Include="AcademicYear\WhenValidatingAcademicYear.cs" />
+    <Compile Include="Attributes\DasRoleCheck\When_DasRoleCheckActionFilter_OnActionExecuting.cs" />
     <Compile Include="Authorization\AuthorizationContextProviderTests.cs" />
     <Compile Include="Extensions\IEnumerableCommitmentAgreementTests.cs" />
     <Compile Include="FakeHttpContext.cs" />
