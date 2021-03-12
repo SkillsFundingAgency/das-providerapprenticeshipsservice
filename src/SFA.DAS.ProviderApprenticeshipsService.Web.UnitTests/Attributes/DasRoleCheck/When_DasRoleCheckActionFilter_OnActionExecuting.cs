@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -13,16 +14,18 @@ using System.Web.Routing;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Attributes.DasRoleCheck
 {
+    [TestFixture]
     public class When_DasRoleCheckActionFilter_OnActionExecuting
     {
         private readonly DasRoleCheckActionFilter Sut = new DasRoleCheckActionFilter();
         private ActionExecutingContext ActionExecutingContext;
 
-        private void Arrange(string serviceClaim, bool isAuthenticated, string controllerAttribute, string methodAttribute)
+        private void Arrange(string[] serviceClaims, bool isAuthenticated, string controllerAttribute, string methodAttribute)
         {
             var claimsIdentity = new Mock<ClaimsIdentity>();
             claimsIdentity.Setup(r => r.Claims)
-                .Returns(new List<Claim> { new Claim("http://schemas.portal.com/service", serviceClaim) });
+                .Returns(serviceClaims
+                    .Select(serviceClaim => new Claim("http://schemas.portal.com/service", serviceClaim)));
 
             claimsIdentity.Setup(r => r.IsAuthenticated)
                 .Returns(isAuthenticated);
@@ -74,60 +77,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Attributes.DasRol
         }
         
         
-        [TestCase("DAA", true, "DasRoleCheckAttribute", "", HttpStatusCode.OK)]
-        [TestCase("DAA", true, "", "DasRoleCheckAttribute", HttpStatusCode.OK)]
-        [TestCase("DAA", true, "", "", HttpStatusCode.OK)]
-        [TestCase("DAA", false, "", "", HttpStatusCode.OK)]
-        [TestCase("DAA", true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK)]
-        [TestCase("DAA", true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK)]
-        [TestCase("DAA", false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK)]
-        [TestCase("DAA", false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK)]
-        [TestCase("DAA", false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden)]
-        [TestCase("DAA", false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden)]
-        [TestCase("DAB", true, "DasRoleCheckAttribute", "", HttpStatusCode.OK)]
-        [TestCase("DAB", true, "", "DasRoleCheckAttribute", HttpStatusCode.OK)]
-        [TestCase("DAB", true, "", "", HttpStatusCode.OK)]
-        [TestCase("DAB", false, "", "", HttpStatusCode.OK)]
-        [TestCase("DAB", true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK)]
-        [TestCase("DAB", true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK)]
-        [TestCase("DAB", false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK)]
-        [TestCase("DAB", false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK)]
-        [TestCase("DAB", false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden)]
-        [TestCase("DAB", false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden)]
-        [TestCase("DAC", true, "DasRoleCheckAttribute", "", HttpStatusCode.OK)]
-        [TestCase("DAC", true, "", "DasRoleCheckAttribute", HttpStatusCode.OK)]
-        [TestCase("DAC", true, "", "", HttpStatusCode.OK)]
-        [TestCase("DAC", false, "", "", HttpStatusCode.OK)]
-        [TestCase("DAC", true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK)]
-        [TestCase("DAC", true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK)]
-        [TestCase("DAC", false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK)]
-        [TestCase("DAC", false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK)]
-        [TestCase("DAC", false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden)]
-        [TestCase("DAC", false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden)]
-        [TestCase("DAV", true, "DasRoleCheckAttribute", "", HttpStatusCode.OK)]
-        [TestCase("DAV", true, "", "DasRoleCheckAttribute", HttpStatusCode.OK)]
-        [TestCase("DAV", true, "", "", HttpStatusCode.OK)]
-        [TestCase("DAV", false, "", "", HttpStatusCode.OK)]
-        [TestCase("DAV", true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK)]
-        [TestCase("DAV", true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK)]
-        [TestCase("DAV", false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK)]
-        [TestCase("DAV", false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK)]
-        [TestCase("DAV", false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden)]
-        [TestCase("DAV", false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden)]
-        [TestCase("", true, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden)]
-        [TestCase("", true, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden)]
-        [TestCase("", true, "", "", HttpStatusCode.OK)]
-        [TestCase("", false, "", "", HttpStatusCode.OK)]
-        [TestCase("", true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK)]
-        [TestCase("", true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK)]
-        [TestCase("", false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK)]
-        [TestCase("", false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK)]
-        [TestCase("", false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden)]
-        [TestCase("", false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden)]
-        public void ValidateDasRole_ValidatesServiceClaim(string serviceClaim, bool isAuthenticated, string controllerAttribute, string methodAttribute, HttpStatusCode httpStatusCode)
+        [TestCaseSource(nameof(ValidatesServiceClaimCases))]
+        public void ValidateDasRole_ValidatesServiceClaim(string[] serviceClaims, bool isAuthenticated, string controllerAttribute, string methodAttribute, HttpStatusCode httpStatusCode)
         {
             // Arrange
-            Arrange(serviceClaim, isAuthenticated, controllerAttribute, methodAttribute);
+            Arrange(serviceClaims, isAuthenticated, controllerAttribute, methodAttribute);
 
             // Act
             Action act = () => Sut.OnActionExecuting(ActionExecutingContext);
@@ -143,5 +97,184 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Attributes.DasRol
                     .And.GetHttpCode().Should().Be((int)httpStatusCode);
             }
         }
+
+        static object[] ValidatesServiceClaimCases =
+        {
+            new object[] { new string[] { "DAA", "SRV" }, true, "DasRoleCheckAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAA", "SRV" }, true, "", "DasRoleCheckAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "DAA", "SRV" }, true, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAA", "SRV" }, false, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAA", "SRV" }, true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAA", "SRV" }, true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "DAA", "SRV" }, false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAA", "SRV" }, false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "DAA", "SRV" }, false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "DAA", "SRV" }, false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+
+            new object[] { new string[] { "SRV", "DAA" }, true, "DasRoleCheckAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAA" }, true, "", "DasRoleCheckAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAA" }, true, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAA" }, false, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAA" }, true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAA" }, true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAA" }, false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAA" }, false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAA" }, false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "SRV", "DAA" }, false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+
+            new object[] { new string[] { "SRV", "DAA", "VRS" }, true, "DasRoleCheckAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAA", "VRS" }, true, "", "DasRoleCheckAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAA", "VRS" }, true, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAA", "VRS" }, false, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAA", "VRS" }, true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAA", "VRS" }, true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAA", "VRS" }, false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAA", "VRS" }, false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAA", "VRS" }, false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "SRV", "DAA", "VRS" }, false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+
+            new object[] { new string[] { "DAB", "SRV" }, true, "DasRoleCheckAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAB", "SRV" }, true, "", "DasRoleCheckAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "DAB", "SRV" }, true, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAB", "SRV" }, false, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAB", "SRV" }, true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAB", "SRV" }, true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "DAB", "SRV" }, false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAB", "SRV" }, false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "DAB", "SRV" }, false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "DAB", "SRV" }, false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+
+            new object[] { new string[] { "SRV", "DAB" }, true, "DasRoleCheckAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAB" }, true, "", "DasRoleCheckAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAB" }, true, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAB" }, false, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAB" }, true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAB" }, true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAB" }, false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAB" }, false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAB" }, false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "SRV", "DAB" }, false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+
+            new object[] { new string[] { "SRV", "DAB", "VRS" }, true, "DasRoleCheckAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAB", "VRS" }, true, "", "DasRoleCheckAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAB", "VRS" }, true, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAB", "VRS" }, false, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAB", "VRS" }, true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAB", "VRS" }, true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAB", "VRS" }, false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAB", "VRS" }, false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAB", "VRS" }, false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "SRV", "DAB", "VRS" }, false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+
+            new object[] { new string[] { "DAC", "SRV" }, true, "DasRoleCheckAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAC", "SRV" }, true, "", "DasRoleCheckAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "DAC", "SRV" }, true, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAC", "SRV" }, false, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAC", "SRV" }, true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAC", "SRV" }, true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "DAC", "SRV" }, false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAC", "SRV" }, false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "DAC", "SRV" }, false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "DAC", "SRV" }, false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+
+            new object[] { new string[] { "SRV", "DAC" }, true, "DasRoleCheckAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAC" }, true, "", "DasRoleCheckAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAC" }, true, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAC" }, false, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAC" }, true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAC" }, true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAC" }, false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAC" }, false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAC" }, false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "SRV", "DAC" }, false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+
+            new object[] { new string[] { "VRS", "DAC", "SRV" }, true, "DasRoleCheckAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "DAC", "SRV" }, true, "", "DasRoleCheckAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "DAC", "SRV" }, true, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "DAC", "SRV" }, false, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "DAC", "SRV" }, true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "DAC", "SRV" }, true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "DAC", "SRV" }, false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "DAC", "SRV" }, false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "DAC", "SRV" }, false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "VRS", "DAC", "SRV" }, false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+
+            new object[] { new string[] { "DAV", "SRV" }, true, "DasRoleCheckAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAV", "SRV" }, true, "", "DasRoleCheckAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "DAV", "SRV" }, true, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAV", "SRV" }, false, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAV", "SRV" }, true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAV", "SRV" }, true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "DAV", "SRV" }, false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "DAV", "SRV" }, false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "DAV", "SRV" }, false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "DAV", "SRV" }, false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+
+            new object[] { new string[] { "SRV", "DAV" }, true, "DasRoleCheckAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAV" }, true, "", "DasRoleCheckAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAV" }, true, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAV" }, false, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAV" }, true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAV" }, true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAV" }, false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAV" }, false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "DAV" }, false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "SRV", "DAV" }, false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+
+            new object[] { new string[] { "VRS", "DAV", "SRV" }, true, "DasRoleCheckAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "DAV", "SRV" }, true, "", "DasRoleCheckAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "DAV", "SRV" }, true, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "DAV", "SRV" }, false, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "DAV", "SRV" }, true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "DAV", "SRV" }, true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "DAV", "SRV" }, false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "DAV", "SRV" }, false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "DAV", "SRV" }, false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "VRS", "DAV", "SRV" }, false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+
+            new object[] { new string[] { "" }, true, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "" }, true, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "" }, true, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "" }, false, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "" }, true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "" }, true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "" }, false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "" }, false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "" }, false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "" }, false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+
+            new object[] { new string[] { "", "SRV" }, true, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "", "SRV" }, true, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "", "SRV" }, true, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "", "SRV" }, false, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "", "SRV" }, true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "", "SRV" }, true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "", "SRV" }, false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "", "SRV" }, false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "", "SRV" }, false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "", "SRV" }, false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+
+            new object[] { new string[] { "SRV", "" }, true, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "SRV", "" }, true, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "SRV", "" }, true, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "" }, false, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "" }, true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "" }, true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "" }, false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "" }, false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "SRV", "" }, false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "SRV", "" }, false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+
+            new object[] { new string[] { "VRS", "SRV", "" }, true, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "VRS", "SRV", "" }, true, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "VRS", "SRV", "" }, true, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "SRV", "" }, false, "", "", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "SRV", "" }, true, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "SRV", "" }, true, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "SRV", "" }, false, "DasRoleCheckExemptAttribute", "", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "SRV", "" }, false, "", "DasRoleCheckExemptAttribute", HttpStatusCode.OK},
+            new object[] { new string[] { "VRS", "SRV", "" }, false, "DasRoleCheckAttribute", "", HttpStatusCode.Forbidden},
+            new object[] { new string[] { "VRS", "SRV", "" }, false, "", "DasRoleCheckAttribute", HttpStatusCode.Forbidden}
+        };
     }
 }
