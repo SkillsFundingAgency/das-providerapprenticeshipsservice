@@ -12,11 +12,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
             return claimIdentity != null ? claimIdentity.Value : string.Empty;
         }
 
-        public static bool HasClaimValue(this HttpContextBase httpContext, string claimType, string value)
+        public static bool HasAnyClaimValue(this HttpContextBase httpContext, string claimType, string[] values)
         {
             return
                 ((ClaimsIdentity)httpContext.User.Identity).Claims.Any(
-                    x => x.Type == claimType && x.Value == value);
+                    x => x.Type == claimType && values.Contains(x.Value));
         }
     }
 }

@@ -19,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
             }
 
             if (filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(DasRoleCheckExemptAttribute), true)
-                ||filterContext.ActionDescriptor.IsDefined(typeof(DasRoleCheckExemptAttribute), true))
+                || filterContext.ActionDescriptor.IsDefined(typeof(DasRoleCheckExemptAttribute), true))
             {
                 return;
             }
@@ -29,8 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
                 throw new HttpException((int)HttpStatusCode.Forbidden, $"User not authenticated when checking for valid Das role");
             }
 
-            var userRole = filterContext.HttpContext.GetClaimValue("http://schemas.portal.com/service");
-            if (!ValidDasRoles.Contains(userRole))
+            if (!filterContext.HttpContext.HasAnyClaimValue("http://schemas.portal.com/service", ValidDasRoles))
             {
                 throw new HttpException((int)HttpStatusCode.Forbidden, $"Service claim must be one of [{string.Join(",", ValidDasRoles)}] for valid Das role");
             }
