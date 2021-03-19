@@ -61,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return RedirectToRoute("home");
         }
 
-        [Authorize]
+        [RoleAuthorize(Roles = "ContributorOrAbove")]
         [Route("~/account", Name = "account-home")]
         public async Task<ActionResult> Index(string message)
         {

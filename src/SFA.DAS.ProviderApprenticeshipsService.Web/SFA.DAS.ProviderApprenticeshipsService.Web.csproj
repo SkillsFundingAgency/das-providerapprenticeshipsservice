@@ -660,6 +660,7 @@
     <Compile Include="Attributes\DeprecatedAttribute.cs" />
     <Compile Include="Attributes\ProviderUkPrnCheckActionFilter.cs" />
     <Compile Include="Attributes\ProviderUkPrnCheckAttribute.cs" />
+    <Compile Include="Attributes\RoleAuthorizeAttribute.cs" />
     <Compile Include="Authorization\AuthorizationContextProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AgreementController.cs" />

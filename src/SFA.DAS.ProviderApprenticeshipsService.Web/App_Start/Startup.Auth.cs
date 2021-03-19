@@ -31,20 +31,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                 CookieManager = new SystemWebCookieManager()
             });
 
-            var realm = ConfigurationManager.AppSettings["IdamsRealm"];
-            var adfsMetadata = ConfigurationManager.AppSettings["IdamsADFSMetadata"];
-
-            //todo: may need more options here
             var options = new WsFederationAuthenticationOptions
             {
-                Wtrealm = realm,
-                MetadataAddress = adfsMetadata,
+                Wtrealm = ConfigurationManager.AppSettings["IdamsRealm"],
+                MetadataAddress = ConfigurationManager.AppSettings["IdamsADFSMetadata"],
                 Notifications = new WsFederationAuthenticationNotifications
                 {
                     SecurityTokenValidated = notification => SecurityTokenValidated(notification, logger, authenticationOrchestrator, accountOrchestrator)
                 }
-                //,Wreply = "?"
-                //,SignOutWreply = "?"
             };
 
             app.UseWsFederationAuthentication(options);
@@ -72,6 +66,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             var showReservations = await accountOrchestrator.ProviderHasPermission(parsedUkprn, Operation.CreateCohort);
 
             identity.AddClaim(new Claim(DasClaimTypes.ShowReservations, showReservations.ToString(), "bool"));
+            identity.AddClaim(new Claim(ClaimTypes.Role, "ContributorOrAbove"));
 
             await orchestrator.SaveIdentityAttributes(id, parsedUkprn, displayName, email);
         }
