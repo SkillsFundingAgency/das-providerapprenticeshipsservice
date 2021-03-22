@@ -5,7 +5,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
-    [DasRoleCheckExempt]
+    [AllowAllRoles]
     public class HomeController : BaseController
     {
         public HomeController(ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)

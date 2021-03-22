@@ -654,13 +654,12 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\TrimStringModelBinder.cs" />
-    <Compile Include="Attributes\DasRoleCheckActionFilter.cs" />
-    <Compile Include="Attributes\DasRoleCheckAttribute.cs" />
-    <Compile Include="Attributes\DasRoleCheckExemptAttribute.cs" />
     <Compile Include="Attributes\DeprecatedAttribute.cs" />
     <Compile Include="Attributes\ProviderUkPrnCheckActionFilter.cs" />
     <Compile Include="Attributes\ProviderUkPrnCheckAttribute.cs" />
     <Compile Include="Attributes\RoleAuthorizeAttribute.cs" />
+    <Compile Include="Authentication\RoleNames.cs" />
+    <Compile Include="Authentication\ServiceClaims.cs" />
     <Compile Include="Authorization\AuthorizationContextProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AgreementController.cs" />
@@ -689,7 +688,8 @@
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\HttpContextBaseExtensions.cs" />
-    <Compile Include="Extensions\IdentityExtensions.cs" />
+    <Compile Include="Extensions\ClaimsIdentityExtensions.cs" />
+    <Compile Include="Extensions\IIdentityExtensions.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />

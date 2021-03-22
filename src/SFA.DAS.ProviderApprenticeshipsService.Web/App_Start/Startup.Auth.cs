@@ -11,6 +11,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using System.Security.Claims;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
@@ -66,7 +67,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             var showReservations = await accountOrchestrator.ProviderHasPermission(parsedUkprn, Operation.CreateCohort);
 
             identity.AddClaim(new Claim(DasClaimTypes.ShowReservations, showReservations.ToString(), "bool"));
-            identity.AddClaim(new Claim(ClaimTypes.Role, "ContributorOrAbove"));
+            identity.MapClaimToRoles();
 
             await orchestrator.SaveIdentityAttributes(id, parsedUkprn, displayName, email);
         }
