@@ -53,6 +53,13 @@ namespace SFA.DAS.ProviderUrlHelper
             return Action(baseUrl, path);
         }
 
+        public string EmployerDemandLink(string path)
+        {
+            var configuration = _lazyProviderConfiguration.Value;
+            var baseUrl = configuration.EmployerDemandBaseUrl;
+            return Action(baseUrl, path);
+        }
+
         private ProviderUrlConfiguration LoadProviderUrlConfiguration(IAutoConfigurationService autoConfigurationService)
         {
             var configuration = autoConfigurationService.Get<ProviderUrlConfiguration>();

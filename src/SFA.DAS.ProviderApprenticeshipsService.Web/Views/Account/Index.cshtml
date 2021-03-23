@@ -1,4 +1,5 @@
-﻿@using SFA.DAS.ProviderUrlHelper.Framework;
+﻿@using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
+@using SFA.DAS.ProviderUrlHelper.Framework;
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.AccountHomeViewModel
@@ -73,6 +74,17 @@
                 </h2>
                 <p>Create a vacancy to recruit an apprentice and manage applications.</p>
             </div>
+            
+            @if (Model.ShowEmployerDemandLink)
+            {
+                <div class="box">
+                    <h2 class="heading-medium">
+                        <a href="@Url.EmployerDemandLink($"{Model.ProviderId}")">Find employers that need a training provider</a>
+                    </h2>
+                    <p>View employers and share your contact details with them.</p>
+                </div>    
+            }
+            
 
             <div class="box">
                 <h2 class="heading-medium">
