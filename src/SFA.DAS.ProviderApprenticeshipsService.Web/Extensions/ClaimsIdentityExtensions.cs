@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
-using System.Web.Http.ModelBinding;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
