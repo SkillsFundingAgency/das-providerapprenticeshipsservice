@@ -436,6 +436,7 @@
     <Compile Include="AcademicYear\WhenDeterminingTheAcademicYear.cs" />
     <Compile Include="AcademicYear\WhenValidatingAcademicYear.cs" />
     <Compile Include="Authorization\AuthorizationContextProviderTests.cs" />
+    <Compile Include="Extensions\ClaimsIdentityExtensionsTests.cs" />
     <Compile Include="Extensions\IEnumerableCommitmentAgreementTests.cs" />
     <Compile Include="FakeHttpContext.cs" />
     <Compile Include="Helpers\HtmlExtensionsTests\WhenCallingCanShowReservationsLink.cs" />
