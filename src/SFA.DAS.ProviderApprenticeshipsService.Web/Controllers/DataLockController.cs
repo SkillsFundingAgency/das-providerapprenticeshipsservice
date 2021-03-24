@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
@@ -38,6 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [Route("")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(RoleNames.HasAccountOwnerPermission))]
         public async Task<ActionResult> UpdateDataLock(DataLockMismatchViewModel model)
         {
             if (!ModelState.IsValid)
@@ -49,7 +51,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (model.SubmitStatusViewModel == SubmitStatusViewModel.UpdateDataInIlr)
             {
                 await _orchestrator.TriageMultiplePriceDataLocks(model.ProviderId, model.HashedApprenticeshipId, CurrentUserId, TriageStatus.FixIlr);
-
                 return RedirectToAction("Details", "ManageApprentices", new { model.ProviderId, model.HashedApprenticeshipId });
             }
 
