@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -57,6 +58,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedApprenticeshipId}/confirm")]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasAccountOwnerPermission))]
         public async Task<ActionResult> ConfirmChanges(long providerId, ApprenticeshipViewModel model)
         {
             var updateViewModel = await _orchestrator.GetConfirmChangesModel(providerId, model.HashedApprenticeshipId, model);
@@ -126,6 +128,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedApprenticeshipId}/review")]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasAccountOwnerPermission))]
         public async Task<ActionResult> ReviewChanges(long providerId, string hashedApprenticeshipId, ReviewApprenticeshipUpdateViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -153,6 +156,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedApprenticeshipId}/undo")]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasAccountOwnerPermission))]
         public async Task<ActionResult> UndoChanges(long providerId, string hashedApprenticeshipId, UndoApprenticeshipUpdateViewModel viewModel)
         {
             if (!ModelState.IsValid)

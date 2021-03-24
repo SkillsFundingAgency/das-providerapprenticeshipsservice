@@ -39,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [Route("")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = nameof(RoleNames.HasAccountOwnerPermission))]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasAccountOwnerPermission))]
         public async Task<ActionResult> UpdateDataLock(DataLockMismatchViewModel model)
         {
             if (!ModelState.IsValid)
