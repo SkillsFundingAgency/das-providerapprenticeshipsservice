@@ -8,9 +8,11 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using System.Security.Claims;
+using Polly;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -206,6 +208,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/Finished")]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasContributorWithApprovalOrAbovePermission))]
         public async Task<ActionResult> FinishEditing(long providerId, string hashedCommitmentId)
         {
             var viewModel = await _commitmentOrchestrator.GetFinishEditing(providerId, hashedCommitmentId);
@@ -216,6 +219,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [Route("{hashedCommitmentId}/Finished")]
         [ValidateAntiForgeryToken]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasContributorWithApprovalOrAbovePermission))]
         public async Task<ActionResult> FinishEditing(FinishEditingViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -239,6 +243,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/RequestApproved")]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasContributorWithApprovalOrAbovePermission))]
         public async Task<ActionResult> Approved(long providerId, string hashedCommitmentId)
         {
             var model = await _commitmentOrchestrator.GetApprovedViewModel(providerId, hashedCommitmentId);
@@ -248,6 +253,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/Submit")]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasContributorWithApprovalOrAbovePermission))]
         public async Task<ActionResult> Submit(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
         {
             var commitment = await _commitmentOrchestrator.GetCommitmentCheckState(providerId, hashedCommitmentId);
@@ -266,6 +272,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedCommitmentId}/Submit")]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasContributorWithApprovalOrAbovePermission))]
         public async Task<ActionResult> Submit(SubmitCommitmentViewModel model)
         {
             await _commitmentOrchestrator.SubmitCommitment(CurrentUserId, model.ProviderId, model.HashedCommitmentId, model.SaveStatus, model.Message, GetSignedInUser());
