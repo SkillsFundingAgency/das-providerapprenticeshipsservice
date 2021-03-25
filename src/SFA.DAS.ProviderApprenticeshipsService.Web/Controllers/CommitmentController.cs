@@ -120,6 +120,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/details/delete")]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasContributorOrAbovePermission))]
         public async Task<ActionResult> DeleteCohort(long providerId, string hashedCommitmentId)
         {
             var model = await _commitmentOrchestrator.GetDeleteCommitmentModel(providerId, hashedCommitmentId);
@@ -130,6 +131,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/details/delete")]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasContributorOrAbovePermission))]
         public async Task<ActionResult> DeleteCohort(DeleteCommitmentViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -140,9 +142,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (viewModel.DeleteConfirmed == null || !viewModel.DeleteConfirmed.Value)
             {   
-                return RedirectToAction(
-                    "Details",
-                    new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
+                return RedirectToAction("Details", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
             }
 
             await _commitmentOrchestrator.DeleteCommitment(CurrentUserId, viewModel.ProviderId, viewModel.HashedCommitmentId, GetSignedInUser());
@@ -191,6 +191,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/AddApprentice")]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasContributorOrAbovePermission))]
         public async Task<ActionResult> AddApprentice(long providerId, string hashedCommitmentId)
         {
             string nextPage;

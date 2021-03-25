@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
@@ -11,6 +11,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [ProviderUkPrnCheck]
+    [RoleAuthorize(Roles = nameof(RoleNames.HasContributorOrAbovePermission))]
     [RoutePrefix("{providerId}/apprentices")]
     public class BulkUploadController : BaseController
     {
@@ -18,8 +19,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         public BulkUploadController(BulkUploadOrchestrator bulkUploadOrchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
         {
-            if (bulkUploadOrchestrator == null)
-                throw new ArgumentNullException(nameof(bulkUploadOrchestrator));
             _bulkUploadOrchestrator = bulkUploadOrchestrator;
         }
 
