@@ -8,7 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 {
     public class DasRoleCheckActionFilter : IActionFilter
     {
-        private const string RequiredUserRole = "DAA";
+        private string[] ValidDasRoles = new string[] { "DAA", "DAB", "DAC", "DAV" };
 
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -19,19 +19,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
             }
 
             if (filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(DasRoleCheckExemptAttribute), true)
-                ||filterContext.ActionDescriptor.IsDefined(typeof(DasRoleCheckExemptAttribute), true))
+                || filterContext.ActionDescriptor.IsDefined(typeof(DasRoleCheckExemptAttribute), true))
             {
                 return;
             }
 
             if (!filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
-                throw new HttpException((int)HttpStatusCode.Forbidden, $"User not authenticated on check for {RequiredUserRole} claim");
+                throw new HttpException((int)HttpStatusCode.Forbidden, $"User not authenticated when checking for valid Das role");
             }
 
-            if (!filterContext.HttpContext.HasClaimValue("http://schemas.portal.com/service", RequiredUserRole))
+            if (!filterContext.HttpContext.HasAnyClaimValue("http://schemas.portal.com/service", ValidDasRoles))
             {
-                throw new HttpException((int)HttpStatusCode.Forbidden, $"Missing {RequiredUserRole} claim");
+                throw new HttpException((int)HttpStatusCode.Forbidden, $"Service claim must be one of [{string.Join(",", ValidDasRoles)}] for valid Das role");
             }
         }
 
