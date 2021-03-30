@@ -37,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
         {
             if (filterContext.HttpContext.Request.IsAuthenticated)
             {
-                filterContext.HttpContext.Response.Redirect("Error/Forbidden");
+                filterContext.HttpContext.Response.Redirect("/Error/Forbidden");
             }
 
             base.HandleUnauthorizedRequest(filterContext);
