@@ -6,6 +6,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     using System;
 
     [AllowAllRoles]
+    [AllowAnonymous]
     public class ErrorController : Controller
     {
         public ViewResult BadRequest()
