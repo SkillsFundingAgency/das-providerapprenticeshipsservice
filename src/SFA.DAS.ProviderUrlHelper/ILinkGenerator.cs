@@ -10,6 +10,7 @@ namespace SFA.DAS.ProviderUrlHelper
         string ReservationsLink(string path);
         string RecruitLink(string path);
         string RegistrationLink(string path);
+        string EmployerDemandLink(string path);
     }
 }
 #endif

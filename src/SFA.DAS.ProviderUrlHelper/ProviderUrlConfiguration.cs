@@ -7,5 +7,6 @@
         public string ReservationsBaseUrl { get; set; }
         public string RecruitBaseUrl { get; set; }
         public string RegistrationBaseUrl { get; set; }
+        public string EmployerDemandBaseUrl { get ; set ; }
     }
 }
