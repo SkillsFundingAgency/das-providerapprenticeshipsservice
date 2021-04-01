@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
@@ -37,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
         {
             if (filterContext.HttpContext.Request.IsAuthenticated)
             {
-                filterContext.HttpContext.Response.Redirect("/Error/Forbidden");
+                throw new HttpException((int)HttpStatusCode.Forbidden, $"Access denied for user {filterContext.HttpContext.GetClaimValue(DasClaimTypes.Name)}");
             }
 
             base.HandleUnauthorizedRequest(filterContext);
