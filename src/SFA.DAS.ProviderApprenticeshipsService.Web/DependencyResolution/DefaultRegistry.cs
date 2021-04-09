@@ -15,10 +15,13 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+using System.Configuration;
+using System.Reflection;
+using System.Web;
 using FeatureToggle;
 using FluentValidation;
 using MediatR;
-using Microsoft.Azure;
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.Handlers;
 using SFA.DAS.Authorization.ProviderPermissions.Handlers;
@@ -28,12 +31,8 @@ using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.Encoding;
 using SFA.DAS.HashingService;
-using SFA.DAS.Http;
-using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Learners.Validators;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.NLog.Logger.Web.MessageHandlers;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Caching;
@@ -48,11 +47,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.ProviderRelationships.Api.Client;
 using StructureMap;
-using System;
-using System.Configuration;
-using System.Net.Http;
-using System.Reflection;
-using System.Web;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
