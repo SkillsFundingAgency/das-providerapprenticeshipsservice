@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -56,6 +57,31 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             _contentApiClientMock.Verify(x => x.Get(_contentType, _clientId), Times.Once);
         }
 
+
+        [Test]
+        public async Task ThenIfShouldUseLegacyStyles_ShouldFetchCorrectContent()
+        {
+            //Arrange
+            _request.UseLegacyStyles = true; 
+
+
+            //Act
+            await _handler.Handle(_request, new CancellationToken());
+
+            //Assert
+            _contentApiClientMock.Verify(x => x.Get(_contentType, _clientId + "-legacy"), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenIfTheMessageIsValidTheValueIsReturnedThenResponseIsSuccess()
+        {
+            //Act
+            var response = await _handler.Handle(_request, new CancellationToken());
+
+            //Assert
+            Assert.False(response.HasFailed);
+        }
+
         [Test]
         public async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
@@ -64,6 +90,38 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
 
             //Assert
             Assert.AreEqual(ContentBanner, response.Content);
+        }
+
+        [Test]
+        public async Task ThenContentApiThrows_ShouldLogError()
+        {
+            //Arrange
+            _contentApiClientMock
+                .Setup(mock => mock.Get(_contentType, _clientId))
+                .Throws(new Exception("Error"));
+
+
+            //Act
+            await _handler.Handle(_request, new CancellationToken());
+
+            //Assert
+            _logger.Verify(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenContentApiThrows_ShouldReturnHasFailed()
+        {
+            //Arrange
+            _contentApiClientMock
+                .Setup(mock => mock.Get(_contentType, _clientId))
+                .Throws(new Exception("Error"));
+
+
+            //Act
+            var response = await _handler.Handle(_request, new CancellationToken());
+
+            //Assert
+            Assert.IsTrue(response.HasFailed);
         }
     }
 }
