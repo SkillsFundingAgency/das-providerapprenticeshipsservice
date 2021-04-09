@@ -5,11 +5,11 @@ using SFA.DAS.Authentication.Extensions.Legacy;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
 {
-    public class ClientContentApiClient : ApiClientBase, IClientContentApiClient
+    public class ContentApiClient : ApiClientBase, IContentApiClient
     {
         private readonly string ApiBaseUrl;
 
-        public ClientContentApiClient(HttpClient client, IContentClientApiConfiguration configuration) : base(client)
+        public ContentApiClient(HttpClient client, IContentApiConfiguration configuration) : base(client)
         {
             ApiBaseUrl = configuration.ApiBaseUrl.EndsWith("/")
                 ? configuration.ApiBaseUrl

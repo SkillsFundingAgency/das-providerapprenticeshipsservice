@@ -5,9 +5,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
 {
     public class ClientContentService : IClientContentService
     {
-        private readonly IClientContentApiClient _client;
+        private readonly IContentApiClient _client;
 
-        public ClientContentService(IClientContentApiClient client)
+        public ClientContentService(IContentApiClient client)
         {
             _client = client;
         }

@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
-    public interface IClientContentApiClient
+    public interface IContentApiClient
     {
         Task<string> Get(string type, string applicationId);
     }

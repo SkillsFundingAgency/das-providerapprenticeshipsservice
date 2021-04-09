@@ -56,7 +56,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 
     }
 
-    public class ContentClientApiConfiguration : IContentClientApiConfiguration
+    public class ContentClientApiConfiguration : IContentApiConfiguration
     {
         public string ApiBaseUrl { get; set; }
         public string Tenant { get; set; }

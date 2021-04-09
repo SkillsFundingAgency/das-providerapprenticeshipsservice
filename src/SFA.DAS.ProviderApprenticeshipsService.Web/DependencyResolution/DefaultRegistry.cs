@@ -94,8 +94,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IProviderAgreementStatusConfiguration>().Use(config);
             For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
 
-            For<IContentClientApiConfiguration>().Use(config.ContentApi);
-            For<IClientContentApiClient>().Use<ClientContentApiClient>().Ctor<HttpClient>().Is(c => CreateClient(c, config));
+            For<IContentApiConfiguration>().Use(config.ContentApi);
+            For<IContentApiClient>().Use<ContentApiClient>().Ctor<HttpClient>().Is(c => CreateClient(c, config));
 
             For<ICache>().Use<InMemoryCache>(); //RedisCache
             For<IAgreementStatusQueryRepository>().Use<ProviderAgreementStatusRepository>();
