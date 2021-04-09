@@ -674,6 +674,7 @@
     <Compile Include="DependencyResolution\CommitmentsRegistry.cs" />
     <Compile Include="DependencyResolution\ConfigurationKeys.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
+    <Compile Include="DependencyResolution\ContentApiClientRegistry.cs" />
     <Compile Include="DependencyResolution\EncodingRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\NotificationsRegistry.cs" />

@@ -43,7 +43,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<ReservationsApiClientRegistry>();
                 c.AddRegistry<LinkGeneratorRegistry>();
-                c.AddRegistry<EncodingRegistry>();                
+                c.AddRegistry<EncodingRegistry>();
+                c.AddRegistry<ContentApiClientRegistry>();
             });
         }
     }
