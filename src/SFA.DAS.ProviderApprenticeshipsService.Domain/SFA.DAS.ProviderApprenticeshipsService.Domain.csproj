@@ -233,7 +233,6 @@
     <Compile Include="Interfaces\IBackgroundNotificationService.cs" />
     <Compile Include="Interfaces\ICacheStorageService.cs" />
     <Compile Include="Interfaces\IContentApiClient.cs" />
-    <Compile Include="Interfaces\IClientContentService.cs" />
     <Compile Include="Interfaces\IContentClientApiConfiguration.cs" />
     <Compile Include="Interfaces\IEmployerAccountService.cs" />
     <Compile Include="Interfaces\IProviderRepository.cs" />
