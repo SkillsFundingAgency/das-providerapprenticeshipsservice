@@ -17,32 +17,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
             _cacheStorageService = cacheStorageService;
             _providerApprenticeshipServiceConfiguration = providerApprenticeshipServiceConfiguration;
         }
-        
+
         public async Task<string> Get(string type, string applicationId)
         {
             var cacheKey = $"{applicationId}_{type}".ToLowerInvariant();
 
-            try
+            if (_cacheStorageService.TryGet(cacheKey, out string cachedContentBanner))
             {
-                if (_cacheStorageService.TryGet(cacheKey, out string cachedContentBanner))
-                {
-                    return cachedContentBanner;
-                }
-
-                var content = await _contentService.Get(type, applicationId);
-
-                if (content != null)
-                {
-                    await _cacheStorageService.Save(cacheKey, content, _providerApprenticeshipServiceConfiguration.DefaultCacheExpirationInMinutes);
-                }
-
-                return content;
+                return cachedContentBanner;
             }
-            catch
+
+            var content = await _contentService.Get(type, applicationId);
+
+            if (content != null)
             {
-                throw new ArgumentException($"Failed to get content for {cacheKey}");
+                await _cacheStorageService.Save(cacheKey, content, _providerApprenticeshipServiceConfiguration.DefaultCacheExpirationInMinutes);
             }
+
+            return content;
         }
     }
 }
-    
