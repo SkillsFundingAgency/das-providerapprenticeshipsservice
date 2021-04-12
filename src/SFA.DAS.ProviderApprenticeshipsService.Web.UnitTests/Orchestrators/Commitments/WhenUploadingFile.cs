@@ -183,7 +183,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             BulkUploadApprenticeshipsCommand commandArgument = null;
             _mockMediator.Setup(x => x.Send(It.IsAny<BulkUploadApprenticeshipsCommand>(), new CancellationToken()))
                 .ReturnsAsync(new Unit())
-                .Callback((IRequest<Unit> x, CancellationToken c) => commandArgument = x as BulkUploadApprenticeshipsCommand);
+                .Callback((IRequest<Unit> x, CancellationToken c) => commandArgument = x.As<BulkUploadApprenticeshipsCommand>());
 
             _mockMediator.Setup(m => m.Send(It.IsAny<GetCommitmentQueryRequest>(), new CancellationToken()))
                 .Returns(Task.FromResult(new GetCommitmentQueryResponse
@@ -231,7 +231,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             BulkUploadApprenticeshipsCommand commandArgument = null;
             _mockMediator.Setup(x => x.Send(It.IsAny<BulkUploadApprenticeshipsCommand>(), new CancellationToken()))
                 .ReturnsAsync(new Unit())
-                .Callback((IRequest<Unit> x, CancellationToken c) => commandArgument = x as BulkUploadApprenticeshipsCommand);
+                .Callback((IRequest<Unit> x, CancellationToken c) => commandArgument = x.As<BulkUploadApprenticeshipsCommand>());
 
             _mockMediator.Setup(m => m.Send(It.IsAny<GetCommitmentQueryRequest>(), new CancellationToken()))
                 .Returns(Task.FromResult(new GetCommitmentQueryResponse
@@ -288,7 +288,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             BulkUploadApprenticeshipsCommand commandArgument = null;
             _mockMediator.Setup(x => x.Send(It.IsAny<BulkUploadApprenticeshipsCommand>(), new CancellationToken()))
                 .ReturnsAsync(new Unit())
-                .Callback((IRequest<Unit> x, CancellationToken c) => commandArgument = x as BulkUploadApprenticeshipsCommand);
+                .Callback((IRequest<Unit> x, CancellationToken c) => commandArgument = x.As<BulkUploadApprenticeshipsCommand>());
 
             _mockMediator.Setup(m => m.Send(It.IsAny<GetCommitmentQueryRequest>(), new CancellationToken()))
                 .Returns(Task.FromResult(new GetCommitmentQueryResponse
