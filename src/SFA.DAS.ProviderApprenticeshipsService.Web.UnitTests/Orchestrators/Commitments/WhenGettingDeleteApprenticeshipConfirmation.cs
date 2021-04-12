@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
-
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetApprenticeship;
@@ -33,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _mockMediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(dummyResponse)
-                .Callback<GetApprenticeshipQueryRequest, CancellationToken>((command, token) => arg = command);
+                .Callback<IRequest<GetApprenticeshipQueryResponse>, CancellationToken>((command, token) => arg = command.As<GetApprenticeshipQueryRequest>());
 
             await _orchestrator.GetDeleteConfirmationModel(123L, "ABBA99", "ABBA66");
 
@@ -54,7 +54,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _mockMediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(dummyResponse)
-                .Callback<GetApprenticeshipQueryRequest, CancellationToken>((command, token) => arg = command);
+                .Callback<IRequest<GetApprenticeshipQueryResponse>, CancellationToken>((command, token) => arg = command.As<GetApprenticeshipQueryRequest>()); ;
 
             var viewModel = await _orchestrator.GetDeleteConfirmationModel(123L, "ABBA99", "ABBA66");
 
@@ -90,7 +90,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _mockMediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(dummyResponse)
-                .Callback<GetApprenticeshipQueryRequest, CancellationToken>((command, token) => arg = command);
+                .Callback<IRequest<GetApprenticeshipQueryResponse>, CancellationToken>((command, token) => arg = command.As<GetApprenticeshipQueryRequest>());
 
             var viewModel = await _orchestrator.GetDeleteConfirmationModel(123L, "ABBA99", "ABBA66");
 
@@ -109,7 +109,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _mockMediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(dummyResponse)
-                .Callback<GetApprenticeshipQueryRequest, CancellationToken>((command, token) => arg = command);
+                .Callback<IRequest<GetApprenticeshipQueryResponse>, CancellationToken>((command, token) => arg = command.As<GetApprenticeshipQueryRequest>());
 
             var viewModel = await _orchestrator.GetDeleteConfirmationModel(123L, "ABBA99", "ABBA66");
 
