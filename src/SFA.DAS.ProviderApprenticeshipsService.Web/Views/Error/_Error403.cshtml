@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Access denied - Error 403";
+    ViewBag.Title = "You do not have permission to access this page";
     ViewBag.PageId = "error-403";
     ViewBag.HideNavBar = true;
 }
@@ -10,25 +10,16 @@
 
             <div class="hgroup">
                 <h1 class="heading-xlarge">
-                    Access denied
+                    You do not have permission to access this page
                 </h1>
             </div>
 
             <div class="inner">
                 <p>
-                    You don’t have permission to access the Apprenticeship Service.
+                    If you think you should have permission to access this page or want to confirm what permissions you have, contact an account owner.
                 </p>
                 <p>
-                    If you want to access the service, you’ll need to contact your organisation’s Information Management Services system (Idams) super user.
-                </p>
-                <h2 class="heading-medium">Help</h2>
-                <p>
-                    You can contact the Apprenticeship Service for advice or help on how to use the service.
-                </p>
-                <h3 class="heading-small">Apprenticeship Service</h3>
-                <p>
-                    Telephone: 0800 015 0600   <a href="https://www.gov.uk/call-charges" target="_blank">Find out about call charges</a>
-
+                    <a href="@Url.Action("Index", "Account")"> Go back to home page </a>
                 </p>
             </div>
         </div>

@@ -5,6 +5,7 @@ using SFA.DAS.Authorization.ProviderPermissions.Options;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
@@ -15,6 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     [Authorize]
     [ProviderUkPrnCheck]
     [RoutePrefix("{providerId}/apprentices")]
+    [RoleAuthorize(Roles = nameof(RoleNames.HasContributorOrAbovePermission))]
     public class CreateCohortController : BaseController
     {
         private readonly CreateCohortOrchestrator _createCohortOrchestrator;

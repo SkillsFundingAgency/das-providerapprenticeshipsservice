@@ -2,6 +2,7 @@
 {
     public static class DasClaimTypes
     {
+        public static readonly string Service = "http://schemas.portal.com/service";
         public static readonly string Upn = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn";
         public static readonly string DisplayName = "http://schemas.portal.com/displayname";
         public static readonly string Name = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";

@@ -2,13 +2,14 @@ using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
-    [DasRoleCheck]
+    [RoleAuthorize(Roles = nameof(RoleNames.DasPermission))]
     public abstract class BaseController : Controller
     {
         private const string FlashMessageCookieName = "sfa-das-employerapprenticeshipsservice-flashmessage";
