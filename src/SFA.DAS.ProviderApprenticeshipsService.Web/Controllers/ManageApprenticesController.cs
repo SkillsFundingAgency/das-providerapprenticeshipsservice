@@ -47,6 +47,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("{hashedApprenticeshipId}/edit", Name = "EditApprovedApprentice")]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasAccountOwnerPermission))]
         [OutputCache(CacheProfile = "NoCache")]
         public async Task<ActionResult> Edit(long providerid, string hashedApprenticeshipId)
         {
@@ -90,6 +91,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedApprenticeshipId}/submit")]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasAccountOwnerPermission))]
         public async Task<ActionResult> SubmitChanges(long providerId, string hashedApprenticeshipId, CreateApprenticeshipUpdateViewModel updateApprenticeship)
         {
             var originalApp = await _orchestrator.GetApprenticeship(providerId, hashedApprenticeshipId);

@@ -10,6 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderRelationships.Types.Models;
 
@@ -21,6 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
         private AccountOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ICurrentDateTime> _currentDateTime;
+        private Mock<IFeatureToggleService> _featureToggleService;
 
         [SetUp]
         public void Arrange()
@@ -45,9 +47,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
 
             _currentDateTime = new Mock<ICurrentDateTime>();
 
+            _featureToggleService = new Mock<IFeatureToggleService>();
+            
             _orchestrator = new AccountOrchestrator(
                 _mediator.Object,
-                Mock.Of<ILog>()
+                Mock.Of<ILog>(),
+                _featureToggleService.Object
             );
         }
 
@@ -59,6 +64,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
             var model = await _orchestrator.GetAccountHomeViewModel(1);
 
             model.ShowAcademicYearBanner.Should().Be(expectShowBanner);
+            model.ShowEmployerDemandLink.Should().BeFalse();
+        }
+
+        [Test]
+        public async Task Then_If_EmployerDemand_Feature_Enabled_Then_Model_Value_Set_To_True()
+        {
+            _featureToggleService.Setup(x => x.Get<EmployerDemand>().FeatureEnabled).Returns(true);
+
+            var model = await _orchestrator.GetAccountHomeViewModel(1);
+
+            model.ShowEmployerDemandLink.Should().BeTrue();
         }
     }
 }
