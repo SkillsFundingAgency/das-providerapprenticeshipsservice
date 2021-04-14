@@ -13,7 +13,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
         {
             filters.Add(new InvalidStateExceptionFilter());
             filters.Add(new ProviderUkPrnCheckActionFilter());
-            filters.Add(new DasRoleCheckActionFilter());
             filters.Add(new RequestIdActionFilter());
             filters.Add(new SessionIdActionFilter(HttpContext.Current));
             filters.AddAuthorizationFilter();
