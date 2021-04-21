@@ -74,6 +74,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [Route("datalock/confirm")]
         [OutputCache(CacheProfile = "NoCache")]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasAccountOwnerPermission))]
         public async Task<ActionResult> ConfirmDataLockChangesPost(DataLockMismatchViewModel model)
         {
             if (!ModelState.IsValid)
@@ -101,6 +102,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Route("requestrestart")]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasAccountOwnerPermission))]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RequestRestart(DataLockMismatchViewModel model)
         {
@@ -140,6 +142,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpPost]
         [Route("ConfirmRestart")]
         [OutputCache(CacheProfile = "NoCache")]
+        [RoleAuthorize(Roles = nameof(RoleNames.HasAccountOwnerPermission))]
         public async Task<ActionResult> ConfirmRestartPost(ConfirmRestartViewModel model)
         {
             if (!ModelState.IsValid)
