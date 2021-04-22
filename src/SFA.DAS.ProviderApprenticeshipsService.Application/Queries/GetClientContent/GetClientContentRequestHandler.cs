@@ -10,19 +10,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientCo
 {
     public class GetClientContentRequestHandler : IRequestHandler<GetClientContentRequest, GetClientContentResponse>
     {           
-        private readonly IClientContentService _service;
-        private readonly ICacheStorageService _cacheStorageService;
+        private readonly IContentApiClient _contentApiClient;
         private readonly ILog _logger;
         private readonly ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
 
         public GetClientContentRequestHandler(         
            ILog logger,
-           IClientContentService service,
-           ICacheStorageService cacheStorageService,
+           IContentApiClient contentApiClient,
            ProviderApprenticeshipsServiceConfiguration providerApprenticeshipsServiceConfiguration)
         {   _logger = logger;
-            _service = service;
-            _cacheStorageService = cacheStorageService;
+            _contentApiClient = contentApiClient;
             _providerApprenticeshipsServiceConfiguration = providerApprenticeshipsServiceConfiguration;
         }
 
@@ -32,21 +29,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientCo
             var cacheKey = $"{applicationId}_{request.ContentType}".ToLowerInvariant();
 
             try
-            {              
-                if (_cacheStorageService.TryGet(cacheKey, out string cachedContentBanner))
-                {
-                    return new GetClientContentResponse
-                    {
-                        Content = cachedContentBanner
-                    };
-                }
-
-                var contentBanner = await _service.Get(request.ContentType, applicationId);
-
-                if (contentBanner != null)
-                {
-                    await _cacheStorageService.Save(cacheKey, contentBanner, 1);
-                }
+            {     
+                var contentBanner = await _contentApiClient.Get(request.ContentType, applicationId);
                 return new GetClientContentResponse
                 {
                     Content = contentBanner

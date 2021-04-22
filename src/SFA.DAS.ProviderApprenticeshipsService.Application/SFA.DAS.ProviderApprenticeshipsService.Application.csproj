@@ -506,8 +506,8 @@
     <Compile Include="Queries\GetUser\GetUserQuery.cs" />
     <Compile Include="Queries\GetUser\GetUserResponse.cs" />
     <Compile Include="Services\CacheStorageService.cs" />
-    <Compile Include="Services\ClientContentApiClient.cs" />
-    <Compile Include="Services\ClientContentService.cs" />
+    <Compile Include="Services\ContentApiClientWithCaching.cs" />
+    <Compile Include="Services\ContentApiClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

@@ -1,21 +1,20 @@
-﻿using NUnit.Framework;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientContent;
-using Moq;
-using System.Threading.Tasks;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+﻿using System;
 using System.Threading;
-using SFA.DAS.Testing.AutoFixture;
+using System.Threading.Tasks;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.NLog.Logger;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientContent;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.GetClientContent
 {
     public class WhenIGetContentBanner
     {
         private GetClientContentRequestHandler _handler;
-        private GetClientContentRequest _request;        
-        public Mock<ICacheStorageService> MockCacheStorageService;
-        private Mock<IClientContentService> _contentBannerService;
+        private GetClientContentRequest _request;
+        private Mock<IContentApiClient> _contentApiClientMock;
         private string _contentType;
         private string _clientId;
         private Mock<ILog> _logger;
@@ -31,13 +30,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
                 DefaultCacheExpirationInMinutes = 1
             };
             ContentBanner = "<p>find out how you can pause your apprenticeships<p>";
-            MockCacheStorageService = new Mock<ICacheStorageService>();
             _contentType = "banner";
             _clientId = "das-providerapprenticeshipsservice-web";
             _logger = new Mock<ILog>();
-            _contentBannerService = new Mock<IClientContentService>();
-            _contentBannerService
-                .Setup(cbs => cbs.Get(_contentType, _clientId))
+            _contentApiClientMock = new Mock<IContentApiClient>();
+            _contentApiClientMock
+                .Setup(mock => mock.Get(_contentType, _clientId))
                 .ReturnsAsync(ContentBanner);
 
             _request = new GetClientContentRequest
@@ -45,8 +43,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
                 ContentType = "banner"
             };
 
-            _handler = new GetClientContentRequestHandler( _logger.Object,
-                _contentBannerService.Object, MockCacheStorageService.Object, ProviderApprenticeshipsServiceConfiguration);
+            _handler = new GetClientContentRequestHandler( _logger.Object, _contentApiClientMock.Object, ProviderApprenticeshipsServiceConfiguration);
         }
 
 
@@ -57,7 +54,32 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             await _handler.Handle(_request, new CancellationToken());
 
             //Assert
-            _contentBannerService.Verify(x => x.Get(_contentType, _clientId), Times.Once);
+            _contentApiClientMock.Verify(x => x.Get(_contentType, _clientId), Times.Once);
+        }
+
+
+        [Test]
+        public async Task ThenIfShouldUseLegacyStyles_ShouldFetchCorrectContent()
+        {
+            //Arrange
+            _request.UseLegacyStyles = true; 
+
+
+            //Act
+            await _handler.Handle(_request, new CancellationToken());
+
+            //Assert
+            _contentApiClientMock.Verify(x => x.Get(_contentType, _clientId + "-legacy"), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenIfTheMessageIsValidTheValueIsReturnedThenResponseIsSuccess()
+        {
+            //Act
+            var response = await _handler.Handle(_request, new CancellationToken());
+
+            //Assert
+            Assert.False(response.HasFailed);
         }
 
         [Test]
@@ -70,67 +92,36 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             Assert.AreEqual(ContentBanner, response.Content);
         }
 
-        [Test, RecursiveMoqAutoData]
-        public async Task Check_Cache_ReturnIfExists(GetClientContentRequest query, 
-            string contentBanner,
-            Mock<ICacheStorageService> cacheStorageService,
-            GetClientContentRequestHandler requestHandler,            
-            Mock<ILog> logger,
-            Mock<IClientContentService> clientMockontentService)
-        {
-            //Arrange            
-            query.ContentType = "Banner";
-            query.UseLegacyStyles = false;
-
-            var key = ProviderApprenticeshipsServiceConfiguration.ContentApplicationId;
-
-            clientMockontentService.Setup(c => c.Get("banner", key));
-
-            requestHandler = new GetClientContentRequestHandler(logger.Object, clientMockontentService.Object,
-                cacheStorageService.Object, ProviderApprenticeshipsServiceConfiguration);
-
-            var cacheKey = key + "_banner";
-            cacheStorageService.Setup(c => c.TryGet(cacheKey, out contentBanner))
-                .Returns(true);
-            
-            //Act
-            var result = await requestHandler.Handle(query, new CancellationToken());
-
-            //assert
-            Assert.AreEqual(result.Content, contentBanner);
-            cacheStorageService.Verify(x => x.TryGet(cacheKey, out contentBanner), Times.Once);
-        }
-
-        [Test, RecursiveMoqAutoData]
-        public async Task Check_Cache_ReturnNull_CallFromClient(GetClientContentRequest query, 
-            string contentBanner,
-            Mock<ICacheStorageService> cacheStorageService,
-            GetClientContentRequestHandler requestHandler,            
-            Mock<ILog> logger,
-            Mock<IClientContentService> clientMockContentService)
+        [Test]
+        public async Task ThenContentApiThrows_ShouldLogError()
         {
             //Arrange
-            var key = ProviderApprenticeshipsServiceConfiguration.ContentApplicationId;
-            query.ContentType = "Banner";
-            query.UseLegacyStyles = false;
+            _contentApiClientMock
+                .Setup(mock => mock.Get(_contentType, _clientId))
+                .Throws(new Exception("Error"));
 
-            string nullCacheString = null;
-            var cacheKey = key + "_banner";
-            cacheStorageService.Setup(c => c.TryGet(cacheKey, out nullCacheString))
-                .Returns(false);
-
-            clientMockContentService.Setup(c => c.Get(query.ContentType, key))
-                .ReturnsAsync(contentBanner);
-
-            requestHandler = new GetClientContentRequestHandler(logger.Object, clientMockContentService.Object,
-                cacheStorageService.Object, ProviderApprenticeshipsServiceConfiguration);
 
             //Act
-            var result = await requestHandler.Handle(query, new CancellationToken());
+            await _handler.Handle(_request, new CancellationToken());
 
-            //assert
-            Assert.AreEqual(result.Content, contentBanner);
+            //Assert
+            _logger.Verify(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>()), Times.Once);
         }
 
+        [Test]
+        public async Task ThenContentApiThrows_ShouldReturnHasFailed()
+        {
+            //Arrange
+            _contentApiClientMock
+                .Setup(mock => mock.Get(_contentType, _clientId))
+                .Throws(new Exception("Error"));
+
+
+            //Act
+            var response = await _handler.Handle(_request, new CancellationToken());
+
+            //Assert
+            Assert.IsTrue(response.HasFailed);
+        }
     }
 }

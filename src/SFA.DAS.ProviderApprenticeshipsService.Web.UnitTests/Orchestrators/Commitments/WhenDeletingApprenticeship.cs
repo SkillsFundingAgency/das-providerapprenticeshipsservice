@@ -29,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
 
             _mockMediator.Setup(x => x.Send(It.IsAny<DeleteApprenticeshipCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new Unit())
-                .Callback<DeleteApprenticeshipCommand, CancellationToken>((command, token) => arg = command);
+                .Callback<IRequest<Unit>, CancellationToken>((command, token) => arg = command.As<DeleteApprenticeshipCommand>());
 
             _mockMediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipQueryRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetApprenticeshipQueryResponse { Apprenticeship = new Apprenticeship() });
