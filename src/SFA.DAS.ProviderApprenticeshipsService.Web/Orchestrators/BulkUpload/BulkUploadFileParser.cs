@@ -84,7 +84,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 EndDate = new DateTimeViewModel(learnerEndDate),
                 ProgType = record.ProgType.TryParse(),
                 CourseCode = courseCode,
-                IsPaidForByTransfer = commitment.IsTransfer()
+                IsPaidForByTransfer = commitment.IsTransfer(),
+                AccountId = commitment.EmployerAccountId,
+                LegalEntityId = long.Parse(commitment.LegalEntityId)
             };
             return new ApprenticeshipUploadModel
             {

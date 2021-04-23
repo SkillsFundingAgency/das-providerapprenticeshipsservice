@@ -275,6 +275,8 @@
     <Compile Include="Models\ApprenticeshipProvider\ProvidersView.cs" />
     <Compile Include="Models\Apprenticeship\RecordStatus.cs" />
     <Compile Include="Models\ApprenticeshipCourse\StandardsView.cs" />
+    <Compile Include="Toremove\BulkValidationResult.cs" />
+    <Compile Include="Toremove\Reservation.cs" />
     <Compile Include="Training.cs" />
     <Compile Include="TrainingType.cs" />
     <Compile Include="Models\UserProfile\User.cs" />

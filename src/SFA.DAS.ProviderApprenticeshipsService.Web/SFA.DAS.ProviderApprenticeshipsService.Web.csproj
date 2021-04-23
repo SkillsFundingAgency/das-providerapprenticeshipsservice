@@ -688,6 +688,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\HtmlExtensions.cs" />
+    <Compile Include="LocalDev\ReservationRegistry2.cs" />
     <Compile Include="Models\AcknowledgementViewModel.cs" />
     <Compile Include="Models\Agreement\AgreementsViewModel.cs" />
     <Compile Include="Models\Agreement\CommitmentAgreement.cs" />

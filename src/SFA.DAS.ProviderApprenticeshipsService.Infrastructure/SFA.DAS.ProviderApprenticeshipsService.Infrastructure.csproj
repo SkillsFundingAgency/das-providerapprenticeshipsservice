@@ -448,6 +448,7 @@
     <Compile Include="Services\PublicHashingService.cs" />
     <Compile Include="Services\ReservationsService.cs" />
     <Compile Include="Services\StubProviderRelationshipsClient.cs" />
+    <Compile Include="ToRemove\ReservationApiClient2.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj">

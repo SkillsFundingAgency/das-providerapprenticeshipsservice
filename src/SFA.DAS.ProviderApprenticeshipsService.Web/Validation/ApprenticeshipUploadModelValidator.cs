@@ -11,6 +11,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.Learners.Validators;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 {
@@ -20,15 +22,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IUlnValidator _ulnValidator;
         private readonly IAcademicYearDateProvider _academicYearDateProvider;
-
+        private readonly IReservationsService _reservationService;
         private static readonly Func<string, IEnumerable<string>, bool> InList = (v, l) => string.IsNullOrWhiteSpace(v) || l.Contains(v);
 
-        public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime, IUlnValidator ulnValidator, IAcademicYearDateProvider academicYearDateProvider)
+        public ApprenticeshipUploadModelValidator(IApprenticeshipValidationErrorText validationText, ICurrentDateTime currentDateTime, IUlnValidator ulnValidator, IAcademicYearDateProvider academicYearDateProvider, IReservationsService reservationsService)
         {
             _validationText = validationText;
             _currentDateTime = currentDateTime;
             _ulnValidator = ulnValidator;
             _academicYearDateProvider = academicYearDateProvider;
+            _reservationService = reservationsService;
         }
 
         public ValidationResult Validate(ApprenticeshipUploadModel model)
@@ -46,7 +49,35 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             ValidateField(validationResult, ValidateFworkCode, model);
             ValidateField(validationResult, ValidatePwayCode, model);
             ValidateField(validationResult, ValidateStdCode, model);
+
+            //var validationFailure = ValidateReservation(model).Result;
+            //if (validationFailure != null && validationFailure.Count > 0)
+            //{
+            //    validationFailure.ForEach(x => validationResult.Errors.Add(x));
+            //}
+
             return validationResult;
+        }
+
+        private async Task<List<ValidationFailure>> ValidateReservation(ApprenticeshipUploadModel arg)
+        {
+            var reservation = new Reservations.Api.Models.Reservation
+            {
+                StartDate = arg.ApprenticeshipViewModel.StartDate.DateTime.Value,
+                CourseId = arg.ApprenticeshipViewModel.CourseCode,
+                AccountId = arg.ApprenticeshipViewModel.AccountId,
+                ProviderId = (uint?)arg.ApprenticeshipViewModel.ProviderId,
+                AccountLegalEntityId = arg.ApprenticeshipViewModel.LegalEntityId
+            };
+            var results = await _reservationService.GetReservationErrors(reservation);
+
+            List<ValidationFailure> validationResuls = new List<ValidationFailure>();
+            foreach (var result in results.ValidationErrors)
+            {
+                validationResuls.Add(new ValidationFailure("StartDate", result.Reason));
+            }
+
+            return validationResuls;
         }
 
         private ValidationFailure ValidateFirstName(ApprenticeshipUploadModel model)
@@ -309,6 +340,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 validationResult.Errors.Add(validationFailure);
             }
         }
+
+        //private void ValidateField(ValidationResult validationResult, Func<ApprenticeshipUploadModel, List<ValidationFailure>> validationFunc, ApprenticeshipUploadModel model)
+        //{
+        //    var validationFailure = validationFunc(model);
+        //    if (validationFailure != null && validationFailure.Count > 0)
+        //    {
+        //        validationFailure.ForEach(x => validationResult.Errors.Add(x));
+        //    }
+        //}
 
         private ValidationFailure CreateValidationFailure(string propertyName, ValidationMessage validationMessage)
         {
