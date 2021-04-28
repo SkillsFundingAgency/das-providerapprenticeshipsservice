@@ -293,8 +293,8 @@
                                     <td>
                                         @if (Model.IsReadOnly)
                                         {
-                                            <a href="@Url.Action("View", new {Model.HashedCommitmentId, apprenticeship.HashedApprenticeshipId})"
-                                               title="View @apprenticeship.ApprenticeshipName" aria-label="View @apprenticeship.ApprenticeshipName">View</a>
+                                            <a  href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved/{Model.HashedCommitmentId}/apprentices/{apprenticeship.HashedApprenticeshipId}")"
+                                                title="View @apprenticeship.ApprenticeshipName" aria-label="View @apprenticeship.ApprenticeshipName">View</a>
                                         }
                                         else
                                         {
