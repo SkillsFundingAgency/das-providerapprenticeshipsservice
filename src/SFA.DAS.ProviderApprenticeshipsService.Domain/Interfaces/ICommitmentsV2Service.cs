@@ -4,8 +4,8 @@ using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
-    public interface IProviderCommitmentsApiV2Client
+    public interface ICommitmentsV2Service
     {
-        Task<GetCohortResponse> GetCohort(long cohortId, CancellationToken cancellationToken = default);
+        Task<bool> CohortIsCompleteForProvider(long cohortId);
     }
 }

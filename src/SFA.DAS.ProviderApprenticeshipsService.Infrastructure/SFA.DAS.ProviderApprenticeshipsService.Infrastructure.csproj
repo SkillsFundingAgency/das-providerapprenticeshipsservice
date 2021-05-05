@@ -453,7 +453,7 @@
     <Compile Include="Services\IPublicHashingService.cs" />
     <Compile Include="Services\PublicHashingService.cs" />
     <Compile Include="Services\ReservationsService.cs" />
-    <Compile Include="Services\ProviderCommitmentsApiV2Client.cs" />
+    <Compile Include="Services\CommitmentsV2ApiClient.cs" />
     <Compile Include="Services\StubProviderRelationshipsClient.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -32,6 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         protected Mock<IHashingService> _mockHashingService = new Mock<IHashingService>();
         protected Mock<IApprenticeshipCoreValidator> _mockApprenticeshipCoreValidator = new Mock<IApprenticeshipCoreValidator>();
         protected Mock<IApprenticeshipMapper> _mockMapper = new Mock<IApprenticeshipMapper>();
+        protected Mock<ICommitmentsV2Service> _mockCommitmentsV2Service;
 
         private Mock<ApprenticeshipViewModelUniqueUlnValidator> _ulnValidator;
         private Mock<IEncodingService> _mockEncodingService;
@@ -54,6 +55,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                 .Returns((long valueToHash, EncodingType encodingType) => $"X{valueToHash}X");
 
             _mockReservationsService = new Mock<IReservationsService>();
+            _mockCommitmentsV2Service = new Mock<ICommitmentsV2Service>();
 
             SetUpOrchestrator();
         }
@@ -69,7 +71,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                        _mockApprenticeshipCoreValidator.Object,
                        _mockMapper.Object,
                        _mockEncodingService.Object,
-                       _mockReservationsService.Object
+                       _mockReservationsService.Object,
+                       _mockCommitmentsV2Service.Object
                        );
         }
 

@@ -7,7 +7,9 @@ using SFA.DAS.Http;
 using SFA.DAS.Http.Configuration;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.NLog.Logger.Web.MessageHandlers;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using StructureMap;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
@@ -29,16 +31,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 .Ctor<HttpClient>().Is(c => GetHttpClient(c));
 
             For<ProviderCommitmentsConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<ProviderCommitmentsConfiguration>("SFA.DAS.ProviderCommitments")).Singleton();
+            For<CommitmentsApiClientV2Configuration>().Use(c => c.GetInstance<ProviderCommitmentsConfiguration>().CommitmentsClientApi);
 
-            //For<IProviderCommitmentsApi>().Use<ProviderCommitmentsApi>()
-            //    .Ctor<HttpClient>().Is(c => GetHttpClient(c));
+            For<ICommitmentsV2ApiClient>().Use<CommitmentsV2ApiClient>()
+                .Ctor<HttpClient>().Is(c => GetHttpV2Client(c));
 
         }
 
         private HttpClient GetHttpClient(IContext context)
         {
             var config = context.GetInstance<CommitmentsApiClientConfiguration>();
-            var config2 = context.GetInstance<ProviderCommitmentsConfiguration>();
 
             var httpClientBuilder = string.IsNullOrWhiteSpace(config.ClientId)
                 ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config as IJwtClientConfiguration))
@@ -63,10 +65,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 .WithHandler(new SessionIdMessageRequestHandler())
                 .Build();
         }
-    }
-
-    public interface IProviderCommitmentsV2Api
-    {
-
     }
 }

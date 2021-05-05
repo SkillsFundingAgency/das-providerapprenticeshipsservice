@@ -238,10 +238,11 @@
     <Compile Include="Configuration\AccountApiConfiguration.cs" />
     <Compile Include="Interfaces\IBackgroundNotificationService.cs" />
     <Compile Include="Interfaces\ICacheStorageService.cs" />
+    <Compile Include="Interfaces\ICommitmentsV2Service.cs" />
     <Compile Include="Interfaces\IContentApiClient.cs" />
     <Compile Include="Interfaces\IContentClientApiConfiguration.cs" />
     <Compile Include="Interfaces\IEmployerAccountService.cs" />
-    <Compile Include="Interfaces\IProviderCommitmentsApiV2Client.cs" />
+    <Compile Include="Interfaces\ICommitmentsV2ApiClient.cs" />
     <Compile Include="Interfaces\IProviderRepository.cs" />
     <Compile Include="Interfaces\IProviderAgreementStatusConfiguration.cs" />
     <Compile Include="Interfaces\IReservationsService.cs" />

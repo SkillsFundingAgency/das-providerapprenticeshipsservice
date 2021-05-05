@@ -38,8 +38,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             base.SetUp();
         }
 
-        [Test(Description = "Should return NotReadyForApproval if the commitment is marked as not ready")]
-        public void ShouldReturnNotReadyForApprovalWhenCommitmentNotReady()
+        [TestCase(false, Description = "Should return NOT ReadyForApproval if the Cohort Is NOT Complete For Provider")]
+        [TestCase(false, Description = "Should return ReadyForApproval if the Cohort Is Complete For Provider")]
+        public void ShouldReturnExpectedReadyForApprovalStateAccordingToCohortState(bool isCompleteForProvider)
         {
             _testCommitment.Apprenticeships = new List<Apprenticeship>
                 {
@@ -50,10 +51,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mockMediator = GetMediator(_testCommitment);
             _mockMediator.Setup(m => m.Send(It.IsAny<GetProviderAgreementQueryRequest>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(new GetProviderAgreementQueryResponse { HasAgreement = ProviderAgreementStatus.Agreed }));
+
+            _mockCommitmentsV2Service.Setup(x => x.CohortIsCompleteForProvider(It.IsAny<long>()))
+                .ReturnsAsync(isCompleteForProvider);
             SetUpOrchestrator();
             var result = _orchestrator.GetFinishEditing(1L, "ABBA123").Result;
 
-            result.ReadyForApproval.Should().BeFalse();
+            result.ReadyForApproval.Should().Be(isCompleteForProvider);
         }
 
         [Test(Description = "Should return ApproveAndSend if at least one apprenticeship is ProviderAgreed")]
