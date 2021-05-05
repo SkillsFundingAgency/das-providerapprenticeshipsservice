@@ -41,6 +41,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string IdentifierUri { get; }
     }
 
+    public class ProviderCommitmentsConfiguration
+    {
+        public CommitmentsApiClientV2Configuration CommitmentsClientApi { get; set; }
+    }
+
+    public class CommitmentsApiClientV2Configuration : IAzureActiveDirectoryClientConfiguration
+    {
+        public string ApiBaseUrl { get; set; }
+        public string Tenant { get; set; }
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
+        public string IdentifierUri { get; set; }
+    }
 
     public class ProviderNotificationConfiguration : IJwtClientConfiguration
     {

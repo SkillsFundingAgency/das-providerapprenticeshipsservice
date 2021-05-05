@@ -27,11 +27,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             For<IValidationApi>().Use<ValidationApi>()
                 .Ctor<HttpClient>().Is(c => GetHttpClient(c));
+
+            For<ProviderCommitmentsConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<ProviderCommitmentsConfiguration>("SFA.DAS.ProviderCommitments")).Singleton();
+
+            //For<IProviderCommitmentsApi>().Use<ProviderCommitmentsApi>()
+            //    .Ctor<HttpClient>().Is(c => GetHttpClient(c));
+
         }
 
         private HttpClient GetHttpClient(IContext context)
         {
             var config = context.GetInstance<CommitmentsApiClientConfiguration>();
+            var config2 = context.GetInstance<ProviderCommitmentsConfiguration>();
 
             var httpClientBuilder = string.IsNullOrWhiteSpace(config.ClientId)
                 ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config as IJwtClientConfiguration))
@@ -43,5 +50,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 .WithHandler(new SessionIdMessageRequestHandler())
                 .Build();
         }
+
+        private HttpClient GetHttpV2Client(IContext context)
+        {
+            var config = context.GetInstance<ProviderCommitmentsConfiguration>().CommitmentsClientApi;
+
+            var httpClientBuilder = new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config));
+
+            return httpClientBuilder
+                .WithDefaultHeaders()
+                .WithHandler(new RequestIdMessageRequestHandler())
+                .WithHandler(new SessionIdMessageRequestHandler())
+                .Build();
+        }
+    }
+
+    public interface IProviderCommitmentsV2Api
+    {
+
     }
 }

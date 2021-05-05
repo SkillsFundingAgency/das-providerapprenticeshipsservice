@@ -160,6 +160,12 @@
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.6.1.0\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.CommitmentsV2.Api.Types, Version=7.23.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.CommitmentsV2.Api.Types.7.23.0\lib\netstandard2.0\SFA.DAS.CommitmentsV2.Api.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.CommitmentsV2.Types, Version=7.23.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.CommitmentsV2.Types.7.23.0\lib\netstandard2.0\SFA.DAS.CommitmentsV2.Types.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Common.Domain, Version=1.4.272.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.272\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
     </Reference>
@@ -447,6 +453,7 @@
     <Compile Include="Services\IPublicHashingService.cs" />
     <Compile Include="Services\PublicHashingService.cs" />
     <Compile Include="Services\ReservationsService.cs" />
+    <Compile Include="Services\ProviderCommitmentsApiV2Client.cs" />
     <Compile Include="Services\StubProviderRelationshipsClient.cs" />
   </ItemGroup>
   <ItemGroup>
