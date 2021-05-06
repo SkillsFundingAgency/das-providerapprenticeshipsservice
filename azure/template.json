@@ -45,7 +45,7 @@
         },
         "aspSku": {
             "type": "string",
-            "defaultValue": "Basic"
+            "defaultValue": "Standard"
         },
         "configurationStorageConnectionString": {
             "type": "securestring"
