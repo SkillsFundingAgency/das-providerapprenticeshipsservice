@@ -19,9 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         public CommitmentsRegistry()
         {
             For<CommitmentsApiClientConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<CommitmentsApiClientConfiguration>(ConfigurationKeys.CommitmentsApiClient)).Singleton();
-            For<ICommitmentsApiClientConfiguration>().Use(c => c.GetInstance<CommitmentsApiClientConfiguration>());
-
-            For<ITrainingProgrammeApi>().Use<TrainingProgrammeApi>()
+            For<ICommitmentsApiClientConfiguration>().Use(c => c.GetInstance<CommitmentsApiClientConfiguration>());For<ITrainingProgrammeApi>().Use<TrainingProgrammeApi>()
                 .Ctor<HttpClient>().Is(c => GetHttpClient(c));
             
             For<IProviderCommitmentsApi>().Use<ProviderCommitmentsApi>()
@@ -30,12 +28,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IValidationApi>().Use<ValidationApi>()
                 .Ctor<HttpClient>().Is(c => GetHttpClient(c));
 
-            For<ProviderCommitmentsConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<ProviderCommitmentsConfiguration>("SFA.DAS.ProviderCommitments")).Singleton();
-            For<CommitmentsApiClientV2Configuration>().Use(c => c.GetInstance<ProviderCommitmentsConfiguration>().CommitmentsClientApi);
+            For<PasForCommitmentsV2Configuration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<PasForCommitmentsV2Configuration>("SFA.DAS.ProviderApprenticeshipsService")).Singleton();
+            For<CommitmentsApiClientV2Configuration>().Use(c => c.GetInstance<PasForCommitmentsV2Configuration>().CommitmentsApiClientV2);
 
             For<ICommitmentsV2ApiClient>().Use<CommitmentsV2ApiClient>()
                 .Ctor<HttpClient>().Is(c => GetHttpV2Client(c));
-
         }
 
         private HttpClient GetHttpClient(IContext context)
@@ -55,7 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
         private HttpClient GetHttpV2Client(IContext context)
         {
-            var config = context.GetInstance<ProviderCommitmentsConfiguration>().CommitmentsClientApi;
+            var config = context.GetInstance<CommitmentsApiClientV2Configuration>();
 
             var httpClientBuilder = new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config));
 
