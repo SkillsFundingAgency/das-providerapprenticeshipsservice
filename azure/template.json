@@ -8,14 +8,32 @@
         "environmentName": {
             "type": "string"
         },
-        "sharedFrontendAppServicePlanName": {
+        "sharedFrontEndAppServicePlanName": {
+            "type": "string"
+        },
+        "sharedFrontEndSubnetResourceId": {
             "type": "string"
         },
         "sharedBackEndAppServicePlanName": {
             "type": "string"
         },
-        "sharedResourceGroupName": {
+        "sharedBackEndSubnetResourceId": {
             "type": "string"
+        },
+        "sharedEnvResourceGroup": {
+            "type": "string"
+        },
+        "sharedEnvVirtualNetworkName": {
+            "type": "string"
+        },
+        "workerSubnetObject": {
+            "type": "object"
+        },
+        "subnetServiceEndpointList": {
+            "type": "array"
+        },
+        "subnetDelegations": {
+            "type": "array"
         },
         "aspSize": {
             "type": "string",
@@ -27,7 +45,7 @@
         },
         "aspSku": {
             "type": "string",
-            "defaultValue": "Basic"
+            "defaultValue": "Standard"
         },
         "configurationStorageConnectionString": {
             "type": "securestring"
@@ -48,9 +66,10 @@
             "type": "string"
         },
         "appServiceAllowedIPs": {
-            "type": "array",
-            "defaultValue": [
-            ]
+            "type": "array"
+        },
+        "workerAccessRestrictions": {
+            "type": "array"
         },
         "logLevel": {
             "type": "string"
@@ -137,7 +156,7 @@
     },
     "resources": [
         {
-            "apiVersion": "2020-06-01",
+            "apiVersion": "2020-10-01",
             "name": "[variables('resourceGroupName')]",
             "type": "Microsoft.Resources/resourceGroups",
             "location": "[parameters('resourceGroupLocation')]",
@@ -146,7 +165,7 @@
             }
         },
         {
-            "apiVersion": "2020-06-01",
+            "apiVersion": "2020-10-01",
             "name": "api-app-insights",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('resourceGroupName')]",
@@ -170,9 +189,9 @@
         },
         {
             "condition": "[greater(length(parameters('apiCustomHostName')), 0)]",
-            "apiVersion": "2020-06-01",
+            "apiVersion": "2020-10-01",
             "name": "api-app-service-certificate",
-            "resourceGroup": "[parameters('sharedResourceGroupName')]",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -194,7 +213,7 @@
             }
         },
         {
-            "apiVersion": "2020-06-01",
+            "apiVersion": "2020-10-01",
             "name": "api-app-service",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('resourceGroupName')]",
@@ -212,7 +231,10 @@
                         "value": "[parameters('sharedBackEndAppServicePlanName')]"
                     },
                     "appServicePlanResourceGroup": {
-                        "value": "[parameters('sharedResourceGroupName')]"
+                        "value": "[parameters('sharedEnvResourceGroup')]"
+                    },
+                    "subnetResourceId": {
+                        "value": "[parameters('sharedBackEndSubnetResourceId')]"
                     },
                     "appServiceAppSettings": {
                         "value": {
@@ -267,7 +289,7 @@
             ]
         },
         {
-            "apiVersion": "2020-06-01",
+            "apiVersion": "2020-10-01",
             "name": "ui-app-insights",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('resourceGroupName')]",
@@ -291,9 +313,9 @@
         },
         {
             "condition": "[greater(length(parameters('uiCustomHostName')), 0)]",
-            "apiVersion": "2017-06-01",
+            "apiVersion": "2020-10-01",
             "name": "ui-app-service-certificate",
-            "resourceGroup": "[parameters('sharedResourceGroupName')]",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -315,7 +337,7 @@
             }
         },
         {
-            "apiVersion": "2020-06-01",
+            "apiVersion": "2020-10-01",
             "name": "ui-app-service",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('resourceGroupName')]",
@@ -330,10 +352,13 @@
                         "value": "[variables('uiAppServiceName')]"
                     },
                     "appServicePlanName": {
-                        "value": "[parameters('sharedFrontendAppServicePlanName')]"
+                        "value": "[parameters('sharedFrontEndAppServicePlanName')]"
                     },
                     "appServicePlanResourceGroup": {
-                        "value": "[parameters('sharedResourceGroupName')]"
+                        "value": "[parameters('sharedEnvResourceGroup')]"
+                    },
+                    "subnetResourceId": {
+                        "value": "[parameters('sharedFrontEndSubnetResourceId')]"
                     },
                     "appServiceAppSettings": {
                         "value": {
@@ -424,7 +449,7 @@
             ]
         },
         {
-            "apiVersion": "2020-06-01",
+            "apiVersion": "2020-10-01",
             "name": "worker-app-service-plan",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('resourceGroupName')]",
@@ -451,7 +476,37 @@
             }
         },
         {
-            "apiVersion": "2020-06-01",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "worker-app-service-subnet",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'subnet.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "virtualNetworkName": {
+                        "value": "[parameters('sharedEnvVirtualNetworkName')]"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('workerSubnetObject').name]"
+                    },
+                    "subnetAddressPrefix": {
+                        "value": "[parameters('workerSubnetObject').addressSpace]"
+                    },
+                    "serviceEndpointList": {
+                        "value": "[parameters('subnetServiceEndpointList')]"
+                    },
+                    "delegations": {
+                        "value": "[parameters('subnetDelegations')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2020-10-01",
             "name": "worker-app-insights",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('resourceGroupName')]",
@@ -474,7 +529,7 @@
             ]
         },
         {
-            "apiVersion": "2020-06-01",
+            "apiVersion": "2020-10-01",
             "name": "worker-app-service",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('resourceGroupName')]",
@@ -493,6 +548,9 @@
                     },
                     "appServicePlanResourceGroup": {
                         "value": "[variables('resourceGroupName')]"
+                    },
+                    "subnetResourceId": {
+                        "value": "[reference('worker-app-service-subnet').outputs.subnetResourceId.value]"
                     },
                     "deployStagingSlot": {
                         "value": false
@@ -518,6 +576,9 @@
                                 }
                             ]
                         }
+                    },
+                    "ipSecurityRestrictions": {
+                        "value": "[parameters('workerAccessRestrictions')]"
                     }
                 }
             },
@@ -527,10 +588,10 @@
             ]
         },
         {
-            "apiVersion": "2020-06-01",
+            "apiVersion": "2020-10-01",
             "name": "pas-sql-database",
             "type": "Microsoft.Resources/deployments",
-            "resourceGroup": "[parameters('sharedResourceGroupName')]",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
