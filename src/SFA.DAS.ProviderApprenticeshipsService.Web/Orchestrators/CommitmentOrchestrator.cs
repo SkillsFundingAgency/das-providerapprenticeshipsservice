@@ -40,6 +40,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly ApprenticeshipViewModelUniqueUlnValidator _uniqueUlnValidator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
         private readonly IReservationsService _reservationsService;
+        private readonly ICommitmentsV2Service _commitmentsV2Service;
 
         private readonly Func<int, string> _addSSuffix = i => i > 1 ? "s" : "";
 
@@ -50,7 +51,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             IApprenticeshipCoreValidator apprenticeshipCoreValidator,
             IApprenticeshipMapper apprenticeshipMapper,
             IEncodingService encodingService,
-            IReservationsService reservationsService)
+            IReservationsService reservationsService,
+            ICommitmentsV2Service commitmentsV2Service)
             : base(mediator, hashingService, logger)
         {
             _uniqueUlnValidator = uniqueUlnValidator;
@@ -59,6 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _apprenticeshipMapper = apprenticeshipMapper;
             _encodingService = encodingService;
             _reservationsService = reservationsService;
+            _commitmentsV2Service = commitmentsV2Service;
         }
 
         public async Task<DeleteConfirmationViewModel> GetDeleteConfirmationModel(long providerId, string hashedCommitmentId, string hashedApprenticeshipId)
@@ -397,7 +400,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 HashedCommitmentId = hashedCommitmentId,
                 ProviderId = providerId,
-                ReadyForApproval = commitment.CanBeApproved,
+                ReadyForApproval = await _commitmentsV2Service.CohortIsCompleteForProvider(commitment.Id),
                 ApprovalState = GetApprovalState(commitment),
                 HasApprenticeships = commitment.Apprenticeships.Any(),
                 InvalidApprenticeshipCount = commitment.Apprenticeships.Count(x => !x.CanBeApproved),
