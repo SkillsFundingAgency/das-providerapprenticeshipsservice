@@ -57,5 +57,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string StartDateTransfersMinDateAltDetailMessage { get; set; }
         public Guid? ReservationId { get; set; }
         public bool IsContinuation { get; set; }
+        public long AccountId { get; set; }
+        public long LegalEntityId { get; set; }
     }
 }

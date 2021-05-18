@@ -147,7 +147,7 @@
                     <a href="@Url.Action("AddApprentice", new {Model.ProviderId, Model.HashedCommitmentId})" class="button button-secondary add-app-btn" aria-label="Add an apprentice">Add an apprentice</a>
                 }
                 
-                @if (Model.IsAutoReservationEnabled && !Model.IsLinkedToChangeOfPartyRequest)
+                @if (!Model.IsLinkedToChangeOfPartyRequest)
                 {
                     <a href="@Url.Action("UploadApprenticeships", "BulkUpload", new {Model.ProviderId, Model.HashedCommitmentId})" class="button button-secondary upload-btn" aria-label="Bulk upload apprentices">Bulk upload apprentices</a>
                 }
