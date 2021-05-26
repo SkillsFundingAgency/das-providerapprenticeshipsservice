@@ -35,8 +35,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 {
                     var csvReader = new CsvReader(tr);
                     csvReader.Configuration.HasHeaderRecord = true;
-                    csvReader.Configuration.IsHeaderCaseSensitive = false;
-                    csvReader.Configuration.ThrowOnBadData = true;
+                    // csvReader.Configuration.IsHeaderCaseSensitive = false;
+                    csvReader.Configuration.PrepareHeaderForMatch = (header, index) => header.ToLower();
+                    csvReader.Configuration.BadDataFound = cont => throw new Exception("Bad data found");
                     csvReader.Configuration.RegisterClassMap<CsvRecordMap>();
 
                     return new BulkUploadResult
@@ -46,7 +47,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                             .Select(record => MapTo(record, commitment))
                     };
                 }
-                 catch (CsvMissingFieldException)
+                 catch (CsvHelper.MissingFieldException)
                 {
                     _logger.Info("Failed to process bulk upload file (missing field).", providerId, commitment.Id);
                     return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("Some mandatory fields are incomplete. Please check your file and upload again.") } };
