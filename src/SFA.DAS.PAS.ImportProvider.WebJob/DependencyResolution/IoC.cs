@@ -1,4 +1,5 @@
-﻿using StructureMap;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using StructureMap;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.DependencyResolution
 {
@@ -8,6 +9,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.DependencyResolution
         {
             return new Container(c =>
             {
+                c.Policies.Add(new ConfigurationPolicy<ProviderApprenticeshipsServiceConfiguration>("SFA.DAS.ProviderApprenticeshipsService"));
                 c.AddRegistry<DefaultRegistry>();
             });
         }
