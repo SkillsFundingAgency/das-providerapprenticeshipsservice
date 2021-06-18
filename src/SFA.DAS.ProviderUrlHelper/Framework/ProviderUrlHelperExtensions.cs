@@ -43,8 +43,9 @@ namespace SFA.DAS.ProviderUrlHelper.Framework
 
         public static string EmployerDemandLink(this UrlHelper helper, string path)
         {
-            var linkGenerator = GetLinkGenerator();
-            return linkGenerator.EmployerDemandLink(path);
+            return string.Empty;
+           // var linkGenerator = GetLinkGenerator();
+           // return linkGenerator.EmployerDemandLink(path);
         }
 
         private static ILinkGenerator GetLinkGenerator()

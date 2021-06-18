@@ -20,7 +20,10 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
-
+using SFA.DAS.ProviderApprenticeshipsService.Web.LocalDev;
+using System.Threading;
+using ClosedXML.Excel;
+using SFA.DAS.Reservations.Application.AccountLegalEntities.Queries.BulkValidate;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -60,6 +63,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             Logger.Info($"Uploading File - Filename:{fileName}", uploadApprenticeshipsViewModel.ProviderId, commitmentId);
 
             var fileValidationResult = await _bulkUploader.ValidateFileStructure(uploadApprenticeshipsViewModel, providerId, commitment);
+          
 
             if (fileValidationResult.Errors.Any())
             {
@@ -70,6 +74,32 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     FileLevelErrors = fileValidationResult.Errors
                 };
             }
+
+            // Adding reservation file level error - don't have sufficient reservations available
+            var reservationErrors = await GetReservationErrors(fileValidationResult.Data.ToList(), commitment.EmployerAccountId, commitment.LegalEntityId, commitment.ProviderId);
+            if (reservationErrors.ValidationErrors.Any(x => x.FileLevelError ))
+            {
+                return new BulkUploadResultViewModel
+                {
+                    BulkUploadId = fileValidationResult.BulkUploadId,
+                    HasFileLevelErrors = true,
+                    FileLevelErrors = reservationErrors.ValidationErrors.Where(x => x.FileLevelError).Select(x => new UploadError(x.Reason))
+                };
+            }
+
+            //if (reservationErrors.ValidationErrors.Any(x => !x.FileLevelError))
+            //{
+            //    return new BulkUploadResultViewModel
+            //    {
+            //        BulkUploadId = fileValidationResult.BulkUploadId,
+            //        HasFileLevelErrors = false,
+            //        HasRowLevelErrors = true,
+            //        FileLevelErrors = reservationErrors.ValidationErrors.Where(x => !x.FileLevelError).Select(x => new UploadError(x.Reason)),
+            //        BulkUploadReference = HashingService.HashValue(fileValidationResult.BulkUploadId)
+            //    };
+            //}
+
+            //fileValidationResult.Data.ForEach(x => x.ApprenticeshipViewModel)
 
             Logger.Info("Uploading file of apprentices.", providerId, commitmentId);
 
@@ -91,6 +121,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     BulkUploadReference = hashedBulkUploadId,
                     HasRowLevelErrors = true,
                     RowLevelErrors = rowErrors
+                };
+            }
+
+            var rowLevelReservationErrors = await GetRowLevelReservationErrors(fileValidationResult.Data.ToList(), commitment.EmployerAccountId, commitment.LegalEntityId, commitment.ProviderId);
+            if (rowLevelReservationErrors.Errors.Any())
+            {
+                return new BulkUploadResultViewModel
+                {
+                    BulkUploadId = fileValidationResult.BulkUploadId,
+                    HasRowLevelErrors = true,
+                    FileLevelErrors = rowLevelReservationErrors.Errors,
+                    BulkUploadReference = hashedBulkUploadId
                 };
             }
 
@@ -124,6 +166,62 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             }
 
             return new BulkUploadResultViewModel { BulkUploadId = fileValidationResult.BulkUploadId };
+        }
+
+        private async Task<Reservations.Application.AccountLegalEntities.Queries.BulkValidate.BulkValidationResults> GetReservationErrors(List<ApprenticeshipUploadModel> list, long employerAccountId, string employerLegalEntityId, long? providerId)
+        {
+            List<Reservations.Api.Models.Reservation> reservations = new List<Reservations.Api.Models.Reservation>();
+            foreach (var apprentice in list.Where(x =>
+               !string.IsNullOrWhiteSpace(x.ApprenticeshipViewModel.ULN)
+               && x.ApprenticeshipViewModel.StartDate.DateTime.HasValue
+               && x.ApprenticeshipViewModel.EndDate.DateTime.HasValue
+               ))
+            {
+                reservations.Add(new Reservations.Api.Models.Reservation
+                {
+                    StartDate = apprentice.ApprenticeshipViewModel.StartDate.DateTime.Value,
+                    CourseId = apprentice.ApprenticeshipViewModel.CourseCode,
+                    AccountId = employerAccountId,
+                    ProviderId = (uint?)providerId,
+                    AccountLegalEntityId = int.Parse(employerLegalEntityId)
+                });
+            }
+
+         
+            var result = await _reservationsService.GetReservationErrors(reservations);
+            return result;
+        }
+
+        private async Task<BulkUploadResult> GetRowLevelReservationErrors(List<ApprenticeshipUploadModel> list, long employerAccountId, string employerLegalEntityId, long? providerId)
+        {
+            BulkUploadResult result = new BulkUploadResult();
+            var errors = new List<UploadError>();
+
+            int counter = 1;
+            foreach (var apprentice in list.Where(x =>
+               !string.IsNullOrWhiteSpace(x.ApprenticeshipViewModel.ULN)
+               && x.ApprenticeshipViewModel.StartDate.DateTime.HasValue
+               && x.ApprenticeshipViewModel.EndDate.DateTime.HasValue
+               ))
+            {
+                var rese = new Reservations.Api.Models.Reservation
+                {
+                    StartDate = apprentice.ApprenticeshipViewModel.StartDate.DateTime.Value,
+                    CourseId = apprentice.ApprenticeshipViewModel.CourseCode,
+                    AccountId = employerAccountId,
+                    ProviderId = (uint?)providerId,
+                    AccountLegalEntityId = int.Parse(employerLegalEntityId)
+                };
+
+                var bulkvalidationResult = await _reservationsService.GetReservationErrors(rese);
+                foreach (var r in bulkvalidationResult.ValidationErrors)
+                {
+                    errors.Add(new UploadError(r.Reason, "", counter, apprentice));
+                }
+            }
+
+            result.Errors = errors;
+            return result;
         }
 
         private async Task<IEnumerable<UploadError>> GetOverlapErrors(IList<ApprenticeshipUploadModel> uploadedApprenticeships)
@@ -212,9 +310,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var validationResult = await _bulkUploader.ValidateFileRows(uploadResult.Data, providerId, bulkUploadId);
             var overlaps = await GetOverlapErrors(uploadResult.Data.ToList());
-
             var errors = validationResult.Errors.ToList();
             errors.AddRange(overlaps);
+
+            var rowLevelReservationErrors = await GetRowLevelReservationErrors(uploadResult.Data.ToList(), commitment.EmployerAccountId, commitment.LegalEntityId, commitment.ProviderId);
+            errors.AddRange(rowLevelReservationErrors.Errors);
 
             var result = _mapper.MapErrors(errors);
 

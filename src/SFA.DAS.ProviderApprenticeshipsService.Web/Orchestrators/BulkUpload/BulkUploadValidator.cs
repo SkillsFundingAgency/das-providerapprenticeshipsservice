@@ -28,10 +28,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
         private readonly BulkUploadApprenticeshipValidationText _validationText;
         private readonly ApprenticeshipUploadModelValidator _viewModelValidator;
        
-        public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, IUlnValidator ulnValidator, IAcademicYearDateProvider academicYear)
+        public BulkUploadValidator(ProviderApprenticeshipsServiceConfiguration config, IUlnValidator ulnValidator, IAcademicYearDateProvider academicYear, IReservationsService reservationsService)
         {
             _validationText = new BulkUploadApprenticeshipValidationText(academicYear);
-            _viewModelValidator = new ApprenticeshipUploadModelValidator(_validationText, new CurrentDateTime(), ulnValidator, academicYear);
+            _viewModelValidator = new ApprenticeshipUploadModelValidator(_validationText, new CurrentDateTime(), ulnValidator, academicYear, reservationsService);
             
             _config = config;
         }
