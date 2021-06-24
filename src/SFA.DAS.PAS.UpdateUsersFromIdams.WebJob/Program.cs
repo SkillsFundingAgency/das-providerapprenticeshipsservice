@@ -23,6 +23,16 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
 
                 logger.Info($"UpdateUsersFromIdams job done, Took: {timer.ElapsedMilliseconds} milliseconds");
             }
+            catch (AggregateException exc)
+            {
+                ILog exLogger = new NLogLogger();
+                exLogger.Error(exc, "Error running UpdateUsersFromIdams WebJob");
+                exc.Handle(ex =>
+                {
+                    exLogger.Error(ex, "Inner exception running UpdateUsersFromIdams WebJob");
+                    return false;
+                });
+            }
             catch (Exception ex)
             {
                 ILog exLogger = new NLogLogger();
