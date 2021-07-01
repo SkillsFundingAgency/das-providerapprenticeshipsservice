@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -26,7 +28,7 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
 
         public async Task SyncUsers()
         {
-            List<IdamsUser> idamsUsers; 
+            List<IdamsUser> idamsUsers;
 
             var provider = await _providerRepository.GetNextProviderForIdamsUpdate();
 
@@ -42,17 +44,39 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
             {
                 _logger.Info($"Retrieving DAS Users and Super Users for Provider {provider.Ukprn}");
                 idamsUsers = await GetIdamsUsers(provider.Ukprn);
+
+                _logger.Info($"Synchronise Users with IDAMS for Provider {provider.Ukprn}");
+                await _userRepository.SyncIdamsUsers(provider.Ukprn, idamsUsers);
+
+                await _providerRepository.MarkProviderIdamsUpdated(provider.Ukprn);
+            }
+            catch (HttpRequestException httpRequestEx)
+            {
+               
+                //Can't get http status code from HttpRequestException is in the message hence
+                if (!httpRequestEx.Message.Contains(((int)HttpStatusCode.NotFound).ToString()))
+                {
+                    string message = $"An error occurred retrieving users from Provider {provider.Ukprn}";
+                    await LogAndUpdateProviderState(httpRequestEx, provider, message);
+                    throw;
+                }
+
+                string httpNotFoundMessage = $"There are no super users (or any users) for Provider {provider.Ukprn}";
+                await LogAndUpdateProviderState(httpRequestEx, provider, httpNotFoundMessage);
+
             }
             catch (Exception ex)
             {
-                _logger.Warn(ex, $"An error occurred retrieving users from Provider {provider.Ukprn}");
-                await _providerRepository.MarkProviderIdamsUpdated(provider.Ukprn);
+                string message = $"An error occurred retrieving users from Provider {provider.Ukprn}";
+                await LogAndUpdateProviderState(ex, provider, message);
                 throw;
             }
 
-            _logger.Info($"Synchronise Users with IDAMS for Provider {provider.Ukprn}");
-            await _userRepository.SyncIdamsUsers(provider.Ukprn, idamsUsers);
+        }
 
+        private async Task LogAndUpdateProviderState(Exception ex, Provider provider, string errorMessage)
+        {
+            _logger.Warn(ex, errorMessage);
             await _providerRepository.MarkProviderIdamsUpdated(provider.Ukprn);
         }
 
@@ -71,7 +95,7 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
 
             var idamsNormalUsers = idamsUsers.Where(u => !idamsSuperUsers.Any(su => su.Equals(u, StringComparison.InvariantCultureIgnoreCase)));
 
-            return idamsNormalUsers.Select(u => new IdamsUser {Email = u, UserType = UserType.NormalUser }).Concat(idamsSuperUsers.Select(su=>new IdamsUser { Email = su, UserType = UserType.SuperUser })).ToList();
+            return idamsNormalUsers.Select(u => new IdamsUser { Email = u, UserType = UserType.NormalUser }).Concat(idamsSuperUsers.Select(su => new IdamsUser { Email = su, UserType = UserType.SuperUser })).ToList();
         }
     }
 }
