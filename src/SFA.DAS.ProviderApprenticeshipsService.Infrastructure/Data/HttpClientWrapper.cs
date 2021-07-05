@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
@@ -16,5 +17,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         {
             return _httpClient.GetStringAsync(url);
         }
+
+        public async Task<string> GetStringFromResponseAsync(string url)
+        {
+            var httpResponse =  await _httpClient.GetAsync(url);
+
+            if (!httpResponse.IsSuccessStatusCode)
+                throw new CustomHttpRequestException
+                {
+                    StatusCode = httpResponse.StatusCode
+                };
+
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+
+            return responseString;
+        }
     }
+
+    public class CustomHttpRequestException : HttpRequestException
+    {
+        public HttpStatusCode StatusCode { get; set; }
+    }
+
 }

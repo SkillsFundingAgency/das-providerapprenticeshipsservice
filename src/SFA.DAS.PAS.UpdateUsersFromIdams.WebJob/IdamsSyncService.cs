@@ -50,11 +50,11 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
 
                 await _providerRepository.MarkProviderIdamsUpdated(provider.Ukprn);
             }
-            catch (HttpRequestException httpRequestEx)
+            catch (CustomHttpRequestException httpRequestEx)
             {
                
                 //Can't get http status code from HttpRequestException is in the message hence
-                if (!httpRequestEx.Message.Contains(((int)HttpStatusCode.NotFound).ToString()))
+                if (httpRequestEx.StatusCode != HttpStatusCode.NotFound)
                 {
                     string message = $"An error occurred retrieving users from Provider {provider.Ukprn}";
                     await LogAndUpdateProviderState(httpRequestEx, provider, message);

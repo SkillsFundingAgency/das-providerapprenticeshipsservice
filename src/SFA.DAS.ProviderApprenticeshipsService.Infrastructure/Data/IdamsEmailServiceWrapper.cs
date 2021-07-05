@@ -72,7 +72,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
         private async Task<string> GetString(string url, string accessToken)
         {
-            return await _httpClientWrapper.GetStringAsync(url);
+            return await _httpClientWrapper.GetStringFromResponseAsync(url);
         }
     }
 }

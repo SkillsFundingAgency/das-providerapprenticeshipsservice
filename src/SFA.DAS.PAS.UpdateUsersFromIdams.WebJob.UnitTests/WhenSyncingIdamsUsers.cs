@@ -7,6 +7,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -122,7 +123,11 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests
             {
                 IdamsEmailServiceWrapper
                     .Setup(x => x.GetEmailsAsync(It.IsAny<long>()))
-                    .Throws(new HttpRequestException("Response status code does not indicate success: 404 (Not Found)."));
+                    .Throws(new CustomHttpRequestException
+                    {
+                        StatusCode = HttpStatusCode.NotFound
+                    });
+
                 return this;
             }
 
