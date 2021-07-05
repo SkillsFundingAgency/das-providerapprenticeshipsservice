@@ -5,6 +5,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
     public interface IHttpClientWrapper
     {
         Task<string> GetStringAsync(string url);
-        Task<string> GetStringFromResponseAsync(string url);
     }
 }

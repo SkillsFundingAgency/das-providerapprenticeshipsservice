@@ -13,12 +13,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             _httpClient = httpClient;
         }
 
-        public Task<string> GetStringAsync(string url)
-        {
-            return _httpClient.GetStringAsync(url);
-        }
-
-        public async Task<string> GetStringFromResponseAsync(string url)
+        public async Task<string> GetStringAsync(string url)
         {
             var httpResponse =  await _httpClient.GetAsync(url);
 
