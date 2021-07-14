@@ -7,6 +7,9 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using SFA.DAS.NLog.Logger;
 
@@ -71,6 +74,14 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests
             f.VerifyIdamsServiceIsNotCalled();
         }
 
+        [Test]
+        public void AndWhenIdamsThrowsAnHttp404RequestException_Then_WeStillMarkProviderAsUpdatedButWeDoNotThrowException()
+        {
+            var f = new WhenSyncingIdamsUsersFixture().SetupIdamsToThrowHttpRequestException();
+            Assert.DoesNotThrowAsync(() => f.Sut.SyncUsers());
+            f.VerifyItMarksProviderAsIdamsUpdated();
+        }
+
         public class WhenSyncingIdamsUsersFixture
         {
             public Mock<IIdamsEmailServiceWrapper> IdamsEmailServiceWrapper { get; set; }
@@ -106,6 +117,17 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests
             public WhenSyncingIdamsUsersFixture SetupIdamsToThrowException()
             {
                 IdamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>())).Throws<ApplicationException>();
+                return this;
+            }
+            public WhenSyncingIdamsUsersFixture SetupIdamsToThrowHttpRequestException()
+            {
+                IdamsEmailServiceWrapper
+                    .Setup(x => x.GetEmailsAsync(It.IsAny<long>()))
+                    .Throws(new CustomHttpRequestException
+                    {
+                        StatusCode = HttpStatusCode.NotFound
+                    });
+
                 return this;
             }
 
