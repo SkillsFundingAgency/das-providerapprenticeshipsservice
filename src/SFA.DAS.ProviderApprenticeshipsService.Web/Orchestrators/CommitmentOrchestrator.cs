@@ -510,7 +510,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderName = commitment.ProviderName,
                 IsTransfer = commitment.IsTransfer(),
                 ChangeOfPartyRequestId = commitment.ChangeOfPartyRequestId,
-                HasOtherCohortsAwaitingApproval = await AnyCohortsForStatus(providerId, RequestStatus.ReadyForApproval)
+                HasOtherCohortsAwaitingApproval = await AnyCohortsForStatus(providerId, RequestStatus.ReadyForApproval),
+                ShowApprenticeEmail = await _commitmentsV2Service.ApprenticeEmailRequired(providerId)
             };
         }
 
