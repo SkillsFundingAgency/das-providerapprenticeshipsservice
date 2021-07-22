@@ -7,5 +7,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
     public interface ICommitmentsV2ApiClient
     {
         Task<GetCohortResponse> GetCohort(long cohortId);
+        Task<bool> ApprenticeEmailRequired(long providerId);
     }
 }

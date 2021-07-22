@@ -49,5 +49,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Services
 
             _commitmentsV2ApiClient.Verify(x=>x.GetCohort(1234));
         }
+
+        [Test]
+        public async Task IsApprenticeEmailRequiredCalledCorrectly()
+        {
+            await _sut.ApprenticeEmailRequired(1234);
+
+            _commitmentsV2ApiClient.Verify(x => x.ApprenticeEmailRequired(1234));
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public async Task DoesCallToIsApprenticeEmailRequiredReturnValue(bool expected)
+        {
+            _commitmentsV2ApiClient.Setup(x => x.ApprenticeEmailRequired(It.IsAny<long>())).ReturnsAsync(expected);
+            
+            var result = await _sut.ApprenticeEmailRequired(1234);
+
+            result.Should().Be(expected);
+        }
     }
 }
