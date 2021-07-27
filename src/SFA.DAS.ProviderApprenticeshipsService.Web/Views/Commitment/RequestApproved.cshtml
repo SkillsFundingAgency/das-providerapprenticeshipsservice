@@ -55,7 +55,14 @@
                 <a href="@Url.Action("Index", "ManageApprentices")">manage your apprentices</a>.
             </p>
         }
-        
+
+        @if (Model.ShowApprenticeEmail)
+        {
+            <p>
+                Your apprentice will now receive an email alert inviting them to the My apprenticeship service where they will review and confirm their apprenticeship details.
+            </p>
+        }
+
         @if (Model.HasOtherCohortsAwaitingApproval)
         {
             <a href="@Url.Action("ReadyForReview")">Return to Approve cohorts</a>

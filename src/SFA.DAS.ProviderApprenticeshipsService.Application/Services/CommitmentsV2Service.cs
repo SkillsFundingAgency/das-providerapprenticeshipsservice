@@ -11,10 +11,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
         {
             _commitmentsV2ApiClient = commitmentsV2ApiClient;
         }
+
         public async Task<bool> CohortIsCompleteForProvider(long cohortId)
         {
             var cohort = await _commitmentsV2ApiClient.GetCohort(cohortId);
             return cohort.IsCompleteForProvider;
+        }
+
+        public Task<bool> ApprenticeEmailRequired(long providerId)
+        {
+            return _commitmentsV2ApiClient.ApprenticeEmailRequired(providerId);
         }
     }
 }

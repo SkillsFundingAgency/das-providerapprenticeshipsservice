@@ -68,6 +68,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             Assert.IsTrue(result.HasOtherCohortsAwaitingApproval);
         }
 
+        [TestCase(true)]
+        [TestCase(false)]
+        public async Task ThenTheViewModelShouldMapShowApprenticeEmail(bool expected)
+        {
+            _mockCommitmentsV2Service.Setup(x => x.ApprenticeEmailRequired(1)).ReturnsAsync(expected);
+            
+            var result = await _orchestrator.GetApprovedViewModel(1, "Hashed-Id");
+
+            Assert.AreEqual(expected, result.ShowApprenticeEmail);
+        }
+
         [Test]
         public async Task ThenTheViewModelShouldIndicateWhenThereAreNotOtherCohortsInSameStatus()
         {

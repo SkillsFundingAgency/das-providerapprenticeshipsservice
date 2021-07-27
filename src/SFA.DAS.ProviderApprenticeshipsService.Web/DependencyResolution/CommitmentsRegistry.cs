@@ -55,10 +55,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         {
             var config = context.GetInstance<CommitmentsApiClientV2Configuration>();
 
-            var httpClientBuilder = string.IsNullOrWhiteSpace(config.ClientId) 
+            var httpClientBuilder = string.IsNullOrWhiteSpace(config.ClientId)
                 ? new HttpClientBuilder()
                 : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config));
-
+                
             return httpClientBuilder
                 .WithDefaultHeaders()
                 .WithHandler(new RequestIdMessageRequestHandler())
