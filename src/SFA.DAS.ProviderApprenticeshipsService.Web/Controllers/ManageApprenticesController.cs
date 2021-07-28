@@ -49,11 +49,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedApprenticeshipId}/edit", Name = "EditApprovedApprentice")]
         [RoleAuthorize(Roles = nameof(RoleNames.HasAccountOwnerPermission))]
         [OutputCache(CacheProfile = "NoCache")]
-        public async Task<ActionResult> Edit(long providerid, string hashedApprenticeshipId)
+        public ActionResult Edit(long providerid, string hashedApprenticeshipId)
         {
-            var model = await _orchestrator.GetApprenticeshipForEdit(providerid, hashedApprenticeshipId);
-            ViewBag.ApprenticeshipProgrammes = model.ApprenticeshipProgrammes;
-            return View(model.Apprenticeship);
+            return Redirect(_providerUrlHelper.ProviderCommitmentsLink($"{providerid}/apprentices/{hashedApprenticeshipId}/edit"));
         }
 
         [HttpPost]
