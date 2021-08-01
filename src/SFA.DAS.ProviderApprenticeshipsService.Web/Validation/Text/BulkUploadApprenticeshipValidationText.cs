@@ -48,7 +48,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
                    new ValidationMessage("The Date of birth is not valid", "DateOfBirth_07");
 
         public ValidationMessage LearnStartDate01 =>
-            new ValidationMessage("You must enter the <strong>start date</strong>, for example 2017-09", "LearnStartDate_01");
+            new ValidationMessage("You must enter the <strong>start date</strong>, for example 2017-09-01", "LearnStartDate_01");
         public ValidationMessage LearnStartDate02 =>
             new ValidationMessage("The <strong>start date</strong> must not be earlier than May 2017", "LearnStartDate_02");
         public ValidationMessage LearnStartDate05 =>
@@ -106,5 +106,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
 
         public ValidationMessage CourseCode01 =>
             new ValidationMessage("You must enter a valid <strong>Standard code</strong> or <strong>Framework code</strong>", "DefaultErrorCode");
+
+        public ValidationMessage EmailAddressBlank =>
+            new ValidationMessage("<strong>Email address</strong> must be entered", "EmailAddress_01");
+        public ValidationMessage EmailAddressNotValid =>
+            new ValidationMessage("You must enter a valid <strong>email address</strong>", "EmailAddress_02");
+        public ValidationMessage EmailAddressLength =>
+            new ValidationMessage("You must enter an <strong>email address</strong> that’s no longer than 200 characters", "EmailAddress_03");
+        public ValidationMessage EmailAddressRepeat =>
+            new ValidationMessage("The <strong>email address</strong> has already been used for an apprentice in this cohort", "EmailAddress_04");
+
+        public ValidationMessage AgreementIdBlank =>
+            new ValidationMessage("<strong>Agreement ID</strong> must be entered", "AgreementId_01");
+        public ValidationMessage AgreementIdMismatch =>
+            new ValidationMessage("The employer on the cohort does not match the <strong>Agreement ID</strong>", "AgreementId_02");        
+
     }
 }

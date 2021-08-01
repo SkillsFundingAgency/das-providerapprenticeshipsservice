@@ -18,25 +18,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 {
     public sealed class BulkUploadFileParser : IBulkUploadFileParser
     {
-        private readonly IProviderCommitmentsLogger _logger;
+        private readonly IProviderCommitmentsLogger _logger;        
 
         public BulkUploadFileParser(IProviderCommitmentsLogger logger)
-        {
+        {            
             _logger = logger;
         }
 
         public BulkUploadResult CreateViewModels(long providerId, CommitmentView commitment, string fileInput)
         {
-            const string errorMessage = "Upload failed. Please check your file and try again.";
-
+            const string errorMessage = "Upload failed. Please check your file and try again.";          
             using (var tr = new StringReader(fileInput))
             {
                 try
                 {
+                    if (string.IsNullOrEmpty(fileInput)) {                        
+                        throw new Exception();
+                    }
+
                     var csvReader = new CsvReader(tr);
                     csvReader.Configuration.HasHeaderRecord = true;
-                    csvReader.Configuration.IsHeaderCaseSensitive = false;
-                    csvReader.Configuration.ThrowOnBadData = true;
+                    csvReader.Configuration.PrepareHeaderForMatch = (header, index) => header.ToLower();
+                    csvReader.Configuration.BadDataFound = cont => throw new Exception("Bad data found");
                     csvReader.Configuration.RegisterClassMap<CsvRecordMap>();
 
                     return new BulkUploadResult
@@ -45,25 +48,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                             .ToList()
                             .Select(record => MapTo(record, commitment))
                     };
-                }
-                 catch (CsvMissingFieldException)
+                }              
+                catch (HeaderValidationException)
                 {
                     _logger.Info("Failed to process bulk upload file (missing field).", providerId, commitment.Id);
                     return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("Some mandatory fields are incomplete. Please check your file and upload again.") } };
-                }
+                }                
                 catch (Exception)
                 {
                     _logger.Info("Failed to process bulk upload file.", providerId, commitment.Id);
-
                     return new BulkUploadResult { Errors = new List<UploadError> { new UploadError(errorMessage) } };
                 }
             }
         }
 
         private ApprenticeshipUploadModel MapTo(CsvRecord record, CommitmentView commitment)
-        {
-            var dateOfBirth = GetValidDate(record.DateOfBirth, "yyyy-MM-dd");
-            var learnerStartDate = GetValidDate(record.StartDate, "yyyy-MM");
+        {          
+            var dateOfBirth = GetValidDate(record.DateOfBirth, "yyyy-MM-dd");            
+            var learnerStartDate = GetValidDate(record.StartDate, "yyyy-MM-dd"); 
+            learnerStartDate = new DateTime(learnerStartDate.GetValueOrDefault().Year, learnerStartDate.GetValueOrDefault().Month, 1); //Start date format changes from CCYY-MM to CCYY-MM-DD (although it is stored as CCYY-MM-01).                        
             var learnerEndDate = GetValidDate(record.EndDate, "yyyy-MM");
 
             var courseCode = record.ProgType == "25"
@@ -71,7 +74,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                                    : $"{record.FworkCode}-{record.ProgType}-{record.PwayCode}";
 
             var apprenticeshipViewModel = new ApprenticeshipViewModel
-            {
+            {   
                 AgreementStatus = AgreementStatus.NotAgreed,
                 PaymentStatus = PaymentStatus.Active,
                 ULN = record.ULN,
@@ -84,7 +87,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 EndDate = new DateTimeViewModel(learnerEndDate),
                 ProgType = record.ProgType.TryParse(),
                 CourseCode = courseCode,
-                IsPaidForByTransfer = commitment.IsTransfer()
+                IsPaidForByTransfer = commitment.IsTransfer(),
+                AgreementId = commitment.AccountLegalEntityPublicHashedId,
+                EmailAddress = record.EmailAddress
             };
             return new ApprenticeshipUploadModel
             {

@@ -37,9 +37,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
                     DateOfBirth = new DateTimeViewModel(now.AddYears(-16)),
                     StartDate = new DateTimeViewModel(now),
                     EndDate = new DateTimeViewModel(now.AddYears(3)),
-                    Cost = "1234"
+                    Cost = "1234"                    
                 },
-                CsvRecord = new CsvRecord { CohortRef = "abba123" }
+                CsvRecord = new CsvRecord { CohortRef = "abba123", EmailAddress = "apprentice1@test.com", AgreementId = "XYZUR" }
             };
 
             _mockAcademicYear = new Moq.Mock<IAcademicYearDateProvider>();

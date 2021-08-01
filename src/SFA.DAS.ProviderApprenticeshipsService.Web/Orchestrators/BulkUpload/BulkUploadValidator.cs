@@ -59,12 +59,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             var apprenticeshipUploadModels = records as ApprenticeshipUploadModel[] ?? records.ToArray();
             if (!apprenticeshipUploadModels.Any()) return new[] { new UploadError(ApprenticeshipFileValidationText.NoRecords) };
 
-            if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != apprenticeshipUploadModels.First().CsvRecord.CohortRef))
+            if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != apprenticeshipUploadModels.First().CsvRecord.CohortRef && apprenticeshipUploadModels.First().CsvRecord.CohortRef != string.Empty))
                 errors.Add(new UploadError(_validationText.CohortRef01.Text.RemoveHtmlTags(), _validationText.CohortRef01.ErrorCode));
 
-            if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != cohortReference))
+            if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != cohortReference && m.CsvRecord.CohortRef != string.Empty))
                 errors.Add(new UploadError(_validationText.CohortRef02.Text.RemoveHtmlTags(), _validationText.CohortRef02.ErrorCode));
-
+           
             if (apprenticeshipUploadModels.Length != apprenticeshipUploadModels.DistinctBy(m => m.ApprenticeshipViewModel.ULN).Count())
                 errors.Add(new UploadError(_validationText.Uln04.Text.RemoveHtmlTags(), _validationText.Uln04.ErrorCode));
 
@@ -143,6 +143,34 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             }
 
             return null;
+        }
+
+        public IEnumerable<UploadError> ValidateEmailUniqueness(IEnumerable<ApprenticeshipUploadModel> records)
+        {
+            var apprenticeshipUploadModels = records as ApprenticeshipUploadModel[] ?? records.ToArray();
+
+            var result = new List<UploadError>();
+
+            var distinctEmailAddress = apprenticeshipUploadModels.Select(x => x.ApprenticeshipViewModel.EmailAddress).Distinct().Count();
+
+            if (apprenticeshipUploadModels.Count() != distinctEmailAddress)
+            {
+                result.Add(new UploadError(_validationText.EmailAddressRepeat.Text.RemoveHtmlTags(), _validationText.EmailAddressRepeat.ErrorCode));
+            }
+
+            return result;
+        }
+
+        public IEnumerable<UploadError> ValidateAgreementId(IEnumerable<ApprenticeshipUploadModel> records, string agreementId)
+        {
+            var apprenticeshipUploadModels = records as ApprenticeshipUploadModel[] ?? records.ToArray();
+
+            var errors = new List<UploadError>();
+
+            if (apprenticeshipUploadModels.Any(m => m.CsvRecord.AgreementId != agreementId))
+                errors.Add(new UploadError(_validationText.AgreementIdMismatch.Text.RemoveHtmlTags(), _validationText.AgreementIdMismatch.ErrorCode));
+
+            return errors;
         }
     }
 }

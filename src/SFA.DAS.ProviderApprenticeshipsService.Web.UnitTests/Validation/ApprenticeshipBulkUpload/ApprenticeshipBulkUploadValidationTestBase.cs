@@ -45,9 +45,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
                     DateOfBirth = new DateTimeViewModel(DateTime.UtcNow.AddYears(-39)),
                     StartDate = new DateTimeViewModel(new DateTime(2017, 06, 20)),
                     EndDate = new DateTimeViewModel(new DateTime(2018, 05, 15)),
-                    Cost = "1234"
+                    Cost = "1234",
+                    EmailAddress = "apprentice1@test.com",
+                    AgreementId = "XYZUR"
                 },
-                CsvRecord = new CsvRecord { CohortRef = "abba123", ProgType = "25", StdCode = "123" }
+                CsvRecord = new CsvRecord { CohortRef = "abba123", ProgType = "25", StdCode = "123", EmailAddress = "apprentice1@test.com", AgreementId = "XYZUR" }
             };
         }
     }

@@ -36,7 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     [TestFixture]
     public sealed class WhenUploadingFile : BulkUploadTestBase
     {
-        private const string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,FworkCode,PwayCode,ProgType,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,EmpRef,ProviderRef,ULN";
+        private const string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,FworkCode,PwayCode,ProgType,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,EmpRef,ProviderRef,ULN,EmailAddress,AgreementId";
         private BulkUploadOrchestrator _sut;
         private Mock<HttpPostedFileBase> _file;
         private Mock<IMediator> _mockMediator;
@@ -93,40 +93,43 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task TestPerformance()
         {
+            string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,FworkCode,PwayCode,ProgType,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,EmpRef,ProviderRef,AgreementId,EmailAddress,ULN";
             _mockMediator.Setup(m => m.Send(It.IsAny<GetCommitmentQueryRequest>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(new GetCommitmentQueryResponse
-                {
-                    Commitment = new CommitmentView
+                    .Returns(Task.FromResult(new GetCommitmentQueryResponse
                     {
-                        AgreementStatus = AgreementStatus.NotAgreed,
-                        EditStatus = EditStatus.ProviderOnly
-                    }
-                }));
+                        Commitment = new CommitmentView
+                        {
+                            AgreementStatus = AgreementStatus.NotAgreed,
+                            EditStatus = EditStatus.ProviderOnly
+                        }
+                    }));
 
             const int upper = 40 * 1000;
             var testData = new List<string>();
             for (int i = 0; i < upper; i++)
             {
                 var uln = (1000000000 + i).ToString();
-                testData.Add("\n\rABBA123,Chris,Froberg,1998-12-08,,,,2,2020-08,2025-08,1500,,Employer ref,Provider ref," + uln);
+                var email = $"apprentice{i}@test.com";
+                testData.Add("\n\r ABBA123,Chris,Froberg,1998-12-08,,,,2,2020-08-01,2025-08,1500,,Employer ref,Provider ref,XYZUR," + email + ',' + uln);
             }
             var str = HeaderLine + string.Join("", testData);
 
             var textStream = new MemoryStream(UTF8.GetBytes(str));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
-            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 1234L };
+            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 1234L, AccountLegalEntityPublicHashedId = "XYZUR" };
             var stopwatch = Stopwatch.StartNew();
             var r1 = await _sut.UploadFile("user123", model, new SignInUserModel());
             stopwatch.Stop(); Console.WriteLine($"Time TOTAL: {stopwatch.Elapsed.Seconds}");
             r1.RowLevelErrors.Count().Should().Be(80 * 1000);
-            stopwatch.Elapsed.Seconds.Should().BeLessThan(7);   
+            stopwatch.Elapsed.Seconds.Should().BeLessThan(7);
         }
 
         [Test]
         public async Task ShouldCallMediatorPassingInMappedApprenticeships()
         {
-            const string dataLine = "\n\rABBA123,Chris,Froberg,1998-12-08,,,25,2,2020-08,2025-08,1500,,Employer ref,Provider ref,1113335559";
+            const string dataLine = "\n\r ABBA123,Chris,Froberg,1998-12-08,,,25,2,2020-08-01,2025-08,1500,,Employer ref,Provider ref,1113335559,apprentice1@test.com,XYZUR";
+          
             const string fileContents = HeaderLine + dataLine;
             var textStream = new MemoryStream(UTF8.GetBytes(fileContents));
             _file.Setup(m => m.InputStream).Returns(textStream);
@@ -146,7 +149,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     }
                 }));
 
-            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111 };
+            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111, AccountLegalEntityPublicHashedId = "XYZUR" };
             var signinUser = new SignInUserModel { DisplayName = "Bob", Email = "test@email.com" };
 
             await _sut.UploadFile("user123", model, signinUser);
@@ -175,7 +178,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task ThenIfAnyRecordsOverlapWithActiveApprenticeshipsThenReturnError()
         {
-            const string dataLine = "\n\rABBA123,Chris,Froberg,1998-12-08,,,25,2,2020-08,2025-08,1500,,Employer ref,Provider ref,1113335559";
+            const string dataLine = "\n\r ABBA123,Chris,Froberg,1998-12-08,,,25,2,2020-08,2025-08,1500,,Employer ref,Provider ref,1113335559, apprentice1@test.com,XYZUR";
             const string fileContents = HeaderLine + dataLine;
             var textStream = new MemoryStream(UTF8.GetBytes(fileContents));
             _file.Setup(m => m.InputStream).Returns(textStream);
@@ -215,7 +218,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                         }
                     }));
 
-            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111 };
+            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111, AccountLegalEntityPublicHashedId = "XYZUR" };
             var file = await _sut.UploadFile("user123", model, new SignInUserModel());
 
             //Assert
@@ -232,6 +235,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
             _mockMediator.Setup(x => x.Send(It.IsAny<BulkUploadApprenticeshipsCommand>(), new CancellationToken()))
                 .ReturnsAsync(new Unit())
                 .Callback((IRequest<Unit> x, CancellationToken c) => commandArgument = x.As<BulkUploadApprenticeshipsCommand>());
+          
 
             _mockMediator.Setup(m => m.Send(It.IsAny<GetCommitmentQueryRequest>(), new CancellationToken()))
                 .Returns(Task.FromResult(new GetCommitmentQueryResponse
@@ -241,7 +245,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                         AgreementStatus = AgreementStatus.NotAgreed,
                         EditStatus = EditStatus.ProviderOnly
                     }
-                }));
+                }));         
 
             _mockMediator.Setup(m => m.Send(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>(), new CancellationToken()))
                 .Returns(
@@ -263,7 +267,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                         }
                     }));
 
-            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111 };
+            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111, AccountLegalEntityPublicHashedId = "XYZUR" };
             var file = await _sut.UploadFile("user123", model, new SignInUserModel());
 
             //Assert
@@ -280,7 +284,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         {
             var inputData = $"{header}" +
                             @"
-                            Abba123,1113335559,Froberg,Chris,1998-12-08,SE123321C,25,,,2,2120-08,2125-08,1500,,Employer ref,Provider ref";
+                            Abba123,1113335559,Froberg,Chris,1998-12-08,SE123321C,25,,,2,2120-08,2125-08,1500,,Employer ref,Provider ref,apprentice1@test.com,XYZUR";
 
             var textStream = new MemoryStream(UTF8.GetBytes(inputData));
             _file.Setup(m => m.InputStream).Returns(textStream);
@@ -320,7 +324,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                         }
                     }));
 
-            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111 };
+            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111, AccountLegalEntityPublicHashedId = "XYZUR" };
             var file = await _sut.UploadFile("user123", model, new SignInUserModel());
 
             //Assert

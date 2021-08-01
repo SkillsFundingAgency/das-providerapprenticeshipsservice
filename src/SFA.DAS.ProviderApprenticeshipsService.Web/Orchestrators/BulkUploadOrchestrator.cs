@@ -29,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly BulkUploader _bulkUploader;
         private readonly BulkUploadMapper _mapper;
         private readonly IBulkUploadFileParser _fileParser;
-        private readonly IReservationsService _reservationsService;
+        private readonly IReservationsService _reservationsService;        
 
         public BulkUploadOrchestrator(
             IMediator mediator,
@@ -44,17 +44,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _mapper = mapper;
             _fileParser = fileParser;
             _reservationsService = reservationsService ?? throw new ArgumentNullException(nameof(reservationsService));
-
         }
 
         public async Task<BulkUploadResultViewModel> UploadFile(string userId, UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel, SignInUserModel signInUser)
         {
             var commitmentId = HashingService.DecodeValue(uploadApprenticeshipsViewModel.HashedCommitmentId);
             var providerId = uploadApprenticeshipsViewModel.ProviderId;
-            var fileName = uploadApprenticeshipsViewModel.Attachment?.FileName ?? "<unknown>";
+            var fileName = uploadApprenticeshipsViewModel.Attachment?.FileName ?? "<unknown>";            
 
             var commitment = await GetCommitment(providerId, commitmentId);
-			AssertCommitmentStatus(commitment);
+            AssertCommitmentStatus(commitment);
             await AssertAutoReservationEnabled(commitment);
 
             Logger.Info($"Uploading File - Filename:{fileName}", uploadApprenticeshipsViewModel.ProviderId, commitmentId);
@@ -189,7 +188,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderId = providerid,
                 HashedCommitmentId = hashedcommitmentid,
                 ApprenticeshipCount = commitment.Apprenticeships.Count,
-                IsPaidByTransfer = commitment.IsTransfer()
+                IsPaidByTransfer = commitment.IsTransfer(),
+                AccountLegalEntityPublicHashedId = commitment.AccountLegalEntityPublicHashedId //AgreementId
             };
         }
 

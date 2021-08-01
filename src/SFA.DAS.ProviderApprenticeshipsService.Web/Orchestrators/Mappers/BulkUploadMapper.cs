@@ -41,6 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                                          StartDate = viewModel.StartDate.DateTime,
                                          EndDate = viewModel.EndDate.DateTime,
                                          ProviderRef = viewModel.ProviderRef
+                                         //Email = viewModel.EmailAddress //TODO: V1 api type need to include email 
                                      };
 
             if (!string.IsNullOrWhiteSpace(viewModel.CourseCode))

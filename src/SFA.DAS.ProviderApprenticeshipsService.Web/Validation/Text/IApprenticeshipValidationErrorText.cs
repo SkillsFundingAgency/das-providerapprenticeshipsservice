@@ -42,5 +42,11 @@
         ValidationMessage Uln02 { get; }
         ValidationMessage Uln03 { get; }
         ValidationMessage Uln04 { get; }
+        ValidationMessage EmailAddressBlank { get; }
+        ValidationMessage EmailAddressNotValid { get; }
+        ValidationMessage EmailAddressLength { get; }
+        ValidationMessage EmailAddressRepeat { get; }
+        ValidationMessage AgreementIdBlank { get; }
+        ValidationMessage AgreementIdMismatch { get; }
     }
 }

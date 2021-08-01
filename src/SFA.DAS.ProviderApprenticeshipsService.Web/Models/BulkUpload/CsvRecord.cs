@@ -28,6 +28,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
 
         public string EPAOrgID { get; set; }  // ToDO: Validate Startwith EPA...
 
-        public string ProviderRef { get; set; }
+        public string ProviderRef { get; set; }        
+
+        public string AgreementId { get; set; }
+        
+        public string EmailAddress { get; set; }
+        
     }
 }

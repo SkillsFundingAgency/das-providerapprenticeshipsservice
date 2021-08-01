@@ -57,7 +57,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
 
             var errors = _sut.ValidateRecords(testData, TrainingProgrammes()).ToList();
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().ToString().Should().BeEquivalentTo("Row:1 - You must enter the <strong>start date</strong>, for example 2017-09");
+            errors.FirstOrDefault().ToString().Should().BeEquivalentTo("Row:1 - You must enter the <strong>start date</strong>, for example 2017-09-01");
         }
 
         [TestCase(2018, 12, "This training course is only available to apprentices with a start date after 05 2019", Description = "Start date before (month numerically higher)")]
@@ -160,6 +160,34 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             messages.Should().Contain("The unique learner number must be unique within the cohort");
         }
 
+        [Test]
+        public void FailingValidationCohortNotUniqueEmails()
+        {
+            var testData = GetFailingTestData().ToList();
+            var first = testData[0];
+            var second = testData[1];
+            first.ApprenticeshipViewModel.EmailAddress = "apprentice@test.com";
+            second.ApprenticeshipViewModel.EmailAddress = "apprentice@test.com";
+
+            var errors = _sut.ValidateEmailUniqueness(new List<ApprenticeshipUploadModel> { first, second }).ToList();
+
+            var messages = errors.Select(m => m.ToString()).ToList();            
+            messages.Should().Contain("The email address has already been used for an apprentice in this cohort");
+        }
+
+        [Test]
+        public void FailingValidationOnAgreementId()
+        {
+            var testData = GetFailingTestData().ToList();
+            var first = testData[0];
+            var second = testData[1];          
+
+            var errors = _sut.ValidateAgreementId(new List<ApprenticeshipUploadModel> { first, second }, "XYZUV").ToList();
+
+            var messages = errors.Select(m => m.ToString()).ToList();
+            messages.Should().Contain("The employer on the cohort does not match the Agreement ID");
+        }
+
         private List<TrainingProgramme> TrainingProgrammes()
         {
             return new List<TrainingProgramme>
@@ -178,12 +206,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                 new ApprenticeshipViewModel
                 {
                     FirstName = "Bob", LastName = "The cat", DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567890", ProgType = 25,
-                    StartDate = new DateTimeViewModel(null, startMonth, startYear), EndDate = new DateTimeViewModel(null, endMonth, endYear), Cost = "15000", EmployerRef = "Abba123"
+                    StartDate = new DateTimeViewModel(01, startMonth, startYear), EndDate = new DateTimeViewModel(null, endMonth, endYear), Cost = "15000", EmployerRef = "Abba123",
+                    EmailAddress = "apprentice1@test.com", AgreementId = "XYZUR"
                 }
             };
             var records = new List<CsvRecord>
                               {
-                                  new CsvRecord { ProgType = "23", FworkCode = "18", PwayCode = "26", CohortRef = "ABBA123" }
+                                  new CsvRecord { ProgType = "23", FworkCode = "18", PwayCode = "26", CohortRef = "ABBA123", EmailAddress = "apprentice1@test.com", AgreementId = "XYZUR" }
                               };
             return apprenticeships.Zip(
                 records,
@@ -197,19 +226,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                 new ApprenticeshipViewModel
                 {
                     FirstName = " ", LastName = new string('*', 101), DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567890", ProgType = 25,
-                    StartDate = new DateTimeViewModel(null, 8, 2019), EndDate = new DateTimeViewModel(null, 12, 2019), Cost = "15000", EmployerRef = "Ab123"
+                    StartDate = new DateTimeViewModel(null, 8, 2019), EndDate = new DateTimeViewModel(null, 12, 2019), Cost = "15000", EmployerRef = "Ab123",
+                    EmailAddress = "apprentice1@test.com", AgreementId="XYZUR"
                 },
                 new ApprenticeshipViewModel
                 {
                     FirstName = new string('*', 101), LastName = "", DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567891", ProgType = 25,
-                    StartDate = new DateTimeViewModel(null, 8, 2019), EndDate = new DateTimeViewModel(null, 12, 2019), Cost = "15000", EmployerRef = "Abba123"
+                    StartDate = new DateTimeViewModel(null, 8, 2019), EndDate = new DateTimeViewModel(null, 12, 2019), Cost = "15000", EmployerRef = "Abba123",
+                    EmailAddress = "apprentice2@test.com", AgreementId="XYZUR"
                 }
             };
 
             var records = new List<CsvRecord>
             {
-                new CsvRecord { ProgType = "25", StdCode = "2", CohortRef = "ABBA123" },
-                new CsvRecord { ProgType = "25", StdCode = "2", CohortRef = "ABBA123" }
+                new CsvRecord { ProgType = "25", StdCode = "2", CohortRef = "ABBA123", EmailAddress = "apprentice1@test.com", AgreementId="XYZUR" },                
+                new CsvRecord { ProgType = "25", StdCode = "2", CohortRef = "ABBA123", EmailAddress = "apprentice2@test.com", AgreementId="XYZUR" }
             };
 
             return apprenticeships.Zip(

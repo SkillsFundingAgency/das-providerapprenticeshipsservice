@@ -43,9 +43,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             ValidateField(validationResult, ValidateCost, model);
             ValidateField(validationResult, ValidateProviderRef, model);
             ValidateField(validationResult, ValidateProgType, model);
-            ValidateField(validationResult, ValidateFworkCode, model);
+            ValidateField(validationResult, ValidateFworkCode, model); 
             ValidateField(validationResult, ValidatePwayCode, model);
             ValidateField(validationResult, ValidateStdCode, model);
+            ValidateField(validationResult, ValidateEmail, model);
+            ValidateField(validationResult, ValidateAgreementId, model);
             return validationResult;
         }
 
@@ -278,6 +280,36 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
                 model.ApprenticeshipViewModel.IsPaidForByTransfer)
                 return CreateValidationFailure("FworkCode", _validationText.FworkCode04);
 
+            return null;
+        }
+
+        private ValidationFailure ValidateEmail(ApprenticeshipUploadModel model)
+        {
+            if (string.IsNullOrEmpty(model.CsvRecord.EmailAddress))
+            {
+                return CreateValidationFailure("EmailAddress", _validationText.EmailAddressBlank);
+            }
+
+            if (!model.CsvRecord.EmailAddress.IsAValidEmailAddress())
+            {
+                return CreateValidationFailure("EmailAddress", _validationText.EmailAddressNotValid);
+            }
+
+            if (model.CsvRecord.EmailAddress.Length > 200)
+            {
+                return CreateValidationFailure("EmailAddress", _validationText.EmailAddressLength);
+            }
+
+            return null;
+        }
+
+        private ValidationFailure ValidateAgreementId(ApprenticeshipUploadModel model)
+        {
+            if (string.IsNullOrEmpty(model.CsvRecord.AgreementId))
+            {
+                return CreateValidationFailure("AgreementId", _validationText.AgreementIdBlank);
+            }
+            
             return null;
         }
 
