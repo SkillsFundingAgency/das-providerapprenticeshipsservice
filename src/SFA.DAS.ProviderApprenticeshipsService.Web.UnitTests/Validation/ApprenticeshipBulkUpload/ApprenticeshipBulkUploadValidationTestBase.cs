@@ -49,7 +49,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
                     EmailAddress = "apprentice1@test.com",
                     AgreementId = "XYZUR"
                 },
-                CsvRecord = new CsvRecord { CohortRef = "abba123", ProgType = "25", StdCode = "123", EmailAddress = "apprentice1@test.com", AgreementId = "XYZUR" }
+                CsvRecord = new CsvRecord {
+                    //ProgType = "25",
+                    CohortRef = "abba123",  StdCode = "123", EmailAddress = "apprentice1@test.com", AgreementId = "XYZUR" }
             };
         }
     }

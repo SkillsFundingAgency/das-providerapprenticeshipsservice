@@ -42,9 +42,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             ValidateField(validationResult, ValidateEndDate, model);
             ValidateField(validationResult, ValidateCost, model);
             ValidateField(validationResult, ValidateProviderRef, model);
-            ValidateField(validationResult, ValidateProgType, model);
-            ValidateField(validationResult, ValidateFworkCode, model); 
-            ValidateField(validationResult, ValidatePwayCode, model);
+            //ValidateField(validationResult, ValidateProgType, model);
+            //ValidateField(validationResult, ValidateFworkCode, model); 
+            //ValidateField(validationResult, ValidatePwayCode, model);
             ValidateField(validationResult, ValidateStdCode, model);
             ValidateField(validationResult, ValidateEmail, model);
             ValidateField(validationResult, ValidateAgreementId, model);
@@ -218,70 +218,77 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
             return null;
         }
-
+       
         private ValidationFailure ValidateStdCode(ApprenticeshipUploadModel model)
         {
+            if (string.IsNullOrWhiteSpace(model.CsvRecord.StdCode))
+            {
+                return CreateValidationFailure("StdCode", _validationText.StdCode04);
+            }
+            
             if (!string.IsNullOrWhiteSpace(model.CsvRecord.StdCode) && (model.CsvRecord.StdCode.TryParse() ?? 100000) > 99999)
             {
                 return CreateValidationFailure("StdCode", _validationText.StdCode01);
             }
 
-            if (model.CsvRecord.ProgType == "25" && (model.CsvRecord.StdCode.TryParse() ?? 0) <= 0)
+            if ((model.CsvRecord.StdCode.TryParse() ?? 0) <= 0)
+             //  if (model.CsvRecord.ProgType == "25" && (model.CsvRecord.StdCode.TryParse() ?? 0) <= 0)
             {
                 return CreateValidationFailure("StdCode", _validationText.StdCode02);
             }
 
-            if (FrameworkProgTypeSelected(model.CsvRecord) && !string.IsNullOrWhiteSpace(model.CsvRecord.StdCode) && model.CsvRecord.StdCode != "0")
-            {
-                return CreateValidationFailure("StdCode", _validationText.StdCode03);
-            }
+            //if (FrameworkProgTypeSelected(model.CsvRecord) && !string.IsNullOrWhiteSpace(model.CsvRecord.StdCode) && model.CsvRecord.StdCode != "0")
+            //if (!string.IsNullOrWhiteSpace(model.CsvRecord.StdCode) && model.CsvRecord.StdCode != "0")
+            //{
+            //    return CreateValidationFailure("StdCode", _validationText.StdCode03);
+            //}
 
             return null;
         }
 
-        private ValidationFailure ValidatePwayCode(ApprenticeshipUploadModel model)
-        {
-            if(!string.IsNullOrWhiteSpace(model.CsvRecord.PwayCode) && InList(model.CsvRecord.ProgType, new[] { "2", "3", "20", "21", "22", "23" }) && model.CsvRecord.PwayCode.TryParse() > 999)
-            {
-                return CreateValidationFailure("PwayCode", _validationText.PwayCode01);
-            }
+        //private ValidationFailure ValidatePwayCode(ApprenticeshipUploadModel model)
+        //{
+        //    if(!string.IsNullOrWhiteSpace(model.CsvRecord.PwayCode) && InList(model.CsvRecord.ProgType, new[] { "2", "3", "20", "21", "22", "23" }) && model.CsvRecord.PwayCode.TryParse() > 999)
+        //    {
+        //        return CreateValidationFailure("PwayCode", _validationText.PwayCode01);
+        //    }
 
-            if(!string.IsNullOrWhiteSpace(model.CsvRecord.ProgType) && InList(model.CsvRecord.ProgType, new[] { "2", "3", "20", "21", "22", "23" }) && (model.CsvRecord.PwayCode.TryParse() ?? 0) <= 0)
-            {
-                return CreateValidationFailure("PwayCode", _validationText.PwayCode02);
-            }
+        //    if(!string.IsNullOrWhiteSpace(model.CsvRecord.ProgType) && InList(model.CsvRecord.ProgType, new[] { "2", "3", "20", "21", "22", "23" }) && (model.CsvRecord.PwayCode.TryParse() ?? 0) <= 0)
+        //    {
+        //        return CreateValidationFailure("PwayCode", _validationText.PwayCode02);
+        //    }
 
-            if (model.CsvRecord.ProgType == "25" && !string.IsNullOrWhiteSpace(model.CsvRecord.PwayCode) && model.CsvRecord.PwayCode != "0")
-            {
-                return CreateValidationFailure("PwayCode", _validationText.PwayCode03);
-            }
+        //    if (model.CsvRecord.ProgType == "25" && !string.IsNullOrWhiteSpace(model.CsvRecord.PwayCode) && model.CsvRecord.PwayCode != "0")
+        //    {
+        //        return CreateValidationFailure("PwayCode", _validationText.PwayCode03);
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
-        private ValidationFailure ValidateFworkCode(ApprenticeshipUploadModel model)
-        {
-            if (!string.IsNullOrWhiteSpace(model.CsvRecord.FworkCode) && (model.CsvRecord.FworkCode.TryParse() ?? 1000) > 999)
-            {
-                return CreateValidationFailure("FworkCode", _validationText.FworkCode01);
-            }
+        //private ValidationFailure ValidateFworkCode(ApprenticeshipUploadModel model)
+        //{
+        //    if (!string.IsNullOrWhiteSpace(model.CsvRecord.FworkCode) && (model.CsvRecord.FworkCode.TryParse() ?? 1000) > 999)
+        //    {
+        //        return CreateValidationFailure("FworkCode", _validationText.FworkCode01);
+        //    }
 
-            if (!string.IsNullOrWhiteSpace(model.CsvRecord.ProgType) && InList(model.CsvRecord.ProgType, new[] { "2", "3", "20", "21", "22", "23" }) && (model.CsvRecord.FworkCode.TryParse() ?? 0) <= 0)
-            {
-                return CreateValidationFailure("FworkCode", _validationText.FworkCode02);
-            }
+        //    if (!string.IsNullOrWhiteSpace(model.CsvRecord.ProgType) && InList(model.CsvRecord.ProgType, new[] { "2", "3", "20", "21", "22", "23" }) && (model.CsvRecord.FworkCode.TryParse() ?? 0) <= 0)
+        //    {
+        //        return CreateValidationFailure("FworkCode", _validationText.FworkCode02);
+        //    }
             
-            if (model.CsvRecord.ProgType == "25" && !string.IsNullOrWhiteSpace(model.CsvRecord.FworkCode) && model.CsvRecord.FworkCode != "0")
-            {
-                return CreateValidationFailure("FworkCode", _validationText.FworkCode03);
-            }
+        //    if (model.CsvRecord.ProgType == "25" && !string.IsNullOrWhiteSpace(model.CsvRecord.FworkCode) && model.CsvRecord.FworkCode != "0")
+        //    {
+        //        return CreateValidationFailure("FworkCode", _validationText.FworkCode03);
+        //    }
 
-            if (!string.IsNullOrWhiteSpace(model.CsvRecord.FworkCode) &&
-                model.ApprenticeshipViewModel.IsPaidForByTransfer)
-                return CreateValidationFailure("FworkCode", _validationText.FworkCode04);
+        //    if (!string.IsNullOrWhiteSpace(model.CsvRecord.FworkCode) &&
+        //        model.ApprenticeshipViewModel.IsPaidForByTransfer)
+        //        return CreateValidationFailure("FworkCode", _validationText.FworkCode04);
 
-            return null;
-        }
+        //    return null;
+        //}
 
         private ValidationFailure ValidateEmail(ApprenticeshipUploadModel model)
         {
@@ -313,25 +320,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             return null;
         }
 
-        private ValidationFailure ValidateProgType(ApprenticeshipUploadModel model)
-        {
-            if ((model.CsvRecord.ProgType.TryParse() ?? 100) > 99)
-            {
-                return CreateValidationFailure("ProgType", _validationText.ProgType01);
-            }
+        //private ValidationFailure ValidateProgType(ApprenticeshipUploadModel model)
+        //{
+        //    if ((model.CsvRecord.ProgType.TryParse() ?? 100) > 99)
+        //    {
+        //        return CreateValidationFailure("ProgType", _validationText.ProgType01);
+        //    }
 
-            if (!InList(model.CsvRecord.ProgType, new[] { "2", "3", "20", "21", "22", "23", "25" }))
-            {
-                return CreateValidationFailure("ProgType", _validationText.ProgType02);
-            }
+        //    if (!InList(model.CsvRecord.ProgType, new[] { "2", "3", "20", "21", "22", "23", "25" }))
+        //    {
+        //        return CreateValidationFailure("ProgType", _validationText.ProgType02);
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
-        private static bool FrameworkProgTypeSelected(CsvRecord record)
-        {
-            return !string.IsNullOrWhiteSpace(record.ProgType) && InList(record.ProgType, new[] { "2", "3", "20", "21", "22", "23" });
-        }
+        //private static bool FrameworkProgTypeSelected(CsvRecord record)
+        //{
+        //    return !string.IsNullOrWhiteSpace(record.ProgType) && InList(record.ProgType, new[] { "2", "3", "20", "21", "22", "23" });
+        //}
 
         private void ValidateField(ValidationResult validationResult, Func<ApprenticeshipUploadModel, ValidationFailure> validationFunc, ApprenticeshipUploadModel model)
         {

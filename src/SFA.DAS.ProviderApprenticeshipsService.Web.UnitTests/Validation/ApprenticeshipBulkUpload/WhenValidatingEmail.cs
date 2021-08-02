@@ -37,18 +37,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
             result.Errors[0].ErrorMessage.Should().Be("You must enter a valid <strong>email address</strong>");
         }
 
-        [Test]
-        public void TestEmailAddressNoLongerThan200Characters()
+        [TestCase(190, 0)]        
+        [TestCase(201, 1)]
+        public void TestEmailAddressNoLongerThan200Characters(int length, int expectedErrorCount)
         {
-            //Arrange
-            ValidModel.CsvRecord.EmailAddress = "apprentice1apprentice1apprentice1apprentice1apprentice1apprentice1apprentice1apprentice1apprentice1apprentice1apprentice1apprentice1apprentice1apprentice1apprentice1apprentice1apprentice1testlength@test.com";
+            //Arrange            
+            ValidModel.CsvRecord.EmailAddress = new string('*', length) + "@test.com";           
 
             //Act
             var result = Validator.Validate(ValidModel);
             
             //Assert
-            result.Errors.Count.Should().Be(1);
-            result.Errors[0].ErrorMessage.Should().Be("You must enter an <strong>email address</strong> that’s no longer than 200 characters");
+            result.Errors.Count.Should().Be(expectedErrorCount);
+            if (expectedErrorCount > 0)
+            {
+                result.Errors[0].ErrorMessage.Should().Be("You must enter an <strong>email address</strong> that’s no longer than 200 characters");
+            }
         }
     }
 }

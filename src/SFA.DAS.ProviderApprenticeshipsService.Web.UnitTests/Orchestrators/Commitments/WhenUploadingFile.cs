@@ -36,7 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
     [TestFixture]
     public sealed class WhenUploadingFile : BulkUploadTestBase
     {
-        private const string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,FworkCode,PwayCode,ProgType,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,EmpRef,ProviderRef,ULN,EmailAddress,AgreementId";
+        private const string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,EmpRef,ProviderRef,ULN,EmailAddress,AgreementId";
         private BulkUploadOrchestrator _sut;
         private Mock<HttpPostedFileBase> _file;
         private Mock<IMediator> _mockMediator;
@@ -93,7 +93,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task TestPerformance()
         {
-            string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,FworkCode,PwayCode,ProgType,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,EmpRef,ProviderRef,AgreementId,EmailAddress,ULN";
+            string HeaderLine = @"CohortRef,GivenNames,FamilyName,DateOfBirth,StdCode,StartDate,EndDate,TotalPrice,EPAOrgId,EmpRef,ProviderRef,AgreementId,EmailAddress,ULN";
             _mockMediator.Setup(m => m.Send(It.IsAny<GetCommitmentQueryRequest>(), It.IsAny<CancellationToken>()))
                     .Returns(Task.FromResult(new GetCommitmentQueryResponse
                     {
@@ -103,14 +103,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                             EditStatus = EditStatus.ProviderOnly
                         }
                     }));
-
+            
             const int upper = 40 * 1000;
             var testData = new List<string>();
             for (int i = 0; i < upper; i++)
             {
                 var uln = (1000000000 + i).ToString();
                 var email = $"apprentice{i}@test.com";
-                testData.Add("\n\r ABBA123,Chris,Froberg,1998-12-08,,,,2,2020-08-01,2025-08,1500,,Employer ref,Provider ref,XYZUR," + email + ',' + uln);
+                testData.Add("\n\r ABBA123,Chris,Froberg,1998-12-08,0,2020-08-01,2025-08,1500,,Employer ref,Provider ref,XYZUR," + email + ',' + uln);
             }
             var str = HeaderLine + string.Join("", testData);
 

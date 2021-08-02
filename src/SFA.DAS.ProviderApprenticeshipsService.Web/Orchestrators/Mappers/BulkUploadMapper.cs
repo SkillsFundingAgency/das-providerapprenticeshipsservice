@@ -40,8 +40,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
                                          Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
                                          StartDate = viewModel.StartDate.DateTime,
                                          EndDate = viewModel.EndDate.DateTime,
-                                         ProviderRef = viewModel.ProviderRef
-                                         //Email = viewModel.EmailAddress //TODO: V1 api type need to include email 
+                                         ProviderRef = viewModel.ProviderRef,                                         
+                                         Email = viewModel.EmailAddress
                                      };
 
             if (!string.IsNullOrWhiteSpace(viewModel.CourseCode))

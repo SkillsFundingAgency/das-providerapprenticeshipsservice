@@ -12,9 +12,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
             Map(x => x.FamilyName);
             Map(x => x.GivenNames);
             Map(x => x.DateOfBirth);
-            Map(x => x.ProgType); //.Optional();
-            Map(x => x.FworkCode); //.Optional();  //TODO: Frameworks fields are removed
-            Map(x => x.PwayCode); //.Optional();
+            //Map(x => x.ProgType); //.Optional();
+            //Map(x => x.FworkCode); //.Optional();  //TODO: Frameworks fields are removed
+            //Map(x => x.PwayCode); //.Optional();
             Map(x => x.StdCode);          
             Map(x => x.StartDate);
             Map(x => x.EndDate);

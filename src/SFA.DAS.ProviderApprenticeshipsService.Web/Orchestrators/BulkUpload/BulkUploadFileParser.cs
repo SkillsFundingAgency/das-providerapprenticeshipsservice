@@ -69,9 +69,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             learnerStartDate = new DateTime(learnerStartDate.GetValueOrDefault().Year, learnerStartDate.GetValueOrDefault().Month, 1); //Start date format changes from CCYY-MM to CCYY-MM-DD (although it is stored as CCYY-MM-01).                        
             var learnerEndDate = GetValidDate(record.EndDate, "yyyy-MM");
 
-            var courseCode = record.ProgType == "25"
-                                   ? record.StdCode
-                                   : $"{record.FworkCode}-{record.ProgType}-{record.PwayCode}";
+            //var courseCode = record.ProgType == "25"
+            //                       ? record.StdCode
+            //                       : $"{record.FworkCode}-{record.ProgType}-{record.PwayCode}";
 
             var apprenticeshipViewModel = new ApprenticeshipViewModel
             {   
@@ -85,8 +85,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 ProviderRef = record.ProviderRef,
                 StartDate = new DateTimeViewModel(learnerStartDate),
                 EndDate = new DateTimeViewModel(learnerEndDate),
-                ProgType = record.ProgType.TryParse(),
-                CourseCode = courseCode,
+                //ProgType = record.ProgType.TryParse(),
+                CourseCode = record.StdCode,
                 IsPaidForByTransfer = commitment.IsTransfer(),
                 AgreementId = commitment.AccountLegalEntityPublicHashedId,
                 EmailAddress = record.EmailAddress

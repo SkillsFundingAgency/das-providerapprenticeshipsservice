@@ -12,11 +12,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
 
         public string DateOfBirth { get; set; }
 
-        public string ProgType { get; set; }
+        //public string ProgType { get; set; }
 
-        public string FworkCode { get; set; }
+        //public string FworkCode { get; set; }
 
-        public string PwayCode { get; set; }
+        //public string PwayCode { get; set; }
 
         public string StdCode { get; set; }
 

@@ -88,6 +88,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
         public ValidationMessage StdCode01 { get { throw new NotImplementedException(); } }
         public ValidationMessage StdCode02 { get { throw new NotImplementedException(); } }
         public ValidationMessage StdCode03 { get { throw new NotImplementedException(); } }
+        public ValidationMessage StdCode04 { get { throw new NotImplementedException(); } }
+        
 
         public ValidationMessage CourseCode01 => 
             new ValidationMessage("Training course can't be empty", "DefaultErrorCode");
