@@ -128,7 +128,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task ShouldCallMediatorPassingInMappedApprenticeships()
         {
-            const string dataLine = "\n\r ABBA123,Chris,Froberg,1998-12-08,,,25,2,2020-08-01,2025-08,1500,,Employer ref,Provider ref,1113335559,apprentice1@test.com,XYZUR";
+            const string dataLine = "\n\r ABBA123,Chris,Froberg,1998-12-08,2,2020-08-01,2025-08,1500,,Employer ref,Provider ref,1113335559,apprentice1@test.com,XYZUR";
           
             const string fileContents = HeaderLine + dataLine;
             var textStream = new MemoryStream(UTF8.GetBytes(fileContents));
@@ -178,7 +178,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
         [Test]
         public async Task ThenIfAnyRecordsOverlapWithActiveApprenticeshipsThenReturnError()
         {
-            const string dataLine = "\n\r ABBA123,Chris,Froberg,1998-12-08,,,25,2,2020-08,2025-08,1500,,Employer ref,Provider ref,1113335559, apprentice1@test.com,XYZUR";
+            const string dataLine = "\n\r ABBA123,Chris,Froberg,1998-12-08,2,2020-08,2025-08,1500,,Employer ref,Provider ref,1113335559, apprentice1@test.com,XYZUR";
             const string fileContents = HeaderLine + dataLine;
             var textStream = new MemoryStream(UTF8.GetBytes(fileContents));
             _file.Setup(m => m.InputStream).Returns(textStream);

@@ -139,7 +139,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests
 
         [TestCase("100000", "The <strong>Standard code</strong> must be 5 characters or fewer", "StdCode_01")]
         [TestCase("-1", "You must enter a <strong>Standard code</strong> - you can add up to 5 characters", "StdCode_02")]
-        [TestCase(null, "You must enter a <strong>Standard code</strong> - you can add up to 5 characters", "StdCode_02")]
+        [TestCase(null, "You must enter a <strong>Standard code</strong>", "StdCode_04")]
         //[TestCase("42", "You must not enter a <strong>Standard code</strong> when you've entered a Framework programme type", "StdCode_03")]
         [TestCase("abba", "The <strong>Standard code</strong> must be 5 characters or fewer", "StdCode_01")]
         public void StandardCodeValidationFail(string standardCode, string message, string errorCode)

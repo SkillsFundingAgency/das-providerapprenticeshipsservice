@@ -104,7 +104,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
         public ValidationMessage StdCode03 =>
               new ValidationMessage("You must not enter a <strong>Standard code</strong> when you've entered a Framework programme type", "StdCode_03");
         public ValidationMessage StdCode04 =>
-             new ValidationMessage("You must enter a <strong>Standard code</strong>", "StdCode_03");
+             new ValidationMessage("You must enter a <strong>Standard code</strong>", "StdCode_04");
 
         public ValidationMessage CourseCode01 =>
             new ValidationMessage("You must enter a valid <strong>Standard code</strong> or <strong>Framework code</strong>", "DefaultErrorCode");
