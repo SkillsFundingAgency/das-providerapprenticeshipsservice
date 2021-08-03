@@ -76,7 +76,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
 
             var hashedCommitmentId = await _createCohortOrchestrator.CreateCohort(providerId, confirmViewModel, CurrentUserId, GetSignedInUser());
-            return RedirectToAction("Details", "Commitment", new { providerId, hashedCommitmentId });
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/{hashedCommitmentId}/details"));
         }
     }
 }

@@ -56,7 +56,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             model.RequestListUrl = Url.Action(redirectTo, new { providerId });
 
             if (model.IsSignedAgreement)
-                return RedirectToAction("Details", new { providerId, hashedCommitmentId });
+                return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/{hashedCommitmentId}/details"));
 
             return View(model);
         }
@@ -93,28 +93,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [Deprecated]
         [Route("{hashedCommitmentId}/Details", Name = "CohortDetails")]
-        public async Task<ActionResult> Details(long providerId, string hashedCommitmentId)
+        public ActionResult Details(long providerId, string hashedCommitmentId)
         {
-            LogUserClaims();
-
-            var model = await _commitmentOrchestrator.GetCommitmentDetails(providerId, hashedCommitmentId);
-               
-            model.BackLinkUrl = GetReturnToListUrl(providerId);
-             
-            AddFlashMessageToViewModel(model);
-
-            return View(model);
-        }
-
-        private void LogUserClaims()
-        {
-            var claims = ((ClaimsIdentity)HttpContext.User.Identity).Claims
-                        .Select(x => $"{x.Type}: {x.Value}").ToArray();
-
-            var logValue = string.Join(Environment.NewLine, claims);
-
-            _logger.Trace("User claims", new Dictionary<string, object> { { "providerClaims", logValue } });
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/{hashedCommitmentId}/details"));
         }
 
         [OutputCache(CacheProfile = "NoCache")]
@@ -142,8 +125,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             }
 
             if (viewModel.DeleteConfirmed == null || !viewModel.DeleteConfirmed.Value)
-            {   
-                return RedirectToAction("Details", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
+            {
+
+                return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{viewModel.ProviderId}/unapproved/{viewModel.HashedCommitmentId}/details"));
             }
 
             await _commitmentOrchestrator.DeleteCommitment(CurrentUserId, viewModel.ProviderId, viewModel.HashedCommitmentId, GetSignedInUser());
@@ -187,7 +171,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var deletedApprenticeshipName = await _commitmentOrchestrator.DeleteApprenticeship(CurrentUserId, viewModel, GetSignedInUser());
             SetInfoMessage($"Apprentice record for {deletedApprenticeshipName} deleted", FlashMessageSeverityLevel.Okay);
 
-            return RedirectToRoute("CohortDetails", new { providerId = viewModel.ProviderId, hashedCommitmentId = viewModel.HashedCommitmentId });
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{viewModel.ProviderId}/unapproved/{viewModel.HashedCommitmentId}/details"));
         }
 
         [HttpGet]
