@@ -245,7 +245,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                         AgreementStatus = AgreementStatus.NotAgreed,
                         EditStatus = EditStatus.ProviderOnly
                     }
-                }));         
+                }));
 
             _mockMediator.Setup(m => m.Send(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>(), new CancellationToken()))
                 .Returns(

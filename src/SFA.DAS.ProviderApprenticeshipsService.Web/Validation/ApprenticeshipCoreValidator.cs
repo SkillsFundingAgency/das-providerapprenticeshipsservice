@@ -57,6 +57,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             ValidateCost();
 
             ValidateProviderReference();
+
+            ValidateAgreementId();
         }
 
         private void ValidateFirstName()
@@ -182,6 +184,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
             RuleFor(x => x.ProviderRef)
                 .Must(m => LengthLessThanFunc(m, 21))
                     .When(x => !string.IsNullOrEmpty(x.ProviderRef)).WithMessage(ValidationText.ProviderRef01.Text).WithErrorCode(ValidationText.ProviderRef01.ErrorCode);
+        }
+
+        private void ValidateAgreementId()
+        {
+            RuleFor(x => x.AgreementId)
+               .Cascade(CascadeMode.StopOnFirstFailure)
+               .NotEmpty().WithMessage(ValidationText.AgreementIdBlank.Text).WithErrorCode(ValidationText.AgreementIdBlank.ErrorCode);
         }
 
         private bool WillApprenticeBeAtLeast15AtStartOfTraining(ApprenticeshipViewModel model, DateTimeViewModel dob)

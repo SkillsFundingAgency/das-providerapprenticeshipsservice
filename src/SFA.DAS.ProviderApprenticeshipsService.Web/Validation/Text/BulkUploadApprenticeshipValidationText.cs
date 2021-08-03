@@ -73,30 +73,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
 
         public ValidationMessage ProviderRef01 =>
             new ValidationMessage("The <strong>Provider reference</strong> must be 20 characters or fewer", "ProviderRef_01");
-
-        // training type validation messages
-
-        public ValidationMessage ProgType01 =>
-              new ValidationMessage("You must enter a <strong>Programme type</strong> - you can add up to 2 characters", "ProgType_01");
-        public ValidationMessage ProgType02 =>
-              new ValidationMessage("The <strong>Programme type</strong> you've added isn't valid", "ProgType_02");
-
-        public ValidationMessage FworkCode01 =>
-              new ValidationMessage("The <strong>Framework code</strong> must be 3 characters or fewer", "FworkCode_01");
-        public ValidationMessage FworkCode02 =>
-              new ValidationMessage("You must enter a <strong>Framework code</strong> - you can add up to 3 characters", "FworkCode_02");
-        public ValidationMessage FworkCode03 =>
-              new ValidationMessage("You must not enter a <strong>Framework code</strong> when you've entered a Standard programme type", "FworkCode_03");
-        public ValidationMessage FworkCode04 =>
-            new ValidationMessage("Entered apprenticeship type is a framework.<br/>All apprenticeship types must be apprenticeship standards.", "FworkCode_04");
-
-        public ValidationMessage PwayCode01 =>
-              new ValidationMessage("The <strong>Pathway code</strong> must be 3 characters or fewer", "PwayCode_01");
-        public ValidationMessage PwayCode02 =>
-              new ValidationMessage("You must enter a <strong>Pathway code</strong> = you can add up to 3 characters", "PwayCode_02");
-        public ValidationMessage PwayCode03 =>
-              new ValidationMessage("You must not enter a <strong>Pathway code</strong> when you've entered a Standard programme type", "PwayCode_03");
-
+        
         public ValidationMessage StdCode01 =>
               new ValidationMessage("The <strong>Standard code</strong> must be 5 characters or fewer", "StdCode_01");
         public ValidationMessage StdCode02 =>

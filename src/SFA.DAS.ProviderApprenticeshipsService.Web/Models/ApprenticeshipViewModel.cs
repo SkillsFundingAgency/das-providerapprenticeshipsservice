@@ -46,8 +46,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string ProviderRef { get; set; }
         public string EmployerRef { get; set; }
 
-        public int? ProgType { get; set; }
-
         public bool HasStarted { get; set; }
 
         public bool IsLockedForUpdate { get; set; }

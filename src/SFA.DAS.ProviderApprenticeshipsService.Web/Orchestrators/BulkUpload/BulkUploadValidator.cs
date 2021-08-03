@@ -64,7 +64,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
             if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != cohortReference && m.CsvRecord.CohortRef != string.Empty))
                 errors.Add(new UploadError(_validationText.CohortRef02.Text.RemoveHtmlTags(), _validationText.CohortRef02.ErrorCode));
-           
+
             if (apprenticeshipUploadModels.Length != apprenticeshipUploadModels.DistinctBy(m => m.ApprenticeshipViewModel.ULN).Count())
                 errors.Add(new UploadError(_validationText.Uln04.Text.RemoveHtmlTags(), _validationText.Uln04.ErrorCode));
 
@@ -167,7 +167,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
             var errors = new List<UploadError>();
 
-            if (apprenticeshipUploadModels.Any(m => m.CsvRecord.AgreementId != agreementId))
+            if (apprenticeshipUploadModels.Any(m => m.CsvRecord.AgreementId != agreementId && m.CsvRecord.AgreementId != string.Empty ))
                 errors.Add(new UploadError(_validationText.AgreementIdMismatch.Text.RemoveHtmlTags(), _validationText.AgreementIdMismatch.ErrorCode));
 
             return errors;

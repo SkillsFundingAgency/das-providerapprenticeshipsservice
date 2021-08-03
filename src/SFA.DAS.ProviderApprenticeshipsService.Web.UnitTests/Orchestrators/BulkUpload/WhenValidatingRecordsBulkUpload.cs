@@ -191,9 +191,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         private List<TrainingProgramme> TrainingProgrammes()
         {
             return new List<TrainingProgramme>
-                       {
-                            //new TrainingProgramme { Name = "Framework1", CourseCode = "1-2-3"},
-                            //new TrainingProgramme { Name = "Framework2", CourseCode = "`4-5-6" },
+                       {   
                             new TrainingProgramme { Name = "Standard 1", CourseCode = "1" },
                             new TrainingProgramme { Name = "Standard 2", CourseCode = "2" }
                        };
@@ -205,18 +203,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             {
                 new ApprenticeshipViewModel
                 {
-                    FirstName = "Bob", LastName = "The cat", DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567890", 
-                    //ProgType = 25,
+                    FirstName = "Bob", LastName = "The cat", DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567890",                     
                     StartDate = new DateTimeViewModel(01, startMonth, startYear), EndDate = new DateTimeViewModel(null, endMonth, endYear), Cost = "15000", EmployerRef = "Abba123",
                     EmailAddress = "apprentice1@test.com", AgreementId = "XYZUR"
                 }
             };
             var records = new List<CsvRecord>
                               {
-                                  new CsvRecord { 
-                                      //ProgType = "23", FworkCode = "18", PwayCode = "26",
-                                      StdCode = "12345",
-                                      CohortRef = "ABBA123", EmailAddress = "apprentice1@test.com", AgreementId = "XYZUR" }
+                                  new CsvRecord { StdCode = "12345",  CohortRef = "ABBA123", EmailAddress = "apprentice1@test.com", AgreementId = "XYZUR" }
                               };
             return apprenticeships.Zip(
                 records,
@@ -229,13 +223,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             {
                 new ApprenticeshipViewModel
                 {
-                    FirstName = " ", LastName = new string('*', 101), DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567890", ProgType = 25,
+                    FirstName = " ", LastName = new string('*', 101), DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567890", 
                     StartDate = new DateTimeViewModel(null, 8, 2019), EndDate = new DateTimeViewModel(null, 12, 2019), Cost = "15000", EmployerRef = "Ab123",
                     EmailAddress = "apprentice1@test.com", AgreementId="XYZUR"
                 },
                 new ApprenticeshipViewModel
                 {
-                    FirstName = new string('*', 101), LastName = "", DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567891", ProgType = 25,
+                    FirstName = new string('*', 101), LastName = "", DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567891",
                     StartDate = new DateTimeViewModel(null, 8, 2019), EndDate = new DateTimeViewModel(null, 12, 2019), Cost = "15000", EmployerRef = "Abba123",
                     EmailAddress = "apprentice2@test.com", AgreementId="XYZUR"
                 }
@@ -243,12 +237,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
 
             var records = new List<CsvRecord>
             {
-                new CsvRecord { 
-                    //ProgType = "25",
-                    StdCode = "2", CohortRef = "ABBA123", EmailAddress = "apprentice1@test.com", AgreementId="XYZUR" },                
-                new CsvRecord { 
-                    //ProgType = "25", 
-                    StdCode = "2", CohortRef = "ABBA123", EmailAddress = "apprentice2@test.com", AgreementId="XYZUR" }
+                new CsvRecord { StdCode = "2", CohortRef = "ABBA123", EmailAddress = "apprentice1@test.com", AgreementId="XYZUR" },                
+                new CsvRecord { StdCode = "2", CohortRef = "ABBA123", EmailAddress = "apprentice2@test.com", AgreementId="XYZUR" }
             };
 
             return apprenticeships.Zip(

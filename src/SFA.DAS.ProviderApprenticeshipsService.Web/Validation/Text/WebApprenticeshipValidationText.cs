@@ -74,17 +74,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
         public ValidationMessage ProviderRef01 =>
             new ValidationMessage("The Reference must be 20 characters or fewer", "ProviderRef_01");
 
-        public ValidationMessage FworkCode01 { get { throw new NotImplementedException(); } }
-        public ValidationMessage FworkCode02 { get { throw new NotImplementedException(); } }
-        public ValidationMessage FworkCode03 { get { throw new NotImplementedException(); } }
-        public ValidationMessage FworkCode04 { get { throw new NotImplementedException(); } }
-
-        public ValidationMessage ProgType01 { get { throw new NotImplementedException(); } }
-        public ValidationMessage ProgType02 { get { throw new NotImplementedException(); } }
-        public ValidationMessage PwayCode01 { get { throw new NotImplementedException(); } }
-        public ValidationMessage PwayCode02 { get { throw new NotImplementedException(); } }
-        public ValidationMessage PwayCode03 { get { throw new NotImplementedException(); } }
-
         public ValidationMessage StdCode01 { get { throw new NotImplementedException(); } }
         public ValidationMessage StdCode02 { get { throw new NotImplementedException(); } }
         public ValidationMessage StdCode03 { get { throw new NotImplementedException(); } }

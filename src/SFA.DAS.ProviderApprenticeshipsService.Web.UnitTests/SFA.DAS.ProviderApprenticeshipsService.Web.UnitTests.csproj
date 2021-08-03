@@ -485,7 +485,6 @@
     <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingDateOfBirth.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingEmail.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingFirstName.cs" />
-    <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingFrameworkCode.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingLastName.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingProviderReference.cs" />
     <Compile Include="Validation\ApprenticeshipBulkUpload\WhenValidatingCourseCode.cs" />

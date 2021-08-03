@@ -18,10 +18,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 {
     public sealed class BulkUploadFileParser : IBulkUploadFileParser
     {
-        private readonly IProviderCommitmentsLogger _logger;        
+        private readonly IProviderCommitmentsLogger _logger;
 
         public BulkUploadFileParser(IProviderCommitmentsLogger logger)
-        {            
+        {
             _logger = logger;
         }
 
@@ -48,12 +48,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                             .ToList()
                             .Select(record => MapTo(record, commitment))
                     };
-                }              
+                }
                 catch (HeaderValidationException)
                 {
                     _logger.Info("Failed to process bulk upload file (missing field).", providerId, commitment.Id);
                     return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("Some mandatory fields are incomplete. Please check your file and upload again.") } };
-                }                
+                }
                 catch (Exception)
                 {
                     _logger.Info("Failed to process bulk upload file.", providerId, commitment.Id);
@@ -66,13 +66,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
         {          
             var dateOfBirth = GetValidDate(record.DateOfBirth, "yyyy-MM-dd");            
             var learnerStartDate = GetValidDate(record.StartDate, "yyyy-MM-dd"); 
-            learnerStartDate = new DateTime(learnerStartDate.GetValueOrDefault().Year, learnerStartDate.GetValueOrDefault().Month, 1); //Start date format changes from CCYY-MM to CCYY-MM-DD (although it is stored as CCYY-MM-01).                        
+            learnerStartDate = new DateTime(learnerStartDate.GetValueOrDefault().Year, learnerStartDate.GetValueOrDefault().Month, 1);
             var learnerEndDate = GetValidDate(record.EndDate, "yyyy-MM");
-
-            //var courseCode = record.ProgType == "25"
-            //                       ? record.StdCode
-            //                       : $"{record.FworkCode}-{record.ProgType}-{record.PwayCode}";
-
+            
             var apprenticeshipViewModel = new ApprenticeshipViewModel
             {   
                 AgreementStatus = AgreementStatus.NotAgreed,
@@ -85,7 +81,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 ProviderRef = record.ProviderRef,
                 StartDate = new DateTimeViewModel(learnerStartDate),
                 EndDate = new DateTimeViewModel(learnerEndDate),
-                //ProgType = record.ProgType.TryParse(),
                 CourseCode = record.StdCode,
                 IsPaidForByTransfer = commitment.IsTransfer(),
                 AgreementId = commitment.AccountLegalEntityPublicHashedId,
