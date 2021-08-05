@@ -122,9 +122,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             second.CsvRecord.CohortRef = "Other reference";
 
             var errors = _sut.ValidateCohortReference(new List<ApprenticeshipUploadModel> { first, second }, "ABBA123").ToList();
-            errors.Count.Should().Be(2);
-            var messages = errors.Select(m => m.ToString()).ToList();
-            messages.Should().Contain("The cohort reference must be the same for all apprentices in your upload file");
+            errors.Count.Should().Be(1);
+            var messages = errors.Select(m => m.ToString()).ToList();            
             messages.Should().Contain("The cohort reference does not match your current cohort");
         }
 

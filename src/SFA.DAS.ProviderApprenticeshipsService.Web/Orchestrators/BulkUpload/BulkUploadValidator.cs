@@ -59,9 +59,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             var apprenticeshipUploadModels = records as ApprenticeshipUploadModel[] ?? records.ToArray();
             if (!apprenticeshipUploadModels.Any()) return new[] { new UploadError(ApprenticeshipFileValidationText.NoRecords) };
 
-            if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != apprenticeshipUploadModels.First().CsvRecord.CohortRef && apprenticeshipUploadModels.First().CsvRecord.CohortRef != string.Empty))
-                errors.Add(new UploadError(_validationText.CohortRef01.Text.RemoveHtmlTags(), _validationText.CohortRef01.ErrorCode));
-
             if (apprenticeshipUploadModels.Any(m => m.CsvRecord.CohortRef != cohortReference && m.CsvRecord.CohortRef != string.Empty))
                 errors.Add(new UploadError(_validationText.CohortRef02.Text.RemoveHtmlTags(), _validationText.CohortRef02.ErrorCode));
 
