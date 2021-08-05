@@ -97,6 +97,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("{hashedCommitmentId}/Details", Name = "CohortDetails")]
         public ActionResult Details(long providerId, string hashedCommitmentId)
         {
+            _logger.Info($"To track Apprentice V1 details UrlReferrer Request: {HttpContext.Request.UrlReferrer} Request to Page: {HttpContext.Request.RawUrl}");
             return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/{hashedCommitmentId}/details"));
         }
 
@@ -126,7 +127,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (viewModel.DeleteConfirmed == null || !viewModel.DeleteConfirmed.Value)
             {
-
                 return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{viewModel.ProviderId}/unapproved/{viewModel.HashedCommitmentId}/details"));
             }
 
