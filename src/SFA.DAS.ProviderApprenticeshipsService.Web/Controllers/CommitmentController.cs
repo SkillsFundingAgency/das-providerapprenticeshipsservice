@@ -230,10 +230,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpGet]
         [Route("{hashedCommitmentId}/RequestApproved")]
         [RoleAuthorize(Roles = nameof(RoleNames.HasContributorWithApprovalOrAbovePermission))]
-        public async Task<ActionResult> Approved(long providerId, string hashedCommitmentId)
+        public ActionResult Approved(long providerId, string hashedCommitmentId)
         {
-            var model = await _commitmentOrchestrator.GetApprovedViewModel(providerId, hashedCommitmentId);
-            return View("RequestApproved", model);
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/{hashedCommitmentId}/Acknowledgement/"));
         }
 
         [HttpGet]
@@ -263,28 +262,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             await _commitmentOrchestrator.SubmitCommitment(CurrentUserId, model.ProviderId, model.HashedCommitmentId, model.SaveStatus, model.Message, GetSignedInUser());
 
-            return RedirectToAction("Acknowledgement", new { providerId = model.ProviderId, hashedCommitmentId = model.HashedCommitmentId, saveStatus = model.SaveStatus});
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{model.ProviderId}/unapproved/{model.HashedCommitmentId}/Acknowledgement?saveStatus={model.SaveStatus}"));
         }
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Acknowledgement")]
-        public async Task<ActionResult> Acknowledgement(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
+        [RoleAuthorize(Roles = nameof(RoleNames.HasContributorWithApprovalOrAbovePermission))]
+        public  ActionResult Acknowledgement(long providerId, string hashedCommitmentId, SaveStatus saveStatus)
         {
-            var viewModel = await _commitmentOrchestrator.GetAcknowledgementViewModel(providerId, hashedCommitmentId, saveStatus);
-
-            var currentStatusCohortAny = await _commitmentOrchestrator.AnyCohortsForStatus(providerId, GetRequestStatusFromCookie());
-            var url = GetReturnToListUrl(providerId);
-            var linkText = "Go back to view cohorts";
-            if (!currentStatusCohortAny)
-            {
-                linkText = "Return to Your cohorts";
-                url = Url.Action("Cohorts", new { providerId });
-            }
-
-            viewModel.RedirectUrl = url;
-            viewModel.RedirectLinkText = linkText;
-
-            return View(viewModel);
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/{hashedCommitmentId}/Acknowledgement?saveStatus={saveStatus}"));
         }
 
         private string GetReturnToListUrl(long providerId)
