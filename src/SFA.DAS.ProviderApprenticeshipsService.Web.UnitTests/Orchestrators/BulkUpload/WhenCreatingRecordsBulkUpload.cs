@@ -152,7 +152,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
 
             var errors = result.Errors.ToList();
             Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("Some mandatory fields are incomplete. Please check your file and upload again.", errors.First().Message);
+            Assert.AreEqual("Upload failed. Please check your file and try again.", errors.First().Message);
 
             logger.Verify(x => x.Info(It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>()), Times.Once);
             logger.Verify(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>()), Times.Never);

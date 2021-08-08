@@ -50,9 +50,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                     };
                 }
                 catch (HeaderValidationException)
-                {
+                {   
                     _logger.Info("Failed to process bulk upload file (missing field).", providerId, commitment.Id);
-                    return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("Some mandatory fields are incomplete. Please check your file and upload again.") } };
+                    return new BulkUploadResult { Errors = new List<UploadError> { new UploadError(errorMessage) } };
                 }
                 catch (Exception)
                 {
@@ -65,8 +65,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
         private ApprenticeshipUploadModel MapTo(CsvRecord record, CommitmentView commitment)
         {          
             var dateOfBirth = GetValidDate(record.DateOfBirth, "yyyy-MM-dd");            
-            var learnerStartDate = GetValidDate(record.StartDate, "yyyy-MM-dd"); 
-            learnerStartDate = new DateTime(learnerStartDate.GetValueOrDefault().Year, learnerStartDate.GetValueOrDefault().Month, 1);
+            var learnerStartDate = GetValidDate(record.StartDate, "yyyy-MM-dd");
+            if (learnerStartDate != null)
+                learnerStartDate = new DateTime(learnerStartDate.GetValueOrDefault().Year, learnerStartDate.GetValueOrDefault().Month, 1);
             var learnerEndDate = GetValidDate(record.EndDate, "yyyy-MM");
             
             var apprenticeshipViewModel = new ApprenticeshipViewModel
