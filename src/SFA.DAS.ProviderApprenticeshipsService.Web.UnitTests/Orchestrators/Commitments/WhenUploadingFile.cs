@@ -30,6 +30,7 @@ using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using static System.Text.Encoding;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetEmailOverlapingApprenticeships;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Commitments
 {
@@ -219,6 +220,58 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Com
                     }));
 
             var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111, AccountLegalEntityPublicHashedId = "XYZUR" };
+            var file = await _sut.UploadFile("user123", model, new SignInUserModel());
+
+            //Assert
+            Assert.IsTrue(file.HasRowLevelErrors);
+        }
+
+        [Test]
+        public async Task ThenIfAnyRecordsEmailOverlapWithActiveApprenticeshipsThenReturnError()
+        {
+            const string dataLine = "\n\r ABBA123,Chris,Froberg,1998-12-08,2,2020-08,2025-08,1500,,Employer ref,Provider ref,1113335559,apprentice1@test.com,XYZUR";
+            const string fileContents = HeaderLine + dataLine;
+            var textStream = new MemoryStream(UTF8.GetBytes(fileContents));
+            _file.Setup(m => m.InputStream).Returns(textStream);
+
+            BulkUploadApprenticeshipsCommand commandArgument = null;
+            _mockMediator.Setup(x => x.Send(It.IsAny<BulkUploadApprenticeshipsCommand>(), new CancellationToken()))
+                .ReturnsAsync(new Unit())
+                .Callback((IRequest<Unit> x, CancellationToken c) => commandArgument = x.As<BulkUploadApprenticeshipsCommand>());
+
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetCommitmentQueryRequest>(), new CancellationToken()))
+                .Returns(Task.FromResult(new GetCommitmentQueryResponse
+                {
+                    Commitment = new CommitmentView
+                    {
+                        AgreementStatus = AgreementStatus.NotAgreed,
+                        EditStatus = EditStatus.ProviderOnly
+                    }
+                }));
+
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetEmailOverlappingApprenticeshipsQueryRequest>(), It.IsAny<CancellationToken>()))
+                .Returns(
+                    Task.Run(() => new GetEmailOverlappingApprenticeshipsQueryResponse
+                    {
+                        Overlaps = new List<ApprenticeshipEmailOverlapValidationResult>
+                        {
+                            new ApprenticeshipEmailOverlapValidationResult
+                            {
+                                OverlappingApprenticeships = new List<OverlappingApprenticeship>
+                                {
+                                    new OverlappingApprenticeship
+                                    {
+                                        Apprenticeship = new Apprenticeship {Email = "apprentice1@test.com"},
+                                        ValidationFailReason = ValidationFailReason.DateEmbrace
+                                    }
+                                }
+                            }
+                        }
+                    }));
+
+            var model = new UploadApprenticeshipsViewModel { Attachment = _file.Object, HashedCommitmentId = "ABBA123", ProviderId = 111, AccountLegalEntityPublicHashedId = "XYZUR" };
+            
+            //Act
             var file = await _sut.UploadFile("user123", model, new SignInUserModel());
 
             //Assert

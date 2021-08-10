@@ -143,11 +143,11 @@
     <Reference Include="SFA.DAS.AutoConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.AutoConfiguration.2.2.6\lib\net462\SFA.DAS.AutoConfiguration.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=7.50.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.7.50.0\lib\netstandard2.0\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=7.54.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.7.54.0\lib\netstandard2.0\SFA.DAS.Commitments.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=7.50.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.7.50.0\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=7.54.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.7.54.0\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.CommitmentsV2.Api.Types, Version=7.23.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.CommitmentsV2.Api.Types.7.23.0\lib\netstandard2.0\SFA.DAS.CommitmentsV2.Api.Types.dll</HintPath>
@@ -413,6 +413,7 @@
     <Compile Include="Queries\GetClientContent\WhenIGetCachedContentBanner.cs" />
     <Compile Include="Queries\GetClientContent\WhenIGetContentBanner.cs" />
     <Compile Include="Queries\GetCommitmentAgreements\WhenGettingCommitmentAgreements.cs" />
+    <Compile Include="Queries\GetEmailOverlappingApprenticeships\WhenGettingEmailOverlappingApprenticeships.cs" />
     <Compile Include="Queries\GetEmployerAccountLegalEntities\WhenIGetEmployerAccountLegalEntities.cs" />
     <Compile Include="Queries\GetProviderAgreement\WhenIGetProviderAgreement.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLockSummary\WhenGettingApprenticeshipDataLockSummary.cs" />
