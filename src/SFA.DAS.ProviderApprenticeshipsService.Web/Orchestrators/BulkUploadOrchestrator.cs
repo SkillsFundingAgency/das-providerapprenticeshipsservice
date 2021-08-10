@@ -53,7 +53,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var fileName = uploadApprenticeshipsViewModel.Attachment?.FileName ?? "<unknown>";  
 
             var commitment = await GetCommitment(providerId, commitmentId);
-            AssertCommitmentStatus(commitment);            
+            AssertCommitmentStatus(commitment);
             await AssertAutoReservationEnabled(commitment);
 
             Logger.Info($"Uploading File - Filename:{fileName}", uploadApprenticeshipsViewModel.ProviderId, commitmentId);
@@ -109,7 +109,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 });
             }
             catch (Exception)
-            {                
+            {
                 var overlaps = (await GetOverlapErrors(fileValidationResult.Data.ToList())).ToList();
                 if (overlaps.Any())
                 {
@@ -149,7 +149,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 });
                 i++;
             }
-            
+
             var overlapRequest = new GetOverlappingApprenticeshipsQueryRequest
             {
                 Apprenticeship = apprentices
@@ -233,7 +233,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var commitment = await GetCommitment(providerid, hashedcommitmentid);
             AssertCommitmentStatus(commitment);
-            await AssertAutoReservationEnabled(commitment);            
+            await AssertAutoReservationEnabled(commitment);    
             AssertIsNotChangeOfParty(commitment);
 
             return new UploadApprenticeshipsViewModel
@@ -253,7 +253,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var commitment = await GetCommitment(providerId, commitmentId);
             AssertCommitmentStatus(commitment);
-            await AssertAutoReservationEnabled(commitment);            
+            await AssertAutoReservationEnabled(commitment);
 
             var fileContentResult = await Mediator.Send(new GetBulkUploadFileQueryRequest
             {
