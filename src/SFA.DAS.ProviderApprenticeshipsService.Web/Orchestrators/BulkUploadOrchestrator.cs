@@ -209,7 +209,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var emailOverlapResponse = await Mediator.Send(emailOverlapRequest);
 
-            if (emailOverlapResponse.Overlaps.Any())
+            if (emailOverlapResponse != null && emailOverlapResponse.Overlaps.Any())
             {
                 var validationErrors = uploadedApprenticeships.ToList();
 
