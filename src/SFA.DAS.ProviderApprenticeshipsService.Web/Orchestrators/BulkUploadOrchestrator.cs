@@ -165,7 +165,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 {
                     foreach (var overlap in overlapGroup.OverlappingApprenticeships.ToList())
                     {
-                        if (string.IsNullOrEmpty(overlap.Apprenticeship.ULN)) break;
+                        if (string.IsNullOrEmpty(overlap.Apprenticeship.ULN)) continue;
 
                         var row = validationErrors.Single(x => x.ApprenticeshipViewModel.ULN == overlap.Apprenticeship.ULN);
                         var rowIndex = validationErrors.IndexOf(row) + 1;
@@ -217,7 +217,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 {
                     foreach (var overlap in overlapGroup.OverlappingApprenticeships.ToList())
                     {
-                        if (string.IsNullOrEmpty(overlap.Apprenticeship.Email)) break;
+                        if (string.IsNullOrEmpty(overlap.Apprenticeship.Email)) continue;
                         var row = validationErrors.Single(x => x.ApprenticeshipViewModel.EmailAddress == overlap.Apprenticeship.Email);
                         var rowIndex = validationErrors.IndexOf(row) + 1;
                         var e = GetEmailOverlappingErrors(overlap, rowIndex, row);
