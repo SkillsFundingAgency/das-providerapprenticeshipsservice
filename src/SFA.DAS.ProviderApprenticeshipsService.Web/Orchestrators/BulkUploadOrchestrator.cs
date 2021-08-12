@@ -324,23 +324,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         }
 
         private IEnumerable<UploadError> GetEmailOverlappingErrors(OverlappingApprenticeship overlappingResult, int i, ApprenticeshipUploadModel record)
-        {
-            const string textStartDate = "This <strong>email address</strong> is already used for another apprentice"; 
-            const string textEndDate = "The <strong>finish date</strong> overlaps with existing training dates for the same apprentice";
+        {            
+            const string textEmailOverlap = "You need to enter unique <strong>email addresses</strong> for each apprentice.";
 
             switch (overlappingResult.ValidationFailReason)
             {
-                case ValidationFailReason.OverlappingStartDate:
-                    return new List<UploadError> { new UploadError(textStartDate, "OverlappingError", i, record) };
-                case ValidationFailReason.OverlappingEndDate:
-                    return new List<UploadError> { new UploadError(textEndDate, "OverlappingError", i, record) };
+                case ValidationFailReason.OverlappingStartDate:                    
+                case ValidationFailReason.OverlappingEndDate:                    
                 case ValidationFailReason.DateEmbrace:
                 case ValidationFailReason.DateWithin:
-                    return new List<UploadError>
-                               {
-                                   new UploadError(textStartDate, "OverlappingError", i, record),
-                                   new UploadError(textEndDate, "OverlappingError", i, record)
-                               };
+                    return new List<UploadError> { new UploadError(textEmailOverlap, "OverlappingError", i, record) };
             }
             return Enumerable.Empty<UploadError>();
         }
