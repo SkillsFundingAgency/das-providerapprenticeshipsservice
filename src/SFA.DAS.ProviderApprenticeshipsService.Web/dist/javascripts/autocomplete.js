@@ -17,8 +17,8 @@ var autocompleteInputs = document.querySelectorAll(".app-autocomplete");
         xhr.onreadystatechange = function() {
           if (xhr.readyState === 4) {
             var jsonResponse = JSON.parse(xhr.responseText);
-            results = jsonResponse.locations.map(function (r) {
-              return r.name;
+            results = jsonResponse.map(function (r) {
+              return r.OrganisationName + ' (' + r.AgreementID + ')';
             });
             updateResults(results);
           }
@@ -34,7 +34,7 @@ var autocompleteInputs = document.querySelectorAll(".app-autocomplete");
         defaultValue: input.value,
         displayMenu: 'overlay',
         showNoOptionsFound: false,
-        minLength: 2,
+        minLength: 3,
         source: getSuggestions,
         placeholder: "",
         confirmOnBlur: false,
