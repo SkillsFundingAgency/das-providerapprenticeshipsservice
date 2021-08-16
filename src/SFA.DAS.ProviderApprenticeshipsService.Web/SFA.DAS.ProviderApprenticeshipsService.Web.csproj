@@ -881,6 +881,7 @@
     <Content Include="dist\images\icon-green-tick.png" />
     <Content Include="dist\images\icon-important-2x.png" />
     <Content Include="dist\images\icon-important.png" />
+    <Content Include="dist\images\icon-search.svg" />
     <Content Include="dist\images\icon-pointer-2x.png" />
     <Content Include="dist\images\icon-pointer-black-2x.png" />
     <Content Include="dist\images\icon-pointer-black.png" />
