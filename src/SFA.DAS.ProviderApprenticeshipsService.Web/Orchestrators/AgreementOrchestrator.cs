@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -31,38 +32,46 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _excelFormatter = excelFormatter;
         }
 
-        public async Task<AgreementsViewModel> GetAgreementsViewModel(long providerId)
+        public async Task<AgreementsViewModel> GetAgreementsViewModel(long providerId, string organisation)
         {
             Logger.Info($"Getting agreements for provider: {providerId}", providerId);
 
             return new AgreementsViewModel
             {
-                CommitmentAgreements = await GetCommitmentAgreements(providerId)
+                CommitmentAgreements = await GetCommitmentAgreements(providerId, organisation),
+                SearchText = organisation
             };
         }
 
         public async Task<byte[]> GetAgreementsAsCsv(long providerId)
         {
-            var agreements = await GetCommitmentAgreements(providerId);
+            var agreements = await GetCommitmentAgreements(providerId, string.Empty);
             return _csvFormatter.Format(agreements);
         }
 
         public async Task<byte[]> GetAgreementsAsExcel(long providerId)
         {
-            var agreements = await GetCommitmentAgreements(providerId);
+            var agreements = await GetCommitmentAgreements(providerId, string.Empty);
             return _excelFormatter.Format(agreements);
         }
 
-        private async Task<IEnumerable<CommitmentAgreement>> GetCommitmentAgreements(long providerId)
+        private async Task<IEnumerable<CommitmentAgreement>> GetCommitmentAgreements(long providerId, string searchTerm)
         {
             var response = await Mediator.Send(new GetCommitmentAgreementsQueryRequest
             {
                 ProviderId = providerId
             });
 
-            return response.CommitmentAgreements.Select(_agreementMapper.Map)
-                .OrderBy(ca => ca.OrganisationName)
-                .ThenBy(ca => ca.CohortID);
+            var result = response.CommitmentAgreements.Select(_agreementMapper.Map);
+
+            return result
+             .Where(v => string.IsNullOrWhiteSpace(searchTerm.ToLower())
+                 || (v.OrganisationName.ToLower().Contains(searchTerm.ToLower()))
+                 || (string.IsNullOrWhiteSpace(v.OrganisationName) == false && v.OrganisationName.ToLower().Contains(searchTerm.ToLower())))
+             .OrderBy(v => v.OrganisationName)
+             .ThenBy(ca => ca.AgreementID)
+             .Distinct()
+             .ToList();
         }
     }
 }

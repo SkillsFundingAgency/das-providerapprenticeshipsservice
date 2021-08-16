@@ -24,11 +24,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("")]
-        public async Task<ActionResult> Agreements(long providerId)
-        {
-            var model = await _orchestrator.GetAgreementsViewModel(providerId);
+        [Route("")]        
+        public async Task<ActionResult> Agreements(long providerId, string organisation = "")
+        {            
+            var model = await _orchestrator.GetAgreementsViewModel(providerId, organisation);
             return View(model);
+        }
+
+        [HttpGet]
+        [Route("search-organisation")]
+        public async Task<JsonResult> SearchOrganisation(long providerId, string searchTerm)
+        {   
+            var data = await _orchestrator.GetAgreementsViewModel(providerId, searchTerm);            
+            return Json(data.CommitmentAgreements, JsonRequestBehavior.AllowGet);            
         }
 
         [HttpGet]

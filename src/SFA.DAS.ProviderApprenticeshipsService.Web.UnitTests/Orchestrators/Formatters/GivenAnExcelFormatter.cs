@@ -30,8 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.For
                     var worksheet = workbook.Worksheets.Worksheet("Agreements");
 
                     // note the offset of 1... VB (vomit emoji)
-                    worksheet.Column(1).Cell(1).GetValue<string>().Should().Be(nameof(CommitmentAgreement.OrganisationName));
-                    worksheet.Column(2).Cell(1).GetValue<string>().Should().Be(nameof(CommitmentAgreement.CohortID));
+                    worksheet.Column(1).Cell(1).GetValue<string>().Should().Be(nameof(CommitmentAgreement.OrganisationName));                    
                     worksheet.Column(3).Cell(1).GetValue<string>().Should().Be(nameof(CommitmentAgreement.AgreementID));
                 }
             }
@@ -48,8 +47,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.For
                     var workbook = new XLWorkbook(memoryStream);
                     var worksheet = workbook.Worksheets.Worksheet("Agreements");
 
-                    worksheet.Column(1).Cell(2).GetValue<string>().Should().Be(agreements[0].OrganisationName);
-                    worksheet.Column(2).Cell(2).GetValue<string>().Should().Be(agreements[0].CohortID);
+                    worksheet.Column(1).Cell(2).GetValue<string>().Should().Be(agreements[0].OrganisationName);                    
                     worksheet.Column(3).Cell(2).GetValue<string>().Should().Be(agreements[0].AgreementID);
                 }
             }

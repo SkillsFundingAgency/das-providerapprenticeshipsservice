@@ -18,7 +18,7 @@ var autocompleteInputs = document.querySelectorAll(".app-autocomplete");
           if (xhr.readyState === 4) {
             var jsonResponse = JSON.parse(xhr.responseText);
             results = jsonResponse.map(function (r) {
-              return r.OrganisationName + ' (' + r.AgreementID + ')';
+                return r.OrganisationName;
             });
             updateResults(results);
           }

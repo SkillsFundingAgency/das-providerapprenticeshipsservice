@@ -9,8 +9,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
             return new CommitmentAgreement
             {
                 // here we're basically mapping between what we call properties internally to what the view calls them
-                AgreementID = commitmentAgreement.AccountLegalEntityPublicHashedId,
-                CohortID = commitmentAgreement.Reference,
+                AgreementID = commitmentAgreement.AccountLegalEntityPublicHashedId,                
                 OrganisationName = commitmentAgreement.LegalEntityName
             };
         }
