@@ -6,16 +6,13 @@
     ViewBag.PageID = "organisations-and-agreements";
 }
 
+<h1 class="heading-xlarge">Organisations and agreements</h1>
+<p class="dynamic-heading">Listed below is every organisation you work with on the apprenticeship service and their agreement ID.</p>
+<p class="dynamic-heading">You will need to add the agreement ID to the individualised learner record (ILR), and to your learner management system (LMS), if you use one. This allows us to provide users with better error messages whenever a data mismatch occurs.</p>
+
 <div class="grid-row">
-    <div class="column-full">
-
-        <h1 class="heading-xlarge">Organisations and agreements</h1>
-
-        <p class="dynamic-heading">Listed below is every organisation you work with on the apprenticeship service and their agreement ID.</p>
-
-        <p class="dynamic-heading">You will need to add the agreement ID to the individualised learner record (ILR), and to your learner management system (LMS), if you use one. This allows us to provide users with better error messages whenever a data mismatch occurs.</p>
-
-        <form method="get" class="" action="@Url.Action("Agreements")">
+    <div class="column-two-thirds">
+        <form method="get" action="@Url.Action("Agreements")">
             <div class="app-search-form">
                 <label for="search-form-example" class="form-label">
                     Search organisation name
@@ -30,38 +27,38 @@
                 </div>
             </div>
         </form>
-
-        <p class="govuk-body"><a href="@Url.Action("Agreements")">Clear search</a></p>
-        @if (Model.CommitmentAgreements.Count() == 0) 
-        {
-            <p>0 organisations match @Model.SearchText</p>
-        }        
-        else
-        {
-            <table class="tableResponsive employerListing">
-                <thead>
-                    <tr>
-                        <th>Organisation</th>         
-                        <th>Agreement ID</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var cohortAgreement in Model.CommitmentAgreements)
-                    {
-                        <tr>
-                            <td>
-                                @cohortAgreement.OrganisationName
-                            </td>                            
-                            <td>
-                                @cohortAgreement.AgreementID
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }   
     </div>
- </div>
+</div>
+
+<p class="govuk-body"><a href="@Url.Action("Agreements")">Clear search</a></p>
+@if (Model.CommitmentAgreements.Count() == 0) 
+{
+    <p>0 organisations match @Model.SearchText</p>
+}        
+else
+{
+    <table class="tableResponsive employerListing">
+        <thead>
+            <tr>
+                <th scope="col">Organisation</th>         
+                <th scope="col">Agreement ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cohortAgreement in Model.CommitmentAgreements)
+            {
+                <tr>
+                    <td>
+                        @cohortAgreement.OrganisationName
+                    </td>                            
+                    <td>
+                        @cohortAgreement.AgreementID
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}   
 
 @section breadcrumb {
     <div class="breadcrumbs">
