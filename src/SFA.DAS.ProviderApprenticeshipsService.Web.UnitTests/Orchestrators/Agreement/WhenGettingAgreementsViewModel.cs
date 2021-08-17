@@ -32,10 +32,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
             {
                 CommitmentAgreements = new List<CommitmentAgreement>
                 {
-                        new CommitmentAgreement { Reference = "1" },
-                        new CommitmentAgreement { Reference = "2" },
-                        new CommitmentAgreement { Reference = "3" },
-                        new CommitmentAgreement { Reference = "4" },
+                        new CommitmentAgreement { Reference = "1" , LegalEntityName = "A"},
+                        new CommitmentAgreement { Reference = "2" , LegalEntityName = "B"},
+                        new CommitmentAgreement { Reference = "3" , LegalEntityName = "C"},
+                        new CommitmentAgreement { Reference = "4" , LegalEntityName = "D"},
                 }
             });
 
@@ -44,9 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
             _orchestrator = new AgreementOrchestrator(_mediator.Object,
                 Mock.Of<IHashingService>(),
                 Mock.Of<IProviderCommitmentsLogger>(),
-                _agreementMapper.Object,
-                Mock.Of<ICsvFormatter>(),
-                Mock.Of<IExcelFormatter>());
+                _agreementMapper.Object);
         }
 
         [Test]
@@ -92,10 +90,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
             Assert.IsNotNull(result);
             Assert.IsTrue(TestHelper.EnumerablesAreEqual(new[]
             {
-                new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "A" },
-                new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "B" },
-                new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "C" },
-                new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "C" }
+                new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "A" , AgreementID = "1" },
+                new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "B" , AgreementID = "2" },
+                new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "C" , AgreementID = "3" },
+                new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "D" , AgreementID = "4" }
             }, result.CommitmentAgreements));
         }
 
@@ -113,7 +111,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
             Assert.IsNotNull(result);
             Assert.IsTrue(TestHelper.EnumerablesAreEqual(new[]
             {
-                new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "A"}
+                new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "A", AgreementID = "1"}
             }, result.CommitmentAgreements));
         }
 
@@ -132,18 +130,34 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
             Assert.AreEqual(result.CommitmentAgreements.Count(), 0);
         }
 
+        [Test]
+        public async Task TheCommitmentAgreementsReturnedFromHandlerAreMappedAndOrderedBySearchTextWithoutDuplicateResults()
+        {
+            //Arrange
+            SetOrganisations();
+
+            //Act
+            var result = await _orchestrator.GetAgreementsViewModel(providerId, "D");
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(result.CommitmentAgreements.Count(), 1);
+        }
+
+
         private void SetOrganisations()
         {
-            SetupMapping("1", "C" );
+            SetupMapping("1", "A" );
             SetupMapping("2", "B" );
-            SetupMapping("3", "A" );
-            SetupMapping("4", "C" );
+            SetupMapping("3", "C" );
+            SetupMapping("4", "D" );
+            SetupMapping("4", "D");
         }
 
         private void SetupMapping(string inReference, string outOrganisationName)
         {
             _agreementMapper.Setup(m => m.Map(It.Is<CommitmentAgreement>(ca => ca.Reference == inReference)))
-                .Returns(new Web.Models.Agreement.CommitmentAgreement { OrganisationName = outOrganisationName });
+                .Returns(new Web.Models.Agreement.CommitmentAgreement { OrganisationName = outOrganisationName, AgreementID = inReference });
         }
     }
 }

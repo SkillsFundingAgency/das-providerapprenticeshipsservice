@@ -21,18 +21,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Extensions
                 dataTable.Columns[0].ColumnName
                     .Should().Be(nameof(CommitmentAgreement.OrganisationName));
             }
-
-            //[Test, AutoData]
-            //public void ThenSecondColumnIsCohortId(List<CommitmentAgreement> sut)
-            //{
-            //    var dataTable = sut.ToDataTable();
-
-            //    dataTable.Columns[1].ColumnName
-            //        .Should().Be(nameof(CommitmentAgreement.CohortID));
-            //}
+           
 
             [Test, AutoData]
-            public void ThenThirdColumnIsAgreementId(List<CommitmentAgreement> sut)
+            public void ThenSecondColumnIsAgreementId(List<CommitmentAgreement> sut)
             {
                 var dataTable = sut.ToDataTable();
 
@@ -60,9 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Extensions
                 for (var i = 0; i < expected.Length; i++)
                 {
                     dataTable.Rows[i][nameof(CommitmentAgreement.OrganisationName)]
-                        .Should().Be(expected[i].OrganisationName);
-                    //dataTable.Rows[i][nameof(CommitmentAgreement.CohortID)]
-                    //    .Should().Be(expected[i].CohortID);
+                        .Should().Be(expected[i].OrganisationName);                 
                     dataTable.Rows[i][nameof(CommitmentAgreement.AgreementID)]
                         .Should().Be(expected[i].AgreementID);
                 }

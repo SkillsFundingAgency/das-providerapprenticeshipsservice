@@ -17,7 +17,7 @@ var autocompleteInputs = document.querySelectorAll(".app-autocomplete");
         xhr.onreadystatechange = function() {
           if (xhr.readyState === 4) {
             var jsonResponse = JSON.parse(xhr.responseText);
-            results = jsonResponse.map(function (r) {
+            results = jsonResponse.map(function (r) {                
                 return r.OrganisationName;
             });
             updateResults(results);

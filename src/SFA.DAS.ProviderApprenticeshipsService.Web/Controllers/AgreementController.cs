@@ -24,9 +24,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("")]        
+        [Route("")]
         public async Task<ActionResult> Agreements(long providerId, string organisation = "")
-        {            
+        {
             var model = await _orchestrator.GetAgreementsViewModel(providerId, organisation);
             return View(model);
         }
@@ -37,22 +37,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {   
             var data = await _orchestrator.GetAgreementsViewModel(providerId, searchTerm);            
             return Json(data.CommitmentAgreements, JsonRequestBehavior.AllowGet);            
-        }
-
-        [HttpGet]
-        [Route("download-csv")]
-        public async Task<FileResult> DownloadCsv(long providerId)
-        {
-            var fileContents = await _orchestrator.GetAgreementsAsCsv(providerId);
-            return File(fileContents, CsvContentType, $"{FileName}_{DateTime.Now:s}.csv");
-        }
-
-        [HttpGet]
-        [Route("download-excel")]
-        public async Task<FileResult> DownloadExcel(long providerId)
-        {
-            var fileContents = await _orchestrator.GetAgreementsAsExcel(providerId);
-            return File(fileContents, ExcelContentType, $"{FileName}_{DateTime.Now:s}.xlsx"); 
-        }
+        }       
     }
 }

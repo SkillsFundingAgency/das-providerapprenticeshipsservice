@@ -1,7 +1,6 @@
 ﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.Agreement.AgreementsViewModel
 
 @{  
-    var organisationSearchSuggestionsEndpointUrl = @Url.Action("SearchOrganisation", "Agreement");
     ViewBag.Title = "Organisations and Agreements";
     ViewBag.PageID = "organisations-and-agreements";
 }
@@ -31,7 +30,7 @@
 <p><a href="@Url.Action("Agreements")">Clear search</a></p>
 @if (Model.CommitmentAgreements.Count() == 0) 
 {
-    <p>0 organisations match @Model.SearchText</p>
+    <p>0 organisations match <span class="strong">'@Model.SearchText'</span></p>    
 }        
 else
 {
@@ -59,7 +58,7 @@ else
 }   
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="@Url.Action("Index", "Home")" aria-label="Back to account home" class="back-link">Back</a>
+    <div class="breadcrumbs">        
+        <a href="javascript:window.history.back();" class="back-link">Back</a>
     </div>
 }
