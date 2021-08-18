@@ -755,10 +755,6 @@
     <Compile Include="Orchestrators\SelectEmployerOrchestrator.cs" />
     <Compile Include="Orchestrators\CreateCohortOrchestrator.cs" />
     <Compile Include="Orchestrators\FiltersCookieManager.cs" />
-    <Compile Include="Orchestrators\Formatters\CsvFormatter.cs" />
-    <Compile Include="Orchestrators\Formatters\ExcelFormatter.cs" />
-    <Compile Include="Orchestrators\Formatters\ICsvFormatter.cs" />
-    <Compile Include="Orchestrators\Formatters\IExcelFormatter.cs" />
     <Compile Include="Orchestrators\IFiltersCookieManager.cs" />
     <Compile Include="Orchestrators\Mappers\AgreementMapper.cs" />
     <Compile Include="Orchestrators\Mappers\SelectEmployerMapper.cs" />
@@ -1021,6 +1017,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\CreateCohort\" />
+    <Folder Include="Orchestrators\Formatters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

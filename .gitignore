@@ -259,4 +259,3 @@ src/Tools/**/*.*
 sh.exe.stackdump
 *.ncrunchsolution
 *.ncrunchproject
-.DS_Store
