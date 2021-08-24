@@ -16,7 +16,7 @@
                     Search organisation name
                 </label>
                 <div class="app-search-form__group">
-                    <input id="search-form-example" title="Search" name="organisation" class="form-control app-search-form__input app-autocomplete" type="text" data-autocomplete-url="@Url.Action("SearchOrganisation", "Agreement")">
+                    <input id="search-form-example" title="Search" name="organisation" value="@Model.SearchText" class="form-control app-search-form__input app-autocomplete" type="text" data-autocomplete-url="@Url.Action("SearchOrganisation", "Agreement")">
                     <div class="app-search-form__button-wrap">
                         <button class="button app-search-form__button" type="submit">
                             Search Organisation
