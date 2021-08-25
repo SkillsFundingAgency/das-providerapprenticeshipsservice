@@ -27,7 +27,12 @@
         </form>
     </div>
 </div>
-<p><a href="@Url.Action("Agreements")">Clear search</a></p>
+
+@if (!String.IsNullOrEmpty(@Model.SearchText))
+{
+    <p><a href="@Url.Action("Agreements")">Clear search</a></p>
+}
+
 @if (Model.CommitmentAgreements.Count() == 0) 
 {
     <p>0 organisations match <span class="strong">'@Model.SearchText'</span></p>    
