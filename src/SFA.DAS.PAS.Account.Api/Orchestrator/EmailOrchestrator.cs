@@ -28,7 +28,7 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
         {
             List<string> recipients;
 
-            var accountUsers = (await _accountOrchestrator.GetAccountUsers(providerId)).ToList();
+            var accountUsers = (await _accountOrchestrator.GetAccountUsers(providerId)).Where(x => x.ServiceClaim != "DAV").ToList();
 
             if (message.ExplicitEmailAddresses != null && message.ExplicitEmailAddresses.Any())
             {

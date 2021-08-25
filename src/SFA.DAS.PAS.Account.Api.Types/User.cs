@@ -7,5 +7,6 @@
         public string DisplayName { get; set; }
         public bool ReceiveNotifications { get; set; }
         public bool IsSuperUser { get; set; }
+        public string ServiceClaim { get; set; }
     }
 }

@@ -31,6 +31,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@displayName", user.DisplayName, DbType.String);
                 parameters.Add("@ukprn", user.Ukprn, DbType.Int64);
                 parameters.Add("@email", user.Email, DbType.String);
+                parameters.Add("@serviceClaim", user.ServiceClaim, DbType.String);
                 return await c.ExecuteAsync(
                     sql: "[dbo].[UpsertUser]",
                     param: parameters,

@@ -30,7 +30,7 @@ namespace SFA.DAS.PAS.Account.Api.Orchestrator
             return result.UserSettings.Select(
                 m =>
                 new User { EmailAddress = m.User.Email, DisplayName = m.User.DisplayName, ReceiveNotifications = m.Setting?.ReceiveNotifications ?? true, UserRef = m.User.UserRef, 
-                    IsSuperUser = m.User.UserType == UserType.SuperUser });
+                    IsSuperUser = m.User.UserType == UserType.SuperUser, ServiceClaim = m.User.ServiceClaim });
         }
 
         public async Task<ProviderAgreement> GetAgreement(long providerId)

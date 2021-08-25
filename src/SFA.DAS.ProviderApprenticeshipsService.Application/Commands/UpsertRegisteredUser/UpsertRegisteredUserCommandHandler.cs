@@ -32,7 +32,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegi
                 DisplayName = message.DisplayName,
                 Email = message.Email,
                 Ukprn = message.Ukprn,
-                IsDeleted = false
+                IsDeleted = false,
+                ServiceClaim = message.ServiceClaim
             });
         }
     }

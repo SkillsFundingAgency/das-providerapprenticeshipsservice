@@ -9,5 +9,6 @@
         public string Email { get; set; }
         public bool IsDeleted { get; set; }
         public UserType UserType { get; set; }
+        public string ServiceClaim { get; set; }
     }
 }
