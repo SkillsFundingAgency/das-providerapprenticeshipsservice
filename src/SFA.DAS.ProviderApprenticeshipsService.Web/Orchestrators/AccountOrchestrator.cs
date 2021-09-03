@@ -73,10 +73,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             });
 
             var model = new NotificationSettingsViewModel
-                            {
-                                HashedId = "ABBA12",
-                                NotificationSettings = Map(response.NotificationSettings)
-                            };
+            {
+                NotificationSettings = Map(response.NotificationSettings)
+            };
 
             _logger.Trace($"Found {response.NotificationSettings.Count} settings for user {userRef}");
 

@@ -9,13 +9,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/sfajs").Include(
-                              "~/dist/javascripts/jquery-1.11.0.min.js",
-                              "~/dist/javascripts/select2.min.js",
-                              "~/dist/javascripts/govuk-template.js",
-                              "~/dist/javascripts/selection-buttons.js",
-                              "~/dist/javascripts/stacker.js",
-                              "~/dist/javascripts/app.js"
-                              ));
+                "~/dist/javascripts/jquery-1.11.0.min.js",
+                "~/dist/javascripts/select2.min.js",
+                "~/dist/javascripts/govuk-template.js",
+                "~/dist/javascripts/selection-buttons.js",
+                "~/dist/javascripts/stacker.js",
+                "~/dist/javascripts/libs/accessible-autocomplete.min.js",
+                "~/dist/javascripts/autocomplete.js",
+                "~/dist/javascripts/app.js"
+            ));
 
             bundles.Add(new ScriptBundle("~/bundles/apprentice").Include(
                       "~/dist/javascripts/apprentice/select2.min.js",

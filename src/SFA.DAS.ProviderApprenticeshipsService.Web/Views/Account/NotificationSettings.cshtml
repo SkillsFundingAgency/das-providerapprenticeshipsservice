@@ -1,4 +1,5 @@
-﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings.NotificationSettingsViewModel
+﻿@using SFA.DAS.ProviderUrlHelper.Framework
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings.NotificationSettingsViewModel
 @{
     ViewBag.Title = "NotificationSettings";
     ViewBag.PageId = "notification-settings";
@@ -53,13 +54,13 @@
 
                             </td>
                         </tr>
-                      }
+                    }
                 </tbody>
             </table>
 
             <button type="submit" class="button" id="submit-email-alerts">Update</button>
-            <br />
-            <a href="/" class="button text-link">Cancel</a>
+            <p><a href="/" class="text-link">Cancel</a></p>
+            <a href="@Url.RecruitLink($"{Model.ProviderId}")/notifications-manage">Manage the notifications of your recruitment emails</a>
         </form>
     </div>
 </div>

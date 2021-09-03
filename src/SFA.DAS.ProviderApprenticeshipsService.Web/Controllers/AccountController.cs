@@ -89,7 +89,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> NotificationSettings()
         {
             var u = User.Identity.GetClaim(DasClaimTypes.Upn);
+            var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
+
             var model = await _accountOrchestrator.GetNotificationSettings(u);
+            model.ProviderId = providerId;
+            
             var flashMesssage = GetFlashMessageViewModelFromCookie();
             if (flashMesssage != null)
             {

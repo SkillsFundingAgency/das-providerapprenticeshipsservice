@@ -752,10 +752,6 @@
     <Compile Include="Orchestrators\SelectEmployerOrchestrator.cs" />
     <Compile Include="Orchestrators\CreateCohortOrchestrator.cs" />
     <Compile Include="Orchestrators\FiltersCookieManager.cs" />
-    <Compile Include="Orchestrators\Formatters\CsvFormatter.cs" />
-    <Compile Include="Orchestrators\Formatters\ExcelFormatter.cs" />
-    <Compile Include="Orchestrators\Formatters\ICsvFormatter.cs" />
-    <Compile Include="Orchestrators\Formatters\IExcelFormatter.cs" />
     <Compile Include="Orchestrators\IFiltersCookieManager.cs" />
     <Compile Include="Orchestrators\Mappers\AgreementMapper.cs" />
     <Compile Include="Orchestrators\Mappers\SelectEmployerMapper.cs" />
@@ -840,7 +836,10 @@
     <Content Include="assets\stylesheets\images\govuk-crest.png" />
     <Content Include="assets\stylesheets\images\open-government-licence.png" />
     <Content Include="assets\stylesheets\images\open-government-licence_2x.png" />
+    <Content Include="dist\images\icon-search.svg" />
     <Content Include="dist\images\search-glass.png" />
+    <Content Include="dist\javascripts\autocomplete.js" />
+    <Content Include="dist\javascripts\libs\accessible-autocomplete.min.js" />
     <Content Include="dist\javascripts\character-limit.js" />
     <Content Include="dist\css\external-links\external-link-24x24.png" />
     <Content Include="dist\css\external-links\external-link-black-12x12.png" />
@@ -878,6 +877,7 @@
     <Content Include="dist\images\icon-green-tick.png" />
     <Content Include="dist\images\icon-important-2x.png" />
     <Content Include="dist\images\icon-important.png" />
+    <Content Include="dist\images\icon-search.svg" />
     <Content Include="dist\images\icon-pointer-2x.png" />
     <Content Include="dist\images\icon-pointer-black-2x.png" />
     <Content Include="dist\images\icon-pointer-black.png" />
@@ -1015,6 +1015,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\CreateCohort\" />
+    <Folder Include="Orchestrators\Formatters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

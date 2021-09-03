@@ -18,8 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 
             var dataColumns = new[]
             {
-                new DataColumn(nameof(CommitmentAgreement.OrganisationName)),
-                new DataColumn(nameof(CommitmentAgreement.CohortID)),
+                new DataColumn(nameof(CommitmentAgreement.OrganisationName)),                
                 new DataColumn(nameof(CommitmentAgreement.AgreementID))
             };
 
@@ -28,9 +27,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
             foreach (var agreement in commitmentAgreements)
             {
                 var row = dataTable.NewRow();
-                row[0] = agreement.OrganisationName;
-                row[1] = agreement.CohortID;
-                row[2] = agreement.AgreementID;
+                row[0] = agreement.OrganisationName;                
+                row[1] = agreement.AgreementID;
                 dataTable.Rows.Add(row);
             }
 
