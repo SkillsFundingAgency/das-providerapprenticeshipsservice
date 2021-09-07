@@ -57,7 +57,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var commitment = await GetCommitment(providerId, commitmentId);
             AssertCommitmentStatus(commitment);
-            //await AssertAutoReservationEnabled(commitment);
+            await AssertAutoReservationEnabled(commitment);
 
             Logger.Info($"Uploading File - Filename:{fileName}", uploadApprenticeshipsViewModel.ProviderId, commitmentId);
 
@@ -236,7 +236,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var commitment = await GetCommitment(providerid, hashedcommitmentid);            
             AssertCommitmentStatus(commitment);
-           // await AssertAutoReservationEnabled(commitment);    
+            await AssertAutoReservationEnabled(commitment);    
             AssertIsNotChangeOfParty(commitment);
 
             var optionalEmail = await _commitmentsV2Service.OptionalEmail(providerid, commitment.EmployerAccountId);
@@ -259,7 +259,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var commitment = await GetCommitment(providerId, commitmentId);
             AssertCommitmentStatus(commitment);
-            //await AssertAutoReservationEnabled(commitment);
+            await AssertAutoReservationEnabled(commitment);
 
             var fileContentResult = await Mediator.Send(new GetBulkUploadFileQueryRequest
             {
@@ -267,7 +267,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 BulkUploadId = bulkUploadId
             });
 
-            var uploadResult = _fileParser.CreateViewModels(providerId, commitment, fileContentResult.FileContent, blackListed); //TODO : check blacklist
+            var uploadResult = _fileParser.CreateViewModels(providerId, commitment, fileContentResult.FileContent, blackListed);
 
             var validationResult = await _bulkUploader.ValidateFileRows(uploadResult.Data, providerId, bulkUploadId);
             var overlaps = await GetOverlapErrors(uploadResult.Data.ToList());

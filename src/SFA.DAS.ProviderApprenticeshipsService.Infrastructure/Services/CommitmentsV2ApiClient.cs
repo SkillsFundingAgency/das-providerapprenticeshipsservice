@@ -71,13 +71,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 
         private string BaseUrl()
         {
-            return "https://localhost:5011/";
-            //if (_config.ApiBaseUrl.EndsWith("/"))
-            //{
-            //    return _config.ApiBaseUrl;
-            //}
+            if (_config.ApiBaseUrl.EndsWith("/"))
+            {
+                return _config.ApiBaseUrl;
+            }
 
-            //return _config.ApiBaseUrl + "/";
+            return _config.ApiBaseUrl + "/";
         }
     }
 }

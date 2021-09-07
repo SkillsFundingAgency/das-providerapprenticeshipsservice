@@ -155,7 +155,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                     It.Is<CommitmentView>(commitment => commitment.EmployerAccountId == AccountId), It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(new BulkUploadResult {Data = new ApprenticeshipUploadModel[0]});
                     
-            return _bulkUploadOrchestrator.GetUnsuccessfulUpload(ProviderId, HashedCohortId	, "ABCDEF", false); //TODO : check blacklist
+            return _bulkUploadOrchestrator.GetUnsuccessfulUpload(ProviderId, HashedCohortId	, "ABCDEF", false);
         }
     }
 }

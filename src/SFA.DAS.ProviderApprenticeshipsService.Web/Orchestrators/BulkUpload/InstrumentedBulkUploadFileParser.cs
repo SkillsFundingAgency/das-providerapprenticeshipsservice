@@ -21,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var result = _parser.CreateViewModels(providerId, commitment, fileContent, blackListed); //TODO : check blacklist
+            var result = _parser.CreateViewModels(providerId, commitment, fileContent, blackListed);
 
             _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to create {result.Data?.Count()} viewmodels");
 
