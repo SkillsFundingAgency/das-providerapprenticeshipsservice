@@ -57,6 +57,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool IsContinuation { get; set; }
 
         public string EmailAddress { get; set; }
-        public string AgreementId { get; set; }
+        public string AgreementId { get; set; }       
+
+        public bool BlackListed { get; set; }
     }
 }

@@ -87,7 +87,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 return new BulkUploadResult { Errors = fileAttributeErrors };
             }
 
-            var uploadResult = _fileParser.CreateViewModels(providerId, commitment, fileContent);
+            var uploadResult = _fileParser.CreateViewModels(providerId, commitment, fileContent, uploadApprenticeshipsViewModel.BlackListed);
 
             if (uploadResult.HasErrors)
                 return uploadResult;
@@ -101,7 +101,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             {
                 Errors = errors,
                 Data = uploadResult.Data,
-                BulkUploadId = bulkUploadId
+                BulkUploadId = bulkUploadId,
+                BlackListed = uploadApprenticeshipsViewModel.BlackListed
             };
         }
 

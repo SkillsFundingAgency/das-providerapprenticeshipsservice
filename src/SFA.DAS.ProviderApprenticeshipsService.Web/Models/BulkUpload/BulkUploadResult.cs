@@ -13,5 +13,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
         public bool HasErrors => (Errors != null && Errors.Any());
 
         public long BulkUploadId { get; set; }
+
+        public bool BlackListed { get; set; }
     }
 }

@@ -30,6 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly BulkUploadMapper _mapper;
         private readonly IBulkUploadFileParser _fileParser;
         private readonly IReservationsService _reservationsService;
+        private readonly ICommitmentsV2Service _commitmentsV2Service;
 
         public BulkUploadOrchestrator(
             IMediator mediator,
@@ -38,12 +39,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             BulkUploadMapper mapper,
             IProviderCommitmentsLogger logger,
             IBulkUploadFileParser fileParser,
-            IReservationsService reservationsService) : base(mediator, hashingService, logger)
+            IReservationsService reservationsService,
+            ICommitmentsV2Service commitmentsV2Service) : base(mediator, hashingService, logger)
         {
             _bulkUploader = bulkUploader;
             _mapper = mapper;
             _fileParser = fileParser;
             _reservationsService = reservationsService ?? throw new ArgumentNullException(nameof(reservationsService));
+            _commitmentsV2Service = commitmentsV2Service;
         }
 
         public async Task<BulkUploadResultViewModel> UploadFile(string userId, UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel, SignInUserModel signInUser)
@@ -54,7 +57,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var commitment = await GetCommitment(providerId, commitmentId);
             AssertCommitmentStatus(commitment);
-            await AssertAutoReservationEnabled(commitment);
+            //await AssertAutoReservationEnabled(commitment);
 
             Logger.Info($"Uploading File - Filename:{fileName}", uploadApprenticeshipsViewModel.ProviderId, commitmentId);
 
@@ -231,10 +234,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<UploadApprenticeshipsViewModel> GetUploadModel(long providerid, string hashedcommitmentid)
         {
-            var commitment = await GetCommitment(providerid, hashedcommitmentid);
+            var commitment = await GetCommitment(providerid, hashedcommitmentid);            
             AssertCommitmentStatus(commitment);
-            await AssertAutoReservationEnabled(commitment);    
+           // await AssertAutoReservationEnabled(commitment);    
             AssertIsNotChangeOfParty(commitment);
+
+            var optionalEmail = await _commitmentsV2Service.OptionalEmail(providerid, commitment.EmployerAccountId);
 
             return new UploadApprenticeshipsViewModel
             {
@@ -242,18 +247,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 HashedCommitmentId = hashedcommitmentid,
                 ApprenticeshipCount = commitment.Apprenticeships.Count,
                 IsPaidByTransfer = commitment.IsTransfer(),
-                AccountLegalEntityPublicHashedId = commitment.AccountLegalEntityPublicHashedId //AgreementId
+                AccountLegalEntityPublicHashedId = commitment.AccountLegalEntityPublicHashedId, //AgreementId
+                BlackListed = optionalEmail
             };
         }
 
-        public async Task<UploadApprenticeshipsViewModel> GetUnsuccessfulUpload(long providerId, string hashedCommitmentId, string bulkUploadReference)
+        public async Task<UploadApprenticeshipsViewModel> GetUnsuccessfulUpload(long providerId, string hashedCommitmentId, string bulkUploadReference, bool blackListed)
         {
             var commitmentId = HashingService.DecodeValue(hashedCommitmentId);
             var bulkUploadId = HashingService.DecodeValue(bulkUploadReference);
 
             var commitment = await GetCommitment(providerId, commitmentId);
             AssertCommitmentStatus(commitment);
-            await AssertAutoReservationEnabled(commitment);
+            //await AssertAutoReservationEnabled(commitment);
 
             var fileContentResult = await Mediator.Send(new GetBulkUploadFileQueryRequest
             {
@@ -261,7 +267,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 BulkUploadId = bulkUploadId
             });
 
-            var uploadResult = _fileParser.CreateViewModels(providerId, commitment, fileContentResult.FileContent);
+            var uploadResult = _fileParser.CreateViewModels(providerId, commitment, fileContentResult.FileContent, blackListed); //TODO : check blacklist
 
             var validationResult = await _bulkUploader.ValidateFileRows(uploadResult.Data, providerId, bulkUploadId);
             var overlaps = await GetOverlapErrors(uploadResult.Data.ToList());

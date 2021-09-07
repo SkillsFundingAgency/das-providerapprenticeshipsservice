@@ -50,7 +50,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (result.HasRowLevelErrors)
             {
-                return RedirectToAction("UploadApprenticeshipsUnsuccessful", new { model.ProviderId, model.HashedCommitmentId, result.BulkUploadReference });
+                return RedirectToAction("UploadApprenticeshipsUnsuccessful", new { model.ProviderId, model.HashedCommitmentId, result.BulkUploadReference, model.BlackListed });
             }
                 
             // ToDo: Flash message, or other feedback to customer
@@ -58,9 +58,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [Route("{hashedCommitmentId}/UploadApprenticeships/Unsuccessful/{bulkUploadReference}")]
-        public async Task<ActionResult> UploadApprenticeshipsUnsuccessful(long providerId, string hashedCommitmentId, string bulkUploadReference)
+        public async Task<ActionResult> UploadApprenticeshipsUnsuccessful(long providerId, string hashedCommitmentId, string bulkUploadReference, bool blackListed)
         {
-            var model = await _bulkUploadOrchestrator.GetUnsuccessfulUpload(providerId, hashedCommitmentId, bulkUploadReference);
+            var model = await _bulkUploadOrchestrator.GetUnsuccessfulUpload(providerId, hashedCommitmentId, bulkUploadReference, blackListed);
             return View(model);
         }
     }

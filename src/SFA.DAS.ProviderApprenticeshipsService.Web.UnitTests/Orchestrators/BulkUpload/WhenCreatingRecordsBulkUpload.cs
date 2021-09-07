@@ -74,7 +74,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         public void CreatingViewModels()
         {
             var commitment = new CommitmentView {Id = 456};
-            var records = _sut.CreateViewModels(123, commitment, _testData);
+            var records = _sut.CreateViewModels(123, commitment, _testData, false);
             records.Data.Count().Should().Be(8);
             records.Errors.Should().NotBeNull();
             records.Errors.Should().BeEmpty();
@@ -89,7 +89,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var commitment = new CommitmentView { Id = 456 };
             _sut = new BulkUploadFileParser(logger.Object);
 
-            var records = _sut.CreateViewModels(123, commitment, "");
+            var records = _sut.CreateViewModels(123, commitment, "", false);
             records.Data.Should().BeNull();
             records.Errors.Should().NotBeNull();
             records.Errors.First().Message.Should().Be("Upload failed. Please check your file and try again.");
@@ -119,7 +119,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var textStream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(inputData));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
-            var result = _sut.CreateViewModels(123, commitment, inputData);
+            var result = _sut.CreateViewModels(123, commitment, inputData, false);
 
             var errors = result.Errors.ToList();
             Assert.AreEqual(1, errors.Count);
@@ -148,7 +148,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var textStream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(inputData));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
-           var result = _sut.CreateViewModels(123, commitment, inputData);
+           var result = _sut.CreateViewModels(123, commitment, inputData, false);
 
             var errors = result.Errors.ToList();
             Assert.AreEqual(1, errors.Count);

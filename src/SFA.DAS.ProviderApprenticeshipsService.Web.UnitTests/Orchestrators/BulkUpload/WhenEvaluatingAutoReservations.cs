@@ -76,7 +76,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                 new BulkUploadMapper(_mediator.Object),
                 Mock.Of<IProviderCommitmentsLogger>(),
                 _mockBulkUploadFileParser.Object,
-                _reservationsService.Object);
+                _reservationsService.Object,
+                Mock.Of<ICommitmentsV2Service>());
         }
 
         [Test]
@@ -151,10 +152,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             
             _mockBulkUploadFileParser
                 .Setup(bufp => bufp.CreateViewModels(ProviderId,
-                    It.Is<CommitmentView>(commitment => commitment.EmployerAccountId == AccountId), It.IsAny<string>()))
+                    It.Is<CommitmentView>(commitment => commitment.EmployerAccountId == AccountId), It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(new BulkUploadResult {Data = new ApprenticeshipUploadModel[0]});
                     
-            return _bulkUploadOrchestrator.GetUnsuccessfulUpload(ProviderId, HashedCohortId	, "ABCDEF");
+            return _bulkUploadOrchestrator.GetUnsuccessfulUpload(ProviderId, HashedCohortId	, "ABCDEF", false); //TODO : check blacklist
         }
     }
 }

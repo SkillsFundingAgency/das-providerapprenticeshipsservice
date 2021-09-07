@@ -17,11 +17,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _parser = parser;
         }
 
-        public BulkUploadResult CreateViewModels(long providerId, CommitmentView commitment, string fileContent)
+        public BulkUploadResult CreateViewModels(long providerId, CommitmentView commitment, string fileContent, bool blackListed)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var result = _parser.CreateViewModels(providerId, commitment, fileContent);
+            var result = _parser.CreateViewModels(providerId, commitment, fileContent, blackListed); //TODO : check blacklist
 
             _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to create {result.Data?.Count()} viewmodels");
 
