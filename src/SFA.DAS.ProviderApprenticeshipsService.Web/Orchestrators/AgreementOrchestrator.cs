@@ -46,8 +46,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             return result
                     .Where(v => string.IsNullOrWhiteSpace(searchTerm.ToLower())
-                        || (v.OrganisationName.ToLower().Contains(searchTerm.ToLower()))
-                        || (string.IsNullOrWhiteSpace(v.OrganisationName) == false && v.OrganisationName.ToLower().Contains(searchTerm.ToLower())))
+                        || (string.IsNullOrWhiteSpace(v.OrganisationName) == false && v.OrganisationName.ToLower().Replace(" ", String.Empty).Contains(searchTerm.ToLower().Replace(" ", String.Empty))))
                     .OrderBy(v => v.OrganisationName)
                     .ThenBy(ca => ca.AgreementID)
                     .GroupBy(m => new { m.OrganisationName, m.AgreementID })
