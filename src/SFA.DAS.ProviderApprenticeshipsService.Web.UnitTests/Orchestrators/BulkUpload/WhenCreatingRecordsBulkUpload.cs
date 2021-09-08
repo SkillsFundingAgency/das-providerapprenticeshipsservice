@@ -147,7 +147,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         }
 
         [Test]
-        public void ThenShouldNotLogInfoWhenEmailHeaderNotProvidedForBlackListUsers()
+        public void ThenShouldNotLogInfoWhenEmailHeaderNotProvidedForBlacklistUsers()
         {
             var logger = new Mock<IProviderCommitmentsLogger>();
             logger.Setup(x => x.Info(It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>())).Verifiable();

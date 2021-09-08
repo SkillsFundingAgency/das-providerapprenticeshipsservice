@@ -174,7 +174,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             messages.Should().Contain("The email address has already been used for an apprentice in this cohort");
         }
                 
-        public void FailingValidationBlackListCohortNotUniqueEmails() 
+        public void FailingValidationCohortNotUniqueEmailsForBlacklistUsers() 
         {
             var testData = GetFailingTestDataForBlackList().ToList();
             var first = testData[0];
@@ -188,7 +188,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         }
 
         [Test]
-        public void ShouldNotFailValidationBlackListCohortAndNoEmails()
+        public void ShouldNotFailValidationCohortWithNoEmailsForBlacklistUsers()
         {            
             var testData = GetFailingTestDataForBlackList().ToList();
             var first = testData[0];

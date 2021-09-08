@@ -56,7 +56,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         }
 
         [Test]
-        public void TestBlackListValidateEmailAddressIfProvided()
+        public void TestValidateEmailAddressIfProvidedForBlacklistUsers()
         {
             //Arrange
             ValidModel.ApprenticeshipViewModel.BlackListed = true;
@@ -70,7 +70,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         }
 
         [Test]
-        public void TestBlackListNullEmailAddress()
+        public void TestNullEmailAddressForBlacklistUsers()
         {
             //Arrange
             ValidModel.ApprenticeshipViewModel.BlackListed = true;
@@ -84,7 +84,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         }
 
         [Test]
-        public void TestBlackListInvalidEmail()
+        public void TestInvalidEmailForBlacklistUsers()
         {
             //Arrange
             ValidModel.ApprenticeshipViewModel.BlackListed = true;
@@ -100,7 +100,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
 
         [TestCase(190, 0)]
         [TestCase(201, 1)]
-        public void TestBlackListEmailAddressNoLongerThan200Characters(int length, int expectedErrorCount)
+        public void TestEmailAddressNoLongerThan200CharactersForBlacklistUsers(int length, int expectedErrorCount)
         {
             //Arrange
             ValidModel.ApprenticeshipViewModel.BlackListed = true;

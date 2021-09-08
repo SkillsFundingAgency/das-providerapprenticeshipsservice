@@ -101,8 +101,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             {
                 Errors = errors,
                 Data = uploadResult.Data,
-                BulkUploadId = bulkUploadId,
-                BlackListed = uploadApprenticeshipsViewModel.BlackListed
+                BulkUploadId = bulkUploadId
             };
         }
 
