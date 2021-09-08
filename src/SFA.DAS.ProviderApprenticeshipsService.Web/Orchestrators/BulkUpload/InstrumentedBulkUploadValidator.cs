@@ -72,5 +72,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
             return result;
         }
+
+        public IEnumerable<UploadError> ValidateAgreementId(IEnumerable<ApprenticeshipUploadModel> records, string agreementId)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            var result = _validator.ValidateAgreementId(records, agreementId);
+
+            _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to validate AgreementID for {records.Count()} items");
+
+            return result;
+        }
+
+        public IEnumerable<UploadError> ValidateEmailUniqueness(IEnumerable<ApprenticeshipUploadModel> records)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            var result = _validator.ValidateEmailUniqueness(records);
+
+            _logger.Trace($"Took {stopwatch.ElapsedMilliseconds} milliseconds to validate Email Address for {records.Count()} items");
+
+            return result;
+        }
     }
 }

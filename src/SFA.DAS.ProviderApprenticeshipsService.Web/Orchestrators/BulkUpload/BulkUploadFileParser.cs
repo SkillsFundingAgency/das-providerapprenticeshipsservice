@@ -27,16 +27,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
         public BulkUploadResult CreateViewModels(long providerId, CommitmentView commitment, string fileInput)
         {
-            const string errorMessage = "Upload failed. Please check your file and try again.";
-
+            const string errorMessage = "Upload failed. Please check your file and try again.";          
             using (var tr = new StringReader(fileInput))
             {
                 try
                 {
+                    if (string.IsNullOrEmpty(fileInput)) {                        
+                        throw new Exception();
+                    }
+
                     var csvReader = new CsvReader(tr);
                     csvReader.Configuration.HasHeaderRecord = true;
-                    csvReader.Configuration.IsHeaderCaseSensitive = false;
-                    csvReader.Configuration.ThrowOnBadData = true;
+                    csvReader.Configuration.PrepareHeaderForMatch = (header, index) => header.ToLower();
+                    csvReader.Configuration.BadDataFound = cont => throw new Exception("Bad data found");
                     csvReader.Configuration.RegisterClassMap<CsvRecordMap>();
 
                     return new BulkUploadResult
@@ -46,32 +49,29 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                             .Select(record => MapTo(record, commitment))
                     };
                 }
-                 catch (CsvMissingFieldException)
-                {
+                catch (HeaderValidationException)
+                {   
                     _logger.Info("Failed to process bulk upload file (missing field).", providerId, commitment.Id);
-                    return new BulkUploadResult { Errors = new List<UploadError> { new UploadError("Some mandatory fields are incomplete. Please check your file and upload again.") } };
+                    return new BulkUploadResult { Errors = new List<UploadError> { new UploadError(errorMessage) } };
                 }
                 catch (Exception)
                 {
                     _logger.Info("Failed to process bulk upload file.", providerId, commitment.Id);
-
                     return new BulkUploadResult { Errors = new List<UploadError> { new UploadError(errorMessage) } };
                 }
             }
         }
 
         private ApprenticeshipUploadModel MapTo(CsvRecord record, CommitmentView commitment)
-        {
-            var dateOfBirth = GetValidDate(record.DateOfBirth, "yyyy-MM-dd");
-            var learnerStartDate = GetValidDate(record.StartDate, "yyyy-MM");
+        {          
+            var dateOfBirth = GetValidDate(record.DateOfBirth, "yyyy-MM-dd");            
+            var learnerStartDate = GetValidDate(record.StartDate, "yyyy-MM-dd");
+            if (learnerStartDate != null)
+                learnerStartDate = new DateTime(learnerStartDate.GetValueOrDefault().Year, learnerStartDate.GetValueOrDefault().Month, 1);
             var learnerEndDate = GetValidDate(record.EndDate, "yyyy-MM");
-
-            var courseCode = record.ProgType == "25"
-                                   ? record.StdCode
-                                   : $"{record.FworkCode}-{record.ProgType}-{record.PwayCode}";
-
+            
             var apprenticeshipViewModel = new ApprenticeshipViewModel
-            {
+            {   
                 AgreementStatus = AgreementStatus.NotAgreed,
                 PaymentStatus = PaymentStatus.Active,
                 ULN = record.ULN,
@@ -82,9 +82,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 ProviderRef = record.ProviderRef,
                 StartDate = new DateTimeViewModel(learnerStartDate),
                 EndDate = new DateTimeViewModel(learnerEndDate),
-                ProgType = record.ProgType.TryParse(),
-                CourseCode = courseCode,
-                IsPaidForByTransfer = commitment.IsTransfer()
+                CourseCode = record.StdCode,
+                IsPaidForByTransfer = commitment.IsTransfer(),
+                AgreementId = commitment.AccountLegalEntityPublicHashedId,
+                EmailAddress = record.EmailAddress
             };
             return new ApprenticeshipUploadModel
             {

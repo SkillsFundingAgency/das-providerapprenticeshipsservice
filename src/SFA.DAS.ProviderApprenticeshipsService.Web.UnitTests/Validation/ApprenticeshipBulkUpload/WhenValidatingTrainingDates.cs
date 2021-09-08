@@ -29,7 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
         [TestCase(1, 18, 2121)]
         public void ShouldFailValidationForStartDate(int? day, int? month, int? year)
         {
-            var expected = "You must enter the <strong>start date</strong>, for example 2017-09";
+            var expected = "You must enter the <strong>start date</strong>, for example 2017-09-01";
             ValidModel.ApprenticeshipViewModel.StartDate = new DateTimeViewModel(day, month, year);
 
             var result = Validator.Validate(ValidModel);

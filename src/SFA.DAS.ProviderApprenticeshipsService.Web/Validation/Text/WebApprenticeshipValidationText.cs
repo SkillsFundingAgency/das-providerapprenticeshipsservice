@@ -74,22 +74,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
         public ValidationMessage ProviderRef01 =>
             new ValidationMessage("The Reference must be 20 characters or fewer", "ProviderRef_01");
 
-        public ValidationMessage FworkCode01 { get { throw new NotImplementedException(); } }
-        public ValidationMessage FworkCode02 { get { throw new NotImplementedException(); } }
-        public ValidationMessage FworkCode03 { get { throw new NotImplementedException(); } }
-        public ValidationMessage FworkCode04 { get { throw new NotImplementedException(); } }
-
-        public ValidationMessage ProgType01 { get { throw new NotImplementedException(); } }
-        public ValidationMessage ProgType02 { get { throw new NotImplementedException(); } }
-        public ValidationMessage PwayCode01 { get { throw new NotImplementedException(); } }
-        public ValidationMessage PwayCode02 { get { throw new NotImplementedException(); } }
-        public ValidationMessage PwayCode03 { get { throw new NotImplementedException(); } }
-
         public ValidationMessage StdCode01 { get { throw new NotImplementedException(); } }
         public ValidationMessage StdCode02 { get { throw new NotImplementedException(); } }
         public ValidationMessage StdCode03 { get { throw new NotImplementedException(); } }
+        public ValidationMessage StdCode04 { get { throw new NotImplementedException(); } }
+        
 
         public ValidationMessage CourseCode01 => 
             new ValidationMessage("Training course can't be empty", "DefaultErrorCode");
+
+        public ValidationMessage EmailAddressBlank =>
+             new ValidationMessage("<strong> Email address </strong> must be entered", "EmailAddress_01");
+        public ValidationMessage EmailAddressNotValid =>
+            new ValidationMessage("You must enter a valid <strong> email address </strong>", "EmailAddress_02");
+        public ValidationMessage EmailAddressLength =>
+            new ValidationMessage("You must enter an <strong> email address </strong> that’s no longer than 200 characters", "EmailAddress_03");
+        public ValidationMessage EmailAddressRepeat =>
+            new ValidationMessage("The <strong> email address </strong> has already been used for an apprentice in this cohort", "EmailAddress_04");
+
+        public ValidationMessage AgreementIdBlank =>
+            new ValidationMessage("<strong>Agreement ID</strong> must be entered", "AgreementId_01");
+        public ValidationMessage AgreementIdMismatch =>
+            new ValidationMessage("The employer on the cohort does not match the <strong> Agreement ID </strong>", "AgreementId_02");
+
     }
 }

@@ -28,5 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public IEnumerable<UploadError> FileErrors { get; set; }
 
         public bool IsPaidByTransfer { get; set; }
+
+        public string AccountLegalEntityPublicHashedId { get; set; } //AgreementId
     }
 }
