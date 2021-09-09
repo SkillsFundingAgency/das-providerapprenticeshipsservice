@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitmentAgreements
 {
@@ -10,20 +11,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitme
     /// </summary>
     public class GetCommitmentAgreementsQueryHandler : IRequestHandler<GetCommitmentAgreementsQueryRequest, GetCommitmentAgreementsQueryResponse>
     {
-        private readonly IProviderCommitmentsApi _commitmentsApi;
+        private readonly ICommitmentsV2ApiClient _commitmentsApi;
 
-        public GetCommitmentAgreementsQueryHandler(IProviderCommitmentsApi commitmentsApi)
+        public GetCommitmentAgreementsQueryHandler(ICommitmentsV2ApiClient commitmentsApi)
         {
             _commitmentsApi = commitmentsApi;
         }
 
         public async Task<GetCommitmentAgreementsQueryResponse> Handle(GetCommitmentAgreementsQueryRequest message, CancellationToken cancellationToken)
         {
-            var commitmentAgreements = await _commitmentsApi.GetCommitmentAgreements(message.ProviderId);
+            var response = await _commitmentsApi.GetProviderCommitmentAgreement(message.ProviderId);
 
             return new GetCommitmentAgreementsQueryResponse
             {
-                CommitmentAgreements = commitmentAgreements
+                CommitmentAgreements = response.ProviderCommitmentAgreement
             };
         }
     }

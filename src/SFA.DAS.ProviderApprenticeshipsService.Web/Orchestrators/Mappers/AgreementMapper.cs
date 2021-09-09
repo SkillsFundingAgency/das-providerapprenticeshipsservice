@@ -1,10 +1,11 @@
-﻿using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Agreement;
+﻿using SFA.DAS.CommitmentsV2.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Agreement;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers
 {
     public class AgreementMapper : IAgreementMapper
     {
-        public CommitmentAgreement Map(Commitments.Api.Types.Commitment.CommitmentAgreement commitmentAgreement)
+        public CommitmentAgreement Map(ProviderCommitmentAgreement commitmentAgreement)
         {
             return new CommitmentAgreement
             {
