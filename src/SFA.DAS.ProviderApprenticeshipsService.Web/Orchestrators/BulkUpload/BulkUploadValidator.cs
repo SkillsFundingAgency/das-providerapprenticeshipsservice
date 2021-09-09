@@ -149,22 +149,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             var result = new List<UploadError>();
 
             if (apprenticeshipUploadModels.Any(x => x.ApprenticeshipViewModel.BlackListed == true))
-            {
-                var emailAddress = new List<string>();
-                var blackListedEmailCount = 0;
-                foreach (var apprentice in apprenticeshipUploadModels)
-                {
-                    if (apprentice.ApprenticeshipViewModel.BlackListed && !string.IsNullOrEmpty(apprentice.ApprenticeshipViewModel.EmailAddress))
-                    {
-                        emailAddress.Add(apprentice.ApprenticeshipViewModel.EmailAddress);
-                        blackListedEmailCount++;
-                    }
-                }
-                if (blackListedEmailCount != emailAddress.Distinct().Count())
+            { 
+                var sumBlacklistEmailAddress = apprenticeshipUploadModels.Where(x => !string.IsNullOrWhiteSpace(x.ApprenticeshipViewModel.EmailAddress));                
+                var distinctBlacklistEmailAddress = (from email in sumBlacklistEmailAddress.Select(x => !string.IsNullOrWhiteSpace(x.ApprenticeshipViewModel.EmailAddress))
+                          select email).Distinct().Count();
+
+                if (sumBlacklistEmailAddress.Count() != distinctBlacklistEmailAddress)
                 {
                     result.Add(new UploadError(_validationText.EmailAddressRepeat.Text.RemoveHtmlTags(), _validationText.EmailAddressRepeat.ErrorCode));
                 }
-                
+
                 return result;
             }
 
