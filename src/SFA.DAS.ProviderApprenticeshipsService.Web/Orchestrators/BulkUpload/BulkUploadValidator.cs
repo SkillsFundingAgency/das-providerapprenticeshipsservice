@@ -161,10 +161,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
                 return result;
             }
+            
+            var apprenticeEmailAddress = apprenticeshipUploadModels.Where(x => !string.IsNullOrWhiteSpace(x.ApprenticeshipViewModel.EmailAddress));           
+            var distinctEmailAddress = apprenticeshipUploadModels.Where(x => !string.IsNullOrWhiteSpace(x.ApprenticeshipViewModel.EmailAddress))
+                                                                 .Select(x => x.ApprenticeshipViewModel.EmailAddress).Distinct().Count();
 
-            var distinctEmailAddress = apprenticeshipUploadModels.Select(x => x.ApprenticeshipViewModel.EmailAddress).Distinct().Count();
-
-            if (apprenticeshipUploadModels.Count() != distinctEmailAddress)
+            if (apprenticeEmailAddress.Count() != distinctEmailAddress)
             {
                 result.Add(new UploadError(_validationText.EmailAddressRepeat.Text.RemoveHtmlTags(), _validationText.EmailAddressRepeat.ErrorCode));
             }

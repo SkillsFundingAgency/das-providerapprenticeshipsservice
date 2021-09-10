@@ -173,7 +173,35 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var messages = errors.Select(m => m.ToString()).ToList();            
             messages.Should().Contain("The email address has already been used for an apprentice in this cohort");
         }
-        
+
+        [Test]
+        public void ShouldNotFailingValidationCohortNotUniqueEmailsWithEmptyEmails()
+        {
+            var testData = GetFailingTestData().ToList();
+            var first = testData[0];
+            var second = testData[1];
+            first.ApprenticeshipViewModel.EmailAddress = "";
+            second.ApprenticeshipViewModel.EmailAddress = "";
+
+            var errors = _sut.ValidateEmailUniqueness(new List<ApprenticeshipUploadModel> { first, second }).ToList();
+            
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void ShouldNotFailingValidationCohortNotUniqueEmailsWithEmptyAndValidEmail()
+        {
+            var testData = GetFailingTestData().ToList();
+            var first = testData[0];
+            var second = testData[1];
+            first.ApprenticeshipViewModel.EmailAddress = "apprentice@test.com";
+            second.ApprenticeshipViewModel.EmailAddress = "";
+
+            var errors = _sut.ValidateEmailUniqueness(new List<ApprenticeshipUploadModel> { first, second }).ToList();
+
+            errors.Count.Should().Be(0);
+        }
+
         [Test]
         public void FailingValidationCohortNotUniqueEmailsForBlacklistUsers() 
         {
