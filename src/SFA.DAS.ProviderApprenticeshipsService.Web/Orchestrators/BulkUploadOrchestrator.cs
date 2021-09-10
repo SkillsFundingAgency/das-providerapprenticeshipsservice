@@ -20,7 +20,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
-
+using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetEmailOverlapingApprenticeships;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -44,17 +44,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _mapper = mapper;
             _fileParser = fileParser;
             _reservationsService = reservationsService ?? throw new ArgumentNullException(nameof(reservationsService));
-
         }
 
         public async Task<BulkUploadResultViewModel> UploadFile(string userId, UploadApprenticeshipsViewModel uploadApprenticeshipsViewModel, SignInUserModel signInUser)
         {
             var commitmentId = HashingService.DecodeValue(uploadApprenticeshipsViewModel.HashedCommitmentId);
             var providerId = uploadApprenticeshipsViewModel.ProviderId;
-            var fileName = uploadApprenticeshipsViewModel.Attachment?.FileName ?? "<unknown>";
+            var fileName = uploadApprenticeshipsViewModel.Attachment?.FileName ?? "<unknown>";  
 
             var commitment = await GetCommitment(providerId, commitmentId);
-			AssertCommitmentStatus(commitment);
+            AssertCommitmentStatus(commitment);
             await AssertAutoReservationEnabled(commitment);
 
             Logger.Info($"Uploading File - Filename:{fileName}", uploadApprenticeshipsViewModel.ProviderId, commitmentId);
@@ -77,10 +76,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var sw = Stopwatch.StartNew();
             var overlapErrors = await GetOverlapErrors(fileValidationResult.Data.ToList());
+            var emailOverlapErrors = await GetEmailOverlapErrors(fileValidationResult.Data.ToList());
             Logger.Trace($"Validating overlaps took {sw.ElapsedMilliseconds}");
 
             var rowErrors = rowValidationResult.Errors.ToList();
             rowErrors.AddRange(overlapErrors);
+            rowErrors.AddRange(emailOverlapErrors);
             var hashedBulkUploadId = HashingService.HashValue(fileValidationResult.BulkUploadId);
             if (rowErrors.Any())
             {
@@ -157,14 +158,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var overlapResponse = await Mediator.Send(overlapRequest);
 
             if (overlapResponse.Overlaps.Any())
-            {
-                
+            {                
                 var validationErrors = uploadedApprenticeships.ToList();
 
                 foreach (var overlapGroup in overlapResponse.Overlaps)
                 {
                     foreach (var overlap in overlapGroup.OverlappingApprenticeships.ToList())
                     {
+                        if (string.IsNullOrEmpty(overlap.Apprenticeship.ULN)) continue;
+
                         var row = validationErrors.Single(x => x.ApprenticeshipViewModel.ULN == overlap.Apprenticeship.ULN);
                         var rowIndex = validationErrors.IndexOf(row) + 1;
 
@@ -174,6 +176,56 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     }
                 }
             }
+           
+            return result;
+        }
+
+        private async Task<IEnumerable<UploadError>> GetEmailOverlapErrors(IList<ApprenticeshipUploadModel> uploadedApprenticeships)
+        {
+            var result = new List<UploadError>();
+            var emailapprentices = new List<Apprenticeship>();
+
+            var j = 0;
+            foreach (var apprentice in uploadedApprenticeships.Where(x =>
+                !string.IsNullOrWhiteSpace(x.ApprenticeshipViewModel.EmailAddress)
+                && x.ApprenticeshipViewModel.StartDate.DateTime.HasValue
+                && x.ApprenticeshipViewModel.EndDate.DateTime.HasValue
+                ))
+            {
+                emailapprentices.Add(new Apprenticeship
+                {
+                    Id = j, //assign a row id, as this value will be zero for files
+                    Email = apprentice.ApprenticeshipViewModel.EmailAddress,
+                    StartDate = apprentice.ApprenticeshipViewModel.StartDate.DateTime.Value,
+                    EndDate = apprentice.ApprenticeshipViewModel.EndDate.DateTime.Value
+                });
+                j++;
+            }
+
+            var emailOverlapRequest = new GetEmailOverlappingApprenticeshipsQueryRequest
+            {
+                Apprenticeship = emailapprentices
+            };
+
+            var emailOverlapResponse = await Mediator.Send(emailOverlapRequest);
+
+            if (emailOverlapResponse != null && emailOverlapResponse.Overlaps.Any())
+            {
+                var validationErrors = uploadedApprenticeships.ToList();
+
+                foreach (var overlapGroup in emailOverlapResponse.Overlaps)
+                {
+                    foreach (var overlap in overlapGroup.OverlappingApprenticeships.ToList())
+                    {
+                        if (string.IsNullOrEmpty(overlap.Apprenticeship.Email)) continue;
+                        var row = validationErrors.Single(x => x.ApprenticeshipViewModel.EmailAddress == overlap.Apprenticeship.Email);
+                        var rowIndex = validationErrors.IndexOf(row) + 1;
+                        var e = GetEmailOverlappingErrors(overlap, rowIndex, row);
+                        result.AddRange(e);
+                    }
+                }
+            }
+
             return result;
         }
 
@@ -181,7 +233,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             var commitment = await GetCommitment(providerid, hashedcommitmentid);
             AssertCommitmentStatus(commitment);
-            await AssertAutoReservationEnabled(commitment);
+            await AssertAutoReservationEnabled(commitment);    
             AssertIsNotChangeOfParty(commitment);
 
             return new UploadApprenticeshipsViewModel
@@ -189,7 +241,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ProviderId = providerid,
                 HashedCommitmentId = hashedcommitmentid,
                 ApprenticeshipCount = commitment.Apprenticeships.Count,
-                IsPaidByTransfer = commitment.IsTransfer()
+                IsPaidByTransfer = commitment.IsTransfer(),
+                AccountLegalEntityPublicHashedId = commitment.AccountLegalEntityPublicHashedId //AgreementId
             };
         }
 
@@ -212,9 +265,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             var validationResult = await _bulkUploader.ValidateFileRows(uploadResult.Data, providerId, bulkUploadId);
             var overlaps = await GetOverlapErrors(uploadResult.Data.ToList());
+            var emailOverlaps = await GetEmailOverlapErrors(uploadResult.Data.ToList());
 
             var errors = validationResult.Errors.ToList();
             errors.AddRange(overlaps);
+            errors.AddRange(emailOverlaps);
 
             var result = _mapper.MapErrors(errors);
 
@@ -266,6 +321,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 throw new HttpException((int)HttpStatusCode.Forbidden, "Cohort is linked to a ChangeOfParty Request - apprentices cannot be added to it");
             }
+        }
+
+        private IEnumerable<UploadError> GetEmailOverlappingErrors(OverlappingApprenticeship overlappingResult, int i, ApprenticeshipUploadModel record)
+        {            
+            const string textEmailOverlap = "You need to enter unique <strong>email addresses</strong> for each apprentice.";
+
+            switch (overlappingResult.ValidationFailReason)
+            {
+                case ValidationFailReason.OverlappingStartDate:                    
+                case ValidationFailReason.OverlappingEndDate:                    
+                case ValidationFailReason.DateEmbrace:
+                case ValidationFailReason.DateWithin:
+                    return new List<UploadError> { new UploadError(textEmailOverlap, "OverlappingError", i, record) };
+            }
+            return Enumerable.Empty<UploadError>();
         }
     }
 }

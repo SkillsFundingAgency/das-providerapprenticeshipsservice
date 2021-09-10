@@ -46,8 +46,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string ProviderRef { get; set; }
         public string EmployerRef { get; set; }
 
-        public int? ProgType { get; set; }
-
         public bool HasStarted { get; set; }
 
         public bool IsLockedForUpdate { get; set; }
@@ -57,5 +55,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public string StartDateTransfersMinDateAltDetailMessage { get; set; }
         public Guid? ReservationId { get; set; }
         public bool IsContinuation { get; set; }
+
+        public string EmailAddress { get; set; }
+        public string AgreementId { get; set; }
     }
 }

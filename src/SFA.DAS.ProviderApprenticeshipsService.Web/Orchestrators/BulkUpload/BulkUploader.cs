@@ -94,6 +94,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
             var errors = _bulkUploadValidator.ValidateCohortReference(uploadResult.Data, uploadApprenticeshipsViewModel.HashedCommitmentId).ToList();
             errors.AddRange(_bulkUploadValidator.ValidateUlnUniqueness(uploadResult.Data).ToList());
+            errors.AddRange(_bulkUploadValidator.ValidateEmailUniqueness(uploadResult.Data).ToList());
+            errors.AddRange(_bulkUploadValidator.ValidateAgreementId(uploadResult.Data, uploadApprenticeshipsViewModel.AccountLegalEntityPublicHashedId).ToList());
 
             return new BulkUploadResult
             {

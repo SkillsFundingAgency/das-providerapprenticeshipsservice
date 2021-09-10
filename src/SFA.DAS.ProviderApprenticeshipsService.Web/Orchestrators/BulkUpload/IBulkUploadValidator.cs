@@ -13,6 +13,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
         IEnumerable<UploadError> ValidateCohortReference( IEnumerable<ApprenticeshipUploadModel> records, string cohortReference);
 
         IEnumerable<UploadError> ValidateFileSize(HttpPostedFileBase attachment);
-        IEnumerable<UploadError> ValidateUlnUniqueness(IEnumerable<ApprenticeshipUploadModel> uploadResultData);
+        IEnumerable<UploadError> ValidateUlnUniqueness(IEnumerable<ApprenticeshipUploadModel> uploadResultData);       
+
+        IEnumerable<UploadError> ValidateEmailUniqueness(IEnumerable<ApprenticeshipUploadModel> records);
+
+        IEnumerable<UploadError> ValidateAgreementId(IEnumerable<ApprenticeshipUploadModel> uploadResultData, string agreementId);
     }
 }

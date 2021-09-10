@@ -10,13 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
 
         public string GivenNames { get; set; }
 
-        public string DateOfBirth { get; set; }
-
-        public string ProgType { get; set; }
-
-        public string FworkCode { get; set; }
-
-        public string PwayCode { get; set; }
+        public string DateOfBirth { get; set; } 
 
         public string StdCode { get; set; }
 
@@ -28,6 +22,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.BulkUpload
 
         public string EPAOrgID { get; set; }  // ToDO: Validate Startwith EPA...
 
-        public string ProviderRef { get; set; }
+        public string ProviderRef { get; set; }        
+
+        public string AgreementId { get; set; }
+        
+        public string EmailAddress { get; set; }
+        
     }
 }

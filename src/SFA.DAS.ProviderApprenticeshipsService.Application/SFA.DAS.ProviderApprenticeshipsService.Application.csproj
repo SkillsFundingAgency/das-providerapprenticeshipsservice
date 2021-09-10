@@ -125,19 +125,17 @@
     <Reference Include="SFA.DAS.Caches, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Caches.1.1.4\lib\netstandard2.0\SFA.DAS.Caches.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=6.1.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.6.1.0\lib\netstandard2.0\SFA.DAS.Commitments.Api.Client.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=7.72.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.7.72.0\lib\netstandard2.0\SFA.DAS.Commitments.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=6.1.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.6.1.0\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=7.72.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.7.72.0\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.CommitmentsV2.Api.Types, Version=7.80.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.CommitmentsV2.Api.Types.7.80.0\lib\netstandard2.0\SFA.DAS.CommitmentsV2.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.CommitmentsV2.Api.Types, Version=7.72.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.CommitmentsV2.Api.Types.7.72.0\lib\netstandard2.0\SFA.DAS.CommitmentsV2.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.CommitmentsV2.Types, Version=7.80.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.CommitmentsV2.Types.7.80.0\lib\netstandard2.0\SFA.DAS.CommitmentsV2.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.CommitmentsV2.Types, Version=7.72.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.CommitmentsV2.Types.7.72.0\lib\netstandard2.0\SFA.DAS.CommitmentsV2.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Common.Domain, Version=1.4.272.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.272\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
@@ -399,6 +397,9 @@
     <Compile Include="Queries\GetClientContent\GetClientContentRequest.cs" />
     <Compile Include="Queries\GetClientContent\GetClientContentRequestHandler.cs" />
     <Compile Include="Queries\GetClientContent\GetClientContentResponse.cs" />
+    <Compile Include="Queries\GetEmailOverlapingApprenticeships\GetEmailOverlappingApprenticeshipsQueryHandler.cs" />
+    <Compile Include="Queries\GetEmailOverlapingApprenticeships\GetEmailOverlappingApprenticeshipsQueryRequest.cs" />
+    <Compile Include="Queries\GetEmailOverlapingApprenticeships\GetEmailOverlappingApprenticeshipsQueryResponse.cs" />
     <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesHandler.cs" />
     <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesResponse.cs" />

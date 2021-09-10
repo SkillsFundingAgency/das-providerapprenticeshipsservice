@@ -8,20 +8,6 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-        <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-            <div class="govuk-notification-banner__header">
-                <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                    Important
-                </h2>
-            </div>
-            <div class="govuk-notification-banner__content">
-                <p class="govuk-notification-banner__heading">
-                    We are making changes to the fields required for bulk upload. These changes will be expected in early September 2021.
-                </p>    
-                    You can find a full list in the <a class="govuk-notification-banner__link" href="https://www.gov.uk/government/publications/apprenticeship-service-bulk-upload-specification">bulk upload specification</a>.                
-            </div>
-        </div>
-
         <h1 class="heading-xlarge">Bulk upload @(Model.IsPaidByTransfer ? "transfers" : "apprentices")</h1>
         <p>You can add details of multiple apprentices at the same time (bulk upload) using a csv file.@(Model.IsPaidByTransfer ? " All apprentices uploaded must be on an apprenticeship standard." : null)</p>
 
@@ -54,6 +40,7 @@
 
             @Html.HiddenFor(m => m.ProviderId)
             @Html.HiddenFor(m => m.HashedCommitmentId)
+            @Html.HiddenFor(m => m.AccountLegalEntityPublicHashedId)
 
             <input class="button upload-file-btn" type="submit" value="Upload file" id="submit-upload-apprentices">
         </form>
