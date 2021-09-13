@@ -233,6 +233,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             errors.Count.Should().Be(0);
         }
 
+        [Test]
+        public void ShouldNotFailValidationCohortWithValidEmailsForBlacklistUsers()
+        {
+            var testData = GetFailingTestDataForBlackList().ToList();
+            var first = testData[0];
+            var second = testData[1];
+            var third = testData[2];
+
+            first.ApprenticeshipViewModel.EmailAddress = "vas1@test.com";
+            second.ApprenticeshipViewModel.EmailAddress = "vas2@test.com";
+            third.ApprenticeshipViewModel.EmailAddress = "vas3@test.com";
+
+            var errors = _sut.ValidateEmailUniqueness(new List<ApprenticeshipUploadModel> { first, second, third }).ToList();
+
+            errors.Count.Should().Be(0);
+        }
 
         [Test]
         public void FailingValidationOnAgreementId()

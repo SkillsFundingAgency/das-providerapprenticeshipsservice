@@ -150,9 +150,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 
             if (apprenticeshipUploadModels.Any(x => x.ApprenticeshipViewModel.BlackListed == true))
             { 
-                var sumBlacklistEmailAddress = apprenticeshipUploadModels.Where(x => !string.IsNullOrWhiteSpace(x.ApprenticeshipViewModel.EmailAddress));                
-                var distinctBlacklistEmailAddress = (from email in sumBlacklistEmailAddress.Select(x => !string.IsNullOrWhiteSpace(x.ApprenticeshipViewModel.EmailAddress))
-                          select email).Distinct().Count();
+                var sumBlacklistEmailAddress = apprenticeshipUploadModels.Where(x => !string.IsNullOrWhiteSpace(x.ApprenticeshipViewModel.EmailAddress));
+                var distinctBlacklistEmailAddress = apprenticeshipUploadModels.Where(x => !string.IsNullOrWhiteSpace(x.ApprenticeshipViewModel.EmailAddress))
+                                                                .Select(x => x.ApprenticeshipViewModel.EmailAddress).Distinct().Count();                
 
                 if (sumBlacklistEmailAddress.Count() != distinctBlacklistEmailAddress)
                 {
