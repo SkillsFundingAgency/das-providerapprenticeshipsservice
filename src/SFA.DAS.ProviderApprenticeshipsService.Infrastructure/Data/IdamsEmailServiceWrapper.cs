@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
     public interface IIdamsEmailServiceWrapper
     {
-        Task<List<string>> GetEmailsAsync(long ukprn);
-        Task<List<string>> GetSuperUserEmailsAsync(long providerId);
+        Task<List<string>> GetEmailsAsync(long ukprn, string identities);
     }
 
     public class IdamsEmailServiceWrapper : IIdamsEmailServiceWrapper
@@ -32,20 +31,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             _httpClientWrapper = httpClientWrapper;
         }
 
-        public virtual async Task<List<string>> GetEmailsAsync(long providerId)
+        public virtual async Task<List<string>> GetEmailsAsync(long providerId, string roles)
         {
-            var url = string.Format(_configuration.IdamsListUsersUrl, _configuration.DasUserRoleId, providerId);
-            _logger.Info($"Getting 'DAS' emails for provider {providerId}");
-            var result = await GetString(url, _configuration.ClientToken);
-            return ParseIdamsResult(result, providerId);
-        }
+            _logger.Info($"Getting emails for provider {providerId} for roles {roles}");
 
-        public virtual async Task<List<string>> GetSuperUserEmailsAsync(long providerId)
-        {
-            var url = string.Format(_configuration.IdamsListUsersUrl, _configuration.SuperUserRoleId, providerId);
-            _logger.Info($"Getting 'super user' emails for provider {providerId}");
-            var result = GetString(url, _configuration.ClientToken);
-            return ParseIdamsResult(await result, providerId);
+            var ids = roles.Split(',');
+            var tasks = ids.Select(id => GetString(string.Format(_configuration.IdamsListUsersUrl, id, providerId)));
+            var results = await Task.WhenAll(tasks);
+
+            return results.SelectMany(result => ParseIdamsResult(result, providerId)).ToList();
         }
 
         private List<string> ParseIdamsResult(string jsonResult, long providerId)
@@ -63,6 +57,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 var item = result.ToObject<UserResponse>();
                 return item?.Emails ?? new List<string>(0);
             }
+            catch (JsonSerializationException)
+            {
+                // Idams query returned no results - { result : ["internal error"] }.
+                return new List<string>();
+            }
             catch (Exception exception)
             {
                 var resultDescription = string.IsNullOrWhiteSpace(jsonResult) ? "empty string" : $"\"{jsonResult}\"";
@@ -70,8 +69,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             }
         }
 
-        private async Task<string> GetString(string url, string accessToken)
+        private async Task<string> GetString(string url)
         {
+            _logger.Info($"Querying {url} for user details");
             return await _httpClientWrapper.GetStringAsync(url);
         }
     }
