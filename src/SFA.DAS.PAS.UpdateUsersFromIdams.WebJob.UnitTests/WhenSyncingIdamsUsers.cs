@@ -8,10 +8,9 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests
 {
@@ -106,23 +105,32 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests
                 ProviderRepository.Setup(x => x.GetNextProviderForIdamsUpdate()).ReturnsAsync(ProviderResponse);
 
                 IdamsEmailServiceWrapper = new Mock<IIdamsEmailServiceWrapper>();
-                IdamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>())).ReturnsAsync(CombinedUsers);
-                IdamsEmailServiceWrapper.Setup(x => x.GetSuperUserEmailsAsync(It.IsAny<long>())).ReturnsAsync(SuperUsers);
+                IdamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>(), "UserRole")).ReturnsAsync(CombinedUsers);
+                IdamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>(), "SuperUserRole")).ReturnsAsync(SuperUsers);
 
                 UserRepository = new Mock<IUserRepository>();
 
-                Sut = new IdamsSyncService(IdamsEmailServiceWrapper.Object, UserRepository.Object, ProviderRepository.Object, Mock.Of<ILog>());
+                var configuration = new ProviderApprenticeshipsServiceConfiguration
+                {
+                    CommitmentNotification = new ProviderNotificationConfiguration
+                    {
+                        DasUserRoleId = "UserRole",
+                        SuperUserRoleId = "SuperUserRole"
+                    }
+                };
+
+                Sut = new IdamsSyncService(IdamsEmailServiceWrapper.Object, UserRepository.Object, ProviderRepository.Object, Mock.Of<ILog>(), configuration);
             }
 
             public WhenSyncingIdamsUsersFixture SetupIdamsToThrowException()
             {
-                IdamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>())).Throws<ApplicationException>();
+                IdamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>(), It.IsAny<string>())).Throws<ApplicationException>();
                 return this;
             }
             public WhenSyncingIdamsUsersFixture SetupIdamsToThrowHttpRequestException()
             {
                 IdamsEmailServiceWrapper
-                    .Setup(x => x.GetEmailsAsync(It.IsAny<long>()))
+                    .Setup(x => x.GetEmailsAsync(It.IsAny<long>(), It.IsAny<string>()))
                     .Throws(new CustomHttpRequestException
                     {
                         StatusCode = HttpStatusCode.NotFound
@@ -145,8 +153,8 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests
 
             public void VerifyWeCallIdamsServiceForThisProvider()
             {
-               IdamsEmailServiceWrapper.Verify(x=>x.GetEmailsAsync(ProviderResponse.Ukprn));
-               IdamsEmailServiceWrapper.Verify(x=>x.GetSuperUserEmailsAsync(ProviderResponse.Ukprn));
+               IdamsEmailServiceWrapper.Verify(x=>x.GetEmailsAsync(ProviderResponse.Ukprn, "UserRole"));
+               IdamsEmailServiceWrapper.Verify(x=>x.GetEmailsAsync(ProviderResponse.Ukprn, "SuperUserRole"));
             }
 
             public void VerifyIdamsUsersAreSyncedInUserRepository()
@@ -163,8 +171,8 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests
 
             public void VerifyIdamsServiceIsNotCalled()
             {
-                IdamsEmailServiceWrapper.Verify(x => x.GetEmailsAsync(It.IsAny<long>()), Times.Never);
-                IdamsEmailServiceWrapper.Verify(x => x.GetSuperUserEmailsAsync(It.IsAny<long>()), Times.Never);
+                IdamsEmailServiceWrapper.Verify(x => x.GetEmailsAsync(It.IsAny<long>(), "UserRole"), Times.Never);
+                IdamsEmailServiceWrapper.Verify(x => x.GetEmailsAsync(It.IsAny<long>(), "SuperUserRole"), Times.Never);
             }
         }
     }
