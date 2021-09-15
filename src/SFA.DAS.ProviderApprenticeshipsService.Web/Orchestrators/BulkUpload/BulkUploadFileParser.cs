@@ -25,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             _logger = logger;
         }
 
-        public BulkUploadResult CreateViewModels(long providerId, CommitmentView commitment, string fileInput)
+        public BulkUploadResult CreateViewModels(long providerId, CommitmentView commitment, string fileInput, bool blackListed)
         {
             const string errorMessage = "Upload failed. Please check your file and try again.";          
             using (var tr = new StringReader(fileInput))
@@ -40,13 +40,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                     csvReader.Configuration.HasHeaderRecord = true;
                     csvReader.Configuration.PrepareHeaderForMatch = (header, index) => header.ToLower();
                     csvReader.Configuration.BadDataFound = cont => throw new Exception("Bad data found");
-                    csvReader.Configuration.RegisterClassMap<CsvRecordMap>();
+                    if (blackListed)
+                        csvReader.Configuration.RegisterClassMap<CsvRecordBlackListMap>(); 
+                    else
+                        csvReader.Configuration.RegisterClassMap<CsvRecordMap>();
 
                     return new BulkUploadResult
                     {
                         Data = csvReader.GetRecords<CsvRecord>()
                             .ToList()
-                            .Select(record => MapTo(record, commitment))
+                            .Select(record => MapTo(record, commitment, blackListed))
                     };
                 }
                 catch (HeaderValidationException)
@@ -62,7 +65,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
             }
         }
 
-        private ApprenticeshipUploadModel MapTo(CsvRecord record, CommitmentView commitment)
+        private ApprenticeshipUploadModel MapTo(CsvRecord record, CommitmentView commitment, bool blackListed)
         {          
             var dateOfBirth = GetValidDate(record.DateOfBirth, "yyyy-MM-dd");            
             var learnerStartDate = GetValidDate(record.StartDate, "yyyy-MM-dd");
@@ -85,7 +88,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
                 CourseCode = record.StdCode,
                 IsPaidForByTransfer = commitment.IsTransfer(),
                 AgreementId = commitment.AccountLegalEntityPublicHashedId,
-                EmailAddress = record.EmailAddress
+                EmailAddress = record.EmailAddress,
+                BlackListed = blackListed
             };
             return new ApprenticeshipUploadModel
             {

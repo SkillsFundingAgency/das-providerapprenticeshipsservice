@@ -5,6 +5,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload
 {
     public interface IBulkUploadFileParser
     {
-        BulkUploadResult CreateViewModels(long providerId, CommitmentView commitment, string fileInput);
+        BulkUploadResult CreateViewModels(long providerId, CommitmentView commitment, string fileInput, bool blackListed);
     }
 }

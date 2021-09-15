@@ -55,7 +55,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                 new BulkUploadMapper(_mediator.Object),
                 Mock.Of<IProviderCommitmentsLogger>(),
                 Mock.Of<IBulkUploadFileParser>(),
-                _reservationsService.Object
+                _reservationsService.Object,
+                Mock.Of<ICommitmentsV2Service>()
                 );
         }
 

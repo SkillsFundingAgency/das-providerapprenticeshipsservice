@@ -175,6 +175,82 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         }
 
         [Test]
+        public void ShouldNotFailingValidationCohortNotUniqueEmailsWithEmptyEmails()
+        {
+            var testData = GetFailingTestData().ToList();
+            var first = testData[0];
+            var second = testData[1];
+            first.ApprenticeshipViewModel.EmailAddress = "";
+            second.ApprenticeshipViewModel.EmailAddress = "";
+
+            var errors = _sut.ValidateEmailUniqueness(new List<ApprenticeshipUploadModel> { first, second }).ToList();
+            
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void ShouldNotFailingValidationCohortNotUniqueEmailsWithEmptyAndValidEmail()
+        {
+            var testData = GetFailingTestData().ToList();
+            var first = testData[0];
+            var second = testData[1];
+            first.ApprenticeshipViewModel.EmailAddress = "apprentice@test.com";
+            second.ApprenticeshipViewModel.EmailAddress = "";
+
+            var errors = _sut.ValidateEmailUniqueness(new List<ApprenticeshipUploadModel> { first, second }).ToList();
+
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void FailingValidationCohortNotUniqueEmailsForBlacklistUsers() 
+        {
+            var testData = GetFailingTestDataForBlackList().ToList();
+            var first = testData[0];
+            var second = testData[1];
+            var third = testData[2];
+
+            var errors = _sut.ValidateEmailUniqueness(new List<ApprenticeshipUploadModel> { first, second, third }).ToList();
+
+            var messages = errors.Select(m => m.ToString()).ToList();
+            messages.Should().Contain("The email address has already been used for an apprentice in this cohort");
+        }
+
+        [Test]
+        public void ShouldNotFailValidationCohortWithNoEmailsForBlacklistUsers()
+        {            
+            var testData = GetFailingTestDataForBlackList().ToList();
+            var first = testData[0];
+            var second = testData[1];
+            var third = testData[2];
+
+            first.ApprenticeshipViewModel.EmailAddress = "";
+            second.ApprenticeshipViewModel.EmailAddress = "";
+            third.ApprenticeshipViewModel.EmailAddress = "";
+
+            var errors = _sut.ValidateEmailUniqueness(new List<ApprenticeshipUploadModel> { first, second, third }).ToList();
+
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void ShouldNotFailValidationCohortWithValidEmailsForBlacklistUsers()
+        {
+            var testData = GetFailingTestDataForBlackList().ToList();
+            var first = testData[0];
+            var second = testData[1];
+            var third = testData[2];
+
+            first.ApprenticeshipViewModel.EmailAddress = "vas1@test.com";
+            second.ApprenticeshipViewModel.EmailAddress = "vas2@test.com";
+            third.ApprenticeshipViewModel.EmailAddress = "vas3@test.com";
+
+            var errors = _sut.ValidateEmailUniqueness(new List<ApprenticeshipUploadModel> { first, second, third }).ToList();
+
+            errors.Count.Should().Be(0);
+        }
+
+        [Test]
         public void FailingValidationOnAgreementId()
         {
             var testData = GetFailingTestData().ToList();
@@ -244,5 +320,42 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
                 records,
                 (a, r) => new ApprenticeshipUploadModel { ApprenticeshipViewModel = a, CsvRecord = r });
         }
+
+        private IEnumerable<ApprenticeshipUploadModel> GetFailingTestDataForBlackList()
+        {
+            var apprenticeships = new List<ApprenticeshipViewModel>
+            {
+                new ApprenticeshipViewModel
+                {
+                    FirstName = " ", LastName = new string('*', 101), DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567890",
+                    StartDate = new DateTimeViewModel(null, 8, 2019), EndDate = new DateTimeViewModel(null, 12, 2019), Cost = "15000", EmployerRef = "Ab123",
+                    EmailAddress = "", AgreementId="XYZUR", BlackListed = true
+                },
+                new ApprenticeshipViewModel
+                {
+                    FirstName = new string('*', 101), LastName = "", DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567891",
+                    StartDate = new DateTimeViewModel(null, 8, 2019), EndDate = new DateTimeViewModel(null, 12, 2019), Cost = "15000", EmployerRef = "Abba123",
+                    EmailAddress = "apprentice2@test.com", AgreementId="XYZUR", BlackListed = true
+                }
+                ,
+                new ApprenticeshipViewModel
+                {
+                    FirstName = new string('*', 102), LastName = "", DateOfBirth = new DateTimeViewModel(8, 12, 1998), CourseCode = "2", ULN = "1234567892",
+                    StartDate = new DateTimeViewModel(null, 8, 2019), EndDate = new DateTimeViewModel(null, 12, 2019), Cost = "15000", EmployerRef = "Abba123",
+                    EmailAddress = "apprentice2@test.com", AgreementId="XYZUR", BlackListed = true
+                }
+            };
+
+            var records = new List<CsvRecord>
+            {
+                new CsvRecord { StdCode = "2", CohortRef = "ABBA123", EmailAddress = "", AgreementId="XYZUR" },
+                new CsvRecord { StdCode = "2", CohortRef = "ABBA123", EmailAddress = "apprentice2@test.com", AgreementId="XYZUR" },
+                new CsvRecord { StdCode = "2", CohortRef = "ABBA123", EmailAddress = "apprentice2@test.com", AgreementId="XYZUR" }
+            };
+
+            return apprenticeships.Zip(
+                records,
+                (a, r) => new ApprenticeshipUploadModel { ApprenticeshipViewModel = a, CsvRecord = r });
+        }       
     }
 }

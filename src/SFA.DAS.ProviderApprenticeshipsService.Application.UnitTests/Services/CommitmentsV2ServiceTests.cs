@@ -68,5 +68,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Services
 
             result.Should().Be(expected);
         }
+
+        [Test]
+        public async Task IsOptionalEmailCalledCorrectly()
+        {
+            await _sut.OptionalEmail(123, 456);
+
+            _commitmentsV2ApiClient.Verify(x => x.OptionalEmail(123,456));
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public async Task DoesCallToOptionalEmailReturnValue(bool expected)
+        {
+            _commitmentsV2ApiClient.Setup(x => x.OptionalEmail(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(expected);
+
+            var result = await _sut.OptionalEmail(123, 456);
+
+            result.Should().Be(expected);
+        }
     }
 }
