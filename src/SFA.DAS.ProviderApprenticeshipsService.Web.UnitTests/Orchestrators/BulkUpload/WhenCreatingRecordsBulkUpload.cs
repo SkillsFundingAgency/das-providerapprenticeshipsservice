@@ -36,6 +36,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             "EmailAddress"
         };
 
+        private static readonly List<string> HeadersWithoutEmail = new List<string>
+        {
+            "CohortRef",
+            "ULN",
+            "FamilyName",
+            "GivenNames",
+            "DateOfBirth",
+            "NINumber",
+            "StdCode",
+            "StartDate",
+            "EndDate",
+            "TotalPrice",
+            "EPAOrgId",
+            "EmpRef",
+            "ProviderRef",
+            "AgreementId"
+        };
+
         private readonly string _testData;
 
         private Mock<HttpPostedFileBase> _file;
@@ -74,7 +92,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
         public void CreatingViewModels()
         {
             var commitment = new CommitmentView {Id = 456};
-            var records = _sut.CreateViewModels(123, commitment, _testData);
+            var records = _sut.CreateViewModels(123, commitment, _testData, false);
             records.Data.Count().Should().Be(8);
             records.Errors.Should().NotBeNull();
             records.Errors.Should().BeEmpty();
@@ -89,7 +107,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var commitment = new CommitmentView { Id = 456 };
             _sut = new BulkUploadFileParser(logger.Object);
 
-            var records = _sut.CreateViewModels(123, commitment, "");
+            var records = _sut.CreateViewModels(123, commitment, "", false);
             records.Data.Should().BeNull();
             records.Errors.Should().NotBeNull();
             records.Errors.First().Message.Should().Be("Upload failed. Please check your file and try again.");
@@ -119,7 +137,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var textStream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(inputData));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
-            var result = _sut.CreateViewModels(123, commitment, inputData);
+            var result = _sut.CreateViewModels(123, commitment, inputData, false);
 
             var errors = result.Errors.ToList();
             Assert.AreEqual(1, errors.Count);
@@ -127,6 +145,37 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             logger.Verify(x => x.Info(It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>()), Times.Once);
             logger.Verify(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>()), Times.Never);
         }
+
+        [Test]
+        public void ThenShouldNotLogInfoWhenEmailHeaderNotProvidedForBlacklistUsers()
+        {
+            var logger = new Mock<IProviderCommitmentsLogger>();
+            logger.Setup(x => x.Info(It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>())).Verifiable();
+            logger.Setup(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>())).Verifiable();
+            var commitment = new CommitmentView { Id = 456 };
+            _sut = new BulkUploadFileParser(logger.Object);
+
+            var builder = new StringBuilder();            
+            builder.AppendLine(string.Join(",", HeadersWithoutEmail));
+            builder.AppendLine(Environment.NewLine);
+            builder.AppendLine("Abba123,1113335559,Froberg,Chris,1998-12-08,SE123321C,2,2120-08,2125-08,1500,,Employer ref,Provider ref,XYZUR");
+            var inputData = builder.ToString();
+
+            _file = new Mock<HttpPostedFileBase>();
+            _file.Setup(m => m.FileName).Returns("APPDATA-20051030-213855.csv");
+            _file.Setup(m => m.ContentLength).Returns(inputData.Length);
+            var textStream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(inputData));
+            _file.Setup(m => m.InputStream).Returns(textStream);
+
+            var result = _sut.CreateViewModels(123, commitment, inputData, true);
+
+            var errors = result.Errors.ToList();
+            Assert.AreEqual(0, errors.Count);
+
+            logger.Verify(x => x.Info(It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>()), Times.Never);
+            logger.Verify(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<long?>(), It.IsAny<long?>()), Times.Never);
+        }
+
 
         [Test]
         [TestCaseSource(nameof(GetInvalidColumnHeaders))]
@@ -148,7 +197,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Bul
             var textStream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(inputData));
             _file.Setup(m => m.InputStream).Returns(textStream);
 
-           var result = _sut.CreateViewModels(123, commitment, inputData);
+           var result = _sut.CreateViewModels(123, commitment, inputData, false);
 
             var errors = result.Errors.ToList();
             Assert.AreEqual(1, errors.Count);

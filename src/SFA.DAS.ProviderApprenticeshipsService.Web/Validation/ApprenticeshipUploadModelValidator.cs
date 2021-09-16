@@ -238,6 +238,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Validation
 
         private ValidationFailure ValidateEmail(ApprenticeshipUploadModel model)
         {
+            if (model.ApprenticeshipViewModel.BlackListed && string.IsNullOrEmpty(model.CsvRecord.EmailAddress))
+            {
+                return null;
+            }
+            
             if (string.IsNullOrEmpty(model.CsvRecord.EmailAddress))
             {
                 return CreateValidationFailure("EmailAddress", _validationText.EmailAddressBlank);

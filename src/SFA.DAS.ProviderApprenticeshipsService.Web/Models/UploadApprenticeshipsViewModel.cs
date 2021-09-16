@@ -30,5 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool IsPaidByTransfer { get; set; }
 
         public string AccountLegalEntityPublicHashedId { get; set; } //AgreementId
+
+        public bool BlackListed { get; set; }
     }
 }
