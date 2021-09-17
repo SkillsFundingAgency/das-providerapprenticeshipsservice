@@ -54,5 +54,67 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Validation.Appren
                 result.Errors[0].ErrorMessage.Should().Be("You must enter an <strong>email address</strong> that’s no longer than 200 characters");
             }
         }
+
+        [Test]
+        public void TestValidateEmailAddressIfProvidedForBlacklistUsers()
+        {
+            //Arrange
+            ValidModel.ApprenticeshipViewModel.BlackListed = true;
+            ValidModel.CsvRecord.EmailAddress = "apprentice1@test.com";
+
+            //Act
+            var result = Validator.Validate(ValidModel);
+
+            //Assert
+            result.Errors.Count.Should().Be(0);            
+        }
+
+        [Test]
+        public void TestNullEmailAddressForBlacklistUsers()
+        {
+            //Arrange
+            ValidModel.ApprenticeshipViewModel.BlackListed = true;
+            ValidModel.CsvRecord.EmailAddress = null;
+
+            //Act
+            var result = Validator.Validate(ValidModel);
+
+            //Assert
+            result.Errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void TestInvalidEmailForBlacklistUsers()
+        {
+            //Arrange
+            ValidModel.ApprenticeshipViewModel.BlackListed = true;
+            ValidModel.CsvRecord.EmailAddress = "apprentice@test";
+
+            //Act
+            var result = Validator.Validate(ValidModel);
+
+            //Assert
+            result.Errors.Count.Should().Be(1);
+            result.Errors[0].ErrorMessage.Should().Be("You must enter a valid <strong>email address</strong>");
+        }
+
+        [TestCase(190, 0)]
+        [TestCase(201, 1)]
+        public void TestEmailAddressNoLongerThan200CharactersForBlacklistUsers(int length, int expectedErrorCount)
+        {
+            //Arrange
+            ValidModel.ApprenticeshipViewModel.BlackListed = true;
+            ValidModel.CsvRecord.EmailAddress = new string('*', length) + "@test.com";
+
+            //Act
+            var result = Validator.Validate(ValidModel);
+
+            //Assert
+            result.Errors.Count.Should().Be(expectedErrorCount);
+            if (expectedErrorCount > 0)
+            {
+                result.Errors[0].ErrorMessage.Should().Be("You must enter an <strong>email address</strong> that’s no longer than 200 characters");
+            }
+        }
     }
 }

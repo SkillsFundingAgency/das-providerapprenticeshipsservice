@@ -22,5 +22,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
         {
             return _commitmentsV2ApiClient.ApprenticeEmailRequired(providerId);
         }
+
+        public Task<bool> OptionalEmail(long providerId, long employerId)
+        {
+           return _commitmentsV2ApiClient.OptionalEmail(providerId, employerId);
+        }
     }
 }

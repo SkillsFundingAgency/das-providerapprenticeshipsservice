@@ -9,5 +9,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
         Task<GetCohortResponse> GetCohort(long cohortId);
         Task<bool> ApprenticeEmailRequired(long providerId);
         Task<GetProviderCommitmentAgreementResponse> GetProviderCommitmentAgreement(long providerId);
+        Task<bool> OptionalEmail(long providerId, long employerId);
     }
 }

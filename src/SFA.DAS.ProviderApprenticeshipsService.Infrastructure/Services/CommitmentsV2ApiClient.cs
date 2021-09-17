@@ -48,6 +48,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
                     _logger.LogError($"{url} returned unexpected status code");
                     throw new ApplicationException("Unexpected status code returned");
             }
+        }       
+
+        public async Task<bool> OptionalEmail(long providerId, long employerId)
+        {
+            var url = $"{BaseUrl()}api/authorization/email-optional?providerId={providerId}&employerid={employerId}";
+            _logger.LogInformation($"Getting {url}");
+            var response = await _httpClient.GetAsync(url);
+            switch (response.StatusCode)
+            {
+                case HttpStatusCode.OK:
+                    _logger.LogInformation($"{url} returned OK");
+                    return true;
+                case HttpStatusCode.NotFound:
+                    _logger.LogInformation($"{url} returned NotFound");
+                    return false;
+                default:
+                    _logger.LogError($"{url} returned unexpected status code");
+                    throw new ApplicationException("Unexpected status code returned");
+            }
         }
 
         public async Task<GetProviderCommitmentAgreementResponse> GetProviderCommitmentAgreement(long providerId)
