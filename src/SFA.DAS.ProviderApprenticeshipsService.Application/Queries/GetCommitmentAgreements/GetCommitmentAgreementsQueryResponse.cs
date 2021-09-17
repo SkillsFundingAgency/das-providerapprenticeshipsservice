@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.CommitmentsV2.Api.Types;
+using SFA.DAS.CommitmentsV2.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitmentAgreements
 {
     public class GetCommitmentAgreementsQueryResponse
     {
-        public List<CommitmentAgreement> CommitmentAgreements { get; set; }
+        public List<ProviderCommitmentAgreement> CommitmentAgreements { get; set; }
     }
 }

@@ -69,6 +69,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
             }
         }
 
+        public async Task<GetProviderCommitmentAgreementResponse> GetProviderCommitmentAgreement(long providerId)
+        {
+            var url = $"{BaseUrl()}api/providers/{providerId}/commitmentagreements";
+            var response = JsonConvert.DeserializeObject<GetProviderCommitmentAgreementResponse>(await GetAsync(url));
+            return response;
+        }
+
         private string BaseUrl()
         {
             if (_config.ApiBaseUrl.EndsWith("/"))
