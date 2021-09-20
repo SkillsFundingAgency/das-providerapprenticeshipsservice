@@ -5,20 +5,23 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.CommitmentsV2.Api.Types.Responses;
+using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitmentAgreements;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.GetCommitmentAgreements
 {
     [TestFixture]
     public class WhenGettingCommitmentAgreements
     {
-        private Mock<IProviderCommitmentsApi> _commitmentsApi;
+        private Mock<ICommitmentsV2ApiClient> _commitmentsApi;
         private GetCommitmentAgreementsQueryHandler _handler;
 
         [SetUp]
         public void WhenGettingCommitmentAgreementsSetup()
         {
-            _commitmentsApi = new Mock<IProviderCommitmentsApi>();
+            _commitmentsApi = new Mock<ICommitmentsV2ApiClient>();
 
             _handler = new GetCommitmentAgreementsQueryHandler(_commitmentsApi.Object);
         }
@@ -30,18 +33,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
 
             var query = new GetCommitmentAgreementsQueryRequest { ProviderId = providerId };
 
-            var commitmentAgreements = new List<CommitmentAgreement>
+            var expectedResponse = new GetProviderCommitmentAgreementResponse
             {
-                new CommitmentAgreement {Reference = "R1", AccountLegalEntityPublicHashedId = "A1", LegalEntityName = "L1"},
-                new CommitmentAgreement {Reference = "R2", AccountLegalEntityPublicHashedId = "A2", LegalEntityName = "L2"},
+                ProviderCommitmentAgreement = new List<ProviderCommitmentAgreement>
+                {
+                    new ProviderCommitmentAgreement {AccountLegalEntityPublicHashedId = "A1", LegalEntityName = "L1"},
+                    new ProviderCommitmentAgreement {AccountLegalEntityPublicHashedId = "A2", LegalEntityName = "L2"},
+                }
             };
 
-            _commitmentsApi.Setup(x => x.GetCommitmentAgreements(providerId))
-                .ReturnsAsync(() => TestHelper.Clone(commitmentAgreements));
+            _commitmentsApi
+                .Setup(x => x.GetProviderCommitmentAgreement(providerId))
+                .ReturnsAsync(() => TestHelper.Clone(expectedResponse));
 
             var response = await _handler.Handle(query, new CancellationToken());
 
-            TestHelper.EnumerablesAreEqual(commitmentAgreements, response.CommitmentAgreements);
+            TestHelper.EnumerablesAreEqual(expectedResponse.ProviderCommitmentAgreement, response.CommitmentAgreements);
         }
     }
 }

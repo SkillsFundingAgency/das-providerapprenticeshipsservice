@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitmentAgreements;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
+using SFA.DAS.CommitmentsV2.Api.Types;
+using SFA.DAS.CommitmentsV2.Types;
+
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agreement
 {
@@ -29,12 +31,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
             _mediator.Setup(m => m.Send(It.IsAny<GetCommitmentAgreementsQueryRequest>(), new CancellationToken()))
             .ReturnsAsync(new GetCommitmentAgreementsQueryResponse
             {
-                CommitmentAgreements = new List<CommitmentAgreement>
+                CommitmentAgreements = new List<ProviderCommitmentAgreement>
                 {
-                        new CommitmentAgreement { Reference = "1" , LegalEntityName = "A"},
-                        new CommitmentAgreement { Reference = "2" , LegalEntityName = "B"},
-                        new CommitmentAgreement { Reference = "3" , LegalEntityName = "C"},
-                        new CommitmentAgreement { Reference = "4" , LegalEntityName = "D"},
+                        new ProviderCommitmentAgreement { AccountLegalEntityPublicHashedId = "1" , LegalEntityName = "A"},
+                        new ProviderCommitmentAgreement { AccountLegalEntityPublicHashedId = "2" , LegalEntityName = "B"},
+                        new ProviderCommitmentAgreement { AccountLegalEntityPublicHashedId = "3" , LegalEntityName = "C"},
+                        new ProviderCommitmentAgreement { AccountLegalEntityPublicHashedId = "4" , LegalEntityName = "D"},
                 }
             });
 
@@ -53,9 +55,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
             _mediator.Setup(m => m.Send(It.IsAny<GetCommitmentAgreementsQueryRequest>(), new CancellationToken()))
                 .ReturnsAsync(new GetCommitmentAgreementsQueryResponse
                 {
-                    CommitmentAgreements = new List<CommitmentAgreement>
+                    CommitmentAgreements = new List<ProviderCommitmentAgreement>
                     {
-                        new CommitmentAgreement()
+                        new ProviderCommitmentAgreement()
                     }
                 });
 
@@ -65,7 +67,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
                 OrganisationName = "org"
             };
 
-            _agreementMapper.Setup(m => m.Map(It.IsAny<CommitmentAgreement>()))
+            _agreementMapper.Setup(m => m.Map(It.IsAny<ProviderCommitmentAgreement>()))
                 .Returns(mappedCommitmentAgreement);
 
             //Act
@@ -153,10 +155,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
             SetupMapping("4", "D");
         }
 
-        private void SetupMapping(string inReference, string outOrganisationName)
+        private void SetupMapping(string publicHashedId, string outOrganisationName)
         {
-            _agreementMapper.Setup(m => m.Map(It.Is<CommitmentAgreement>(ca => ca.Reference == inReference)))
-                .Returns(new Web.Models.Agreement.CommitmentAgreement { OrganisationName = outOrganisationName, AgreementID = inReference });
+            _agreementMapper
+                .Setup(m => m.Map(It.Is<ProviderCommitmentAgreement>(ca => ca.AccountLegalEntityPublicHashedId == publicHashedId)))
+                .Returns(new Web.Models.Agreement.CommitmentAgreement { OrganisationName = outOrganisationName, AgreementID = publicHashedId });
         }
     }
 }
