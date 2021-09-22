@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
@@ -17,13 +17,20 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
         private readonly IUserRepository _userRepository;
         private readonly IProviderRepository _providerRepository;
         private readonly ILog _logger;
+        private readonly ProviderNotificationConfiguration _configuration;
 
-        public IdamsSyncService(IIdamsEmailServiceWrapper idamsEmailServiceWrapper, IUserRepository userRepository, IProviderRepository providerRepository, ILog logger)
+        public IdamsSyncService(
+            IIdamsEmailServiceWrapper idamsEmailServiceWrapper, 
+            IUserRepository userRepository, 
+            IProviderRepository providerRepository, 
+            ILog logger,
+            ProviderApprenticeshipsServiceConfiguration configuration)
         {
             _idamsEmailServiceWrapper = idamsEmailServiceWrapper;
             _userRepository = userRepository;
             _providerRepository = providerRepository;
             _logger = logger;
+            _configuration = configuration.CommitmentNotification;
         }
 
         public async Task SyncUsers()
@@ -82,11 +89,8 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
 
         private async Task<List<IdamsUser>> GetIdamsUsers(long providerId)
         {
-            Task<List<string>> idamsUsersTask;
-            Task<List<string>> idamsSuperUsersTask;
-
-            idamsUsersTask = _idamsEmailServiceWrapper.GetEmailsAsync(providerId);
-            idamsSuperUsersTask = _idamsEmailServiceWrapper.GetSuperUserEmailsAsync(providerId);
+            var idamsUsersTask = _idamsEmailServiceWrapper.GetEmailsAsync(providerId, _configuration.DasUserRoleId);
+            var idamsSuperUsersTask = _idamsEmailServiceWrapper.GetEmailsAsync(providerId, _configuration.SuperUserRoleId);
 
             await Task.WhenAll(idamsUsersTask, idamsSuperUsersTask);
 
