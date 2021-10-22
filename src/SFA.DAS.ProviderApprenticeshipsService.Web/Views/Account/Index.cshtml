@@ -32,11 +32,14 @@
         <div class="boxes">
             @if (Model.ShowCreateCohortLink) // does user have create cohort permissions?
             {
+
                 <div class="box">
                     <h2 class="heading-medium">
-                        <a href="@Url.Action("Create","CreateCohort", new { providerId = Model.ProviderId })">Create a cohort</a>
+                        <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved/add/select-journey")">Add new apprentices</a>
                     </h2>
-                    <p>Create new cohorts on behalf of an employer.</p>
+                    <li>manually enter details</li>
+                    <li>create a new cohort</li>
+                    <li>add to an existing cohort</li>
                 </div>
             }
 
@@ -74,17 +77,17 @@
                 </h2>
                 <p>Create a vacancy to recruit an apprentice and manage applications.</p>
             </div>
-            
+
             @if (Model.ShowEmployerDemandLink)
             {
-                <div class="box">
-                    <h2 class="heading-medium">
-                        <a href="@Url.EmployerDemandLink($"{Model.ProviderId}/find-apprenticeship-opportunities")">Find employers that need a training provider</a>
-                    </h2>
-                    <p>View employers and share your contact details with them.</p>
-                </div>    
+            <div class="box">
+                <h2 class="heading-medium">
+                    <a href="@Url.EmployerDemandLink($"{Model.ProviderId}/find-apprenticeship-opportunities")">Find employers that need a training provider</a>
+                </h2>
+                <p>View employers and share your contact details with them.</p>
+            </div>
             }
-            
+
 
             <div class="box">
                 <h2 class="heading-medium">
@@ -92,7 +95,7 @@
                 </h2>
                 <p>Find and view organisations and their agreement IDs.</p>
             </div>
-            
+
             <div class="box">
                 <h2 class="heading-medium">
                     <a href="@Url.RegistrationLink($"{Model.ProviderId}/registration/startaccountsetup")">Set up employer account</a>
