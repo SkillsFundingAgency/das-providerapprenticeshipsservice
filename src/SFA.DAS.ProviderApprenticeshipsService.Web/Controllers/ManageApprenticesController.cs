@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Web.Mvc;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -8,12 +6,15 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.ApprenticeshipUpdate;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderUrlHelper;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [Authorize]
     [ProviderUkPrnCheck]
     [RoutePrefix("{providerId}/apprentices/manage")]
+    [Deprecated]
     public class ManageApprenticesController : BaseController
     {
         private readonly ManageApprenticesOrchestrator _orchestrator;
@@ -30,7 +31,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpGet]
         [Route("all")]
         [OutputCache(CacheProfile = "NoCache")]
-        [Deprecated]
         public ActionResult Index(long providerId)
         {
             return Redirect(_providerUrlHelper.ProviderCommitmentsLink($"{providerId}/apprentices"));
@@ -39,7 +39,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpGet]
         [Route("{hashedApprenticeshipId}/details")]
         [OutputCache(CacheProfile = "NoCache")]
-        [Deprecated]
         public ActionResult Details(long providerid, string hashedApprenticeshipId)
         {
             return Redirect(_providerUrlHelper.ProviderCommitmentsLink($"{providerid}/apprentices/{hashedApprenticeshipId}"));
