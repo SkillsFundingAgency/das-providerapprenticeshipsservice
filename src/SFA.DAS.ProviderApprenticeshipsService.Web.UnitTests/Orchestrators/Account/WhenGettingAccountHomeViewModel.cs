@@ -64,17 +64,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
             var model = await _orchestrator.GetAccountHomeViewModel(1);
 
             model.ShowAcademicYearBanner.Should().Be(expectShowBanner);
-            model.ShowEmployerDemandLink.Should().BeFalse();
-        }
-
-        [Test]
-        public async Task Then_If_EmployerDemand_Feature_Enabled_Then_Model_Value_Set_To_True()
-        {
-            _featureToggleService.Setup(x => x.Get<EmployerDemand>().FeatureEnabled).Returns(true);
-
-            var model = await _orchestrator.GetAccountHomeViewModel(1);
-
-            model.ShowEmployerDemandLink.Should().BeTrue();
         }
     }
 }
