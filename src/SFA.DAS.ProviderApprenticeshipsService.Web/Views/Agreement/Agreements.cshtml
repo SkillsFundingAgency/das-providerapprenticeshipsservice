@@ -1,6 +1,6 @@
 ﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.Agreement.AgreementsViewModel
 
-@{  
+@{
     ViewBag.Title = "Organisations and Agreements";
     ViewBag.PageID = "organisations-and-agreements";
 }
@@ -16,7 +16,13 @@
                     Search organisation name
                 </label>
                 <div class="app-search-form__group">
-                    <input id="search-form-example" title="Search" name="organisation" value="@Model.SearchText" class="form-control app-search-form__input app-autocomplete" type="text" data-autocomplete-url="@Url.Action("SearchOrganisation", "Agreement")">
+                    <select id="search-agreement" name="organisation" class="form-control app-search-form__input app-autocomplete" data-autocomplete-default="@Model.SearchText">
+                        <option class="das-js-hide" value="">Select training provider</option>
+                        @foreach (var agreement in Model.CommitmentAgreements)
+                        {
+                            <option value="@agreement.OrganisationName">@agreement.OrganisationName</option>
+                        }
+                    </select>
                     <div class="app-search-form__button-wrap">
                         <button class="button app-search-form__button" type="submit">
                             Search Organisation
@@ -33,16 +39,16 @@
     <p><a href="@Url.Action("Agreements")">Clear search</a></p>
 }
 
-@if (Model.CommitmentAgreements.Count() == 0) 
+@if (Model.CommitmentAgreements.Count() == 0)
 {
-    <p>0 organisations match <span class="strong">'@Model.SearchText'</span></p>    
-}        
+    <p>0 organisations match <span class="strong">'@Model.SearchText'</span></p>
+}
 else
 {
     <table>
         <thead>
             <tr>
-                <th scope="col">Organisation</th>         
+                <th scope="col">Organisation</th>
                 <th scope="col">Agreement ID</th>
             </tr>
         </thead>
@@ -52,7 +58,7 @@ else
                 <tr>
                     <td>
                         @cohortAgreement.OrganisationName
-                    </td>                            
+                    </td>
                     <td>
                         @cohortAgreement.AgreementID
                     </td>
@@ -60,10 +66,10 @@ else
             }
         </tbody>
     </table>
-}   
+}
 
 @section breadcrumb {
-    <div class="breadcrumbs">        
+    <div class="breadcrumbs">
         <a href="javascript:window.history.back();" class="back-link">Back</a>
     </div>
 }
