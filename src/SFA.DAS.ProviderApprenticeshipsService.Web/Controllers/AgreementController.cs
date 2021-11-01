@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
@@ -14,9 +13,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     public class AgreementController : BaseController
     {
         private readonly AgreementOrchestrator _orchestrator;
-        private const string FileName = "organisations_and_agreements";
-        private const string CsvContentType = "text/csv";
-        private const string ExcelContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
         public AgreementController(AgreementOrchestrator orchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
         {
@@ -30,13 +26,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var model = await _orchestrator.GetAgreementsViewModel(providerId, organisation);
             return View(model);
         }
-
-        [HttpGet]
-        [Route("search-organisation")]
-        public async Task<JsonResult> SearchOrganisation(long providerId, string searchTerm)
-        {   
-            var data = await _orchestrator.GetAgreementsViewModel(providerId, searchTerm);            
-            return Json(data.CommitmentAgreements, JsonRequestBehavior.AllowGet);            
-        }       
     }
 }
