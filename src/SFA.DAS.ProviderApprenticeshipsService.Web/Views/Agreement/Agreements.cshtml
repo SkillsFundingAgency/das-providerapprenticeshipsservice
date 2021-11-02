@@ -1,9 +1,12 @@
-﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.Agreement.AgreementsViewModel
+﻿@using Newtonsoft.Json;
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.Agreement.AgreementsViewModel
 
 @{
     ViewBag.Title = "Organisations and Agreements";
     ViewBag.PageID = "organisations-and-agreements";
 }
+
+
 
 <h1 class="heading-xlarge">Organisations and agreements</h1>
 <p>Listed below is every organisation you work with on the apprenticeship service and their agreement ID.</p>
@@ -16,13 +19,7 @@
                     Search organisation name
                 </label>
                 <div class="app-search-form__group">
-                    <select id="search-agreement" name="organisation" class="form-control app-search-form__input app-autocomplete" data-autocomplete-default="@Model.SearchText">
-                        <option class="das-js-hide" value="">Select training provider</option>
-                        @foreach (var organisationName in Model.AllProviderOrganisationNames)
-                        {
-                            <option value="@organisationName">@organisationName</option>
-                        }
-                    </select>
+                    <input id="search-form-example" title="Search" name="organisation" value="@Model.SearchText" class="form-control app-search-form__input app-autocomplete" type="text">
                     <div class="app-search-form__button-wrap">
                         <button class="button app-search-form__button" type="submit">
                             Search Organisation
@@ -66,6 +63,12 @@ else
             }
         </tbody>
     </table>
+}
+
+@section PreFooterJS {
+    <script>
+        var autoCompleteSource = @Html.Raw(JsonConvert.SerializeObject(Model.AllProviderOrganisationNames));
+    </script>
 }
 
 @section breadcrumb {

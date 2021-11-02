@@ -112,26 +112,26 @@
     <!--/floating-menu-holder-->
 
     @if (HttpContext.Current.User.Identity.IsAuthenticated && !(ViewBag?.HideNavBar ?? false))
-        {
-            var controllerName = ViewContext.RouteData.Values["Controller"].ToString(); ;
-            var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
-            <div class="header-organisation" role="navigation">
-                <nav class="header-inner">
-                    <ul role="menubar" id="global-nav-links">
-                        <li><a href="@Url.Action("Index", "Account")" role="menuitem" class="@(controllerName == "Account" ? "selected" : "")">Home</a></li>
-                        <li><a href="@Url.Action("Cohorts", "Commitment", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Commitment" ? "selected" : "")">Apprentice requests</a></li>
-                        <li><a href="@Url.ReservationsLink($"{providerId}/reservations/manage")" role="menuitem" class="@(controllerName == "ManageReservations" ? "selected" : "")">Manage funding</a></li>
-                        <li><a href="@Url.Action("Index", "ManageApprentices", new {providerId = providerId})" role="menuitem" class="@(controllerName == "ManageApprentices" ? "selected" : "")">Manage your apprentices</a></li>
-                        <li><a href="@Url.RecruitLink($"{providerId}")">Recruit apprentices</a></li>
-                        <li><a href="@Url.Action("Agreements", "Agreement", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Agreement" ? "selected" : "")">Organisations and agreements</a></li>
-                    </ul>
-                </nav>
-            </div>
+    {
+        var controllerName = ViewContext.RouteData.Values["Controller"].ToString(); ;
+        var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
+        <div class="header-organisation" role="navigation">
+            <nav class="header-inner">
+                <ul role="menubar" id="global-nav-links">
+                    <li><a href="@Url.Action("Index", "Account")" role="menuitem" class="@(controllerName == "Account" ? "selected" : "")">Home</a></li>
+                    <li><a href="@Url.Action("Cohorts", "Commitment", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Commitment" ? "selected" : "")">Apprentice requests</a></li>
+                    <li><a href="@Url.ReservationsLink($"{providerId}/reservations/manage")" role="menuitem" class="@(controllerName == "ManageReservations" ? "selected" : "")">Manage funding</a></li>
+                    <li><a href="@Url.Action("Index", "ManageApprentices", new {providerId = providerId})" role="menuitem" class="@(controllerName == "ManageApprentices" ? "selected" : "")">Manage your apprentices</a></li>
+                    <li><a href="@Url.RecruitLink($"{providerId}")">Recruit apprentices</a></li>
+                    <li><a href="@Url.Action("Agreements", "Agreement", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Agreement" ? "selected" : "")">Organisations and agreements</a></li>
+                </ul>
+            </nav>
+        </div>
     }
 
 
     <main role="main" id="content">
-       
+
         @RenderSection("breadcrumb", required: false)
 
         @Html.Partial(@"_ModalMessage")
@@ -139,6 +139,7 @@
 
     </main>
 
+    @RenderSection("PreFooterJS", required: false)
     <footer class="group js-footer" id="footer" role="contentinfo">
         <div class="footer-wrapper">
             <div class="footer-meta">
@@ -162,9 +163,9 @@
 
                     </div>
                 </div>
-				<div class="copyright">
-					<a href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/copyright-and-re-use/crown-copyright/">&copy; Crown copyright</a>
-				</div>
+                <div class="copyright">
+                    <a href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/copyright-and-re-use/crown-copyright/">&copy; Crown copyright</a>
+                </div>
             </div>
         </div>
     </footer>

@@ -1,28 +1,32 @@
-var idSelectField = 'search-agreement';
+var autocompleteInputs = document.querySelectorAll(".app-autocomplete");
 
-var selectEl = document.querySelector('#' + idSelectField);
-if (selectEl) {
-    accessibleAutocomplete.enhanceSelectElement({
-        selectElement: selectEl,
-        minLength: 3,
-        autoselect: true,
-        defaultValue: selectEl.dataset.autocompleteDefault,
-        displayMenu: 'overlay',
-        placeholder: '',
-        onConfirm: function (opt) {
-            var txtInput = document.querySelector('#' + idSelectField);
-            var searchString = opt || txtInput.value;
-            var requestedOption = [].filter.call(this.selectElement.options,
-                function (option) {
-                    return (option.textContent || option.innerText) === searchString
-                }
-            )[0];
-            if (requestedOption) {
-                requestedOption.selected = true;
-            } else {
-                this.selectElement.selectedIndex = 0;
-            }
-        }
+if (autocompleteInputs.length > 0) {
 
-    });
+    for (var i = 0; i < autocompleteInputs.length; i++) {
+
+        var input = autocompleteInputs[i]
+        var container = document.createElement('div');
+        var apiUrl = input.dataset.autocompleteUrl;
+
+        container.className = "das-autocomplete-wrap"
+        input.parentNode.replaceChild(container, input);
+
+        var getSuggestions = function (query, updateResults) {
+            ;
+        };
+
+        accessibleAutocomplete({
+            element: container,
+            id: input.id,
+            name: input.name,
+            defaultValue: input.value,
+            displayMenu: 'overlay',
+            showNoOptionsFound: false,
+            minLength: 3,
+            source: autoCompleteSource,
+            placeholder: "",
+            confirmOnBlur: false,
+            autoselect: true
+        });
+    }
 }
