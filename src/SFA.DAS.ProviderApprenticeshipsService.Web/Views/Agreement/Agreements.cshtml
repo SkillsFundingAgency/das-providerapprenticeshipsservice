@@ -18,9 +18,9 @@
                 <div class="app-search-form__group">
                     <select id="search-agreement" name="organisation" class="form-control app-search-form__input app-autocomplete" data-autocomplete-default="@Model.SearchText">
                         <option class="das-js-hide" value="">Select training provider</option>
-                        @foreach (var agreement in Model.CommitmentAgreements)
+                        @foreach (var organisationName in Model.AllProviderOrganisationNames)
                         {
-                            <option value="@agreement.OrganisationName">@agreement.OrganisationName</option>
+                            <option value="@organisationName">@organisationName</option>
                         }
                     </select>
                     <div class="app-search-form__button-wrap">
