@@ -52,7 +52,7 @@
 
             <div class="box">
                 <h2 class="heading-medium">
-                    <a href="@Url.Action("Cohorts", "Commitment", new {providerId = Model.ProviderId})">Apprentice requests</a>
+                    <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved")">Apprentice requests</a>
                 </h2>
                 <p>Review, edit, approve and add apprentices.</p>
             </div>
@@ -66,7 +66,7 @@
 
             <div class="box">
                 <h2 class="heading-medium">
-                    <a href="@Url.Action("Index", "ManageApprentices", new {providerId = Model.ProviderId})">Manage your apprentices</a>
+                    <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/apprentices")">Manage your apprentices</a>
                 </h2>
                 <p>View and update approved apprentice records.</p>
             </div>
