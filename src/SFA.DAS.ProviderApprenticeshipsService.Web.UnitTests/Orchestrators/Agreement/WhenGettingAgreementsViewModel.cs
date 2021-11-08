@@ -145,6 +145,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
             Assert.AreEqual(result.CommitmentAgreements.Count(), 1);
         }
 
+        [Test]
+        public async Task ThenAllOrganisationNamesAreReturnedWithFilteredResults()
+        {
+            //Arrange
+            SetOrganisations();
+
+            //Act
+            var result = await _orchestrator.GetAgreementsViewModel(providerId, "D");
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(result.CommitmentAgreements.Count(), 1);
+            Assert.AreEqual(result.AllProviderOrganisationNames.Count(), 4);
+        }
+
 
         private void SetOrganisations()
         {

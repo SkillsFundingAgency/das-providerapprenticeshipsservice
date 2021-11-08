@@ -28,14 +28,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             Logger.Info($"Getting agreements for provider: {providerId}", providerId);
 
+            var commitmentAgreements = await GetCommitmentAgreements(providerId);
+
+            var filteredCommitmentAgreements = string.IsNullOrEmpty(organisation) 
+                ? commitmentAgreements 
+                : commitmentAgreements.Where(v => string.IsNullOrWhiteSpace(organisation.ToLower()) || (string.IsNullOrWhiteSpace(v.OrganisationName) == false && v.OrganisationName.ToLower().Replace(" ", String.Empty).Contains(organisation.ToLower().Replace(" ", String.Empty))));
+
             return new AgreementsViewModel
             {
-                CommitmentAgreements = await GetCommitmentAgreements(providerId, organisation),
+                CommitmentAgreements = filteredCommitmentAgreements.ToList(),
+                AllProviderOrganisationNames = commitmentAgreements.Select(ca => ca.OrganisationName).ToList(),
                 SearchText = organisation
             };
         }      
 
-        private async Task<IEnumerable<CommitmentAgreement>> GetCommitmentAgreements(long providerId, string searchTerm)
+        private async Task<IEnumerable<CommitmentAgreement>> GetCommitmentAgreements(long providerId)
         {
             var response = await Mediator.Send(new GetCommitmentAgreementsQueryRequest
             {
@@ -45,8 +52,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             var result = response.CommitmentAgreements.Select(_agreementMapper.Map);
 
             return result
-                    .Where(v => string.IsNullOrWhiteSpace(searchTerm.ToLower())
-                        || (string.IsNullOrWhiteSpace(v.OrganisationName) == false && v.OrganisationName.ToLower().Replace(" ", String.Empty).Contains(searchTerm.ToLower().Replace(" ", String.Empty))))
                     .OrderBy(v => v.OrganisationName)
                     .ThenBy(ca => ca.AgreementID)
                     .GroupBy(m => new { m.OrganisationName, m.AgreementID })

@@ -1,9 +1,12 @@
-﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.Agreement.AgreementsViewModel
+﻿@using Newtonsoft.Json;
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.Agreement.AgreementsViewModel
 
-@{  
+@{
     ViewBag.Title = "Organisations and Agreements";
     ViewBag.PageID = "organisations-and-agreements";
 }
+
+
 
 <h1 class="heading-xlarge">Organisations and agreements</h1>
 <p>Listed below is every organisation you work with on the apprenticeship service and their agreement ID.</p>
@@ -16,7 +19,7 @@
                     Search organisation name
                 </label>
                 <div class="app-search-form__group">
-                    <input id="search-form-example" title="Search" name="organisation" value="@Model.SearchText" class="form-control app-search-form__input app-autocomplete" type="text" data-autocomplete-url="@Url.Action("SearchOrganisation", "Agreement")">
+                    <input id="search-form-example" title="Search" name="organisation" value="@Model.SearchText" class="form-control app-search-form__input app-autocomplete" type="text">
                     <div class="app-search-form__button-wrap">
                         <button class="button app-search-form__button" type="submit">
                             Search Organisation
@@ -33,16 +36,16 @@
     <p><a href="@Url.Action("Agreements")">Clear search</a></p>
 }
 
-@if (Model.CommitmentAgreements.Count() == 0) 
+@if (Model.CommitmentAgreements.Count() == 0)
 {
-    <p>0 organisations match <span class="strong">'@Model.SearchText'</span></p>    
-}        
+    <p>0 organisations match <span class="strong">'@Model.SearchText'</span></p>
+}
 else
 {
     <table>
         <thead>
             <tr>
-                <th scope="col">Organisation</th>         
+                <th scope="col">Organisation</th>
                 <th scope="col">Agreement ID</th>
             </tr>
         </thead>
@@ -52,7 +55,7 @@ else
                 <tr>
                     <td>
                         @cohortAgreement.OrganisationName
-                    </td>                            
+                    </td>
                     <td>
                         @cohortAgreement.AgreementID
                     </td>
@@ -60,10 +63,16 @@ else
             }
         </tbody>
     </table>
-}   
+}
+
+@section PreFooterJS {
+    <script>
+        var autoCompleteSource = @Html.Raw(JsonConvert.SerializeObject(Model.AllProviderOrganisationNames));
+    </script>
+}
 
 @section breadcrumb {
-    <div class="breadcrumbs">        
+    <div class="breadcrumbs">
         <a href="javascript:window.history.back();" class="back-link">Back</a>
     </div>
 }
