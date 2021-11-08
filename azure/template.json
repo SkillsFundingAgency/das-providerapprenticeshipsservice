@@ -108,8 +108,7 @@
                 "ProviderCreateCohortV2": true,
                 "ProviderManageApprenticesV2": true,
                 "ApprenticeDetailsV2": true,
-                "CohortSummariesV2": true,
-                "EmployerDemand": true
+                "CohortSummariesV2": true
             }
         },
         "useStubProviderRelationships": {
@@ -426,10 +425,6 @@
                                 {
                                     "name": "FeatureToggle.CohortSummariesV2",
                                     "value": "[parameters('FeatureToggle').CohortSummariesV2]"
-                                },
-                                {
-                                    "name": "FeatureToggle.EmployerDemand",
-                                    "value": "[parameters('FeatureToggle').EmployerDemand]"
                                 }
                             ]
                         }
