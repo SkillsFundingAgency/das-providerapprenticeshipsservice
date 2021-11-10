@@ -1,7 +1,7 @@
-﻿using System.Web.Mvc;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+using System.Web.Mvc;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {

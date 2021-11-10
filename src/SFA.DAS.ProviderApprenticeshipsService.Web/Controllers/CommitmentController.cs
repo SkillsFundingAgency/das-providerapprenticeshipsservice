@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
-using System.Security.Claims;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [Authorize]
     [ProviderUkPrnCheck]
     [RoutePrefix("{providerId}/apprentices")]
+    [Deprecated]
     public class CommitmentController : BaseController
     {
         private const string LastCohortPageCookieKey = "sfa-das-providerapprenticeshipsservice-lastCohortPage";
@@ -26,13 +23,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         private readonly ProviderUrlHelper.ILinkGenerator _providerUrlhelper;
 
         private readonly CommitmentOrchestrator _commitmentOrchestrator;
-        private readonly ILog _logger;
 
-        public CommitmentController(CommitmentOrchestrator commitmentOrchestrator, ILog logger, ICookieStorageService<FlashMessageViewModel> flashMessage, 
+        public CommitmentController(CommitmentOrchestrator commitmentOrchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage, 
             ICookieStorageService<string> lastCohortCookieStorageService, IFeatureToggleService featureToggleService, ProviderUrlHelper.LinkGenerator providerUrlhelper) : base(flashMessage)
         {
             _commitmentOrchestrator = commitmentOrchestrator;
-            _logger = logger;
             _lastCohortCookieStorageService = lastCohortCookieStorageService;
             _featureToggleService = featureToggleService;
             _providerUrlhelper = providerUrlhelper;
@@ -41,7 +36,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [HttpGet]
         [Route("Cohorts")]
         [OutputCache(CacheProfile = "NoCache")]
-        [Deprecated]
         public ActionResult Cohorts(long providerId)
         {
             return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved"));
@@ -63,7 +57,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("cohorts/employer")]
-        [Deprecated]
         public ActionResult WithEmployer(long providerId)
         {
             return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/with-employer"));
@@ -71,7 +64,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("cohorts/transferfunded")]
-        [Deprecated]
         public ActionResult TransferFunded(long providerId)
         {
             return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/with-transfer-sender"));
@@ -79,32 +71,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("cohorts/review")]
-        [Deprecated]
         public ActionResult ReadyForReview(long providerId)
         {
             return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/review"));
         }
 		
 		[Route("cohorts/drafts")]
-        [Deprecated]
         public ActionResult DraftList(long providerId)
         {
             return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/draft"));
         }
 
         [HttpGet]
-        [Deprecated]
         [Route("{hashedCommitmentId}/Details", Name = "CohortDetails")]
         public ActionResult Details(long providerId, string hashedCommitmentId)
         {
-            _logger.Info($"To track Apprentice V1 details UrlReferrer Request: {HttpContext.Request.UrlReferrer} Request to Page: {HttpContext.Request.RawUrl}");
             return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/{hashedCommitmentId}/details"));
         }
 
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/details/delete")]
         [RoleAuthorize(Roles = nameof(RoleNames.HasContributorOrAbovePermission))]
-        [Deprecated]
         public async Task<ActionResult> DeleteCohort(long providerId, string hashedCommitmentId)
         {
             var model = await _commitmentOrchestrator.GetDeleteCommitmentModel(providerId, hashedCommitmentId);
@@ -116,7 +103,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/details/delete")]
         [RoleAuthorize(Roles = nameof(RoleNames.HasContributorOrAbovePermission))]
-        [Deprecated]
         public async Task<ActionResult> DeleteCohort(DeleteCommitmentViewModel viewModel)
         {
             if (!ModelState.IsValid)

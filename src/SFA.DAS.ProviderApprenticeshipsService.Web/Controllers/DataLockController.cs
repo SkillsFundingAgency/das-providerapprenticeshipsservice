@@ -1,20 +1,20 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-
-using SFA.DAS.Commitments.Api.Types.DataLock.Types;
+﻿using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.DataLock;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [Authorize]
     [ProviderUkPrnCheck]
     [RoutePrefix("{providerId}/apprentices/manage/{hashedApprenticeshipId}/datalock")]
+    [Deprecated]
     public class DataLockController : BaseController
     {
         private readonly DataLockOrchestrator _orchestrator;
