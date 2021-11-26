@@ -108,7 +108,8 @@
                 "ProviderCreateCohortV2": true,
                 "ProviderManageApprenticesV2": true,
                 "ApprenticeDetailsV2": true,
-                "CohortSummariesV2": true
+                "CohortSummariesV2": true,
+                "BulkUploadV2": false
             }
         },
         "useStubProviderRelationships": {
