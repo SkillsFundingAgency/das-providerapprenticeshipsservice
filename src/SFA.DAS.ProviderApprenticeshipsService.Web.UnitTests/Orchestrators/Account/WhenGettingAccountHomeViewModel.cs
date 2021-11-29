@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FeatureToggle;
 using FluentAssertions;
 using MediatR;
 using Moq;
@@ -64,6 +65,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
             var model = await _orchestrator.GetAccountHomeViewModel(1);
 
             model.ShowAcademicYearBanner.Should().Be(expectShowBanner);
+        }
+
+        [TestCase(true, true, TestName = "Bulk upload feature allowed.")]
+        [TestCase(false, false, TestName = "Bulk upload  NOT feature allowed.")]
+        public async Task ThenSetBulkUploadEnabledFeatureToggle(bool featureToggleSetting, bool expectedResult)
+        {
+            var cloudConfigToggleProviderMock = new Mock<IBooleanToggleValueProvider>();
+            cloudConfigToggleProviderMock.Setup(x => x.EvaluateBooleanToggleValue(It.IsAny<BulkUploadV2>())).Returns(featureToggleSetting);
+            _featureToggleService.Setup(x => x.Get<BulkUploadV2>()).Returns(new BulkUploadV2 { ToggleValueProvider = cloudConfigToggleProviderMock.Object });
+
+            var model = await _orchestrator.GetAccountHomeViewModel(1);
+
+            model.IsBulkUploadV2Enabled.Should().Be(expectedResult);
         }
     }
 }

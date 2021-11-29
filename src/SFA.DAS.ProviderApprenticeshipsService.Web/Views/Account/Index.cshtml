@@ -1,5 +1,4 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
-@using SFA.DAS.ProviderUrlHelper.Framework;
+﻿@using SFA.DAS.ProviderUrlHelper.Framework;
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.AccountHomeViewModel
@@ -35,7 +34,14 @@
 
                 <div class="box">
                     <h2 class="heading-medium">
-                        <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved/add/select-journey")">Add new apprentices</a>
+                        @if (Model.IsBulkUploadV2Enabled)
+                        {
+                            <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved/add/entry-method")">Add new apprentices</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved/add/select-journey")">Add new apprentices</a>
+                        }
                     </h2>
                     <li>manually enter details</li>
                     <li>create a new cohort</li>
