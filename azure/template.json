@@ -426,6 +426,10 @@
                                 {
                                     "name": "FeatureToggle.CohortSummariesV2",
                                     "value": "[parameters('FeatureToggle').CohortSummariesV2]"
+                                },
+                                {
+                                    "name": "FeatureToggle.BulkUploadV2",
+                                    "value": "[parameters('FeatureToggle').BulkUploadV2]"
                                 }
                             ]
                         }
