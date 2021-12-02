@@ -13,6 +13,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasR
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 using SFA.DAS.ProviderRelationships.Types.Models;
@@ -50,7 +51,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     ProviderName = providerResponse.ProvidersView.Provider.ProviderName,
                     ProviderId = providerId,
                     ShowAcademicYearBanner = false,
-                    ShowCreateCohortLink = showCreateCohortLink
+                    ShowCreateCohortLink = showCreateCohortLink,
+                    IsBulkUploadV2Enabled = _featureToggleService.Get<BulkUploadV2>().FeatureEnabled
                 };
             }
             catch (Exception)

@@ -108,7 +108,8 @@
                 "ProviderCreateCohortV2": true,
                 "ProviderManageApprenticesV2": true,
                 "ApprenticeDetailsV2": true,
-                "CohortSummariesV2": true
+                "CohortSummariesV2": true,
+                "BulkUploadV2": false
             }
         },
         "useStubProviderRelationships": {
@@ -425,6 +426,10 @@
                                 {
                                     "name": "FeatureToggle.CohortSummariesV2",
                                     "value": "[parameters('FeatureToggle').CohortSummariesV2]"
+                                },
+                                {
+                                    "name": "FeatureToggle.BulkUploadV2",
+                                    "value": "[parameters('FeatureToggle').BulkUploadV2]"
                                 }
                             ]
                         }
