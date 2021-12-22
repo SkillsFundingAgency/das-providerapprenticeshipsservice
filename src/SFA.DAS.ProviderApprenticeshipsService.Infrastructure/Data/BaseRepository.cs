@@ -4,6 +4,7 @@ using Polly.Retry;
 using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -11,13 +12,11 @@ using System.Threading.Tasks;
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
     public abstract class BaseRepository
-    {
-        //TODO : check how to get the local env variable var environment = Environment.GetEnvironmentVariable("DASENV");
+    {        
         private static string AzureResource = "https://database.windows.net/";
         private readonly string _connectionString;
         private readonly ILog _logger;
-        private readonly Policy _retryPolicy;
-        private readonly bool _isDevEnvironment;
+        private readonly Policy _retryPolicy;        
         private static IList<int> _transientErrorNumbers = new List<int>
             {
                 // https://docs.microsoft.com/en-us/azure/sql-database/sql-database-develop-error-messages
@@ -26,11 +25,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 -2, 20, 64, 233, 10053, 10054, 10060, 40143
             };
 
-        protected BaseRepository(string connectionString, ILog logger, bool isDevEnvironment = false)
+    protected BaseRepository(string connectionString, ILog logger)
         {
             _connectionString = connectionString;
-            _logger = logger;
-            _isDevEnvironment = isDevEnvironment;
+            _logger = logger;            
             _retryPolicy = GetRetryPolicy();
         }
 
@@ -138,7 +136,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 throw new Exception(
                     $"{GetType().FullName}.WithConnection() experienced an exception (not a SQL Exception)", ex);
             }
-        }
+        }        
 
         private RetryPolicy GetRetryPolicy()
         {
@@ -156,7 +154,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
         private SqlConnection GetSqlConnecction(string connectionString)
         {
-            if (_isDevEnvironment)
+            bool IsDevEnvironment = ConfigurationManager.AppSettings["EnvironmentName"]?.Equals("LOCAL") ?? false;
+            if (IsDevEnvironment)
             {
                 return new SqlConnection(connectionString);
             }

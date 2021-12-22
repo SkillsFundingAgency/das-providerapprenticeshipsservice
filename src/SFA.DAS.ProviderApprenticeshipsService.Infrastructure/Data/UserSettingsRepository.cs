@@ -1,16 +1,11 @@
-using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Threading.Tasks;
-
 using Dapper;
-
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-//using SFA.DAS.Sql.Client;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
@@ -18,7 +13,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
     {
         private readonly ILog _logger;
 
-        public UserSettingsRepository(ProviderApprenticeshipsServiceConfiguration config, ILog logger) : base(config.DatabaseConnectionString, logger, ConfigurationManager.AppSettings["EnvironmentName"].Equals("LOCAL"))
+        public UserSettingsRepository(ProviderApprenticeshipsServiceConfiguration config, ILog logger) : base(config.DatabaseConnectionString, logger)
         {
             _logger = logger;
         }

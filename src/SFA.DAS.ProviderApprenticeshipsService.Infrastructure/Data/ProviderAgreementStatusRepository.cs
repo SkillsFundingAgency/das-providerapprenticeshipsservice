@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Dapper;
-
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-//using SFA.DAS.Sql.Client;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
@@ -21,7 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         private readonly ILog _logger;
         private readonly ICurrentDateTime _currentDateTime;
 
-        public ProviderAgreementStatusRepository(IProviderAgreementStatusConfiguration config, ILog logger, ICurrentDateTime currentDateTime) : base(config.DatabaseConnectionString, logger, ConfigurationManager.AppSettings["EnvironmentName"].Equals("LOCAL"))
+        public ProviderAgreementStatusRepository(IProviderAgreementStatusConfiguration config, ILog logger, ICurrentDateTime currentDateTime) : base(config.DatabaseConnectionString, logger)
         {
             _logger = logger;
             _currentDateTime = currentDateTime;
