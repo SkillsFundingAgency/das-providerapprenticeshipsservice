@@ -2,19 +2,20 @@
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
-using SFA.DAS.Sql.Client;
+//using SFA.DAS.Sql.Client;
 using System;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using System.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
     public class ProviderRepository : BaseRepository, IProviderRepository
     {
         public ProviderRepository(ProviderApprenticeshipsServiceConfiguration config, ILog logger) : base(
-            config.DatabaseConnectionString, logger)
+            config.DatabaseConnectionString, logger, ConfigurationManager.AppSettings["EnvironmentName"].Equals("LOCAL"))
         {
         }
 
