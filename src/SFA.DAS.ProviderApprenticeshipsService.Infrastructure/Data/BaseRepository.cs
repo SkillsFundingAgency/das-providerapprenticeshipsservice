@@ -154,8 +154,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
         private SqlConnection GetSqlConnecction(string connectionString)
         {
-            bool IsDevEnvironment = ConfigurationManager.AppSettings["EnvironmentName"]?.Equals("LOCAL") ?? false;
-            if (IsDevEnvironment)
+            bool isDevelopment = ConfigurationManager.AppSettings["EnvironmentName"]?.Equals("LOCAL") ?? false;
+            if (isDevelopment)
             {
                 return new SqlConnection(connectionString);
             }
