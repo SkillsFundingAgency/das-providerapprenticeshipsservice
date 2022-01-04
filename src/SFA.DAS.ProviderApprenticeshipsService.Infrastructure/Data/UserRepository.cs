@@ -9,13 +9,12 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.Sql.Client;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
     public class UserRepository : BaseRepository, IUserRepository
     {
-        private readonly ILog _logger;
+        private readonly ILog _logger;       
 
         public UserRepository(ProviderApprenticeshipsServiceConfiguration config, ILog logger) : base(config.DatabaseConnectionString, logger)
         {
@@ -104,5 +103,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.StoredProcedure);
             });
         }
+
     }
 }

@@ -2,7 +2,6 @@
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
-using SFA.DAS.Sql.Client;
 using System;
 using System.Data;
 using System.Linq;
