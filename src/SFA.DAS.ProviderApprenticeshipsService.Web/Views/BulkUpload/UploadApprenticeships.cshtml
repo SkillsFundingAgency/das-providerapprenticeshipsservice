@@ -10,6 +10,7 @@
 
         <h1 class="heading-xlarge">Bulk upload @(Model.IsPaidByTransfer ? "transfers" : "apprentices")</h1>
         <p>You can add details of multiple apprentices at the same time (bulk upload) using a csv file.@(Model.IsPaidByTransfer ? " All apprentices uploaded must be on an apprenticeship standard." : null)</p>
+        <p>You will need to know the employer agreement ID, this can be found on your <a href="@Url.Action("Agreements", "Agreement")">Organisations and agreements page</a>.</p>
 
         <div class="panel panel-border-wide">
             <p>
@@ -34,7 +35,7 @@
 
         <form method="POST" action="@Url.Action("UploadApprenticeships")" enctype="multipart/form-data">
             @Html.AntiForgeryToken()
-            <label class="form-label hidden" for="files-upload">Upload file</label>
+            <label class="form-label hidden" for="files-upload">Continue</label>
             @Html.ValidationMessageFor(m => m.Attachment, null, new { id = "error-message-" + Html.IdFor(m => m.Attachment) })
             <input id="files-upload" accept=".csv" type="file" name="@Html.NameFor(m => m.Attachment)">
 
@@ -43,7 +44,7 @@
             @Html.HiddenFor(m => m.AccountLegalEntityPublicHashedId)
             @Html.HiddenFor(m => m.BlackListed)
 
-            <input class="button upload-file-btn" type="submit" value="Upload file" id="submit-upload-apprentices">
+            <input class="button upload-file-btn" type="submit" value="Continue" id="submit-upload-apprentices">
         </form>
     </div>
 </div>
