@@ -438,3 +438,6 @@ if ($cookieSettings != null) {
     var $cookieSettingsOptions = $cookieSettings.dataset.options;
     new CookieSettings($cookieSettings, $cookieSettingsOptions);
 }
+
+// Details/summary polyfill from frontend toolkit
+GOVUK.details.init();
