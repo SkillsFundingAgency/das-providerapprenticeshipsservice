@@ -478,7 +478,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
-            "name": "worker-app-service-subnet",
+            "name": "providerapprenticeshipsservice-worker-app-service-subnet",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "properties": {
                 "mode": "Incremental",
@@ -501,6 +501,27 @@
                     },
                     "delegations": {
                         "value": "[parameters('subnetDelegations')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2021-04-01",
+            "name": "providerapprenticeshipsservice-worker-sql-firewall-rule",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'), 'sql-server-firewall-rules.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "serverName": {
+                        "value": "[parameters('sharedSQLServerName')]"
+                    },
+                    "subnetResourceIdList": {
+                        "value": "[createArray(reference('providerapprenticeshipsservice-worker-app-service-subnet').outputs.SubnetResourceId.value)]"
                     }
                 }
             }
@@ -550,7 +571,7 @@
                         "value": "[variables('resourceGroupName')]"
                     },
                     "subnetResourceId": {
-                        "value": "[reference('worker-app-service-subnet').outputs.subnetResourceId.value]"
+                        "value": "[reference('providerapprenticeshipsservice-worker-app-service-subnet').outputs.subnetResourceId.value]"
                     },
                     "deployStagingSlot": {
                         "value": false
