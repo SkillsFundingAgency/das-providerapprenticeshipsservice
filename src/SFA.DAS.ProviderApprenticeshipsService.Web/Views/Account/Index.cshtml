@@ -24,30 +24,26 @@
     </div>
 </div>
 
-
 <div class="grid-row">
     <div class="column-two-thirds">
 
         <div class="boxes">
-            @if (Model.ShowCreateCohortLink) // does user have create cohort permissions?
-            {
 
-                <div class="box">
-                    <h2 class="heading-medium">
-                        @if (Model.IsBulkUploadV2Enabled)
-                        {
-                            <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved/add/entry-method")">Add new apprentices</a>
-                        }
-                        else
-                        {
-                            <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved/add/select-journey")">Add new apprentices</a>
-                        }
-                    </h2>
-                    <li>manually enter details</li>
-                    <li>create a new cohort</li>
-                    <li>add to an existing cohort</li>
-                </div>
-            }
+            <div class="box">
+                <h2 class="heading-medium">
+                    @if (Model.IsBulkUploadV2Enabled)
+                    {
+                        <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved/add/entry-method")">Add new apprentices</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved/add/select-journey")">Add new apprentices</a>
+                    }
+                </h2>
+                <li>manually enter details</li>
+                <li>create a new cohort</li>
+                <li>add to an existing cohort</li>
+            </div>
 
             <div class="box">
                 <h2 class="heading-medium">
