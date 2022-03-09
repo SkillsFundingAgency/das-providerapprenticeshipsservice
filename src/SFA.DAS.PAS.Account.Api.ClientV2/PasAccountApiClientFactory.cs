@@ -17,9 +17,16 @@ namespace SFA.DAS.PAS.Account.Api.ClientV2
 
         public IPasAccountApiClient CreateClient()
         {
-            IHttpClientFactory httpClientFactory = IsClientCredentialConfiguration(_configuration.ClientId, _configuration.ClientSecret, _configuration.Tenant)
-               ? new AzureActiveDirectoryHttpClientFactory(_configuration, _loggerFactory)
-               : new ManagedIdentityHttpClientFactory(_configuration, _loggerFactory);
+            IHttpClientFactory httpClientFactory;
+
+            if (IsClientCredentialConfiguration(_configuration.ClientId, _configuration.ClientSecret, _configuration.Tenant))
+            {
+                httpClientFactory = new AzureActiveDirectoryHttpClientFactory(_configuration, _loggerFactory);
+            }
+            else
+            {
+                httpClientFactory = new ManagedIdentityHttpClientFactory(_configuration, _loggerFactory);
+            }
 
             var httpClient = httpClientFactory.CreateHttpClient();
 
