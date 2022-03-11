@@ -81,8 +81,5 @@ namespace SFA.DAS.PAS.Account.Api.Client
                 return await response.Content.ReadAsStringAsync();
             }
         }
-
-
-
     }
 }
