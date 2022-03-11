@@ -21,7 +21,7 @@ namespace SFA.DAS.PAS.Account.Api.Client
             // So we can mock for testing
         }
 
-        private async Task<string> GetAuthenticationToken(string clientId, string appKey, string resourceId, string tenant)
+        private async Task<string> GetAuthenticationToken()
         {
             var accessToken = IsClientCredentialConfiguration(_configuration.ClientId, _configuration.ClientSecret, _configuration.Tenant)
                 ? await GetClientCredentialAuthenticationResult(_configuration.ClientId, _configuration.ClientSecret, _configuration.IdentifierUri, _configuration.Tenant)
@@ -49,7 +49,7 @@ namespace SFA.DAS.PAS.Account.Api.Client
 
         public virtual async Task<string> GetAsync(string url)
         {
-            var accessToken = await GetAuthenticationToken(_configuration.ClientId, _configuration.ClientSecret, _configuration.IdentifierUri, _configuration.Tenant);
+            var accessToken = await GetAuthenticationToken();
 
             using (var client = new HttpClient())
             {
@@ -64,7 +64,7 @@ namespace SFA.DAS.PAS.Account.Api.Client
 
         public virtual async Task<string> PostAsync(string url, object content)
         {
-            var accessToken = await GetAuthenticationToken(_configuration.ClientId, _configuration.ClientSecret, _configuration.IdentifierUri, _configuration.Tenant);
+            var accessToken = await GetAuthenticationToken();
 
             using (var client = new HttpClient())
             {
