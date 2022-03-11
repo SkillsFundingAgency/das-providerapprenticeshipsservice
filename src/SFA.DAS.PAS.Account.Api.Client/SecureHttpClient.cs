@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -8,6 +9,7 @@ using Newtonsoft.Json;
 
 namespace SFA.DAS.PAS.Account.Api.Client
 {
+    [ExcludeFromCodeCoverage]
     internal class SecureHttpClient
     {
         private readonly IPasAccountApiConfiguration _configuration;
