@@ -14,8 +14,8 @@ namespace SFA.DAS.PAS.Account.Api
                {
                    TokenValidationParameters = new System.IdentityModel.Tokens.TokenValidationParameters
                    {
-                       ValidAudience = ConfigurationManager.AppSettings["idaAudience"],
-                       RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                       RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
+                       ValidAudiences = ConfigurationManager.AppSettings["idaAudience"].Split(',')
                    },
                    Tenant = ConfigurationManager.AppSettings["idaTenant"]
                });
