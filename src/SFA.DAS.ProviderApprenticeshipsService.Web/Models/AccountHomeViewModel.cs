@@ -7,7 +7,6 @@
         public AccountStatus AccountStatus { get; set; }
         public string Message { get; set; }
         public bool ShowAcademicYearBanner { get; set; }
-        public bool ShowCreateCohortLink { get; set; }
         public bool IsBulkUploadV2Enabled { get; set; }
     }
 

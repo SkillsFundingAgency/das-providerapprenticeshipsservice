@@ -43,15 +43,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
                 var providerResponse = await _mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });
 
-                var showCreateCohortLink = await ProviderHasPermission(providerId, Operation.CreateCohort);
-
                 return new AccountHomeViewModel
                 {
                     AccountStatus = AccountStatus.Active,
                     ProviderName = providerResponse.ProvidersView.Provider.ProviderName,
                     ProviderId = providerId,
                     ShowAcademicYearBanner = false,
-                    ShowCreateCohortLink = showCreateCohortLink,
                     IsBulkUploadV2Enabled = _featureToggleService.Get<BulkUploadV2>().FeatureEnabled
                 };
             }
@@ -59,7 +56,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             {
                 _logger.Warn($"Provider {providerId} details not found in provider information service");
 
-                return new AccountHomeViewModel {AccountStatus = AccountStatus.NoAgreement};
+                return new AccountHomeViewModel { AccountStatus = AccountStatus.NoAgreement };
             }
         }
 
@@ -117,8 +114,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             if (notificationSettings == null) return new List<UserNotificationSetting>(0);
 
             return
-                notificationSettings.Select( m =>
-                    new UserNotificationSetting { UserRef = m.UserRef, ReceiveNotifications = m.ReceiveNotifications })
+                notificationSettings.Select(m =>
+                   new UserNotificationSetting { UserRef = m.UserRef, ReceiveNotifications = m.ReceiveNotifications })
                     .ToList();
         }
 
