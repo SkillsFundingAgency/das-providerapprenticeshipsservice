@@ -647,6 +647,7 @@
     <Compile Include="Authentication\RoleNames.cs" />
     <Compile Include="Authentication\ServiceClaims.cs" />
     <Compile Include="Authorization\AuthorizationContextProvider.cs" />
+    <Compile Include="Controllers\CollectingStandardsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AgreementController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -1006,6 +1007,7 @@
     <Content Include="Views\Home\CookieDetails.cshtml" />
     <Content Include="Views\Shared\_ZenDeskWidget.cshtml" />
     <Content Include="Views\Shared\_CookieBanner.cshtml" />
+    <Content Include="Views\CollectingStandards\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

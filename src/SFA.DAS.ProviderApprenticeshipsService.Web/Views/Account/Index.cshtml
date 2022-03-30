@@ -8,6 +8,26 @@
     ViewBag.PageId = "account-home";
 }
 
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Check your record</h1>
+        <p>You will be able to check and edit these sections in your provider account:</p>
+        <ul class="list list-bullet">
+            <li>your organisation’s details</li>
+            <li>the apprenticeship standards you deliver</li>
+            <li>the locations where you do the training</li>
+        </ul>
+        <p>This information will be shared with Find apprenticeship training.</p>
+        <h3 class="heading-medium">Before you start, </h3><p>you must review these sections to make sure the information we have pre-filled for you is correct.</p>
+        <div class="govuk-grid-column-two-thirds">
+            <a href="/" class="button button-start" title="Start now" aria-label="Start now">Start now</a>
+            <a href="@Url.Action("Index", "Account")">I'll do this later</a>
+        </div>
+        <br />
+        <p>You no longer need to do this in the course directory.</p>
+    </div>
+</div>
+
 @if (!string.IsNullOrEmpty(Model.Message))
 {
     <p style="border: 5px solid pink; text-align: center; padding: 20px; margin-top: 20px;">
