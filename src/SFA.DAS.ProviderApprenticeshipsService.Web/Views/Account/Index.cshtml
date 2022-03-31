@@ -7,24 +7,27 @@
     ViewBag.Title = Model.ProviderName;
     ViewBag.PageId = "account-home";
 }
-
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Check your record</h1>
-        <p>You will be able to check and edit these sections in your provider account:</p>
+<br/>
+<div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Important
+        </h2>
+    </div>
+    <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">
+            Check your record.
+        </p>
+        <p class="govuk-body">Accurate, up to date information befefits both you, and apprenticeship service as a whole.</p>
+        <p class="govuk-body">We want to make it easier for your organisation to manage your records, by taking away the need for you to visit multiple goverment websites.</p>
+        <p class="govuk-body">You can now Check and edit these sections in your provider account.</p>
         <ul class="list list-bullet">
             <li>your organisation’s details</li>
             <li>the apprenticeship standards you deliver</li>
             <li>the locations where you do the training</li>
         </ul>
-        <p>This information will be shared with Find apprenticeship training.</p>
         <h3 class="heading-medium">Before you start, </h3><p>you must review these sections to make sure the information we have pre-filled for you is correct.</p>
-        <div class="govuk-grid-column-two-thirds">
-            <a href="/" class="button button-start" title="Start now" aria-label="Start now">Start now</a>
-            <a href="@Url.Action("Index", "Account")">I'll do this later</a>
-        </div>
-        <br />
-        <p>You no longer need to do this in the course directory.</p>
+        <a class="govuk-notification-banner__link" href="#">Check the quality of your data</a>.
     </div>
 </div>
 
