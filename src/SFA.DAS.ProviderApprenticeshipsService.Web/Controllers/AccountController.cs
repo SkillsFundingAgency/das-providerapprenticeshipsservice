@@ -67,12 +67,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             var model = await _accountOrchestrator.GetAccountHomeViewModel(providerId);
 
-            //RU-Stub
-            model = new AccountHomeViewModel
-            {
-                AccountStatus = AccountStatus.Active
-            };
-
             if (!string.IsNullOrEmpty(message))
                 model.Message = HttpUtility.UrlDecode(message);
 
