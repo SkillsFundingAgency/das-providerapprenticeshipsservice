@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Configuration;
+using System.Net.Http;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Configuration;
@@ -22,15 +23,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<ICommitmentsApiClientConfiguration>().Use(c => c.GetInstance<CommitmentsApiClientConfiguration>());
             For<ITrainingProgrammeApi>().Use<TrainingProgrammeApi>()
                 .Ctor<HttpClient>().Is(c => GetHttpClient(c));
-            
+
             For<IProviderCommitmentsApi>().Use<ProviderCommitmentsApi>()
               .Ctor<HttpClient>().Is(c => GetHttpClient(c));
 
             For<IValidationApi>().Use<ValidationApi>()
                 .Ctor<HttpClient>().Is(c => GetHttpClient(c));
 
-            For<PasForCommitmentsV2Configuration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<PasForCommitmentsV2Configuration>(ConfigurationKeys.PasConfiguration)).Singleton();
-            For<CommitmentsApiClientV2Configuration>().Use(c => c.GetInstance<PasForCommitmentsV2Configuration>().CommitmentsApiClientV2);
+            For<CommitmentsApiClientV2Configuration>().Use(c => c.GetInstance<ProviderApprenticeshipsServiceConfiguration>().CommitmentsApiClientV2);
 
             For<ICommitmentsV2ApiClient>().Use<CommitmentsV2ApiClient>()
                 .Ctor<HttpClient>().Is(c => GetHttpV2Client(c));
@@ -55,10 +55,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         {
             var config = context.GetInstance<CommitmentsApiClientV2Configuration>();
 
-            var httpClientBuilder = string.IsNullOrWhiteSpace(config.ClientId)
+            bool isDevelopment = ConfigurationManager.AppSettings["EnvironmentName"]?.Equals("LOCAL") ?? false;
+            var httpClientBuilder = isDevelopment
                 ? new HttpClientBuilder()
-                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config));
-                
+                : new HttpClientBuilder().WithBearerAuthorisationHeader(new ManagedIdentityTokenGenerator(config));
+
             return httpClientBuilder
                 .WithDefaultHeaders()
                 .WithHandler(new RequestIdMessageRequestHandler())
