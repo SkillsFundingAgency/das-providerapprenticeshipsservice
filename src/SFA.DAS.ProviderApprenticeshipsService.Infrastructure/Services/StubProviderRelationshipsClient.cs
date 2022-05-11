@@ -51,7 +51,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
                 { Ukprn = request.Ukprn, Operation = request.Operation }, cancellationToken)).AccountProviderLegalEntities.Any();
         }
 
-        public Task HealthCheck()
+        public Task Ping(CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task RevokePermissions(RevokePermissionsRequest request, CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
         }
