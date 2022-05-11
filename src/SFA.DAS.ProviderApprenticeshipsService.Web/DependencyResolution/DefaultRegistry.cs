@@ -46,6 +46,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.ProviderRelationships.Api.Client;
+using SFA.DAS.ProviderRelationships.Api.Client.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
@@ -66,28 +67,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             var environment = GetAndStoreEnvironment();
             var configurationRepository = GetConfigurationRepository();
-
             For<IConfigurationRepository>().Use(configurationRepository);
-
+            
             var config = GetConfiguration(environment, configurationRepository);
-
-            #region uncomment to override the auto config of the ProviderRelationships Api Client
-
-            //var providerPermissionsReadStoreConfig = GetProviderPermissionsReadStoreConfiguration(environment, configurationRepository);
-            //For<ProviderRelationshipsReadStoreConfiguration>().ClearAll();
-            //For<ProviderRelationshipsReadStoreConfiguration>().Use(providerPermissionsReadStoreConfig);
-
-            //var providerRelationshipsApiClientConfiguration =
-            //    GetProviderRelationshipsApiClientConfiguration(environment, configurationRepository);
-            //For<ProviderRelationshipsApiClientConfiguration>().ClearAll();
-            //For<ProviderRelationshipsApiClientConfiguration>().Use(providerRelationshipsApiClientConfiguration);
-
-            #endregion
-
             ConfigureHashingService(config);
             For<IProviderAgreementStatusConfiguration>().Use(config);
             For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
-
+            
             For<ICache>().Use<InMemoryCache>(); //RedisCache
             For<IAgreementStatusQueryRepository>().Use<ProviderAgreementStatusRepository>();
             For<IApprenticeshipValidationErrorText>().Use<WebApprenticeshipValidationText>();
@@ -99,7 +85,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
-
 
             For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
             For<IAuthorizationHandler>().Use<AuthorizationHandler>();
@@ -202,8 +187,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
         private void ConfigureProviderRelationshipsApiClient()
         {
-            var useStub = GetUseStubProviderRelationshipsSetting();
+            For<ProviderRelationshipsApiConfiguration>().Use(c => c.GetInstance<ProviderApprenticeshipsServiceConfiguration>().ProviderRelationshipsApi);
 
+            var useStub = GetUseStubProviderRelationshipsSetting();
             if (useStub)
             {
                 For<IProviderRelationshipsApiClient>().Use<StubProviderRelationshipsApiClient>();
