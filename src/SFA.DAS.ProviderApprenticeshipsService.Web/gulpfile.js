@@ -1,11 +1,6 @@
 "use strict";
 const gulp = require('gulp');
-const sass = require('gulp-sass');
-const concat = require('gulp-concat');
-const rename = require('gulp-rename');
-const uglify = require('gulp-uglify');
-const cleanCSS = require('gulp-clean-css');
-
+const sass = require('gulp-sass')(require('node-sass'));
 const input = './src/sass/**/*.scss';
 const output = './dist/css/';
 
