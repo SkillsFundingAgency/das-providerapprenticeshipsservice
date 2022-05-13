@@ -16,19 +16,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     public class BulkUploadController : BaseController
     {
         private readonly BulkUploadOrchestrator _bulkUploadOrchestrator;
+        private readonly IProviderCommitmentsLogger _logger;
+        private readonly ProviderUrlHelper.ILinkGenerator _providerUrlhelper;
 
-        public BulkUploadController(BulkUploadOrchestrator bulkUploadOrchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
+
+        public BulkUploadController(BulkUploadOrchestrator bulkUploadOrchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage,
+            IProviderCommitmentsLogger logger,
+            ProviderUrlHelper.LinkGenerator providerUrlhelper) : base(flashMessage)
         {
             _bulkUploadOrchestrator = bulkUploadOrchestrator;
+            _logger = logger;
+            _providerUrlhelper = providerUrlhelper;
         }
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/UploadApprenticeships")]
-        public async Task<ActionResult> UploadApprenticeships(long providerid, string hashedcommitmentid)
-        {
-            var viewModel = await _bulkUploadOrchestrator.GetUploadModel(providerid, hashedcommitmentid);
-            return View(viewModel);
+        [Deprecated]
+        public ActionResult UploadApprenticeships(long providerid, string hashedcommitmentid)
+        {   
+            _logger.Info($"To track V1 Bulk Upload (UploadApprenticeships) UrlReferrer Request: {HttpContext.Request.UrlReferrer} Request to Page: {HttpContext.Request.RawUrl}");
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerid}/unapproved/add/file-upload/start"));            
         }
 
         [HttpPost]
@@ -58,10 +66,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [Route("{hashedCommitmentId}/UploadApprenticeships/Unsuccessful/{bulkUploadReference}")]
-        public async Task<ActionResult> UploadApprenticeshipsUnsuccessful(long providerId, string hashedCommitmentId, string bulkUploadReference, bool blackListed)
-        {
-            var model = await _bulkUploadOrchestrator.GetUnsuccessfulUpload(providerId, hashedCommitmentId, bulkUploadReference, blackListed);
-            return View(model);
+        [Deprecated]
+        public ActionResult UploadApprenticeshipsUnsuccessful(long providerId, string hashedCommitmentId, string bulkUploadReference, bool blackListed)
+        {   
+            _logger.Info($"To track V1 Bulk Upload (UploadApprenticeshipsUnsuccessful) UrlReferrer Request: {HttpContext.Request.UrlReferrer} Request to Page: {HttpContext.Request.RawUrl}");
+            return Redirect(_providerUrlhelper.ProviderCommitmentsLink($"{providerId}/unapproved/add/file-upload/start"));         
         }
     }
 }
