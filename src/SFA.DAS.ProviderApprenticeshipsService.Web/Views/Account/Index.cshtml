@@ -40,6 +40,7 @@
                         <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved/add/select-journey")">Add new apprentices</a>
                     }
                 </h2>
+                <li>upload a CSV file</li>
                 <li>manually enter details</li>
                 <li>create a new cohort</li>
                 <li>add to an existing cohort</li>
@@ -96,12 +97,9 @@
 
             <div class="box">
                 <h2 class="heading-medium">
-                    <a href="@Url.RegistrationLink($"{Model.ProviderId}/registration/startaccountsetup")">Set up employer account</a>
+                    <a href="@Url.RegistrationLink($"{Model.ProviderId}/registration/invitedemployers")">Manage employer invitations</a>
                 </h2>
-                <p>Start setting up an apprenticeship service account for an employer</p>
-                <p>
-                    <a href="@Url.RegistrationLink($"{Model.ProviderId}/registration/invitedemployers")">View invited employers</a>
-                </p>
+                <p>Invite employers to create an apprenticeship service account</p>
             </div>
         </div>
     </div>
