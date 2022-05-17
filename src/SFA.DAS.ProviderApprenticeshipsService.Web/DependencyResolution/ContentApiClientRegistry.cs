@@ -23,7 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             var config = context.GetInstance<IContentApiConfiguration>();
 
             HttpClient httpClient = new HttpClientBuilder()
-                    .WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config))
+                    .WithBearerAuthorisationHeader(new ManagedIdentityTokenGenerator(config))
                     .WithHandler(new RequestIdMessageRequestHandler())
                     .WithHandler(new SessionIdMessageRequestHandler())
                     .WithDefaultHeaders()
