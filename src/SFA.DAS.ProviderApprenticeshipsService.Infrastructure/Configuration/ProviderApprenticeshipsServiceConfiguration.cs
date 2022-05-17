@@ -11,7 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public bool UseFakeIdentity { get; set; }
         public string DatabaseConnectionString { get; set; }
         public string ServiceBusConnectionString { get; set; }
-        public CommitmentsApiClientConfiguration CommitmentsApi { get; set; }
+        public CommitmentsApiClientV2Configuration CommitmentsApiClientV2 { get; set; }
         public NotificationsApiClientConfiguration NotificationApi { get; set; }
         public ProviderNotificationConfiguration CommitmentNotification { get; set; }
         public ProviderRelationshipsApiConfiguration ProviderRelationshipsApi { get; set; }
@@ -42,12 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string IdentifierUri { get; }
     }
 
-    public class PasForCommitmentsV2Configuration
-    {
-        public CommitmentsApiClientV2Configuration CommitmentsApiClientV2 { get; set; }
-    }
-
-    public class CommitmentsApiClientV2Configuration : IAzureActiveDirectoryClientConfiguration
+    public class CommitmentsApiClientV2Configuration : IManagedIdentityClientConfiguration
     {
         public string ApiBaseUrl { get; set; }
         public string Tenant { get; set; }
