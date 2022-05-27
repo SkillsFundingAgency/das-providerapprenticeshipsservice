@@ -6,7 +6,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 
     <Authors>DAS</Authors>
-    <Description>SFA.DAS.CommitmentsV2.Api.Client library</Description>
+    <Description>Client library V2 for accessing Provider Account API</Description>
     <PackageLicense>https://github.com/SkillsFundingAgency/das-providerapprenticeshipsservice/blob/master/LICENSE</PackageLicense>
     <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-providerapprenticeshipsservice</PackageProjectUrl>
 
