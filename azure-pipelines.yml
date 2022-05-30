@@ -139,7 +139,7 @@ steps:
   displayName: 'Archive Provider WebJob'
   inputs:
     rootFolderOrFile: '$(build.artifactstagingdirectory)/Provider WebJob'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/Provider Accounts API/SFA.DAS.PAS.Host.WebJob.zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/Provider WebJob/SFA.DAS.PAS.Host.WebJob.zip'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet test'
