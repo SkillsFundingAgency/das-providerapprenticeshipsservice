@@ -108,7 +108,7 @@ steps:
   inputs:
     solution: 'src/SFA.DAS.ProviderApprenticeshipsService.Web/SFA.DAS.ProviderApprenticeshipsService.Web.csproj'
     vsVersion: "15.0"
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/ProviderPortal"'
+    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/Provider Portal"'
     platform: 'anycpu'
     configuration: '$(buildConfiguration)'
     clean: true
@@ -116,8 +116,8 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Archive Provider Portal'
   inputs:
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/ProviderPortal'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/SFA.DAS.ProviderApprenticeshipsService.Web.zip'
+    rootFolderOrFile: '$(build.artifactstagingdirectory)/Provider Portal'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/Provider Portal/SFA.DAS.ProviderApprenticeshipsService.Web.zip'
 
 - task: VSBuild@1
   displayName: 'Publish Provider WebJob'
