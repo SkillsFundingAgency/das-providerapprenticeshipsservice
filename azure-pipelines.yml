@@ -98,10 +98,16 @@ steps:
   inputs:
     solution: 'src/SFA.DAS.PAS.Account.Api/SFA.DAS.PAS.Account.Api.csproj'
     vsVersion: "15.0"
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/Provider Accounts API"'
+    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/Provider Accounts API"'
     platform: 'anycpu'
     configuration: '$(buildConfiguration)'
     clean: true
+
+- task: ArchiveFiles@2
+  displayName: 'Archive Provider Accounts API'
+  inputs:
+    rootFolderOrFile: '$(build.artifactstagingdirectory)/Provider Accounts API'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/Provider Accounts API/SFA.DAS.PAS.Account.Api.zip'
 
 - task: VSBuild@1
   displayName: 'Publish Provider Portal'
@@ -124,10 +130,16 @@ steps:
   inputs:
     solution: 'src/SFA.DAS.PAS.Host.WebJob/SFA.DAS.PAS.Host.WebJob.csproj'
     vsVersion: "15.0"
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/Provider WebJob"'
+    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/Provider WebJob"'
     platform: 'anycpu'
     configuration: '$(buildConfiguration)'
     clean: true
+
+- task: ArchiveFiles@2
+  displayName: 'Archive Provider WebJob'
+  inputs:
+    rootFolderOrFile: '$(build.artifactstagingdirectory)/Provider WebJob'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/Provider Accounts API/SFA.DAS.PAS.Host.WebJob.zip'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet test'
