@@ -113,6 +113,12 @@ steps:
     configuration: '$(buildConfiguration)'
     clean: true
 
+- task: ArchiveFiles@2
+  displayName: 'Archive Provider Portal'
+  inputs:
+    rootFolderOrFile: '$(build.artifactstagingdirectory)/ProviderPortal'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/SFA.DAS.ProviderApprenticeshipsService.Web.zip'
+
 - task: VSBuild@1
   displayName: 'Publish Provider WebJob'
   inputs:
