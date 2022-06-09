@@ -34,6 +34,13 @@ namespace SFA.DAS.ProviderUrlHelper.Framework
             return linkGenerator.RecruitLink(path);
         }
 
+        public static string TraineeshipLink(this UrlHelper helper, string path)
+        {
+            var linkGenerator = GetLinkGenerator();
+
+            return linkGenerator.TraineeshipLink(path);
+        }
+
         public static string RegistrationLink(this UrlHelper helper, string path)
         {
             var linkGenerator = GetLinkGenerator();
