@@ -49,12 +49,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     ProviderName = providerResponse.ProvidersView.Provider.ProviderName,
                     ProviderId = providerId,
                     ShowAcademicYearBanner = false,
-                    IsBulkUploadV2Enabled = _featureToggleService.Get<BulkUploadV2>().FeatureEnabled
+                    IsBulkUploadV2Enabled = _featureToggleService.Get<BulkUploadV2>().FeatureEnabled,
+                    ShowTraineeshipLink = _featureToggleService.Get<Traineeships>().FeatureEnabled
                 };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _logger.Warn($"Provider {providerId} details not found in provider information service");
+                _logger.Warn(ex,$"Provider {providerId} details not found in provider information service");
 
                 return new AccountHomeViewModel { AccountStatus = AccountStatus.NoAgreement };
             }
