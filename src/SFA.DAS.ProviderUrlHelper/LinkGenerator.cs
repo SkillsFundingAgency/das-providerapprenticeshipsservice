@@ -44,6 +44,14 @@ namespace SFA.DAS.ProviderUrlHelper
 
             return Action(baseUrl, path);
         }
+        
+        public string TraineeshipLink(string path)
+        {
+            var configuration = _lazyProviderConfiguration.Value;
+            var baseUrl = configuration.TraineeshipBaseUrl;
+
+            return Action(baseUrl, path);
+        }
 
         public string RegistrationLink(string path)
         {
