@@ -12,8 +12,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 using SFA.DAS.ProviderRelationships.Types.Models;
@@ -24,15 +22,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ILog _logger;
-        private readonly IFeatureToggleService _featureToggleService;
 
         public AccountOrchestrator(IMediator mediator,
-            ILog logger,
-            IFeatureToggleService featureToggleService)
+            ILog logger)
         {
             _mediator = mediator;
             _logger = logger;
-            _featureToggleService = featureToggleService;
         }
 
         public async Task<AccountHomeViewModel> GetAccountHomeViewModel(int providerId)

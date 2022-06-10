@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using FeatureToggle;
 using FluentAssertions;
 using MediatR;
 using Moq;
@@ -11,7 +10,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderRelationships.Types.Models;
 
@@ -23,7 +21,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
         private AccountOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ICurrentDateTime> _currentDateTime;
-        private Mock<IFeatureToggleService> _featureToggleService;
 
         [SetUp]
         public void Arrange()
@@ -47,13 +44,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
                 .ReturnsAsync(() => new GetProviderHasRelationshipWithPermissionQueryResponse());
 
             _currentDateTime = new Mock<ICurrentDateTime>();
-
-            _featureToggleService = new Mock<IFeatureToggleService>();
             
             _orchestrator = new AccountOrchestrator(
                 _mediator.Object,
-                Mock.Of<ILog>(),
-                _featureToggleService.Object
+                Mock.Of<ILog>()
             );
         }
 
