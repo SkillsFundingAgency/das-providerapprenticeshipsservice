@@ -270,7 +270,6 @@
     <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Interfaces\IUserSettingsRepository.cs" />
     <Compile Include="Models\Apprenticeship\FundingStatus.cs" />
-    <Compile Include="Models\FeatureToggles\BulkUploadV2.cs" />
     <Compile Include="Models\FeatureToggles\ProviderCreateCohortV2.cs" />
     <Compile Include="Models\FeatureToggles\ApprenticeDetailsV2.cs" />
     <Compile Include="Models\FeatureToggles\ProviderManageApprenticesV2.cs" />

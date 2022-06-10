@@ -48,8 +48,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     AccountStatus = AccountStatus.Active,
                     ProviderName = providerResponse.ProvidersView.Provider.ProviderName,
                     ProviderId = providerId,
-                    ShowAcademicYearBanner = false,
-                    IsBulkUploadV2Enabled = _featureToggleService.Get<BulkUploadV2>().FeatureEnabled
+                    ShowAcademicYearBanner = false
                 };
             }
             catch (Exception)
