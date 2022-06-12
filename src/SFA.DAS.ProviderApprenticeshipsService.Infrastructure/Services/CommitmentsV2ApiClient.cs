@@ -76,6 +76,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
             return response;
         }
 
+        public async Task<GetProviderResponse> GetProvider(long providerId)
+        {
+            var url = $"{BaseUrl()}api/providers/{providerId}";
+            var response = JsonConvert.DeserializeObject<GetProviderResponse>(await GetAsync(url));
+            return response;
+        }
+
         private string BaseUrl()
         {
             if (_config.ApiBaseUrl.EndsWith("/"))
@@ -85,5 +92,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 
             return _config.ApiBaseUrl + "/";
         }
+
+      
     }
 }
