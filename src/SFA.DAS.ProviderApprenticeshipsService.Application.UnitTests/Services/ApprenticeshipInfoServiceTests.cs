@@ -10,8 +10,6 @@ using System;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Services
 {
- 
-
     [TestFixture]
     public class ApprenticeshipInfoServiceTests
     {
@@ -57,12 +55,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Services
             _commitmentsV2ApiClient
                 .Setup(x => x.GetProvider(response.ProviderId))
                 .Throws(new Exception());
-                
+
             var result = await _sut.GetProvider(response.ProviderId);
 
             _commitmentsV2ApiClient.Verify(x => x.GetProvider(response.ProviderId));
             Assert.IsNull(result);
         }
-
     }
 }

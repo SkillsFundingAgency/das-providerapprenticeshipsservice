@@ -41,14 +41,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
                 case HttpStatusCode.OK:
                     _logger.LogInformation($"{url} returned OK");
                     return true;
+
                 case HttpStatusCode.NotFound:
                     _logger.LogInformation($"{url} returned NotFound");
                     return false;
+
                 default:
                     _logger.LogError($"{url} returned unexpected status code");
                     throw new ApplicationException("Unexpected status code returned");
             }
-        }       
+        }
 
         public async Task<bool> OptionalEmail(long providerId, long employerId)
         {
@@ -60,9 +62,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
                 case HttpStatusCode.OK:
                     _logger.LogInformation($"{url} returned OK");
                     return true;
+
                 case HttpStatusCode.NotFound:
                     _logger.LogInformation($"{url} returned NotFound");
                     return false;
+
                 default:
                     _logger.LogError($"{url} returned unexpected status code");
                     throw new ApplicationException("Unexpected status code returned");
@@ -92,7 +96,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 
             return _config.ApiBaseUrl + "/";
         }
-
-      
     }
 }
