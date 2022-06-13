@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29509.3
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderApprenticeshipsService.Application", "SFA.DAS.ProviderApprenticeshipsService.Application\SFA.DAS.ProviderApprenticeshipsService.Application.csproj", "{849E452B-2B68-445A-980C-995311311AF0}"
 EndProject
@@ -31,8 +31,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PAS.Infrastructure.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PAS.Account.Api", "SFA.DAS.PAS.Account.Api\SFA.DAS.PAS.Account.Api.csproj", "{74B62020-23A0-49D8-805C-8AB655FD0BC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PAS.Account.Api.Client", "SFA.DAS.PAS.Account.Api.Client\SFA.DAS.PAS.Account.Api.Client.csproj", "{8EEB1A04-927D-4223-B70C-391934D14A04}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PAS.Account.Api.UnitTests", "SFA.DAS.PAS.Account.Api.UnitTests\SFA.DAS.PAS.Account.Api.UnitTests.csproj", "{ADE1D3CC-9B6A-4BF0-AF80-A8E568249A60}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.ProviderUrlHelper", "SFA.DAS.ProviderUrlHelper\SFA.DAS.ProviderUrlHelper.csproj", "{72A3F1C7-A664-4ACE-8770-70773D82019F}"
@@ -52,8 +50,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PAS.UpdateUsersFromIdams.WebJob", "SFA.DAS.PAS.UpdateUsersFromIdams.WebJob\SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.csproj", "{A8882A6B-B963-4FB9-9694-660025B4D5D5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests", "SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests\SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests.csproj", "{DD00F665-F000-47CA-9A98-5D253DE3235A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PAS.Account.Api.Client.ConsoleTest", "SFA.DAS.PAS.Account.Api.Client.ConsoleTest\SFA.DAS.PAS.Account.Api.Client.ConsoleTest.csproj", "{3AAECE24-66C4-473E-A453-9A90339DE581}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,10 +111,6 @@ Global
 		{74B62020-23A0-49D8-805C-8AB655FD0BC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74B62020-23A0-49D8-805C-8AB655FD0BC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74B62020-23A0-49D8-805C-8AB655FD0BC0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8EEB1A04-927D-4223-B70C-391934D14A04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8EEB1A04-927D-4223-B70C-391934D14A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8EEB1A04-927D-4223-B70C-391934D14A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8EEB1A04-927D-4223-B70C-391934D14A04}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ADE1D3CC-9B6A-4BF0-AF80-A8E568249A60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ADE1D3CC-9B6A-4BF0-AF80-A8E568249A60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADE1D3CC-9B6A-4BF0-AF80-A8E568249A60}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -159,10 +151,6 @@ Global
 		{DD00F665-F000-47CA-9A98-5D253DE3235A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD00F665-F000-47CA-9A98-5D253DE3235A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD00F665-F000-47CA-9A98-5D253DE3235A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3AAECE24-66C4-473E-A453-9A90339DE581}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3AAECE24-66C4-473E-A453-9A90339DE581}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3AAECE24-66C4-473E-A453-9A90339DE581}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3AAECE24-66C4-473E-A453-9A90339DE581}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -178,7 +166,6 @@ Global
 		{FAE3391F-E970-499E-8C39-AA1BAFB498BB} = {C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}
 		{E0C7F90D-1E67-42F9-B1B2-93EACB084168} = {C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}
 		{DD00F665-F000-47CA-9A98-5D253DE3235A} = {C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}
-		{3AAECE24-66C4-473E-A453-9A90339DE581} = {C94BD4C5-3AA2-4748-9DEC-0F855D7A898C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3DD64861-62CA-4CDB-AC38-D40047EC39BC}

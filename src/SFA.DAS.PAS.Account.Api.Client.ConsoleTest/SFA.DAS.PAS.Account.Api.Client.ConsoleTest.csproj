@@ -50,10 +50,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.PAS.Account.Api.Client\SFA.DAS.PAS.Account.Api.Client.csproj">
-      <Project>{8eeb1a04-927d-4223-b70c-391934d14a04}</Project>
-      <Name>SFA.DAS.PAS.Account.Api.Client</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.PAS.Account.Api.Types\SFA.DAS.PAS.Account.Api.Types.csproj">
       <Project>{0720D9AF-EDDB-4813-855A-EE9192CEA7A5}</Project>
       <Name>SFA.DAS.PAS.Account.Api.Types</Name>
