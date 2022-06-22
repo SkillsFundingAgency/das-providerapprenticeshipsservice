@@ -26,7 +26,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly ILog _logger;
         private readonly IFeatureToggleService _featureToggleService;
 
-        public AccountOrchestrator(IMediator mediator,
+        public AccountOrchestrator(
+            IMediator mediator,
             ILog logger,
             IFeatureToggleService featureToggleService)
         {
@@ -49,7 +50,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     ProviderName = providerResponse.ProvidersView.Provider.ProviderName,
                     ProviderId = providerId,
                     ShowAcademicYearBanner = false,
-                    IsBulkUploadV2Enabled = _featureToggleService.Get<BulkUploadV2>().FeatureEnabled,
                     ShowTraineeshipLink = _featureToggleService.Get<Traineeships>().FeatureEnabled
                 };
             }

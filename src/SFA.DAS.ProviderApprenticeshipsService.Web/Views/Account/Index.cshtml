@@ -31,14 +31,7 @@
 
             <div class="box">
                 <h2 class="heading-medium">
-                    @if (Model.IsBulkUploadV2Enabled)
-                    {
-                        <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved/add/entry-method")">Add new apprentices</a>
-                    }
-                    else
-                    {
-                        <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved/add/select-journey")">Add new apprentices</a>
-                    }
+                    <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved/add/entry-method")">Add new apprentices</a>
                 </h2>
                 <ul class="list list-bullet">
                     <li>upload a CSV file</li>
