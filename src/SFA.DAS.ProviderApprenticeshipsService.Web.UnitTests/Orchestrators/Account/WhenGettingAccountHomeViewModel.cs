@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FeatureToggle;
 using FluentAssertions;
 using MediatR;
 using Moq;
@@ -10,6 +11,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderRelationships.Types.Models;
 
@@ -21,6 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
         private AccountOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ICurrentDateTime> _currentDateTime;
+        private Mock<IFeatureToggleService> _featureToggleService;
 
         [SetUp]
         public void Arrange()
@@ -44,10 +47,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
                 .ReturnsAsync(() => new GetProviderHasRelationshipWithPermissionQueryResponse());
 
             _currentDateTime = new Mock<ICurrentDateTime>();
-            
+
+            _featureToggleService = new Mock<IFeatureToggleService>();
+
             _orchestrator = new AccountOrchestrator(
                 _mediator.Object,
-                Mock.Of<ILog>()
+                Mock.Of<ILog>(),
+                _featureToggleService.Object
             );
         }
 
@@ -59,19 +65,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
             var model = await _orchestrator.GetAccountHomeViewModel(1);
 
             model.ShowAcademicYearBanner.Should().Be(expectShowBanner);
-        }
-
-        [TestCase(true, true, TestName = "Bulk upload feature allowed.")]
-        [TestCase(false, false, TestName = "Bulk upload  NOT feature allowed.")]
-        public async Task ThenSetBulkUploadEnabledFeatureToggle(bool featureToggleSetting, bool expectedResult)
-        {
-            var cloudConfigToggleProviderMock = new Mock<IBooleanToggleValueProvider>();
-            cloudConfigToggleProviderMock.Setup(x => x.EvaluateBooleanToggleValue(It.IsAny<Traineeships>())).Returns(featureToggleSetting);
-            _featureToggleService.Setup(x => x.Get<Traineeships>()).Returns(new Traineeships { ToggleValueProvider = cloudConfigToggleProviderMock.Object });
-            
-            var model = await _orchestrator.GetAccountHomeViewModel(1);
-
-            model.IsBulkUploadV2Enabled.Should().Be(expectedResult);
         }
 
         [TestCase(true, true)]
