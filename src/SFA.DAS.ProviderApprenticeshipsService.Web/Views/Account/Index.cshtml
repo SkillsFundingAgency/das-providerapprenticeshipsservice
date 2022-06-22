@@ -96,7 +96,17 @@
                 </h2>
                 <p>Invite employers to create an apprenticeship service account</p>
             </div>
-
+            @if (Model.ShowTraineeshipLink)
+            {
+                <div class="box">
+                    <h2 class="heading-medium">
+                        <a href="@Url.TraineeshipLink($"{Model.ProviderId}")">Recruit trainees</a>
+                    </h2>
+                    <p>Create a traineeship vacancy and manage applications.</p>
+                </div>    
+            }
+            
+                        
         </div>
     </div>
 

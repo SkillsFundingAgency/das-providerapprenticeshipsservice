@@ -273,6 +273,7 @@
     <Compile Include="Models\FeatureToggles\ProviderCreateCohortV2.cs" />
     <Compile Include="Models\FeatureToggles\ApprenticeDetailsV2.cs" />
     <Compile Include="Models\FeatureToggles\ProviderManageApprenticesV2.cs" />
+    <Compile Include="Models\FeatureToggles\Traineeships.cs" />
     <Compile Include="Models\UserType.cs" />
     <Compile Include="Models\IdamsUser.cs" />
     <Compile Include="Models\Organisation\LegalEntity.cs" />
