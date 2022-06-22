@@ -14,15 +14,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
         private const string StandardsKey = "Standards";
 
         private readonly ICache _cache;
-        private readonly IProviderCommitmentsApi _providerCommitmentsApi;
+        private readonly ICommitmentsV2ApiClient _commitmentsV2Api;
         private readonly ITrainingProgrammeApi _trainingProgrammeApi;
         
         public ApprenticeshipInfoService(ICache cache,
-            IProviderCommitmentsApi providerCommitmentsApi,
+            ICommitmentsV2ApiClient commitmentsV2Api,
             ITrainingProgrammeApi trainingProgrammeApi)
         {
             _cache = cache;
-            _providerCommitmentsApi = providerCommitmentsApi;
+            _commitmentsV2Api = commitmentsV2Api;
             _trainingProgrammeApi = trainingProgrammeApi;
         }
 
@@ -62,14 +62,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
         {
             try
             {
-                var api = await _providerCommitmentsApi.GetProvider(ukprn);
+                var api = await _commitmentsV2Api.GetProvider(ukprn);
                 return new ProvidersView
                 {
                     CreatedDate = DateTime.UtcNow,
                     Provider = new Provider
                     {
-                        Ukprn = api.Provider.Ukprn,
-                        ProviderName = api.Provider.Name
+                        Ukprn = api.ProviderId,
+                        ProviderName = api.Name
                     }
                 };
             }

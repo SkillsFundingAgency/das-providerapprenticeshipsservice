@@ -437,6 +437,7 @@
     <Compile Include="Queries\GetTrainingProgrammesTests\WhenIGetTrainingProgrammes.cs" />
     <Compile Include="Queries\UpdateNotificationSettings\WhenGettingUserSettings.cs" />
     <Compile Include="Queries\GetUserNotificationSettings\WhenUpdatingUserSettings.cs" />
+    <Compile Include="Services\ApprenticeshipInfoServiceTests.cs" />
     <Compile Include="Services\CommitmentsV2ServiceTests.cs" />
     <Compile Include="TestHelper.cs" />
   </ItemGroup>
