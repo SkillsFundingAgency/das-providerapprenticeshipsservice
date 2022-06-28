@@ -1,0 +1,18 @@
+team: MAP
+
+businessApplication: Provider Portal
+
+features:
+-Provider Portal
+-Provider Agreements
+-Provider Login (client)
+-Provider API
+
+aka:
+PAS
+
+kind:
+- frontend 
+- api
+- worker
+- database
