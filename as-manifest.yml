@@ -1,3 +1,5 @@
+schema: https://github.com/SkillsFundingAgency/das-technical-guidance/blob/collections/_development_standards/as-manifest.schema.yaml
+
 team: MAP
 
 businessApplication: Provider Portal
