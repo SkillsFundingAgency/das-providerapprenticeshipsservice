@@ -3,13 +3,11 @@ team: MAP
 businessApplication: Provider Portal
 
 features:
--Provider Portal
--Provider Agreements
--Provider Login (client)
--Provider API
+- Provider Portal
+- Provider Agreements
+- Provider Login (client)
+- Provider API
 
-aka:
-PAS
 
 kind:
 - frontend 
@@ -18,4 +16,4 @@ kind:
 - database
 
 links:
-https://providers.apprenticeships.education.gov.uk/
+- https://providers.apprenticeships.education.gov.uk/
