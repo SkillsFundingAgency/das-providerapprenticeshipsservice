@@ -109,7 +109,8 @@
                 "ProviderManageApprenticesV2": true,
                 "ApprenticeDetailsV2": true,
                 "CohortSummariesV2": true,
-                "BulkUploadV2": false
+                "BulkUploadV2": false,
+                "Traineeships": false
             }
         },
         "useStubProviderRelationships": {
@@ -435,6 +436,10 @@
                                 {
                                     "name": "FeatureToggle.BulkUploadV2",
                                     "value": "[parameters('FeatureToggle').BulkUploadV2]"
+                                },
+                                {
+                                    "name": "FeatureToggle.Traineeships",
+                                    "value": "[parameters('FeatureToggle').Traineeships]"
                                 }
                             ]
                         }
