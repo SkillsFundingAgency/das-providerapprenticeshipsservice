@@ -27,4 +27,8 @@
     <ProjectReference Include="..\SFA.DAS.PAS.Account.Api.Types\SFA.DAS.PAS.Account.Api.Types.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DependencyResolution\" />
+  </ItemGroup>
+
 </Project>

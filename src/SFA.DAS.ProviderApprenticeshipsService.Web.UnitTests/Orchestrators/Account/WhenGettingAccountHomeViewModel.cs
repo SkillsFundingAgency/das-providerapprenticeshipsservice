@@ -49,7 +49,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
             _currentDateTime = new Mock<ICurrentDateTime>();
 
             _featureToggleService = new Mock<IFeatureToggleService>();
-            
+
             _orchestrator = new AccountOrchestrator(
                 _mediator.Object,
                 Mock.Of<ILog>(),
@@ -67,29 +67,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
             model.ShowAcademicYearBanner.Should().Be(expectShowBanner);
         }
 
-        [TestCase(true, true, TestName = "Bulk upload feature allowed.")]
-        [TestCase(false, false, TestName = "Bulk upload  NOT feature allowed.")]
-        public async Task ThenSetBulkUploadEnabledFeatureToggle(bool featureToggleSetting, bool expectedResult)
-        {
-            var cloudConfigToggleProviderMock = new Mock<IBooleanToggleValueProvider>();
-            cloudConfigToggleProviderMock.Setup(x => x.EvaluateBooleanToggleValue(It.IsAny<BulkUploadV2>())).Returns(featureToggleSetting);
-            cloudConfigToggleProviderMock.Setup(x => x.EvaluateBooleanToggleValue(It.IsAny<Traineeships>())).Returns(featureToggleSetting);
-            _featureToggleService.Setup(x => x.Get<BulkUploadV2>()).Returns(new BulkUploadV2 { ToggleValueProvider = cloudConfigToggleProviderMock.Object });
-            _featureToggleService.Setup(x => x.Get<Traineeships>()).Returns(new Traineeships { ToggleValueProvider = cloudConfigToggleProviderMock.Object });
-            
-            var model = await _orchestrator.GetAccountHomeViewModel(1);
-
-            model.IsBulkUploadV2Enabled.Should().Be(expectedResult);
-        }
-
         [TestCase(true, true)]
         [TestCase(false, false)]
         public async Task Then_Set_Traineeship_Enabled_Flag(bool featureToggleSetting, bool expectedResult)
         {
             var cloudConfigToggleProviderMock = new Mock<IBooleanToggleValueProvider>();
-            cloudConfigToggleProviderMock.Setup(x => x.EvaluateBooleanToggleValue(It.IsAny<BulkUploadV2>())).Returns(featureToggleSetting);
             cloudConfigToggleProviderMock.Setup(x => x.EvaluateBooleanToggleValue(It.IsAny<Traineeships>())).Returns(featureToggleSetting);
-            _featureToggleService.Setup(x => x.Get<BulkUploadV2>()).Returns(new BulkUploadV2 { ToggleValueProvider = cloudConfigToggleProviderMock.Object });
             _featureToggleService.Setup(x => x.Get<Traineeships>()).Returns(new Traineeships { ToggleValueProvider = cloudConfigToggleProviderMock.Object });
             
             var model = await _orchestrator.GetAccountHomeViewModel(1);
