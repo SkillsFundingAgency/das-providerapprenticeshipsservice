@@ -428,12 +428,8 @@
     <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileCommand.cs" />
     <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileHandler.cs" />
     <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileValidator.cs" />
-    <Compile Include="Commands\TriageApprenticeshipDataLocks\TriageApprenticeshipDataLocksCommand.cs" />
-    <Compile Include="Commands\TriageApprenticeshipDataLocks\TriageApprenticeshipDataLocksCommandHandler.cs" />
-    <Compile Include="Commands\TriageApprenticeshipDataLocks\TriageApprenticeshipDataLocksCommandValidator.cs" />
     <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationHandler.cs" />
     <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationRequest.cs" />
-    <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommand.cs" />
     <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommand.cs" />
     <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommandHandler.cs" />
     <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommandValidator.cs" />
@@ -455,8 +451,6 @@
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommand.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandHandler.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandValidator.cs" />
-    <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommandHandler.cs" />
-    <Compile Include="Commands\UpdateDataLock\UpdateDataLockCommandValidator.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsCommand.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsHandler.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsValidator.cs" />
@@ -473,9 +467,6 @@
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryResponse.cs" />
     <Compile Include="Queries\GetAccountUsers\GetAccountUsersHandler.cs" />
     <Compile Include="Queries\GetAccountUsers\GetAccountUsersResponse.cs" />
-    <Compile Include="Queries\GetApprenticeshipDataLockSummary\GetApprenticeshipDataLockSummaryQueryHandler.cs" />
-    <Compile Include="Queries\GetApprenticeshipDataLockSummary\GetApprenticeshipDataLockSummaryQueryRequest.cs" />
-    <Compile Include="Queries\GetApprenticeshipDataLockSummary\GetApprenticeshipDataLockSummaryQueryResponse.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommand.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommandHandler.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommandValidator.cs" />
@@ -487,21 +478,12 @@
     <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLockQueryRequest.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLocksQueryResponse.cs" />
     <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLockSummaryQueryHandler.cs" />
-    <Compile Include="Queries\GetApprenticeshipPriceHistory\GetApprenticeshipPriceHistoryQueryHandler.cs" />
-    <Compile Include="Queries\GetApprenticeshipPriceHistory\GetApprenticeshipPriceHistoryQueryRequest.cs" />
-    <Compile Include="Queries\GetApprenticeshipPriceHistory\GetApprenticeshipPriceHistoryQueryResponse.cs" />
-    <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryHandler.cs" />
-    <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryRequest.cs" />
-    <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryResponse.cs" />
     <Compile Include="Queries\GetBulkUploadFile\GetBulkUploadFileQueryHandler.cs" />
     <Compile Include="Queries\GetBulkUploadFile\GetBulkUploadFileQueryRequest.cs" />
     <Compile Include="Queries\GetBulkUploadFile\GetBulkUploadFileQueryResponse.cs" />
     <Compile Include="Queries\GetCommitments\GetCommitmentsQueryHandler.cs" />
     <Compile Include="Queries\GetCommitments\GetCommitmentsQueryRequest.cs" />
     <Compile Include="Queries\GetCommitments\GetCommitmentsQueryResponse.cs" />
-    <Compile Include="Queries\GetCommitment\GetCommitmentQueryHandler.cs" />
-    <Compile Include="Queries\GetCommitment\GetCommitmentQueryRequest.cs" />
-    <Compile Include="Queries\GetCommitment\GetCommitmentQueryResponse.cs" />
     <Compile Include="Queries\GetCommitmentAgreements\GetCommitmentAgreementsQueryHandler.cs" />
     <Compile Include="Queries\GetCommitmentAgreements\GetCommitmentAgreementsQueryRequest.cs" />
     <Compile Include="Queries\GetCommitmentAgreements\GetCommitmentAgreementsQueryResponse.cs" />
@@ -515,9 +497,6 @@
     <Compile Include="Queries\GetProvider\GetProviderQueryRequest.cs" />
     <Compile Include="Queries\GetProvider\GetProviderQueryResponse.cs" />
     <Compile Include="Queries\GetAccountUsers\GetAccountUsersQuery.cs" />
-    <Compile Include="Queries\GetTrainingProgrammes\GetTrainingProgrammesQueryHandler.cs" />
-    <Compile Include="Queries\GetTrainingProgrammes\GetTrainingProgrammesQueryRequest.cs" />
-    <Compile Include="Queries\GetTrainingProgrammes\GetTrainingProgrammesQueryResponse.cs" />
     <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsHandler.cs" />
     <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsQuery.cs" />
     <Compile Include="Queries\GetUserNotificationSettings\GetUserNotificationSettingsResponse.cs" />
@@ -525,7 +504,6 @@
     <Compile Include="Queries\GetUser\GetUserQuery.cs" />
     <Compile Include="Queries\GetUser\GetUserResponse.cs" />
     <Compile Include="Services\CacheStorageService.cs" />
-    <Compile Include="Services\CommitmentsV2Service.cs" />
     <Compile Include="Services\ContentApiClientWithCaching.cs" />
     <Compile Include="Services\ContentApiClient.cs" />
   </ItemGroup>

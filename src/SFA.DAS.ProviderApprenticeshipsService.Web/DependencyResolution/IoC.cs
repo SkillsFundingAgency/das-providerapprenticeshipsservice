@@ -26,16 +26,16 @@ using SFA.DAS.Authorization.ProviderPermissions.DependencyResolution.StructureMa
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
-
-    public static class IoC {
-        public static IContainer Initialize() {
+    public static class IoC
+    {
+        public static IContainer Initialize()
+        {
             return new Container(c =>
             {
                 c.Policies.Add(new ConfigurationPolicy<AccountApiConfiguration>("SFA.DAS.EmployerAccountAPI"));
                 c.Policies.Add(new ConfigurationPolicy<ProviderApprenticeshipsServiceConfiguration>("SFA.DAS.ProviderApprenticeshipsService"));
                 c.Policies.Add(new ConfigurationPolicy<AccountApiConfiguration>("SFA.DAS.EmployerAccountAPI"));
                 c.Policies.Add<CurrentDatePolicy>();
-                c.AddRegistry<ValidationRegistry>();
                 c.AddRegistry<AuthorizationRegistry>();
                 c.AddRegistry<ProviderPermissionsAuthorizationRegistry>();
                 c.AddRegistry<NotificationsRegistry>();

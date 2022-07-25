@@ -42,7 +42,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.BulkUpload;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 using SFA.DAS.ProviderRelationships.Api.Client;
@@ -51,13 +50,16 @@ using StructureMap;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
-    public class DefaultRegistry : Registry {
+    public class DefaultRegistry : Registry
+    {
         private const string ServiceName = "SFA.DAS.ProviderApprenticeshipsService";
         private const string ServiceNamespace = "SFA.DAS";
 
-        public DefaultRegistry() {
+        public DefaultRegistry()
+        {
             Scan(
-                scan => {
+                scan =>
+                {
                     scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
                     scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(t => t.Singleton());
                     scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
@@ -68,17 +70,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             var environment = GetAndStoreEnvironment();
             var configurationRepository = GetConfigurationRepository();
             For<IConfigurationRepository>().Use(configurationRepository);
-            
+
             var config = GetConfiguration(environment, configurationRepository);
             ConfigureHashingService(config);
             For<IProviderAgreementStatusConfiguration>().Use(config);
             For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
-            
+
             For<ICache>().Use<InMemoryCache>(); //RedisCache
             For<IAgreementStatusQueryRepository>().Use<ProviderAgreementStatusRepository>();
             For<IApprenticeshipValidationErrorText>().Use<WebApprenticeshipValidationText>();
-            For<IApprenticeshipCoreValidator>().Use<ApprenticeshipCoreValidator>().Singleton();
-            For<IApprovedApprenticeshipValidator>().Use<ApprovedApprenticeshipValidator>().Singleton();
             For<IAccountApiClient>().Use<AccountApiClient>();
             For<IAccountApiConfiguration>().Use<Domain.Configuration.AccountApiConfiguration>();
 
@@ -97,8 +97,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             ConfigureLogging();
 
-            ConfigureInstrumentedTypes();
-
             For<EncodingConfig>().Use(x => GetEncodingConfig(environment, configurationRepository));
         }
 
@@ -106,12 +104,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         {
             For<IBooleanToggleValueProvider>().Use<CloudConfigurationBooleanValueProvider>();
             For<IFeatureToggleService>().Use<FeatureToggleService>();
-        }
-
-        private void ConfigureInstrumentedTypes()
-        {
-            For<IBulkUploadValidator>().Use(x => new InstrumentedBulkUploadValidator(x.GetInstance<ILog>(), x.GetInstance<BulkUploadValidator>(), x.GetInstance<IUlnValidator>(), x.GetInstance<IAcademicYearDateProvider>()));
-            For<IBulkUploadFileParser>().Use(x => new InstrumentedBulkUploadFileParser(x.GetInstance<ILog>(), x.GetInstance<BulkUploadFileParser>()));
         }
 
         private void ConfigureLogging()

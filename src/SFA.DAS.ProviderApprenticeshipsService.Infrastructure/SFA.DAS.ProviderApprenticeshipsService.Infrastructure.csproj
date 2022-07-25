@@ -441,7 +441,6 @@
     <Compile Include="Models\UserResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AcademicYearDateProvider.cs" />
-    <Compile Include="Services\AcademicYearValidator.cs" />
     <Compile Include="Services\BackgroundNotificationService.cs" />
     <Compile Include="Services\CloudConfigurationBooleanValueProvider.cs" />
     <Compile Include="Services\CookieStorageService.cs" />
@@ -451,7 +450,6 @@
     <Compile Include="Services\IAccountLegalEntityPublicHashingService.cs" />
     <Compile Include="Services\IPublicHashingService.cs" />
     <Compile Include="Services\PublicHashingService.cs" />
-    <Compile Include="Services\ReservationsService.cs" />
     <Compile Include="Services\CommitmentsV2ApiClient.cs" />
     <Compile Include="Services\StubProviderRelationshipsClient.cs" />
   </ItemGroup>

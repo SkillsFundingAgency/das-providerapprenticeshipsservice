@@ -10,8 +10,6 @@ using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitment;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
@@ -30,29 +28,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             Mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             HashingService = hashingService ?? throw new ArgumentNullException(nameof(hashingService));
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
-
-        public async Task<CommitmentView> GetCommitment(long providerId, string hashedCommitmentId)
-        {
-            return await GetCommitment(providerId, HashingService.DecodeValue(hashedCommitmentId));
-        }
-
-        public async Task<CommitmentView> GetCommitment(long providerId, long commitmentId)
-        {
-            Logger.Info($"Getting commitment:{commitmentId} for provider:{providerId}", providerId, commitmentId);
-
-            var data = await Mediator.Send(new GetCommitmentQueryRequest
-            {
-                ProviderId = providerId,
-                CommitmentId = commitmentId
-            });
-
-            return data.Commitment;
-        }
-
-        protected async Task AssertCommitmentStatus(long commitmentId, long providerId)
-        {
-            AssertCommitmentStatus(await GetCommitment(providerId, commitmentId));
         }
 
         protected static void AssertCommitmentStatus(CommitmentView commitment)
@@ -77,15 +52,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
             if (!allowedEditStatuses.Contains(commitment.EditStatus))
                 throw new InvalidStateException($"Invalid commitment state (edit status is {commitment.EditStatus}, expected {string.Join(",", allowedEditStatuses)})");
-        }
-
-        protected async Task<List<TrainingProgramme>> GetTrainingProgrammes(bool includeFrameworks = true)
-        {
-            var programmes = await Mediator.Send(new GetTrainingProgrammesQueryRequest
-            {
-                IncludeFrameworks = includeFrameworks
-            });
-            return programmes.TrainingProgrammes;
         }
     }
 }
