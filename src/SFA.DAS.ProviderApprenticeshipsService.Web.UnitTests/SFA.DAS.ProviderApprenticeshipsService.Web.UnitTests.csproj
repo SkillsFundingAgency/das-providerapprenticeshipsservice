@@ -461,8 +461,6 @@
     <Compile Include="Orchestrators\Account\WhenGettingAccountHomeViewModel.cs" />
     <Compile Include="Orchestrators\Agreement\WhenGettingAgreementsViewModel.cs" />
     <Compile Include="Orchestrators\Authentication\WhenSavingIdentityAttributes.cs" />
-    <Compile Include="Orchestrators\Mappers\SelectEmployer\WhenIMapToChooseEmployerViewModel.cs" />
-    <Compile Include="Orchestrators\SelectEmployer\WhenIGetChooseEmployerViewModel.cs" />
     <Compile Include="StatusCalculator\WhenGettingStatusOfTransferCommitment.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="Validation\ApprenticeshipUpdate\WhenValidatingCreateApprenticeshipUpdateViewModel.cs" />

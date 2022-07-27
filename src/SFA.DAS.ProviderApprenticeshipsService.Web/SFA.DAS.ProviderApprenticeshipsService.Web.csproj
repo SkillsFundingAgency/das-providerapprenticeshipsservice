@@ -715,16 +715,12 @@
     <Compile Include="Models\ViewModelBase.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
     <Compile Include="Orchestrators\AgreementOrchestrator.cs" />
-    <Compile Include="Orchestrators\SelectEmployerOrchestrator.cs" />
     <Compile Include="Orchestrators\FiltersCookieManager.cs" />
     <Compile Include="Orchestrators\IFiltersCookieManager.cs" />
     <Compile Include="Orchestrators\Mappers\AgreementMapper.cs" />
-    <Compile Include="Orchestrators\Mappers\SelectEmployerMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IAgreementMapper.cs" />
-    <Compile Include="Orchestrators\Mappers\ISelectEmployerMapper.cs" />
     <Compile Include="Routing\RouteDataKeys.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
-    <Compile Include="Orchestrators\BaseCommitmentOrchestrator.cs" />
     <Compile Include="Models\BulkUpload\CsvRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestContext.cs" />

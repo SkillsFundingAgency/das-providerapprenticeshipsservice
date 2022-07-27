@@ -11,27 +11,33 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
-    public sealed class AgreementOrchestrator : BaseCommitmentOrchestrator
+    public sealed class AgreementOrchestrator
     {
-        private readonly IAgreementMapper _agreementMapper;       
+        private readonly IAgreementMapper _agreementMapper;
+        private readonly IMediator _mediator;
+        private readonly IHashingService _hashingService;
+        private readonly IProviderCommitmentsLogger _logger;
+
         public AgreementOrchestrator(
             IMediator mediator,
             IHashingService hashingService,
             IProviderCommitmentsLogger logger,
             IAgreementMapper agreementMapper)
-        : base(mediator, hashingService, logger)
         {
-            _agreementMapper = agreementMapper;            
+            _agreementMapper = agreementMapper;
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _hashingService = hashingService ?? throw new ArgumentNullException(nameof(hashingService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<AgreementsViewModel> GetAgreementsViewModel(long providerId, string organisation)
         {
-            Logger.Info($"Getting agreements for provider: {providerId}", providerId);
+            _logger.Info($"Getting agreements for provider: {providerId}", providerId);
 
             var commitmentAgreements = await GetCommitmentAgreements(providerId);
 
-            var filteredCommitmentAgreements = string.IsNullOrEmpty(organisation) 
-                ? commitmentAgreements 
+            var filteredCommitmentAgreements = string.IsNullOrEmpty(organisation)
+                ? commitmentAgreements
                 : commitmentAgreements.Where(v => string.IsNullOrWhiteSpace(organisation.ToLower()) || (string.IsNullOrWhiteSpace(v.OrganisationName) == false && v.OrganisationName.ToLower().Replace(" ", String.Empty).Contains(organisation.ToLower().Replace(" ", String.Empty))));
 
             return new AgreementsViewModel
@@ -40,11 +46,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 AllProviderOrganisationNames = commitmentAgreements.Select(ca => ca.OrganisationName).ToList(),
                 SearchText = organisation
             };
-        }      
+        }
 
         private async Task<IEnumerable<CommitmentAgreement>> GetCommitmentAgreements(long providerId)
         {
-            var response = await Mediator.Send(new GetCommitmentAgreementsQueryRequest
+            var response = await _mediator.Send(new GetCommitmentAgreementsQueryRequest
             {
                 ProviderId = providerId
             });
