@@ -12,6 +12,7 @@ namespace SFA.DAS.ProviderUrlHelper
         string TraineeshipLink(string path);
         string RegistrationLink(string path);
         string EmployerDemandLink(string path);
+        string CourseManagementLink(string path);
     }
 }
 #endif

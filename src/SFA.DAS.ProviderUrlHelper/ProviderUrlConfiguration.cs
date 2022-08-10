@@ -9,5 +9,6 @@
         public string RegistrationBaseUrl { get; set; }
         public string EmployerDemandBaseUrl { get ; set ; }
         public string TraineeshipBaseUrl { get; set; }
+        public string CourseManagementBaseUrl { get; set; }
     }
 }

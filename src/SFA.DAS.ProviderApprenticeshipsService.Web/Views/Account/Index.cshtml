@@ -23,7 +23,6 @@
         <hr class="hr-double">
     </div>
 </div>
-
 <div class="grid-row">
     <div class="column-two-thirds">
 
@@ -103,10 +102,21 @@
                         <a href="@Url.TraineeshipLink($"{Model.ProviderId}")">Recruit trainees</a>
                     </h2>
                     <p>Create a traineeship vacancy and manage applications.</p>
-                </div>    
+                </div>
             }
-            
-                        
+
+            <div class="box">
+                <h2 class="heading-medium">
+                    <a href="@Url.CourseManagementLink($"{Model.ProviderId}/review-your-details")">Your standards and training venues</a>
+                </h2>
+                <ul class="list list-bullet">
+                    <li>manage the standards you deliver</li>
+                    <li>add or remove a training venue</li>
+                    <li>change your training provider overview</li>
+                </ul>
+            </div> 
+
+
         </div>
     </div>
 
