@@ -16,6 +16,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Services;
 using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
@@ -25,15 +26,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly ILog _logger;
         private readonly IFeatureToggleService _featureToggleService;
+        private readonly IGetRoatpBetaProviderService _roatpProviderService;
 
         public AccountOrchestrator(
             IMediator mediator,
             ILog logger,
-            IFeatureToggleService featureToggleService)
+            IFeatureToggleService featureToggleService, IGetRoatpBetaProviderService roatpProviderService)
         {
             _mediator = mediator;
             _logger = logger;
             _featureToggleService = featureToggleService;
+            _roatpProviderService = roatpProviderService;
         }
 
         public async Task<AccountHomeViewModel> GetAccountHomeViewModel(int providerId)
@@ -50,7 +53,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     ProviderName = providerResponse.ProvidersView.Provider.ProviderName,
                     ProviderId = providerId,
                     ShowAcademicYearBanner = false,
-                    ShowTraineeshipLink = _featureToggleService.Get<Traineeships>().FeatureEnabled
+                    ShowTraineeshipLink = _featureToggleService.Get<Traineeships>().FeatureEnabled,
+                    ShowRoatpCourseManagementLink = _roatpProviderService.IsUkprnEnabled(providerId)
                 };
             }
             catch (Exception ex)
