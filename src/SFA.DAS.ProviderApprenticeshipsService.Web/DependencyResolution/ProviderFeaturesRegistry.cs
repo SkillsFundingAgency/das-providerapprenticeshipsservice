@@ -37,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             //var config = GetConfiguration(environment);
            // ConfigureHashingService(config);
             //For<IProviderFeaturesConfiguration>().Use(config);
-            For<ProviderFeaturesConfiguration>().Use(config);
+            For<IProviderFeaturesConfiguration>().Use(config);
 
             //For<ICache>().Use<InMemoryCache>(); //RedisCache
             

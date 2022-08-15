@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Wordprocessing;
 using MediatR;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Types;
@@ -54,7 +55,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     ProviderId = providerId,
                     ShowAcademicYearBanner = false,
                     ShowTraineeshipLink = _featureToggleService.Get<Traineeships>().FeatureEnabled,
-                    ShowRoatpCourseManagementLink = _roatpProviderService.IsUkprnEnabled(providerId)
+                    ShowRoatpCourseManagementLink = false // _roatpProviderService.IsUkprnEnabled(providerId)
                 };
             }
             catch (Exception ex)
