@@ -34,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IConfigurationRepository>().Use(configurationRepository);
 
             var config = GetConfiguration(environment, configurationRepository);
-           // var config = GetConfiguration(environment);
+            //var config = GetConfiguration(environment);
            // ConfigureHashingService(config);
             //For<IProviderFeaturesConfiguration>().Use(config);
             For<ProviderFeaturesConfiguration>().Use(config);

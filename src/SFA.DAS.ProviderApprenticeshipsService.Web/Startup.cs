@@ -14,17 +14,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
-          // BuildConfiguration(app);
         }
-
-        // private void BuildConfiguration(IAppBuilder app)
-        // { 
-        //     var configuration = app.
-        //
-        //     var configBuilder = new ConfigurationBuilder()
-        //         .AddConfiguration(configuration);
-        //
-        //     throw new NotImplementedException();
-        // }
     }
 }
