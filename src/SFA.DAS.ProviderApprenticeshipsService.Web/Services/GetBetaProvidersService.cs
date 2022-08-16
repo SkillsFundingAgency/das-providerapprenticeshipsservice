@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Services
@@ -9,28 +8,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Services
     public class GetRoatpBetaProvidersService: IGetRoatpBetaProviderService
     {
         private const string CourseManagement = "CourseManagement";
-        private readonly ProviderFeaturesConfiguration _providerFeaturesConfiguration;
+        private readonly RoatpCourseManagementWebConfiguration _roatpCourseManagementWebConfiguration;
 
-        public GetRoatpBetaProvidersService(ProviderFeaturesConfiguration providerFeaturesConfiguration)
+        public GetRoatpBetaProvidersService(RoatpCourseManagementWebConfiguration roatpCourseManagementWebConfiguration)
         {
-            _providerFeaturesConfiguration = providerFeaturesConfiguration;
-        }
-
-
-        private List<int> GetBetaProviderUkprns()
-        {
-            var featureToggles = _providerFeaturesConfiguration.FeatureToggles;
-
-            var courseManagementFeature = featureToggles.First(f => f.Feature == CourseManagement);
-            return courseManagementFeature?.Whitelist == null ?
-                new List<int>() :
-                courseManagementFeature.Whitelist.Select(w => Convert.ToInt32(w.Ukprn)).ToList();
-
+            _roatpCourseManagementWebConfiguration = roatpCourseManagementWebConfiguration;
         }
 
         public bool IsUkprnEnabled(int ukprn)
         {
-            return GetBetaProviderUkprns().Any(x => x == ukprn);
+            var featureToggles = _roatpCourseManagementWebConfiguration.ProviderFeaturesConfiguration.FeatureToggles;
+
+            var courseManagementFeature = featureToggles.First(f => f.Feature == CourseManagement);
+            var providerUkrpns= !courseManagementFeature.IsEnabled 
+                                        || courseManagementFeature?.Whitelist == null ?
+                        new List<int>() :
+                        courseManagementFeature.Whitelist.Select(w => w.Ukprn).ToList();
+
+            return providerUkrpns.Any(x => x == ukprn);
         }
     }
 }

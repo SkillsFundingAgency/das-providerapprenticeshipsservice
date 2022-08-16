@@ -47,7 +47,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 _logger.Info($"Getting provider {providerId}");
 
                 var providerResponse = await _mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });
-
+                
                 return new AccountHomeViewModel
                 {
                     AccountStatus = AccountStatus.Active,
@@ -55,7 +55,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     ProviderId = providerId,
                     ShowAcademicYearBanner = false,
                     ShowTraineeshipLink = _featureToggleService.Get<Traineeships>().FeatureEnabled,
-                    ShowRoatpCourseManagementLink = false // _roatpProviderService.IsUkprnEnabled(providerId)
+                    ShowRoatpCourseManagementLink = _roatpProviderService.IsUkprnEnabled(providerId)
                 };
             }
             catch (Exception ex)

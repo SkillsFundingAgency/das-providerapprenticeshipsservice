@@ -32,6 +32,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string ContentApplicationId { get; set; }
         public int DefaultCacheExpirationInMinutes { get; set; }
         public ZenDeskConfiguration ZenDeskSettings { get; set; }
+
+        public ProviderFeaturesConfiguration ProviderFeaturesConfiguration { get; set; }
     }
 
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
@@ -81,22 +83,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string CobrowsingSnippetKey { get; set; }
     }
 
-    public class ProviderFeaturesConfiguration : IProviderFeaturesConfiguration
+    public class RoatpCourseManagementWebConfiguration : IRoatpWebConfiguration
     {
-        public List<ProviderFeatureToggle> FeatureToggles { get; set; }
+        public ProviderFeaturesConfiguration ProviderFeaturesConfiguration { get; set; }
         public string DatabaseConnectionString { get; set; }
         public string ServiceBusConnectionString { get; set; }
+    }
+    public class ProviderFeaturesConfiguration
+    {
+        public List<ProviderFeatureToggle> FeatureToggles { get; set; }
     }
 
     public class ProviderFeatureToggle : FeatureToggle
     {
         public List<ProviderFeatureToggleWhitelistItem> Whitelist { get; set; }
-        public bool IsWhitelistEnabled => Whitelist != null && Whitelist.Count > 0;
-
-        public bool IsUserWhitelisted(long ukprn, string userEmail)
-        {
-            return Whitelist.Any(w => w.Ukprn == ukprn && (w.UserEmails == null || w.UserEmails.Count == 0 || w.UserEmails.Contains(userEmail, StringComparer.InvariantCultureIgnoreCase)));
-        }
     }
 
     public class FeatureToggle
@@ -107,7 +107,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 
     public class ProviderFeatureToggleWhitelistItem
     {
-        public long Ukprn { get; set; }
-        public List<string> UserEmails { get; set; }
+        public int Ukprn { get; set; }
     }
 }
