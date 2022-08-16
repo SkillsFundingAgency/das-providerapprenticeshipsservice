@@ -11,8 +11,8 @@ using StructureMap;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
     public class RoatpCourseManagementWebRegistry : Registry
-    { private const string ServiceName = "SFA.DAS.Roatp.CourseManagement.Web";
-
+    { 
+        private const string ServiceName = "SFA.DAS.Roatp.CourseManagement.Web";
 
         public RoatpCourseManagementWebRegistry()
         {
@@ -24,9 +24,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
            
              For<IRoatpCourseManagementWebConfiguration>().Use(config);
         }
-
-       
-       
 
         private string GetAndStoreEnvironment()
         {
@@ -42,8 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         
             return environment;
         }
-        
-        
+
         private RoatpCourseManagementCourseManagementWebConfiguration GetConfiguration(string environment, IConfigurationRepository configurationRepository)
         {
             var configurationService = new ConfigurationService(configurationRepository,
@@ -56,8 +52,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         {
             return new AzureTableStorageConfigurationRepository(ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"]);
         }
-        
-        
         
         private void PopulateSystemDetails(string envName)
         {
