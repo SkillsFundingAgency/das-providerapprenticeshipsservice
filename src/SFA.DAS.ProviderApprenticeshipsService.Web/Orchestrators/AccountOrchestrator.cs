@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DocumentFormat.OpenXml.Wordprocessing;
 using MediatR;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Types;

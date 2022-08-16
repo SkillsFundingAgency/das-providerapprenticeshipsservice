@@ -11,21 +11,18 @@ using StructureMap;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
     public class RoatpCourseManagementWebRegistry : Registry
-    {
-        private const string ServiceName = "SFA.DAS.Roatp.CourseManagement.Web";
-        //private const string ServiceNamespace = "SFA.DAS";
+    { private const string ServiceName = "SFA.DAS.Roatp.CourseManagement.Web";
+
 
         public RoatpCourseManagementWebRegistry()
         {
-           
-
             var environment = GetAndStoreEnvironment();
-           var configurationRepository = GetConfigurationRepository();
+            var configurationRepository = GetConfigurationRepository();
             For<IConfigurationRepository>().Use(configurationRepository);
            
             var config = GetConfiguration(environment, configurationRepository);
            
-             For<IRoatpWebConfiguration>().Use(config);
+             For<IRoatpCourseManagementWebConfiguration>().Use(config);
         }
 
        
@@ -47,12 +44,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         }
         
         
-        private RoatpCourseManagementWebConfiguration GetConfiguration(string environment, IConfigurationRepository configurationRepository)
+        private RoatpCourseManagementCourseManagementWebConfiguration GetConfiguration(string environment, IConfigurationRepository configurationRepository)
         {
             var configurationService = new ConfigurationService(configurationRepository,
                 new ConfigurationOptions(ServiceName, environment, "1.0"));
         
-            return configurationService.Get<RoatpCourseManagementWebConfiguration>();
+            return configurationService.Get<RoatpCourseManagementCourseManagementWebConfiguration>();
         }
         
         private static IConfigurationRepository GetConfigurationRepository()

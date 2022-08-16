@@ -246,7 +246,7 @@
     <Compile Include="Interfaces\IContentClientApiConfiguration.cs" />
     <Compile Include="Interfaces\IEmployerAccountService.cs" />
     <Compile Include="Interfaces\ICommitmentsV2ApiClient.cs" />
-    <Compile Include="Interfaces\IRoatpWebConfiguration.cs" />
+    <Compile Include="Interfaces\IRoatpCourseManagementWebConfiguration.cs" />
     <Compile Include="Interfaces\IProviderRepository.cs" />
     <Compile Include="Interfaces\IProviderAgreementStatusConfiguration.cs" />
     <Compile Include="Interfaces\IReservationsService.cs" />

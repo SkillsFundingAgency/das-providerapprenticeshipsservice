@@ -32,8 +32,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string ContentApplicationId { get; set; }
         public int DefaultCacheExpirationInMinutes { get; set; }
         public ZenDeskConfiguration ZenDeskSettings { get; set; }
-
-        public ProviderFeaturesConfiguration ProviderFeaturesConfiguration { get; set; }
     }
 
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
@@ -83,7 +81,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string CobrowsingSnippetKey { get; set; }
     }
 
-    public class RoatpCourseManagementWebConfiguration : IRoatpWebConfiguration
+    public class RoatpCourseManagementCourseManagementWebConfiguration : IRoatpCourseManagementWebConfiguration
     {
         public ProviderFeaturesConfiguration ProviderFeaturesConfiguration { get; set; }
         public string DatabaseConnectionString { get; set; }
