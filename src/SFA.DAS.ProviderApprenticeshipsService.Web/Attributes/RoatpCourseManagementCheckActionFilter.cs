@@ -27,7 +27,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
              var isRoatpCourseManagementLinkEnabled = _roatpProviderService.IsUkprnEnabled(ukprnValue);
              if (!HttpContext.Current.Items.Contains(RoatpConstants.IsCourseManagementLinkEnabled))
                     HttpContext.Current.Items.Add(RoatpConstants.IsCourseManagementLinkEnabled, isRoatpCourseManagementLinkEnabled);
-
         }
 
         public void OnActionExecuted(ActionExecutedContext filterContext)

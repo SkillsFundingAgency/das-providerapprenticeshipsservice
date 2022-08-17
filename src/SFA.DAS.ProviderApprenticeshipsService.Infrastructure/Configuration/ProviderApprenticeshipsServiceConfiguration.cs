@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Http.Configuration;
 using SFA.DAS.Notifications.Api.Client.Configuration;
@@ -81,7 +79,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string CobrowsingSnippetKey { get; set; }
     }
 
-    public class RoatpCourseManagementCourseManagementWebConfiguration : IRoatpCourseManagementWebConfiguration
+    public class RoatpCourseManagementWebConfiguration : IRoatpCourseManagementWebConfiguration
     {
         public ProviderFeaturesConfiguration ProviderFeaturesConfiguration { get; set; }
         public string DatabaseConnectionString { get; set; }

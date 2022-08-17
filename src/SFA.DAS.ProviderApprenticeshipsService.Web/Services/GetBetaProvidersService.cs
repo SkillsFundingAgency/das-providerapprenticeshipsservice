@@ -8,16 +8,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Services
     public class GetRoatpBetaProviderService: IGetRoatpBetaProviderService
     {
         private const string CourseManagement = "CourseManagement";
-        private readonly RoatpCourseManagementCourseManagementWebConfiguration _roatpCourseManagementCourseManagementWebConfiguration;
+        private readonly RoatpCourseManagementWebConfiguration _roatpCourseManagementWebConfiguration;
 
-        public GetRoatpBetaProviderService(RoatpCourseManagementCourseManagementWebConfiguration roatpCourseManagementCourseManagementWebConfiguration)
+        public GetRoatpBetaProviderService(RoatpCourseManagementWebConfiguration roatpCourseManagementWebConfiguration)
         {
-            _roatpCourseManagementCourseManagementWebConfiguration = roatpCourseManagementCourseManagementWebConfiguration;
+            _roatpCourseManagementWebConfiguration = roatpCourseManagementWebConfiguration;
         }
 
         public bool IsUkprnEnabled(int ukprn)
         {
-            var featureToggles = _roatpCourseManagementCourseManagementWebConfiguration.ProviderFeaturesConfiguration.FeatureToggles;
+            var featureToggles = _roatpCourseManagementWebConfiguration.ProviderFeaturesConfiguration.FeatureToggles;
 
             var courseManagementFeature = featureToggles.First(f => f.Feature == CourseManagement);
             var providerUkrpns= !courseManagementFeature.IsEnabled 
