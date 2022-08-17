@@ -637,6 +637,8 @@
     <Compile Include="Attributes\DeprecatedAttribute.cs" />
     <Compile Include="Attributes\ProviderUkPrnCheckActionFilter.cs" />
     <Compile Include="Attributes\ProviderUkPrnCheckAttribute.cs" />
+    <Compile Include="Attributes\RoatpConstants.cs" />
+    <Compile Include="Attributes\RoatpCourseManagementCheckActionFilter.cs" />
     <Compile Include="Attributes\RoleAuthorizeAttribute.cs" />
     <Compile Include="Authentication\RoleNames.cs" />
     <Compile Include="Authentication\ServiceClaims.cs" />

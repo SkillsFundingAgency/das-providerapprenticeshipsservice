@@ -5,12 +5,12 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Services
 {
-    public class GetRoatpBetaProvidersService: IGetRoatpBetaProviderService
+    public class GetRoatpBetaProviderService: IGetRoatpBetaProviderService
     {
         private const string CourseManagement = "CourseManagement";
         private readonly RoatpCourseManagementCourseManagementWebConfiguration _roatpCourseManagementCourseManagementWebConfiguration;
 
-        public GetRoatpBetaProvidersService(RoatpCourseManagementCourseManagementWebConfiguration roatpCourseManagementCourseManagementWebConfiguration)
+        public GetRoatpBetaProviderService(RoatpCourseManagementCourseManagementWebConfiguration roatpCourseManagementCourseManagementWebConfiguration)
         {
             _roatpCourseManagementCourseManagementWebConfiguration = roatpCourseManagementCourseManagementWebConfiguration;
         }

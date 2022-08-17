@@ -1,8 +1,10 @@
 ﻿@using Microsoft.ApplicationInsights.Extensibility
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Models
 @using SFA.DAS.ProviderUrlHelper.Framework
-
+@{
+    var showCourseManagementLink = HttpContext.Current.Items.Contains(RoatpConstants.IsCourseManagementLinkEnabled) && HttpContext.Current.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true);
+}
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
 <!--[if gt IE 8]><!-->
@@ -39,11 +41,11 @@
     <!--<![endif]-->
     <!-- Google Tag Manager -->
     <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window, document, 'script', 'dataLayer', 'GTM-TD56SF5');
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window, document, 'script', 'dataLayer', 'GTM-TD56SF5');
     </script>
     <!-- End Google Tag Manager -->
     <script type="text/javascript">
@@ -59,125 +61,125 @@
     @Html.Partial("_ZenDeskWidget")
 </head>
 <body id="@ViewBag.PageId">
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TD56SF5"
-                height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
+<!-- Google Tag Manager (noscript) -->
+<noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TD56SF5"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
+<!-- End Google Tag Manager (noscript) -->
 
-    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
-    <div id="skiplink-container">
-        <div>
-            <a href="#content" class="skiplink">Skip to main content</a>
-        </div>
+<script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+<div id="skiplink-container">
+    <div>
+        <a href="#content" class="skiplink">Skip to main content</a>
     </div>
+</div>
 
-    @Html.Partial("_CookieBanner")
+@Html.Partial("_CookieBanner")
 
-    <header role="banner" id="global-header" class="with-proposition">
-        <div class="header-wrapper">
-            <div class="header-proposition">
-                <div class="content">
-                    <a id="proposition-name" href="/">Apprenticeships</a>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <div id="floating-menu-holder">
-        <div class="account-information floating-menu" role="navigation">
-            <div class="js-float">
-                <p class="floating-head-text">
-                    Your training provider account
-                </p>
-                <nav id="user-nav">
-                    <ul>
-                        @if (HttpContext.Current.User.Identity.IsAuthenticated)
-                        {
-                            <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
-                            <li><a href="/notification-settings" class="link-user-profile">Notification settings</a></li>
-                            <li><a href="@Url.RouteUrl("signout")">Sign out</a></li>
-                        }
-                        else
-                        {
-                            <li>
-                                <a href="@Url.RouteUrl("signin")" aria-label="Sign in">Sign in</a>
-                            </li>
-                        }
-                    </ul>
-                </nav>
+<header role="banner" id="global-header" class="with-proposition">
+    <div class="header-wrapper">
+        <div class="header-proposition">
+            <div class="content">
+                <a id="proposition-name" href="/">Apprenticeships</a>
             </div>
         </div>
     </div>
-    <!--/floating-menu-holder-->
+</header>
 
-    @if (HttpContext.Current.User.Identity.IsAuthenticated && !(ViewBag?.HideNavBar ?? false))
-        {
-            var controllerName = ViewContext.RouteData.Values["Controller"].ToString(); ;
-            var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
-            <div class="header-organisation" role="navigation">
-                <nav class="header-inner">
-                    <ul role="menubar" id="global-nav-links">
-                        <li><a href="@Url.Action("Index", "Account")" role="menuitem" class="@(controllerName == "Account" ? "selected" : "")">Home</a></li>
-                        <li><a href="@Url.ProviderCommitmentsLink($"{providerId}/unapproved")" role="menuitem">Apprentice requests</a></li>
-                        <li><a href="@Url.ReservationsLink($"{providerId}/reservations/manage")" role="menuitem" class="@(controllerName == "ManageReservations" ? "selected" : "")">Manage funding</a></li>
-                        <li><a href="@Url.ProviderCommitmentsLink($"{providerId}/apprentices")" role="menuitem">Manage your apprentices</a></li>
-                        <li><a href="@Url.RecruitLink($"{providerId}")">Recruit apprentices</a></li>
-                        <li><a href="@Url.Action("Agreements", "Agreement", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Agreement" ? "selected" : "")">Organisations and agreements</a></li>
-                        @if ((Model is AccountHomeViewModel) && (Model as AccountHomeViewModel).ShowRoatpCourseManagementLink)
-                        {
-                            <li><a href="@Url.CourseManagementLink($"{providerId}/review-your-details")" role="menuitem" class="@(controllerName == "CourseManagement" ? "selected" : "")">Your standards and training venues</a></li>
-                        }
-                    </ul>
-                </nav>
+<div id="floating-menu-holder">
+    <div class="account-information floating-menu" role="navigation">
+        <div class="js-float">
+            <p class="floating-head-text">
+                Your training provider account
+            </p>
+            <nav id="user-nav">
+                <ul>
+                    @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                    {
+                        <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
+                        <li><a href="/notification-settings" class="link-user-profile">Notification settings</a></li>
+                        <li><a href="@Url.RouteUrl("signout")">Sign out</a></li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("signin")" aria-label="Sign in">Sign in</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<!--/floating-menu-holder-->
+
+@if (HttpContext.Current.User.Identity.IsAuthenticated && !(ViewBag?.HideNavBar ?? false))
+{
+    var controllerName = ViewContext.RouteData.Values["Controller"].ToString(); ;
+    var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
+    <div class="header-organisation" role="navigation">
+        <nav class="header-inner">
+            <ul role="menubar" id="global-nav-links">
+                <li><a href="@Url.Action("Index", "Account")" role="menuitem" class="@(controllerName == "Account" ? "selected" : "")">Home</a></li>
+                <li><a href="@Url.ProviderCommitmentsLink($"{providerId}/unapproved")" role="menuitem">Apprentice requests</a></li>
+                <li><a href="@Url.ReservationsLink($"{providerId}/reservations/manage")" role="menuitem" class="@(controllerName == "ManageReservations" ? "selected" : "")">Manage funding</a></li>
+                <li><a href="@Url.ProviderCommitmentsLink($"{providerId}/apprentices")" role="menuitem">Manage your apprentices</a></li>
+                <li><a href="@Url.RecruitLink($"{providerId}")">Recruit apprentices</a></li>
+                <li><a href="@Url.Action("Agreements", "Agreement", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Agreement" ? "selected" : "")">Organisations and agreements</a></li>
+                @if(showCourseManagementLink)
+                {
+                    <li><a href="@Url.CourseManagementLink($"{providerId}/review-your-details")" role="menuitem" class="@(controllerName == "CourseManagement" ? "selected" : "")">Your standards and training venues</a></li>
+                }
+            </ul>
+        </nav>
+    </div>
+}
+
+
+<main role="main" id="content">
+
+    @RenderSection("breadcrumb", required: false)
+
+    @Html.Partial(@"_ModalMessage")
+    @RenderBody()
+
+</main>
+
+@RenderSection("PreFooterJS", required: false)
+<footer class="group js-footer" id="footer" role="contentinfo">
+    <div class="footer-wrapper">
+        <div class="footer-meta">
+            <div class="footer-meta-inner">
+                <ul class="platform-help-links">
+                    <li><a href="@Url.Action("Help", "Home")">Help</a></li>
+                    <li><a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank" aria-label="Give feedback">Feedback </a></li>
+                    <li><a href="@Url.RouteUrl("privacy")">Privacy</a></li>
+                    <li><a href="@Url.RouteUrl("cookies")">Cookies</a></li>
+                    <li><a href="@Url.RouteUrl("terms")">Terms and conditions</a></li>
+                    <li>Built by the <a href="http://gov.uk/sfa" target="_blank">Education and Skills Funding Agency</a></li>
+                </ul>
+                <div class="open-government-licence">
+                    <p class="logo">
+                        <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence</a>
+                    </p>
+
+                    <p>
+                        All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
+                    </p>
+
+                </div>
             </div>
-    }
-
-
-    <main role="main" id="content">
-
-        @RenderSection("breadcrumb", required: false)
-
-        @Html.Partial(@"_ModalMessage")
-        @RenderBody()
-
-    </main>
-
-    @RenderSection("PreFooterJS", required: false)
-    <footer class="group js-footer" id="footer" role="contentinfo">
-        <div class="footer-wrapper">
-            <div class="footer-meta">
-                <div class="footer-meta-inner">
-                    <ul class="platform-help-links">
-                        <li><a href="@Url.Action("Help", "Home")">Help</a></li>
-                        <li><a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank" aria-label="Give feedback">Feedback </a></li>
-                        <li><a href="@Url.RouteUrl("privacy")">Privacy</a></li>
-                        <li><a href="@Url.RouteUrl("cookies")">Cookies</a></li>
-                        <li><a href="@Url.RouteUrl("terms")">Terms and conditions</a></li>
-                        <li>Built by the <a href="http://gov.uk/sfa" target="_blank">Education and Skills Funding Agency</a></li>
-                    </ul>
-                    <div class="open-government-licence">
-                        <p class="logo">
-                            <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence</a>
-                        </p>
-
-                        <p>
-                            All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
-                        </p>
-
-                    </div>
-                </div>
-                <div class="copyright">
-                    <a href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/copyright-and-re-use/crown-copyright/">&copy; Crown copyright</a>
-                </div>
+            <div class="copyright">
+                <a href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/copyright-and-re-use/crown-copyright/">&copy; Crown copyright</a>
             </div>
         </div>
-    </footer>
-    <div id="global-app-error" class="app-error hidden"></div>
+    </div>
+</footer>
+<div id="global-app-error" class="app-error hidden"></div>
 
-    @Scripts.Render("~/bundles/sfajs")
+@Scripts.Render("~/bundles/sfajs")
 
-    @RenderSection("pageSpecificJS", required: false)
+@RenderSection("pageSpecificJS", required: false)
 </body>
 </html>
