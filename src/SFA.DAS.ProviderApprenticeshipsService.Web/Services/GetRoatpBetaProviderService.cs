@@ -19,7 +19,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Services
         {
             var featureToggles = _roatpCourseManagementWebConfiguration.ProviderFeaturesConfiguration.FeatureToggles;
 
-            var courseManagementFeature = featureToggles.First(f => f.Feature == CourseManagement);
+            var courseManagementFeature = featureToggles.FirstOrDefault(f => f.Feature == CourseManagement);
+            if (courseManagementFeature == null) return false;
+
             var providerUkrpns= !courseManagementFeature.IsEnabled 
                                         || courseManagementFeature?.Whitelist == null ?
                         new List<int>() :

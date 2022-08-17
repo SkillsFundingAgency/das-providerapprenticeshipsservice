@@ -747,7 +747,7 @@
     <Compile Include="Orchestrators\Mappers\IAgreementMapper.cs" />
     <Compile Include="Orchestrators\Mappers\ISelectEmployerMapper.cs" />
     <Compile Include="Routing\RouteDataKeys.cs" />
-    <Compile Include="Services\GetBetaProvidersService.cs" />
+    <Compile Include="Services\GetRoatpBetaProviderService.cs" />
     <Compile Include="Services\IGetRoatpBetaProviderService.cs" />
     <Compile Include="Validation\ApprovedApprenticeshipValidator.cs" />
     <Compile Include="Validation\IApprovedApprenticeshipValidator.cs" />
