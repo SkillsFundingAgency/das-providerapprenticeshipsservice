@@ -31,6 +31,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 
         public void OnActionExecuted(ActionExecutedContext filterContext)
         {
+            // No code required for OnActionExecuted, but method required by IActionFilter
+            // SonarCloud wanted a comment
         }
     }
 }
