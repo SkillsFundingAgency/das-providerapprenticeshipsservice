@@ -5,7 +5,6 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using StructureMap;
 
@@ -13,6 +12,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
     public class RoatpCourseManagementWebRegistry : Registry
     {
+        private const string ServiceName = "SFA.DAS.Roatp.CourseManagement.Web";
         public RoatpCourseManagementWebRegistry()
         {
             var environment = GetAndStoreEnvironment();
@@ -31,7 +31,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             {
                 environment = ConfigurationManager.AppSettings["EnvironmentName"];
             }
-            if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST"))
+            if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST") || environment.Equals("TEST2"))
             {
                 PopulateSystemDetails(environment);
             }
@@ -42,7 +42,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         private RoatpCourseManagementWebConfiguration GetConfiguration(string environment, IConfigurationRepository configurationRepository)
         {
             var configurationService = new ConfigurationService(configurationRepository,
-                new ConfigurationOptions(RoatpConstants.ServiceName, environment, "1.0"));
+                new ConfigurationOptions(ServiceName, environment, "1.0"));
         
             return configurationService.Get<RoatpCourseManagementWebConfiguration>();
         }

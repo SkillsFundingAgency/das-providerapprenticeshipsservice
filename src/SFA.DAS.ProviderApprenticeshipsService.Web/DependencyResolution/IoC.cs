@@ -21,7 +21,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.Reservations.Api.Client.DependencyResolution;
 using SFA.DAS.Authorization.DependencyResolution.StructureMap;
 using SFA.DAS.Authorization.ProviderPermissions.DependencyResolution.StructureMap;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -33,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 c.Policies.Add(new ConfigurationPolicy<AccountApiConfiguration>("SFA.DAS.EmployerAccountAPI"));
                 c.Policies.Add(new ConfigurationPolicy<ProviderApprenticeshipsServiceConfiguration>("SFA.DAS.ProviderApprenticeshipsService"));
                 c.Policies.Add(new ConfigurationPolicy<AccountApiConfiguration>("SFA.DAS.EmployerAccountAPI"));
-                c.Policies.Add(new ConfigurationPolicy<RoatpCourseManagementWebConfiguration>(RoatpConstants.ServiceName));
+                c.Policies.Add(new ConfigurationPolicy<RoatpCourseManagementWebConfiguration>("SFA.DAS.Roatp.CourseManagement.Web"));
                 c.Policies.Add<CurrentDatePolicy>();
                 c.AddRegistry<ValidationRegistry>();
                 c.AddRegistry<AuthorizationRegistry>();

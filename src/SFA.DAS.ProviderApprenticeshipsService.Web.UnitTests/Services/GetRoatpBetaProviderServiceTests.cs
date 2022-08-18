@@ -51,7 +51,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Services
         }
 
         [Test]
-        public void IsUkprnEnabled_NotIsEnabled_ReturnsFalse()
+        public void IsUkprnEnabled_FeatureNotEnabled_ReturnsFalse()
         {
             _configuration.ProviderFeaturesConfiguration.FeatureToggles[0].IsEnabled = false;
             _service = new GetRoatpBetaProviderService(_configuration);
