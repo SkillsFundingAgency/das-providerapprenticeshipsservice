@@ -31,11 +31,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             {
                 environment = ConfigurationManager.AppSettings["EnvironmentName"];
             }
-            if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST") || environment.Equals("TEST2"))
-            {
-                PopulateSystemDetails(environment);
-            }
-        
+            
             return environment;
         }
 
@@ -50,12 +46,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         private static IConfigurationRepository GetConfigurationRepository()
         {
             return new AzureTableStorageConfigurationRepository(ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"]);
-        }
-        
-        private void PopulateSystemDetails(string envName)
-        {
-            SystemDetails.EnvironmentName = envName;
-            SystemDetails.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
     }
 }
