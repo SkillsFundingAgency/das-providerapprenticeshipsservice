@@ -1,6 +1,10 @@
 ﻿@using Microsoft.ApplicationInsights.Extensibility
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderUrlHelper.Framework
+@{
+    var showCourseManagementLink = HttpContext.Current.Items.Contains(RoatpConstants.IsCourseManagementLinkEnabled) && HttpContext.Current.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true);
+}
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -38,11 +42,14 @@
     <!--<![endif]-->
     <!-- Google Tag Manager -->
     <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window, document, 'script', 'dataLayer', 'GTM-TD56SF5');
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-TD56SF5');
     </script>
     <!-- End Google Tag Manager -->
     <script type="text/javascript">
@@ -51,7 +58,6 @@
         }({
             instrumentationKey: "@TelemetryConfiguration.Active.InstrumentationKey"
         });
-
         window.appInsights = appInsights;
         appInsights.trackPageView();
     </script>
@@ -112,21 +118,25 @@
     <!--/floating-menu-holder-->
 
     @if (HttpContext.Current.User.Identity.IsAuthenticated && !(ViewBag?.HideNavBar ?? false))
-        {
-            var controllerName = ViewContext.RouteData.Values["Controller"].ToString(); ;
-            var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
-            <div class="header-organisation" role="navigation">
-                <nav class="header-inner">
-                    <ul role="menubar" id="global-nav-links">
-                        <li><a href="@Url.Action("Index", "Account")" role="menuitem" class="@(controllerName == "Account" ? "selected" : "")">Home</a></li>
-                        <li><a href="@Url.ProviderCommitmentsLink($"{providerId}/unapproved")" role="menuitem">Apprentice requests</a></li>
-                        <li><a href="@Url.ReservationsLink($"{providerId}/reservations/manage")" role="menuitem" class="@(controllerName == "ManageReservations" ? "selected" : "")">Manage funding</a></li>
-                        <li><a href="@Url.ProviderCommitmentsLink($"{providerId}/apprentices")" role="menuitem">Manage your apprentices</a></li>
-                        <li><a href="@Url.RecruitLink($"{providerId}")">Recruit apprentices</a></li>
-                        <li><a href="@Url.Action("Agreements", "Agreement", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Agreement" ? "selected" : "")">Organisations and agreements</a></li>
-                    </ul>
-                </nav>
-            </div>
+    {
+        var controllerName = ViewContext.RouteData.Values["Controller"].ToString(); ;
+        var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
+        <div class="header-organisation" role="navigation">
+            <nav class="header-inner">
+                <ul role="menubar" id="global-nav-links">
+                    <li><a href="@Url.Action("Index", "Account")" role="menuitem" class="@(controllerName == "Account" ? "selected" : "")">Home</a></li>
+                    <li><a href="@Url.ProviderCommitmentsLink($"{providerId}/unapproved")" role="menuitem">Apprentice requests</a></li>
+                    <li><a href="@Url.ReservationsLink($"{providerId}/reservations/manage")" role="menuitem" class="@(controllerName == "ManageReservations" ? "selected" : "")">Manage funding</a></li>
+                    <li><a href="@Url.ProviderCommitmentsLink($"{providerId}/apprentices")" role="menuitem">Manage your apprentices</a></li>
+                    <li><a href="@Url.RecruitLink($"{providerId}")">Recruit apprentices</a></li>
+                    <li><a href="@Url.Action("Agreements", "Agreement", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Agreement" ? "selected" : "")">Organisations and agreements</a></li>
+                    @if(showCourseManagementLink)
+                    {
+                        <li><a href="@Url.CourseManagementLink($"{providerId}/review-your-details")" role="menuitem" class="@(controllerName == "CourseManagement" ? "selected" : "")">Your standards and training venues</a></li>
+                    }
+                </ul>
+            </nav>
+        </div>
     }
 
 

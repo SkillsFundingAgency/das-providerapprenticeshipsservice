@@ -459,6 +459,7 @@
     <Compile Include="Helpers\HtmlExtensionsTests\WhenCallingCanShowReservationsLink.cs" />
     <Compile Include="Orchestrators\BulkUpload\WhenEvaluatingAutoReservations.cs" />
     <Compile Include="Orchestrators\Commitments\WhenGettingHashedIdsFromCommitmentDetails.cs" />
+    <Compile Include="Services\GetRoatpBetaProviderServiceTests.cs" />
     <Compile Include="TestServiceLocator.cs" />
     <Compile Include="Models\DataLockSummaryViewModelTests.cs" />
     <Compile Include="MoqCustomisedAutoData.cs" />
