@@ -241,7 +241,6 @@
     <Compile Include="Configuration\AccountApiConfiguration.cs" />
     <Compile Include="Interfaces\IBackgroundNotificationService.cs" />
     <Compile Include="Interfaces\ICacheStorageService.cs" />
-    <Compile Include="Interfaces\ICommitmentsV2Service.cs" />
     <Compile Include="Interfaces\IContentApiClient.cs" />
     <Compile Include="Interfaces\IContentClientApiConfiguration.cs" />
     <Compile Include="Interfaces\IEmployerAccountService.cs" />
@@ -249,7 +248,6 @@
     <Compile Include="Interfaces\IRoatpCourseManagementWebConfiguration.cs" />
     <Compile Include="Interfaces\IProviderRepository.cs" />
     <Compile Include="Interfaces\IProviderAgreementStatusConfiguration.cs" />
-    <Compile Include="Interfaces\IReservationsService.cs" />
     <Compile Include="Models\AcademicYear\AcademicYearValidationResult.cs" />
     <Compile Include="Models\ApprenticeshipCourse\AllTrainingProgrammesView.cs" />
     <Compile Include="Models\ApprenticeshipCourse\FundingPeriod.cs" />
@@ -259,7 +257,6 @@
     <Compile Include="Data\IAgreementStatusQueryRepository.cs" />
     <Compile Include="Models\ApprenticeshipCourse\FrameworksView.cs" />
     <Compile Include="Interfaces\IAcademicYearDateProvider.cs" />
-    <Compile Include="Interfaces\IAcademicYearValidator.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoService.cs" />
     <Compile Include="Interfaces\ICache.cs" />
     <Compile Include="Interfaces\ICookieStorageService.cs" />

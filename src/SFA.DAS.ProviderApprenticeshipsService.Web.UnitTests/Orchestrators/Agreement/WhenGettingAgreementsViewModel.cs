@@ -13,7 +13,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 using SFA.DAS.CommitmentsV2.Api.Types;
 using SFA.DAS.CommitmentsV2.Types;
 
-
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agreement
 {
     [TestFixture]
@@ -63,7 +62,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
 
             var mappedCommitmentAgreement = new Web.Models.Agreement.CommitmentAgreement
             {
-                AgreementID = "agree",               
+                AgreementID = "agree",
                 OrganisationName = "org"
             };
 
@@ -98,7 +97,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
             }, result.CommitmentAgreements));
         }
 
-
         [Test]
         public async Task TheCommitmentAgreementsReturnedFromHandlerAreMappedAndOrderedBySearchText()
         {
@@ -115,7 +113,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
                 new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "A", AgreementID = "1"}
             }, result.CommitmentAgreements));
         }
-
 
         [Test]
         public async Task TheCommitmentAgreementsReturnedFromHandlerAreMappedAndOrderedBySearchTextWithNoResults()
@@ -160,13 +157,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
             Assert.AreEqual(result.AllProviderOrganisationNames.Count(), 4);
         }
 
-
         private void SetOrganisations()
         {
-            SetupMapping("1", "A" );
-            SetupMapping("2", "B" );
-            SetupMapping("3", "C" );
-            SetupMapping("4", "D" );
+            SetupMapping("1", "A");
+            SetupMapping("2", "B");
+            SetupMapping("3", "C");
+            SetupMapping("4", "D");
             SetupMapping("4", "D");
         }
 

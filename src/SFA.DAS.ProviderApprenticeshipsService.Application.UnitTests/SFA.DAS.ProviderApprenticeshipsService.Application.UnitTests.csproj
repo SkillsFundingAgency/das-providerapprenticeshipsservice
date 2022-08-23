@@ -409,8 +409,6 @@
     <Compile Include="Commands\SubmitCommitment\WhenApprovingAsSecondApprover.cs" />
     <Compile Include="Commands\SubmitCommitment\WhenApprovingAsFirstApprover.cs" />
     <Compile Include="Commands\SubmitCommitment\WhenValidatingCommand.cs" />
-    <Compile Include="Commands\TriageApprenticeshipDataLocks\WhenTriagingApprenticeshipDataLocks.cs" />
-    <Compile Include="Commands\TriageApprenticeshipDataLocks\WhenValidatingCommand.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\WhenUndoingApprenticeshipUpdate.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\WhenValidatingCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\WhenUpsertingRegisteredUser.cs" />
@@ -428,17 +426,13 @@
     <Compile Include="Queries\GetEmailOverlappingApprenticeships\WhenGettingEmailOverlappingApprenticeships.cs" />
     <Compile Include="Queries\GetEmployerAccountLegalEntities\WhenIGetEmployerAccountLegalEntities.cs" />
     <Compile Include="Queries\GetProviderAgreement\WhenIGetProviderAgreement.cs" />
-    <Compile Include="Queries\GetApprenticeshipDataLockSummary\WhenGettingApprenticeshipDataLockSummary.cs" />
-    <Compile Include="Queries\GetApprenticeshipPriceHistory\WhenGettingApprenticeshipPriceHistory.cs" />
     <Compile Include="Queries\GetBulkUploadFile\WhenIGetBulkUploadFile.cs" />
     <Compile Include="Queries\GetPendingApprenticeshipUpdate\WhenIGetPendingApprenticeshipUpdate.cs" />
     <Compile Include="Queries\GetProviderHasRelationshipWithPermission\WhenIGetProviderHasRelationshipWithPermission.cs" />
     <Compile Include="Queries\GetProviderRelationshipsWithPermission\WhenIGetProviderRelationshipsWithPermission.cs" />
-    <Compile Include="Queries\GetTrainingProgrammesTests\WhenIGetTrainingProgrammes.cs" />
     <Compile Include="Queries\UpdateNotificationSettings\WhenGettingUserSettings.cs" />
     <Compile Include="Queries\GetUserNotificationSettings\WhenUpdatingUserSettings.cs" />
     <Compile Include="Services\ApprenticeshipInfoServiceTests.cs" />
-    <Compile Include="Services\CommitmentsV2ServiceTests.cs" />
     <Compile Include="TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
