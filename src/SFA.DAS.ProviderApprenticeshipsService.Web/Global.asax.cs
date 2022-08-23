@@ -28,7 +28,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             AreaRegistration.RegisterAllAreas();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            
+            var container = StructuremapMvc.StructureMapDependencyScope.Container;
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters, container);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
@@ -36,7 +38,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = DasClaimTypes.Name;
 
-            var container = StructuremapMvc.StructureMapDependencyScope.Container;
             FluentValidationModelValidatorProvider.Configure(x => x.ValidatorFactory = new StructureMapValidatorFactory(container));
 
             TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["InstrumentationKey"];

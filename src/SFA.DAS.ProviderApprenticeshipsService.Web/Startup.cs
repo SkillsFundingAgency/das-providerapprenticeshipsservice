@@ -1,10 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.IdentityModel.Protocols;
-using Microsoft.Owin.Security.Notifications;
-using Microsoft.Owin.Security.WsFederation;
-using NLog;
-using Owin;
+﻿using Owin;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {

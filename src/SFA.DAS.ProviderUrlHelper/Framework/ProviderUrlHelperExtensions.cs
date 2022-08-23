@@ -54,6 +54,12 @@ namespace SFA.DAS.ProviderUrlHelper.Framework
             return linkGenerator.EmployerDemandLink(path);
         }
 
+        public static string CourseManagementLink(this UrlHelper helper, string path)
+        {
+            var linkGenerator = GetLinkGenerator();
+            return linkGenerator.CourseManagementLink(path);
+        }
+
         private static ILinkGenerator GetLinkGenerator()
         {
             var linkGenerator = ServiceLocator.Get<ILinkGenerator>();
