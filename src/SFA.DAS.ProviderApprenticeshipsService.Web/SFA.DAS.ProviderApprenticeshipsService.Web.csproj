@@ -725,8 +725,6 @@
     <Compile Include="Routing\RouteDataKeys.cs" />
     <Compile Include="Services\GetRoatpBetaProviderService.cs" />
     <Compile Include="Services\IGetRoatpBetaProviderService.cs" />
-    <Compile Include="Validation\ApprovedApprenticeshipValidator.cs" />
-    <Compile Include="Validation\IApprovedApprenticeshipValidator.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Models\BulkUpload\CsvRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

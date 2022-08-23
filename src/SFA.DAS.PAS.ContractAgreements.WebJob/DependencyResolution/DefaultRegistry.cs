@@ -40,7 +40,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution
             For<IProviderAgreementStatusRepository>().Use<ProviderAgreementStatusRepository>();
             For<IContractFeedEventValidator>().Use<ContractFeedEventValidator>();
 
-            // ToDo: Implement overload for NLogLogger without IRequestContext 
+            // ToDo: Implement overload for NLogLogger without IRequestContext
             For<ILog>().Use(x => new NLogLogger(
                 x.ParentType,
                 new DummyRequestContext(),
