@@ -65,7 +65,10 @@
         "sharedKeyVaultName": {
             "type": "string"
         },
-        "appServiceAllowedIPs": {
+        "frontEndAccessRestrictions": {
+            "type": "array"
+        },
+        "backEndAccessRestrictions": {
             "type": "array"
         },
         "workerAccessRestrictions": {
@@ -286,7 +289,7 @@
                         "value": "[reference(concat(variables('apiAppServiceName'), '-app-service-certificate-', parameters('utcValue'))).outputs.certificateThumbprint.value]"
                     },
                     "ipSecurityRestrictions": {
-                        "value": "[parameters('appServiceAllowedIPs')]"
+                        "value": "[parameters('backEndAccessRestrictions')]"
                     }
                 }
             },
@@ -451,7 +454,7 @@
                         "value": "[reference(concat(variables('uiAppServiceName'), '-app-service-certificate-', parameters('utcValue'))).outputs.certificateThumbprint.value]"
                     },
                     "ipSecurityRestrictions": {
-                        "value": "[parameters('appServiceAllowedIPs')]"
+                        "value": "[parameters('frontEndAccessRestrictions')]"
                     }
                 }
             },
