@@ -1,9 +1,9 @@
 ﻿using System.Net.Http;
-using SFA.DAS.AutoConfiguration;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
@@ -15,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         {
             For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(c => GetHttpClient(c));
             For<INotificationsApiClientConfiguration>().Use(c => c.GetInstance<NotificationsApiClientConfiguration>());
-            For<NotificationsApiClientConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<NotificationsApiClientConfiguration>(ConfigurationKeys.NotificationsApiClient)).Singleton();
+            For<NotificationsApiClientConfiguration>().Use(c => c.GetInstance<ProviderApprenticeshipsServiceConfiguration>().NotificationApi).Singleton();
 
         }
 
