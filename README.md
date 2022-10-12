@@ -51,8 +51,8 @@ values (NEWID(), '10005077', 'CONTRACT', 'LEVY', 'APPROVED', 'APPROVED', GETDATE
 - Close all instances of "Microsoft Azure storage emulator" within the system tray
 
 - Set SFA.DAS.ProviderApprenticeshipService startup projects to 'Multiple startup projects'. The **only** projects set to start should be: 
-  - SFA.DAS.API (PAS Account API)
-  - SFA.DAS.CloudService (PAS Web UI)
+  - SFA.DAS.PAS.Account.Api
+  - SFA.DAS.ProviderApprenticeshipsService.Web
   
 - Clean the SFA.DAS.ProviderApprenticeshipService solution
 - Rebuild the SFA.DAS.ProviderApprenticeshipService solution
@@ -61,9 +61,9 @@ values (NEWID(), '10005077', 'CONTRACT', 'LEVY', 'APPROVED', 'APPROVED', GETDATE
 
 - Run the SFA.DAS.ProviderApprenticeshipService.sln, it may several minutes to start the first time.
 
-- Once both solutions are fully running, open an incognito tab in any browser and navigate to the "misc helpers" website (Get link from Approvals / Continous Improvement team)
-- Under the "Providers" tab, click the "Test-U-Good Provider Home" link. Select Pirean PreProd and you will be directed to a log in page.
-- Enter the log in credentials (can be found on the "misc helpers" website) and you should be taken to the "Apprentices" section landing page.
+- Once both solutions are fully running, open an incognito tab in any browser and navigate to the port it is running on [https://localhost:{port}/account].Account details can be found on the "Repositories and Environments" confluence page.
+- Under the "Sign in with one of these accounts" option, Select Pirean PreProd and you will be directed to a log in page.
+- Enter the log in credentials (can be found on the "Repositories and Environments" confluence page) and you should be taken to the "Apprentices" section landing page.
 
 **Note**: The above startup projects are Azure Cloud Service Definitions and the Service Configurations (*.cscfg) contain the per environment configuration settings; e.g. the 'EnvironmentName' which is used to locate the Azure Storage Configuration Settings.
 
@@ -74,7 +74,6 @@ values (NEWID(), '10005077', 'CONTRACT', 'LEVY', 'APPROVED', 'APPROVED', GETDATE
   - [SFA.DAS.ProviderApprenticeshipService](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-providerapprenticeshipservice/SFA.DAS.ProviderApprenticeshipsService.json)
   - [SFA.DAS.ProviderUrlHelper](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-providerapprenticeshipservice/SFA.DAS.ProviderUrlHelper.json)
   - [SFA.DAS.ContractAgreements](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-providerapprenticeshipservice/SFA.DAS.ContractAgreements.json)
-  - [SFA.DAS.PasAccountApiClient](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-providerapprenticeshipservice/SFA.DAS.PASAccountApiClient.json)
 
 - Create a Configuration table in your (Development) local Azure Storage account.
 - Add a row to the Configuration table for each configuraiton json file with fields:
