@@ -61,7 +61,7 @@ values (NEWID(), '10005077', 'CONTRACT', 'LEVY', 'APPROVED', 'APPROVED', GETDATE
 
 - Run the SFA.DAS.ProviderApprenticeshipService.sln, it may several minutes to start the first time.
 
-- Once both solutions are fully running, open an incognito tab in any browser and navigate to the port it is running on [https://localhost:{port}/account].Account details can be found on the "Repositories and Environments" confluence page.
+- Once both solutions are fully running, open an incognito tab in any browser and navigate to the port it is running on [https://localhost:{port}/account]. Account details can be found on the "Repositories and Environments" confluence page.
 - Under the "Sign in with one of these accounts" option, Select Pirean PreProd and you will be directed to a log in page.
 - Enter the log in credentials (can be found on the "Repositories and Environments" confluence page) and you should be taken to the "Apprentices" section landing page.
 
