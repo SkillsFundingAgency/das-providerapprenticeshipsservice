@@ -673,9 +673,6 @@
     <Compile Include="Models\Agreement\AgreementsViewModel.cs" />
     <Compile Include="Models\Agreement\CommitmentAgreement.cs" />
     <Compile Include="Models\AgreementNotSignedViewModel.cs" />
-    <Compile Include="Models\ApprenticeshipFiltersViewModel.cs" />
-    <Compile Include="Models\ApprenticeshipListItemGroupViewModel.cs" />
-    <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprovedViewModel.cs" />
     <Compile Include="Models\LegalEntityViewModel.cs" />
     <Compile Include="Models\TransferFundedListItemViewModel.cs" />
@@ -683,7 +680,6 @@
     <Compile Include="Models\CohortsViewModel.cs" />
     <Compile Include="Models\CommitmentListItemViewModel.cs" />
     <Compile Include="Models\CommitmentListViewModel.cs" />
-    <Compile Include="Models\CommitmentDetailsViewModel.cs" />
     <Compile Include="Models\AccountHomeViewModel.cs" />
     <Compile Include="Models\IPaginationViewModel.cs" />
     <Compile Include="Models\Settings\NotificationSettingsViewModel.cs" />
@@ -700,8 +696,6 @@
     <Compile Include="Models\ViewModelBase.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
     <Compile Include="Orchestrators\AgreementOrchestrator.cs" />
-    <Compile Include="Orchestrators\FiltersCookieManager.cs" />
-    <Compile Include="Orchestrators\IFiltersCookieManager.cs" />
     <Compile Include="Orchestrators\Mappers\AgreementMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IAgreementMapper.cs" />
     <Compile Include="Routing\RouteDataKeys.cs" />
