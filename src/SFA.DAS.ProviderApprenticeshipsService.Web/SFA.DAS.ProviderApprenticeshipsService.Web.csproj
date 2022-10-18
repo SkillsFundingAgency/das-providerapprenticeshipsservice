@@ -677,9 +677,6 @@
     <Compile Include="Models\LegalEntityViewModel.cs" />
     <Compile Include="Models\TransferFundedListItemViewModel.cs" />
     <Compile Include="Models\TransferFundedViewModel.cs" />
-    <Compile Include="Models\CohortsViewModel.cs" />
-    <Compile Include="Models\CommitmentListItemViewModel.cs" />
-    <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\AccountHomeViewModel.cs" />
     <Compile Include="Models\IPaginationViewModel.cs" />
     <Compile Include="Models\Settings\NotificationSettingsViewModel.cs" />
@@ -691,7 +688,6 @@
     <Compile Include="Models\Types\FlashMessageViewModel.cs" />
     <Compile Include="Models\Types\SaveOrSendStatus.cs" />
     <Compile Include="Models\SignInUserModel.cs" />
-    <Compile Include="Models\SubmitCommitmentViewModel.cs" />
     <Compile Include="Models\SystemDetails.cs" />
     <Compile Include="Models\ViewModelBase.cs" />
     <Compile Include="Orchestrators\AccountOrchestrator.cs" />
@@ -851,7 +847,6 @@
     <Content Include="Views\Commitment\Details.cshtml" />
     <Content Include="Views\Commitment\Edit.cshtml" />
     <Content Include="Views\Commitment\AddApprentice.cshtml" />
-    <Content Include="Views\Commitment\Submit.cshtml" />
     <Content Include="Views\Shared\ValidationSummary.cshtml" />
     <Content Include="Views\Commitment\FinishEditing.cshtml" />
     <Content Include="Views\Commitment\Acknowledgement.cshtml" />
@@ -868,8 +863,6 @@
     <Content Include="Views\BulkUpload\UploadApprenticeshipsUnsuccessful.cshtml" />
     <Content Include="Views\Error\_InvalidState.cshtml" />
     <Content Include="Views\Commitment\AgreementNotSigned.cshtml" />
-    <Content Include="Views\Commitment\Cohorts.cshtml" />
-    <Content Include="Views\Commitment\RequestList.cshtml" />
     <Content Include="Views\Commitment\RequestApproved.cshtml" />
     <Content Include="Views\ManageApprentices\Index.cshtml" />
     <Content Include="Views\ManageApprentices\Details.cshtml" />
@@ -898,7 +891,6 @@
     <Content Include="Views\Agreement\Agreements.cshtml" />
     <Content Include="Views\Shared\ChooseEmployer.cshtml" />
     <Content Include="Views\Shared\ConfirmEmployer.cshtml" />
-    <Content Include="Views\Commitment\DraftList.cshtml" />
     <Content Include="src\sass\screen-ie6.scss" />
     <Content Include="src\sass\screen-ie7.scss" />
     <Content Include="src\sass\screen-ie8.scss" />
