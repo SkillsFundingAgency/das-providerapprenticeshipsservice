@@ -677,20 +677,13 @@
     <Compile Include="Models\ApprenticeshipListItemGroupViewModel.cs" />
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprovedViewModel.cs" />
-    <Compile Include="Models\BulkUpload\CsvRecordMap.cs" />
-    <Compile Include="Models\ConfirmEmployerViewModel.cs" />
-    <Compile Include="Models\ChooseEmployerViewModel.cs" />
     <Compile Include="Models\LegalEntityViewModel.cs" />
     <Compile Include="Models\TransferFundedListItemViewModel.cs" />
     <Compile Include="Models\TransferFundedViewModel.cs" />
-    <Compile Include="Models\CourseDataLockViewModel.cs" />
     <Compile Include="Models\CohortsViewModel.cs" />
-    <Compile Include="Models\CommitmentDeleteViewModel.cs" />
     <Compile Include="Models\CommitmentListItemViewModel.cs" />
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentDetailsViewModel.cs" />
-    <Compile Include="Models\DeleteConfirmationViewModel.cs" />
-    <Compile Include="Models\FinishEditingViewModel.cs" />
     <Compile Include="Models\AccountHomeViewModel.cs" />
     <Compile Include="Models\IPaginationViewModel.cs" />
     <Compile Include="Models\Settings\NotificationSettingsViewModel.cs" />
@@ -700,7 +693,6 @@
     <Compile Include="Models\Types\DateTimeViewModel.cs" />
     <Compile Include="Models\Types\FlashMessageSeverityLevel.cs" />
     <Compile Include="Models\Types\FlashMessageViewModel.cs" />
-    <Compile Include="Models\Types\EmployerSelectionAction.cs" />
     <Compile Include="Models\Types\SaveOrSendStatus.cs" />
     <Compile Include="Models\SignInUserModel.cs" />
     <Compile Include="Models\SubmitCommitmentViewModel.cs" />
@@ -716,17 +708,9 @@
     <Compile Include="Services\GetRoatpBetaProviderService.cs" />
     <Compile Include="Services\IGetRoatpBetaProviderService.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
-    <Compile Include="Models\BulkUpload\CsvRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestContext.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Validation\DeleteCohortConfirmationViewModelValidator.cs" />
-    <Compile Include="Validation\DeleteConfirmationViewModelValidator.cs" />
-    <Compile Include="Validation\FinishEditingViewModelValidator.cs" />
-    <Compile Include="Validation\Text\ApprenticeshipFileValidationText.cs" />
-    <Compile Include="Validation\Text\BulkUploadApprenticeshipValidationText.cs" />
-    <Compile Include="Validation\Text\WebApprenticeshipValidationText.cs" />
-    <Compile Include="Validation\Text\IApprenticeshipValidationErrorText.cs" />
     <Compile Include="Validation\Text\ValidationMessage.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -942,7 +926,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\CreateCohort\" />
     <Folder Include="Orchestrators\Formatters\" />
   </ItemGroup>
   <ItemGroup>
