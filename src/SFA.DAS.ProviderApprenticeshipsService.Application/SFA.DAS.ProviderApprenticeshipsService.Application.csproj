@@ -179,12 +179,6 @@
     <Reference Include="SFA.DAS.ProviderRelationships.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.ProviderRelationships.Types.4.0.3\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Reservations.Api.Client, Version=4.1.606.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Reservations.Api.Client.4.1.606\lib\net462\SFA.DAS.Reservations.Api.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="SFA.DAS.Reservations.Api.Types, Version=4.1.606.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Reservations.Api.Types.4.1.606\lib\netstandard2.0\SFA.DAS.Reservations.Api.Types.dll</HintPath>
-    </Reference>
     <Reference Include="StackExchange.Redis, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46">
       <HintPath>..\packages\StackExchange.Redis.2.2.4\lib\net461\StackExchange.Redis.dll</HintPath>
       <Private>True</Private>
@@ -415,9 +409,6 @@
     <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesHandler.cs" />
     <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesResponse.cs" />
-    <Compile Include="Queries\GetReservationValidation\GetReservationValidationHandler.cs" />
-    <Compile Include="Queries\GetReservationValidation\GetReservationValidationRequest.cs" />
-    <Compile Include="Queries\GetReservationValidation\GetReservationValidationResponse.cs" />
     <Compile Include="Queries\GetProviderHasRelationshipWithPermission\GetProviderHasRelationshipWithPermissionQueryHandler.cs" />
     <Compile Include="Queries\GetProviderHasRelationshipWithPermission\GetProviderHasRelationshipWithPermissionQueryRequest.cs" />
     <Compile Include="Queries\GetProviderHasRelationshipWithPermission\GetProviderHasRelationshipWithPermissionQueryResponse.cs" />
@@ -460,8 +451,6 @@
     <Compile Include="Domain\Commitment\CommitmentStatusCalculator.cs" />
     <Compile Include="Domain\Commitment\RequestStatus.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
-    <Compile Include="Extensions\CommitmentListItemExtensions.cs" />
-    <Compile Include="Extensions\CommitmentViewExtensions.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryHandler.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryRequest.cs" />
     <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryResponse.cs" />
