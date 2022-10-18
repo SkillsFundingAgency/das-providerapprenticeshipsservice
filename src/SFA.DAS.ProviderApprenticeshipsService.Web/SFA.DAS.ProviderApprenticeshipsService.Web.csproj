@@ -675,8 +675,6 @@
     <Compile Include="Models\AgreementNotSignedViewModel.cs" />
     <Compile Include="Models\ApprovedViewModel.cs" />
     <Compile Include="Models\LegalEntityViewModel.cs" />
-    <Compile Include="Models\TransferFundedListItemViewModel.cs" />
-    <Compile Include="Models\TransferFundedViewModel.cs" />
     <Compile Include="Models\AccountHomeViewModel.cs" />
     <Compile Include="Models\IPaginationViewModel.cs" />
     <Compile Include="Models\Settings\NotificationSettingsViewModel.cs" />
