@@ -424,10 +424,7 @@
     <Compile Include="Queries\GetClientContent\WhenIGetContentBanner.cs" />
     <Compile Include="Queries\GetCommitmentAgreements\WhenGettingCommitmentAgreements.cs" />
     <Compile Include="Queries\GetEmailOverlappingApprenticeships\WhenGettingEmailOverlappingApprenticeships.cs" />
-    <Compile Include="Queries\GetEmployerAccountLegalEntities\WhenIGetEmployerAccountLegalEntities.cs" />
     <Compile Include="Queries\GetProviderAgreement\WhenIGetProviderAgreement.cs" />
-    <Compile Include="Queries\GetBulkUploadFile\WhenIGetBulkUploadFile.cs" />
-    <Compile Include="Queries\GetPendingApprenticeshipUpdate\WhenIGetPendingApprenticeshipUpdate.cs" />
     <Compile Include="Queries\GetProviderHasRelationshipWithPermission\WhenIGetProviderHasRelationshipWithPermission.cs" />
     <Compile Include="Queries\GetProviderRelationshipsWithPermission\WhenIGetProviderRelationshipsWithPermission.cs" />
     <Compile Include="Queries\UpdateNotificationSettings\WhenGettingUserSettings.cs" />
