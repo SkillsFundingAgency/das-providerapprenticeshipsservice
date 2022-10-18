@@ -448,9 +448,6 @@
     <Compile Include="Domain\Commitment\CommitmentStatusCalculator.cs" />
     <Compile Include="Domain\Commitment\RequestStatus.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
-    <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryHandler.cs" />
-    <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryRequest.cs" />
-    <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryResponse.cs" />
     <Compile Include="Queries\GetAccountUsers\GetAccountUsersHandler.cs" />
     <Compile Include="Queries\GetAccountUsers\GetAccountUsersResponse.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommand.cs" />

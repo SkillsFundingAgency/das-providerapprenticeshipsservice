@@ -2,18 +2,9 @@
 
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcore3.1</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <UserSecretsId>838d1671-cd66-4f0d-b455-7fddfbcd58de</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AutoFixture" Version="4.17.0" />
-    <PackageReference Include="Moq" Version="4.16.1" />
-    <PackageReference Include="NUnit" Version="3.13.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.PAS.Account.Api.ClientV2\SFA.DAS.PAS.Account.Api.ClientV2.csproj" />
-  </ItemGroup>
 
 </Project>
