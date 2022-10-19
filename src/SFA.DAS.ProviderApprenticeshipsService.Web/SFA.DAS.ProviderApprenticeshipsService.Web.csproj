@@ -668,7 +668,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Models\Agreement\AgreementsViewModel.cs" />
     <Compile Include="Models\Agreement\CommitmentAgreement.cs" />
     <Compile Include="Models\AccountHomeViewModel.cs" />
@@ -850,9 +849,7 @@
     <Content Include="Views\Error\_InvalidState.cshtml" />
     <Content Include="Views\Error\_Error403.cshtml" />
     <Content Include="Views\Shared\_ModalMessage.cshtml" />
-    <Content Include="Views\Shared\EditApprenticeship.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
-    <Content Include="Views\Shared\Pagination.cshtml" />
     <Content Include="Views\Account\NotificationSettings.cshtml" />
     <Content Include="Views\Account\NotificationUnsubscribe.cshtml" />
     <Content Include="Views\Agreement\Agreements.cshtml" />

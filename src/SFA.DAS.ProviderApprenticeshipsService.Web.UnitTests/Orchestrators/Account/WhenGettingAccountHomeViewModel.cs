@@ -8,7 +8,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
@@ -39,12 +38,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
                         Provider = new Provider()
                     }
                 });
-
-            _mediator.Setup(x =>
-                    x.Send(It.Is<GetProviderHasRelationshipWithPermissionQueryRequest>(r =>
-                            r.Permission == Operation.CreateCohort),
-                    It.IsAny<CancellationToken>()))
-                .ReturnsAsync(() => new GetProviderHasRelationshipWithPermissionQueryResponse());
 
             _currentDateTime = new Mock<ICurrentDateTime>();
 

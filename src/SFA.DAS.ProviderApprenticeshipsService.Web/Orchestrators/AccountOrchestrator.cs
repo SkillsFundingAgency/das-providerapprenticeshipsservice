@@ -9,14 +9,12 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotificati
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UnsubscribeNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderHasRelationshipWithPermission;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
-using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
@@ -138,17 +136,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     }
                 }
             };
-        }
-
-        public async Task<bool> ProviderHasPermission(long providerId, Operation permission)
-        {
-            var permissionResponse = await _mediator.Send(new GetProviderHasRelationshipWithPermissionQueryRequest
-            {
-                Permission = permission,
-                ProviderId = providerId
-            });
-
-            return permissionResponse.HasPermission;
         }
     }
 }

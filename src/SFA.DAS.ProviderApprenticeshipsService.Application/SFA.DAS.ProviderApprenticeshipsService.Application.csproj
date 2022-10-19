@@ -399,12 +399,6 @@
     <Compile Include="Queries\GetClientContent\GetClientContentRequest.cs" />
     <Compile Include="Queries\GetClientContent\GetClientContentRequestHandler.cs" />
     <Compile Include="Queries\GetClientContent\GetClientContentResponse.cs" />
-    <Compile Include="Queries\GetProviderHasRelationshipWithPermission\GetProviderHasRelationshipWithPermissionQueryHandler.cs" />
-    <Compile Include="Queries\GetProviderHasRelationshipWithPermission\GetProviderHasRelationshipWithPermissionQueryRequest.cs" />
-    <Compile Include="Queries\GetProviderHasRelationshipWithPermission\GetProviderHasRelationshipWithPermissionQueryResponse.cs" />
-    <Compile Include="Queries\GetProviderRelationshipsWithPermission\GetProviderRelationshipsWithPermissionQueryHandler.cs" />
-    <Compile Include="Queries\GetProviderRelationshipsWithPermission\GetProviderRelationshipsWithPermissionQueryRequest.cs" />
-    <Compile Include="Queries\GetProviderRelationshipsWithPermission\GetProviderRelationshipsWithPermissionQueryResponse.cs" />
     <Compile Include="Services\ApprenticeshipInfoService.cs" />
     <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationHandler.cs" />
     <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationRequest.cs" />

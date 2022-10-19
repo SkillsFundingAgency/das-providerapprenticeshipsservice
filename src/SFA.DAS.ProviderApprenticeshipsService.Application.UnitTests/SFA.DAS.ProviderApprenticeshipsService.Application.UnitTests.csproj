@@ -405,8 +405,6 @@
     <Compile Include="Queries\GetClientContent\WhenIGetContentBanner.cs" />
     <Compile Include="Queries\GetCommitmentAgreements\WhenGettingCommitmentAgreements.cs" />
     <Compile Include="Queries\GetProviderAgreement\WhenIGetProviderAgreement.cs" />
-    <Compile Include="Queries\GetProviderHasRelationshipWithPermission\WhenIGetProviderHasRelationshipWithPermission.cs" />
-    <Compile Include="Queries\GetProviderRelationshipsWithPermission\WhenIGetProviderRelationshipsWithPermission.cs" />
     <Compile Include="Queries\UpdateNotificationSettings\WhenGettingUserSettings.cs" />
     <Compile Include="Queries\GetUserNotificationSettings\WhenUpdatingUserSettings.cs" />
     <Compile Include="Services\ApprenticeshipInfoServiceTests.cs" />
