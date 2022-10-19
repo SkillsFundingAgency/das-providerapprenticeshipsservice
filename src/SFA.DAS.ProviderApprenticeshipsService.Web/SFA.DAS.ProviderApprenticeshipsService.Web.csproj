@@ -855,10 +855,6 @@
     <Content Include="Views\Shared\Pagination.cshtml" />
     <Content Include="Views\Account\NotificationSettings.cshtml" />
     <Content Include="Views\Account\NotificationUnsubscribe.cshtml" />
-    <Content Include="Views\DataLock\UpdateDataLock.cshtml" />
-    <Content Include="Views\DataLock\ConfirmDataLockChanges.cshtml" />
-    <Content Include="Views\DataLock\RequestRestart.cshtml" />
-    <Content Include="Views\DataLock\ConfirmRestart.cshtml" />
     <Content Include="Views\Agreement\Agreements.cshtml" />
     <Content Include="src\sass\screen-ie6.scss" />
     <Content Include="src\sass\screen-ie7.scss" />
