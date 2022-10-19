@@ -389,28 +389,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\BulkUploadApprenticeships\WhenBulkUploading.cs" />
-    <Compile Include="Commands\BulkUploadApprenticeships\WhenValidatingCommand.cs" />
-    <Compile Include="Commands\CreateApprenticeshipUpdate\WhenCreatingApprenticeshipUpdate.cs" />
-    <Compile Include="Commands\CreateApprenticeshipUpdate\WhenValidatingCommand.cs" />
-    <Compile Include="Commands\CreateCommitment\WhenCreatingCommitment.cs" />
-    <Compile Include="Commands\CreateCommitment\WhenValidatingCommand.cs" />
-    <Compile Include="Commands\DeleteApprenticeship\WhenDeletingApprentice.cs" />
-    <Compile Include="Commands\DeleteCommitment\WhenDeletingCohort.cs" />
-    <Compile Include="Commands\DeleteApprenticeship\WhenValidatingCommand.cs" />
-    <Compile Include="Commands\DeleteCommitment\WhenValidatingCommand.cs" />
     <Compile Include="Commands\DeleteRegisteredUser\WhenDeletingRegisteredUser.cs" />
     <Compile Include="Commands\DeleteRegisteredUser\WhenValidatingCommand.cs" />
-    <Compile Include="Commands\ReviewApprenticeshipUpdate\WhenReviewingApprenticeshipUpdate.cs" />
-    <Compile Include="Commands\ReviewApprenticeshipUpdate\WhenValidatingCommand.cs" />
-    <Compile Include="Commands\SaveBulkUploadFile\WhenSavingBulkUploadFile.cs" />
     <Compile Include="Commands\SendNotification\WhenHandlingTheCommand.cs" />
     <Compile Include="Commands\SendNotification\WhenValidatingCommand.cs" />
-    <Compile Include="Commands\SubmitCommitment\WhenApprovingAsSecondApprover.cs" />
-    <Compile Include="Commands\SubmitCommitment\WhenApprovingAsFirstApprover.cs" />
-    <Compile Include="Commands\SubmitCommitment\WhenValidatingCommand.cs" />
-    <Compile Include="Commands\UndoApprenticeshipUpdate\WhenUndoingApprenticeshipUpdate.cs" />
-    <Compile Include="Commands\UndoApprenticeshipUpdate\WhenValidatingCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\WhenUpsertingRegisteredUser.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\WhenValidatingCommand.cs" />
     <Compile Include="Extensions\DateTimeExtensions\WhenGettingFirstOfMonth.cs" />

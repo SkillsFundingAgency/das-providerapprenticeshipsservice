@@ -390,10 +390,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\CreateCommitment\CreateCommitmentCommand.cs" />
-    <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandHandler.cs" />
-    <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandResponse.cs" />
-    <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandValidator.cs" />
     <Compile Include="Commands\DeleteRegisteredUser\DeleteRegisteredUserCommand.cs" />
     <Compile Include="Commands\DeleteRegisteredUser\DeleteRegisteredUserCommandHandler.cs" />
     <Compile Include="Commands\DeleteRegisteredUser\DeleteRegisteredUserCommandValidator.cs" />
@@ -410,32 +406,11 @@
     <Compile Include="Queries\GetProviderRelationshipsWithPermission\GetProviderRelationshipsWithPermissionQueryRequest.cs" />
     <Compile Include="Queries\GetProviderRelationshipsWithPermission\GetProviderRelationshipsWithPermissionQueryResponse.cs" />
     <Compile Include="Services\ApprenticeshipInfoService.cs" />
-    <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileCommand.cs" />
-    <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileHandler.cs" />
-    <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileValidator.cs" />
     <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationHandler.cs" />
     <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationRequest.cs" />
-    <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommand.cs" />
-    <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommandHandler.cs" />
-    <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommandValidator.cs" />
-    <Compile Include="Commands\BulkUploadApprenticeships\BulkUploadApprenticeshipsCommand.cs" />
-    <Compile Include="Commands\BulkUploadApprenticeships\BulkUploadApprenticeshipsCommandHandler.cs" />
-    <Compile Include="Commands\BulkUploadApprenticeships\BulkUploadApprenticeshipsCommandValidator.cs" />
-    <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommand.cs" />
-    <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommandHandler.cs" />
-    <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommandValidator.cs" />
-    <Compile Include="Commands\DeleteApprenticeship\DeleteApprenticeshipCommand.cs" />
-    <Compile Include="Commands\DeleteApprenticeship\DeleteApprenticeshipCommandHandler.cs" />
-    <Compile Include="Commands\DeleteApprenticeship\DeleteApprenticeshipCommandValidator.cs" />
-    <Compile Include="Commands\DeleteCommitment\DeleteCommitmentCommand.cs" />
-    <Compile Include="Commands\DeleteCommitment\DeleteCommitmentCommandHandler.cs" />
-    <Compile Include="Commands\DeleteCommitment\DeleteCommitmentCommandValidator.cs" />
     <Compile Include="Commands\SendNotification\SendNotificationCommand.cs" />
     <Compile Include="Commands\SendNotification\SendNotificationCommandHandler.cs" />
     <Compile Include="Commands\SendNotification\SendNotificationCommandValidator.cs" />
-    <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommand.cs" />
-    <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandHandler.cs" />
-    <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandValidator.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsCommand.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsHandler.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsValidator.cs" />
@@ -447,9 +422,6 @@
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Queries\GetAccountUsers\GetAccountUsersHandler.cs" />
     <Compile Include="Queries\GetAccountUsers\GetAccountUsersResponse.cs" />
-    <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommand.cs" />
-    <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommandHandler.cs" />
-    <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommandValidator.cs" />
     <Compile Include="InvalidRequestException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetProviderAgreement\GetProviderAgreementQueryHandler.cs" />
