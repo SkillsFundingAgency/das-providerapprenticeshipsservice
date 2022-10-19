@@ -16,7 +16,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Services;
 using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
