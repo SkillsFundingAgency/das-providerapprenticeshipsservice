@@ -669,11 +669,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\HtmlExtensions.cs" />
-    <Compile Include="Models\AcknowledgementViewModel.cs" />
     <Compile Include="Models\Agreement\AgreementsViewModel.cs" />
     <Compile Include="Models\Agreement\CommitmentAgreement.cs" />
-    <Compile Include="Models\AgreementNotSignedViewModel.cs" />
-    <Compile Include="Models\ApprovedViewModel.cs" />
     <Compile Include="Models\AccountHomeViewModel.cs" />
     <Compile Include="Models\IPaginationViewModel.cs" />
     <Compile Include="Models\Settings\NotificationSettingsViewModel.cs" />
