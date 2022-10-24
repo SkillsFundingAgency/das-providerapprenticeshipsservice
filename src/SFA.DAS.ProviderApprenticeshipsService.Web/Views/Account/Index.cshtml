@@ -107,8 +107,8 @@
                     <p>Create a traineeship vacancy and manage applications.</p>
                 </div>
             }
-            
-            @if(showCourseManagementLink)
+
+            @if (showCourseManagementLink)
             {
                 <div class="box">
                     <h2 class="heading-medium">
@@ -121,6 +121,13 @@
                     </ul>
                 </div>
             }
+
+            <div class="box">
+                <h2 class="heading-medium">
+                    <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/subscriptions")">Developer APIs</a>
+                </h2>
+                <p>Integrate our APIs to help with recruitment or to track apprentice progress using your own systems. You can display adverts on multiple sites or automatically update training records.</p>
+            </div>
 
         </div>
     </div>
