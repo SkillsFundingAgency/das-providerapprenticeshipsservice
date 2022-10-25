@@ -60,6 +60,12 @@ namespace SFA.DAS.ProviderUrlHelper.Framework
             return linkGenerator.CourseManagementLink(path);
         }
 
+        public static string APIManagementLink(this UrlHelper helper, string path)
+        {
+            var linkGenerator = GetLinkGenerator();
+            return linkGenerator.APIManagementLink(path);
+        }
+
         private static ILinkGenerator GetLinkGenerator()
         {
             var linkGenerator = ServiceLocator.Get<ILinkGenerator>();
