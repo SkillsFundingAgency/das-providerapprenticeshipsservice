@@ -107,8 +107,8 @@
                     <p>Create a traineeship vacancy and manage applications.</p>
                 </div>
             }
-            
-            @if(showCourseManagementLink)
+
+            @if (showCourseManagementLink)
             {
                 <div class="box">
                     <h2 class="heading-medium">
@@ -121,6 +121,13 @@
                     </ul>
                 </div>
             }
+
+            <div class="box">
+                <h2 class="heading-medium">
+                    <a href="@Url.ProviderEarningsLink($"{Model.ProviderId}")">Apps Indicative earnings report</a>
+                </h2>
+                <p>View your expected earnings based on your submission to the Digital apprenticeship service.</p>
+            </div>
 
         </div>
     </div>
