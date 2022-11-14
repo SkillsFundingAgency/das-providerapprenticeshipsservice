@@ -11,51 +11,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
 {
     public class ApprenticeshipInfoService : IApprenticeshipInfoService
     {
-        private const string StandardsKey = "Standards";
-
-        private readonly ICache _cache;
         private readonly ICommitmentsV2ApiClient _commitmentsV2Api;
-        private readonly ITrainingProgrammeApi _trainingProgrammeApi;
         
-        public ApprenticeshipInfoService(ICache cache,
-            ICommitmentsV2ApiClient commitmentsV2Api,
-            ITrainingProgrammeApi trainingProgrammeApi)
+        public ApprenticeshipInfoService(ICommitmentsV2ApiClient commitmentsV2Api)
         {
-            _cache = cache;
             _commitmentsV2Api = commitmentsV2Api;
-            _trainingProgrammeApi = trainingProgrammeApi;
-        }
-
-        public async Task<StandardsView> GetStandards(bool refreshCache = false)
-        {
-            if (!await _cache.ExistsAsync(StandardsKey) || refreshCache)
-            {
-                var standards = (await _trainingProgrammeApi.GetAllStandards()).TrainingProgrammes.ToList().OrderBy(x => x.Name).ToList();
-
-                await _cache.SetCustomValueAsync(StandardsKey, new StandardsView
-                {
-                    CreationDate = DateTime.UtcNow,
-                    Standards = standards
-                });
-            }
-
-            return await _cache.GetCustomValueAsync<StandardsView>(StandardsKey);
-        }
-        
-        public async Task<AllTrainingProgrammesView> GetAll(bool refreshCache = false)
-        {
-            if (!await _cache.ExistsAsync(nameof(AllTrainingProgrammesView)) || refreshCache)
-            {
-                var trainingProgrammes = (await _trainingProgrammeApi.GetAll()).TrainingProgrammes.ToList().OrderBy(x => x.Name).ToList();
-
-                await _cache.SetCustomValueAsync(nameof(AllTrainingProgrammesView), new AllTrainingProgrammesView
-                {
-                    CreatedDate = DateTime.UtcNow,
-                    TrainingProgrammes = trainingProgrammes
-                });
-            }
-
-            return await _cache.GetCustomValueAsync<AllTrainingProgrammesView>(nameof(AllTrainingProgrammesView));
         }
 
         public async Task<ProvidersView> GetProvider(long ukprn)
