@@ -6,7 +6,6 @@ using MediatR;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Helpers;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientContent;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Helpers;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions

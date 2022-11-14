@@ -1,12 +1,11 @@
-﻿using AutoFixture;
+﻿using System;
+using System.Threading.Tasks;
+using AutoFixture;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using System.Threading.Tasks;
-using SFA.DAS.CommitmentsV2.Api.Types.Responses;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
-using System;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Services
 {
@@ -16,17 +15,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Services
         public ApprenticeshipInfoService _sut;
 
         private Mock<ICommitmentsV2ApiClient> _commitmentsV2ApiClient;
-        private Mock<ICache> _cache;
-        private Mock<ITrainingProgrammeApi> _trainingProgrammeApi;
 
         [SetUp]
         public void Arrange()
         {
             _commitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
-            _cache = new Mock<ICache>();
-            _trainingProgrammeApi = new Mock<ITrainingProgrammeApi>();
 
-            _sut = new ApprenticeshipInfoService(_cache.Object, _commitmentsV2ApiClient.Object, _trainingProgrammeApi.Object);
+            _sut = new ApprenticeshipInfoService(_commitmentsV2ApiClient.Object);
         }
 
         [Test]

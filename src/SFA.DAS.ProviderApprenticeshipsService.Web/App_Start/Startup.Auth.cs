@@ -64,9 +64,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                 return;
             }
 
-            var showReservations = await accountOrchestrator.ProviderHasPermission(parsedUkprn, Operation.CreateCohort);
-
-            identity.AddClaim(new Claim(DasClaimTypes.ShowReservations, showReservations.ToString(), "bool"));
             identity.MapClaimToRoles();
 
             await orchestrator.SaveIdentityAttributes(id, parsedUkprn, displayName, email);
