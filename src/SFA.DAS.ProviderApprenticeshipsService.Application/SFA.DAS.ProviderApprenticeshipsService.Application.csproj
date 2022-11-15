@@ -179,12 +179,6 @@
     <Reference Include="SFA.DAS.ProviderRelationships.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.ProviderRelationships.Types.4.0.3\lib\netstandard2.0\SFA.DAS.ProviderRelationships.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Reservations.Api.Client, Version=4.1.606.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Reservations.Api.Client.4.1.606\lib\net462\SFA.DAS.Reservations.Api.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="SFA.DAS.Reservations.Api.Types, Version=4.1.606.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Reservations.Api.Types.4.1.606\lib\netstandard2.0\SFA.DAS.Reservations.Api.Types.dll</HintPath>
-    </Reference>
     <Reference Include="StackExchange.Redis, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46">
       <HintPath>..\packages\StackExchange.Redis.2.2.4\lib\net461\StackExchange.Redis.dll</HintPath>
       <Private>True</Private>
@@ -396,10 +390,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\CreateCommitment\CreateCommitmentCommand.cs" />
-    <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandHandler.cs" />
-    <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandResponse.cs" />
-    <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandValidator.cs" />
     <Compile Include="Commands\DeleteRegisteredUser\DeleteRegisteredUserCommand.cs" />
     <Compile Include="Commands\DeleteRegisteredUser\DeleteRegisteredUserCommandHandler.cs" />
     <Compile Include="Commands\DeleteRegisteredUser\DeleteRegisteredUserCommandValidator.cs" />
@@ -409,48 +399,12 @@
     <Compile Include="Queries\GetClientContent\GetClientContentRequest.cs" />
     <Compile Include="Queries\GetClientContent\GetClientContentRequestHandler.cs" />
     <Compile Include="Queries\GetClientContent\GetClientContentResponse.cs" />
-    <Compile Include="Queries\GetEmailOverlapingApprenticeships\GetEmailOverlappingApprenticeshipsQueryHandler.cs" />
-    <Compile Include="Queries\GetEmailOverlapingApprenticeships\GetEmailOverlappingApprenticeshipsQueryRequest.cs" />
-    <Compile Include="Queries\GetEmailOverlapingApprenticeships\GetEmailOverlappingApprenticeshipsQueryResponse.cs" />
-    <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesHandler.cs" />
-    <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesRequest.cs" />
-    <Compile Include="Queries\GetEmployerAccountLegalEntities\GetEmployerAccountLegalEntitiesResponse.cs" />
-    <Compile Include="Queries\GetReservationValidation\GetReservationValidationHandler.cs" />
-    <Compile Include="Queries\GetReservationValidation\GetReservationValidationRequest.cs" />
-    <Compile Include="Queries\GetReservationValidation\GetReservationValidationResponse.cs" />
-    <Compile Include="Queries\GetProviderHasRelationshipWithPermission\GetProviderHasRelationshipWithPermissionQueryHandler.cs" />
-    <Compile Include="Queries\GetProviderHasRelationshipWithPermission\GetProviderHasRelationshipWithPermissionQueryRequest.cs" />
-    <Compile Include="Queries\GetProviderHasRelationshipWithPermission\GetProviderHasRelationshipWithPermissionQueryResponse.cs" />
-    <Compile Include="Queries\GetProviderRelationshipsWithPermission\GetProviderRelationshipsWithPermissionQueryHandler.cs" />
-    <Compile Include="Queries\GetProviderRelationshipsWithPermission\GetProviderRelationshipsWithPermissionQueryRequest.cs" />
-    <Compile Include="Queries\GetProviderRelationshipsWithPermission\GetProviderRelationshipsWithPermissionQueryResponse.cs" />
     <Compile Include="Services\ApprenticeshipInfoService.cs" />
-    <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileCommand.cs" />
-    <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileHandler.cs" />
-    <Compile Include="Commands\SaveBulkUploadFile\SaveBulkUploadFileValidator.cs" />
     <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationHandler.cs" />
     <Compile Include="Commands\UnsubscribeNotification\UnsubscribeNotificationRequest.cs" />
-    <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommand.cs" />
-    <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommandHandler.cs" />
-    <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommandValidator.cs" />
-    <Compile Include="Commands\BulkUploadApprenticeships\BulkUploadApprenticeshipsCommand.cs" />
-    <Compile Include="Commands\BulkUploadApprenticeships\BulkUploadApprenticeshipsCommandHandler.cs" />
-    <Compile Include="Commands\BulkUploadApprenticeships\BulkUploadApprenticeshipsCommandValidator.cs" />
-    <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommand.cs" />
-    <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommandHandler.cs" />
-    <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommandValidator.cs" />
-    <Compile Include="Commands\DeleteApprenticeship\DeleteApprenticeshipCommand.cs" />
-    <Compile Include="Commands\DeleteApprenticeship\DeleteApprenticeshipCommandHandler.cs" />
-    <Compile Include="Commands\DeleteApprenticeship\DeleteApprenticeshipCommandValidator.cs" />
-    <Compile Include="Commands\DeleteCommitment\DeleteCommitmentCommand.cs" />
-    <Compile Include="Commands\DeleteCommitment\DeleteCommitmentCommandHandler.cs" />
-    <Compile Include="Commands\DeleteCommitment\DeleteCommitmentCommandValidator.cs" />
     <Compile Include="Commands\SendNotification\SendNotificationCommand.cs" />
     <Compile Include="Commands\SendNotification\SendNotificationCommandHandler.cs" />
     <Compile Include="Commands\SendNotification\SendNotificationCommandValidator.cs" />
-    <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommand.cs" />
-    <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandHandler.cs" />
-    <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandValidator.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsCommand.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsHandler.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsValidator.cs" />
@@ -460,39 +414,16 @@
     <Compile Include="Domain\Commitment\CommitmentStatusCalculator.cs" />
     <Compile Include="Domain\Commitment\RequestStatus.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
-    <Compile Include="Extensions\CommitmentListItemExtensions.cs" />
-    <Compile Include="Extensions\CommitmentViewExtensions.cs" />
-    <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryHandler.cs" />
-    <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryRequest.cs" />
-    <Compile Include="Queries\ApprenticeshipSearch\ApprenticeshipSearchQueryResponse.cs" />
     <Compile Include="Queries\GetAccountUsers\GetAccountUsersHandler.cs" />
     <Compile Include="Queries\GetAccountUsers\GetAccountUsersResponse.cs" />
-    <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommand.cs" />
-    <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommandHandler.cs" />
-    <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommandValidator.cs" />
     <Compile Include="InvalidRequestException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetProviderAgreement\GetProviderAgreementQueryHandler.cs" />
     <Compile Include="Queries\GetProviderAgreement\GetProviderAgreementQueryRequest.cs" />
     <Compile Include="Queries\GetProviderAgreement\GetProviderAgreementQueryResponse.cs" />
-    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLockQueryRequest.cs" />
-    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLocksQueryResponse.cs" />
-    <Compile Include="Queries\GetApprenticeshipDataLocks\GetApprenticeshipDataLockSummaryQueryHandler.cs" />
-    <Compile Include="Queries\GetBulkUploadFile\GetBulkUploadFileQueryHandler.cs" />
-    <Compile Include="Queries\GetBulkUploadFile\GetBulkUploadFileQueryRequest.cs" />
-    <Compile Include="Queries\GetBulkUploadFile\GetBulkUploadFileQueryResponse.cs" />
-    <Compile Include="Queries\GetCommitments\GetCommitmentsQueryHandler.cs" />
-    <Compile Include="Queries\GetCommitments\GetCommitmentsQueryRequest.cs" />
-    <Compile Include="Queries\GetCommitments\GetCommitmentsQueryResponse.cs" />
     <Compile Include="Queries\GetCommitmentAgreements\GetCommitmentAgreementsQueryHandler.cs" />
     <Compile Include="Queries\GetCommitmentAgreements\GetCommitmentAgreementsQueryRequest.cs" />
     <Compile Include="Queries\GetCommitmentAgreements\GetCommitmentAgreementsQueryResponse.cs" />
-    <Compile Include="Queries\GetOverlappingApprenticeships\GetOverlappingApprenticeshipsQueryHandler.cs" />
-    <Compile Include="Queries\GetOverlappingApprenticeships\GetOverlappingApprenticeshipsQueryRequest.cs" />
-    <Compile Include="Queries\GetOverlappingApprenticeships\GetOverlappingApprenticeshipsQueryResponse.cs" />
-    <Compile Include="Queries\GetPendingApprenticeshipUpdate\GetPendingApprenticeshipUpdateQueryResponse.cs" />
-    <Compile Include="Queries\GetPendingApprenticeshipUpdate\GetPendingApprenticeshipUpdateQueryHandler.cs" />
-    <Compile Include="Queries\GetPendingApprenticeshipUpdate\GetPendingApprenticeshipUpdateQueryRequest.cs" />
     <Compile Include="Queries\GetProvider\GetProviderQueryHandler.cs" />
     <Compile Include="Queries\GetProvider\GetProviderQueryRequest.cs" />
     <Compile Include="Queries\GetProvider\GetProviderQueryResponse.cs" />
