@@ -60,10 +60,10 @@ namespace SFA.DAS.ProviderUrlHelper.Framework
             return linkGenerator.CourseManagementLink(path);
         }
 
-        public static string ProviderEarningsLink(this UrlHelper helper, string path)
+        public static string ProviderFundingLink(this UrlHelper helper, string path)
         {
             var linkGenerator = GetLinkGenerator();
-            return linkGenerator.ProviderEarningsLink(path);
+            return linkGenerator.ProviderFundingLink(path);
         }
 
         private static ILinkGenerator GetLinkGenerator()

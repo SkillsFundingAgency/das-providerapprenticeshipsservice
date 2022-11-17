@@ -75,10 +75,10 @@ namespace SFA.DAS.ProviderUrlHelper
             return Action(baseUrl, path);
         }
 
-        public string ProviderEarningsLink(string path)
+        public string ProviderFundingLink(string path)
         {
             var configuration = _lazyProviderConfiguration.Value;
-            var baseUrl = configuration.ProviderEarningsBaseUrl;
+            var baseUrl = configuration.ProviderFundingBaseUrl;
             return Action(baseUrl, path);
         }
 
