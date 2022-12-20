@@ -239,6 +239,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\AccountApiConfiguration.cs" />
+    <Compile Include="Features\ProviderFeature.cs" />
     <Compile Include="Interfaces\IBackgroundNotificationService.cs" />
     <Compile Include="Interfaces\ICacheStorageService.cs" />
     <Compile Include="Interfaces\IContentApiClient.cs" />
