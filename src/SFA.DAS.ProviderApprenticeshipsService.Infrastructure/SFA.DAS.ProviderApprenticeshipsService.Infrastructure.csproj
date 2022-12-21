@@ -416,6 +416,7 @@
     <Compile Include="Caching\TaskSynchronizationScope.cs" />
     <Compile Include="Configuration\ConfigurationPolicy.cs" />
     <Compile Include="Configuration\CurrentDatePolicy.cs" />
+    <Compile Include="Configuration\DfESignInServiceConfiguration.cs" />
     <Compile Include="Configuration\ProviderApprenticeshipsServiceConfiguration.cs" />
     <Compile Include="Data\BaseRepository.cs" />
     <Compile Include="Data\HttpClientWrapper.cs" />
@@ -439,6 +440,7 @@
     <Compile Include="Services\CloudConfigurationBooleanValueProvider.cs" />
     <Compile Include="Services\CookieStorageService.cs" />
     <Compile Include="Services\CurrentDateTime.cs" />
+    <Compile Include="Services\DfESignInService.cs" />
     <Compile Include="Services\EmployerAccountService.cs" />
     <Compile Include="Services\FeatureToggleService.cs" />
     <Compile Include="Services\IAccountLegalEntityPublicHashingService.cs" />

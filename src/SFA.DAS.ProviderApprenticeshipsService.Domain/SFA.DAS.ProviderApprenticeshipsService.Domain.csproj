@@ -243,6 +243,8 @@
     <Compile Include="Interfaces\ICacheStorageService.cs" />
     <Compile Include="Interfaces\IContentApiClient.cs" />
     <Compile Include="Interfaces\IContentClientApiConfiguration.cs" />
+    <Compile Include="Interfaces\IDfESignInService.cs" />
+    <Compile Include="Interfaces\IDfESignInServiceConfiguration.cs" />
     <Compile Include="Interfaces\IEmployerAccountService.cs" />
     <Compile Include="Interfaces\ICommitmentsV2ApiClient.cs" />
     <Compile Include="Interfaces\IRoatpCourseManagementWebConfiguration.cs" />
@@ -268,6 +270,7 @@
     <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Interfaces\IUserSettingsRepository.cs" />
     <Compile Include="Models\Apprenticeship\FundingStatus.cs" />
+    <Compile Include="Models\DfESignInConfig.cs" />
     <Compile Include="Models\FeatureToggles\ProviderCreateCohortV2.cs" />
     <Compile Include="Models\FeatureToggles\ApprenticeDetailsV2.cs" />
     <Compile Include="Models\FeatureToggles\ProviderManageApprenticesV2.cs" />

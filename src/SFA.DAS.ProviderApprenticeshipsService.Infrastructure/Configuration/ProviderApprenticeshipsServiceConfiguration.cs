@@ -30,6 +30,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string ContentApplicationId { get; set; }
         public int DefaultCacheExpirationInMinutes { get; set; }
         public ZenDeskConfiguration ZenDeskSettings { get; set; }
+        
+        /// <summary>
+        /// Gets or Sets property UseDfESignIn.
+        /// Property responsible for holding the DfESignIn toggle switch value.
+        /// </summary>
+        public bool UseDfESignIn { get; set; } = false; 
     }
 
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration

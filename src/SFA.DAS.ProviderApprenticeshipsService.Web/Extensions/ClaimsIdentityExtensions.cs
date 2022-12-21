@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Constants;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 {
@@ -53,6 +54,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
             {
                 identity.AddClaim(new Claim(ClaimTypes.Role, role));
             }
+        }
+
+        public static string GetClaimValue(this ClaimsIdentity claimsIdentity, string claimName)
+        {
+            var claimValue = claimsIdentity.Claims.Where(c => c.Type.Contains(claimName)).Select(c => c.Value).SingleOrDefault();
+            return claimValue ?? string.Empty;
         }
     }
 }

@@ -33,6 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 c.Policies.Add(new ConfigurationPolicy<ProviderApprenticeshipsServiceConfiguration>("SFA.DAS.ProviderApprenticeshipsService"));
                 c.Policies.Add(new ConfigurationPolicy<AccountApiConfiguration>("SFA.DAS.EmployerAccountAPI"));
                 c.Policies.Add(new ConfigurationPolicy<RoatpCourseManagementWebConfiguration>("SFA.DAS.Roatp.CourseManagement.Web"));
+                c.Policies.Add(new ConfigurationPolicy<DfESignInServiceConfiguration>("SFA.DAS.Provider.DfeSignIn"));
                 c.Policies.Add<CurrentDatePolicy>();
                 c.AddRegistry<AuthorizationRegistry>();
                 c.AddRegistry<ProviderPermissionsAuthorizationRegistry>();
@@ -43,6 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 c.AddRegistry<EncodingRegistry>();
                 c.AddRegistry<ContentApiClientRegistry>();
                 c.AddRegistry<RoatpCourseManagementWebRegistry>();
+                c.AddRegistry<DfESignInApiClientRegistry>();
             });
         }
     }

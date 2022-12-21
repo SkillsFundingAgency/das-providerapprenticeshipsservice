@@ -1,10 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.WsFederation;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -17,10 +20,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     public class AccountController : BaseController
     {
         private readonly AccountOrchestrator _accountOrchestrator;
+        private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
 
-        public AccountController(AccountOrchestrator accountOrchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
+        public AccountController(AccountOrchestrator accountOrchestrator, ProviderApprenticeshipsServiceConfiguration configuration, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
         {
             _accountOrchestrator = accountOrchestrator;
+            _configuration = configuration;
         }
 
         [AllowAllRoles]
@@ -40,11 +45,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var callbackUrl = Url.Action("SignOutCallback", "Account", routeValues: null, protocol: Request.Url.Scheme);
 
-            var auth = Request.GetOwinContext().Authentication;
+            if (_configuration != null && _configuration.UseDfESignIn)
+            {
+                var authTypes = HttpContext.GetOwinContext().Authentication.GetAuthenticationTypes();
+                HttpContext.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = callbackUrl }, authTypes.Select(t => t.AuthenticationType).ToArray());
+            }
+            else
+            {
+                var auth = Request.GetOwinContext().Authentication;
 
-            auth.SignOut(
-                new AuthenticationProperties {RedirectUri = callbackUrl},
-                WsFederationAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
+                auth.SignOut(
+                    new AuthenticationProperties { RedirectUri = callbackUrl },
+                    WsFederationAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
+            }
         }
 
         [AllowAllRoles]
