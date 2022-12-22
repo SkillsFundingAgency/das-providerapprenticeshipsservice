@@ -18,6 +18,7 @@ using System.Configuration;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using OpenIdConnectMessage = Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectMessage;
 using WsFederationMessage = Microsoft.IdentityModel.Protocols.WsFederation.WsFederationMessage;
 
@@ -43,7 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             if (providerApprenticeshipsServiceConfig != null && providerApprenticeshipsServiceConfig.UseDfESignIn)
             {
                 var oidcRedirectUrl = ConfigurationManager.AppSettings["IdamsRealm"] + "sign-in";
-                var oidcOptions = new OpenIdConnectAuthenticationOptions
+                app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
                 {
                     Authority = dfESignInConfig.DfEOidcConfiguration.BaseUrl,
                     ClientId = dfESignInConfig.DfEOidcConfiguration.ClientId,
@@ -51,7 +52,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                     GetClaimsFromUserInfoEndpoint = true,
                     PostLogoutRedirectUri = oidcRedirectUrl,
                     RedirectUri = oidcRedirectUrl,
-                    ResponseType = "code",
+                    ResponseType = OpenIdConnectResponseType.Code,
                     Scope = "openid email profile organisation organisationid",
                     Notifications = new OpenIdConnectAuthenticationNotifications
                     {
@@ -59,13 +60,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                         {
                             await PopulateAccountsClaim(notification, logger, authenticationOrchestrator);
                         }
-                    }
-                };
-                app.UseOpenIdConnectAuthentication(oidcOptions);
+                    },
+                });
             }
             else
             {
-                var options = new WsFederationAuthenticationOptions
+                app.UseWsFederationAuthentication(new WsFederationAuthenticationOptions
                 {
                     Wtrealm = ConfigurationManager.AppSettings["IdamsRealm"],
                     MetadataAddress = ConfigurationManager.AppSettings["IdamsADFSMetadata"],
@@ -73,8 +73,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                     {
                         SecurityTokenValidated = notification => SecurityTokenValidated(notification, logger, authenticationOrchestrator, accountOrchestrator)
                     }
-                };
-                app.UseWsFederationAuthentication(options);
+                });
             }
         }
         
@@ -102,7 +101,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             await orchestrator.SaveIdentityAttributes(id, parsedUkprn, displayName, email);
         }
 
-        private async Task PopulateAccountsClaim(SecurityTokenValidatedNotification<OpenIdConnectMessage, OpenIdConnectAuthenticationOptions> notification, IProviderCommitmentsLogger logger,
+        /// <summary>
+        /// Method to populate/add the OpenIdConnect claims to the initial identity.
+        /// </summary>
+        /// <param name="notification">Security Token.</param>
+        /// <param name="logger">Logger.</param>
+        /// <param name="orchestrator">Authentication Orchestrator.</param>
+        /// <returns>Task.</returns>
+        private static async Task PopulateAccountsClaim(SecurityTokenValidatedNotification<OpenIdConnectMessage, OpenIdConnectAuthenticationOptions> notification, IProviderCommitmentsLogger logger,
             AuthenticationOrchestrator orchestrator)
         {
             logger.Info("SecurityTokenValidated notification called");
@@ -116,7 +122,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
             var ukPrn = userOrganization.UkPrn != null ? Convert.ToInt64(userOrganization.UkPrn) : 0;
 
-            // if the UserId and User Org Id are available then fetch & add rest of additional claims.
+            // when the UserId and UserOrgId are available then fetch additional claims from DfESignIn Api Service.
             if (!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(userOrganization.Id.ToString()))
                 await DfEPublicApi(notification, userId, userOrganization.Id.ToString());
 
@@ -126,8 +132,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimsIdentity.DefaultNameClaimType, ukPrn.ToString()));
             notification.AuthenticationTicket.Identity.AddClaim(new Claim(CustomClaimsIdentity.DisplayName, displayName));
             notification.AuthenticationTicket.Identity.AddClaim(new Claim(CustomClaimsIdentity.UkPrn, ukPrn.ToString()));
-          
+
             notification.AuthenticationTicket.Identity.MapClaimToRoles();
+
+            logger.Info("Identity information added to the user repository.");
 
             // store the identity information in user repository.
             await orchestrator.SaveIdentityAttributes(userId, ukPrn, displayName, emailAddress);
