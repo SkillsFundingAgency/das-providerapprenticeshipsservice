@@ -11,6 +11,9 @@ using System.Net.Http.Headers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
+    /// <summary>
+    /// DfESignInApiClientRegistry class to register the dependencies with IOC container.
+    /// </summary>
     public class DfESignInApiClientRegistry : Registry
     {
         public DfESignInApiClientRegistry()
@@ -23,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         }
 
         /// <summary>
-        /// method to create the http client and inject it from constructor.
+        /// Method to create the http client and inject it from constructor.
         /// </summary>
         /// <returns>HttpClient.</returns>
         private static HttpClient CreateClient()
@@ -35,14 +38,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         }
 
         /// <summary>
-        /// method to generate the access token for DfESignIn Service.
+        /// Method to generate the access token for DfESignIn Service.
         /// </summary>
         /// <returns>string.</returns>
         private static string AccessToken()
         {
             var tokenBuilder = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ITokenBuilder>();
             if (tokenBuilder != null) return tokenBuilder.CreateToken();
-            throw new ApplicationException("Token Builder could not be null");
+            throw new NullReferenceException($"{nameof(tokenBuilder)} could not be null");
         }
     }
 }

@@ -44,17 +44,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var callbackUrl = Url.Action("SignOutCallback", "Account", routeValues: null, protocol: Request.Url.Scheme);
 
+            // check if the DfESignIn configuration exist and enabled.
             if (_configuration != null && _configuration.UseDfESignIn)
             {
                 var authTypes = HttpContext.GetOwinContext().Authentication.GetAuthenticationTypes();
-                HttpContext.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = callbackUrl }, authTypes.Select(t => t.AuthenticationType).ToArray());
+                HttpContext.GetOwinContext().Authentication.SignOut(
+                    new AuthenticationProperties { RedirectUri = callbackUrl },
+                    authTypes.Select(t => t.AuthenticationType).ToArray());
                 Response.Redirect("/");
             }
             else
             {
-                var auth = Request.GetOwinContext().Authentication;
-
-                auth.SignOut(
+                Request.GetOwinContext().Authentication.SignOut(
                     new AuthenticationProperties { RedirectUri = callbackUrl },
                     WsFederationAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
             }
