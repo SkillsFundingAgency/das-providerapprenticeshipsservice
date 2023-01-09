@@ -10,5 +10,6 @@
         public string EmployerDemandBaseUrl { get ; set ; }
         public string TraineeshipBaseUrl { get; set; }
         public string CourseManagementBaseUrl { get; set; }
+        public string APIManagementBaseUrl { get; set; }
     }
 }
