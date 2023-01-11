@@ -14,6 +14,7 @@ namespace SFA.DAS.ProviderUrlHelper
         string EmployerDemandLink(string path);
         string CourseManagementLink(string path);
         string ProviderFundingLink(string path);
+        string APIManagementLink(string path);
     }
 }
 #endif

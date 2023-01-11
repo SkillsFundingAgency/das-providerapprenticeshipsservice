@@ -11,5 +11,6 @@
         public string TraineeshipBaseUrl { get; set; }
         public string CourseManagementBaseUrl { get; set; }
         public string ProviderFundingBaseUrl { get; set; }
+        public string APIManagementBaseUrl { get; set; }
     }
 }
