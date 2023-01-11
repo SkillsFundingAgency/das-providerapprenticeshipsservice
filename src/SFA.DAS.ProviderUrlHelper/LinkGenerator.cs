@@ -79,7 +79,8 @@ namespace SFA.DAS.ProviderUrlHelper
         {
             var configuration = _lazyProviderConfiguration.Value;
             var baseUrl = configuration.ProviderFundingBaseUrl;
-		}
+            return Action(baseUrl, path);
+        }
 
         public string APIManagementLink(string path)
         {

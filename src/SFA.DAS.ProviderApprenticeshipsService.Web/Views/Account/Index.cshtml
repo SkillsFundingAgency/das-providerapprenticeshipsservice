@@ -3,14 +3,13 @@
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 @using SFA.DAS.ProviderUrlHelper.Framework;
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
-
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.AccountHomeViewModel
 
 @{
     ViewBag.Title = Model.ProviderName;
     ViewBag.PageId = "account-home";
-    
-    var showCourseManagementLink = HttpContext.Current.Items.Contains(RoatpConstants.IsCourseManagementLinkEnabled ) && HttpContext.Current.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true);
+
+    var showCourseManagementLink = HttpContext.Current.Items.Contains(RoatpConstants.IsCourseManagementLinkEnabled) && HttpContext.Current.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true);
 }
 
 @if (!string.IsNullOrEmpty(Model.Message))
@@ -123,8 +122,8 @@
                     </ul>
                 </div>
             }
-            
-            @if (AuthorizationService.IsAuthorized(ProviderFeature.FlexiblePaymentsPilot))
+
+            @if (Model.ShowEarningsReport)
             {
                 <div class="box">
                     <h2 class="heading-medium">
