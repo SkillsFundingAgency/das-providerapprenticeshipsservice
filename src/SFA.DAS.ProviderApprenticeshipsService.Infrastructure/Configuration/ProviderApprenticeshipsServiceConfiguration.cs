@@ -30,6 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string ContentApplicationId { get; set; }
         public int DefaultCacheExpirationInMinutes { get; set; }
         public ZenDeskConfiguration ZenDeskSettings { get; set; }
+        public SFA.DAS.Authorization.ProviderFeatures.Configuration.ProviderFeaturesConfiguration Features { get; set; }
     }
 
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration

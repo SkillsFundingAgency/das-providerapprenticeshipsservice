@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Web;
 using System.Web.Routing;
 using SFA.DAS.Authorization.Context;
+using SFA.DAS.Authorization.ProviderFeatures.Context;
 using SFA.DAS.Authorization.ProviderPermissions.Context;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
@@ -29,15 +30,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
             var request = _httpContext.Request;
 
             var authorizationContext = new AuthorizationContext();
+            
+            var ukprn = GetProviderId(request.RequestContext.RouteData.Values); // alternative source: long.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
+            var accountLegalEntityId = GetAccountLegalEntityId(request.Params);
+            if (accountLegalEntityId != null)
+            {
+                authorizationContext.AddProviderPermissionValues(accountLegalEntityId.Value, ukprn);
 
-            authorizationContext.AddProviderPermissionValues(
-                GetAccountLegalEntityId(request.Params),
-                GetProviderId(request.RequestContext.RouteData.Values));    // alternative source: long.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
+            }
+
+            var userEmail = GetUserEmail();
+            if (userEmail != null)
+            {
+                authorizationContext.AddProviderFeatureValues(ukprn, userEmail);
+            }
 
             return authorizationContext;
         }
 
-        private long GetAccountLegalEntityId(NameValueCollection parameters)
+        private long? GetAccountLegalEntityId(NameValueCollection parameters)
         {
             try
             {
@@ -45,7 +56,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
 
                 if(accountLegalEntityPublicHashedId == null)
                 {
-                    throw new Exception("AuthorizationContextProvider error - Unable to extract AccountLegalEntityId");
+                    return null;
                 }
                 return _accountLegalEntityPublicHashingService.DecodeValue(accountLegalEntityPublicHashedId);
                 
@@ -55,7 +66,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
                 _log.Warn(ex, "Unable to extract AccountLegalEntityId");
             }
 
-            throw new Exception("AuthorizationContextProvider error - Unable to extract AccountLegalEntityId");
+            return null;
         }
 
         private long GetProviderId(RouteValueDictionary routeValueDictionary)
@@ -69,6 +80,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
                 return providerId;
 
             throw new Exception("AuthorizationContextProvider error - Unable to extract ProviderId");
+        }
+
+        private string GetUserEmail()
+        {
+            return _httpContext.User.Identity.GetClaim("http://schemas.portal.com/mail");
         }
     }
 }

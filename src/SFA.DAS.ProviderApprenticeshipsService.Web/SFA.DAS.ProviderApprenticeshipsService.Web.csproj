@@ -288,6 +288,9 @@
     <Reference Include="SFA.DAS.Authorization.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Authorization.Mvc.6.0.97\lib\net462\SFA.DAS.Authorization.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.Authorization.ProviderFeatures, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Authorization.ProviderFeatures.6.0.97\lib\netstandard2.0\SFA.DAS.Authorization.ProviderFeatures.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Authorization.ProviderPermissions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Authorization.ProviderPermissions.6.0.97\lib\netstandard2.0\SFA.DAS.Authorization.ProviderPermissions.dll</HintPath>
     </Reference>

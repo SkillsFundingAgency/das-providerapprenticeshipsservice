@@ -23,6 +23,7 @@ using FeatureToggle;
 using FluentValidation;
 using MediatR;
 using SFA.DAS.Authorization.Context;
+using SFA.DAS.Authorization.Features.Services;
 using SFA.DAS.Authorization.Handlers;
 using SFA.DAS.Authorization.ProviderPermissions.Handlers;
 using SFA.DAS.Configuration;
@@ -72,6 +73,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             ConfigureHashingService(config);
             For<IProviderAgreementStatusConfiguration>().Use(config);
             For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
+            For<SFA.DAS.Authorization.ProviderFeatures.Configuration.ProviderFeaturesConfiguration>().Use(config.Features);
+            For<IFeatureTogglesService<DAS.Authorization.ProviderFeatures.Models.ProviderFeatureToggle>>().Use<FeatureTogglesService<DAS.Authorization.ProviderFeatures.Configuration.ProviderFeaturesConfiguration, DAS.Authorization.ProviderFeatures.Models.ProviderFeatureToggle>>();
 
             For<ICache>().Use<InMemoryCache>(); //RedisCache
             For<IAgreementStatusQueryRepository>().Use<ProviderAgreementStatusRepository>();

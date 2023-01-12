@@ -19,6 +19,7 @@ using StructureMap;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.Authorization.DependencyResolution.StructureMap;
+using SFA.DAS.Authorization.ProviderFeatures.DependencyResolution.StructureMap;
 using SFA.DAS.Authorization.ProviderPermissions.DependencyResolution.StructureMap;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
@@ -43,6 +44,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 c.AddRegistry<EncodingRegistry>();
                 c.AddRegistry<ContentApiClientRegistry>();
                 c.AddRegistry<RoatpCourseManagementWebRegistry>();
+                c.AddRegistry<ProviderFeaturesAuthorizationRegistry>();
             });
         }
     }
