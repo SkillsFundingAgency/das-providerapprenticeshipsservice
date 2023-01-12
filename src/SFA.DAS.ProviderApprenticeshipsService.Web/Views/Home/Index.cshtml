@@ -1,38 +1,27 @@
-﻿@using SFA.DAS.ProviderUrlHelper
-@{
+﻿@{
     ViewBag.Title = "Manage apprenticeships on behalf of employers";
     ViewBag.PageId = "home-page";
     ViewBag.HideNavBar = true;
 }
-
-@if (DateTime.UtcNow < new DateTime(2018,10,22,8,0,0))
-{
-    <div class="info-summary" tabindex="-1">
-        <h3 class="heading-medium">Scheduled maintenance</h3>
-        <p>The apprenticeship service will be undergoing scheduled maintenance over the weekend of 20 and 21 October 2018. You may experience some service disruption during this time. We expect the service to be fully operational by 8am on 22 October.</p>
-    </div>
-}
-
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Manage apprenticeships on behalf of employers</h1>
-
-        <p>This service is for training providers registered with the apprenticeship service to work with employers to:</p>
+        <h1 class="heading-large">Apprenticeship service for training providers: sign in or register for an account</h1>
+        <p>
+            <div class="panel panel-border-wide">
+                <p>To access this service, you must be approved as a main provider or employer provider on the <a href="https://www.gov.uk/guidance/register-of-apprenticeship-training-providers">register as an apprenticeship training provider</a>.</p>
+            </div>
+        </p>
+        <p>Use this service to:</p>
         <ul class="list list-bullet">
-            <li>recruit apprentices</li>
-            <li>add details of the apprentices they're going to train</li>
-            <li>manage details of the apprentices they're currently training</li>
+            <li>add and manage apprentices you’re training</li>
+            <li>reserve apprenticeship funding for non-levy employers</li>
+            <li>invite employers to create an apprenticeship service account</li>
+            <li>create and manage vacancies to recruit apprentices on behalf of employers</li>
+            <li>view and respond to employer requests for training</li>
         </ul>
-
-        <h2 class="heading-medium">Before you start</h2>
-        <p>You need to have an account with the government’s Information Management Services system (IdAMS) to use this.</p>
-        <p>If your organisation doesn't already have an IdAMS account, you’ll get your account details when you <a href="https://www.gov.uk/guidance/register-of-apprenticeship-training-providers" target="_blank" rel="external">register as an apprenticeship training provider</a>.</p>
-        <p>If your organisation does already have an IdAMS account, an account super user from your organisation will need to give you access to the apprenticeship service.</p>
-
+        <p>You'll need a DfE Sign-in to use this service. If you don't have a DfE Sign-in, you can create one at the next step.</p>
         <div class="form-group">
-            <a href="/signin" class="button button-start" title="Start now" aria-label="Start now">Start now</a>
+            <a href="/account" class="button button-start" title="Start now" aria-label="Start now">Start now</a>
         </div>
-
-
     </div>
 </div>

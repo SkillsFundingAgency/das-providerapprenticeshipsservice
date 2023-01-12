@@ -1,17 +1,11 @@
-﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using System.Web.Mvc;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [AllowAllRoles]
-    public class HomeController : BaseController
+    public class HomeController : Controller
     {
-        public HomeController(ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
-        {
-        }
-
         [Route("~/help", Name = "help")]
         public ActionResult Help()
         {
@@ -21,8 +15,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("~/", Name = "home")]
         public ActionResult Index()
         {
-            if (User.Identity.IsAuthenticated) return RedirectToRoute("account-home");
-
             return View();
         }
 

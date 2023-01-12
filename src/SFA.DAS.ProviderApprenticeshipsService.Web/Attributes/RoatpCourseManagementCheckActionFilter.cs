@@ -17,6 +17,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            // skip the global filter RoatpCourseManagementCheckActionFilter attribute for the controllers and action methods.
+            if (!filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(RoatpCourseManagementCheckActionFilter), true)
+                && !filterContext.ActionDescriptor.IsDefined(typeof(RoatpCourseManagementCheckActionFilter), true))
+            {
+                return;
+            }
+
             var ukprn = filterContext.HttpContext.GetClaimValue("http://schemas.portal.com/ukprn");
             
              if (string.IsNullOrEmpty(ukprn) || !int.TryParse(ukprn, out var ukprnValue ))
