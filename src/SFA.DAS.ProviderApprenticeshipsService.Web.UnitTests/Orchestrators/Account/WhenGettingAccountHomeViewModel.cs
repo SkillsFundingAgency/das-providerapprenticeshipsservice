@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using FeatureToggle;
 using FluentAssertions;
 using MediatR;
 using Moq;
@@ -12,9 +11,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Features;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
-using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Account
 {
@@ -24,7 +21,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
         private AccountOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ICurrentDateTime> _currentDateTime;
-        private Mock<IFeatureToggleService> _featureToggleService;
         private Mock<IAuthorizationService> _authorizationService;
 
         [SetUp]
@@ -44,15 +40,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
 
             _currentDateTime = new Mock<ICurrentDateTime>();
 
-            _featureToggleService = new Mock<IFeatureToggleService>();
-            var featureToggle = new Mock<IFeatureToggle>();
-            _featureToggleService.Setup(x => x.Get<Traineeships>()).Returns(featureToggle.Object);
             _authorizationService = new Mock<IAuthorizationService>();
 
             _orchestrator = new AccountOrchestrator(
                 _mediator.Object,
                 Mock.Of<ILog>(),
-                _featureToggleService.Object,
                 _authorizationService.Object
             );
         }
@@ -67,17 +59,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
             model.ShowAcademicYearBanner.Should().Be(expectShowBanner);
         }
 
-        [TestCase(true, true)]
-        [TestCase(false, false)]
-        public async Task Then_Set_Traineeship_Enabled_Flag(bool featureToggleSetting, bool expectedResult)
+        [Test]
+        public async Task Then_Set_Traineeship_Enabled_Flag()
         {
-            var cloudConfigToggleProviderMock = new Mock<IBooleanToggleValueProvider>();
-            cloudConfigToggleProviderMock.Setup(x => x.EvaluateBooleanToggleValue(It.IsAny<Traineeships>())).Returns(featureToggleSetting);
-            _featureToggleService.Setup(x => x.Get<Traineeships>()).Returns(new Traineeships { ToggleValueProvider = cloudConfigToggleProviderMock.Object });
-            
             var model = await _orchestrator.GetAccountHomeViewModel(1);
 
-            model.ShowTraineeshipLink.Should().Be(expectedResult);
+            model.ShowTraineeshipLink.Should().Be(true);
         }
 
         [TestCase(true)]

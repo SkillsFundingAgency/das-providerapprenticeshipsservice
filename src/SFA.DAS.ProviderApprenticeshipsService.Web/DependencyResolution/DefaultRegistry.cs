@@ -19,7 +19,6 @@ using System;
 using System.Configuration;
 using System.Reflection;
 using System.Web;
-using FeatureToggle;
 using FluentValidation;
 using MediatR;
 using SFA.DAS.Authorization.Context;
@@ -88,9 +87,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
             For<IAuthorizationHandler>().Use<AuthorizationHandler>();
-
-            ConfigureFeatureToggle();
-
+            
             RegisterMediator();
 
             ConfigureProviderRelationshipsApiClient();
@@ -98,12 +95,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             ConfigureLogging();
 
             For<EncodingConfig>().Use(x => GetEncodingConfig(environment, configurationRepository));
-        }
-
-        private void ConfigureFeatureToggle()
-        {
-            For<IBooleanToggleValueProvider>().Use<CloudConfigurationBooleanValueProvider>();
-            For<IFeatureToggleService>().Use<FeatureToggleService>();
         }
 
         private void ConfigureLogging()

@@ -44,12 +44,6 @@
       <HintPath>..\packages\Dapper.Contrib.1.50.0\lib\net45\Dapper.Contrib.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FeatureToggle, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FeatureToggle.4.0.2\lib\net461\FeatureToggle.dll</HintPath>
-    </Reference>
-    <Reference Include="FeatureToggle.Common, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FeatureToggle.Common.4.0.2\lib\netstandard1.4\FeatureToggle.Common.dll</HintPath>
-    </Reference>
     <Reference Include="Hashids.net, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Hashids.net.1.2.2\lib\net45\Hashids.net.dll</HintPath>
       <Private>True</Private>
@@ -464,11 +458,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AcademicYearDateProvider.cs" />
     <Compile Include="Services\BackgroundNotificationService.cs" />
-    <Compile Include="Services\CloudConfigurationBooleanValueProvider.cs" />
     <Compile Include="Services\CookieStorageService.cs" />
     <Compile Include="Services\CurrentDateTime.cs" />
     <Compile Include="Services\EmployerAccountService.cs" />
-    <Compile Include="Services\FeatureToggleService.cs" />
     <Compile Include="Services\IAccountLegalEntityPublicHashingService.cs" />
     <Compile Include="Services\IPublicHashingService.cs" />
     <Compile Include="Services\PublicHashingService.cs" />
