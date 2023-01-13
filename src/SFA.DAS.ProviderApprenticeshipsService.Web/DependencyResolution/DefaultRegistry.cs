@@ -63,6 +63,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                     scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
                     scan.Exclude(t => t.GetInterface(nameof(IAuthorizationHandler)) != null);
+                    //scan.ExcludeType<DefaultAuthorizationContextProvider>();
                 });
 
             var environment = GetAndStoreEnvironment();

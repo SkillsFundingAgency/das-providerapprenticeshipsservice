@@ -73,7 +73,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
         {
             long providerId;
 
-            if (long.TryParse(_httpContext.User.Identity.GetClaim("http://schemas.portal.com/ukprn"), out providerId))
+            if (long.TryParse(_httpContext.User.Identity.GetClaim(DasClaimTypes.Ukprn), out providerId))
                 return providerId;
 
             if (long.TryParse((string) routeValueDictionary[RouteDataKeys.ProviderId], out providerId))
@@ -84,7 +84,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
 
         private string GetUserEmail()
         {
-            return _httpContext.User.Identity.GetClaim("http://schemas.portal.com/mail");
+            return _httpContext.User.Identity.GetClaim(DasClaimTypes.Email);
         }
     }
 }
