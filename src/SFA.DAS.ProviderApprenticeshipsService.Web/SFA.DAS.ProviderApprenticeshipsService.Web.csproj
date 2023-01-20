@@ -69,12 +69,6 @@
     <Reference Include="FastMember.Signed, Version=1.3.0.0, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
       <HintPath>..\packages\FastMember.Signed.1.3.0\lib\net45\FastMember.Signed.dll</HintPath>
     </Reference>
-    <Reference Include="FeatureToggle, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FeatureToggle.4.0.2\lib\net461\FeatureToggle.dll</HintPath>
-    </Reference>
-    <Reference Include="FeatureToggle.Common, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FeatureToggle.Common.4.0.2\lib\netstandard1.4\FeatureToggle.Common.dll</HintPath>
-    </Reference>
     <Reference Include="FluentValidation, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.8.0.0\lib\net45\FluentValidation.dll</HintPath>
     </Reference>
@@ -287,6 +281,12 @@
     </Reference>
     <Reference Include="SFA.DAS.Authorization.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Authorization.Mvc.6.0.97\lib\net462\SFA.DAS.Authorization.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Authorization.Features, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Authorization.Features.6.0.97\lib\netstandard2.0\SFA.DAS.Authorization.Features.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Authorization.ProviderFeatures, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Authorization.ProviderFeatures.6.0.97\lib\netstandard2.0\SFA.DAS.Authorization.ProviderFeatures.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Authorization.ProviderPermissions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Authorization.ProviderPermissions.6.0.97\lib\netstandard2.0\SFA.DAS.Authorization.ProviderPermissions.dll</HintPath>
