@@ -76,7 +76,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<ICache>().Use<InMemoryCache>(); //RedisCache
             For<IAgreementStatusQueryRepository>().Use<ProviderAgreementStatusRepository>();
             For<IAccountApiClient>().Use<AccountApiClient>();
-            For<IAccountApiConfiguration>().Use<Domain.Configuration.AccountApiConfiguration>();
 
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));

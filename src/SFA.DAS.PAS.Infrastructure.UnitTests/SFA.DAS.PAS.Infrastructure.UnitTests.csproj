@@ -255,7 +255,6 @@
     <Compile Include="NoopExecutionPolicy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CookieStorageTests\WhenIUseTheCookieStorageService.cs" />
-    <Compile Include="Services\EmployerAccountServiceUnitTests\WhenIGetLegalEntitiesLinkedToAnAccount.cs" />
     <Compile Include="Services\FeatureToggleTests\DummyFeatureToggle.cs" />
     <Compile Include="Services\FeatureToggleTests\WhenIGetASimpleFeatureToggle.cs" />
   </ItemGroup>

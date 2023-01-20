@@ -238,12 +238,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\AccountApiConfiguration.cs" />
     <Compile Include="Interfaces\IBackgroundNotificationService.cs" />
     <Compile Include="Interfaces\ICacheStorageService.cs" />
     <Compile Include="Interfaces\IContentApiClient.cs" />
     <Compile Include="Interfaces\IContentClientApiConfiguration.cs" />
-    <Compile Include="Interfaces\IEmployerAccountService.cs" />
     <Compile Include="Interfaces\ICommitmentsV2ApiClient.cs" />
     <Compile Include="Interfaces\IRoatpCourseManagementWebConfiguration.cs" />
     <Compile Include="Interfaces\IProviderRepository.cs" />
@@ -294,7 +292,9 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Configuration\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

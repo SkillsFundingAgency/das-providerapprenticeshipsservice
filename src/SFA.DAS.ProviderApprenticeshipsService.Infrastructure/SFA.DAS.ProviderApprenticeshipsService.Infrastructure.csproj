@@ -439,7 +439,6 @@
     <Compile Include="Services\CloudConfigurationBooleanValueProvider.cs" />
     <Compile Include="Services\CookieStorageService.cs" />
     <Compile Include="Services\CurrentDateTime.cs" />
-    <Compile Include="Services\EmployerAccountService.cs" />
     <Compile Include="Services\FeatureToggleService.cs" />
     <Compile Include="Services\IAccountLegalEntityPublicHashingService.cs" />
     <Compile Include="Services\IPublicHashingService.cs" />
