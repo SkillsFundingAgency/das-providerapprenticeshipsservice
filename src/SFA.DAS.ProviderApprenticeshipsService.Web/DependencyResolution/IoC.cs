@@ -18,6 +18,7 @@
 using StructureMap;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.Authorization.DependencyResolution.StructureMap;
+using SFA.DAS.Authorization.ProviderFeatures.DependencyResolution.StructureMap;
 using SFA.DAS.Authorization.ProviderPermissions.DependencyResolution.StructureMap;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
@@ -32,14 +33,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 c.Policies.Add(new ConfigurationPolicy<RoatpCourseManagementWebConfiguration>("SFA.DAS.Roatp.CourseManagement.Web"));
                 c.Policies.Add<CurrentDatePolicy>();
                 c.AddRegistry<AuthorizationRegistry>();
+                c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<ProviderPermissionsAuthorizationRegistry>();
                 c.AddRegistry<NotificationsRegistry>();
                 c.AddRegistry<CommitmentsRegistry>();
-                c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<LinkGeneratorRegistry>();
                 c.AddRegistry<EncodingRegistry>();
                 c.AddRegistry<ContentApiClientRegistry>();
                 c.AddRegistry<RoatpCourseManagementWebRegistry>();
+                c.AddRegistry<ProviderFeaturesAuthorizationRegistry>();
             });
         }
     }

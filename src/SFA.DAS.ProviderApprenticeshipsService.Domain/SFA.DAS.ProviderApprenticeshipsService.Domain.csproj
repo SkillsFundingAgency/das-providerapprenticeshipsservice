@@ -33,12 +33,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FeatureToggle, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FeatureToggle.4.0.2\lib\net461\FeatureToggle.dll</HintPath>
-    </Reference>
-    <Reference Include="FeatureToggle.Common, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FeatureToggle.Common.4.0.2\lib\netstandard1.4\FeatureToggle.Common.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNetCore.WebUtilities, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNetCore.WebUtilities.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.WebUtilities.dll</HintPath>
     </Reference>
@@ -232,6 +226,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\ProviderFeature.cs" />
     <Compile Include="Interfaces\IBackgroundNotificationService.cs" />
     <Compile Include="Interfaces\ICacheStorageService.cs" />
     <Compile Include="Interfaces\IContentApiClient.cs" />
@@ -253,17 +248,12 @@
     <Compile Include="Interfaces\ICache.cs" />
     <Compile Include="Interfaces\ICookieStorageService.cs" />
     <Compile Include="Interfaces\ICurrentDateTime.cs" />
-    <Compile Include="Interfaces\IFeatureToggleService.cs" />
     <Compile Include="Interfaces\IProviderAgreementStatusRepository.cs" />
     <Compile Include="Interfaces\IProviderCommitmentsLogger.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Interfaces\IUserSettingsRepository.cs" />
     <Compile Include="Models\Apprenticeship\FundingStatus.cs" />
-    <Compile Include="Models\FeatureToggles\ProviderCreateCohortV2.cs" />
-    <Compile Include="Models\FeatureToggles\ApprenticeDetailsV2.cs" />
-    <Compile Include="Models\FeatureToggles\ProviderManageApprenticesV2.cs" />
-    <Compile Include="Models\FeatureToggles\Traineeships.cs" />
     <Compile Include="Models\UserType.cs" />
     <Compile Include="Models\IdamsUser.cs" />
     <Compile Include="Models\Organisation\LegalEntity.cs" />
