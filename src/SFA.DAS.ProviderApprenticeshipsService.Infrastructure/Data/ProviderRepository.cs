@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
 using System;
@@ -7,12 +6,13 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using NLog;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
     public class ProviderRepository : BaseRepository, IProviderRepository
     {
-        public ProviderRepository(ProviderApprenticeshipsServiceConfiguration config, ILog logger) : base(
+        public ProviderRepository(ProviderApprenticeshipsServiceConfiguration config, ILogger logger) : base(
             config.DatabaseConnectionString, logger)
         {
         }

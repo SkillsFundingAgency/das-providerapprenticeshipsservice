@@ -4,19 +4,19 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using NLog;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
     public class UserRepository : BaseRepository, IUserRepository
     {
-        private readonly ILog _logger;       
+        private readonly ILogger _logger;       
 
-        public UserRepository(ProviderApprenticeshipsServiceConfiguration config, ILog logger) : base(config.DatabaseConnectionString, logger)
+        public UserRepository(ProviderApprenticeshipsServiceConfiguration config, ILogger logger) : base(config.DatabaseConnectionString, logger)
         {
             _logger = logger;
         }

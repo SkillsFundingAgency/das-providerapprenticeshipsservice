@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using SFA.DAS.NLog.Logger;
+using NLog;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging
 {
     public sealed class ProviderCommitmentsLogger : IProviderCommitmentsLogger
     {
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
 
-        public ProviderCommitmentsLogger(ILog logger)
+        public ProviderCommitmentsLogger(ILogger logger)
         {
             _logger = logger;
         }

@@ -8,11 +8,6 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="System.IdentityModel" />
-    <Reference Include="System.Transactions" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -27,7 +22,6 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="2.0.5" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="4.0.4.403061554" />
     <PackageReference Include="System.Spatial" Version="5.8.5" />
   </ItemGroup>
   <ItemGroup>
@@ -44,10 +38,8 @@
     <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Types" Version="7.85.0" />
     <PackageReference Include="SFA.DAS.Configuration.FileStorage" Version="1.0.0.53229" />
     <PackageReference Include="SFA.DAS.CosmosDb.Testing" Version="1.0.1" />
-    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.43" />
     <PackageReference Include="SFA.DAS.ProviderRelationships.Api.Client" Version="4.0.3" />
-    <PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930" />
     <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
     <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="4.4.1" />
     <PackageReference Include="System.Text.Encodings.Web" Version="5.0.1" />

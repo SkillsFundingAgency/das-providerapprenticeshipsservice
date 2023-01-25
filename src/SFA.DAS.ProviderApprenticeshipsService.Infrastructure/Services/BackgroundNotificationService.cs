@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using SFA.DAS.NLog.Logger;
+using NLog;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -10,10 +10,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 {
     public class BackgroundNotificationService : IBackgroundNotificationService
     {
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
         private readonly INotificationsApi _notificationsApi;
 
-        public BackgroundNotificationService(ILog logger, INotificationsApi notificationsApi)
+        public BackgroundNotificationService(ILogger logger, INotificationsApi notificationsApi)
         {
             _logger = logger;
             _notificationsApi = notificationsApi;

@@ -1,17 +1,17 @@
 ﻿using System;
+using NLog;
 using Polly;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies
 {
     [PolicyName(Name)]
     public class IdamsExecutionPolicy : ExecutionPolicy
     {
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
 
         public const string Name = "IDAMS Policy";
 
-        public IdamsExecutionPolicy(ILog logger)
+        public IdamsExecutionPolicy(ILogger logger)
         {
             _logger = logger;
 

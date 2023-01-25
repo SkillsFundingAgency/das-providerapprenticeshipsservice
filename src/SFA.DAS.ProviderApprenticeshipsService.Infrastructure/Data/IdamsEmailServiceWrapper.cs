@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SFA.DAS.NLog.Logger;
+using NLog;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Models;
 
@@ -17,12 +17,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
     public class IdamsEmailServiceWrapper : IIdamsEmailServiceWrapper
     {
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
         private readonly ProviderNotificationConfiguration _configuration;
         private readonly IHttpClientWrapper _httpClientWrapper;
 
         public IdamsEmailServiceWrapper(
-            ILog logger,
+            ILogger logger,
             ProviderApprenticeshipsServiceConfiguration configuration,
             IHttpClientWrapper httpClientWrapper)
         {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Azure.Services.AppAuthentication;
 using Polly;
 using Polly.Retry;
-using SFA.DAS.NLog.Logger;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -15,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
     {        
         private static string AzureResource = "https://database.windows.net/";
         private readonly string _connectionString;
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
         private readonly Policy _retryPolicy;        
         private static IList<int> _transientErrorNumbers = new List<int>
             {
@@ -25,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 -2, 20, 64, 233, 10053, 10054, 10060, 40143
             };
 
-    protected BaseRepository(string connectionString, ILog logger)
+    protected BaseRepository(string connectionString, ILogger logger)
         {
             _connectionString = connectionString;
             _logger = logger;            
