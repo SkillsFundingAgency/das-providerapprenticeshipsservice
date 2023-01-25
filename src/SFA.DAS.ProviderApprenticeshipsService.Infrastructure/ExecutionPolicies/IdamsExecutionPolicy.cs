@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using NLog;
 using Polly;
 
@@ -17,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.ExecutionPolicie
 
             var tooManyRequestsPolicy = CreateAsyncRetryPolicy<TooManyRequestsException>(9, new TimeSpan(0, 0, 1), OnRetryableFailure);
             var serviceUnavailablePolicy = CreateAsyncRetryPolicy<ServiceUnavailableException>(4, new TimeSpan(0, 0, 5), OnRetryableFailure);
-            RootPolicy = Policy.WrapAsync(tooManyRequestsPolicy, serviceUnavailablePolicy);
+            RootPolicy = Policy.Wrap(tooManyRequestsPolicy, serviceUnavailablePolicy);
         }
 
         protected override T OnException<T>(Exception ex)

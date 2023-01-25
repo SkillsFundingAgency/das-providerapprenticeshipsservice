@@ -36,7 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         {
             try
             {
-                return await _retryPolicy.ExecuteAsync(async () =>
+                return await _retryPolicy.Execute(async () =>
                 {
                     using (var connection = GetSqlConnecction(_connectionString))
                     {
@@ -69,7 +69,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             try
             {
 
-                return await _retryPolicy.ExecuteAsync(async () =>
+                return await _retryPolicy.Execute(async () =>
                 {
                     using (var connection = GetSqlConnecction(_connectionString))
                     {
@@ -106,7 +106,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         {
             try
             {
-                await _retryPolicy.ExecuteAsync(async () =>
+                await _retryPolicy.Execute(async () =>
                 {
                     using (var connection = GetSqlConnecction(_connectionString))
                     {
@@ -143,7 +143,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             return Policy
                 .Handle<SqlException>(ex => _transientErrorNumbers.Contains(ex.Number))
                 .Or<TimeoutException>()
-                .WaitAndRetryAsync(3, retryAttempt =>
+                .WaitAndRetry(3, retryAttempt =>
                     TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                     (exception, timespan, retryCount, context) =>
                     {

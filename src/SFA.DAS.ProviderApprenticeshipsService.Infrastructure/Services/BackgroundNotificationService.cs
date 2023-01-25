@@ -21,18 +21,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 
         public Task SendEmail(Email email)
         {
-            _logger.Debug($"Sending email to [{email.RecipientsAddress}] in a background task.");
-            IHostEnvironment.QueueBackgroundWorkItem(async cancellationToken =>
+            _logger.Debug($"Sending email with ID: [{email.SystemId}] in a background task.");
+
+            try
             {
-                try
-                {
-                    await _notificationsApi.SendEmail(email);
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error(ex, $"Error using the Notification Api when trying to send email {email.RecipientsAddress}.");
-                }
-            });
+                _notificationsApi.SendEmail(email);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error using the Notification Api when trying to send email with ID: [{email.SystemId}].");
+            }
+
             return Task.CompletedTask;
         }
     }

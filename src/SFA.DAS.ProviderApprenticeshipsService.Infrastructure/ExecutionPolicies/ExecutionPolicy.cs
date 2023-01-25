@@ -23,7 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.ExecutionPolicie
         {
             try
             {
-                await RootPolicy.ExecuteAsync(action);
+                await RootPolicy.Execute(action);
             }
             catch (Exception ex)
             {
@@ -46,7 +46,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.ExecutionPolicie
         {
             try
             {
-                return await RootPolicy.ExecuteAsync(func);
+                return await RootPolicy.Execute(func);
             }
             catch (Exception ex)
             {
@@ -87,7 +87,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.ExecutionPolicie
             {
                 waits[i] = waitBetweenTries;
             }
-            return Policy.Handle<T>().WaitAndRetryAsync(waits, (ex, wait) =>
+            return Policy.Handle<T>().WaitAndRetry(waits, (ex, wait) =>
             {
                 onRetryableFailure?.Invoke(ex);
             });
