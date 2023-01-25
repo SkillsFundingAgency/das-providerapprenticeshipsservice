@@ -1,11 +1,11 @@
-﻿using System.Web;
+﻿using System;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies
 {
-    public class TooManyRequestsException : HttpException
+    public class TooManyRequestsException : Exception
     {
         public TooManyRequestsException()
-            : base(429, "Rate limit has been reached")
+            : base("Rate limit has been reached")
         {
         }
     }

@@ -1,7 +1,6 @@
-﻿using System.Web;
+﻿using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.CookieService;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.PAS.Infrastructure.UnitTests.Services.CookieStorageTests
@@ -10,7 +9,7 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Services.CookieStorageTests
     {
         private CookieStorageService<TestStorageClass> _cookieStorageService;
         private Mock<ICookieService<TestStorageClass>> _cookieService;
-        private Mock<HttpContextBase> _httpContextBase;
+        private Mock<HttpContextAccessor> _httpContextAccessor;
         public const string ExpectedCookieName = "CookieTestName";
 
         [SetUp]
@@ -18,10 +17,10 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Services.CookieStorageTests
         {
             _cookieService = new Mock<ICookieService<TestStorageClass>>();
 
-            _httpContextBase = new Mock<HttpContextBase>();
+            _httpContextAccessor = new Mock<HttpContextAccessor>();
 
             _cookieStorageService = new CookieStorageService<TestStorageClass>(_cookieService.Object,
-                _httpContextBase.Object);
+                _httpContextAccessor.Object);
         }
 
         [Test]
@@ -36,7 +35,7 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Services.CookieStorageTests
             //Assert
             _cookieService.Verify(
                 x =>
-                    x.Create(It.IsAny<HttpContextBase>(), ExpectedCookieName, It.IsAny<TestStorageClass>(),
+                    x.Create(It.IsAny<HttpContextAccessor>(), ExpectedCookieName, It.IsAny<TestStorageClass>(),
                         expectedExpiryDays));
         }
 
@@ -44,7 +43,7 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Services.CookieStorageTests
         public void ThenTheInformationIsReadFromTheCookieService()
         {
             //Arrange
-            _cookieService.Setup(x => x.Get(It.IsAny<HttpContextBase>(), ExpectedCookieName))
+            _cookieService.Setup(x => x.Get(It.IsAny<HttpContextAccessor>(), ExpectedCookieName))
                 .Returns(new TestStorageClass());
 
             //Act
@@ -61,7 +60,7 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Services.CookieStorageTests
             _cookieStorageService.Delete(ExpectedCookieName);
 
             //Assert
-            _cookieService.Verify(x => x.Delete(It.IsAny<HttpContextBase>(), ExpectedCookieName));
+            _cookieService.Verify(x => x.Delete(It.IsAny<HttpContextAccessor>(), ExpectedCookieName));
         }
 
         [Test]
@@ -72,7 +71,7 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Services.CookieStorageTests
 
             //Assert
             _cookieService.Verify(
-                x => x.Update(It.IsAny<HttpContextBase>(), ExpectedCookieName, It.IsAny<TestStorageClass>()));
+                x => x.Update(It.IsAny<HttpContextAccessor>(), ExpectedCookieName, It.IsAny<TestStorageClass>()));
         }
 
         public class TestStorageClass

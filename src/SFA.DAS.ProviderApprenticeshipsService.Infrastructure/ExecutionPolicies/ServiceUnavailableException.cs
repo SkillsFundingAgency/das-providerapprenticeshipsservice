@@ -1,11 +1,11 @@
-﻿using System.Web;
+﻿using System;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies
 {
-    public class ServiceUnavailableException : HttpException
+    public class ServiceUnavailableException : Exception
     {
         public ServiceUnavailableException()
-            : base(503, "Service is unavailable")
+            : base("Service is unavailable")
         {
         }
     }

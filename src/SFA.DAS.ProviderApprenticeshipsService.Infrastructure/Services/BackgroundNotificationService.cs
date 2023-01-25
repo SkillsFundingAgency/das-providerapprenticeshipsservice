@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web.Hosting;
+using Microsoft.Extensions.Hosting;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Types;
@@ -22,7 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
         public Task SendEmail(Email email)
         {
             _logger.Debug($"Sending email to [{email.RecipientsAddress}] in a background task.");
-            HostingEnvironment.QueueBackgroundWorkItem(async cancellationToken =>
+            IHostEnvironment.QueueBackgroundWorkItem(async cancellationToken =>
             {
                 try
                 {
