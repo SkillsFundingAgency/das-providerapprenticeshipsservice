@@ -1,6 +1,6 @@
 ﻿using Moq;
+using NLog;
 using NUnit.Framework;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientContent;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -18,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         private Mock<ICacheStorageService> _cacheStorageServiceMock;
         private string _contentType;
         private string _applicationId;
-        private Mock<ILog> _logger;
+        private Mock<ILogger> _logger;
         public string ContentBanner;
         public static ProviderApprenticeshipsServiceConfiguration ProviderApprenticeshipsServiceConfiguration;
         private delegate void ServiceProcessValue(string inputValue, out string outputValue);
@@ -34,7 +34,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             
             _contentType = "banner";
             _applicationId = "das-providerapprenticeshipsservice-web";
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger>();
             _contentApiClientMock = new Mock<IContentApiClient>();
             _cacheStorageServiceMock = new Mock<ICacheStorageService>();
             _contentApiClientMock

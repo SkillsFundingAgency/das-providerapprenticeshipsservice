@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
+using NLog;
 using NUnit.Framework;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientContent;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -17,7 +17,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         private Mock<IContentApiClient> _contentApiClientMock;
         private string _contentType;
         private string _clientId;
-        private Mock<ILog> _logger;
+        private Mock<ILogger> _logger;
         public string ContentBanner;
         public static ProviderApprenticeshipsServiceConfiguration ProviderApprenticeshipsServiceConfiguration;
 
@@ -32,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             ContentBanner = "<p>find out how you can pause your apprenticeships<p>";
             _contentType = "banner";
             _clientId = "das-providerapprenticeshipsservice-web";
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger>();
             _contentApiClientMock = new Mock<IContentApiClient>();
             _contentApiClientMock
                 .Setup(mock => mock.Get(_contentType, _clientId))

@@ -14,7 +14,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     [TestFixture]
     public class WhenDeletingRegisteredUser
     {
-        private IRequestHandler<DeleteRegisteredUserCommand> _handler;
+        private IRequestHandler<DeleteRegisteredUserCommand, Unit> _handler;
         private Mock<IValidator<DeleteRegisteredUserCommand>> _validator;
         private Mock<IUserRepository> _userRepository;
 

@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
-using SFA.DAS.Configuration.FileStorage;
+// using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using StructureMap;
 using StructureMap.Pipeline;

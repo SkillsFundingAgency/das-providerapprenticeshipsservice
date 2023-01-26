@@ -15,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     [TestFixture]
     public class WhenUpsertingRegisteredUser
     {
-        private IRequestHandler<UpsertRegisteredUserCommand> _handler;
+        private IRequestHandler<UpsertRegisteredUserCommand, Unit> _handler;
         private Mock<IValidator<UpsertRegisteredUserCommand>> _validator;
         private Mock<IUserRepository> _repository;
 

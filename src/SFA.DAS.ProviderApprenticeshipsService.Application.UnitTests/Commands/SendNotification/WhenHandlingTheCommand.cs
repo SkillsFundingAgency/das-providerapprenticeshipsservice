@@ -8,8 +8,8 @@ using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Moq;
+using NLog;
 using NUnit.Framework;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -20,7 +20,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     public class WhenHandlingTheCommand
     {
         private Mock<IValidator<SendNotificationCommand>> _mockValidator;
-        IRequestHandler<SendNotificationCommand> _sut;
+        IRequestHandler<SendNotificationCommand, Unit> _sut;
+        private Mock<ILogger> _logger;
         private Mock<IBackgroundNotificationService> _backgroundNotificationService;
 
         [SetUp]
@@ -31,7 +32,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
                 .Returns(() => new ValidationResult());
 
             _backgroundNotificationService = new Mock<IBackgroundNotificationService>();
-            _sut = new SendNotificationCommandHandler(_mockValidator.Object, _backgroundNotificationService.Object, Mock.Of<ILog>());
+            _logger= new Mock<ILogger>();
+            _sut = new SendNotificationCommandHandler(_mockValidator.Object, _backgroundNotificationService.Object, _logger.Object);
 
             _backgroundNotificationService.Setup(api => api.SendEmail(It.IsAny<Email>())).Returns(Task.CompletedTask);
         }

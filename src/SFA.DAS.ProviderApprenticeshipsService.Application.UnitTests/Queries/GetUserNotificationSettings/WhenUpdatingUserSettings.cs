@@ -15,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
     [TestFixture]
     public class WhenUpdatingUserSettings
     {
-        private IRequestHandler<UpdateUserNotificationSettingsCommand> _sut;
+        private IRequestHandler<UpdateUserNotificationSettingsCommand, Unit> _sut;
         private Mock<IUserSettingsRepository> _mockSettingsRepo;
         private Mock<IValidator<UpdateUserNotificationSettingsCommand>> _mockValidator;
 
