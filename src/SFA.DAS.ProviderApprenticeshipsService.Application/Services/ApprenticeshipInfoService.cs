@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;

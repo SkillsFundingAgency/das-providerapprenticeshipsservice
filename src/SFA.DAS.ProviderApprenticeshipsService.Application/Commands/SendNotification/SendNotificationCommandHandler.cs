@@ -3,25 +3,26 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
-using SFA.DAS.NLog.Logger;
+using NLog;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification
 {
-    public sealed class SendNotificationCommandHandler : AsyncRequestHandler<SendNotificationCommand>
+    public sealed class SendNotificationCommandHandler : IRequestHandler<SendNotificationCommand, Unit>
     {
         private readonly IValidator<SendNotificationCommand> _validator;
         private readonly IBackgroundNotificationService _backgroundNotificationService;
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
 
-        public SendNotificationCommandHandler(IValidator<SendNotificationCommand>validator, IBackgroundNotificationService backgroundNotificationService, ILog logger)
+        public SendNotificationCommandHandler(IValidator<SendNotificationCommand>validator, IBackgroundNotificationService backgroundNotificationService, ILogger logger)
         {
             _validator = validator;
             _backgroundNotificationService = backgroundNotificationService;
             _logger = logger;
         }
 
-        protected override Task Handle(SendNotificationCommand message, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(SendNotificationCommand message, CancellationToken cancellationToken)
         {
             var validationResult = _validator.Validate(message);
             if (!validationResult.IsValid)
@@ -35,13 +36,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotifi
 
             try
             {
-                return _backgroundNotificationService.SendEmail(message.Email);
+                await _backgroundNotificationService.SendEmail(message.Email);
             }
             catch(Exception ex)
             {
-                _logger.Error(ex, $"Error calling Notification Api. Recipient: {message.Email.RecipientsAddress}");
-                return Task.CompletedTask;
+                _logger.Error(ex, $"Error calling Notification Api. Recipient: {message.Email.RecipientsAddress}");;
             }
+
+            return Unit.Value;
         }
     }
 }

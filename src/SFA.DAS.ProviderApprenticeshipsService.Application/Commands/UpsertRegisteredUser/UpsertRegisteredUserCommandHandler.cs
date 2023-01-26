@@ -7,7 +7,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegisteredUser
 {
-    public class UpsertRegisteredUserCommandHandler: AsyncRequestHandler<UpsertRegisteredUserCommand>
+    public class UpsertRegisteredUserCommandHandler: IRequestHandler<UpsertRegisteredUserCommand, Unit>
     {
         private readonly IValidator<UpsertRegisteredUserCommand> _validator;
         private readonly IUserRepository _userRepository;
@@ -20,13 +20,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegi
             _userRepository = userRepository;
         }
 
-        protected override Task Handle(UpsertRegisteredUserCommand message, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpsertRegisteredUserCommand message, CancellationToken cancellationToken)
         {
             var validationResult = _validator.Validate(message);
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
 
-            return _userRepository.Upsert(new User
+            await _userRepository.Upsert(new User
             {
                 UserRef = message.UserRef,
                 DisplayName = message.DisplayName,
@@ -34,6 +34,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegi
                 Ukprn = message.Ukprn,
                 IsDeleted = false
             });
+
+            return Unit.Value;
         }
     }
 }

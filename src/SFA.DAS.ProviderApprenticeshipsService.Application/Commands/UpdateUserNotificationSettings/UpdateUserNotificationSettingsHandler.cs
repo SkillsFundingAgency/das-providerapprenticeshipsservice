@@ -6,7 +6,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUserNotificationSettings
 {
-    public class UpdateUserNotificationSettingsHandler : AsyncRequestHandler<UpdateUserNotificationSettingsCommand>
+    public class UpdateUserNotificationSettingsHandler : IRequestHandler<UpdateUserNotificationSettingsCommand, Unit>
     {
         private readonly IUserSettingsRepository _userSettingsRepository;
         private readonly IValidator<UpdateUserNotificationSettingsCommand> _validator;
@@ -22,7 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUser
             _logger = logger;
         }
 
-        protected override async Task Handle(UpdateUserNotificationSettingsCommand command, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateUserNotificationSettingsCommand command, CancellationToken cancellationToken)
         {
             var validationResult = _validator.Validate(command);
             if (!validationResult.IsValid)
@@ -31,6 +31,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUser
             await _userSettingsRepository.UpdateUserSettings(command.UserRef, command.ReceiveNotifications);
 
             _logger.Trace($"User settings updated for user {command.UserRef}");
+
+            return Unit.Value;
         }
     }
 }

@@ -10,7 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UnsubscribeNotification
 {
-    public class UnsubscribeNotificationHandler : AsyncRequestHandler<UnsubscribeNotificationRequest>
+    public class UnsubscribeNotificationHandler : IRequestHandler<UnsubscribeNotificationRequest, Unit>
     {
         private readonly IUserSettingsRepository _settingsRepository;
 
@@ -19,12 +19,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.Unsubscrib
             _settingsRepository = settingsRepository;
         }
 
-        protected override Task Handle(UnsubscribeNotificationRequest request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UnsubscribeNotificationRequest request, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(request.UserRef))
                 throw new InvalidRequestException(new List<ValidationFailure>(1) { new ValidationFailure("UserRef", "UserRef cannot be null or empty")} );
 
-            return _settingsRepository.UpdateUserSettings(request.UserRef, false);
+            await _settingsRepository.UpdateUserSettings(request.UserRef, false);
+
+            return Unit.Value;
         }
     }
 }

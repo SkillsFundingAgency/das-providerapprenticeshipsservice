@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.NLog.Logger;
+using NLog;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
@@ -11,11 +11,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientCo
     public class GetClientContentRequestHandler : IRequestHandler<GetClientContentRequest, GetClientContentResponse>
     {           
         private readonly IContentApiClient _contentApiClient;
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
         private readonly ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
 
-        public GetClientContentRequestHandler(         
-           ILog logger,
+        public GetClientContentRequestHandler(
+           ILogger logger,
            IContentApiClient contentApiClient,
            ProviderApprenticeshipsServiceConfiguration providerApprenticeshipsServiceConfiguration)
         {   _logger = logger;
@@ -23,7 +23,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientCo
             _providerApprenticeshipsServiceConfiguration = providerApprenticeshipsServiceConfiguration;
         }
 
-        public async  Task<GetClientContentResponse> Handle(GetClientContentRequest request, CancellationToken cancellationToken)
+        public async Task<GetClientContentResponse> Handle(GetClientContentRequest request, CancellationToken cancellationToken)
         {
             var applicationId = request.UseLegacyStyles ? _providerApprenticeshipsServiceConfiguration.ContentApplicationId + "-legacy" : _providerApprenticeshipsServiceConfiguration.ContentApplicationId;
             var cacheKey = $"{applicationId}_{request.ContentType}".ToLowerInvariant();

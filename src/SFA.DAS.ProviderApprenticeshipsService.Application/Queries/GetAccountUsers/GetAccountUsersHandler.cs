@@ -26,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAccountU
             _logger = logger;
         }
 
-        public async  Task<GetAccountUsersResponse> Handle(GetAccountUsersQuery request, CancellationToken cancellationToken)
+        public async Task<GetAccountUsersResponse> Handle(GetAccountUsersQuery request, CancellationToken cancellationToken)
         {
             if(request.Ukprn < 1)
                 throw new ValidationException($"Ukprn must be more than 0 when getting account users.");

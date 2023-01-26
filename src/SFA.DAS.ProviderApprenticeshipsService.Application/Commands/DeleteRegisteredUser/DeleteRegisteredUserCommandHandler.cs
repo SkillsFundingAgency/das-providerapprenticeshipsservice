@@ -7,7 +7,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser
 {
-    public class DeleteRegisteredUserCommandHandler: AsyncRequestHandler<DeleteRegisteredUserCommand>
+    public class DeleteRegisteredUserCommandHandler : IRequestHandler<DeleteRegisteredUserCommand, Unit>
     {
         private readonly IValidator<DeleteRegisteredUserCommand> _validator;
         private readonly IUserRepository _userRepository;
@@ -18,13 +18,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegi
             _userRepository = userRepository;
         }
 
-        protected override async Task Handle(DeleteRegisteredUserCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteRegisteredUserCommand request, CancellationToken cancellationToken)
         {
             var validationResult = _validator.Validate(request);
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
 
             await _userRepository.DeleteUser(request.UserRef);
+
+            return Unit.Value;
         }
     }
 }
