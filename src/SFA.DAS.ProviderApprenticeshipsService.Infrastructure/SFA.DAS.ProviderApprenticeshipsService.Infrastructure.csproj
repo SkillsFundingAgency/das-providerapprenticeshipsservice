@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+	<PackageReference Include="SFA.DAS.Configuration" Version="2.0.5" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="2.0.5" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
     <PackageReference Include="System.Spatial" Version="5.8.5" />

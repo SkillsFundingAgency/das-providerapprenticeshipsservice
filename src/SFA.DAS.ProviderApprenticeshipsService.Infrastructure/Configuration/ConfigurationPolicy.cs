@@ -12,8 +12,11 @@ using StructureMap.Pipeline;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 {
+    /* 
+     * TO BE REPLACED ALONG WIHT STRUCTUREMAP
     public class ConfigurationPolicy<T> : ConfiguredInstancePolicy where T : Domain.Interfaces.IConfiguration
     {
+        
         private readonly string _serviceName;
 
         public ConfigurationPolicy(string serviceName)
@@ -21,6 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
             _serviceName = serviceName;
         }
 
+        
         protected override void apply(Type pluginType, IConfiguredInstance instance)
         {
             var serviceConfigurationParamater = instance?.Constructor?.GetParameters().FirstOrDefault(x => x.ParameterType == typeof(T)
@@ -59,6 +63,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
             }
             return configurationRepository;
         }
+     
 
     }
+       
+*/
 }
