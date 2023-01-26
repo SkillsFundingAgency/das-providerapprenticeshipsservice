@@ -871,6 +871,7 @@
     <Content Include="Views\Home\CookieDetails.cshtml" />
     <Content Include="Views\Shared\_ZenDeskWidget.cshtml" />
     <Content Include="Views\Shared\_CookieBanner.cshtml" />
+    <Content Include="Views\Account\ChangeSignInDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

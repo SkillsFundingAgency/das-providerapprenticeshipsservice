@@ -96,17 +96,25 @@
                 <p class="floating-head-text">
                     Your training provider account
                 </p>
-                <nav id="user-nav">
-                    <ul>
+                <nav class="das-user-navigation" id="das-user-navigation">
+                    <ul class="das-user-navigation__list">
                         @if (HttpContext.Current.User.Identity.IsAuthenticated)
                         {
-                            <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
-                            <li><a href="/notification-settings" class="link-user-profile">Notification settings</a></li>
-                            <li><a href="@Url.RouteUrl("signout")">Sign out</a></li>
+                            <li class="das-user-navigation__list-item"><a href="" target="_blank" class="das-user-navigation__link">@HttpContext.Current.User.Identity.Name</a></li>
+                            <li class="das-user-navigation__list-item das-user-navigation__list-item--has-sub-menu">
+                                <a href="/" class="das-user-navigation__link">Settings</a>
+                                <ul class="das-user-navigation__sub-menu js-hidden">
+                                    <li class="das-user-navigation__sub-menu-list-item"><a href="/change-signin-details" class="das-user-navigation__sub-menu-link">Change your sign-in details</a></li>
+                                    <li class="das-user-navigation__sub-menu-list-item"><a href="/notification-settings" class="das-user-navigation__sub-menu-link">Notification setting</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="@Url.RouteUrl("signout")">Sign out</a>
+                            </li>
                         }
                         else
                         {
-                            <li>
+                            <li class="das-user-navigation__list-item">
                                 <a href="@Url.RouteUrl("signin")" aria-label="Sign in">Sign in</a>
                             </li>
                         }
