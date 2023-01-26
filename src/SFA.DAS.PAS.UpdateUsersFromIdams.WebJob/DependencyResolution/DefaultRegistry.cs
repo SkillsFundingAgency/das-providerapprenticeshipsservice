@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Net.Http;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Http;
@@ -31,10 +32,13 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.DependencyResolution
             ConfigureHttpClient(config);
             RegisterExecutionPolicies();
 
+            
             For<ILog>().Use(x => new NLogLogger(
                x.ParentType,
                new DummyRequestContext(),
                null)).AlwaysUnique();
+            //For<ILoggerFactory>().Use(() => new LoggerFactory().AddApplicationInsights(ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"], null).AddNLog()).Singleton();
+            //For<ILogger>().Use(c => c.GetInstance<ILoggerFactory>().CreateLogger(c.ParentType));
             For<IIdamsSyncService>().Use<IdamsSyncService>();
         }
 
