@@ -3,27 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.NLog.Logger;
+using NLog;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
-namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
+namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services
 {
     public class IdamsSyncService : IIdamsSyncService
     {
         private readonly IIdamsEmailServiceWrapper _idamsEmailServiceWrapper;
         private readonly IUserRepository _userRepository;
         private readonly IProviderRepository _providerRepository;
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
         private readonly ProviderNotificationConfiguration _configuration;
 
         public IdamsSyncService(
-            IIdamsEmailServiceWrapper idamsEmailServiceWrapper, 
-            IUserRepository userRepository, 
-            IProviderRepository providerRepository, 
-            ILog logger,
+            IIdamsEmailServiceWrapper idamsEmailServiceWrapper,
+            IUserRepository userRepository,
+            IProviderRepository providerRepository,
+            ILogger logger,
             ProviderApprenticeshipsServiceConfiguration configuration)
         {
             _idamsEmailServiceWrapper = idamsEmailServiceWrapper;
@@ -59,7 +59,7 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
             }
             catch (CustomHttpRequestException httpRequestEx)
             {
-               
+
                 //Can't get http status code from HttpRequestException is in the message hence
                 if (httpRequestEx.StatusCode != HttpStatusCode.NotFound)
                 {
