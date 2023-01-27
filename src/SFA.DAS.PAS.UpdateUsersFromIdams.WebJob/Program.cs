@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using SFA.DAS.NLog.Logger;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob;
 
@@ -9,28 +10,39 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        static void Main(string[] args)
+        try
         {
-            try
+            var container = new ServiceCollection();
+            var provider = container.BuildServiceProvider();
+            var logger = provider.GetService<ILogger<Program>>();
+
+            logger.LogInformation("UpdateUsersFromIdams job started");
+            var timer = Stopwatch.StartNew();
+
+            var service = provider.GetService<IIdamsSyncService>();
+
+            service.SyncUsers().Wait();
+            timer.Stop();
+
+            logger.LogInformation($"UpdateUsersFromIdams job done, Took: {timer.ElapsedMilliseconds} milliseconds");
+        }
+        catch (AggregateException exc)
+        {
+            ILoggerFactory loggerFactory = new LoggerFactory();
+            ILogger exLogger = loggerFactory.CreateLogger<Program>();
+            exLogger.LogError(exc, "Error running UpdateUsersFromIdams WebJob");
+            exc.Handle(ex =>
             {
-                var container = new ServiceCollection();
-                var provider = container.BuildServiceProvider();
-                var logger = provider.GetService<ILog>();
-                
-                logger.Info("UpdateUsersFromIdams job started");
-                var timer = Stopwatch.StartNew();
-
-                var service = provider.GetService<IIdamsSyncService>();
-
-                service.SyncUsers().Wait();
-                timer.Stop();
-
-                logger.Info($"UpdateUsersFromIdams job done, Took: {timer.ElapsedMilliseconds} milliseconds");
-            }
-            catch (AggregateException exc)
-            {
-                webBuilder
-                    .UseStartup<Startup>()
-                    .UseNLog();
+                exLogger.LogError(ex, "Inner exception running UpdateUsersFromIdams WebJob");
+                return false;
             });
+        }
+        catch (Exception ex)
+        {
+            ILoggerFactory loggerFactory = new LoggerFactory();
+            ILogger exLogger = loggerFactory.CreateLogger<Program>();
+            exLogger.LogError(ex, "Error running UpdateUsersFromIdams WebJob");
+            throw;
+        };
+    } 
 }
