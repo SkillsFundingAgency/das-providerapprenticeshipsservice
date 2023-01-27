@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using NLog;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -9,13 +10,10 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
-    public class UserSettingsRepository : BaseRepository, IUserSettingsRepository
+    public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IUserSettingsRepository
     {
-        private readonly ILogger _logger;
-
-        public UserSettingsRepository(ProviderApprenticeshipsServiceConfiguration config, ILogger logger) : base(config.DatabaseConnectionString, logger)
+        public UserSettingsRepository(ProviderApprenticeshipsServiceConfiguration config, ILogger<UserSettingsRepository> logger) : base(config.DatabaseConnectionString, logger)
         {
-            _logger = logger;
         }
 
         public async Task<IEnumerable<UserSetting>> GetUserSetting(string userRef)

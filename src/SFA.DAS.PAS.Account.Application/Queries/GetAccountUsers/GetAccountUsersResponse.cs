@@ -1,9 +1,7 @@
-using System.Collections.Generic;
-
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAccountUsers
+namespace SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers
 {
     public class GetAccountUsersResponse
     {

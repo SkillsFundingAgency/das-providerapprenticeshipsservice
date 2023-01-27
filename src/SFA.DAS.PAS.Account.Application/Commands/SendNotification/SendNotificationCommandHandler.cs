@@ -1,21 +1,18 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
-using NLog;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification
+namespace SFA.DAS.PAS.Account.Application.Commands.SendNotification
 {
     public sealed class SendNotificationCommandHandler : IRequestHandler<SendNotificationCommand, Unit>
     {
         private readonly IValidator<SendNotificationCommand> _validator;
         private readonly IBackgroundNotificationService _backgroundNotificationService;
-        private readonly ILogger _logger;
+        private readonly ILogger<SendNotificationCommandHandler> _logger;
 
-        public SendNotificationCommandHandler(IValidator<SendNotificationCommand>validator, IBackgroundNotificationService backgroundNotificationService, ILogger logger)
+        public SendNotificationCommandHandler(IValidator<SendNotificationCommand>validator, IBackgroundNotificationService backgroundNotificationService, ILogger<SendNotificationCommandHandler> logger)
         {
             _validator = validator;
             _backgroundNotificationService = backgroundNotificationService;
@@ -27,12 +24,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotifi
             var validationResult = _validator.Validate(message);
             if (!validationResult.IsValid)
             {
-                _logger.Info("Invalid SendNotificationCommand, not sending");
+                _logger.LogInformation("Invalid SendNotificationCommand, not sending");
                 throw new ValidationException(validationResult.Errors);
             }
                 
 
-            _logger.Info($"Sending email to {message.Email.RecipientsAddress}. Template: {message.Email.TemplateId}");
+            _logger.LogInformation($"Sending email to {message.Email.RecipientsAddress}. Template: {message.Email.TemplateId}");
 
             try
             {
@@ -40,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotifi
             }
             catch(Exception ex)
             {
-                _logger.Error(ex, $"Error calling Notification Api. Recipient: {message.Email.RecipientsAddress}");;
+                _logger.LogError(ex, $"Error calling Notification Api. Recipient: {message.Email.RecipientsAddress}");
             }
 
             return Unit.Value;

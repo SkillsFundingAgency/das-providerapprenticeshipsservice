@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces

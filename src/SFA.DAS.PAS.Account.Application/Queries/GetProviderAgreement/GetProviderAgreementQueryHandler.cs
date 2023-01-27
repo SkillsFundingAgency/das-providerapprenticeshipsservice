@@ -1,13 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderAgreement
+namespace SFA.DAS.PAS.Account.Application.Queries.GetProviderAgreement
 {
     public class GetProviderAgreementQueryHandler : IRequestHandler<GetProviderAgreementQueryRequest, GetProviderAgreementQueryResponse>
     {

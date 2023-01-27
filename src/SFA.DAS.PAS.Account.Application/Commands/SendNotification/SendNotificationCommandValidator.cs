@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification
+namespace SFA.DAS.PAS.Account.Application.Commands.SendNotification
 {
     public sealed class SendNotificationCommandValidator : AbstractValidator<SendNotificationCommand>
     {

@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using MediatR;
-
+using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 
@@ -13,9 +13,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNoti
     {
         private readonly IUserSettingsRepository _userRepository;
 
-        private readonly IProviderCommitmentsLogger _logger;
+        private readonly ILogger<GetUserNotificationSettingsHandler> _logger;
 
-        public GetUserNotificationSettingsHandler(IUserSettingsRepository userRepository, IProviderCommitmentsLogger logger)
+        public GetUserNotificationSettingsHandler(IUserSettingsRepository userRepository, ILogger<GetUserNotificationSettingsHandler> logger)
         {
             _userRepository = userRepository;
             _logger = logger;
@@ -26,10 +26,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNoti
             var userSettings = (await _userRepository.GetUserSetting(message.UserRef)).ToList();
             if (!userSettings.Any())
             {
-                _logger.Info($"No settings found for user {message.UserRef}");
+                _logger.LogInformation($"No settings found for user {message.UserRef}");
                 await _userRepository.AddSettings(message.UserRef);
                 userSettings = (await _userRepository.GetUserSetting(message.UserRef)).ToList();
-                _logger.Info($"Created default settings for user {message.UserRef}");
+                _logger.LogInformation($"Created default settings for user {message.UserRef}");
             }
 
             return new GetUserNotificationSettingsResponse

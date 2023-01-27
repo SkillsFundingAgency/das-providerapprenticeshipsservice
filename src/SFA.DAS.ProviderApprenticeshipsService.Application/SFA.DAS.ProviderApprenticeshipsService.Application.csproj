@@ -1,16 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <OutputType>Library</OutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System.IdentityModel" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj" />
-    <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Infrastructure\SFA.DAS.ProviderApprenticeshipsService.Infrastructure.csproj" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation.ValidatorAttribute" Version="8.0.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
@@ -18,9 +9,9 @@
     <PackageReference Include="SFA.DAS.Authentication.Extensions.Legacy" Version="1.0.29" />
     <PackageReference Include="SFA.DAS.Caches" Version="1.1.4" />
     <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="7.78.0" />
-    <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Types" Version="7.85.0" />
+    <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Types" Version="9.0.2" />
     <PackageReference Include="SFA.DAS.CosmosDb.Testing" Version="1.0.1" />
-    <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.43" />
+    <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.210" />
     <PackageReference Include="SFA.DAS.ProviderRelationships.Api.Client" Version="4.0.3" />
     <PackageReference Include="StackExchange.Redis" Version="2.2.4" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
@@ -31,13 +22,15 @@
     <PackageReference Include="System.Text.Encodings.Web" Version="5.0.1" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
-    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="NLog" Version="4.7.15" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
   </ItemGroup>
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj" />
+    <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Infrastructure\SFA.DAS.ProviderApprenticeshipsService.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Commands\SendNotification" />
+    <Folder Include="Queries\GetProviderAgreement" />
   </ItemGroup>
 </Project>

@@ -7,7 +7,6 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAccountUsers;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
@@ -29,7 +28,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
         {
             _fixture = new Fixture();
             _mediator = new Mock<IMediator>();
-            _sut = new AccountOrchestrator(_mediator.Object, Mock.Of<IProviderCommitmentsLogger>());
+            _sut = new AccountOrchestrator(_mediator.Object);
             _normalUser = _fixture.Build<User>().With(u => u.UserType, UserType.NormalUser).Create();
             _superUser = _fixture.Build<User>().With(u => u.UserType, UserType.SuperUser).Create();
         }

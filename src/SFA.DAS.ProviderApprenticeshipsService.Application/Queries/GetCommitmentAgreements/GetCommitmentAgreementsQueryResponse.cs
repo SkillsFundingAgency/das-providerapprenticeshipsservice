@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.CommitmentsV2.Api.Types;
 using SFA.DAS.CommitmentsV2.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitmentAgreements

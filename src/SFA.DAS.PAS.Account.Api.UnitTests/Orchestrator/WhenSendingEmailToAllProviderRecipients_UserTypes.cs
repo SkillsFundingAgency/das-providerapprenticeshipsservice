@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.PAS.Account.Api.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
+using SFA.DAS.PAS.Account.Application.Commands.SendNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
@@ -62,7 +63,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
         {
             _request.ExplicitEmailAddresses = explicitListIsNull ? null : new List<string>();
 
-            _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, Mock.Of<IProviderCommitmentsLogger>());
+            _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, Mock.Of<ILogger<EmailOrchestrator>>());
             await _sut.SendEmailToAllProviderRecipients(_ukprn, _request);
 
             _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c=>c.Email.RecipientsAddress == "normal@test.com"), It.IsAny<CancellationToken>()), Times.Once);
@@ -76,7 +77,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
             _request.ExplicitEmailAddresses = explicitListIsNull ? null : new List<string>();
             _accountUsers.Remove(_normalUser);
 
-            _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, Mock.Of<IProviderCommitmentsLogger>());
+            _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, Mock.Of<ILogger<EmailOrchestrator>>());
             await _sut.SendEmailToAllProviderRecipients(_ukprn, _request);
 
             _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress == "normal@test.com"), It.IsAny<CancellationToken>()), Times.Never);

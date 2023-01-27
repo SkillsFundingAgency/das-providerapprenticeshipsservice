@@ -1,25 +1,21 @@
-﻿using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-using FluentValidation;
+﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
-
+using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAccountUsers
+namespace SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers
 {
     public class GetAccountUsersHandler : IRequestHandler<GetAccountUsersQuery, GetAccountUsersResponse>
     {
         private readonly IUserSettingsRepository _userSettingsRepository;
         private readonly IUserRepository _userRepository;
 
-        private readonly IProviderCommitmentsLogger _logger;
+        private readonly ILogger<GetAccountUsersHandler> _logger;
 
         public GetAccountUsersHandler(
             IUserSettingsRepository userSettingsRepository, 
             IUserRepository userRepository,
-            IProviderCommitmentsLogger logger)
+            ILogger<GetAccountUsersHandler> logger)
         {
             _userSettingsRepository = userSettingsRepository;
             _userRepository = userRepository;
@@ -32,7 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAccountU
                 throw new ValidationException($"Ukprn must be more than 0 when getting account users.");
 
             var response = new GetAccountUsersResponse();
-            _logger.Info($"Getting users from repository for {request.Ukprn}", providerId:request.Ukprn);
+            _logger.LogInformation($"Getting users from repository for {request.Ukprn}");
             var providerUsers = await _userRepository.GetUsers(request.Ukprn);
             foreach (var user in providerUsers)
             {
@@ -40,7 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAccountU
                 response.Add(user, settings.FirstOrDefault());
             }
 
-            _logger.Info($"Retrieved {providerUsers.Count()} users from repository for {request.Ukprn}", providerId: request.Ukprn);
+            _logger.LogInformation($"Retrieved {providerUsers.Count()} users from repository for {request.Ukprn}");
 
             return response;
         }

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAccountUsers
+namespace SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers
 {
     public class GetAccountUsersQuery : IRequest<GetAccountUsersResponse>
     {

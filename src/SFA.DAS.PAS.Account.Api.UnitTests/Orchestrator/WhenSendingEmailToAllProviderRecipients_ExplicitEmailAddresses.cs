@@ -4,11 +4,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.PAS.Account.Api.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
+using SFA.DAS.PAS.Account.Application.Commands.SendNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
@@ -71,7 +72,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
                 ExplicitEmailAddresses = _emailAddresses
             };
 
-            _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, Mock.Of<IProviderCommitmentsLogger>());
+            _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, Mock.Of<ILogger<EmailOrchestrator>>());
             await _sut.SendEmailToAllProviderRecipients(_ukprn, _request);
         }
 

@@ -6,7 +6,6 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProviderAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
@@ -24,7 +23,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
         public void SetUp()
         {
             _mediator = new Mock<IMediator>();
-            _sut = new AccountOrchestrator(_mediator.Object, Mock.Of<IProviderCommitmentsLogger>());
+            _sut = new AccountOrchestrator(_mediator.Object);
         }
 
         [TestCase(ProviderAgreementStatus.Agreed)]

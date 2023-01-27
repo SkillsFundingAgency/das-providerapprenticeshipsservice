@@ -4,19 +4,20 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using NLog;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using ILogger = NLog.ILogger;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
-    public class ProviderAgreementStatusRepository : BaseRepository, IProviderAgreementStatusRepository, IAgreementStatusQueryRepository
+    public class ProviderAgreementStatusRepository : BaseRepository<ProviderAgreementStatusRepository>, IAgreementStatusQueryRepository
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<ProviderAgreementStatusRepository> _logger;
         private readonly ICurrentDateTime _currentDateTime;
 
-        public ProviderAgreementStatusRepository(IProviderAgreementStatusConfiguration config, ILogger logger, ICurrentDateTime currentDateTime) : base(config.DatabaseConnectionString, logger)
+        public ProviderAgreementStatusRepository(IProviderAgreementStatusConfiguration config, ILogger<ProviderAgreementStatusRepository> logger, ICurrentDateTime currentDateTime) : base(config.DatabaseConnectionString, logger)
         {
             _logger = logger;
             _currentDateTime = currentDateTime;
@@ -56,7 +57,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             });
 
             if (latestBookmark == null)
-                _logger.Info("Latest Bookmark not found.");
+                _logger.LogInformation("Latest Bookmark not found.");
 
             return latestBookmark;
         }
@@ -85,13 +86,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
         private async Task UpdateLatestBookmark(IDbConnection conn, IDbTransaction tran, Guid newLatestBookmark)
         {
-            _logger.Info($"Updating latest bookmark to: {newLatestBookmark.ToString()}");
+            _logger.LogInformation($"Updating latest bookmark to: {newLatestBookmark.ToString()}");
 
             var parameters = new DynamicParameters();
             parameters.Add("@latestBookmark", newLatestBookmark, DbType.Guid);
             parameters.Add("@updatedDate", _currentDateTime.Now, DbType.DateTime);
 
-            _logger.Info("Deleting existing record from [ContractFeedEventRun]");
+            _logger.LogInformation("Deleting existing record from [ContractFeedEventRun]");
 
             await conn.ExecuteAsync(
                 sql:
@@ -99,7 +100,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 commandType: CommandType.Text,
                 transaction: tran);
 
-            _logger.Info("Inserting new record into [ContractFeedEventRun]");
+            _logger.LogInformation("Inserting new record into [ContractFeedEventRun]");
 
             await conn.ExecuteAsync(
                 sql:

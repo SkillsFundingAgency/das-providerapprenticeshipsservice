@@ -8,14 +8,15 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
-    public abstract class BaseRepository
+    public abstract class BaseRepository<T>
     {        
         private static string AzureResource = "https://database.windows.net/";
         private readonly string _connectionString;
-        private readonly ILogger _logger;
+        private readonly ILogger<T> _logger;
         private readonly Policy _retryPolicy;        
         private static IList<int> _transientErrorNumbers = new List<int>
             {
@@ -25,7 +26,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 -2, 20, 64, 233, 10053, 10054, 10060, 40143
             };
 
-    protected BaseRepository(string connectionString, ILogger logger)
+    protected BaseRepository(string connectionString, ILogger<T> logger)
         {
             _connectionString = connectionString;
             _logger = logger;            
@@ -147,7 +148,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                     TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                     (exception, timespan, retryCount, context) =>
                     {
-                        _logger.Warn($"SqlException ({exception.Message}). Retrying...attempt {retryCount})");
+                        _logger.LogWarning($"SqlException ({exception.Message}). Retrying...attempt {retryCount})");
                     }
                 );
         }
