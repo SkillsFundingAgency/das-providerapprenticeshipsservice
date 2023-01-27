@@ -96,16 +96,16 @@
                 <p class="floating-head-text">
                     Your training provider account
                 </p>
-                <nav class="das-user-navigation" id="das-user-navigation">
-                    <ul class="das-user-navigation__list">
+                <nav id="user-nav">
+                    <ul>
                         @if (HttpContext.Current.User.Identity.IsAuthenticated)
                         {
-                            <li class="das-user-navigation__list-item"><a href="" target="_blank" class="das-user-navigation__link">@HttpContext.Current.User.Identity.Name</a></li>
-                            <li class="das-user-navigation__list-item das-user-navigation__list-item--has-sub-menu">
-                                <a href="/" class="das-user-navigation__link">Settings</a>
-                                <ul class="das-user-navigation__sub-menu js-hidden">
-                                    <li class="das-user-navigation__sub-menu-list-item"><a href="/change-signin-details" class="das-user-navigation__sub-menu-link">Change your sign-in details</a></li>
-                                    <li class="das-user-navigation__sub-menu-list-item"><a href="/notification-settings" class="das-user-navigation__sub-menu-link">Notification setting</a></li>
+                            <li><a href="" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
+                            <li class="has-sub-menu">
+                                <a href="/">Settings</a>
+                                <ul role="menu" class="js-hidden" id="settings-menu">
+                                    <li><a href="/change-signin-details" class="sub-menu-item">Change your sign-in details</a></li>
+                                    <li><a href="/notification-settings" class="sub-menu-item">Notification setting</a></li>
                                 </ul>
                             </li>
                             <li>
@@ -114,12 +114,14 @@
                         }
                         else
                         {
-                            <li class="das-user-navigation__list-item">
+                            <li>
                                 <a href="@Url.RouteUrl("signin")" aria-label="Sign in">Sign in</a>
                             </li>
                         }
                     </ul>
                 </nav>
+
+
             </div>
         </div>
     </div>
