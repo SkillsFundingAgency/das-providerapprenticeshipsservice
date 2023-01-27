@@ -2,11 +2,10 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -19,12 +18,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
     {
         private GetUserNotificationSettingsHandler _sut;
         private Mock<IUserSettingsRepository> _mockSettingsRepo;
+        private Mock<ILogger<GetUserNotificationSettingsHandler>> _mockLogger;
         const string UserRef = "userRef";
         [SetUp]
         public void SetUp()
         {
             _mockSettingsRepo = new Mock<IUserSettingsRepository>();
-            _sut = new GetUserNotificationSettingsHandler(_mockSettingsRepo.Object, Mock.Of<IProviderCommitmentsLogger>());
+            _mockLogger = new Mock<ILogger<GetUserNotificationSettingsHandler>>();
+            _sut = new GetUserNotificationSettingsHandler(_mockSettingsRepo.Object, _mockLogger.Object);
         }
 
         [Test]

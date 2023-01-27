@@ -25,7 +25,7 @@ namespace SFA.DAS.PAS.Account.Application.Commands.SendNotification
             if (!validationResult.IsValid)
             {
                 _logger.LogInformation("Invalid SendNotificationCommand, not sending");
-                throw new ValidationException(validationResult.Errors);
+                throw new ValidationException(validationResult.Errors.ToString());
             }
                 
 
