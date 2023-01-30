@@ -1848,7 +1848,7 @@ li.menu-link.sub-menu-open ul {
 
 .header-organisation ul li.menu-link > a {
   position: absolute;
-  padding-left: 25px;
+  padding-right: 25px;
   right: 0;
   top: 0; }
   .header-organisation ul li.menu-link > a:before {
