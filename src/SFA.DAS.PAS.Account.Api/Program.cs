@@ -28,12 +28,12 @@ builder.Services.AddServiceRegistration();
 //builder.Services.AddDatabaseRegistration(employerProfilesConfiguration, rootConfiguration["EnvironmentName"]);
 //builder.Services.AddMediatR(typeof(GetUserByEmailQuery));
 
-// if (rootConfiguration["EnvironmentName"] != "DEV")
-// {
-//     builder.Services.AddHealthChecks()
-//         .AddDbContextCheck<EmployerProfilesDataContext>();
-//
-// }
+if (rootConfiguration["EnvironmentName"] != "DEV")
+{
+    builder.Services.AddHealthChecks();
+        //.AddDbContextCheck<PasDataContext>();
+
+}
 
 if (!(rootConfiguration["EnvironmentName"]!.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase) ||
       rootConfiguration["EnvironmentName"]!.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)))

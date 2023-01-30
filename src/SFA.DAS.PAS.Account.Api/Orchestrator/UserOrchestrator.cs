@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.PAS.Account.Api.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
+using SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings;
 
 namespace SFA.DAS.PAS.Account.Api.Orchestrator;
 

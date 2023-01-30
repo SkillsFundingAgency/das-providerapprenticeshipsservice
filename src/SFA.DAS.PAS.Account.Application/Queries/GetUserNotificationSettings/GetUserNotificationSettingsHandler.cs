@@ -1,13 +1,9 @@
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings
+namespace SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings
 {
     public class GetUserNotificationSettingsHandler : IRequestHandler<GetUserNotificationSettingsQuery, GetUserNotificationSettingsResponse>
     {
