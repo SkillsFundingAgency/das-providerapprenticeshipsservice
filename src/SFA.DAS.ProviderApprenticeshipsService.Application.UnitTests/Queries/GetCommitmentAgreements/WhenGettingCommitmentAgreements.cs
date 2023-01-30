@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoFixture.NUnit3;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitmentAgreements;
@@ -26,11 +26,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             _handler = new GetCommitmentAgreementsQueryHandler(_commitmentsApi.Object);
         }
 
-        [Test]
-        public async Task ThenCommitmentAgreementsAreReturned()
+        [Test, AutoData]
+        public async Task ThenCommitmentAgreementsAreReturned(long providerId)
         {
-            const long providerId = 777L;
-
             var query = new GetCommitmentAgreementsQueryRequest { ProviderId = providerId };
 
             var expectedResponse = new GetProviderCommitmentAgreementResponse
@@ -44,11 +42,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
 
             _commitmentsApi
                 .Setup(x => x.GetProviderCommitmentAgreement(providerId))
-                .ReturnsAsync(() => TestHelper.Clone(expectedResponse));
+                .ReturnsAsync(expectedResponse);
 
             var response = await _handler.Handle(query, new CancellationToken());
 
-            TestHelper.EnumerablesAreEqual(expectedResponse.ProviderCommitmentAgreement, response.CommitmentAgreements);
+            expectedResponse.ProviderCommitmentAgreement.Should().BeEquivalentTo(response.CommitmentAgreements);
         }
     }
 }

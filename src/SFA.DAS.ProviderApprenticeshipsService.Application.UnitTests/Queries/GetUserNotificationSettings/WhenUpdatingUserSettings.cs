@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
@@ -51,8 +49,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             _mockValidator.Setup(m => m.Validate(_command))
                 .Returns(new ValidationResult { Errors = { new ValidationFailure("Error", "Error message") } });
 
-            Func<Task> act = async () => await _sut.Handle(_command, new CancellationToken());
-            act.ShouldThrow<InvalidRequestException>();
+            
+            Assert.ThrowsAsync<InvalidRequestException>(() =>  _sut.Handle(_command, new CancellationToken()));
 
             _mockSettingsRepo.Verify(m => m.GetUserSetting(It.IsAny<string>()), Times.Never);
             _mockSettingsRepo.Verify(m => m.UpdateUserSettings(It.IsAny<string>(), It.IsAny<bool>()), Times.Never);

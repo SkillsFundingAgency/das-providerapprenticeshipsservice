@@ -6,7 +6,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
+using SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
@@ -39,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             result.NotificationSettings.Count.Should().Be(1);
 
             _mockSettingsRepo.Verify(m => m.GetUserSetting(It.IsAny<string>()), Times.Once);
-            result.NotificationSettings.First().ShouldBeEquivalentTo(new UserNotificationSetting { UserRef = UserRef, ReceiveNotifications = true });
+            result.NotificationSettings.First().Should().BeEquivalentTo(new UserNotificationSetting { UserRef = UserRef, ReceiveNotifications = true });
         }
 
         [Test]
