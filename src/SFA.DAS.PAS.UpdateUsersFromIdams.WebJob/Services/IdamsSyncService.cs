@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using NLog;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -16,14 +16,14 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services
         private readonly IIdamsEmailServiceWrapper _idamsEmailServiceWrapper;
         private readonly IUserRepository _userRepository;
         private readonly IProviderRepository _providerRepository;
-        private readonly ILogger _logger;
+        private readonly ILogger<IdamsSyncService> _logger;
         private readonly ProviderNotificationConfiguration _configuration;
 
         public IdamsSyncService(
             IIdamsEmailServiceWrapper idamsEmailServiceWrapper,
             IUserRepository userRepository,
             IProviderRepository providerRepository,
-            ILogger logger,
+            ILogger<IdamsSyncService> logger,
             ProviderApprenticeshipsServiceConfiguration configuration)
         {
             _idamsEmailServiceWrapper = idamsEmailServiceWrapper;
@@ -41,18 +41,18 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services
 
             if (provider == null)
             {
-                _logger.Info($"SyncUsers - No Provider Found");
+                _logger.LogInformation($"SyncUsers - No Provider Found");
                 return;
             }
 
-            _logger.Info($"SyncUsers For Provider {provider.Ukprn} has started");
+            _logger.LogInformation($"SyncUsers For Provider {provider.Ukprn} has started");
 
             try
             {
-                _logger.Info($"Retrieving DAS Users and Super Users for Provider {provider.Ukprn}");
+                _logger.LogInformation($"Retrieving DAS Users and Super Users for Provider {provider.Ukprn}");
                 idamsUsers = await GetIdamsUsers(provider.Ukprn);
 
-                _logger.Info($"Synchronise Users with IDAMS for Provider {provider.Ukprn}");
+                _logger.LogInformation($"Synchronise Users with IDAMS for Provider {provider.Ukprn}");
                 await _userRepository.SyncIdamsUsers(provider.Ukprn, idamsUsers);
 
                 await _providerRepository.MarkProviderIdamsUpdated(provider.Ukprn);
@@ -83,7 +83,7 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services
 
         private async Task LogAndUpdateProviderState(Exception ex, Provider provider, string errorMessage)
         {
-            _logger.Warn(ex, errorMessage);
+            _logger.LogWarning(ex, errorMessage);
             await _providerRepository.MarkProviderIdamsUpdated(provider.Ukprn);
         }
 
