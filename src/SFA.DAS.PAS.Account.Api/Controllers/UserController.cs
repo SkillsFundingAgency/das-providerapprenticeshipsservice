@@ -9,11 +9,11 @@ namespace SFA.DAS.PAS.Account.Api.Controllers;
 [Route("api/user")]
 public class UserController : Controller
 {
-    private readonly UserOrchestrator _orchestrator;
+    private readonly IUserOrchestrator _orchestrator;
 
     private readonly IProviderCommitmentsLogger _logger;
 
-    public UserController(UserOrchestrator orchestrator, IProviderCommitmentsLogger logger)
+    public UserController(IUserOrchestrator orchestrator, IProviderCommitmentsLogger logger)
     {
         _orchestrator = orchestrator;
         _logger = logger;

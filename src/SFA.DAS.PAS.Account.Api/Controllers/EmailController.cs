@@ -8,11 +8,11 @@ namespace SFA.DAS.PAS.Account.Api.Controllers;
 [Route("api/email")]
 public class EmailController : Controller
 {
-    private readonly EmailOrchestrator _emailOrchestrator;
+    private readonly IEmailOrchestrator _emailOrchestrator;
 
     private readonly IProviderCommitmentsLogger _logger;
 
-    public EmailController(EmailOrchestrator emailOrchestrator, IProviderCommitmentsLogger logger)
+    public EmailController(IEmailOrchestrator emailOrchestrator, IProviderCommitmentsLogger logger)
     {
         _emailOrchestrator = emailOrchestrator;
         _logger = logger;

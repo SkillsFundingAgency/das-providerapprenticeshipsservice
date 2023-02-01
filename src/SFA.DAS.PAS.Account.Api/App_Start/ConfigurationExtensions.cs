@@ -1,9 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using SFA.DAS.Configuration.AzureTableStorage;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.PAS.Account.Api;
@@ -36,11 +32,6 @@ public static class ConfigurationExtensions
         }
 
         return configBuilder.Build();
-    }
-
-    public static void AddConfiguration(this IServiceCollection services, IConfiguration config)
-    {
-        services.AddSingleton<IProviderAgreementStatusConfiguration>(config.Get<ProviderApprenticeshipsServiceConfiguration>());
     }
 
     public static bool IsDev(this IConfiguration configuration)

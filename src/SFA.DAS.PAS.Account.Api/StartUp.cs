@@ -9,6 +9,7 @@ using SFA.DAS.Api.Common.Infrastructure;
 using System.Text.Json.Serialization;
 using SFA.DAS.Api.Common.AppStart;
 using SFA.DAS.Api.Common.Configuration;
+using SFA.DAS.PAS.Account.Api.ServiceRegistrations;
 
 namespace SFA.DAS.PAS.Account.Api
 {
@@ -28,15 +29,17 @@ namespace SFA.DAS.PAS.Account.Api
             var rootConfiguration = _configuration.LoadConfiguration();
 
             services.AddOptions();
-            services.AddConfiguration(rootConfiguration);
-
+            services.AddConfigurationOptions(rootConfiguration);
+            services.AddMediatRHandlers();
+            services.AddOrchestrators();
+            services.AddDataRepositories();
             services.AddFluentValidation();
-            services.AddServiceRegistration();
+            services.AddApplicationServices();
+            services.AddNotifications(rootConfiguration);
 
             if (rootConfiguration["EnvironmentName"] != "DEV")
             {
                 services.AddHealthChecks();
-                //.AddDbContextCheck<PasDataContext>();
             }
 
             if (!(rootConfiguration["EnvironmentName"]!.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase) ||

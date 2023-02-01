@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
@@ -9,12 +10,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
     public class BackgroundNotificationService : IBackgroundNotificationService
     {
         private readonly ILogger<BackgroundNotificationService> _logger;
-        //private readonly INotificationsApi _notificationsApi;
+        private readonly INotificationsApi _notificationsApi;
 
-        public BackgroundNotificationService(ILogger<BackgroundNotificationService> logger)//, INotificationsApi notificationsApi)
+        public BackgroundNotificationService(ILogger<BackgroundNotificationService> logger, INotificationsApi notificationsApi)
         {
             _logger = logger;
-            //_notificationsApi = notificationsApi;
+            _notificationsApi = notificationsApi;
         }
 
         public Task SendEmail(Email email)
@@ -23,8 +24,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 
             try
             {
-                //TODO MAC-201
-                //_notificationsApi.SendEmail(email);
+                _notificationsApi.SendEmail(email);
             }
             catch (Exception ex)
             {
