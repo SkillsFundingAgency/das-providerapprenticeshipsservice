@@ -3,16 +3,16 @@ using System.Data;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Logging;
-using NLog;
 using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
     public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IUserSettingsRepository
     {
-        public UserSettingsRepository(ProviderApprenticeshipsServiceConfiguration config, ILogger<UserSettingsRepository> logger) : base(config.DatabaseConnectionString, logger)
+        public UserSettingsRepository(IProviderAgreementStatusConfiguration config, ILogger<UserSettingsRepository> logger, IConfiguration rootConfig) 
+            : base(config.DatabaseConnectionString, logger, rootConfig)
         {
         }
 

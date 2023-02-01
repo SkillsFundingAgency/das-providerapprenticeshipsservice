@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using ILogger = NLog.ILogger;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
@@ -17,7 +17,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         private readonly ILogger<ProviderAgreementStatusRepository> _logger;
         private readonly ICurrentDateTime _currentDateTime;
 
-        public ProviderAgreementStatusRepository(IProviderAgreementStatusConfiguration config, ILogger<ProviderAgreementStatusRepository> logger, ICurrentDateTime currentDateTime) : base(config.DatabaseConnectionString, logger)
+        public ProviderAgreementStatusRepository(IProviderAgreementStatusConfiguration config, 
+            ILogger<ProviderAgreementStatusRepository> logger, 
+            ICurrentDateTime currentDateTime,
+            IConfiguration rootConfig)
+            : base(config.DatabaseConnectionString, logger, rootConfig)
         {
             _logger = logger;
             _currentDateTime = currentDateTime;

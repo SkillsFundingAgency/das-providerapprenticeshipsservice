@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Net.Http;
-using NLog;
+using Microsoft.Extensions.Logging;
 using Polly;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies
@@ -8,11 +7,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.ExecutionPolicie
     [PolicyName(Name)]
     public class IdamsExecutionPolicy : ExecutionPolicy
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<IdamsExecutionPolicy> _logger;
 
         public const string Name = "IDAMS Policy";
 
-        public IdamsExecutionPolicy(ILogger logger)
+        public IdamsExecutionPolicy(ILogger<IdamsExecutionPolicy> logger)
         {
             _logger = logger;
 
@@ -23,13 +22,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.ExecutionPolicie
 
         protected override T OnException<T>(Exception ex)
         {
-            _logger.Error(ex, $"Exceeded retry limit - {ex.Message}");
+            _logger.LogError(ex, $"Exceeded retry limit - {ex.Message}");
             return default(T);
         }
 
         private void OnRetryableFailure(Exception ex)
         {
-            _logger.Info($"Error calling IDAMS - {ex.Message} - Will retry");
+            _logger.LogInformation($"Error calling IDAMS - {ex.Message} - Will retry");
         }
     }
 }

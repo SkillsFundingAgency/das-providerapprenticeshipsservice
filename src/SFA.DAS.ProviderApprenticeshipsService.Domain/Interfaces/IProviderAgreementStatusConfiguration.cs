@@ -8,5 +8,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
     public interface IProviderAgreementStatusConfiguration : IConfiguration
     {
+        bool CheckForContractAgreements { get; set; }
     }
 }

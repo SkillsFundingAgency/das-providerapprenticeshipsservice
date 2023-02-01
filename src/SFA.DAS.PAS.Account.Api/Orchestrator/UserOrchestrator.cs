@@ -29,7 +29,7 @@ public class UserOrchestrator : IUserOrchestrator
         if (setting == null)
         {
             _logger.LogInformation($"Unable to get user with ref {userRef}");
-            return null;
+            return new User { };
         }
 
         return new User { UserRef = setting.UserRef, ReceiveNotifications = setting.ReceiveNotifications };

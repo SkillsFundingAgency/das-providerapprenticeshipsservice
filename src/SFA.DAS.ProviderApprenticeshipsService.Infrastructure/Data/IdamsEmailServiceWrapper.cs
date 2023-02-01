@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NLog;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Models;
 
@@ -17,12 +17,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
     public class IdamsEmailServiceWrapper : IIdamsEmailServiceWrapper
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<IdamsEmailServiceWrapper> _logger;
         private readonly ProviderNotificationConfiguration _configuration;
         private readonly IHttpClientWrapper _httpClientWrapper;
 
         public IdamsEmailServiceWrapper(
-            ILogger logger,
+            ILogger<IdamsEmailServiceWrapper> logger,
             ProviderApprenticeshipsServiceConfiguration configuration,
             IHttpClientWrapper httpClientWrapper)
         {
@@ -33,7 +33,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
         public virtual async Task<List<string>> GetEmailsAsync(long providerId, string roles)
         {
-            _logger.Info($"Getting emails for provider {providerId} for roles {roles}");
+            _logger.LogInformation($"Getting emails for provider {providerId} for roles {roles}");
 
             var ids = roles.Split(',');
             var tasks = ids.Select(id => GetString(string.Format(_configuration.IdamsListUsersUrl, id, providerId)));
@@ -71,7 +71,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
         private async Task<string> GetString(string url)
         {
-            _logger.Info($"Querying {url} for user details");
+            _logger.LogInformation($"Querying {url} for user details");
             return await _httpClientWrapper.GetStringAsync(url);
         }
     }

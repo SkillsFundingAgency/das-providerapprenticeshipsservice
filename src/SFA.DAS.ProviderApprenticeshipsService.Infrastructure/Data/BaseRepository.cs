@@ -1,14 +1,13 @@
 ﻿using Microsoft.Azure.Services.AppAuthentication;
 using Polly;
 using Polly.Retry;
-using NLog;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
@@ -16,6 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
     {        
         private static string AzureResource = "https://database.windows.net/";
         private readonly string _connectionString;
+        public IConfiguration _configuration;
         private readonly ILogger<T> _logger;
         private readonly Policy _retryPolicy;        
         private static IList<int> _transientErrorNumbers = new List<int>
@@ -26,10 +26,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 -2, 20, 64, 233, 10053, 10054, 10060, 40143
             };
 
-    protected BaseRepository(string connectionString, ILogger<T> logger)
+    protected BaseRepository(string connectionString, ILogger<T> logger, IConfiguration configuration)
         {
             _connectionString = connectionString;
-            _logger = logger;            
+            _logger = logger;
+            _configuration = configuration;
             _retryPolicy = GetRetryPolicy();
         }
 
@@ -155,8 +156,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
         private SqlConnection GetSqlConnecction(string connectionString)
         {
-            bool isDevelopment = ConfigurationManager.AppSettings["EnvironmentName"]?.Equals("LOCAL") ?? false;
-            if (isDevelopment)
+            bool isLocal = _configuration["EnvironmentName"]?.Equals("LOCAL") ?? false;
+            if (isLocal)
             {
                 return new SqlConnection(connectionString);
             }

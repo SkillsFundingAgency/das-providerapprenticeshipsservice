@@ -9,6 +9,7 @@ using StructureMap.Pipeline;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 {
+    /*
     public class CurrentDatePolicy : ConfiguredInstancePolicy
     {
         protected override void apply(Type pluginType, IConfiguredInstance instance)
@@ -38,4 +39,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
             return result;
         }
     }
+    */
 }

@@ -10,6 +10,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
         void Warn(string message, long? providerId = default(long?), long? commitmentId = default(long?), long? apprenticeshipId = default(long?));
         void Warn(Exception ex, string message, long? providerId = default(long?), long? commitmentId = default(long?), long? apprenticeshipId = default(long?));
         void Error(Exception ex, string message, long? providerId = default(long?), long? commitmentId = default(long?), long? apprenticeshipId = default(long?));
-        void Fatal(Exception ex, string message, long? providerId = default(long?), long? commitmentId = default(long?), long? apprenticeshipId = default(long?));
+        void Critical(Exception ex, string message, long? providerId = default(long?), long? commitmentId = default(long?), long? apprenticeshipId = default(long?));
     }
 }

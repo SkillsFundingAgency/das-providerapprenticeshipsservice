@@ -17,10 +17,8 @@ public static class ConfigurationExtensions
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddEnvironmentVariables();
 
-
-        if (!config["EnvironmentName"].Equals("DEV", StringComparison.CurrentCultureIgnoreCase))
+        if (!IsDev(config))
         {
-
 #if DEBUG
             configBuilder
                 .AddJsonFile("appsettings.json", true)
@@ -29,7 +27,7 @@ public static class ConfigurationExtensions
 
             configBuilder.AddAzureTableStorage(options =>
                 {
-                    options.ConfigurationKeys = config["ConfigNames"].Split(",");
+                    options.ConfigurationKeys = config["ConfigNames"]?.Split(",");
                     options.StorageConnectionString = config["ConfigurationStorageConnectionString"];
                     options.EnvironmentName = config["EnvironmentName"];
                     options.PreFixConfigurationKeys = false;
@@ -42,11 +40,19 @@ public static class ConfigurationExtensions
 
     public static void AddConfiguration(this IServiceCollection services, IConfiguration config)
     {
-        services.Configure<ProviderApprenticeshipsServiceConfiguration>(config.GetSection(nameof(ProviderApprenticeshipsServiceConfiguration)));
-        services.AddSingleton(cfg => cfg.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
-        services.AddSingleton<IProviderAgreementStatusConfiguration>(cfg =>
-            cfg.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
-        //ProviderApprenticeshipsServiceConfiguration
+        services.AddSingleton<IProviderAgreementStatusConfiguration>(config.Get<ProviderApprenticeshipsServiceConfiguration>());
+    }
 
+    public static bool IsDev(this IConfiguration configuration)
+    {
+        var isDev = ((configuration["EnvironmentName"]?.StartsWith("DEV", StringComparison.CurrentCultureIgnoreCase)) ?? false);
+        var isDevelopment = ((configuration["EnvironmentName"]?.StartsWith("Development", StringComparison.CurrentCultureIgnoreCase)) ?? false);
+
+        return (isDev || isDevelopment);
+    }
+
+    public static bool IsLocal(this IConfiguration configuration)
+    {
+        return configuration["EnvironmentName"]?.StartsWith("LOCAL", StringComparison.CurrentCultureIgnoreCase) ?? false;
     }
 }
