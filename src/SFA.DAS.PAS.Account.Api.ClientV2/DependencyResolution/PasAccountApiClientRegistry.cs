@@ -1,27 +1,25 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.PAS.Account.Api.ClientV2.Configuration;
-using StructureMap;
-using System;
-using System.Linq.Expressions;
 
 namespace SFA.DAS.PAS.Account.Api.ClientV2.DependencyResolution
 {
-    public class PasAccountApiClientRegistry : Registry
+    public static class PasAccountApiClientRegistry
     {
-        public PasAccountApiClientRegistry(Expression<Func<IContext, PasAccountApiConfiguration>> getApiConfig)
+        public static IServiceCollection AddPasAccountApiClient(this IServiceCollection services, IConfiguration configuration)
         {
-            For<PasAccountApiConfiguration>().Use(getApiConfig);
-            For<IPasAccountApiClient>().Use(ctx => CreateClient(ctx)).Singleton();
-        }
+            services.AddSingleton(configuration.Get<PasAccountApiConfiguration>()); // CONFIG TO BE ADDED FOR PASAccountApi
 
-        private IPasAccountApiClient CreateClient(IContext ctx)
-        {
-            var config = ctx.GetInstance<PasAccountApiConfiguration>();
-            var loggerFactory = ctx.GetInstance<ILoggerFactory>();
+            services.AddSingleton<IPasAccountApiClient>(s =>
+            {
+                var pasConfig = s.GetService<PasAccountApiConfiguration>();
+                var loggerFactory = s.GetService<ILoggerFactory>();
+                var apiClientfactory = new PasAccountApiClientFactory(pasConfig, loggerFactory);
+                return apiClientfactory.CreateClient();
+            });
 
-            var factory = new PasAccountApiClientFactory(config, loggerFactory);
-            return factory.CreateClient();
+            return services;
         }
     }
 }
