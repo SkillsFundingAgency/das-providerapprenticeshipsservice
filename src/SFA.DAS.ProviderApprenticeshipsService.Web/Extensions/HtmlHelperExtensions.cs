@@ -3,24 +3,67 @@ using System.Linq;
 using System.Linq.Expressions;
 using MediatR;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Helpers;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientContent;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 {
-    public static class HtmlHelperExtensions
+    public interface IHtmlHelpers
     {
-        public static HtmlString AddClassIfPropertyInError<TModel, TProperty>(
-            this HtmlHelper<TModel> htmlHelper,
+        HtmlString AddClassIfPropertyInError<TModel, TProperty>(
+            Expression<Func<TModel, TProperty>> expression,
+            string errorClass);
+        HtmlString AddClassIfPropertyInError<TModel>(
+            string expressionText,
+            string errorClass);
+        HtmlString DasValidationMessageFor<TModel, TProperty>( 
+            Expression<Func<TModel, TProperty>> expression);
+        HtmlString GetClientContentByType(string type, bool useLegacyStyles = false);
+        HtmlString SetZenDeskLabels(params string[] labels);
+        string GetZenDeskSnippetKey();
+        string GetZenDeskSnippetSectionId();
+        string GetZenDeskCobrowsingSnippetKey();
+    }
+
+    public class HtmlHelpers : IHtmlHelpers
+    {
+        private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
+        private readonly IMediator _mediator;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILogger<HtmlHelpers> _logger;
+        private readonly IHtmlHelper _htmlHelper;
+        private ModelExpressionProvider _expressionProvider { get; }
+
+        public HtmlHelpers(
+        ProviderApprenticeshipsServiceConfiguration configuration,
+        IMediator mediator,
+        IHttpContextAccessor httpContextAccessor,
+        ILogger<HtmlHelpers> logger,
+        IHtmlHelper htmlHelper)
+        {
+            _configuration = configuration;
+            _mediator = mediator;
+            _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
+            _htmlHelper = htmlHelper;
+            _expressionProvider = _htmlHelper.ViewContext.HttpContext.RequestServices.GetService(typeof(ModelExpressionProvider)) as ModelExpressionProvider; ;
+        }
+
+        public HtmlString AddClassIfPropertyInError<TModel, TProperty>(
             Expression<Func<TModel, TProperty>> expression,
             string errorClass)
         {
-            var expressionText = ExpressionHelper.GetExpressionText(expression);
-            var fullHtmlFieldName = htmlHelper.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(expressionText);
-            var state = htmlHelper.ViewData.ModelState[fullHtmlFieldName];
+            var expressionText = _expressionProvider.GetExpressionText(expression);
+            var fullHtmlFieldName = _htmlHelper.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(expressionText);
+            var state = _htmlHelper.ViewData.ModelState[fullHtmlFieldName];
 
             if (state?.Errors == null || state.Errors.Count == 0)
             {
@@ -30,13 +73,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
             return new HtmlString(errorClass);
         }
 
-        public static HtmlString AddClassIfPropertyInError<TModel>(
-            this HtmlHelper<TModel> htmlHelper,
+        public HtmlString AddClassIfPropertyInError<TModel>(
             string expressionText,
             string errorClass)
         {
-            var fullHtmlFieldName = htmlHelper.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(expressionText);
-            var state = htmlHelper.ViewData.ModelState[fullHtmlFieldName];
+            var fullHtmlFieldName = _htmlHelper.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(expressionText);
+            var state = _htmlHelper.ViewData.ModelState[fullHtmlFieldName];
 
             if (state?.Errors == null || state.Errors.Count == 0)
             {
@@ -46,17 +88,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
             return new HtmlString(errorClass);
         }
         
-        public static HtmlString DasValidationMessageFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
-            Expression<Func<TModel, TProperty>> expression)
+        public HtmlString DasValidationMessageFor<TModel, TProperty>(Expression<Func<TModel, TProperty>> expression)
         {
-            var propertyName = ExpressionHelper.GetExpressionText(expression);
+            var propertyName = _expressionProvider.GetExpressionText(expression);
 
-            if (htmlHelper.ViewData.ModelState.IsValidField(propertyName))
+            if (_htmlHelper.ViewData.ModelState.GetValidationState(propertyName).Equals(ModelValidationState.Valid))
             {
                 return new HtmlString(string.Empty);
             }
 
-            var error = htmlHelper.ViewData.ModelState[propertyName].Errors.First();
+            var error = _htmlHelper.ViewData.ModelState[propertyName].Errors.First();
             var errorMesage = ValidationMessage.ExtractFieldMessage(error.ErrorMessage);
             
             var builder = new TagBuilder("span");
@@ -64,28 +105,24 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
             builder.AddCssClass("error-message");
             builder.AddCssClass("field-validation-error");
             builder.Attributes.Add("id", $"error-message-{propertyName}");
-            builder.SetInnerText(errorMesage);
+            builder.InnerHtml.SetContent(errorMesage);
 
             return new HtmlString(builder.ToString());
         }
 
-        public static HtmlString GetClientContentByType(this IHtmlHelper html, string type, bool useLegacyStyles = false)
+        public HtmlString GetClientContentByType(string type, bool useLegacyStyles = false)
         {
-            var mediator = DependencyResolver.Current.GetService<IMediator>();
-
-            IMediator Mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-
-            var userResponse = AsyncHelper.RunSync(() => mediator.Send(new GetClientContentRequest
+            var userResponse = AsyncHelper.RunSync(() => _mediator.Send(new GetClientContentRequest
             {
                 UseLegacyStyles = useLegacyStyles,
                 ContentType = type
             }));            
 
             var content = userResponse;
-            return HtmlString.Create(content.Content);
+            return new HtmlString(content.Content);
         }
 
-        public static HtmlString SetZenDeskLabels(this IHtmlHelper html, params string[] labels)
+        public HtmlString SetZenDeskLabels(params string[] labels)
         {
             var keywords = string.Join(",", labels
                 .Where(label => !string.IsNullOrEmpty(label))
@@ -96,29 +133,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
                                 + (!string.IsNullOrEmpty(keywords) ? keywords : "''")
                                 + "] });</script>";
 
-            return HtmlString.Create(apiCallString);
+            return new HtmlString(apiCallString);
         }
 
-        private static string EscapeApostrophes(string input)
+        private string EscapeApostrophes(string input)
         {
             return input.Replace("'", @"\'");
         }
 
-        public static string GetZenDeskSnippetKey(this IHtmlHelper html)
+        public string GetZenDeskSnippetKey()
         {
-            var configuration = DependencyResolver.Current.GetService<ProviderApprenticeshipsServiceConfiguration>();
-            return configuration.ZenDeskSettings.SnippetKey;
+            return _configuration.ZenDeskSettings.SnippetKey;
         }
 
-        public static string GetZenDeskSnippetSectionId(this IHtmlHelper html)
+        public string GetZenDeskSnippetSectionId()
         {
-            var configuration = DependencyResolver.Current.GetService<ProviderApprenticeshipsServiceConfiguration>();
-            return configuration.ZenDeskSettings.SectionId;
+            return _configuration.ZenDeskSettings.SectionId;
         }
-        public static string GetZenDeskCobrowsingSnippetKey(this IHtmlHelper html)
+        public string GetZenDeskCobrowsingSnippetKey()
         {
-            var configuration = DependencyResolver.Current.GetService<ProviderApprenticeshipsServiceConfiguration>();
-            return configuration.ZenDeskSettings.CobrowsingSnippetKey;
+            return _configuration.ZenDeskSettings.CobrowsingSnippetKey;
         }
     }
 }

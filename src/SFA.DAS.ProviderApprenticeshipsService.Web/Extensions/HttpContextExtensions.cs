@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 {
-    public static class HttpContextBaseExtensions
+    public static class HttpContextExtensions
     {
         public static string GetClaimValue(this HttpContext httpContext, string claimKey)
         {
