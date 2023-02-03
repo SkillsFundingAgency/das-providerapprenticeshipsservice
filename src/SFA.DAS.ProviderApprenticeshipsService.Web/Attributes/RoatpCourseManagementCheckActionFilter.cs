@@ -1,32 +1,34 @@
-﻿using System.Net;
-using System.Web;
-using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Services;
+using System;
+using Microsoft.AspNetCore.Http;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 {
     public class RoatpCourseManagementCheckActionFilter : IActionFilter
     {
         private readonly IGetRoatpBetaProviderService _roatpProviderService;
-        
-        public RoatpCourseManagementCheckActionFilter(IGetRoatpBetaProviderService roatpProviderService)
+        private readonly HttpContext _httpContext;
+
+        public RoatpCourseManagementCheckActionFilter(IGetRoatpBetaProviderService roatpProviderService, HttpContext httpContext)
         {
             _roatpProviderService = roatpProviderService;
+            _httpContext = httpContext;
         }
 
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var ukprn = filterContext.HttpContext.GetClaimValue("http://schemas.portal.com/ukprn");
-            
+            var ukprn = _httpContext.User.Identity.GetClaim(DasClaimTypes.Ukprn);
+
              if (string.IsNullOrEmpty(ukprn) || !int.TryParse(ukprn, out var ukprnValue ))
             {
-                throw new HttpException((int)HttpStatusCode.BadRequest, "Missing provider id");
+                throw new Exception("Missing provider id");
             }
 
              var isRoatpCourseManagementLinkEnabled = _roatpProviderService.IsUkprnEnabled(ukprnValue);
-             if (!HttpContext.Current.Items.Contains(RoatpConstants.IsCourseManagementLinkEnabled))
-                    HttpContext.Current.Items.Add(RoatpConstants.IsCourseManagementLinkEnabled, isRoatpCourseManagementLinkEnabled);
+             if (!_httpContext.Items.ContainsKey(RoatpConstants.IsCourseManagementLinkEnabled))
+                _httpContext.Items.Add(RoatpConstants.IsCourseManagementLinkEnabled, isRoatpCourseManagementLinkEnabled);
         }
 
         public void OnActionExecuted(ActionExecutedContext filterContext)

@@ -1,5 +1,4 @@
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution {
-    using System.Web;
 
     using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 

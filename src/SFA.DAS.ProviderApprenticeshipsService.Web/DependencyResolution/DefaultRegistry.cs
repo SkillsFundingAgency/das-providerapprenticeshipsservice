@@ -18,7 +18,6 @@
 using System;
 using System.Configuration;
 using System.Reflection;
-using System.Web;
 using FluentValidation;
 using MediatR;
 using SFA.DAS.Authorization.Context;
@@ -44,6 +43,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderRelationships.Api.Client;
 using SFA.DAS.ProviderRelationships.Api.Client.Configuration;
 using StructureMap;
+using SFA.DAS.ProviderApprenticeshipsService.Web;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 {
@@ -82,7 +82,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IAccountApiClient>().Use<AccountApiClient>();
             For<IAccountApiConfiguration>().Use<Domain.Configuration.AccountApiConfiguration>();
 
-            For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
+            For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContextHelper.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
@@ -100,7 +100,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
         private void ConfigureLogging()
         {
-            For<ILoggingContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
+            For<ILoggingContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContextHelper.Current)));
             For<IProviderCommitmentsLogger>().Use(x => GetBaseLogger(x)).AlwaysUnique();
             For<ILog>().Use(x => new NLogLogger(
                 x.ParentType,

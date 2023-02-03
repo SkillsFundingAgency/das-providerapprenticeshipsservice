@@ -1,4 +1,3 @@
-using System.Web.Mvc;
 using NLog;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using NLog;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
@@ -11,7 +11,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var urlReferrer = filterContext.RequestContext.HttpContext.Request.UrlReferrer;
+            var urlReferrer = filterContext.HttpContext.Request.UrlReferrer;
             var referrer = urlReferrer == null ? "unknown" : urlReferrer.ToString();
 
             var rawUrl = filterContext.RequestContext.HttpContext.Request.RawUrl;

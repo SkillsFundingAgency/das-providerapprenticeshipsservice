@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web.Optimization;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {

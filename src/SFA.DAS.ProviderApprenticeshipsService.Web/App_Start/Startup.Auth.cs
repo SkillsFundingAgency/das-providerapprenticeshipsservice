@@ -2,11 +2,6 @@
 using System.Threading.Tasks;
 using System.Configuration;
 using Microsoft.IdentityModel.Protocols;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.Notifications;
-using Microsoft.Owin.Security.WsFederation;
-using Owin;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
@@ -9,7 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [Authorize]
     [ProviderUkPrnCheck]
-    [RoutePrefix("{providerId}/agreements")]
+    [Route("{providerId}/agreements")]
     public class AgreementController : BaseController
     {
         private readonly AgreementOrchestrator _orchestrator;
@@ -21,7 +22,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<ActionResult> Agreements(long providerId, string organisation = "")
+        public async Task<IActionResult> Agreements(long providerId, string organisation = "")
         {
             var model = await _orchestrator.GetAgreementsViewModel(providerId, organisation);
             return View(model);

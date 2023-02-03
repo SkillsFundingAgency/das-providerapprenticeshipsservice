@@ -24,7 +24,6 @@ using WebActivatorEx;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.App_Start {
     using System;
-    using System.Web.Mvc;
     using global::NLog;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 

@@ -1,4 +1,6 @@
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
@@ -9,10 +11,10 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
-    [RoleAuthorize(Roles = nameof(RoleNames.DasPermission))]
+    [Authorize(Roles = nameof(RoleNames.DasPermission))]
     public abstract class BaseController : Controller
     {
-        private const string FlashMessageCookieName = "sfa-das-employerapprenticeshipsservice-flashmessage";
+        private const string FlashMessageCookieName = "sfa-das-providerapprenticeshipsservice-flashmessage";
         private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
 
         protected BaseController(ICookieStorageService<FlashMessageViewModel> flashMessage)
@@ -41,6 +43,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return flashMessageViewModelFromCookie;
         }
 
+        /*
         protected override void OnException(ExceptionContext filterContext)
         {
             if (filterContext.Exception is InvalidStateException)
@@ -61,9 +64,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             return new SignInUserModel
             {
-                DisplayName = HttpContext.GetClaimValue(DasClaimTypes.DisplayName),
+                DisplayName = Request.GetClaimValue(DasClaimTypes.DisplayName),
                 Email = HttpContext.GetClaimValue(DasClaimTypes.Email)
             };
         }
+        */
     }
 }

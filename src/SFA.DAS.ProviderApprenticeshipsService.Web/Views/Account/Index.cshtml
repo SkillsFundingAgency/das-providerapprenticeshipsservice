@@ -1,4 +1,5 @@
-﻿@using SFA.DAS.Authorization.Services
+@using SFA.DAS.ProviderApprenticeshipsService.Web
+@using SFA.DAS.Authorization.Services
 @using SFA.DAS.ProviderApprenticeshipsService.Domain.Features
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 @using SFA.DAS.ProviderUrlHelper.Framework;
@@ -9,7 +10,7 @@
     ViewBag.Title = Model.ProviderName;
     ViewBag.PageId = "account-home";
 
-    var showCourseManagementLink = HttpContext.Current.Items.Contains(RoatpConstants.IsCourseManagementLinkEnabled) && HttpContext.Current.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true);
+    var showCourseManagementLink = HttpContextHelper.Current.Items.Contains(RoatpConstants.IsCourseManagementLinkEnabled) && HttpContextHelper.Current.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true);
 }
 
 @if (!string.IsNullOrEmpty(Model.Message))

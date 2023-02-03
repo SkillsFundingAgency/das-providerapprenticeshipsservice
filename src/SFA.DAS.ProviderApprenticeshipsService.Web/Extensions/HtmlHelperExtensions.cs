@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Web.Mvc;
 using MediatR;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Helpers;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientContent;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -12,7 +13,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 {
     public static class HtmlHelperExtensions
     {
-        public static MvcHtmlString AddClassIfPropertyInError<TModel, TProperty>(
+        public static HtmlString AddClassIfPropertyInError<TModel, TProperty>(
             this HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, TProperty>> expression,
             string errorClass)
@@ -23,13 +24,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 
             if (state?.Errors == null || state.Errors.Count == 0)
             {
-                return MvcHtmlString.Empty;
+                return HtmlString.Empty;
             }
 
-            return new MvcHtmlString(errorClass);
+            return new HtmlString(errorClass);
         }
 
-        public static MvcHtmlString AddClassIfPropertyInError<TModel>(
+        public static HtmlString AddClassIfPropertyInError<TModel>(
             this HtmlHelper<TModel> htmlHelper,
             string expressionText,
             string errorClass)
@@ -39,20 +40,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 
             if (state?.Errors == null || state.Errors.Count == 0)
             {
-                return MvcHtmlString.Empty;
+                return HtmlString.Empty;
             }
 
-            return new MvcHtmlString(errorClass);
+            return new HtmlString(errorClass);
         }
         
-        public static MvcHtmlString DasValidationMessageFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
+        public static HtmlString DasValidationMessageFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, TProperty>> expression)
         {
             var propertyName = ExpressionHelper.GetExpressionText(expression);
 
             if (htmlHelper.ViewData.ModelState.IsValidField(propertyName))
             {
-                return new MvcHtmlString(string.Empty);
+                return new HtmlString(string.Empty);
             }
 
             var error = htmlHelper.ViewData.ModelState[propertyName].Errors.First();
@@ -65,10 +66,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
             builder.Attributes.Add("id", $"error-message-{propertyName}");
             builder.SetInnerText(errorMesage);
 
-            return new MvcHtmlString(builder.ToString());
+            return new HtmlString(builder.ToString());
         }
 
-        public static MvcHtmlString GetClientContentByType(this HtmlHelper html, string type, bool useLegacyStyles = false)
+        public static HtmlString GetClientContentByType(this IHtmlHelper html, string type, bool useLegacyStyles = false)
         {
             var mediator = DependencyResolver.Current.GetService<IMediator>();
 
@@ -81,10 +82,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
             }));            
 
             var content = userResponse;
-            return MvcHtmlString.Create(content.Content);
+            return HtmlString.Create(content.Content);
         }
 
-        public static MvcHtmlString SetZenDeskLabels(this HtmlHelper html, params string[] labels)
+        public static HtmlString SetZenDeskLabels(this IHtmlHelper html, params string[] labels)
         {
             var keywords = string.Join(",", labels
                 .Where(label => !string.IsNullOrEmpty(label))
@@ -95,7 +96,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
                                 + (!string.IsNullOrEmpty(keywords) ? keywords : "''")
                                 + "] });</script>";
 
-            return MvcHtmlString.Create(apiCallString);
+            return HtmlString.Create(apiCallString);
         }
 
         private static string EscapeApostrophes(string input)
@@ -103,18 +104,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
             return input.Replace("'", @"\'");
         }
 
-        public static string GetZenDeskSnippetKey(this HtmlHelper html)
+        public static string GetZenDeskSnippetKey(this IHtmlHelper html)
         {
             var configuration = DependencyResolver.Current.GetService<ProviderApprenticeshipsServiceConfiguration>();
             return configuration.ZenDeskSettings.SnippetKey;
         }
 
-        public static string GetZenDeskSnippetSectionId(this HtmlHelper html)
+        public static string GetZenDeskSnippetSectionId(this IHtmlHelper html)
         {
             var configuration = DependencyResolver.Current.GetService<ProviderApprenticeshipsServiceConfiguration>();
             return configuration.ZenDeskSettings.SectionId;
         }
-        public static string GetZenDeskCobrowsingSnippetKey(this HtmlHelper html)
+        public static string GetZenDeskCobrowsingSnippetKey(this IHtmlHelper html)
         {
             var configuration = DependencyResolver.Current.GetService<ProviderApprenticeshipsServiceConfiguration>();
             return configuration.ZenDeskSettings.CobrowsingSnippetKey;

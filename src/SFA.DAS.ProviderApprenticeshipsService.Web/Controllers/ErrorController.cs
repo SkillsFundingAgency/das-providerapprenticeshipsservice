@@ -1,9 +1,10 @@
-﻿using System.Web.Mvc;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     using System;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
 
     [AllowAllRoles]
     [AllowAnonymous]

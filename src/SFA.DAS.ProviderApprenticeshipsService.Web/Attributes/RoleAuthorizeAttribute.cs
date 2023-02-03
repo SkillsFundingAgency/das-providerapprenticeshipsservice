@@ -1,7 +1,12 @@
 ﻿using System.Linq;
 using System.Net;
-using System.Web;
-using System.Web.Mvc;
+using System.Reflection.Metadata;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Filters;
+using SFA.DAS.Authorization.Context;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
@@ -13,18 +18,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 
     public class RoleAuthorizeAttribute : AuthorizeAttribute
     {
-        public override void OnAuthorization(AuthorizationContext filterContext)
+        /* TODO - MAC-201
+        public void OnAuthorization(HttpContext httpContext)
         {
-            filterContext.HttpContext.Items["ActionDescriptor"] = filterContext.ActionDescriptor;
-            base.OnAuthorization(filterContext);
+            var actionDescriptor = httpContext.Items["ActionDescriptor"] as ActionDescriptor;
+            //base.OnAuthorization(actionDescriptor);
         }
 
-        protected override bool AuthorizeCore(HttpContextBase httpContext)
+        protected bool AuthorizeCore(HttpContext httpContext)
         {
             if (httpContext.Items["ActionDescriptor"] is ActionDescriptor actionDescriptor)
             {
-                if ((actionDescriptor.GetCustomAttributes(typeof(AllowAllRolesAttribute), true).Any() ||
-                    actionDescriptor.ControllerDescriptor.GetCustomAttributes(typeof(AllowAllRolesAttribute), true).Any()) &&
+                if (actionDescriptor.EndpointMetadata.OfType<AllowAllRolesAttribute>().Any()
+                    // ||
+                    // actionDescriptor.ControllerDescriptor.GetCustomAttributes(typeof(AllowAllRolesAttribute), true).Any())
+                    &&
                     httpContext.User.Identity.HasServiceClaim())
                 {
                     return true;
@@ -34,14 +42,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
             return base.AuthorizeCore(httpContext);
         }
 
-        protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
+        protected void HandleUnauthorizedRequest(HttpContext httpContext)
         {
-            if (filterContext.HttpContext.Request.IsAuthenticated)
+            if (httpContext.User.Identity.IsAuthenticated)
             {
                 throw new HttpException((int)HttpStatusCode.Forbidden, $"Access denied for user {filterContext.HttpContext.GetClaimValue(DasClaimTypes.Name)}");
             }
 
             base.HandleUnauthorizedRequest(filterContext);
         }
+        */
     }
 }

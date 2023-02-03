@@ -1,9 +1,10 @@
-﻿@using Microsoft.ApplicationInsights.Extensibility
+@using SFA.DAS.ProviderApprenticeshipsService.Web
+@using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderUrlHelper.Framework
 @{
-    var showCourseManagementLink = HttpContext.Current.Items.Contains(RoatpConstants.IsCourseManagementLinkEnabled) && HttpContext.Current.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true);
+    var showCourseManagementLink = HttpContextHelper.Current.Items.Contains(RoatpConstants.IsCourseManagementLinkEnabled) && HttpContextHelper.Current.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true);
 }
 
 <!DOCTYPE html>
@@ -98,9 +99,9 @@
                 </p>
                 <nav id="user-nav">
                     <ul>
-                        @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                        @if (HttpContextHelper.Current.User.Identity.IsAuthenticated)
                         {
-                            <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
+                            <li><a href="/" class="link-user-profile">@HttpContextHelperHelper.Current.User.Identity.Name</a></li>
                             <li><a href="/notification-settings" class="link-user-profile">Notification settings</a></li>
                             <li><a href="@Url.RouteUrl("signout")">Sign out</a></li>
                         }
@@ -117,7 +118,7 @@
     </div>
     <!--/floating-menu-holder-->
 
-    @if (HttpContext.Current.User.Identity.IsAuthenticated && !(ViewBag?.HideNavBar ?? false))
+    @if (HttpContextHelper.Current.User.Identity.IsAuthenticated && !(ViewBag?.HideNavBar ?? false))
     {
         var controllerName = ViewContext.RouteData.Values["Controller"].ToString(); ;
         var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));

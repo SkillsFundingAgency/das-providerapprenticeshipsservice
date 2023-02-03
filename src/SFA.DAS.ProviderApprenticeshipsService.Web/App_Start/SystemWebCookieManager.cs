@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Web;
-using Microsoft.Owin;
-using Microsoft.Owin.Infrastructure;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.App_Start
 {

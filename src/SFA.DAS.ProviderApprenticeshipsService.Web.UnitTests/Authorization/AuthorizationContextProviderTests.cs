@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Security.Principal;
-using System.Web;
-using System.Web.Routing;
 using FluentAssertions;
 using FluentAssertions.Specialized;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization.Context;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Routing;
@@ -65,27 +66,30 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
         }
 
         public IAuthorizationContextProvider AuthorizationContextProvider { get; set; }
-        public Mock<HttpContextBase> HttpContext { get; set; }
+        public Mock<HttpContext> HttpContext { get; set; }
         public Mock<IAccountLegalEntityPublicHashingService> AccountLegalEntityPublicHashingService { get; set; }
         public string AccountLegalEntityPublicHashedIdRouteValue { get; set; }
         public long AccountLegalEntityId { get; set; }
         public string ProviderIdRouteValue { get; set; }
         public long ProviderId { get; set; }
         public RouteData RouteData { get; set; }
-        public NameValueCollection Params { get; set; }
+        public IQueryCollection QueryParams { get; set; }
 
         public AuthorizationContextProviderTestsFixture()
         {
             RouteData = new RouteData();
-            Params = new NameValueCollection();
+            QueryParams = new QueryCollection();
 
-            HttpContext = new Mock<HttpContextBase>();
-            HttpContext.Setup(c => c.Request.RequestContext.RouteData).Returns(RouteData);
-            HttpContext.Setup(c => c.Request.Params).Returns(Params);
+            HttpContext = new Mock<HttpContext>();
+            HttpContext.Setup(c => c.Request.HttpContext.GetRouteData()).Returns(RouteData);
+            HttpContext.Setup(c => c.Request.Query).Returns(QueryParams);
             HttpContext.Setup(c => c.User).Returns(new GenericPrincipal(new Mock<IIdentity>().Object, new string[0]));
 
             AccountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
-            AuthorizationContextProvider = new AuthorizationContextProvider(HttpContext.Object, AccountLegalEntityPublicHashingService.Object, Mock.Of<ILog>());
+            AuthorizationContextProvider = new AuthorizationContextProvider(HttpContext.Object, 
+                AccountLegalEntityPublicHashingService.Object, 
+                Mock.Of<ILogger<AuthorizationContextProvider>>(),
+                Mock.Of<IActionContextAccessor>());
         }
 
         public IAuthorizationContext GetAuthorizationContext()
@@ -100,7 +104,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
             AccountLegalEntityPublicHashedIdRouteValue = "ABC123";
             AccountLegalEntityId = 123;
 
-            Params[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId] = AccountLegalEntityPublicHashedIdRouteValue;
+            QueryParams[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId] = AccountLegalEntityPublicHashedIdRouteValue;
 
             AccountLegalEntityPublicHashingService.Setup(h => h.DecodeValue(AccountLegalEntityPublicHashedIdRouteValue)).Returns(AccountLegalEntityId);
 
@@ -111,7 +115,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
         {
             AccountLegalEntityPublicHashedIdRouteValue = "AAA";
 
-            Params[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId] = AccountLegalEntityPublicHashedIdRouteValue;
+            QueryParams[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId] = AccountLegalEntityPublicHashedIdRouteValue;
 
             AccountLegalEntityPublicHashingService.Setup(h => h.DecodeValue(AccountLegalEntityPublicHashedIdRouteValue)).Throws<Exception>();
 

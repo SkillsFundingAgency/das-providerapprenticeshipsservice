@@ -1,5 +1,4 @@
-﻿using System.Web.Mvc;
-
+﻿
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.App_Start
 {
     public sealed class TrimStringModelBinder : IModelBinder
