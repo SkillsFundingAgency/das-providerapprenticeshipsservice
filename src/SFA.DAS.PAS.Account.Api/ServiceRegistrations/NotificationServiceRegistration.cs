@@ -5,7 +5,6 @@ using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Notifications.Api.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.PAS.Account.Api.ServiceRegistrations
 {

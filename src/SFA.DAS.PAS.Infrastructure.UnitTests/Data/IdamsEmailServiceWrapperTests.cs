@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using NLog;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
@@ -27,7 +27,7 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Data
                 
             };
             _mockHttpClientWrapper = new Mock<IHttpClientWrapper>();
-            _sut = new IdamsEmailServiceWrapper(Mock.Of<ILogger>(), config, _mockHttpClientWrapper.Object);
+            _sut = new IdamsEmailServiceWrapper(Mock.Of<ILogger<IdamsEmailServiceWrapper>>(), config, _mockHttpClientWrapper.Object);
         }
 
         [Test]
