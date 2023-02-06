@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authentication;
 using static IdentityServer3.Core.Constants;
 using Microsoft.AspNetCore.Routing;
 using NLog;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -24,26 +25,28 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     {
         private readonly AccountOrchestrator _accountOrchestrator;
         private readonly LinkGenerator _linkGenerator;
+        private readonly IAuthenticationServiceWrapper _authenticationService;
 
         public AccountController(AccountOrchestrator accountOrchestrator,
             LinkGenerator linkGenerator,
-            ICookieStorageService<FlashMessageViewModel> flashMessage) 
+            ICookieStorageService<FlashMessageViewModel> flashMessage,
+            IAuthenticationServiceWrapper authenticationService) 
             : base(flashMessage)
         {
             _accountOrchestrator = accountOrchestrator;
+            _linkGenerator = linkGenerator;
+            _authenticationService = authenticationService;
         }
 
         [AllowAllRoles]
         [Route("~/signin", Name = "signin")]
         public void SignIn()
         {
-            /*
             if (!Request.IsAuthenticated)
             {
                 HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties {RedirectUri = "/"},
                     WsFederationAuthenticationDefaults.AuthenticationType);
             }
-            */
         }
 
         [AllowAllRoles]

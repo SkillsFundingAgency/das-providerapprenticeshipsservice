@@ -11,7 +11,7 @@ using SFA.DAS.ProviderRelationships.Types.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
-    public partial class Startup
+    public partial class StartupAuth
     {
         public void ConfigureAuth(IAppBuilder app)
         {

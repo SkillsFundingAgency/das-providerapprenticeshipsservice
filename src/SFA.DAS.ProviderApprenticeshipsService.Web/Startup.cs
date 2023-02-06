@@ -14,21 +14,23 @@ using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
+
             services.AddControllersWithViews(ConfigureMvcOptions)
                 // Newtonsoft.Json is added for compatibility reasons
                 // The recommended approach is to use System.Text.Json for serialization
@@ -38,6 +40,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                 {
                     options.UseMemberCasing();
                 });
+
+            services.AddAuthorizationServicePolicies();
 
         }
 

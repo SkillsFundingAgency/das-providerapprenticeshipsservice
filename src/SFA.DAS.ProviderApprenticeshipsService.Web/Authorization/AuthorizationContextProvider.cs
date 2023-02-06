@@ -20,7 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
         private readonly ILogger<AuthorizationContextProvider> _log;
         private readonly IActionContextAccessor _actionContextAccessor;
 
-        public AuthorizationContextProvider(HttpContext httpContext, 
+        public AuthorizationContextProvider(HttpContext httpContext,
             IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
             ILogger<AuthorizationContextProvider> log,
             IActionContextAccessor actionContextAccessor)

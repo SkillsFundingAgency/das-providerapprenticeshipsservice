@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using NLog;
 
@@ -11,15 +13,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var urlReferrer = filterContext.HttpContext.Request.UrlReferrer;
+            var urlReferrer = filterContext.HttpContext.Request.GetDisplayUrl();
             var referrer = urlReferrer == null ? "unknown" : urlReferrer.ToString();
 
-            var rawUrl = filterContext.RequestContext.HttpContext.Request.RawUrl;
+            var rawUrl = filterContext.HttpContext.Request.GetUri();
 
-            var controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
-            var actionName = filterContext.ActionDescriptor.ActionName;
+            var controller = ((Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor)filterContext.ActionDescriptor).ControllerName;
+            var actionName = ((Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor)filterContext.ActionDescriptor).ActionName;
 
-            Logger.Info($"To track Apprentice V1 details UrlReferrer Request: {referrer} Request to Page: {rawUrl} Handled At: {controllerName}.{actionName}");
+            Logger.Info($"To track Apprentice V1 details UrlReferrer Request: {referrer} Request to Page: {rawUrl} Handled At: {controller}.{actionName}");
             base.OnActionExecuting(filterContext);
         }
     }

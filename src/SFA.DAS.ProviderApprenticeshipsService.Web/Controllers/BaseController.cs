@@ -43,31 +43,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return flashMessageViewModelFromCookie;
         }
 
-        /*
-        protected override void OnException(ExceptionContext filterContext)
-        {
-            if (filterContext.Exception is InvalidStateException)
-            {
-                filterContext.ExceptionHandled = true;
-                filterContext.Result = RedirectToAction("InvalidState", "Error");
-            }
-        }
-		protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            if (HttpContext.User.Identity.IsAuthenticated)
-            {
-                CurrentUserId = filterContext.HttpContext.GetClaimValue(DasClaimTypes.Upn);
-            }
-        }
-
         protected SignInUserModel GetSignedInUser()
         {
             return new SignInUserModel
             {
-                DisplayName = Request.GetClaimValue(DasClaimTypes.DisplayName),
+                DisplayName = HttpContext.GetClaimValue(DasClaimTypes.DisplayName),
                 Email = HttpContext.GetClaimValue(DasClaimTypes.Email)
             };
         }
-        */
     }
 }
