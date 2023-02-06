@@ -1,9 +1,10 @@
+using Microsoft.AspNetCore.Mvc.Filters;
 using NLog;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions
 {
-    public class InvalidStateExceptionFilter : FilterAttribute, IExceptionFilter
+    public class InvalidStateExceptionFilter : IExceptionFilter
     {
         public void OnException(ExceptionContext filterContext)
         {

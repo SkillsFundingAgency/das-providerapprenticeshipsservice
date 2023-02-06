@@ -14,7 +14,10 @@ using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SFA.DAS.Authorization.Mvc.Extensions;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
@@ -43,6 +46,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
             services.AddAuthorizationServicePolicies();
 
+            services.AddMvc(opt =>
+            {
+                opt.AddAuthorization();
+                opt.Filters.Add<InvalidStateExceptionFilter>();
+                opt.Filters.Add<ProviderUkPrnCheckActionFilter>();
+                opt.Filters.Add(new RoatpCourseManagementCheckActionFilter());
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,7 +76,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
         }
 
         private void ConfigureMvcOptions(MvcOptions mvcOptions)
-        { 
+        {
         }
     }
 }
