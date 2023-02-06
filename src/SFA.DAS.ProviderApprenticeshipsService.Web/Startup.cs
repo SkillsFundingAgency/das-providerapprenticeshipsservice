@@ -18,6 +18,7 @@ using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Middlewares;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
@@ -63,6 +64,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMiddleware<HttpExceptionMiddleware>();
 
             app.UseStaticFiles();
             app.UseRouting();
