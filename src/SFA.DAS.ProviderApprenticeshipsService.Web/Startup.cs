@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -15,20 +16,55 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.Authorization.Mvc.Extensions;
+using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
+using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Middlewares;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _environment;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
-            Configuration = configuration;
+            _configuration = configuration;
+            _environment = environment;
+
+            var config = new ConfigurationBuilder()
+              .AddConfiguration(configuration)
+              .SetBasePath(Directory.GetCurrentDirectory());
+#if DEBUG
+            if (!configuration.IsDev())
+            {
+                config.AddJsonFile("appsettings.json", false)
+                    .AddJsonFile("appsettings.Development.json", true);
+            }
+#endif
+
+            config.AddEnvironmentVariables();
+
+            if (!configuration.IsDev())
+            {
+                config.AddAzureTableStorage(options =>
+                {
+                    options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
+                    options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
+                    options.EnvironmentName = configuration["EnvironmentName"];
+                    options.PreFixConfigurationKeys = false;
+                    options.ConfigurationKeysRawJsonResult = new[] { "SFA.DAS.Encoding" };
+                }
+                );
+            }
+
+            _configuration = config.Build();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -46,6 +82,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                 });
 
             services.AddAuthorizationServicePolicies();
+            services.AddTransient<IProviderCommitmentsLogger, ProviderCommitmentsLogger>();
+            services.AddLogging();
 
             services.AddMvc(opt =>
             {

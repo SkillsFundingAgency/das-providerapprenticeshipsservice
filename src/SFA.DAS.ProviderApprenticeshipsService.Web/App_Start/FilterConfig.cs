@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.Authorization.Mvc.Extensions;
-using SFA.DAS.NLog.Logger.Web;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Services;

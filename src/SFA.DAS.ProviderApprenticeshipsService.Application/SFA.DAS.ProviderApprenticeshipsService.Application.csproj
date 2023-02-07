@@ -3,6 +3,11 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Queries\GetProviderAgreement\**" />
+    <EmbeddedResource Remove="Queries\GetProviderAgreement\**" />
+    <None Remove="Queries\GetProviderAgreement\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="FluentValidation.ValidatorAttribute" Version="8.0.0" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
@@ -29,9 +34,5 @@
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj" />
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Infrastructure\SFA.DAS.ProviderApprenticeshipsService.Infrastructure.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands\SendNotification" />
-    <Folder Include="Queries\GetProviderAgreement" />
   </ItemGroup>
 </Project>

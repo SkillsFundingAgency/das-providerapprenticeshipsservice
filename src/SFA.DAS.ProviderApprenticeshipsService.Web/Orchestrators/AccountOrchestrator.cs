@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Authorization.Services;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UnsubscribeNotification;
@@ -21,12 +21,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
     public class AccountOrchestrator
     {
         private readonly IMediator _mediator;
-        private readonly ILog _logger;
+        private readonly ILogger<AccountOrchestrator> _logger;
         private readonly IAuthorizationService _authorizationService;
 
         public AccountOrchestrator(
             IMediator mediator,
-            ILog logger,
+            ILogger<AccountOrchestrator> logger,
             IAuthorizationService authorizationService)
         {
             _mediator = mediator;
@@ -38,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             try
             {
-                _logger.Info($"Getting provider {providerId}");
+                _logger.LogInformation($"Getting provider {providerId}");
 
                 var providerResponse = await _mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });
 
@@ -54,7 +54,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             }
             catch (Exception ex)
             {
-                _logger.Warn(ex,$"Provider {providerId} details not found in provider information service");
+                _logger.LogWarning(ex,$"Provider {providerId} details not found in provider information service");
 
                 return new AccountHomeViewModel { AccountStatus = AccountStatus.NoAgreement };
             }
@@ -62,7 +62,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
         public async Task<NotificationSettingsViewModel> GetNotificationSettings(string userRef)
         {
-            _logger.Info($"Getting setting for user {userRef}");
+            _logger.LogInformation($"Getting setting for user {userRef}");
 
             var response = await _mediator.Send(new GetUserNotificationSettingsQuery
             {
@@ -74,7 +74,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 NotificationSettings = Map(response.NotificationSettings)
             };
 
-            _logger.Trace($"Found {response.NotificationSettings.Count} settings for user {userRef}");
+            _logger.LogTrace($"Found {response.NotificationSettings.Count} settings for user {userRef}");
 
             return model;
         }
@@ -82,7 +82,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         public async Task UpdateNotificationSettings(NotificationSettingsViewModel model)
         {
             var setting = model.NotificationSettings.First();
-            _logger.Info($"Uppdating setting for user {setting.UserRef}");
+            _logger.LogInformation($"Uppdating setting for user {setting.UserRef}");
 
             await _mediator.Send(new UpdateUserNotificationSettingsCommand
             {
@@ -90,7 +90,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                 ReceiveNotifications = setting.ReceiveNotifications
             });
 
-            _logger.Trace($"Updated receive notification to {setting.ReceiveNotifications} for user {setting.UserRef}");
+            _logger.LogTrace($"Updated receive notification to {setting.ReceiveNotifications} for user {setting.UserRef}");
         }
 
         public async Task<SummaryUnsubscribeViewModel> Unsubscribe(string userRef, string urlSettingsPage)

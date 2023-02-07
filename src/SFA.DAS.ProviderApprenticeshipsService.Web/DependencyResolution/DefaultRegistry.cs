@@ -30,7 +30,6 @@ using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.Encoding;
 using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Caching;
@@ -93,11 +92,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             ConfigureProviderRelationshipsApiClient();
 
-            ConfigureLogging();
+            // REPLACED ConfigureLogging();
 
             For<EncodingConfig>().Use(x => GetEncodingConfig(environment, configurationRepository));
         }
 
+        /* REPLACED
         private void ConfigureLogging()
         {
             For<ILoggingContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContextHelper.Current)));
@@ -106,7 +106,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 x.ParentType,
                 x.GetInstance<ILoggingContext>(),
                 null)).AlwaysUnique();
-        }
+        }*/
 
         private void ConfigureHashingService(ProviderApprenticeshipsServiceConfiguration config)
         {
@@ -115,11 +115,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IAccountLegalEntityPublicHashingService>().Use(x => new PublicHashingService(config.PublicAllowedAccountLegalEntityHashstringCharacters, config.PublicAllowedAccountLegalEntityHashstringSalt));
         }
 
-        private IProviderCommitmentsLogger GetBaseLogger(IContext x)
+        /* REPLACED
+         * private IProviderCommitmentsLogger GetBaseLogger(IContext x)
         {
             var parentType = x.ParentType;
             return new ProviderCommitmentsLogger(new NLogLogger(parentType, x.GetInstance<ILoggingContext>()));
-        }
+        }*/
 
         private string GetAndStoreEnvironment()
         {
