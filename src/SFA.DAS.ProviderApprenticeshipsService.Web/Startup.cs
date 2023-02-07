@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Builder.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -72,16 +73,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews(ConfigureMvcOptions)
-                // Newtonsoft.Json is added for compatibility reasons
-                // The recommended approach is to use System.Text.Json for serialization
-                // Visit the following link for more guidance about moving away from Newtonsoft.Json to System.Text.Json
-                // https://docs.microsoft.com/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to
-                .AddNewtonsoftJson(options =>
-                {
-                    options.UseMemberCasing();
-                });
-
             services.AddAuthentication().AddCookie(options =>
             {
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
@@ -96,12 +87,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             services.AddTransient<IProviderCommitmentsLogger, ProviderCommitmentsLogger>();
             services.AddLogging();
 
-            services.AddMvc(opt =>
+            services.AddControllersWithViews(options =>
             {
-                opt.AddAuthorization();
-                opt.Filters.Add<InvalidStateExceptionFilter>();
-                opt.Filters.Add<ProviderUkPrnCheckActionFilter>();
-                opt.Filters.Add(new RoatpCourseManagementCheckActionFilter());
+                options.AddAuthorization();
+                options.Filters.Add<InvalidStateExceptionFilter>();
+                options.Filters.Add<ProviderUkPrnCheckActionFilter>();
+                options.Filters.Add(new RoatpCourseManagementCheckActionFilter());
+                options.ModelBinderProviders.Insert(0, new TrimStringModelBinderProvider());
+            })
+            // Newtonsoft.Json is added for compatibility reasons
+            // The recommended approach is to use System.Text.Json for serialization
+            // Visit the following link for more guidance about moving away from Newtonsoft.Json to System.Text.Json
+            // https://docs.microsoft.com/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to
+            .AddNewtonsoftJson(options =>
+            {
+                options.UseMemberCasing();
             });
 
         }
@@ -133,11 +133,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-        }
-
-        private void ConfigureMvcOptions(MvcOptions mvcOptions)
-        {
-            mvcOptions.ModelBinderProviders.Insert(0, new TrimStringModelBinderProvider());
         }
     }
 }
