@@ -6,6 +6,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
     {
         public static void AddAuthorizationServicePolicies(this IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(

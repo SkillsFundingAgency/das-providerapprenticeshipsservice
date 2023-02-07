@@ -19,12 +19,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
             var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
 
+            /* REPLACED
             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions()
             {
                 CookieManager = new SystemWebCookieManager()
             });
+            */
 
             var options = new WsFederationAuthenticationOptions
             {

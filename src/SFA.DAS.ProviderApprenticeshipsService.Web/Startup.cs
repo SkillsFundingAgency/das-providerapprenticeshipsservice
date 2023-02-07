@@ -8,8 +8,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Microsoft.Extensions.Configuration;
@@ -69,8 +71,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpContextAccessor();
-
             services.AddControllersWithViews(ConfigureMvcOptions)
                 // Newtonsoft.Json is added for compatibility reasons
                 // The recommended approach is to use System.Text.Json for serialization
@@ -80,6 +80,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                 {
                     options.UseMemberCasing();
                 });
+
+            services.AddAuthentication().AddCookie(options =>
+            {
+                options.ExpireTimeSpan = TimeSpan.FromHours(1);
+                options.Cookie.Name = $"SFA.DAS.ProviderApprenticeshipsService.Web.Auth";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.SlidingExpiration = true;
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
+            });
 
             services.AddAuthorizationServicePolicies();
             services.AddTransient<IProviderCommitmentsLogger, ProviderCommitmentsLogger>();
@@ -102,10 +112,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
             app.UseMiddleware<HttpExceptionMiddleware>();
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCookiePolicy();
+
+            app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
