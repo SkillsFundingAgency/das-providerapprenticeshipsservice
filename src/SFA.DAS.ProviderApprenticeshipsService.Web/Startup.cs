@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -136,6 +137,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
         private void ConfigureMvcOptions(MvcOptions mvcOptions)
         {
+            mvcOptions.ModelBinderProviders.Insert(0, new TrimStringModelBinderProvider());
         }
     }
 }
