@@ -41,8 +41,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<ProviderPermissionsAuthorizationRegistry>();
                 c.AddRegistry<CommitmentsRegistry>();
-                c.AddRegistry<LinkGeneratorRegistry>();
-                c.AddRegistry<EncodingRegistry>();
                 c.AddRegistry<ContentApiClientRegistry>();
                 c.AddRegistry<RoatpCourseManagementWebRegistry>();
                 c.AddRegistry<ProviderFeaturesAuthorizationRegistry>();
