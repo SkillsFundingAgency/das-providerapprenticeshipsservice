@@ -1,0 +1,71 @@
+﻿[
+  {
+    "outputFileName": "wwwroot/bundles/sfajs.js",
+    "inputFiles": [
+      "wwwroot/dist/javascripts/jquery-1.11.0.min.js",
+      "wwwroot/dist/javascripts/selection-buttons.js",
+      "wwwroot/dist/javascripts/govuk-template.js",
+      "wwwroot/dist/javascripts/selection-buttons.js",
+      "wwwroot/dist/javascripts/stacker.js",
+      "wwwroot/dist/javascripts/libs/accessible-autocomplete.min.js",
+      "wwwroot/dist/javascripts/autocomplete.js",
+      "wwwroot/dist/javascripts/app.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/bundles/apprentice.js",
+    "inputFiles": [
+      "wwwroot/dist/javascripts/apprentice/select2.min.js",
+      "wwwroot/dist/javascripts/apprentice/dropdown.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/bundles/characterLimitation.js",
+    "inputFiles": [
+      "wwwroot/dist/javascripts/character-limit.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/bundles/lengthLimitation.js",
+    "inputFiles": [
+      "wwwroot/dist/javascripts/length-limit.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/bundles/jqueryvalcustom.js",
+    "inputFiles": [
+      "wwwroot/Scripts/jquery.validate.unobtrusive.custom.js",
+      "wwwroot/Scripts/jquery.validate.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/bundles/dropdown-select.css",
+    "inputFiles": [
+      "wwwroot/dist/css/dropdown-select.min.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/bundles/screenie6.css",
+    "inputFiles": [
+      "wwwroot/dist/css/screen-ie6.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/bundles/screenie7.css",
+    "inputFiles": [
+      "wwwroot/dist/css/screen-ie7.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/bundles/screenie8.css",
+    "inputFiles": [
+      "wwwroot/dist/css/screen-ie8.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/bundles/screen.css",
+    "inputFiles": [
+      "wwwroot/dist/css/screen.css"
+    ]
+  }
+]
