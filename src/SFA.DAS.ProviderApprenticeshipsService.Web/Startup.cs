@@ -28,6 +28,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Middlewares;
+using SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
@@ -85,6 +86,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
             services.AddAuthorizationServicePolicies();
             services.AddTransient<IProviderCommitmentsLogger, ProviderCommitmentsLogger>();
+
+            services.AddApplicationServices(_configuration);
+
             services.AddLogging();
 
             services.AddControllersWithViews(options =>

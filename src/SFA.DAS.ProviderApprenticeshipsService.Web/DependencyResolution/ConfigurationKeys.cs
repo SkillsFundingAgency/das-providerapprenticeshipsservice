@@ -4,5 +4,6 @@
     {
         public const string CommitmentsApiClient = "SFA.DAS.CommitmentsAPI";
         public const string PasConfiguration = "SFA.DAS.ProviderApprenticeshipsService";
+        public const string EncodingConfig = "SFA.DAS.Encoding";
     }
 }
