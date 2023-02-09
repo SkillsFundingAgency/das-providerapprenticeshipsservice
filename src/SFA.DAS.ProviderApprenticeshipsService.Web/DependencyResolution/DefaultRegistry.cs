@@ -89,24 +89,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IAuthorizationHandler>().Use<AuthorizationHandler>();
             
             RegisterMediator();
-
-            ConfigureProviderRelationshipsApiClient();
-
-            // REPLACED ConfigureLogging();
-
-            For<EncodingConfig>().Use(x => GetEncodingConfig(environment, configurationRepository));
         }
-
-        /* REPLACED
-        private void ConfigureLogging()
-        {
-            For<ILoggingContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContextHelper.Current)));
-            For<IProviderCommitmentsLogger>().Use(x => GetBaseLogger(x)).AlwaysUnique();
-            For<ILog>().Use(x => new NLogLogger(
-                x.ParentType,
-                x.GetInstance<ILoggingContext>(),
-                null)).AlwaysUnique();
-        }*/
 
         private void ConfigureHashingService(ProviderApprenticeshipsServiceConfiguration config)
         {
@@ -114,13 +97,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             For<IPublicHashingService>().Use(x => new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring));
             For<IAccountLegalEntityPublicHashingService>().Use(x => new PublicHashingService(config.PublicAllowedAccountLegalEntityHashstringCharacters, config.PublicAllowedAccountLegalEntityHashstringSalt));
         }
-
-        /* REPLACED
-         * private IProviderCommitmentsLogger GetBaseLogger(IContext x)
-        {
-            var parentType = x.ParentType;
-            return new ProviderCommitmentsLogger(new NLogLogger(parentType, x.GetInstance<ILoggingContext>()));
-        }*/
 
         private string GetAndStoreEnvironment()
         {
@@ -145,14 +121,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             return configurationService.Get<ProviderApprenticeshipsServiceConfiguration>();
         }
 
-        private EncodingConfig GetEncodingConfig(string environment, IConfigurationRepository configurationRepository)
-        {
-            var configurationService = new ConfigurationService(configurationRepository,
-                new ConfigurationOptions("SFA.DAS.Encoding", environment, "1.0"));
-
-            return configurationService.Get<EncodingConfig>();
-        }
-
         private static IConfigurationRepository GetConfigurationRepository()
         {
             return new AzureTableStorageConfigurationRepository(ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"]);
@@ -168,34 +136,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         {
             SystemDetails.EnvironmentName = envName;
             SystemDetails.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        }
-
-        private void ConfigureProviderRelationshipsApiClient()
-        {
-            For<ProviderRelationshipsApiConfiguration>().Use(c => c.GetInstance<ProviderApprenticeshipsServiceConfiguration>().ProviderRelationshipsApi);
-
-            var useStub = GetUseStubProviderRelationshipsSetting();
-            if (useStub)
-            {
-                For<IProviderRelationshipsApiClient>().Use<StubProviderRelationshipsApiClient>();
-            }
-        }
-
-        private bool GetUseStubProviderRelationshipsSetting()
-        {
-            var value = ConfigurationManager.AppSettings["UseStubProviderRelationships"];
-
-            if (value == null)
-            {
-                return false;
-            }
-
-            if (!bool.TryParse(value, out var result))
-            {
-                return false;
-            }
-
-            return result;
         }
     }
 }

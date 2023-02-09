@@ -10,7 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Services;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions
 {
-    public static class ContentApiClientRegistraions
+    public static class ContentApiClientRegistrations
     {
         public static IServiceCollection AddContentApi(this IServiceCollection services, IConfiguration configuration)
         {

@@ -12,6 +12,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
             services.AddContentApi(configuration);
             services.AddNotifications(configuration);
             services.AddRoatpServices(configuration);
+            services.AddProviderRelationshipsApi(configuration);
 
             return services;
         }
