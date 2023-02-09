@@ -2100,6 +2100,29 @@ legend {
 .form-group form {
   display: inline-block; }
 
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-right: -15px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline; }
+  .button-group a {
+    display: inline-block;
+    max-width: 100%;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    text-align: center; }
+  .button-group .button, .button-group .button-link {
+    margin-bottom: 15px; }
+  .button-group .button, .button-group .button-link,
+  .button-group a {
+    margin-right: 15px; }
+  .button-group a {
+    text-align: left; }
+
 table {
   margin-bottom: 20px; }
 
