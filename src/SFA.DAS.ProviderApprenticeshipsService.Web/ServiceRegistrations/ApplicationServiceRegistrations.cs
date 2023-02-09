@@ -8,6 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
         {
             services.AddEncodingServices(configuration);
             services.AddNotifications(configuration);
+            services.AddRoatpCourseManagementWebConfiguration(configuration);
 
             return services;
         }
