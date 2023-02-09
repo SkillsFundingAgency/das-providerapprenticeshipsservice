@@ -87,8 +87,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
             For<IAuthorizationHandler>().Use<AuthorizationHandler>();
-            
-            RegisterMediator();
         }
 
         private void ConfigureHashingService(ProviderApprenticeshipsServiceConfiguration config)
@@ -124,12 +122,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         private static IConfigurationRepository GetConfigurationRepository()
         {
             return new AzureTableStorageConfigurationRepository(ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"]);
-        }
-
-        private void RegisterMediator()
-        {
-            For<ServiceFactory>().Use<ServiceFactory>(ctx => ctx.GetInstance);
-            For<IMediator>().Use<Mediator>();
         }
 
         private void PopulateSystemDetails(string envName)
