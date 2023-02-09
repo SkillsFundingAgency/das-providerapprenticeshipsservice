@@ -7,13 +7,13 @@ using System.Net.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions
 {
     public static class NotificationServiceRegistrations
     {
         public static IServiceCollection AddNotifications(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<NotificationsApiClientConfiguration>(configuration.GetSection("NotificationsApi"));
+            services.Configure<NotificationsApiClientConfiguration>(c => configuration.GetSection("NotificationsApi").Bind(c));
             services.AddSingleton(cfg => cfg.GetService<IOptions<NotificationsApiClientConfiguration>>().Value);
 
             services.AddTransient<INotificationsApi>(s =>

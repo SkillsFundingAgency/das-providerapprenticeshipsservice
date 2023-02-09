@@ -21,6 +21,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
@@ -73,6 +74,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
             services.AddAuthentication().AddCookie(options =>
             {
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
@@ -83,9 +85,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                 options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
             });
 
+
             services.AddAuthorizationServicePolicies();
             services.AddTransient<IProviderCommitmentsLogger, ProviderCommitmentsLogger>();
-
+            services.AddEncodingServices(_configuration);
             services.AddApplicationServices(_configuration);
 
             services.AddLogging();

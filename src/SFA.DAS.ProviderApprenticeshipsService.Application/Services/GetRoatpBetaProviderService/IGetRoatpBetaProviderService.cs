@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Services
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services.GetRoatpBetaProviderService
 {
     public interface IGetRoatpBetaProviderService
     {

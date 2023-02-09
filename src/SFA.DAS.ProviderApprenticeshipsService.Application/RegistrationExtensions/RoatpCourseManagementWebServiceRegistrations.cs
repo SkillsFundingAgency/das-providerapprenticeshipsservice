@@ -9,15 +9,20 @@ using Microsoft.Extensions.Configuration;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using Microsoft.Extensions.Options;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Services.GetRoatpBetaProviderService;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions
 {
     public static class RoatpCourseManagementWebServiceRegistrations
     {
-        public static IServiceCollection AddRoatpCourseManagementWebConfiguration(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddRoatpServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IRoatpCourseManagementWebConfiguration>(configuration.Get<RoatpCourseManagementWebConfiguration>());
+            // services.AddSingleton<IRoatpCourseManagementWebConfiguration>(configuration.Get<RoatpCourseManagementWebConfiguration>());
             // services.AddSingleton<IRoatpCourseManagementWebConfiguration>(cfg => cfg.GetService<IOptions<RoatpCourseManagementWebConfiguration>>().Value);
+            services.AddSingleton(configuration.Get<RoatpCourseManagementWebConfiguration>());
+
+            services.AddTransient<IGetRoatpBetaProviderService, GetRoatpBetaProviderService>();
 
             return services;
         }

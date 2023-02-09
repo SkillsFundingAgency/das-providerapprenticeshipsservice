@@ -2,7 +2,7 @@
 using System.IO;
 using System;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.App_Start
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions
 {
     public static class EnvironmentConfigurationExtensions
     {

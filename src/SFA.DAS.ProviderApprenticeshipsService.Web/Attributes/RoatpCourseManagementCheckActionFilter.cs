@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Services;
 using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Services.GetRoatpBetaProviderService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 {

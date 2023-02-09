@@ -12,13 +12,11 @@ using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using Microsoft.Extensions.Options;
-using SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 using Microsoft.Extensions.Logging;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions
 {
     public static class CommitmentsServiceRegistrations
     {
@@ -40,21 +38,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
             });
 
             // ICOMMITMENTSV2APICLIENT
-            services.Configure<CommitmentsApiClientV2Configuration>(configuration.GetSection("CommitmentsApiClientV2"));
+            services.Configure<CommitmentsApiClientV2Configuration>(c => configuration.GetSection("CommitmentsApiClientV2").Bind(c));
             services.AddSingleton(cfg => cfg.GetService<IOptions<CommitmentsApiClientV2Configuration>>().Value);
 
-            services.AddSingleton<ICommitmentsV2ApiClient, CommitmentsV2ApiClient>();
-            services.AddHttpClient<ICommitmentsV2ApiClient, CommitmentsV2ApiClient>();
+            // services.AddSingleton<ICommitmentsV2ApiClient, CommitmentsV2ApiClient>();
+            // services.AddHttpClient<ICommitmentsV2ApiClient, CommitmentsV2ApiClient>();
             //.AddHttpMessageHandler<RequestIdMessageRequestHandler>()
             //.AddHttpMessageHandler<SessionIdMessageRequestHandler>();
 
-            /*
            services.AddSingleton<ICommitmentsV2ApiClient>(s =>
            {
+               ILogger<CommitmentsV2ApiClient> commitmentsV2ApiLogger = new LoggerFactory().CreateLogger<CommitmentsV2ApiClient>();
                var commitmentsV2Config = s.GetService<CommitmentsApiClientV2Configuration>();
                var httpClient = GetHttpV2Client(commitmentsV2Config, configuration);
-               return new CommitmentsV2ApiClient(httpClient, commitmentsV2Config, new ILogger<CommitmentsV2ApiClient>());
-           });*/
+
+               return new CommitmentsV2ApiClient(httpClient, commitmentsV2Config, commitmentsV2ApiLogger);
+           });
 
             return services;
         }
