@@ -82,7 +82,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 
     public class RoatpCourseManagementWebConfiguration : IRoatpCourseManagementWebConfiguration
     {
-        public ProviderFeaturesConfiguration ProviderFeaturesConfiguration { get; set; }
         public string DatabaseConnectionString { get; set; }
         public string ServiceBusConnectionString { get; set; }
     }

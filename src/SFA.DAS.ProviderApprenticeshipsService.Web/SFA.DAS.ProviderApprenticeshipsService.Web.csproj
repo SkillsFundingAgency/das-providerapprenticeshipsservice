@@ -631,8 +631,6 @@
     <Compile Include="Attributes\DeprecatedAttribute.cs" />
     <Compile Include="Attributes\ProviderUkPrnCheckActionFilter.cs" />
     <Compile Include="Attributes\ProviderUkPrnCheckAttribute.cs" />
-    <Compile Include="Attributes\RoatpConstants.cs" />
-    <Compile Include="Attributes\RoatpCourseManagementCheckActionFilter.cs" />
     <Compile Include="Attributes\RoleAuthorizeAttribute.cs" />
     <Compile Include="Authentication\RoleNames.cs" />
     <Compile Include="Authentication\ServiceClaims.cs" />
@@ -687,8 +685,6 @@
     <Compile Include="Orchestrators\Mappers\AgreementMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IAgreementMapper.cs" />
     <Compile Include="Routing\RouteDataKeys.cs" />
-    <Compile Include="Services\GetRoatpBetaProviderService.cs" />
-    <Compile Include="Services\IGetRoatpBetaProviderService.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestContext.cs" />
