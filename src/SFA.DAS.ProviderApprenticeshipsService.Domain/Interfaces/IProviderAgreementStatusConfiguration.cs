@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
-    public interface IProviderAgreementStatusConfiguration : IConfiguration
+    public interface IProviderAgreementStatusConfiguration : IBaseConfiguration
     {
         bool CheckForContractAgreements { get; set; }
     }

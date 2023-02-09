@@ -15,7 +15,6 @@ using Microsoft.Extensions.Options;
 using SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.App_Start;
 using Microsoft.Extensions.Logging;
 

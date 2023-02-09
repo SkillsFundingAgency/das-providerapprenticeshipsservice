@@ -2,15 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SFA.DAS.Encoding;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution;
-using StructureMap;
-using System;
-using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
-using System.Configuration;
-using SFA.DAS.Configuration;
-using Newtonsoft.Json;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
 {

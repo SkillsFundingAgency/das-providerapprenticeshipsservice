@@ -9,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using Microsoft.Extensions.Options;
-using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
 {

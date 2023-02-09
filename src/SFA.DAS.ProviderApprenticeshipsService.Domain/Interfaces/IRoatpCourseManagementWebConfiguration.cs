@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
-    public interface IRoatpCourseManagementWebConfiguration: IConfiguration
+    public interface IRoatpCourseManagementWebConfiguration: IBaseConfiguration
     {
     }
 }

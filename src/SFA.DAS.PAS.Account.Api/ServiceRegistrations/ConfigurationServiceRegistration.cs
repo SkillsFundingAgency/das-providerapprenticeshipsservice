@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.PAS.Account.Api.ServiceRegistrations
 {

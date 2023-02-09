@@ -3,7 +3,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Configuration
 {
-    public class AccountApiConfiguration : IAccountApiConfiguration, IConfiguration
+    public class AccountApiConfiguration : IAccountApiConfiguration, IBaseConfiguration
     {
         public string ApiBaseUrl { get; set; }
         public string ClientId { get; set; }
