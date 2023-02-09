@@ -6,7 +6,6 @@ using SFA.DAS.Notifications.Api.Client;
 using System.Net.Http;
 using SFA.DAS.Http.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using StructureMap;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;

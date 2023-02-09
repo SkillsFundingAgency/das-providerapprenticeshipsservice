@@ -419,7 +419,6 @@
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.56514" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.43" />
     <PackageReference Include="SFA.DAS.ProviderRelationships.Api.Client" Version="4.0.3" />
-    <PackageReference Include="StructureMap.MVC5" Version="3.1.1.134" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.ComponentModel.Composition" Version="7.0.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />

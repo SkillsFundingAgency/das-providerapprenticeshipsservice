@@ -79,31 +79,4 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string SnippetKey { get; set; }
         public string CobrowsingSnippetKey { get; set; }
     }
-
-    public class RoatpCourseManagementWebConfiguration : IRoatpCourseManagementWebConfiguration
-    {
-        public ProviderFeaturesConfiguration ProviderFeaturesConfiguration { get; set; }
-        public string DatabaseConnectionString { get; set; }
-        public string ServiceBusConnectionString { get; set; }
-    }
-    public class ProviderFeaturesConfiguration
-    {
-        public List<ProviderFeatureToggle> FeatureToggles { get; set; }
-    }
-
-    public class ProviderFeatureToggle : FeatureToggle
-    {
-        public List<ProviderFeatureToggleWhitelistItem> Whitelist { get; set; }
-    }
-
-    public class FeatureToggle
-    {
-        public string Feature { get; set; }
-        public bool IsEnabled { get; set; }
-    }
-
-    public class ProviderFeatureToggleWhitelistItem
-    {
-        public int Ukprn { get; set; }
-    }
 }

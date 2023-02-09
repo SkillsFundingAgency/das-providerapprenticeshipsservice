@@ -1,7 +1,7 @@
 ﻿using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Configuration
+namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 {
     public class AccountApiConfiguration : IAccountApiConfiguration, IBaseConfiguration
     {
