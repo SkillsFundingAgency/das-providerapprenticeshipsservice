@@ -75,21 +75,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            services.AddAuthentication().AddCookie(options =>
-            {
-                options.ExpireTimeSpan = TimeSpan.FromHours(1);
-                options.Cookie.Name = $"SFA.DAS.ProviderApprenticeshipsService.Web.Auth";
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.SlidingExpiration = true;
-                options.Cookie.SameSite = SameSiteMode.None;
-                options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
-            });
-
-
-            services.AddAuthorizationServicePolicies();
             services.AddTransient<IProviderCommitmentsLogger, ProviderCommitmentsLogger>();
             services.AddEncodingServices(_configuration);
             services.AddApplicationServices(_configuration);
+
+            services.AddAndConfigureAuthentication();
+            services.AddAuthorizationServicePolicies();
 
             services.AddLogging();
 

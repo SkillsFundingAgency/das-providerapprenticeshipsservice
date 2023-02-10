@@ -394,6 +394,7 @@
     <PackageReference Include="jQuery.Validation" Version="1.11.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.JavaScript" Version="0.15.0-build58334" />
     <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.5.1" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="6.0.12" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
