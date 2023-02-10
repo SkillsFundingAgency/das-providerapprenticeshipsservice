@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile
+﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
+
+namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile
 {
     public class User
     {

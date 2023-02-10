@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Data
+namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
     public interface IAgreementStatusQueryRepository
     {

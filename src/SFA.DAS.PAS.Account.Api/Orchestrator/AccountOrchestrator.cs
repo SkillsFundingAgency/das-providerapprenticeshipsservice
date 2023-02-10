@@ -2,7 +2,8 @@
 using SFA.DAS.PAS.Account.Api.Types;
 using SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers;
 using SFA.DAS.PAS.Account.Application.Queries.GetProviderAgreement;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
+using ProviderAgreementStatus = SFA.DAS.PAS.Account.Api.Types.ProviderAgreementStatus;
 
 namespace SFA.DAS.PAS.Account.Api.Orchestrator;
 public interface IAccountOrchestrator

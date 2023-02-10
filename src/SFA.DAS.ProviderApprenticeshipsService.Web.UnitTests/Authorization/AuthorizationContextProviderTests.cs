@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization.Context;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Routing;

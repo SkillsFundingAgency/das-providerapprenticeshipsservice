@@ -1,5 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Training;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Domain.UnitTests
 {

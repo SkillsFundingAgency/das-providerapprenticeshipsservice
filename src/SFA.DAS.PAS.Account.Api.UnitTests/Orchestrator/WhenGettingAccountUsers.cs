@@ -5,9 +5,9 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserSetting;
 
 namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
 {

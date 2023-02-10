@@ -1,5 +1,5 @@
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserSetting;
 
 namespace SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers
 {

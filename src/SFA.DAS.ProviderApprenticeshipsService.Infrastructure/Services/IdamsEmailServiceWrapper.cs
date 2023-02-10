@@ -8,13 +8,8 @@ using Newtonsoft.Json.Linq;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Models;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
+namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 {
-    public interface IIdamsEmailServiceWrapper
-    {
-        Task<List<string>> GetEmailsAsync(long ukprn, string identities);
-    }
-
     public class IdamsEmailServiceWrapper : IIdamsEmailServiceWrapper
     {
         private readonly ILogger<IdamsEmailServiceWrapper> _logger;

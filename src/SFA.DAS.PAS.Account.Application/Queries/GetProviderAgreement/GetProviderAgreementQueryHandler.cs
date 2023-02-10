@@ -1,8 +1,6 @@
 ﻿using MediatR;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.PAS.Account.Application.Queries.GetProviderAgreement
 {

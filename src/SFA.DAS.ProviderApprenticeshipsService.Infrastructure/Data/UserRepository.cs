@@ -6,9 +6,9 @@ using Dapper;
 using Microsoft.Extensions.Logging;
 using MoreLinq.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
 using Microsoft.Extensions.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.IdamsUser;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {

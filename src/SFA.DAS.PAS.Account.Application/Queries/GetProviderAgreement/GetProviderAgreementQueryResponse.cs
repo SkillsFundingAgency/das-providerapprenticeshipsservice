@@ -1,4 +1,4 @@
-﻿using SFA.DAS.ProviderApprenticeshipsService.Domain;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
 
 namespace SFA.DAS.PAS.Account.Application.Queries.GetProviderAgreement
 {

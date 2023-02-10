@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Enums
 {
     public enum UserType : short
     {

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.IdamsUser;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services
 {

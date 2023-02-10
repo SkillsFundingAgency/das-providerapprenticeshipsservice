@@ -3,9 +3,9 @@ using System.Data;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserSetting;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {

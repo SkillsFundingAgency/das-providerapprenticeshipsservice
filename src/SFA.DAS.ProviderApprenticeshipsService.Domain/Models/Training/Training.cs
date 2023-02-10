@@ -1,6 +1,7 @@
-﻿using System;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
+using System;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Domain
+namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Training
 {
     public class Training
     {
@@ -46,6 +47,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain
             }
 
             throw new InvalidOperationException($"The code '{code}' is not valid");
-        } 
+        }
     }
 }

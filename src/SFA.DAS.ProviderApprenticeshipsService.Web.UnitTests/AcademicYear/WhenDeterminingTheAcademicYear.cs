@@ -10,7 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.AcademicYear
     public class WhenDeterminingTheAcademicYear
     {
         private Mock<ICurrentDateTime> _currentDateTime;
-        private IAcademicYearDateProvider _academicYear;
+        private IAcademicYearDateProviderService _academicYear;
 
         [SetUp]
         public void Arrange()
@@ -27,7 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.AcademicYear
         {
             //Arrange
             _currentDateTime.Setup(x => x.Now).Returns(currentDate);
-            _academicYear = new Infrastructure.Services.AcademicYearDateProvider(_currentDateTime.Object);
+            _academicYear = new Infrastructure.Services.AcademicYearDateProviderService(_currentDateTime.Object);
 
             //Act
             var actualStart = _academicYear.CurrentAcademicYearStartDate;

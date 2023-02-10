@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
+namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
 {
     public interface IHttpClientWrapper
     {

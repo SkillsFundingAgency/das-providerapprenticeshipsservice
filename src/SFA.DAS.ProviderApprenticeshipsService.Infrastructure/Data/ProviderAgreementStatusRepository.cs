@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 

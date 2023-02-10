@@ -13,6 +13,7 @@
     <PackageReference Include="SFA.DAS.Commitments.Api.Types" Version="7.78.0" />
     <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Types" Version="9.0.2" />
     <PackageReference Include="SFA.DAS.Http" Version="3.2.69" />
+	<PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Types" Version="2.2.43" />
     <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="4.4.1" />
     <PackageReference Include="System.Text.Encodings.Web" Version="5.0.1" />

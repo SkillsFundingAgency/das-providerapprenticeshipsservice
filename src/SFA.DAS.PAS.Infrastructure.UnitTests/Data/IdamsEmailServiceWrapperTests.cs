@@ -3,8 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.PAS.Infrastructure.UnitTests.Data
 {
