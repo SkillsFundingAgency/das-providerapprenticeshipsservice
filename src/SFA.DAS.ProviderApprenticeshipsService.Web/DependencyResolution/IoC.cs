@@ -28,9 +28,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         public static IContainer Initialize()
         {
             return new Container(c =>
-            {
-                c.Policies.Add<CurrentDatePolicy>();
-                
+            {                
                 c.AddRegistry<AuthorizationRegistry>();
                 c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<ProviderPermissionsAuthorizationRegistry>();
