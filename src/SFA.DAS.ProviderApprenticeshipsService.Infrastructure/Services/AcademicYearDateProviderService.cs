@@ -7,11 +7,11 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 {
-    public class AcademicYearDateProvider : IAcademicYearDateProvider
+    public class AcademicYearDateProviderService : IAcademicYearDateProviderService
     {
         private readonly ICurrentDateTime _currentDateTime;
 
-        public AcademicYearDateProvider(ICurrentDateTime currentDateTime)
+        public AcademicYearDateProviderService(ICurrentDateTime currentDateTime)
         {
             _currentDateTime = currentDateTime;
         }
