@@ -11,7 +11,12 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
-    public sealed class AgreementOrchestrator
+    public interface IAgreementOrchestrator
+    {
+        Task<AgreementsViewModel> GetAgreementsViewModel(long providerId, string organisation);
+    }
+
+    public sealed class AgreementOrchestrator : IAgreementOrchestrator
     {
         private readonly IAgreementMapper _agreementMapper;
         private readonly IMediator _mediator;

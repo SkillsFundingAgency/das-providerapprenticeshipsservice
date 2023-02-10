@@ -78,6 +78,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.App_Start
             principal.Identities.First().MapClaimToRoles();
 
             await orchestrator.SaveIdentityAttributes(id, parsedUkprn, displayName, email);
+
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegisteredUser;
@@ -6,7 +7,12 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
-    public class AuthenticationOrchestrator
+    public interface IAuthenticationOrchestrator
+    {
+        Task SaveIdentityAttributes(string userId, long ukprn, string displayName, string email);
+    }
+
+    public class AuthenticationOrchestrator : IAuthenticationOrchestrator
     {
         private readonly IMediator _mediator;
         private readonly IProviderCommitmentsLogger _logger;

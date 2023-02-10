@@ -76,6 +76,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
         {
             services.AddOptions();
             services.AddTransient<IProviderCommitmentsLogger, ProviderCommitmentsLogger>();
+            services.AddOrchestrators();
             services.AddEncodingServices(_configuration);
             services.AddApplicationServices(_configuration);
 

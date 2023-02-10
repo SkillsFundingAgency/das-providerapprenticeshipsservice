@@ -18,7 +18,15 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
-    public class AccountOrchestrator
+    public interface IAccountOrchestrator
+    {
+        Task<AccountHomeViewModel> GetAccountHomeViewModel(int providerId);
+        Task<NotificationSettingsViewModel> GetNotificationSettings(string userRef);
+        Task UpdateNotificationSettings(NotificationSettingsViewModel model);
+        Task<SummaryUnsubscribeViewModel> Unsubscribe(string userRef, string urlSettingsPage);
+    }
+
+    public class AccountOrchestrator : IAccountOrchestrator
     {
         private readonly IMediator _mediator;
         private readonly ILogger<AccountOrchestrator> _logger;
