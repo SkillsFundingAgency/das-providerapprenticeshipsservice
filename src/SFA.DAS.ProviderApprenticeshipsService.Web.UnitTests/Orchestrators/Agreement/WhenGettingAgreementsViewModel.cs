@@ -42,7 +42,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agr
             _agreementMapper = new Mock<IAgreementMapper>();
 
             _orchestrator = new AgreementOrchestrator(_mediator.Object,
-                Mock.Of<IHashingService>(),
                 Mock.Of<IProviderCommitmentsLogger>(),
                 _agreementMapper.Object);
         }

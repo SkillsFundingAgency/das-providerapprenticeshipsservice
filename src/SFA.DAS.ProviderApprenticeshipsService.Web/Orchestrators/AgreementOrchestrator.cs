@@ -20,18 +20,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
     {
         private readonly IAgreementMapper _agreementMapper;
         private readonly IMediator _mediator;
-        private readonly IHashingService _hashingService;
         private readonly IProviderCommitmentsLogger _logger;
 
         public AgreementOrchestrator(
             IMediator mediator,
-            IHashingService hashingService,
             IProviderCommitmentsLogger logger,
             IAgreementMapper agreementMapper)
         {
             _agreementMapper = agreementMapper;
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            _hashingService = hashingService ?? throw new ArgumentNullException(nameof(hashingService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Authorization.Context;
-using SFA.DAS.Authorization.ProviderFeatures.Context;
+//using SFA.DAS.Authorization.ProviderFeatures.Context;
 using SFA.DAS.Authorization.ProviderPermissions.Context;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;

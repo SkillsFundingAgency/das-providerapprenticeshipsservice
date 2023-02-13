@@ -53,47 +53,40 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
         public DefaultRegistry()
         {
-            Scan(
-                scan =>
-                {
-                    scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
-                    scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(t => t.Singleton());
-                    scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
-                    scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
-                    scan.RegisterConcreteTypesAgainstTheFirstInterface();
-                    scan.Exclude(t => t.GetInterface(nameof(IAuthorizationHandler)) != null);
-                    //scan.ExcludeType<DefaultAuthorizationContextProvider>();
-                });
-
+            // the below 4 lines can all go with high confidence, azuretablestorage in startup replaces this all
             var environment = GetAndStoreEnvironment();
             var configurationRepository = GetConfigurationRepository();
             For<IConfigurationRepository>().Use(configurationRepository);
-
             var config = GetConfiguration(environment, configurationRepository);
-            ConfigureHashingService(config);
+
+            // this is basically the MAIN config,ned to ensure this has been done, it was surely done in the API
             For<IProviderAgreementStatusConfiguration>().Use(config);
             For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
+
+            // to be registered
             For<SFA.DAS.Authorization.ProviderFeatures.Configuration.ProviderFeaturesConfiguration>().Use(config.Features);
             For<IFeatureTogglesService<DAS.Authorization.ProviderFeatures.Models.ProviderFeatureToggle>>().Use<FeatureTogglesService<DAS.Authorization.ProviderFeatures.Configuration.ProviderFeaturesConfiguration, DAS.Authorization.ProviderFeatures.Models.ProviderFeatureToggle>>();
 
-            For<ICache>().Use<InMemoryCache>(); //RedisCache
+            // only in PAS.API
             For<IAgreementStatusQueryRepository>().Use<ProviderAgreementStatusRepository>();
+
+            // THIS IS USED IN eMPLOYERaCCOUNTService in Infrastructure so needs registered at Application or Infrastructure, aong with the config
             For<IAccountApiClient>().Use<AccountApiClient>();
             For<IAccountApiConfiguration>().Use<Domain.Configuration.AccountApiConfiguration>();
 
-            For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContextHelper.Current));
+            //SFA.DAS.CookieService is incompatible...
+            // it was used in the deleted CookieStorageService
+            // SO THIS SEEMS LIKE A TASK TO REPLACE
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
+
+            // when and why has CookieStorageService has been deleted???
+            // it is used in various controllers in Web....
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
+            // registered but never used... need to check with Dan
+            // the below has also been done in AuthorizationRegistry
             For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
             For<IAuthorizationHandler>().Use<AuthorizationHandler>();
-        }
-
-        private void ConfigureHashingService(ProviderApprenticeshipsServiceConfiguration config)
-        {
-            For<IHashingService>().Use(x => new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring));
-            For<IPublicHashingService>().Use(x => new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring));
-            For<IAccountLegalEntityPublicHashingService>().Use(x => new PublicHashingService(config.PublicAllowedAccountLegalEntityHashstringCharacters, config.PublicAllowedAccountLegalEntityHashstringSalt));
         }
 
         private string GetAndStoreEnvironment()
