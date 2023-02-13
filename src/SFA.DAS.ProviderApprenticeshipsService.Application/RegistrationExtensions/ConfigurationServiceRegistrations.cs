@@ -12,11 +12,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensi
         public static IServiceCollection AddConfigurations(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IProviderAgreementStatusConfiguration>(configuration.Get<ProviderApprenticeshipsServiceConfiguration>());
-
-            // TBC if it can be removed: I dont think this is used but replacing:
-            // c.Policies.Add(new ConfigurationPolicy<AccountApiConfiguration>("SFA.DAS.EmployerAccountAPI"));
-            // in old IoC.cs
             services.AddSingleton<IAccountApiConfiguration>(configuration.Get<AccountApiConfiguration>());
+            services.AddSingleton<IAccountApiClient>(configuration.Get<AccountApiClient>());
 
             return services;
         }

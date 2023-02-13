@@ -79,6 +79,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             services.AddOrchestrators();
             services.AddEncodingServices(_configuration);
             services.AddApplicationServices(_configuration);
+            services.AddFeatureToggleService(_configuration);
 
             services.AddAndConfigureAuthentication();
             services.AddAuthorizationServicePolicies();
