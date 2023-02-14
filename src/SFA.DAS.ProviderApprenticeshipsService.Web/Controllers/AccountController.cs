@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Routing;
 using NLog;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
+using Microsoft.AspNetCore.Authentication.WsFederation;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -41,13 +42,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [AllowAllRoles]
         [Route("~/signin", Name = "signin")]
-        public void SignIn()
+        public IActionResult SignIn()
         {
-            if (!Request.IsAuthenticated)
+            if (!User.Identity.IsAuthenticated)
             {
-                HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties {RedirectUri = "/"},
-                    WsFederationAuthenticationDefaults.AuthenticationType);
+                HttpContext.ChallengeAsync(WsFederationDefaults.AuthenticationScheme);
             }
+            return RedirectToAction("/");
         }
 
         [AllowAllRoles]
@@ -63,8 +64,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var authenticationProperties = new AuthenticationProperties { RedirectUri = callbackUrl };
             authenticationProperties.Parameters.Clear();
             authenticationProperties.Parameters.Add("id_token", idToken);
-            return SignOut(
-                authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+            SignOut(authenticationProperties, 
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    WsFederationDefaults.AuthenticationScheme);
+
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToRoute("account-home");
+            }
+
+            return RedirectToRoute("home");
             /*
             var auth = _httpContext.Request.Query.GetOwinContext().Authentication;
 
