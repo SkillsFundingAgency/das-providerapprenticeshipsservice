@@ -19,7 +19,7 @@ using SFA.DAS.Commitments.Api.Client.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions
 {
-    public static class ProviderRelationshipsApiClient
+    public static class ProviderRelationshipsApiClientRegistrations
     {
         public static IServiceCollection AddProviderRelationshipsApi(this IServiceCollection services, IConfiguration configuration)
         {

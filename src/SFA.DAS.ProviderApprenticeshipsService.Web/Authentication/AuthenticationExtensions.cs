@@ -13,7 +13,7 @@ using System.Configuration;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.App_Start
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication
 {
     public static class AuthenticationExtensions
     {
@@ -30,7 +30,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.App_Start
                 sharedOptions.DefaultSignInScheme =
                     CookieAuthenticationDefaults.AuthenticationScheme;
                 sharedOptions.DefaultChallengeScheme =
-                   WsFederationDefaults.AuthenticationScheme;
+                    WsFederationDefaults.AuthenticationScheme;
             })
                 .AddWsFederation(options =>
                 {
@@ -57,10 +57,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.App_Start
         {
             logger.Info("SecurityTokenValidated notification called");
 
-            var id = principal.Claims.FirstOrDefault(claim => claim.Type == (DasClaimTypes.Upn))?.Value;
-            var displayName = principal.Claims.FirstOrDefault(claim => claim.Type == (DasClaimTypes.DisplayName))?.Value;
-            var ukprn = principal.Claims.FirstOrDefault(claim => claim.Type == (DasClaimTypes.Ukprn))?.Value;
-            var email = principal.Claims.FirstOrDefault(claim => claim.Type == (DasClaimTypes.Email))?.Value;
+            var id = principal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.Upn)?.Value;
+            var displayName = principal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.DisplayName)?.Value;
+            var ukprn = principal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.Ukprn)?.Value;
+            var email = principal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.Email)?.Value;
 
             httpContext.Items.Add(ClaimsIdentity.DefaultNameClaimType, id);
             httpContext.Items.Add(DasClaimTypes.DisplayName, displayName);
