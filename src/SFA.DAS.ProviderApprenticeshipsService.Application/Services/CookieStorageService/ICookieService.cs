@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService
 {
     public interface ICookieService<T>
     {

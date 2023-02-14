@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService
 {
     public interface ICookieStorageService<T>
     {

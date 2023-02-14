@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using System;
 using System.Text;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService
 {
     public class HttpCookieService<T> : ICookieService<T>
     {

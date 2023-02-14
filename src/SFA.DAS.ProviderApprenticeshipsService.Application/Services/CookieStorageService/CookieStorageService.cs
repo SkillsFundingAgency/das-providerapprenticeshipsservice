@@ -1,8 +1,6 @@
-﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using Microsoft.AspNetCore.Http;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
+﻿using Microsoft.AspNetCore.Http;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService
 {
     public class CookieStorageService<T> : ICookieStorageService<T>
     {
