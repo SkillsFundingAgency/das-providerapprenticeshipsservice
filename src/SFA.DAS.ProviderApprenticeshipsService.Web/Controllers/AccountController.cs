@@ -18,6 +18,7 @@ using static IdentityServer3.Core.Constants;
 using Microsoft.AspNetCore.Routing;
 using NLog;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {

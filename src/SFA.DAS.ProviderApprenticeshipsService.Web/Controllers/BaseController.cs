@@ -1,17 +1,15 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
-    [Authorize(Roles = nameof(RoleNames.DasPermission))]
+    [Authorize(Policy = nameof(PolicyNames.RequireAuthenticatedUser))]
+    [Authorize(Policy = nameof(PolicyNames.RequireDasPermissionRole))]
     public abstract class BaseController : Controller
     {
         private const string FlashMessageCookieName = "sfa-das-providerapprenticeshipsservice-flashmessage";

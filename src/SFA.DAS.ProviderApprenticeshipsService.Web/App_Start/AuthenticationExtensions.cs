@@ -79,7 +79,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.App_Start
 
             await orchestrator.SaveIdentityAttributes(id, parsedUkprn, displayName, email);
 
-            return Task.CompletedTask;
+            return;
         }
     }
 }

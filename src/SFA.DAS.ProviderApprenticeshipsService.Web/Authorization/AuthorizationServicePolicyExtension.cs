@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
 {
@@ -16,6 +17,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
                     , policy =>
                     {
                         policy.RequireAuthenticatedUser();
+                    });
+
+                options.AddPolicy(
+                    PolicyNames
+                        .RequireDasPermissionRole
+                    , policy =>
+                    {
+                        policy.RequireRole(RoleNames.DasPermission);
                     });
             });
         }
