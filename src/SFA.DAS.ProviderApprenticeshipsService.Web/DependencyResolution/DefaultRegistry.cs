@@ -53,15 +53,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
         public DefaultRegistry()
         {
-            //SFA.DAS.CookieService is incompatible...
-            // it was used in the deleted CookieStorageService
-            // SO THIS SEEMS LIKE A TASK TO REPLACE
-            For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
-
-            // when and why has CookieStorageService has been deleted???
-            // it is used in various controllers in Web....
-            For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
-
             // registered but never used... need to check with Dan
             // the below has also been done in AuthorizationRegistry
             For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();

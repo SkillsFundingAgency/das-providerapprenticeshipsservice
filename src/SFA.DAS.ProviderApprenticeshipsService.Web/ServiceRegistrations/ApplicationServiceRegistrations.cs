@@ -17,6 +17,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
             services.AddFluentValidation();
             services.AddMediatRHandlers();
             services.AddHashingServices(configuration);
+            services.AddCookieStorageService();
 
             return services;
         }
