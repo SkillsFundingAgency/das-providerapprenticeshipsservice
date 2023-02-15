@@ -20,7 +20,7 @@
 
 <div class="grid-row">
     <div class="column-full home-page">
-        @Html.GetClientContentByType("banner", useLegacyStyles: true)
+        @Model.BannerContent
         <h1 class="heading-xlarge">@Model.ProviderName</h1>
         <p class="grey-text">UKPRN: @Model.ProviderId</p>
         <hr class="hr-double">
@@ -169,4 +169,4 @@
     </div>
 </div>
 
-@Html.GetClientContentByType("covid_section", useLegacyStyles: true)
+@Model.CovidSectionContent

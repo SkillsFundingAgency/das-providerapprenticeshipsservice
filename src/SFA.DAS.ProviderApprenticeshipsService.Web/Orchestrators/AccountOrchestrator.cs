@@ -16,6 +16,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Features;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 
@@ -35,17 +36,20 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly ILogger<AccountOrchestrator> _logger;
         private readonly IAuthorizationService _authorizationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHtmlHelpers _htmlHelpers;
 
         public AccountOrchestrator(
             IMediator mediator,
             ILogger<AccountOrchestrator> logger,
             IAuthorizationService authorizationService,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            IHtmlHelpers htmlHelpers)
         {
             _mediator = mediator;
             _logger = logger;
             _authorizationService = authorizationService;
             _httpContextAccessor = httpContextAccessor;
+            _htmlHelpers = htmlHelpers;
         }
 
         public async Task<AccountHomeViewModel> GetAccountHomeViewModel(int providerId)
@@ -64,9 +68,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     ShowAcademicYearBanner = false,
                     ShowTraineeshipLink = true,
                     ShowEarningsReport = _authorizationService.IsAuthorized(ProviderFeature.FlexiblePaymentsPilot),
-                    ShowCourseManagementLink = _httpContextAccessor.HttpContext.Items.ContainsKey(RoatpConstants.IsCourseManagementLinkEnabled) 
-                                              && _httpContextAccessor.HttpContext.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true)
-            };
+                    ShowCourseManagementLink = _httpContextAccessor.HttpContext.Items.ContainsKey(RoatpConstants.IsCourseManagementLinkEnabled)
+                                              && _httpContextAccessor.HttpContext.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true),
+                    BannerContent = _htmlHelpers.GetClientContentByType("banner", useLegacyStyles: true),
+                    CovidSectionContent = _htmlHelpers.GetClientContentByType("covid_section", useLegacyStyles: true)
+                };
             }
             catch (Exception ex)
             {

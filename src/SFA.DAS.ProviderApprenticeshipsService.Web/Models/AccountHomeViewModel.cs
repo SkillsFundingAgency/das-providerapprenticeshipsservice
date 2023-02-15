@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
+﻿using Microsoft.AspNetCore.Html;
+
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
 {
     public class AccountHomeViewModel
     {
@@ -10,6 +12,8 @@
         public bool ShowTraineeshipLink { get; set; }
         public bool ShowEarningsReport { get; set; }
         public bool ShowCourseManagementLink { get; set; }
+        public HtmlString BannerContent { get; set; }
+        public HtmlString CovidSectionContent { get; set; }
     }
 
     public enum AccountStatus

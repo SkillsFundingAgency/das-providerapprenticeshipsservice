@@ -28,6 +28,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Middlewares;
 using SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations;
 
@@ -75,7 +76,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            services.AddTransient<IProviderCommitmentsLogger, ProviderCommitmentsLogger>();
+            services.AddTransient<IProviderCommitmentsLogger, ProviderCommitmentsLogger>(); // need to think where to inject it > move to Application
+            services.AddScoped<IHtmlHelpers, HtmlHelpers>(); // to be grouped to somewhere else
             services.AddOrchestrators();
             services.AddEncodingServices(_configuration);
             services.AddApplicationServices(_configuration);
