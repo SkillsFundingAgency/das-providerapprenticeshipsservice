@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.Notifications.Api.Types;
@@ -13,6 +15,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Features;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 
@@ -31,15 +34,18 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly ILogger<AccountOrchestrator> _logger;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AccountOrchestrator(
             IMediator mediator,
             ILogger<AccountOrchestrator> logger,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _mediator = mediator;
             _logger = logger;
             _authorizationService = authorizationService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<AccountHomeViewModel> GetAccountHomeViewModel(int providerId)
@@ -57,8 +63,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     ProviderId = providerId,
                     ShowAcademicYearBanner = false,
                     ShowTraineeshipLink = true,
-                    ShowEarningsReport = _authorizationService.IsAuthorized(ProviderFeature.FlexiblePaymentsPilot)
-                };
+                    ShowEarningsReport = _authorizationService.IsAuthorized(ProviderFeature.FlexiblePaymentsPilot),
+                    ShowCourseManagementLink = _httpContextAccessor.HttpContext.Items.ContainsKey(RoatpConstants.IsCourseManagementLinkEnabled) 
+                                              && _httpContextAccessor.HttpContext.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true)
+            };
             }
             catch (Exception ex)
             {

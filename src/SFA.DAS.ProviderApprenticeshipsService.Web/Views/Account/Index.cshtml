@@ -1,16 +1,14 @@
+@using Microsoft.AspNetCore.Mvc.Filters;
 @using SFA.DAS.ProviderApprenticeshipsService.Web
 @using SFA.DAS.Authorization.Services
 @using SFA.DAS.ProviderApprenticeshipsService.Domain.Features
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
-@using SFA.DAS.ProviderUrlHelper.Framework;
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.AccountHomeViewModel
 
 @{
     ViewBag.Title = Model.ProviderName;
     ViewBag.PageId = "account-home";
-
-    var showCourseManagementLink = HttpContextHelper.Current.Items.Contains(RoatpConstants.IsCourseManagementLinkEnabled) && HttpContextHelper.Current.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true);
 }
 
 @if (!string.IsNullOrEmpty(Model.Message))
@@ -110,7 +108,7 @@
                 </div>
             }
 
-            @if (showCourseManagementLink)
+            @if (Model.ShowCourseManagementLink)
             {
                 <div class="box">
                     <h2 class="heading-medium">

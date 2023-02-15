@@ -9,6 +9,7 @@
         public bool ShowAcademicYearBanner { get; set; }
         public bool ShowTraineeshipLink { get; set; }
         public bool ShowEarningsReport { get; set; }
+        public bool ShowCourseManagementLink { get; set; }
     }
 
     public enum AccountStatus

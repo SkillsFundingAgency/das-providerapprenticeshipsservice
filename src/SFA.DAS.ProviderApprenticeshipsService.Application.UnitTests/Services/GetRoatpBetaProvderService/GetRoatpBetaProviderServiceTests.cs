@@ -3,7 +3,7 @@ using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.GetRoatpBetaProviderService;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Services
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Services
 {
     [TestFixture]
     public class GetRoatpBetaProviderServiceTests
