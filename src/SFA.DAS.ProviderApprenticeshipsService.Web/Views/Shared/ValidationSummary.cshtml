@@ -1,5 +1,6 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text
+﻿@using Microsoft.AspNetCore.Mvc.ModelBinding;
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
+@using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 @model ModelStateDictionary
 
 <div class='@(Html.ViewData.ModelState.IsValid ? "validation-summary-valid" : "validation-summary-errors") error-summary' role="group" data-valmsg-summary="true">
@@ -11,7 +12,7 @@
     <ul class="error-summary-list">
         @foreach (var stateItem in ViewContext.ViewData.ModelState)
         {
-            var elementId = ViewData.TemplateInfo.GetFullHtmlFieldId(stateItem.Key) ?? stateItem.Key;
+            var elementId = Html.GenerateIdFromName(ViewData.TemplateInfo.GetFullHtmlFieldName(stateItem.Key)) ?? stateItem.Key;
 
             foreach (var error in stateItem.Value.Errors)
             {

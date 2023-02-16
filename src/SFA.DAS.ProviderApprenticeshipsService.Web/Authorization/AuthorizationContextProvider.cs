@@ -14,17 +14,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
 {
     public class AuthorizationContextProvider : IAuthorizationContextProvider
     {
-        private readonly HttpContext _httpContext;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
         private readonly ILogger<AuthorizationContextProvider> _log;
         private readonly IActionContextAccessor _actionContextAccessor;
 
-        public AuthorizationContextProvider(HttpContext httpContext,
+        public AuthorizationContextProvider(IHttpContextAccessor httpContextAccessor,
             IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
             ILogger<AuthorizationContextProvider> log,
             IActionContextAccessor actionContextAccessor)
         {
-            _httpContext = httpContext;
+            _httpContextAccessor = httpContextAccessor;
             _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
             _log = log;
             _actionContextAccessor = actionContextAccessor;
@@ -35,7 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
             var authorizationContext = new AuthorizationContext();
             
             var ukprn = GetProviderId(_actionContextAccessor.ActionContext.RouteData.Values);
-            var accountLegalEntityId = GetAccountLegalEntityId(_httpContext.Request.Query[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId]);
+            var accountLegalEntityId = GetAccountLegalEntityId(_httpContextAccessor.HttpContext.Request.Query[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId]);
             if (accountLegalEntityId != null)
             {
                 authorizationContext.AddProviderPermissionValues(accountLegalEntityId.Value, ukprn);
@@ -76,7 +76,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
         {
             long providerId;
 
-            if (long.TryParse(_httpContext.User.Identity.GetClaim(DasClaimTypes.Ukprn), out providerId))
+            if (long.TryParse(_httpContextAccessor.HttpContext.User.Identity.GetClaim(DasClaimTypes.Ukprn), out providerId))
                 return providerId;
 
             if (long.TryParse((string) routeValueDictionary[RouteDataKeys.ProviderId], out providerId))
@@ -87,7 +87,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
 
         private string GetUserEmail()
         {
-            return _httpContext.User.Identity.GetClaim(DasClaimTypes.Email);
+            return _httpContextAccessor.HttpContext.User.Identity.GetClaim(DasClaimTypes.Email);
         }
     }
 }
