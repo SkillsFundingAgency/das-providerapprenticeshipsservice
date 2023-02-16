@@ -23,7 +23,7 @@
     <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="7.78.0" />
     <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Types" Version="9.0.2" />
     <PackageReference Include="SFA.DAS.CosmosDb.Testing" Version="1.0.1" />
-    <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.210" />
+    <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.43" />
     <PackageReference Include="SFA.DAS.ProviderRelationships.Api.Client" Version="4.0.3" />
     <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
   </ItemGroup>

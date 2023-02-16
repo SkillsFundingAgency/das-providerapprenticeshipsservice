@@ -13,7 +13,6 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication;
-using static IdentityServer3.Core.Constants;
 using Microsoft.AspNetCore.Routing;
 using NLog;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;

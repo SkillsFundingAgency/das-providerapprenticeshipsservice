@@ -86,7 +86,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             services.AddAndConfigureAuthentication();
             services.AddAuthorizationServicePolicies();
 
-            services.AddLogging();
+            services.AddApplicationInsightsTelemetry();
 
             services.AddControllersWithViews(options =>
             {
@@ -104,6 +104,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             {
                 options.UseMemberCasing();
             });
+
+            services.AddLogging();
 
         }
 
