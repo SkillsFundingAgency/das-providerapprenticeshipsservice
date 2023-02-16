@@ -2,9 +2,10 @@
 @using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
-@using SFA.DAS.ProviderUrlHelper.Framework
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HtmlContextAccessor
 @{
-    var showCourseManagementLink = HttpContextHelper.Current.Items.Contains(RoatpConstants.IsCourseManagementLinkEnabled) && HttpContextHelper.Current.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true);
+    var showCourseManagementLink = HtmlContextAccessor.HttpContext.Items.ContainsKey(RoatpConstants.IsCourseManagementLinkEnabled) && HtmlContextAccessor.HttpContext.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true);
 }
 
 <!DOCTYPE html>
@@ -34,12 +35,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:image" content="/dist/images/opengraph-image.png">
 
-    <link href="@Styles.Url("~/bundles/dropdown-select")" media="all" rel="stylesheet" />
-    <!--[if IE 6]><link href="@Styles.Url("~/bundles/screenie6")" media="screen" rel="stylesheet" /><![endif]-->
-    <!--[if IE 7]><link href="@Styles.Url("~/bundles/screenie7")" media="screen" rel="stylesheet" /><![endif]-->
-    <!--[if IE 8]><link href="@Styles.Url("~/bundles/screenie8")" media="screen" rel="stylesheet" /><![endif]-->
+    <link href="~/bundles/dropdown-select" rel="stylesheet" type="text/css" media="all" />
+    <!--[if IE 6]><link href="~/bundles/screenie6" rel="stylesheet" type="text/css" media="screen" /><![endif]-->
+    <!--[if IE 7]><link href="~/bundles/screenie7" rel="stylesheet" type="text/css" media="screen" /><![endif]-->
+    <!--[if IE 8]><link href="~/bundles/screenie8" rel="stylesheet" type="text/css" media="screen" /><![endif]-->
     <!--[if gt IE 8]><!-->
-    <link href="@Styles.Url("~/bundles/screen")" media="all" rel="stylesheet" />
+    <link href="~/bundles/screen" rel="stylesheet" type="text/css" media="all" />
     <!--<![endif]-->
     <!-- Google Tag Manager -->
     <script>
@@ -57,12 +58,12 @@
         var appInsights = window.appInsights || function (config) {
             function r(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } } var t = { config: config }, u = document, e = window, o = "script", s = u.createElement(o), i, f; s.src = config.url || "//az416426.vo.msecnd.net/scripts/a/ai.0.js"; u.getElementsByTagName(o)[0].parentNode.appendChild(s); try { t.cookie = u.cookie } catch (h) { } for (t.queue = [], i = ["Event", "Exception", "Metric", "PageView", "Trace", "Dependency"]; i.length;) r("track" + i.pop()); return r("setAuthenticatedUserContext"), r("clearAuthenticatedUserContext"), config.disableExceptionTracking || (i = "onerror", r("_" + i), f = e[i], e[i] = function (config, r, u, e, o) { var s = f && f(config, r, u, e, o); return s !== !0 && t["_" + i](config, r, u, e, o), s }), t
         }({
-            instrumentationKey: "@TelemetryConfiguration.Active.InstrumentationKey"
+            instrumentationKey: @TelemetryConfiguration.CreateDefault().InstrumentationKey;
         });
         window.appInsights = appInsights;
         appInsights.trackPageView();
     </script>
-    @Html.Partial("_ZenDeskWidget")
+    @Html.PartialAsync("_ZenDeskWidget")
 </head>
 <body id="@ViewBag.PageId">
     <!-- Google Tag Manager (noscript) -->
@@ -79,7 +80,7 @@
         </div>
     </div>
 
-    @Html.Partial("_CookieBanner")
+    @Html.PartialAsync("_CookieBanner")
 
     <header role="banner" id="global-header" class="with-proposition">
         <div class="header-wrapper">
@@ -99,9 +100,9 @@
                 </p>
                 <nav id="user-nav">
                     <ul>
-                        @if (HttpContextHelper.Current.User.Identity.IsAuthenticated)
+                        @if (HtmlContextAccessor.HttpContext.User.Identity.IsAuthenticated)
                         {
-                            <li><a href="/" class="link-user-profile">@HttpContextHelperHelper.Current.User.Identity.Name</a></li>
+                            <li><a href="/" class="link-user-profile">@HtmlContextAccessor.HttpContext.User.Identity.Name</a></li>
                             <li><a href="/notification-settings" class="link-user-profile">Notification settings</a></li>
                             <li><a href="@Url.RouteUrl("signout")">Sign out</a></li>
                         }
@@ -117,8 +118,7 @@
         </div>
     </div>
     <!--/floating-menu-holder-->
-
-    @if (HttpContextHelper.Current.User.Identity.IsAuthenticated && !(ViewBag?.HideNavBar ?? false))
+    @if (HtmlContextAccessor.HttpContext.User.Identity.IsAuthenticated && !(ViewBag?.HideNavBar ?? false))
     {
         var controllerName = ViewContext.RouteData.Values["Controller"].ToString(); ;
         var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
@@ -145,7 +145,7 @@
 
         @RenderSection("breadcrumb", required: false)
 
-        @Html.Partial(@"_ModalMessage")
+        @Html.PartialAsync(@"_ModalMessage")
         @RenderBody()
 
     </main>
@@ -182,7 +182,7 @@
     </footer>
     <div id="global-app-error" class="app-error hidden"></div>
 
-    @Scripts.Render("~/bundles/sfajs")
+    <script src="~/bundles/sfajs" asp-append-version="true"></script>
 
     @RenderSection("pageSpecificJS", required: false)
 </body>
