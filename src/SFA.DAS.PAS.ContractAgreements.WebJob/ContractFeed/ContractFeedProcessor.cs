@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-
-using SFA.DAS.NLog.Logger;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
@@ -12,14 +11,14 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
     {
         private readonly XNamespace _nsAtom = "http://www.w3.org/2005/Atom";
         private readonly XNamespace _nsUrn = "urn:sfa:schemas:contract";
-        private readonly ContractFeedReader _reader;
+        private readonly IContractFeedReader _reader;
         private readonly IContractFeedEventValidator _validator;
-        private readonly ILog _logger;
+        private readonly ILogger<ContractFeedProcessor> _logger;
 
         public ContractFeedProcessor(
-            ContractFeedReader reader, 
+            IContractFeedReader reader, 
             IContractFeedEventValidator validator,
-            ILog logger)
+            ILogger<ContractFeedProcessor> logger)
         {
             _reader = reader;
             _validator = validator;
@@ -30,7 +29,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
         {
             var latestBookmarkString = latestBookmark.HasValue ? latestBookmark.ToString() : "[not set]";
 
-            _logger.Info($"Finding page for latest bookmark: {latestBookmarkString}");
+            _logger.LogInformation($"Finding page for latest bookmark: {latestBookmarkString}");
 
             var currentPageUrl = _reader.LatestPageUrl;
             string startPageUrl = null;
@@ -42,7 +41,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
                 if (pageNavigation.IsStartPage)
                 {
                     startPageUrl = pageUrl;
-                    _logger.Info($"Start page found at: {startPageUrl}");
+                    _logger.LogInformation($"Start page found at: {startPageUrl}");
 
                     return false;
                 }
@@ -53,12 +52,12 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
                 if (PageContainsBookmark(latestBookmark, doc))
                 {
                     startPageUrl = pageUrl;
-                    _logger.Info($"Bookmark {latestBookmarkString} found on page: {startPageUrl}");
+                    _logger.LogInformation($"Bookmark {latestBookmarkString} found on page: {startPageUrl}");
 
                     return false;
                 }
 
-                _logger.Info($"Bookmark {latestBookmarkString} not found on {pageUrl}");
+                _logger.LogInformation($"Bookmark {latestBookmarkString} not found on {pageUrl}");
 
                 return true;
             });
@@ -88,7 +87,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
                     .Where(_validator.Validate)
                     .ToList();
 
-                _logger.Info($"Adding: {matchingContracts.Count} from page: {pageUri}");
+                _logger.LogInformation($"Adding: {matchingContracts.Count} from page: {pageUri}");
 
                 saveRecordsAction(matchingContracts, newBookmark);
 
@@ -115,7 +114,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             {
                 var id = element.Element(_nsAtom + "id")?.Value.Split(':').ElementAt(1);
 
-                _logger.Info($"Bookmark Id: {id}");
+                _logger.LogInformation($"Bookmark Id: {id}");
 
                 var contract = element
                     .Element(_nsAtom + "content")?
@@ -145,7 +144,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             }
             catch (Exception ex)
             {
-                _logger.Warn(ex, "Problem extracting contract feed event");
+                _logger.LogWarning(ex, "Problem extracting contract feed event");
                 return null;
             }
         }

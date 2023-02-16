@@ -5,7 +5,6 @@ using System.Configuration;
 
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
 using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -15,7 +14,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 
 using StructureMap;
 using StructureMap.Graph;
-using IConfiguration = SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.IConfiguration;
+using IConfiguration = SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.IBaseConfiguration;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution
 {
@@ -39,12 +38,6 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution
             For<IContractDataProvider>().Use<ContractFeedProcessor>();
             For<IProviderAgreementStatusRepository>().Use<ProviderAgreementStatusRepository>();
             For<IContractFeedEventValidator>().Use<ContractFeedEventValidator>();
-
-            // ToDo: Implement overload for NLogLogger without IRequestContext
-            For<ILog>().Use(x => new NLogLogger(
-                x.ParentType,
-                new DummyRequestContext(),
-                null)).AlwaysUnique();
         }
 
         private ContractFeedConfiguration GetConfiguration(string serviceName)
@@ -78,12 +71,5 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution
         {
             return new AzureTableStorageConfigurationRepository(ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"]);
         }
-    }
-
-    public class DummyRequestContext : ILoggingContext
-    {
-        public string Url { get; }
-
-        public string IpAddress { get; }
     }
 }

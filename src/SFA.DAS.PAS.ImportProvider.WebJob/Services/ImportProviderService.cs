@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.Services
 {
-    public class ImportProviderService : IImportProvider
+    public class ImportProviderService : IImportProviderService
     {
         private IProviderCommitmentsApi _providerApiClient;
         private IProviderRepository _providerRepository;

@@ -21,5 +21,8 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.Configuration
 
         // Needed?
         public string ServiceBusConnectionString { get; set; }
+        
+        // Needed?
+        public bool CheckForContractAgreements { get; set; }
     }
 }

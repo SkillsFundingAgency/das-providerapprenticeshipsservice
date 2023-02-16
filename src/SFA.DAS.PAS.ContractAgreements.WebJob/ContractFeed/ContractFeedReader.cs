@@ -2,30 +2,29 @@
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http.Headers;
 using System.ServiceModel.Syndication;
 using System.Xml;
-
-using SFA.DAS.NLog.Logger;
 using System.Diagnostics;
 using System.Net.Http;
 using Polly;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
-    public class ContractFeedReader
+    public class ContractFeedReader : IContractFeedReader
     {
         private readonly IContractFeedProcessorHttpClient _httpClient;
-        private readonly ILog _logger;
+        private readonly ILogger<ContractFeedReader> _logger;
         private const string MostRecentPageUrl = "/api/contracts/notifications";
 
-        public ContractFeedReader(IContractFeedProcessorHttpClient httpClient, ILog logger)
+        public ContractFeedReader(IContractFeedProcessorHttpClient httpClient, ILogger<ContractFeedReader> logger)
         {
             _httpClient = httpClient;
             _logger = logger;
+            LatestPageUrl = $"{_httpClient.BaseAddress}{MostRecentPageUrl}";
         }
 
-        public string LatestPageUrl => $"{_httpClient.BaseAddress}{MostRecentPageUrl}";
+        public string LatestPageUrl { get; }
 
         public void Read(string pageUri, ReadDirection direction, Func<string, string, Navigation, bool> pageWriter)
         {
@@ -71,7 +70,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             var stopwatch = Stopwatch.StartNew();
             var result = func();
             stopwatch.Stop();
-            _logger.Trace($"It took {stopwatch.ElapsedMilliseconds} milliseconds to {actionDescription}");
+            _logger.LogTrace($"It took {stopwatch.ElapsedMilliseconds} milliseconds to {actionDescription}");
 
             return result;
         }
@@ -86,7 +85,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
                 .Handle<HttpRequestException>()
                 .Retry(3, (exception, retryCount) =>
                 {
-                    _logger.Info($"Retry {retryCount} for page {url}");
+                    _logger.LogInformation($"Retry {retryCount} for page {url}");
                 })
                 .Execute(() => LogTiming($"download feed page {url}", () => client.GetAsync(url).Result));
 
@@ -105,11 +104,11 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
                     var aex = aggregateException;
                     foreach (var exception in aex.InnerExceptions)
                     {
-                        _logger.Error(exception, $"Error in contact feed reader, calling endpoint {url}");
+                        _logger.LogError(exception, $"Error in contact feed reader, calling endpoint {url}");
                     }
                     throw aex.InnerExceptions.First();
                 }
-                _logger.Error(ex, $"Error in contact feed reader, calling endpoint {url}");
+                _logger.LogError(ex, $"Error in contact feed reader, calling endpoint {url}");
                 throw;
             }
         }

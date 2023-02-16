@@ -25,7 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    var fasf = webBuilder.UseStartup<Startup>();
                 });
     }
 }

@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.Services
 {
-    interface IImportProvider
+    interface IImportProviderService
     {
         Task Import();
     }

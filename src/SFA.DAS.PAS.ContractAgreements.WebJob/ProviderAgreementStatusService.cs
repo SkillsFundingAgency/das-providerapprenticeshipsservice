@@ -1,10 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
-
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.PAS.ContractAgreements.WebJob.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob
 {
@@ -12,12 +11,12 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
     {
         private readonly IContractDataProvider _dataProvider;
         private readonly IProviderAgreementStatusRepository _repository;
-        private readonly ILog _logger;
+        private readonly ILogger<ProviderAgreementStatusService> _logger;
 
         public ProviderAgreementStatusService(
             IContractDataProvider dataProvider, 
             IProviderAgreementStatusRepository repository,
-            ILog logger)
+            ILogger<ProviderAgreementStatusService> logger)
         {
             _dataProvider = dataProvider;
             _repository = repository;
@@ -32,7 +31,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
             var latestBookmark = await _repository.GetLatestBookmark();
             var pageToReadUrl = _dataProvider.FindPageWithBookmark(latestBookmark);
             
-            _logger.Info($"Last bookmark: {latestBookmark?.ToString() ?? "[not set]"}, Next page to read url: {pageToReadUrl}");
+            _logger.LogInformation($"Last bookmark: {latestBookmark?.ToString() ?? "[not set]"}, Next page to read url: {pageToReadUrl}");
 
             var insertedEvents = _dataProvider.ReadEvents(pageToReadUrl, latestBookmark, (events, newBookmark) =>
                 {
@@ -41,16 +40,16 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
 
             if (insertedEvents > 0)
             {
-                _logger.Info($"Inserted {insertedEvents} contracts into the database.");
+                _logger.LogInformation($"Inserted {insertedEvents} contracts into the database.");
             }
 
             time.Stop();
 
-            _logger.Info($"Run took {time.ElapsedMilliseconds} milliseconds.");
+            _logger.LogInformation($"Run took {time.ElapsedMilliseconds} milliseconds.");
 
             if (await _repository.GetCountOfContracts() == 0)
             {
-                _logger.Warn($"The database doesn't currently contain any valid contracts from the feed.");
+                _logger.LogWarning($"The database doesn't currently contain any valid contracts from the feed.");
             }
         }
     }

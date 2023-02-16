@@ -11,38 +11,37 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob
     {
         public static void Main(string[] args)
         {
+            ILoggerFactory loggerFactory = new LoggerFactory();
+            ILogger logger = loggerFactory.CreateLogger<Program>();
+
             try
             {
-                var container = new ServiceCollection();
-                var provider = container.BuildServiceProvider();
-                var logger = provider.GetService<ILogger<Program>>();
+                var services = new ServiceCollection();
+                services.AddTransient<IImportProviderService, ImportProviderService>();
+                var provider = services.BuildServiceProvider();
 
                 logger.LogInformation("ImportProvider job started");
                 var timer = Stopwatch.StartNew();
 
-                var service = provider.GetService<IImportProvider>();
+                var importService = provider.GetService<IImportProviderService>();
 
-                service.Import();
+                importService.Import();
                 timer.Stop();
 
                 logger.LogInformation($"ImportProvider job done, Took: {timer.ElapsedMilliseconds} milliseconds");
             }
             catch (AggregateException exc)
             {
-                ILoggerFactory loggerFactory = new LoggerFactory();
-                ILogger exLogger = loggerFactory.CreateLogger<Program>();
-                exLogger.LogError(exc, "Error running ImportProvider WebJob");
+                logger.LogError(exc, "Error running ImportProvider WebJob");
                 exc.Handle(ex =>
                 {
-                    exLogger.LogError(ex, "Inner exception running ImportProvider WebJob");
+                    logger.LogError(ex, "Inner exception running ImportProvider WebJob");
                     return false;
                 });
             }
             catch (Exception ex)
             {
-                ILoggerFactory loggerFactory = new LoggerFactory();
-                ILogger exLogger = loggerFactory.CreateLogger<Program>();
-                exLogger.LogError(ex, "Error running ImportProvider WebJob");
+                logger.LogError(ex, "Error running ImportProvider WebJob");
                 throw;
             };
         }

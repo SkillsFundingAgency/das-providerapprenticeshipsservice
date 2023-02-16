@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
 {
@@ -22,7 +20,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
         {
             // Feed is set to have 13 pages
             var helper = new TestHelper(UrlToApi);
-            var repository = new InMemoryProviderAgreementStatusRepository(Mock.Of<ILog>());
+            var repository = new InMemoryProviderAgreementStatusRepository(Mock.Of<ILogger<InMemoryProviderAgreementStatusRepository>>());
             var service = helper.SetUpProviderAgreementStatusService(repository);
 
             await service.UpdateProviderAgreementStatuses();
@@ -35,7 +33,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
         public async Task UpdatesBookmarkIfNewItemOnLatestPage()
         {
             var helper = new TestHelper(UrlToApi);
-            var repository = new InMemoryProviderAgreementStatusRepository(Mock.Of<ILog>());
+            var repository = new InMemoryProviderAgreementStatusRepository(Mock.Of<ILogger<InMemoryProviderAgreementStatusRepository>>());
 
             await repository.AddContractEventsForPage(new List<ContractFeedEvent> { new ContractFeedEvent
                 {
@@ -60,7 +58,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
         public async Task UpdatesBookmarkIfPageIsNowFull()
         {
             var helper = new TestHelper(UrlToApi);
-            var repository = new InMemoryProviderAgreementStatusRepository(Mock.Of<ILog>());
+            var repository = new InMemoryProviderAgreementStatusRepository(Mock.Of<ILogger<InMemoryProviderAgreementStatusRepository>>());
 
             await repository.AddContractEventsForPage(new List<ContractFeedEvent> { new ContractFeedEvent
                 {
