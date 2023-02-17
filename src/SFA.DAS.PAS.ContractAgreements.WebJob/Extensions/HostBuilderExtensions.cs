@@ -28,7 +28,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.Extensions
                 services.AddTransient<IContractFeedEventValidator, ContractFeedEventValidator>();
                 services.AddTransient<IContractFeedReader, ContractFeedReader>();
                 services.AddTransient<IContractDataProvider, ContractFeedProcessor>();
-                services.AddTransient<IProviderAgreementStatusRepository, ProviderAgreementStatusRepository>(); //TODO
+                services.AddTransient<IProviderAgreementStatusRepository, ProviderAgreementStatusRepository>();
                 services.AddTransient<IProviderAgreementStatusService, ProviderAgreementStatusService>();
                 services.AddLogging();
             });

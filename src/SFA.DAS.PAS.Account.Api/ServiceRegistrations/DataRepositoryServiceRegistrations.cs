@@ -9,7 +9,7 @@ namespace SFA.DAS.PAS.Account.Api.ServiceRegistrations
         public static IServiceCollection AddDataRepositories(this IServiceCollection services)
         {
             services.AddTransient<IUserSettingsRepository, UserSettingsRepository>();
-            services.AddTransient<IAgreementStatusQueryRepository, ProviderAgreementStatusRepository>();
+            services.AddTransient<IProviderAgreementStatusRepository, ProviderAgreementStatusRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
 
             return services;

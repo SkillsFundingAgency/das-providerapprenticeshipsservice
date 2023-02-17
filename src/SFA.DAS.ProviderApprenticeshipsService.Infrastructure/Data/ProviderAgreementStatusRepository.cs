@@ -11,7 +11,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
-    public class ProviderAgreementStatusRepository : BaseRepository<ProviderAgreementStatusRepository>, IAgreementStatusQueryRepository
+    public class ProviderAgreementStatusRepository : BaseRepository<ProviderAgreementStatusRepository>, IProviderAgreementStatusRepository
     {
         private readonly ILogger<ProviderAgreementStatusRepository> _logger;
         private readonly ICurrentDateTime _currentDateTime;

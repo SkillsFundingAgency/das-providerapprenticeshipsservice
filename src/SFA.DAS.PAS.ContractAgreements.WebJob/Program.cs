@@ -5,23 +5,14 @@
 
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Configuration.AzureTableStorage;
-using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
-using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
-using SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution;
 using SFA.DAS.PAS.ContractAgreements.WebJob.Extensions;
 using SFA.DAS.PAS.ContractAgreements.WebJob.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob
 {
