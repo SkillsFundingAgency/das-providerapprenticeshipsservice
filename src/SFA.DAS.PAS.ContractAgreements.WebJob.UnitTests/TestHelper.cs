@@ -5,10 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
-
+using Microsoft.Extensions.Logging;
 using Moq;
-
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses;
 
@@ -30,10 +28,10 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
         {
             MockFeedProcessorClient = GetMockFeedProcessorClient();
 
-            var reader = new ContractFeedReader(MockFeedProcessorClient.Object, Mock.Of<ILog>());
-            var dataProvider = new ContractFeedProcessor(reader, new MockContractFeedEventValidator(), Mock.Of<ILog>());
+            var reader = new ContractFeedReader(MockFeedProcessorClient.Object, Mock.Of<ILogger<ContractFeedReader>>());
+            var dataProvider = new ContractFeedProcessor(reader, new MockContractFeedEventValidator(), Mock.Of<ILogger<ContractFeedProcessor>>());
 
-            var service = new ProviderAgreementStatusService(dataProvider, repository, Mock.Of<ILog>());
+            var service = new ProviderAgreementStatusService(dataProvider, repository, Mock.Of<ILogger<ProviderAgreementStatusService>>());
 
             return service;
         }

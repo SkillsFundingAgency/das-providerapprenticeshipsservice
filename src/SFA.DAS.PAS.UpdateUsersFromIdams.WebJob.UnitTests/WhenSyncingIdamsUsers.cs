@@ -9,8 +9,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.IdamsUser;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests
 {
@@ -119,7 +123,7 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests
                     }
                 };
 
-                Sut = new IdamsSyncService(IdamsEmailServiceWrapper.Object, UserRepository.Object, ProviderRepository.Object, Mock.Of<ILog>(), configuration);
+                Sut = new IdamsSyncService(IdamsEmailServiceWrapper.Object, UserRepository.Object, ProviderRepository.Object, Mock.Of<ILogger<IdamsSyncService>>(), configuration);
             }
 
             public WhenSyncingIdamsUsersFixture SetupIdamsToThrowException()

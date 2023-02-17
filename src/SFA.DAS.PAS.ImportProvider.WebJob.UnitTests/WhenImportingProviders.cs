@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using AutoFixture;
+﻿using AutoFixture;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.PAS.ImportProvider.WebJob.Importer;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using System.Data;
 using System.Threading.Tasks;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.PAS.ImportProvider.WebJob.Services;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.UnitTests
 {
@@ -25,7 +24,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.UnitTests
 
         public class WhenImportingProvidersFixture
         {
-            public ImportProviderService Sut { get; set; }
+            public IImportProviderService Sut { get; set; }
             public Mock<IProviderCommitmentsApi> providerApiClient { get; set; }
             public Mock<IProviderRepository> importProviderRepository { get; set; }
             
@@ -41,7 +40,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.UnitTests
                 importProviderRepository = new Mock<IProviderRepository>();
                 importProviderRepository.Setup(x => x.ImportProviders(It.IsAny<DataTable>()));
 
-                Sut = new ImportProviderService(providerApiClient.Object, importProviderRepository.Object, Mock.Of<ILog>());
+                Sut = new ImportProviderService(providerApiClient.Object, importProviderRepository.Object, Mock.Of<ILogger<ImportProviderService>>());
             }
 
             public async Task<WhenImportingProvidersFixture> Import()
