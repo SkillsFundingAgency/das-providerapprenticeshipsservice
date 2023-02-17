@@ -1,8 +1,6 @@
-﻿using System.Net.Http;
+﻿using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
+using System.Net.Http;
 using System.Net.Http.Headers;
-
-using ContractFeedConfiguration = SFA.DAS.PAS.ContractAgreements.WebJob.Configuration.ContractFeedConfiguration;
-
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
     public class ContractFeedProcessorHttpClient : IContractFeedProcessorHttpClient
@@ -18,7 +16,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(VendorAtomMediaType));
         }
         
-        public ContractFeedProcessorHttpClient(ContractFeedConfiguration config)
+        public ContractFeedProcessorHttpClient(IContractFeedConfiguration config)
         {
             _authenticationCredentials = new AzureAuthentication(config.AADInstance, config.Tenant, config.ClientId, config.AppKey, config.ResourceId);
             BaseAddress = config.BaseAddress;

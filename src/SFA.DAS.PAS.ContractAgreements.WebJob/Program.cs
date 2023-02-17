@@ -5,15 +5,21 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
 using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
+using SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution;
+using SFA.DAS.PAS.ContractAgreements.WebJob.Extensions;
 using SFA.DAS.PAS.ContractAgreements.WebJob.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
@@ -21,41 +27,29 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main()
+        {
+            using (var host = CreateHost())
+            {
+                await UpdateProviderAgreementStatuses(host);
+
+                await host.RunAsync();
+            }
+        }
+
+        private static async Task UpdateProviderAgreementStatuses(IHost host)
         {
             ILoggerFactory loggerFactory = new LoggerFactory();
             ILogger logger = loggerFactory.CreateLogger<Program>();
 
             try
             {
-                var services = new ServiceCollection();
-                // what about ContractFeedConfigration and loading config? Which config is it meant to come from?
-                services.AddTransient<ICurrentDateTime, CurrentDateTime>();
-                services.AddTransient<IContractFeedProcessorHttpClient, ContractFeedProcessorHttpClient>();
-                services.AddTransient<IContractFeedEventValidator, ContractFeedEventValidator>();
-                services.AddTransient<IContractFeedReader, ContractFeedReader>();                
-                services.AddTransient<IContractDataProvider, ContractFeedProcessor>();
-                services.AddTransient<IProviderAgreementStatusRepository, ProviderAgreementStatusRepository>();
-                services.AddTransient<IProviderAgreementStatusService, ProviderAgreementStatusService>();
-                services.AddLogging();
-                var provider = services.BuildServiceProvider();
-
-                var config = GetConfiguration("SFA.DAS.ContractAgreements");
-                For<IConfiguration>().Use(config);
-                For<IProviderAgreementStatusConfiguration>().Use(config);
-                For<ContractFeedConfiguration>().Use(config);
-                //For<ICurrentDateTime>().Use(x => new CurrentDateTime());
-                //For<IContractFeedProcessorHttpClient>().Use<ContractFeedProcessorHttpClient>();
-                //For<IContractDataProvider>().Use<ContractFeedProcessor>();
-                For<IProviderAgreementStatusRepository>().Use<ProviderAgreementStatusRepository>();
-                //For<IContractFeedEventValidator>().Use<ContractFeedEventValidator>();
-
                 logger.LogInformation("ContractAgreements job started");
 
                 var timer = Stopwatch.StartNew();
 
-                var service = provider.GetService<ProviderAgreementStatusService>();
-                service.UpdateProviderAgreementStatuses().Wait();
+                var providerAgreementStatusService = host.Services.GetService<IProviderAgreementStatusService>();
+                await providerAgreementStatusService.UpdateProviderAgreementStatuses();
 
                 timer.Stop();
 
@@ -77,11 +71,13 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
             }
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-           Host.CreateDefaultBuilder(args)
-               .ConfigureWebHostDefaults(webBuilder =>
-               {
-                   var fasf = webBuilder.UseStartup<Startup>();
-               });
+        private static IHost CreateHost()
+        {
+            var builder = new HostBuilder()
+                .AddConfiguration()
+                .ConfigureServices();
+
+            return builder.Build();
+        }
     }
 }
