@@ -6,15 +6,15 @@
     display: block;
     border-width: 7px 4px;
     border-color: transparent;
-    border-bottom-color: $borCol;
+    border-top-color: $borCol;
     border-style: solid;
     right: 12px;
     top: 50%;
-    margin-top: -10px;
+    margin-top: -3px;
 }
 
 @mixin open-arrow ($borCol: black) {
-    border-top-color: $borCol;
-    border-bottom-color: transparent;
-    margin-top: -3px;
+    border-bottom-color: $borCol;
+    border-top-color: transparent;
+    margin-top: -10px;
 }

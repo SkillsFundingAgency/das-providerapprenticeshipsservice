@@ -1750,19 +1750,19 @@ nav ul {
         display: block;
         border-width: 7px 4px;
         border-color: transparent;
-        border-bottom-color: currentColor;
+        border-top-color: currentColor;
         border-style: solid;
         right: 12px;
         top: 50%;
-        margin-top: -10px; }
+        margin-top: -3px; }
     .js-enabled #user-nav li.has-sub-menu.open > a {
       background: #fff;
       border-color: #bfc1c3;
       border-bottom-color: #fff; }
       .js-enabled #user-nav li.has-sub-menu.open > a:before {
-        border-top-color: currentColor;
-        border-bottom-color: transparent;
-        margin-top: -3px; }
+        border-bottom-color: currentColor;
+        border-top-color: transparent;
+        margin-top: -10px; }
     .js-enabled #user-nav li.has-sub-menu ul {
       position: absolute;
       background: #fff;
@@ -1825,16 +1825,16 @@ li.menu-link.sub-menu-open ul {
     display: block;
     border-width: 7px 4px;
     border-color: transparent;
-    border-bottom-color: black;
+    border-top-color: black;
     border-style: solid;
     right: 12px;
     top: 50%;
-    margin-top: -10px; }
+    margin-top: -3px; }
 
 .header-organisation ul li.menu-link.sub-menu-open > a:before {
-  border-top-color: black;
-  border-bottom-color: transparent;
-  margin-top: -3px; }
+  border-bottom-color: black;
+  border-top-color: transparent;
+  margin-top: -10px; }
 
 #page-onboard-companies-house .govuk-box-highlight {
   display: none; }
@@ -1855,15 +1855,15 @@ a#link-settings {
     display: block;
     border-width: 7px 4px;
     border-color: transparent;
-    border-bottom-color: black;
+    border-top-color: black;
     border-style: solid;
     right: 12px;
     top: 50%;
-    margin-top: -10px; }
-  a#link-settings.open:before {
-    border-top-color: black;
-    border-bottom-color: transparent;
     margin-top: -3px; }
+  a#link-settings.open:before {
+    border-bottom-color: black;
+    border-top-color: transparent;
+    margin-top: -10px; }
   a#link-settings:focus {
     outline: 0; }
 
