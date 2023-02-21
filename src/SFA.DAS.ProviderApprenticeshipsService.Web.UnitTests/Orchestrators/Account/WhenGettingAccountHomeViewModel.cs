@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -11,6 +12,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Features;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Account
@@ -22,8 +24,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
         private Mock<IMediator> _mediator;
         private Mock<ICurrentDateTime> _currentDateTime;
         private Mock<IAuthorizationService> _authorizationService;
+        private Mock<IHttpContextAccessor> _httpContextAccessor;
+        private Mock<IHtmlHelpers> _htmlHelpers;
 
-        [SetUp]
+       [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
@@ -39,13 +43,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
                 });
 
             _currentDateTime = new Mock<ICurrentDateTime>();
-
             _authorizationService = new Mock<IAuthorizationService>();
+            _httpContextAccessor = new Mock<IHttpContextAccessor>();
+            _htmlHelpers = new Mock<IHtmlHelpers>();
 
             _orchestrator = new AccountOrchestrator(
                 _mediator.Object,
                 Mock.Of<ILogger<AccountOrchestrator>>(),
-                _authorizationService.Object
+                _authorizationService.Object,
+                _httpContextAccessor.Object,
+                _htmlHelpers.Object
             );
         }
 

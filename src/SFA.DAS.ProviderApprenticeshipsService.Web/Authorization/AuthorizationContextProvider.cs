@@ -1,6 +1,5 @@
 using System;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Authorization.Context;
@@ -17,24 +16,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
         private readonly ILogger<AuthorizationContextProvider> _log;
-        private readonly IActionContextAccessor _actionContextAccessor;
+        private readonly IActionContextAccessorWrapper _actionContextAccessorWrapper;
 
         public AuthorizationContextProvider(IHttpContextAccessor httpContextAccessor,
             IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
             ILogger<AuthorizationContextProvider> log,
-            IActionContextAccessor actionContextAccessor)
+            IActionContextAccessorWrapper actionContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
             _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
             _log = log;
-            _actionContextAccessor = actionContextAccessor;
+            _actionContextAccessorWrapper = actionContextAccessor;
         }
 
         public IAuthorizationContext GetAuthorizationContext()
         {
             var authorizationContext = new AuthorizationContext();
             
-            var ukprn = GetProviderId(_actionContextAccessor.ActionContext.RouteData.Values);
+            var routeData = _actionContextAccessorWrapper.GetRouteData();
+            var ukprn = GetProviderId(routeData.Values);
             var accountLegalEntityId = GetAccountLegalEntityId(_httpContextAccessor.HttpContext.Request.Query[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId]);
             if (accountLegalEntityId != null)
             {
