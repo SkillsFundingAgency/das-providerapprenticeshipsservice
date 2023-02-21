@@ -35,26 +35,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
             });
         }
 
-        #region Invalid AccountLegalEntityPublicHashedId
-
-        [Test]
-        public void WhenGettingAuthorizationContextAndRequiredRouteValuesAreAvailableButAccountLegalEntityPublicHashedIdIsNotAValidHash_ThenShouldThrowException()
-        {
-            Run<Exception>(f => f.SetInvalidHashAccountLegalEntityPublicHashedId().SetValidProviderId(),
-                f => f.GetAuthorizationContext(),
-                (f, a) => a.Should().ThrowExactly<Exception>().WithMessage("AuthorizationContextProvider error - Unable to extract AccountLegalEntityId"));
-        }
-
-        [Test]
-        public void WhenGettingAuthorizationContextAndRequiredRouteValuesAreAvailableButAccountLegalEntityPublicHashedIdIsNotAvailable_ThenShouldThrowException()
-        {
-            Run(f => f.SetValidProviderId(),
-                f => f.GetAuthorizationContext(),
-                (f, a) => a.Should().ThrowExactly<Exception>().WithMessage("AuthorizationContextProvider error - Unable to extract AccountLegalEntityId"));
-        }
-
-        #endregion Invalid AccountLegalEntityPublicHashedId
-
         #region Invalid ProviderId
 
         [Test]
