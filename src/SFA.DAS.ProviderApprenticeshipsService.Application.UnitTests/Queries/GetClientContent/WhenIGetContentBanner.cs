@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientContent;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -17,7 +17,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         private Mock<IContentApiClient> _contentApiClientMock;
         private string _contentType;
         private string _clientId;
-        private Mock<ILogger> _logger;
+        private Mock<ILogger<GetClientContentRequestHandler>> _logger;
         public string ContentBanner;
         public static ProviderApprenticeshipsServiceConfiguration ProviderApprenticeshipsServiceConfiguration;
 
@@ -32,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             ContentBanner = "<p>find out how you can pause your apprenticeships<p>";
             _contentType = "banner";
             _clientId = "das-providerapprenticeshipsservice-web";
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILogger<GetClientContentRequestHandler>>();
             _contentApiClientMock = new Mock<IContentApiClient>();
             _contentApiClientMock
                 .Setup(mock => mock.Get(_contentType, _clientId))
@@ -105,7 +105,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             await _handler.Handle(_request, new CancellationToken());
 
             //Assert
-            _logger.Verify(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>()), Times.Once);
+            _logger.Verify(x => x.LogError(It.IsAny<Exception>(), It.IsAny<string>()), Times.Once);
         }
 
         [Test]

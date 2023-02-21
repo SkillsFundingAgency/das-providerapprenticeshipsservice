@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using NLog;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
@@ -11,11 +11,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientCo
     public class GetClientContentRequestHandler : IRequestHandler<GetClientContentRequest, GetClientContentResponse>
     {           
         private readonly IContentApiClient _contentApiClient;
-        private readonly ILogger _logger;
+        private readonly ILogger<GetClientContentRequestHandler> _logger;
         private readonly ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
 
         public GetClientContentRequestHandler(
-           ILogger logger,
+           ILogger<GetClientContentRequestHandler> logger,
            IContentApiClient contentApiClient,
            ProviderApprenticeshipsServiceConfiguration providerApprenticeshipsServiceConfiguration)
         {   _logger = logger;
@@ -38,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientCo
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Failed to get Content for {cacheKey}");
+                _logger.LogError(ex, $"Failed to get Content for {cacheKey}");
 
                 return new GetClientContentResponse
                 {

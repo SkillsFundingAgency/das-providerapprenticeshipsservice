@@ -15,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
             var encodingConfig = JsonConvert.DeserializeObject<EncodingConfig>(encodingConfigJson);
             services.AddSingleton(encodingConfig);
 
-            services.AddSingleton<IEncodingService>(configuration.Get<EncodingService>());
+            services.AddSingleton<IEncodingService, EncodingService>();
 
             return services;
         }

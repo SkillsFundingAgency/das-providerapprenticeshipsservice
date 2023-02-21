@@ -6,6 +6,8 @@ using SFA.DAS.Notifications.Api.Client;
 using System.Net.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions
 {
@@ -22,6 +24,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensi
                 var httpClient = GetHttpClient(config);
                 return new NotificationsApi(httpClient, config);
             });
+
+            services.AddTransient<IBackgroundNotificationService, BackgroundNotificationService>();
 
             return services;
         }

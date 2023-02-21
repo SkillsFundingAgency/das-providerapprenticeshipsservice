@@ -76,11 +76,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            services.AddTransient<IProviderCommitmentsLogger, ProviderCommitmentsLogger>(); // need to think where to inject it > move to Application
-            services.AddScoped<IHtmlHelpers, HtmlHelpers>(); // to be grouped to somewhere else
+            services.AddApplicationServices(_configuration);
             services.AddOrchestrators();
             services.AddEncodingServices(_configuration);
-            services.AddApplicationServices(_configuration);
             services.AddFeatureToggleService(_configuration);
 
             services.AddAndConfigureAuthentication();

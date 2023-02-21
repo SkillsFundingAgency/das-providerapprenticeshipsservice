@@ -37,7 +37,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Extensions
                 });
                 services.AddTransient<IProviderRepository, ProviderRepository>();
                 services.AddTransient<IImportProviderService, ImportProviderService>();
-
+                services.AddLogging();
             });
 
             return hostBuilder;

@@ -7,6 +7,7 @@ using SFA.DAS.Authorization.ProviderPermissions.Handlers;
 using SFA.DAS.Authorization.Caching;
 using SFA.DAS.Authorization.Logging;
 using SFA.DAS.Authorization.Services;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
 {
@@ -35,6 +36,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
                     });
             });
 
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<IActionContextAccessorWrapper, ActionContextAccessorWrapper>();
+
             // ***Deafult Registry***
             services.AddAuthorization<AuthorizationContextProvider>();
             services.AddSingleton<IAuthorizationHandler, AuthorizationHandler>();
@@ -46,7 +50,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
             services.Decorate<IAuthorizationHandler, AuthorizationResultLogger>();
             services.AddScoped<IAuthorizationService, AuthorizationService>();
             services.AddSingleton<IDefaultAuthorizationHandler, DefaultAuthorizationHandler>();
-            services.AddScoped<IAuthorizationService, AuthorizationServiceWithDefaultHandler>();
+            //services.AddScoped<IAuthorizationService, AuthorizationServiceWithDefaultHandler>();
         }
     }
 }
