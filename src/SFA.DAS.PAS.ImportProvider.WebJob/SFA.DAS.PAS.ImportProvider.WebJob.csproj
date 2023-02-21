@@ -10,7 +10,7 @@
     <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="7.78.0" />
     <PackageReference Include="SFA.DAS.Http" Version="3.2.69" />
     <PackageReference Include="Microsoft.ApplicationInsights.NLogTarget" Version="2.21.0" />
-    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="2.0.5" />
+    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.33" />
   </ItemGroup>
   <ItemGroup>

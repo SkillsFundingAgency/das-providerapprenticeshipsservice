@@ -11,9 +11,8 @@
     <PackageReference Include="Polly" Version="7.2.3" />
     <PackageReference Include="System.ComponentModel.Composition" Version="7.0.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    
-	<PackageReference Include="SFA.DAS.Configuration" Version="2.0.5" />
-    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="2.0.5" />
+	<PackageReference Include="SFA.DAS.Configuration" Version="3.0.84" />
+    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
     <PackageReference Include="System.Spatial" Version="5.8.5" />
     <PackageReference Include="Pipelines.Sockets.Unofficial" Version="2.2.0" />

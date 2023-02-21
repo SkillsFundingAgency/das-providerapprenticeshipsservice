@@ -21,21 +21,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensi
     {
         public static IServiceCollection AddCommitments(this IServiceCollection services, IConfiguration configuration)
         {
-            // IPROVIDERCOMMITMENTS
-
-            // this is the old CommitmentsAPI, need to see if this can be switched to v2 (although it seems V2 doesnt provide
-            // an equivalent method for GetProviders() in V1
-            // ALSO, to verify it this resolves having added SFA.DAS.CommitmentsAPI to ConfigNames
-            services.AddSingleton<ICommitmentsApiClientConfiguration>(configuration.Get<CommitmentsApiClientConfiguration>());
-            //services.AddSingleton<ICommitmentsApiClientConfiguration>(cfg => cfg.GetService<IOptions<CommitmentsApiClientConfiguration>>().Value);
-
-            services.AddTransient<IProviderCommitmentsApi>(s =>
-            {
-                var config = s.GetService<CommitmentsApiClientConfiguration>();
-                var httpClient = GetHttpClient(config);
-                return new ProviderCommitmentsApi(httpClient, config);
-            });
-
             // ICOMMITMENTSV2APICLIENT
             services.Configure<CommitmentsApiClientV2Configuration>(c => configuration.GetSection("CommitmentsApiClientV2").Bind(c));
             services.AddSingleton(cfg => cfg.GetService<IOptions<CommitmentsApiClientV2Configuration>>().Value);
@@ -55,19 +40,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensi
            });
 
             return services;
-        }
-
-        private static HttpClient GetHttpClient(ICommitmentsApiClientConfiguration config)
-        {
-            var httpClientBuilder = string.IsNullOrWhiteSpace(config.ClientId)
-                ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config))
-                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config));
-
-            return httpClientBuilder
-                .WithDefaultHeaders()
-                //.WithHandler(new RequestIdMessageRequestHandler())
-                //.WithHandler(new SessionIdMessageRequestHandler())
-                .Build();
         }
 
         private static HttpClient GetHttpV2Client(CommitmentsApiClientV2Configuration commitmentsV2Config, IConfiguration config)
