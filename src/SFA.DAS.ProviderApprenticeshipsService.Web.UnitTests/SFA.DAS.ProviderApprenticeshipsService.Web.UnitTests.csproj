@@ -446,7 +446,6 @@
     <Compile Include="Extensions\ClaimsIdentityExtensionsTests.cs" />
     <Compile Include="Extensions\IEnumerableCommitmentAgreementTests.cs" />
     <Compile Include="FakeHttpContext.cs" />
-    <Compile Include="Services\GetRoatpBetaProviderServiceTests.cs" />
     <Compile Include="TestServiceLocator.cs" />
     <Compile Include="MoqCustomisedAutoData.cs" />
     <Compile Include="Orchestrators\Account\WhenGettingAccountHomeViewModel.cs" />

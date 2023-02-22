@@ -1,10 +1,6 @@
 ﻿@using Microsoft.ApplicationInsights.Extensibility
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderUrlHelper.Framework
-@{
-    var showCourseManagementLink = HttpContext.Current.Items.Contains(RoatpConstants.IsCourseManagementLinkEnabled) && HttpContext.Current.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true);
-}
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -130,10 +126,7 @@
                     <li><a href="@Url.ProviderCommitmentsLink($"{providerId}/apprentices")" role="menuitem">Manage your apprentices</a></li>
                     <li><a href="@Url.RecruitLink($"{providerId}")">Recruit apprentices</a></li>
                     <li><a href="@Url.Action("Agreements", "Agreement", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Agreement" ? "selected" : "")">Organisations and agreements</a></li>
-                    @if(showCourseManagementLink)
-                    {
-                        <li><a href="@Url.CourseManagementLink($"{providerId}/review-your-details")" role="menuitem" class="@(controllerName == "CourseManagement" ? "selected" : "")">Your standards and training venues</a></li>
-                    }
+                    <li><a href="@Url.CourseManagementLink($"{providerId}/review-your-details")" role="menuitem" class="@(controllerName == "CourseManagement" ? "selected" : "")">Your standards and training venues</a></li>
                 </ul>
             </nav>
         </div>
