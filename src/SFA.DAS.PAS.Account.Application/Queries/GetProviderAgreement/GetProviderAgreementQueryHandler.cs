@@ -1,15 +1,16 @@
 ﻿using MediatR;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.PAS.Account.Application.Queries.GetProviderAgreement
 {
     public class GetProviderAgreementQueryHandler : IRequestHandler<GetProviderAgreementQueryRequest, GetProviderAgreementQueryResponse>
     {
         private readonly IProviderAgreementStatusRepository _providerAgreementStatusRepository;
-        private readonly IProviderAgreementStatusConfiguration _configuration;
+        private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
 
-        public GetProviderAgreementQueryHandler(IProviderAgreementStatusRepository providerAgreementStatusRepository, IProviderAgreementStatusConfiguration configuration)
+        public GetProviderAgreementQueryHandler(IProviderAgreementStatusRepository providerAgreementStatusRepository, ProviderApprenticeshipsServiceConfiguration configuration)
         {
             _providerAgreementStatusRepository = providerAgreementStatusRepository;
             _configuration = configuration;

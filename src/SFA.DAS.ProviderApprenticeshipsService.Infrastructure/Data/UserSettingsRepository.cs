@@ -6,12 +6,13 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserSetting;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
     public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IUserSettingsRepository
     {
-        public UserSettingsRepository(IProviderAgreementStatusConfiguration config, ILogger<UserSettingsRepository> logger, IConfiguration rootConfig) 
+        public UserSettingsRepository(ProviderApprenticeshipsServiceConfiguration config, ILogger<UserSettingsRepository> logger, IConfiguration rootConfig) 
             : base(config.DatabaseConnectionString, logger, rootConfig)
         {
         }

@@ -9,6 +9,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.IdamsUser;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
@@ -16,7 +17,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
     {
         private readonly ILogger<UserRepository> _logger;       
 
-        public UserRepository(IProviderAgreementStatusConfiguration config, ILogger<UserRepository> logger, IConfiguration rootConfig) 
+        public UserRepository(ProviderApprenticeshipsServiceConfiguration config, ILogger<UserRepository> logger, IConfiguration rootConfig) 
             : base(config.DatabaseConnectionString, logger, rootConfig)
         {
             _logger = logger;

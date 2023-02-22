@@ -16,6 +16,7 @@ using SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers;
 using SFA.DAS.PAS.Account.Application.Queries.GetProviderAgreement;
 using SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.PAS.Account.Api.UnitTests.AppStart;
@@ -31,7 +32,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IUserSettingsRepository))]
     [TestCase(typeof(IProviderAgreementStatusRepository))]
     [TestCase(typeof(IUserRepository))]
-    [TestCase(typeof(IProviderAgreementStatusConfiguration))]
+    [TestCase(typeof(ProviderApprenticeshipsServiceConfiguration))]
     [TestCase(typeof(IRequestHandler<GetAccountUsersQuery, GetAccountUsersResponse>))]
     [TestCase(typeof(IRequestHandler<GetProviderAgreementQueryRequest, GetProviderAgreementQueryResponse>))]
     [TestCase(typeof(IRequestHandler<SendNotificationCommand, Unit>))]

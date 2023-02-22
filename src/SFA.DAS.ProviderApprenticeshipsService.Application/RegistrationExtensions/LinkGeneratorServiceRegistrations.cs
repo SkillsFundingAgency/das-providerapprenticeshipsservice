@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.AutoConfiguration;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.LinkGeneratorService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions
@@ -7,7 +8,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensi
     {
         public static IServiceCollection AddLinkGenerator(this IServiceCollection services)
         {
-            services.AddSingleton<ILinkGeneratorService, LinkGeneratorService>();
+            //services.AddTransient<IAutoConfigurationService, TableStorageConfigurationService>();
+            services.AddTransient<ILinkGeneratorService, LinkGeneratorService>();
 
             return services;
         }

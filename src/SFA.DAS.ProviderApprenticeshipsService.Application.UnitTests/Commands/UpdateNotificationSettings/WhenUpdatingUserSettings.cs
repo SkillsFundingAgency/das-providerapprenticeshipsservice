@@ -8,7 +8,7 @@ using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.GetUserNotificationSettings
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.UpdateNotificationSettings
 {
     [TestFixture]
     public class WhenUpdatingUserSettings
@@ -35,7 +35,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         [Test]
         public async Task ThenGettingUsersSettings()
         {
-            _mockValidator.Setup(m => m.Validate(_command)) .Returns(new ValidationResult() );
+            _mockValidator.Setup(m => m.Validate(_command)).Returns(new ValidationResult());
 
             await _sut.Handle(_command, new CancellationToken());
 
@@ -49,8 +49,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             _mockValidator.Setup(m => m.Validate(_command))
                 .Returns(new ValidationResult { Errors = { new ValidationFailure("Error", "Error message") } });
 
-            
-            Assert.ThrowsAsync<InvalidRequestException>(() =>  _sut.Handle(_command, new CancellationToken()));
+
+            Assert.ThrowsAsync<InvalidRequestException>(() => _sut.Handle(_command, new CancellationToken()));
 
             _mockSettingsRepo.Verify(m => m.GetUserSetting(It.IsAny<string>()), Times.Never);
             _mockSettingsRepo.Verify(m => m.UpdateUserSettings(It.IsAny<string>(), It.IsAny<bool>()), Times.Never);
