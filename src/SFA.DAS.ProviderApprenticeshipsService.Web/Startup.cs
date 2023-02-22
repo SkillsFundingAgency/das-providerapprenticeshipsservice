@@ -81,7 +81,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             services.AddEncodingServices(_configuration);
             services.AddFeatureToggleService(_configuration);
 
-            services.AddAndConfigureAuthentication();
+            services.AddAndConfigureAuthentication(_configuration);
             services.AddAuthorizationServicePolicies();
 
             services.AddApplicationInsightsTelemetry();

@@ -1,27 +1,27 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
-using Microsoft.IdentityModel.Protocols;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
-using System.Configuration;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
+using Microsoft.Extensions.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication
 {
     public static class AuthenticationExtensions
     {
-        public static void AddAndConfigureAuthentication(this IServiceCollection services)
+        public static void AddAndConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             var serviceProvider = services.BuildServiceProvider();
             var providerCommitmentsLogger = serviceProvider.GetService<IProviderCommitmentsLogger>();
             var accountOrchestrator = serviceProvider.GetService<AuthenticationOrchestrator>();
+            var idamsMetadata = configuration.GetSection("IdamsADFSMetadata").Value;
+            var wtRealm = configuration.GetSection("IdamsRealm").Value;
 
             services.AddAuthentication(sharedOptions =>
             {
@@ -34,8 +34,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication
             })
                 .AddWsFederation(options =>
                 {
-                    options.MetadataAddress = ConfigurationManager.AppSettings["IdamsRealm"];
-                    options.Wtrealm = ConfigurationManager.AppSettings["IdamsADFSMetadata"];
+                    options.MetadataAddress = idamsMetadata;
+                    options.Wtrealm = wtRealm;
                     options.Events.OnSecurityTokenValidated = async (context) =>
                     {
                         await SecurityTokenValidated(context.HttpContext, context.Principal, providerCommitmentsLogger, accountOrchestrator);
