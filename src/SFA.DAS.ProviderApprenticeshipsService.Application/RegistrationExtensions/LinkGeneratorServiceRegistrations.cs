@@ -8,7 +8,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensi
     {
         public static IServiceCollection AddLinkGenerator(this IServiceCollection services)
         {
-            //services.AddTransient<IAutoConfigurationService, TableStorageConfigurationService>();
+            services.AddTransient<IEnvironmentService, EnvironmentService>();
+            services.AddTransient<IAzureTableStorageConnectionAdapter, AzureTableStorageConnectionAdapter>();
+            services.AddTransient<IAutoConfigurationService, TableStorageConfigurationService>();
             services.AddTransient<ILinkGeneratorService, LinkGeneratorService>();
 
             return services;
