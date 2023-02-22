@@ -9,7 +9,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
     {
         public static void MapClaimToRoles(this ClaimsIdentity identity)
         {
-            foreach (var serviceClaim in identity.Claims.Where(c => c.Type == DasClaimTypes.Service))
+            foreach (var serviceClaim in identity.Claims.ToList().Where(c => c.Type == DasClaimTypes.Service))
             {
                 if(Enum.TryParse(serviceClaim.Value, true, out ServiceClaim claim))
                 {
