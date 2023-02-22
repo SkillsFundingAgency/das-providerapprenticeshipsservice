@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Logging;
-using MoreLinq.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.IdamsUser;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using System;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
@@ -91,21 +91,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
         public async Task SyncIdamsUsers(long ukprn, List<IdamsUser> idamsUsers)
         {
-            //TODO MAC-201
-            // var sublist = idamsUsers.Select(x => new {x.Email, UserType = (short) x.UserType}).ToDataTable(arg =>new { arg.Email, arg.UserType});
-            //
-            // await WithConnection(async c =>
-            // {
-            //     var parameters = new DynamicParameters();
-            //     parameters.Add("@ukprn", ukprn, DbType.Int64);
-            //     parameters.Add("@users", sublist.AsTableValuedParameter());
-            //
-            //     return await c.ExecuteAsync(
-            //         sql: "[dbo].[SyncIdamsUsers]",
-            //         param: parameters,
-            //         commandType: CommandType.StoredProcedure);
-            // });
-        }
+            DataTable idamsUsersTable = new DataTable();
+            idamsUsersTable.Columns.Add("Email");
+            idamsUsersTable.Columns.Add("UserType");
 
+            idamsUsers.Select(x => idamsUsersTable.Rows.Add(new Object[] { x.Email, x.UserType }));
+
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@ukprn", ukprn, DbType.Int64);
+                parameters.Add("@users", idamsUsersTable.AsTableValuedParameter());
+           
+                return await c.ExecuteAsync(
+                    sql: "[dbo].[SyncIdamsUsers]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+        }   
     }
 }

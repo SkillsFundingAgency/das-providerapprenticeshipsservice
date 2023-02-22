@@ -1,10 +1,10 @@
-﻿using MoreLinq;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.PAS.ImportProvider.WebJob.Extensions;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.Services
 {
@@ -26,8 +26,8 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Services
             _logger.LogInformation("Import Provider - Started");
 
             var providers = (await _providerApiClient.GetProviders()).Providers;
-            var batches = providers.Batch(1000).Select(b => b.ToDataTable(p => p.Ukprn, p => p.Name));
-            
+            var batches = providers.Chunk(1000).Select(b => b.ToDataTable());
+
             foreach (var batch in batches)
             {
                 await ImportProviders(batch);
