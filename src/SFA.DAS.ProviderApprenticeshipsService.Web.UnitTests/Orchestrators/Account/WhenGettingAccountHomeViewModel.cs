@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using MediatR;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -12,6 +15,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Features;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
@@ -69,6 +73,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
         [Test]
         public async Task Then_Set_Traineeship_Enabled_Flag()
         {
+            var httpContext = new DefaultHttpContext(new FeatureCollection());
+            httpContext.Request.RouteValues.Add(RoatpConstants.IsCourseManagementLinkEnabled, true);
+            _httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
+
             var model = await _orchestrator.GetAccountHomeViewModel(1);
 
             model.ShowTraineeshipLink.Should().Be(true);
@@ -78,9 +86,67 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
         [TestCase(false)]
         public async Task Then_ShowEarningsReport_Is_Set_From_Authorization_Service(bool expectedResult)
         {
+            // Arrange
             _authorizationService.Setup(x => x.IsAuthorized(ProviderFeature.FlexiblePaymentsPilot)).Returns(expectedResult);
+            var httpContext = new DefaultHttpContext(new FeatureCollection());
+            httpContext.Items.Add(RoatpConstants.IsCourseManagementLinkEnabled, true);
+            _httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
+
+            // Act
             var model = await _orchestrator.GetAccountHomeViewModel(1);
+
+            // Assert
             model.ShowEarningsReport.Should().Be(expectedResult);
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public async Task Then_ShowCourseManagementLink_Is_Set_From_HttpContextAccessor(bool expectedResult)
+        {
+            // Arrange
+            var httpContext = new DefaultHttpContext(new FeatureCollection());
+            httpContext.Items.Add(RoatpConstants.IsCourseManagementLinkEnabled, expectedResult);
+            _httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
+
+            // Act
+            var model = await _orchestrator.GetAccountHomeViewModel(1);
+
+            // Assert
+            model.ShowCourseManagementLink.Should().Be(expectedResult);
+        }
+
+        [TestCase("bannercontent")]
+        public async Task Then_BannerContent_Is_Set_From_HtmlHelpers(string expectedBannerContentString)
+        {
+            // Arrange
+            HtmlString expectedBannerContent = new HtmlString(expectedBannerContentString);
+            var httpContext = new DefaultHttpContext(new FeatureCollection());
+            httpContext.Items.Add(RoatpConstants.IsCourseManagementLinkEnabled, true);
+            _httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
+            _htmlHelpers.Setup(x => x.GetClientContentByType(It.IsAny<string>(), It.IsAny<bool>())).Returns(expectedBannerContent);
+
+            // Act
+            var model = await _orchestrator.GetAccountHomeViewModel(1);
+
+            // Assert
+            model.BannerContent.Should().Be(expectedBannerContent);
+        }
+
+        [TestCase("covidsectioncontent")]
+        public async Task Then_CovidSectionContent_Is_Set_From_HtmlHelpers(string expectedCovidSectionContentString)
+        {
+            // Arrange
+            HtmlString expectedCovidSectionContent = new HtmlString(expectedCovidSectionContentString);
+            var httpContext = new DefaultHttpContext(new FeatureCollection());
+            httpContext.Items.Add(RoatpConstants.IsCourseManagementLinkEnabled, true);
+            _httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
+            _htmlHelpers.Setup(x => x.GetClientContentByType(It.IsAny<string>(), It.IsAny<bool>())).Returns(expectedCovidSectionContent);
+
+            // Act
+            var model = await _orchestrator.GetAccountHomeViewModel(1);
+
+            // Assert
+            model.CovidSectionContent.Should().Be(expectedCovidSectionContent);
         }
     }
 }
