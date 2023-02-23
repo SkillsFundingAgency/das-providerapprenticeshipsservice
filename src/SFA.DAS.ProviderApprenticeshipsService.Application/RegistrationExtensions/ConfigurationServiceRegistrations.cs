@@ -13,6 +13,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensi
         public static IServiceCollection AddConfigurations(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton(configuration.Get<ProviderApprenticeshipsServiceConfiguration>());
+            services.AddSingleton(configuration.Get<ProviderUrlConfiguration>());
 
             // I assumed that this config comes from SFA.DAS.EmployerAccountAPI because IAccountApiClient is used in EmployerAccountService
             // butTO BE CONFIRMED

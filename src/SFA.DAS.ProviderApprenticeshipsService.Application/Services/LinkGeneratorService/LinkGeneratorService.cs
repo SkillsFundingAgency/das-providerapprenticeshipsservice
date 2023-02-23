@@ -6,95 +6,71 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services.LinkGenera
 {
     public class LinkGeneratorService : ILinkGeneratorService
     {
-        private readonly Lazy<ProviderUrlConfiguration> _lazyProviderConfiguration;
+        private readonly ProviderUrlConfiguration _providerUrlConfiguration;
 
-        public LinkGeneratorService(IAutoConfigurationService autoConfigurationService)
+        public LinkGeneratorService(ProviderUrlConfiguration providerUrlConfiguration)
         {
-            _lazyProviderConfiguration =
-                new Lazy<ProviderUrlConfiguration>(() => LoadProviderUrlConfiguration(autoConfigurationService));
+            _providerUrlConfiguration = providerUrlConfiguration;
         }
 
         public virtual string ProviderCommitmentsLink(string path)
         {
-            var configuration = _lazyProviderConfiguration.Value;
-            var baseUrl = configuration.ProviderCommitmentsBaseUrl;
-
+            var baseUrl = _providerUrlConfiguration.ProviderCommitmentsBaseUrl;
             return Action(baseUrl, path);
         }
 
         public string ProviderApprenticeshipServiceLink(string path)
         {
-            var configuration = _lazyProviderConfiguration.Value;
-            var baseUrl = configuration.ProviderApprenticeshipServiceBaseUrl;
-
+            var baseUrl = _providerUrlConfiguration.ProviderApprenticeshipServiceBaseUrl;
             return Action(baseUrl, path);
         }
 
         public string ReservationsLink(string path)
         {
-            var configuration = _lazyProviderConfiguration.Value;
-            var baseUrl = configuration.ReservationsBaseUrl;
-
+            var baseUrl = _providerUrlConfiguration.ReservationsBaseUrl;
             return Action(baseUrl, path);
         }
 
         public string RecruitLink(string path)
         {
-            var configuration = _lazyProviderConfiguration.Value;
-            var baseUrl = configuration.RecruitBaseUrl;
-
+            var baseUrl = _providerUrlConfiguration.RecruitBaseUrl;
             return Action(baseUrl, path);
         }
 
         public string TraineeshipLink(string path)
         {
-            var configuration = _lazyProviderConfiguration.Value;
-            var baseUrl = configuration.TraineeshipBaseUrl;
-
+            var baseUrl = _providerUrlConfiguration.TraineeshipBaseUrl;
             return Action(baseUrl, path);
         }
 
         public string RegistrationLink(string path)
         {
-            var configuration = _lazyProviderConfiguration.Value;
-            var baseUrl = configuration.RegistrationBaseUrl;
-
+            var baseUrl = _providerUrlConfiguration.RegistrationBaseUrl;
             return Action(baseUrl, path);
         }
 
         public string EmployerDemandLink(string path)
         {
-            var configuration = _lazyProviderConfiguration.Value;
-            var baseUrl = configuration.EmployerDemandBaseUrl;
+            var baseUrl = _providerUrlConfiguration.EmployerDemandBaseUrl;
             return Action(baseUrl, path);
         }
 
         public string CourseManagementLink(string path)
         {
-            var configuration = _lazyProviderConfiguration.Value;
-            var baseUrl = configuration.CourseManagementBaseUrl;
+            var baseUrl = _providerUrlConfiguration.CourseManagementBaseUrl;
             return Action(baseUrl, path);
         }
 
         public string ProviderFundingLink(string path)
         {
-            var configuration = _lazyProviderConfiguration.Value;
-            var baseUrl = configuration.ProviderFundingBaseUrl;
+            var baseUrl = _providerUrlConfiguration.ProviderFundingBaseUrl;
             return Action(baseUrl, path);
         }
 
         public string APIManagementLink(string path)
         {
-            var configuration = _lazyProviderConfiguration.Value;
-            var baseUrl = configuration.APIManagementBaseUrl;
+            var baseUrl = _providerUrlConfiguration.APIManagementBaseUrl;
             return Action(baseUrl, path);
-        }
-
-        private ProviderUrlConfiguration LoadProviderUrlConfiguration(IAutoConfigurationService autoConfigurationService)
-        {
-            var configuration = autoConfigurationService.Get<ProviderUrlConfiguration>();
-
-            return configuration;
         }
 
         private static string Action(string baseUrl, string path)
