@@ -28,18 +28,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensi
             */
             services.Configure<ProviderRelationshipsApiConfiguration>(c => configuration.GetSection("ProviderRelationshipsApi").Bind(c));
 
-            var useStub = GetUseStubProviderRelationshipsSetting();
+            var useStub = GetUseStubProviderRelationshipsSetting(configuration);
             if (useStub)
             {
                 services.AddTransient<IProviderRelationshipsApiClient, StubProviderRelationshipsApiClient>();
             }
+            // Should there be an else statement with a non-Stub implementaton, passing in ProviderRelationshipsApiConfiguration??
 
             return services;
         }
 
-        private static bool GetUseStubProviderRelationshipsSetting()
+        private static bool GetUseStubProviderRelationshipsSetting(IConfiguration configuration)
         {
-            var value = ConfigurationManager.AppSettings["UseStubProviderRelationships"];
+            var value = configuration.GetSection("UseStubProviderRelationships").Value;
 
             if (value == null)
             {

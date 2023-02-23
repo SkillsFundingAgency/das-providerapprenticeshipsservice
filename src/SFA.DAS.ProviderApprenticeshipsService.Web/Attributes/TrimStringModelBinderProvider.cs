@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 {
@@ -12,8 +13,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
             {
                 throw new ArgumentNullException(nameof(context));
             }
-
-            return new BinderTypeModelBinder(typeof(TrimStringModelBinder));
+            if (!context.Metadata.IsComplexType && context.Metadata.ModelType == typeof(string))
+            {
+                return new TrimStringModelBinder(new SimpleTypeModelBinder(context.Metadata.ModelType, new LoggerFactory()));
+            }
+            return null;
         }
     }
 }

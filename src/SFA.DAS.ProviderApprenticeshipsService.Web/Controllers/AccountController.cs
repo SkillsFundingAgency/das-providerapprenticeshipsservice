@@ -22,11 +22,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     public class AccountController : BaseController
     {
-        private readonly AccountOrchestrator _accountOrchestrator;
+        private readonly IAccountOrchestrator _accountOrchestrator;
         private readonly LinkGenerator _linkGenerator;
         private readonly IAuthenticationServiceWrapper _authenticationService;
 
-        public AccountController(AccountOrchestrator accountOrchestrator,
+        public AccountController(IAccountOrchestrator accountOrchestrator,
             LinkGenerator linkGenerator,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             IAuthenticationServiceWrapper authenticationService) 

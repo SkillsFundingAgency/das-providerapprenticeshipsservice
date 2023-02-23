@@ -19,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication
         {
             var serviceProvider = services.BuildServiceProvider();
             var providerCommitmentsLogger = serviceProvider.GetService<IProviderCommitmentsLogger>();
-            var accountOrchestrator = serviceProvider.GetService<AuthenticationOrchestrator>();
+            var accountOrchestrator = serviceProvider.GetService<IAuthenticationOrchestrator>();
             var idamsMetadata = configuration.GetSection("IdamsADFSMetadata").Value;
             var wtRealm = configuration.GetSection("IdamsRealm").Value;
 
@@ -53,7 +53,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication
         }
 
         private static async Task SecurityTokenValidated(HttpContext httpContext, ClaimsPrincipal principal, IProviderCommitmentsLogger logger,
-           AuthenticationOrchestrator orchestrator)
+           IAuthenticationOrchestrator orchestrator)
         {
             logger.Info("SecurityTokenValidated notification called");
 

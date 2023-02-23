@@ -4,7 +4,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
@@ -19,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
             services.AddContentApi(configuration);
             services.AddNotifications(configuration);
             services.AddRoatpServices(configuration);
-            services.AddProviderRelationshipsApi(configuration);
+            services.AddProviderRelationshipsApi(configuration); // TBC IF NEEDED
             services.AddFluentValidation();
             services.AddApprenticeshipInfoService();
                      
@@ -32,7 +31,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
             services.AddTransient<IProviderCommitmentsLogger, ProviderCommitmentsLogger>(); // need to think where to inject it > move to Application
             services.AddScoped<IHtmlHelpers, HtmlHelpers>(); // to be grouped to somewhere else
             services.AddScoped<IAuthenticationServiceWrapper, AuthenticationServiceWrapper>(); // this is unused atm, to be confirmed if this is a preferred way in AccountController
-            
 
             return services;
         }
