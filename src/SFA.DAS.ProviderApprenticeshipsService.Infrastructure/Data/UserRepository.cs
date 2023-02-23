@@ -9,7 +9,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.IdamsUser;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using System;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
@@ -95,7 +94,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             idamsUsersTable.Columns.Add("Email");
             idamsUsersTable.Columns.Add("UserType");
 
-            idamsUsers.Select(x => idamsUsersTable.Rows.Add(new Object[] { x.Email, x.UserType }));
+            foreach (var idamsUser in idamsUsers)
+            {
+                idamsUsersTable.Rows.Add(idamsUser.Email, (short)idamsUser.UserType);
+            }
 
             await WithConnection(async c =>
             {

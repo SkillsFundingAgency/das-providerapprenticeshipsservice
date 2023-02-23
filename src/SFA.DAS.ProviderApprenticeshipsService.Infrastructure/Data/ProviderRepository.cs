@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
@@ -18,8 +19,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         {
         }
 
-        public async Task ImportProviders(DataTable providersDataTable)
+        public async Task ImportProviders(ProviderResponse[] providers)
         {
+            DataTable providersDataTable = new DataTable();
+            providersDataTable.Columns.Add("Ukprn");
+            providersDataTable.Columns.Add("Name");
+
+            foreach (var provider in providers)
+            {
+                providersDataTable.Rows.Add(provider.Ukprn, provider.Name);
+            }
+
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
