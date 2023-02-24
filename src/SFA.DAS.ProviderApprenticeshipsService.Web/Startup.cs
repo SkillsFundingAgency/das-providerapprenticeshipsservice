@@ -21,6 +21,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.Provider.Shared.UI.Startup;
 using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
@@ -85,6 +86,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             services.AddAuthorizationServicePolicies();
 
             services.AddApplicationInsightsTelemetry();
+
+            services.AddProviderUiServiceRegistration(_configuration);
 
             services.AddControllersWithViews(options =>
             {
