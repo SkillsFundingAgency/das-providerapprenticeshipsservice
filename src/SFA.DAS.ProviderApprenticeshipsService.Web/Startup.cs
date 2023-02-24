@@ -21,9 +21,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.Provider.Shared.UI;
+using SFA.DAS.Provider.Shared.UI.Models;
 using SFA.DAS.Provider.Shared.UI.Startup;
 using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
@@ -97,6 +100,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                 options.Filters.Add(new RoatpCourseManagementCheckActionFilter());
                 options.ModelBinderProviders.Insert(0, new TrimStringModelBinderProvider());
             })
+            .SetDefaultNavigationSection(NavigationSection.YourCohorts)
+
             // Newtonsoft.Json is added for compatibility reasons
             // The recommended approach is to use System.Text.Json for serialization
             // Visit the following link for more guidance about moving away from Newtonsoft.Json to System.Text.Json
@@ -128,8 +133,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            app.UseRouting(); 
             app.UseAuthentication();
-            app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
