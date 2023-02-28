@@ -6,14 +6,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
 {
     public static class OrchestratorsServiceRegistrations
     {
-        public static IServiceCollection AddOrchestrators(this IServiceCollection services)
+        public static void AddOrchestrators(this IServiceCollection services)
         {
             services.AddTransient<IAgreementMapper, AgreementMapper>();
             services.AddTransient<IAccountOrchestrator, AccountOrchestrator>();
             services.AddTransient<IAgreementOrchestrator, AgreementOrchestrator>();
             services.AddTransient<IAuthenticationOrchestrator, AuthenticationOrchestrator>();
 
-            return services;
         }
     }
 }

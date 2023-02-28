@@ -8,13 +8,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Builder.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +25,7 @@ using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Provider.Shared.UI;
 using SFA.DAS.Provider.Shared.UI.Models;
 using SFA.DAS.Provider.Shared.UI.Startup;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -79,7 +81,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
+            
             services.AddOptions();
+            
+            services.AddMediatR(typeof(DeleteRegisteredUserCommand));
+            
+            services.AddLogging();
             services.AddApplicationServices(_configuration);
             services.AddOrchestrators();
             services.AddEncodingServices(_configuration);
@@ -88,31 +96,39 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             services.AddAndConfigureAuthentication(_configuration);
             services.AddAuthorizationServicePolicies();
 
-            services.AddApplicationInsightsTelemetry();
+            
 
             services.AddProviderUiServiceRegistration(_configuration);
+            services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
 
-            services.AddControllersWithViews(options =>
-            {
-                options.AddAuthorization();
-                options.Filters.Add<InvalidStateExceptionFilter>();
-                options.Filters.Add<ProviderUkPrnCheckActionFilter>();
-                options.Filters.Add(new RoatpCourseManagementCheckActionFilter());
-                options.ModelBinderProviders.Insert(0, new TrimStringModelBinderProvider());
-            })
-            .SetDefaultNavigationSection(NavigationSection.YourCohorts)
+            services.Configure<RouteOptions>(options =>
+                {
+
+                }).AddMvc(options =>
+                {
+                    //options.AddAuthorization();
+                    options.Filters.Add<InvalidStateExceptionFilter>();
+                    options.Filters.Add<ProviderUkPrnCheckActionFilter>();
+                    options.Filters.Add(new RoatpCourseManagementCheckActionFilter());
+                    options.ModelBinderProviders.Insert(0, new TrimStringModelBinderProvider());
+                    if (!_configuration.IsDev())
+                    {
+                        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                    }
+
+                })
+                .SetDefaultNavigationSection(NavigationSection.YourCohorts);
 
             // Newtonsoft.Json is added for compatibility reasons
             // The recommended approach is to use System.Text.Json for serialization
             // Visit the following link for more guidance about moving away from Newtonsoft.Json to System.Text.Json
             // https://docs.microsoft.com/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to
-            .AddNewtonsoftJson(options =>
-            {
-                options.UseMemberCasing();
-            });
+            // .AddNewtonsoftJson(options =>
+            // {
+            //     options.UseMemberCasing();
+            // });
 
-            services.AddLogging();
-
+            //services.AddApplicationInsightsTelemetry();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -122,19 +138,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseHsts();
-            }
 
-            app.UseMiddleware<HttpExceptionMiddleware>();
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseCookiePolicy();
-
-            app.UseRouting(); 
             app.UseAuthentication();
+            app.UseStaticFiles();
+            app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

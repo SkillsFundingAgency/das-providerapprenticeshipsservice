@@ -5,47 +5,49 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
-    [AllowAllRoles]
-    public class HomeController : BaseController
+    [Route("{controller}")]
+    public class HomeController : Controller
     {
-        public HomeController(ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
+        public HomeController()
         {
         }
 
-        [Route("~/help", Name = "help")]
-        public ActionResult Help()
+        [HttpGet]
+        [Route("help")]
+        public IActionResult Help()
         {
-            return View();
+            return View("Help");
         }
 
-        [Route("~/", Name = "home")]
-        public ActionResult Index()
+        [HttpGet]
+        [Route("", Name = "home")]
+        public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated) return RedirectToRoute("account-home");
 
             return View();
         }
 
-        [Route("~/terms", Name = "terms")]
-        public ActionResult Terms()
+        [Route("terms", Name = "terms")]
+        public IActionResult Terms()
         {
             return View();
         }
 
-        [Route("~/privacy", Name = "privacy")]
-        public ActionResult Privacy()
+        [Route("privacy", Name = "privacy")]
+        public IActionResult Privacy()
         {
             return View();
         }
 
-        [Route("~/cookies", Name = "cookies")]
-        public ActionResult Cookies()
+        [Route("cookies", Name = "cookies")]
+        public IActionResult Cookies()
         {
             return View();
         }
 
-        [Route("~/cookie-details", Name = "cookie-details")]
-        public ActionResult CookieDetails()
+        [Route("cookie-details", Name = "cookie-details")]
+        public IActionResult CookieDetails()
         {
             return View();
         }

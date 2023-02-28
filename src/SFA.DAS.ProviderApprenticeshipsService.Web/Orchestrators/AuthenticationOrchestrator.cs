@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegisteredUser;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -14,12 +12,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 
     public class AuthenticationOrchestrator : IAuthenticationOrchestrator
     {
-        private readonly IMediator _mediator;
+        //private readonly IMediator _mediator;
         private readonly IProviderCommitmentsLogger _logger;
 
-        public AuthenticationOrchestrator(IMediator mediator, IProviderCommitmentsLogger logger)
+        public AuthenticationOrchestrator(//IMediator mediator,
+            IProviderCommitmentsLogger logger)
         {
-            _mediator = mediator;
+            //_mediator = mediator;
             _logger = logger;
         }
 
@@ -27,13 +26,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
         {
             _logger.Info($"Updating \"{userId}\" attributes - ukprn:\"{ukprn}\", displayname:\"{displayName}\", email:\"{email}\"");
 
-            await _mediator.Send(new UpsertRegisteredUserCommand
-            {
-                UserRef = userId,
-                DisplayName = displayName,
-                Ukprn = ukprn,
-                Email = email
-            });
+            //TODO this needs to call the repository directly
+            // await _mediator.Send(new UpsertRegisteredUserCommand
+            // {
+            //     UserRef = userId,
+            //     DisplayName = displayName,
+            //     Ukprn = ukprn,
+            //     Email = email
+            // });
         }
     }
 }
