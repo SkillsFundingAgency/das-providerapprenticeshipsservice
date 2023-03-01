@@ -3,6 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.ProviderRelationships.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderRelationships.Api.Client;
+using SFA.DAS.Http.TokenGenerators;
+using SFA.DAS.Http;
+using System.Net.Http;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions
 {
@@ -19,10 +22,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensi
             }
             else
             {
-                services.AddTransient<IProviderRelationshipsApiClient, ProviderRelationshipsApiClient>();
+                services.AddSingleton<IProviderRelationshipsApiClient>(s =>
+                {
+                    var config = s.GetService<ProviderRelationshipsApiConfiguration>();
+                    var restHttpClient = GetRestHttpClient(config);
+
+                    return new ProviderRelationshipsApiClient(restHttpClient);
+                });
             }
 
             return services;
+        }
+
+        private static RestHttpClient GetRestHttpClient(ProviderRelationshipsApiConfiguration config)
+        {
+            HttpClient httpClient = new HttpClientBuilder()
+                    .WithBearerAuthorisationHeader(new ManagedIdentityTokenGenerator(config))
+                    .WithDefaultHeaders()
+                    .Build();
+
+            return new RestHttpClient(httpClient);
         }
 
         private static bool GetUseStubProviderRelationshipsSetting(IConfiguration configuration)
