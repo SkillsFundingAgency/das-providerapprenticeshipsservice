@@ -5,6 +5,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.WsFederation;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -18,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     {
         private readonly AccountOrchestrator _accountOrchestrator;
 
-        public AccountController(AccountOrchestrator accountOrchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
+        public AccountController(AccountOrchestrator accountOrchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage, ProviderApprenticeshipsServiceConfiguration configuration) : base(flashMessage, configuration)
         {
             _accountOrchestrator = accountOrchestrator;
         }
@@ -123,6 +124,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var model = await _accountOrchestrator.Unsubscribe(userRef, url);
 
             return View(model);
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("~/change-signin-details")]
+        public ActionResult ChangeSignInDetails()
+        {
+            return View();
         }
     }
 }

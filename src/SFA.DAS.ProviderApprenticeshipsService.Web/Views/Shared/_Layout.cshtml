@@ -96,9 +96,24 @@
                     <ul>
                         @if (HttpContext.Current.User.Identity.IsAuthenticated)
                         {
-                            <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
-                            <li><a href="/notification-settings" class="link-user-profile">Notification settings</a></li>
-                            <li><a href="@Url.RouteUrl("signout")">Sign out</a></li>
+                            <li><a href="" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
+                            if (ViewBag.UseDfESignIn != null && ViewBag.UseDfESignIn == true)
+                            {
+                                <li class="has-sub-menu">
+                                    <a href="/">Settings</a>
+                                    <ul role="menu" class="js-hidden" id="settings-menu">
+                                        <li><a href="/change-signin-details" class="sub-menu-item">Change your sign-in details</a></li>
+                                        <li><a href="/notification-settings" class="sub-menu-item">Notification settings</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li><a href="/notification-settings" class="link-user-profile">Notification settings</a></li>
+                            }
+                            <li>
+                                <a href="@Url.RouteUrl("signout")">Sign out</a>
+                            </li>
                         }
                         else
                         {
