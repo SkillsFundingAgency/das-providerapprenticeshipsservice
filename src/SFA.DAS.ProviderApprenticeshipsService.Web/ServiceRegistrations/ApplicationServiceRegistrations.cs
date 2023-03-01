@@ -21,7 +21,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
             services.AddProviderRelationshipsApi(configuration); // TBC IF NEEDED
             services.AddFluentValidation();
             services.AddApprenticeshipInfoService();
-                     
+            services.AddUserIdentityService();
+
             services.AddHashingServices(configuration);
             services.AddCookieStorageService();
             services.AddLinkGenerator();

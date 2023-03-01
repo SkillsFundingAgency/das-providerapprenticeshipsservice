@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -42,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
                     ProvidersView = new ProvidersView
                     {
                         CreatedDate = new DateTime(2000, 1, 1),
-                        Provider = new Provider()
+                        Provider = new SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider.Provider()
                     }
                 });
 
