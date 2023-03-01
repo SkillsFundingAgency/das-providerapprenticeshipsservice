@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
-using MediatR;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using Microsoft.AspNetCore.Authentication.WsFederation;
@@ -20,7 +19,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication
         {
             var authenticationConfiguration = configuration.GetSection("ProviderIdams").Get<AuthenticationConfiguration>();
             
-
             services.AddAuthentication(sharedOptions =>
             {
                 sharedOptions.DefaultScheme =
@@ -71,18 +69,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication
             ctx.HttpContext.Items.Add(DasClaimTypes.Ukprn, ukprn);
             ctx.HttpContext.Items.Add(DasClaimTypes.Email, email);
 
-            long parsedUkprn;
-
-            if (!long.TryParse(ukprn, out parsedUkprn))
-            {
-                logger.Info($"Unable to parse Ukprn \"{ukprn}\" from claims for user \"{id}\"");
-                return;
-            }
-
             ctx.Principal.Identities.First().MapClaimToRoles();
 
-            await orchestrator.SaveIdentityAttributes(id, parsedUkprn, displayName, email);
-
+            await orchestrator.SaveIdentityAttributes(id, ukprn, displayName, email);
         }
     }
 }

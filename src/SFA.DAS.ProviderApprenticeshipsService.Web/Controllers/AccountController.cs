@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Routing;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
 using Microsoft.AspNetCore.Authentication.WsFederation;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -35,7 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [AllowAllRoles]
-        [Route("~/signin", Name = "signin")]
+        [Route("~/signin", Name = RouteNames.SignIn)]
         public IActionResult SignIn()
         {
             if (!User.Identity.IsAuthenticated)
@@ -46,7 +47,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [AllowAllRoles]
-        [Route("~/signout", Name = "signout")]
+        [Route("~/signout", Name = RouteNames.SignOut)]
         public async Task<IActionResult> SignOut()
         {
             var idToken = await HttpContext.GetTokenAsync("id_token");
@@ -64,10 +65,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToRoute("account-home");
+                return RedirectToRoute(RouteNames.AccountHome);
             }
 
-            return RedirectToRoute("home");
+            return RedirectToRoute(RouteNames.Home);
             /*
             var auth = _httpContext.Request.Query.GetOwinContext().Authentication;
 
@@ -87,7 +88,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Authorize]
-        [Route("~/account", Name = "account-home")]
+        [Route("~/account", Name = RouteNames.AccountHome)]
         public async Task<IActionResult> Index(string message)
         {
             var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));

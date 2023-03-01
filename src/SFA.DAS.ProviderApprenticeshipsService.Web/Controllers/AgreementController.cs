@@ -9,7 +9,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     [Authorize]
-    [ServiceFilter(typeof(ProviderUkPrnCheckActionFilter))] //[ProviderUkPrnCheck]
+    [ServiceFilter(typeof(ProviderUkPrnCheckActionFilter))]
     [Route("{providerId}/agreements")]
     public class AgreementController : BaseController
     {

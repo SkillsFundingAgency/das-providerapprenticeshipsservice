@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
@@ -20,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("", Name = "home")]
+        [Route("", Name = RouteNames.Home)]
         public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated) return RedirectToRoute("account-home");

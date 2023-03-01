@@ -2,22 +2,21 @@
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Services.UserIdentityService;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegisteredUser
 {
     public class UpsertRegisteredUserCommandHandler: IRequestHandler<UpsertRegisteredUserCommand, Unit>
     {
         private readonly IValidator<UpsertRegisteredUserCommand> _validator;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserIdentityService _userIdentityService;
 
         public UpsertRegisteredUserCommandHandler(
             IValidator<UpsertRegisteredUserCommand> validator,
-            IUserRepository userRepository)
+            IUserIdentityService userIdentityService)
         {
             _validator = validator;
-            _userRepository = userRepository;
+            _userIdentityService = userIdentityService;
         }
 
         public async Task<Unit> Handle(UpsertRegisteredUserCommand message, CancellationToken cancellationToken)
@@ -26,14 +25,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegi
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
 
-            await _userRepository.Upsert(new User
-            {
-                UserRef = message.UserRef,
-                DisplayName = message.DisplayName,
-                Email = message.Email,
-                Ukprn = message.Ukprn,
-                IsDeleted = false
-            });
+            await _userIdentityService.UpsertUserIdentityAttributes(message.UserRef, message.Ukprn, message.DisplayName, message.Email);
 
             return Unit.Value;
         }
