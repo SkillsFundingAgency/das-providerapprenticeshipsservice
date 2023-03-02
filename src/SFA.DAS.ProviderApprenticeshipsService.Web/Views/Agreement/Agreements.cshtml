@@ -56,21 +56,21 @@
 }
 else
 {
-    <table>
-        <thead>
-            <tr>
-                <th scope="col">Organisation</th>
-                <th scope="col">Agreement ID</th>
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Organisation</th>
+                <th scope="col" class="govuk-table__header">Agreement ID</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="govuk-table__body">
             @foreach (var cohortAgreement in Model.CommitmentAgreements)
             {
-                <tr>
-                    <td>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">
                         @cohortAgreement.OrganisationName
                     </td>
-                    <td>
+                    <td class="govuk-table__cell">
                         @cohortAgreement.AgreementID
                     </td>
                 </tr>
@@ -86,7 +86,13 @@ else
 }
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="javascript:window.history.back();" class="back-link">Back</a>
-    </div>
+     <div class="das-js-back-link-or-home">
+            <div class="govuk-breadcrumbs">
+                <ol class="govuk-breadcrumbs__list">
+                    <li class="govuk-breadcrumbs__list-item">
+                    <a class="govuk-breadcrumbs__link" href="javascript:window.history.back();">Back</a>
+                    </li>
+                </ol>
+            </div>
+        </div>    
 }

@@ -3,13 +3,13 @@
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 @model ModelStateDictionary
 
-<div class='@(Html.ViewData.ModelState.IsValid ? "validation-summary-valid" : "validation-summary-errors") error-summary' role="group" data-valmsg-summary="true">
-   
-    <h1 id="error-summary" class="heading-medium error-summary-heading">
+<div class='@(Html.ViewData.ModelState.IsValid ? "validation-summary-valid" : "validation-summary-errors") govuk-error-summary' role="group" data-valmsg-summary="true" data-module="govuk-error-summary">
+    <h1 id="error-summary" class="govuk-error-summary__title">
         There are errors on this page that need your attention
     </h1>		   
     
-    <ul class="error-summary-list">
+    <div class="govuk-error-summary__body">
+        <ul class="govuk-list govuk-error-summary__list">
         @foreach (var stateItem in ViewContext.ViewData.ModelState)
         {
             var elementId = Html.GenerateIdFromName(ViewData.TemplateInfo.GetFullHtmlFieldName(stateItem.Key)) ?? stateItem.Key;
@@ -17,13 +17,13 @@
             foreach (var error in stateItem.Value.Errors)
             {
                 <li>
-                    <a href="#error-message-@elementId" data-focuses="error-message-@elementId">
+                    <a href="#error-message-@elementId" data-focuses="error-message-@elementId" class="govuk-error-message">
                         @ValidationMessage.ExtractBannerMessage(error.ErrorMessage.RemoveHtmlTags())
                     </a>
                 </li>
             }
         }
-
-    </ul>
+        </ul>
+    </div>
 </div>
 

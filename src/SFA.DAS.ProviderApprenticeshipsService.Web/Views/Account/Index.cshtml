@@ -49,7 +49,7 @@
                     <a asp-external-subdomain="approvals" asp-external-controller="unapproved" asp-external-action="add/entry-method" asp-external-id="@Model.ProviderId" class="das-navigation__link @(selected == NavigationSection.YourCohorts ? "das-navigation__link--current" : "")">Add new apprentices</a>
                     @* <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved/add/entry-method")">Add new apprentices</a> *@
                 </h2>
-                <ul class="list list-bullet">
+                <ul class="govuk-list govuk-list--bullet">
                     <li>upload a CSV file</li>
                     <li>manually enter details</li>
                     <li>create a new cohort</li>
@@ -139,7 +139,7 @@
                         @* TBC *@
                         <a href="@Url.CourseManagementLink($"{Model.ProviderId}/review-your-details")">Your standards and training venues</a>
                     </h2>
-                    <ul class="list list-bullet">
+                    <ul class="govuk-list govuk-list--bullet">
                         <li>manage the standards you deliver</li>
                         <li>add or remove a training venue</li>
                         <li>change your training provider overview</li>
@@ -187,7 +187,7 @@
         <h3 class="govuk-heading-m">Instructions for the apprentices' employer</h3>
         <p>Employers need to <a href="https://www.gov.uk/guidance/manage-apprenticeship-funds" target="_blank" title="Register to manage their apprenticeship funds">register to manage their apprenticeship funds</a>. </p>
         <p>Once they've registered they need to:</p>
-        <ol class="list list-number">
+        <ol class="govuk-list govuk-list--number">
             <li>Add the PAYE schemes that the apprentices will be paid through.</li>
             <li>Add the employer organisations that will contract with the training provider.</li>
             <li>Accept agreements for their organisations so that they can spend levy funds.</li>
