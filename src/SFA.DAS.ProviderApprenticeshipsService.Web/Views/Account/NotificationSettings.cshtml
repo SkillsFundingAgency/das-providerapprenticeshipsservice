@@ -21,11 +21,11 @@
 }
 
 
-<div class="grid-row">
-    <div class="column-two-thirds">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
         <form method="post">
             @Html.AntiForgeryToken()
-            <h1 class="heading-xlarge">Notification settings</h1>
+            <h1 class="govuk-heading-xl">Notification settings</h1>
             <p>Choose whether you want to receive cohort, apprentice and recruitment notification emails.</p>
             <p>Changing these settings will not affect service emails, like password resets.</p>
 
@@ -73,7 +73,7 @@
                 </tbody>
             </table>
 
-            <button type="submit" class="button" id="submit-email-alerts">Update</button>
+            <button type="submit" class="govuk-button" id="submit-email-alerts">Update</button>
             <p><a href="/" class="text-link">Cancel</a></p>
             <a asp-external-subdomain="recruit" asp-external-controller="" asp-external-action="notifications-manage" asp-external-id="@Model.ProviderId">Manage the notifications of your recruitment emails</a>
             @* <a href="@Url.RecruitLink($"{Model.ProviderId}")/notifications-manage">Manage the notifications of your recruitment emails</a> *@

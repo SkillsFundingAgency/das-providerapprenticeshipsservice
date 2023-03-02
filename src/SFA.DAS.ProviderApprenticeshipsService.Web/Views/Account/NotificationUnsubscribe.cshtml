@@ -21,12 +21,12 @@
     <script src="/js/site.js" no-cdn></script>
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
         @if (Model.AlreadyUnsubscribed)
         {
-            <h1 class="heading-xlarge">You've already unsubscribed</h1>
+            <h1 class="govuk-heading-xl">You've already unsubscribed</h1>
 
             <p>You've already unsubscribed from email notifications.</p>
 
@@ -34,7 +34,7 @@
         }
         else
         {
-            <h1 class="heading-xlarge">Unsubscribe successful</h1>
+            <h1 class="govuk-heading-xl">Unsubscribe successful</h1>
             <p>You've unsubscribed from any further email notifications.</p>
 
             <p>You'll continue to receive important service emails, such as password resets.</p>
