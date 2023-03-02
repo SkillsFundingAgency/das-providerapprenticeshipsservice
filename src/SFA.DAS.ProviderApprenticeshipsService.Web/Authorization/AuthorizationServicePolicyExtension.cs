@@ -3,7 +3,7 @@ using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.DependencyResolution.Microsoft;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.Authorization.Handlers;
-using SFA.DAS.Authorization.ProviderPermissions.Handlers;
+using SFA.DAS.Authorization.ProviderFeatures.Handlers;
 using SFA.DAS.Authorization.Caching;
 using SFA.DAS.Authorization.Logging;
 using SFA.DAS.Authorization.Services;

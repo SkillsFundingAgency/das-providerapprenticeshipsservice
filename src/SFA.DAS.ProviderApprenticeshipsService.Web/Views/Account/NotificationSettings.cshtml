@@ -75,7 +75,8 @@
 
             <button type="submit" class="button" id="submit-email-alerts">Update</button>
             <p><a href="/" class="text-link">Cancel</a></p>
-            <a href="@Url.RecruitLink($"{Model.ProviderId}")/notifications-manage">Manage the notifications of your recruitment emails</a>
+            <a asp-external-subdomain="recruit" asp-external-controller="" asp-external-action="notifications-manage" asp-external-id="@Model.ProviderId">Manage the notifications of your recruitment emails</a>
+            @* <a href="@Url.RecruitLink($"{Model.ProviderId}")/notifications-manage">Manage the notifications of your recruitment emails</a> *@
         </form>
     </div>
 </div>
