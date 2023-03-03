@@ -43,7 +43,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             {
                 HttpContext.ChallengeAsync(WsFederationDefaults.AuthenticationScheme);
             }
-            return RedirectToAction("/");
+            return RedirectToRoute(RouteNames.Home);
         }
 
         [AllowAllRoles]
@@ -114,7 +114,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Authorize]
-        [Route("~/notification-settings")]
+        [Route("~/notification-settings", Name = RouteNames.GetNotificationSettings)]
         public async Task<IActionResult> NotificationSettings()
         {
             var u = User.Identity.GetClaim(DasClaimTypes.Upn);
@@ -133,17 +133,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Authorize]
-        [Route("~/notification-settings")]
+        [Route("~/notification-settings", Name = RouteNames.PostNotificationSettings)]
         public async Task<IActionResult> NotificationSettings(NotificationSettingsViewModel model)
         {
             await _accountOrchestrator.UpdateNotificationSettings(model);
             SetInfoMessage("Settings updated", FlashMessageSeverityLevel.Info);
-            return RedirectToAction("NotificationSettings");
+            return RedirectToRoute(RouteNames.GetNotificationSettings);
         }
 
         [HttpGet]
         [Authorize]
-        [Route("~/notifications/unsubscribe")]
+        [Route("~/notifications/unsubscribe", Name = RouteNames.UnsubscribeNotifications)]
         public async Task<IActionResult> NotificationUnsubscribe()
         {
             var userRef = User.Identity.GetClaim(DasClaimTypes.Upn);

@@ -15,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensi
         {
             services.Configure<ProviderRelationshipsApiConfiguration>(c => configuration.GetSection("ProviderRelationshipsApi").Bind(c));
 
-            var useStub = GetUseStubProviderRelationshipsSetting(configuration);
+             var useStub = GetUseStubProviderRelationshipsSetting(configuration);
             if (useStub)
             {
                 services.AddTransient<IProviderRelationshipsApiClient, StubProviderRelationshipsApiClient>();

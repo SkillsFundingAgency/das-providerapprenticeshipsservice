@@ -21,10 +21,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("", Name = RouteNames.Home)]
+        [Route("/", Name = RouteNames.Home)]
         public IActionResult Index()
         {
-            if (User.Identity.IsAuthenticated) return RedirectToRoute("account-home");
+            if (User.Identity.IsAuthenticated) return RedirectToRoute(RouteNames.AccountHome);
 
             return View();
         }

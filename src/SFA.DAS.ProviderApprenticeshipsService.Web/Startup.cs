@@ -109,7 +109,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                     //options.AddAuthorization();
                     options.Filters.Add<InvalidStateExceptionFilter>();
                     options.Filters.Add<ProviderUkPrnCheckActionFilter>();
-                    options.Filters.Add(new RoatpCourseManagementCheckActionFilter());
+                    //options.Filters.Add(new RoatpCourseManagementCheckActionFilter());
                     options.ModelBinderProviders.Insert(0, new TrimStringModelBinderProvider());
                     if (!_configuration.IsDev())
                     {
