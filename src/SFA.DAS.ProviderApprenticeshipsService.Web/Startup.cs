@@ -117,7 +117,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                     }
 
                 })
-                .SetDefaultNavigationSection(NavigationSection.YourCohorts);
+                .SetDefaultNavigationSection(NavigationSection.Home);
 
             // Newtonsoft.Json is added for compatibility reasons
             // The recommended approach is to use System.Text.Json for serialization
