@@ -13,45 +13,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services.LinkGenera
             _providerUrlConfiguration = providerUrlConfiguration;
         }
 
-        public virtual string ProviderCommitmentsLink(string path)
-        {
-            var baseUrl = _providerUrlConfiguration.ProviderCommitmentsBaseUrl;
-            return Action(baseUrl, path);
-        }
-
-        public string ProviderApprenticeshipServiceLink(string path)
-        {
-            var baseUrl = _providerUrlConfiguration.ProviderApprenticeshipServiceBaseUrl;
-            return Action(baseUrl, path);
-        }
-
-        public string ReservationsLink(string path)
-        {
-            var baseUrl = _providerUrlConfiguration.ReservationsBaseUrl;
-            return Action(baseUrl, path);
-        }
-
-        public string RecruitLink(string path)
-        {
-            var baseUrl = _providerUrlConfiguration.RecruitBaseUrl;
-            return Action(baseUrl, path);
-        }
-
         public string TraineeshipLink(string path)
         {
             var baseUrl = _providerUrlConfiguration.TraineeshipBaseUrl;
-            return Action(baseUrl, path);
-        }
-
-        public string RegistrationLink(string path)
-        {
-            var baseUrl = _providerUrlConfiguration.RegistrationBaseUrl;
-            return Action(baseUrl, path);
-        }
-
-        public string EmployerDemandLink(string path)
-        {
-            var baseUrl = _providerUrlConfiguration.EmployerDemandBaseUrl;
             return Action(baseUrl, path);
         }
 
