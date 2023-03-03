@@ -79,20 +79,3 @@ else
     </table>
 }
 
-@section PreFooterJS {
-    <script>
-        var autoCompleteSource = @Html.Raw(JsonConvert.SerializeObject(Model.AllProviderOrganisationNames));
-    </script>
-}
-
-@section breadcrumb {
-     <div class="das-js-back-link-or-home">
-            <div class="govuk-breadcrumbs">
-                <ol class="govuk-breadcrumbs__list">
-                    <li class="govuk-breadcrumbs__list-item">
-                    <a class="govuk-breadcrumbs__link" href="javascript:window.history.back();">Back</a>
-                    </li>
-                </ol>
-            </div>
-        </div>    
-}

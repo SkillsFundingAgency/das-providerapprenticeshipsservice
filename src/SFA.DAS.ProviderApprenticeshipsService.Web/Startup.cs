@@ -92,6 +92,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             services.AddOrchestrators();
             services.AddEncodingServices(_configuration);
             services.AddFeatureToggleService(_configuration);
+            services.AddActionFilters();
 
             services.AddAndConfigureAuthentication(_configuration);
             services.AddAuthorizationServicePolicies();
@@ -108,8 +109,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                 {
                     //options.AddAuthorization();
                     options.Filters.Add<InvalidStateExceptionFilter>();
-                    options.Filters.Add<ProviderUkPrnCheckActionFilter>();
-                    //options.Filters.Add(new RoatpCourseManagementCheckActionFilter());
                     options.ModelBinderProviders.Insert(0, new TrimStringModelBinderProvider());
                     if (!_configuration.IsDev())
                     {

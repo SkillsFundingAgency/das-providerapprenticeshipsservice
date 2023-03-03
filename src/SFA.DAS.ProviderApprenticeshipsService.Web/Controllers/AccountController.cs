@@ -88,10 +88,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Authorize]
+        [ServiceFilter(typeof(RoatpCourseManagementCheckActionFilter))]
         [Route("~/account", Name = RouteNames.AccountHome)]
         public async Task<IActionResult> Index(string message)
         {
-            var providerId = int.Parse(User.Identity.GetClaim("http://schemas.portal.com/ukprn"));
+            var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
 
             var model = await _accountOrchestrator.GetAccountHomeViewModel(providerId);
                        
