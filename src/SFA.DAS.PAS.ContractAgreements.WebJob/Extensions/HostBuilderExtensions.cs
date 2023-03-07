@@ -1,17 +1,18 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
 using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.PAS.ContractAgreements.WebJob.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using System;
 using System.Reflection;
-using ConfigurationManager = System.Configuration.ConfigurationManager;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.Extensions
 {
@@ -22,6 +23,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.Extensions
             hostBuilder.ConfigureServices((context, services) =>
             {
                 services.AddSingleton<IContractFeedConfiguration>(context.Configuration.Get<ContractFeedConfiguration>());
+                services.AddSingleton(context.Configuration.Get<ProviderApprenticeshipsServiceConfiguration>());
 
                 services.AddTransient<ICurrentDateTime, CurrentDateTime>();
                 services.AddTransient<IContractFeedProcessorHttpClient, ContractFeedProcessorHttpClient>();
@@ -38,29 +40,31 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.Extensions
 
         public static IHostBuilder AddConfiguration(this IHostBuilder hostBuilder)
         {
+            return hostBuilder.ConfigureAppConfiguration((context, builder) =>
+            {
+                var environment = context.HostingEnvironment.EnvironmentName;
+
+                if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST"))
+                {
+                    PopulateSystemDetails(environment);
+                }
+
+                builder.AddJsonFile("appsettings.json", true, true)
+                       .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true, true) // should this be conditional to Local and Dev envs?
+                       .AddAzureTableStorage(ConfigurationKeys.ContractAgreements)
+                       .AddAzureTableStorage("SFA.DAS.ProviderApprenticeshipsService")
+                       .AddEnvironmentVariables();
+            });
+        }
+        public static IHostBuilder UseDasEnvironment(this IHostBuilder hostBuilder)
+        {
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
             {
-                environment = ConfigurationManager.AppSettings["EnvironmentName"];
-            }
-            if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST"))
-            {
-                PopulateSystemDetails(environment);
+                environment = Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName);
             }
 
-            return hostBuilder.ConfigureAppConfiguration((context, builder) =>
-            {
-                builder.AddJsonFile("appsettings.json", true, true) // should this be conditional to Local and Dev envs?
-                    .AddJsonFile($"appsettings.{environment}.json", true, true) // should this be conditional to Local and Dev envs?
-                    .AddAzureTableStorage(options =>
-                    {
-                        options.ConfigurationKeys = ConfigurationManager.AppSettings["ConfigNames"].Split(",");
-                        options.StorageConnectionString = ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"];
-                        options.EnvironmentName = environment;
-                        options.PreFixConfigurationKeys = false;
-                    })
-                    .AddEnvironmentVariables();
-            });
+            return hostBuilder.UseEnvironment(environment);
         }
 
         private static void PopulateSystemDetails(string envName)

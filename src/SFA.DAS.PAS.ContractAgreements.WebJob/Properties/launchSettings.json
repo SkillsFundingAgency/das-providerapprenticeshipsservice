@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SFA.DAS.PAS.ContractAgreements.WebJob": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "APPSETTING_EnvironmentName": "LOCAL"
+      }
+    }
+  }
+}

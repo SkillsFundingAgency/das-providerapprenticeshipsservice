@@ -14,6 +14,10 @@ using System;
 using System.Configuration;
 using System.Net.Http;
 using SFA.DAS.Configuration.AzureTableStorage;
+using Microsoft.IdentityModel.Protocols;
+using SFA.DAS.Configuration;
+using Polly;
+using SFA.DAS.PAS.ImportProvider.WebJob.Configuration;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.Extensions
 {
@@ -45,30 +49,29 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Extensions
 
         public static IHostBuilder AddConfiguration(this IHostBuilder hostBuilder)
         {
-            var environment = Environment.GetEnvironmentVariable("DASENV");
-            if (string.IsNullOrEmpty(environment))
-            {
-                environment = ConfigurationManager.AppSettings["EnvironmentName"];
-            }
-
             return hostBuilder.ConfigureAppConfiguration((context, builder) =>
             {
+                var environment = context.HostingEnvironment.EnvironmentName;
+
                 builder.AddJsonFile("appsettings.json", true, true)
                     .AddJsonFile($"appsettings.{environment}.json", true, true)
-                    .AddAzureTableStorage(options =>
-                    {
-                        // NOTE: There is no section or standalone config relevant to this job currenty
-                        // TBC: Where the config values are stored for CommitmentsApiClientConfiguration (presumably V1)
-                        options.ConfigurationKeys = ConfigurationManager.AppSettings["ConfigNames"].Split(",");
-                        options.StorageConnectionString = ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"];
-                        options.EnvironmentName = environment;
-                        options.PreFixConfigurationKeys = false;
-                    })
+                    .AddAzureTableStorage(ConfigurationKeys.ProviderApprenticeshipsService)
                     .AddEnvironmentVariables();
             });
         }
 
-        private static HttpClient GetHttpClient(ICommitmentsApiClientConfiguration config)
+        public static IHostBuilder UseDasEnvironment(this IHostBuilder hostBuilder)
+        {
+            var environment = Environment.GetEnvironmentVariable("DASENV");
+            if (string.IsNullOrEmpty(environment))
+            {
+                environment = Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName);
+            }
+
+            return hostBuilder.UseEnvironment(environment);
+        }
+
+            private static HttpClient GetHttpClient(ICommitmentsApiClientConfiguration config)
         {
             var httpClientBuilder = string.IsNullOrWhiteSpace(config.ClientId)
                 ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config))

@@ -41,7 +41,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             {
                 return await _retryPolicy.Execute(async () =>
                 {
-                    using (var connection = GetSqlConnecction(_connectionString))
+                    using (var connection = GetSqlConnection(_connectionString))
                     {
                         await connection.OpenAsync();
                         return await getData(connection);
@@ -74,7 +74,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 
                 return await _retryPolicy.Execute(async () =>
                 {
-                    using (var connection = GetSqlConnecction(_connectionString))
+                    using (var connection = GetSqlConnection(_connectionString))
                     {
                         await connection.OpenAsync();
                         using (var trans = connection.BeginTransaction())
@@ -111,7 +111,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             {
                 await _retryPolicy.Execute(async () =>
                 {
-                    using (var connection = GetSqlConnecction(_connectionString))
+                    using (var connection = GetSqlConnection(_connectionString))
                     {
                         await connection.OpenAsync();
                         using (var trans = connection.BeginTransaction())
@@ -155,7 +155,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                 );
         }
 
-        private SqlConnection GetSqlConnecction(string connectionString)
+        private SqlConnection GetSqlConnection(string connectionString)
         {
             bool isLocal = _configuration["EnvironmentName"]?.Equals("LOCAL") ?? false;
             if (isLocal)

@@ -65,6 +65,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob
         private static IHost CreateHost()
         {
             var builder = new HostBuilder()
+                .UseDasEnvironment()
                 .AddConfiguration()
                 .ConfigureServices();
 
