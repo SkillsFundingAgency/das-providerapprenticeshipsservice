@@ -19,21 +19,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services.LinkGenera
             return Action(baseUrl, path);
         }
 
-        public string CourseManagementLink(string path)
-        {
-            var baseUrl = _providerUrlConfiguration.CourseManagementBaseUrl;
-            return Action(baseUrl, path);
-        }
-
         public string ProviderFundingLink(string path)
         {
             var baseUrl = _providerUrlConfiguration.ProviderFundingBaseUrl;
-            return Action(baseUrl, path);
-        }
-
-        public string APIManagementLink(string path)
-        {
-            var baseUrl = _providerUrlConfiguration.APIManagementBaseUrl;
             return Action(baseUrl, path);
         }
 
