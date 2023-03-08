@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
@@ -22,8 +23,11 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.Extensions
         {
             hostBuilder.ConfigureServices((context, services) =>
             {
-                services.AddSingleton<IContractFeedConfiguration>(context.Configuration.Get<ContractFeedConfiguration>());
-                services.AddSingleton(context.Configuration.Get<ProviderApprenticeshipsServiceConfiguration>());
+                services.Configure<ContractFeedConfiguration>(context.Configuration.GetSection(ConfigurationKeys.ContractAgreements));
+                services.AddSingleton<IContractFeedConfiguration>(isp => isp.GetService<IOptions<ContractFeedConfiguration>>().Value);
+
+                services.Configure<ProviderApprenticeshipsServiceConfiguration>(context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService));
+                services.AddSingleton(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
 
                 services.AddTransient<ICurrentDateTime, CurrentDateTime>();
                 services.AddTransient<IContractFeedProcessorHttpClient, ContractFeedProcessorHttpClient>();
