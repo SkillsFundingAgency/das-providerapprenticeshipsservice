@@ -18,6 +18,9 @@ using Microsoft.IdentityModel.Protocols;
 using SFA.DAS.Configuration;
 using Polly;
 using SFA.DAS.PAS.ImportProvider.WebJob.Configuration;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.Extensions
 {
@@ -27,18 +30,20 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Extensions
         {
             hostBuilder.ConfigureServices((context, services) =>
             {
-                // this is the old CommitmentsAPI, need to see if this can be switched to v2 (although it seems V2 doesnt provide
-                // an equivalent method for GetProviders() in V1
-                // ALSO, to confirm where this config should come from???
-                services.AddSingleton<ICommitmentsApiClientConfiguration>(context.Configuration.Get<CommitmentsApiClientConfiguration>());
-                //services.AddSingleton<ICommitmentsApiClientConfiguration>(cfg => cfg.GetService<IOptions<CommitmentsApiClientConfiguration>>().Value);
+                services.Configure<ProviderApprenticeshipsServiceConfiguration>(context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService));
+                services.AddSingleton(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
 
-                services.AddTransient<IProviderCommitmentsApi>(s =>
+                services.Configure<CommitmentsApiClientV2Configuration>(context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService).GetSection("CommitmentsApiClientV2"));
+                services.AddSingleton(cfg => cfg.GetService<IOptions<CommitmentsApiClientV2Configuration>>().Value);
+                services.AddSingleton<ICommitmentsV2ApiClient>(s =>
                 {
-                    var config = s.GetService<CommitmentsApiClientConfiguration>();
-                    var httpClient = GetHttpClient(config);
-                    return new ProviderCommitmentsApi(httpClient, config);
+                    ILogger<CommitmentsV2ApiClient> commitmentsV2ApiLogger = new LoggerFactory().CreateLogger<CommitmentsV2ApiClient>();
+                    var commitmentsV2Config = s.GetService<CommitmentsApiClientV2Configuration>();
+                    var httpClient = GetHttpV2Client(commitmentsV2Config, context.Configuration);
+
+                    return new CommitmentsV2ApiClient(httpClient, commitmentsV2Config, commitmentsV2ApiLogger);
                 });
+
                 services.AddTransient<IProviderRepository, ProviderRepository>();
                 services.AddTransient<IImportProviderService, ImportProviderService>();
                 services.AddLogging();
@@ -71,12 +76,13 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Extensions
             return hostBuilder.UseEnvironment(environment);
         }
 
-            private static HttpClient GetHttpClient(ICommitmentsApiClientConfiguration config)
+        private static HttpClient GetHttpV2Client(CommitmentsApiClientV2Configuration commitmentsV2Config, IConfiguration config)
         {
-            var httpClientBuilder = string.IsNullOrWhiteSpace(config.ClientId)
-                ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config))
-                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config));
-
+            var isDev = config["EnvironmentName"].Equals("Development", StringComparison.CurrentCultureIgnoreCase);
+            var httpClientBuilder = !isDev
+                ? new HttpClientBuilder()
+                : new HttpClientBuilder().WithBearerAuthorisationHeader(new ManagedIdentityTokenGenerator(commitmentsV2Config));
+            
             return httpClientBuilder
                 .WithDefaultHeaders()
                 //.WithHandler(new RequestIdMessageRequestHandler())

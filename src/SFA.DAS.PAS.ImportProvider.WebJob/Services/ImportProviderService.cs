@@ -1,21 +1,20 @@
 ﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.Services
 {
     public class ImportProviderService : IImportProviderService
     {
-        private IProviderCommitmentsApi _providerApiClient;
+        private ICommitmentsV2ApiClient _commitmentsV2ApiClient;
         private IProviderRepository _providerRepository;
         private ILogger<ImportProviderService> _logger;
 
-        public ImportProviderService(IProviderCommitmentsApi providerApiClient, IProviderRepository providerRepository, ILogger<ImportProviderService> logger)
+        public ImportProviderService(ICommitmentsV2ApiClient commitmentsV2ApiClient, IProviderRepository providerRepository, ILogger<ImportProviderService> logger)
         {
-            _providerApiClient = providerApiClient;
+            _commitmentsV2ApiClient = commitmentsV2ApiClient;
             _providerRepository = providerRepository;
             _logger = logger;
         }
@@ -24,7 +23,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Services
         {
             _logger.LogInformation("Import Provider - Started");
 
-            var providers = (await _providerApiClient.GetProviders()).Providers;
+            var providers = (await _commitmentsV2ApiClient.GetProviders()).Providers;
             var batches = providers.Chunk(1000);
 
             foreach (var batch in batches)
@@ -35,7 +34,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Services
             _logger.LogInformation("ImportProvidersJob - Finished");
         }
 
-        private Task ImportProviders(ProviderResponse[] providers)
+        private Task ImportProviders(Provider[] providers)
         {
             return _providerRepository.ImportProviders(providers);
         }

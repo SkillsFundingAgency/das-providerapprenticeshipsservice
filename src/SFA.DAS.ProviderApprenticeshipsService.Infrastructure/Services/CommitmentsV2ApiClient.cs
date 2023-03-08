@@ -8,6 +8,8 @@ using SFA.DAS.Authentication.Extensions.Legacy;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using Microsoft.Extensions.Configuration;
+using System.Threading;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 {
@@ -84,6 +86,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
         {
             var url = $"{BaseUrl()}api/providers/{providerId}";
             var response = JsonConvert.DeserializeObject<GetProviderResponse>(await GetAsync(url));
+            return response;
+        }
+
+        public async Task<GetAllProvidersResponse> GetProviders()
+        {
+            var url = $"{BaseUrl()}api/providers";
+            var response = JsonConvert.DeserializeObject<GetAllProvidersResponse>(await GetAsync(url));
             return response;
         }
 

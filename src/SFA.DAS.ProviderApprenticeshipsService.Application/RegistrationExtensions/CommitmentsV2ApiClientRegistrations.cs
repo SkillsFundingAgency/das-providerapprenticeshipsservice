@@ -17,9 +17,9 @@ using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions
 {
-    public static class CommitmentsServiceRegistrations
+    public static class CommitmentsV2ApiClientRegistrations
     {
-        public static IServiceCollection AddCommitments(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCommitmentsV2ApiClient(this IServiceCollection services, IConfiguration configuration)
         {
             // ICOMMITMENTSV2APICLIENT
             services.Configure<CommitmentsApiClientV2Configuration>(c => configuration.GetSection("CommitmentsApiClientV2").Bind(c));
