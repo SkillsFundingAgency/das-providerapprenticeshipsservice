@@ -55,7 +55,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 
     public class ProviderNotificationConfiguration : IJwtClientConfiguration
     {
+        public bool UseProviderEmail { get; set; }
+
         public bool SendEmail { get; set; }
+
+        public string[] ProviderTestEmails { get; set; }
 
         public string IdamsListUsersUrl { get; set; }
 

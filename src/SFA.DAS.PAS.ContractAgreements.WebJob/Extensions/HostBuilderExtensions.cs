@@ -54,9 +54,9 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.Extensions
                 }
 
                 builder.AddJsonFile("appsettings.json", true, true)
-                       .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true, true) // should this be conditional to Local and Dev envs?
+                       .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true, true)
                        .AddAzureTableStorage(ConfigurationKeys.ContractAgreements)
-                       .AddAzureTableStorage("SFA.DAS.ProviderApprenticeshipsService")
+                       .AddAzureTableStorage(ConfigurationKeys.ProviderApprenticeshipsService)
                        .AddEnvironmentVariables();
             });
         }

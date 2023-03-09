@@ -22,7 +22,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob
     // To learn more about Microsoft Azure WebJobs SDK, please see https://go.microsoft.com/fwlink/?LinkID=320976
     class Program
     {
-        public static async Task Main(string[] args)
+        public static async Task Main()
         {
             using (var host = CreateHost())
             {
