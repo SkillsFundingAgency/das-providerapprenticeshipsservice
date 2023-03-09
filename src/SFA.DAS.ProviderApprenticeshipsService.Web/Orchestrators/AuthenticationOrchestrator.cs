@@ -6,7 +6,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
 {
     public interface IAuthenticationOrchestrator
     {
-        Task SaveIdentityAttributes(string userId, string ukprn, string displayName, string email);
+        Task<bool> SaveIdentityAttributes(string userId, string ukprn, string displayName, string email);
     }
 
     public class AuthenticationOrchestrator : IAuthenticationOrchestrator
@@ -22,19 +22,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
             _userIdentityService = userIdentityService;
         }
 
-        public async Task SaveIdentityAttributes(string userId, string ukprn, string displayName, string email)
+        public async Task<bool> SaveIdentityAttributes(string userId, string ukprn, string displayName, string email)
         {
             long parsedUkprn;
 
             if (!long.TryParse(ukprn, out parsedUkprn))
             {
                 _logger.Info($"Unable to parse Ukprn \"{ukprn}\" from claims for user \"{userId}\"");
-                return;
+                return false;
             }
 
             _logger.Info($"Updating \"{userId}\" attributes - ukprn:\"{parsedUkprn}\", displayname:\"{displayName}\", email:\"{email}\"");
 
             await _userIdentityService.UpsertUserIdentityAttributes(userId, parsedUkprn, displayName, email);
+
+            return true;
         }
     }
 }
