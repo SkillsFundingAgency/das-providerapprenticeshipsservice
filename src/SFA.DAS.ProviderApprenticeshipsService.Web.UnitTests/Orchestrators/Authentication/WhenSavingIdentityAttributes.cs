@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.UserIdentityService;
@@ -20,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Aut
             _userIdentityService = new Mock<IUserIdentityService>();
             _logger = new Mock<IProviderCommitmentsLogger>();
             _userIdentityService.Setup(x => x.UpsertUserIdentityAttributes(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(Task.CompletedTask);
+                .Returns(Task.FromResult(Unit.Value));
 
             _orchestrator = new AuthenticationOrchestrator(_logger.Object, _userIdentityService.Object);
         }

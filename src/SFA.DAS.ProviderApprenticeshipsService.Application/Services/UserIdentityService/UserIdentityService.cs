@@ -1,4 +1,5 @@
-﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+﻿using MediatR;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
 using System.Threading.Tasks;
 
@@ -6,7 +7,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services.UserIdenti
 {
     public interface IUserIdentityService
     {
-        Task UpsertUserIdentityAttributes(string userId, long ukprn, string displayName, string email);
+        Task<Unit> UpsertUserIdentityAttributes(string userId, long ukprn, string displayName, string email);
     }
 
     public class UserIdentityService : IUserIdentityService
@@ -18,7 +19,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services.UserIdenti
             _userRepository= userRepository;
         }
 
-        public async Task UpsertUserIdentityAttributes(string userId, long ukprn, string displayName, string email)
+        public async Task<Unit> UpsertUserIdentityAttributes(string userId, long ukprn, string displayName, string email)
         {
             await _userRepository.Upsert(new User
             {
@@ -28,6 +29,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services.UserIdenti
                 Ukprn = ukprn,
                 IsDeleted = false
             });
+
+            return Unit.Value;
         }
     }
 }

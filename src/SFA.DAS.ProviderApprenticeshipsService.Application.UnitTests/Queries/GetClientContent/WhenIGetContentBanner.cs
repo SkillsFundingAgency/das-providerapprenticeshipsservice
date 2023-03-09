@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientContent;
+using SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Extensions.LoggingMockExtensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
@@ -64,7 +65,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
             //Arrange
             _request.UseLegacyStyles = true; 
 
-
             //Act
             await _handler.Handle(_request, new CancellationToken());
 
@@ -96,16 +96,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         public async Task ThenContentApiThrows_ShouldLogError()
         {
             //Arrange
+            var cacheKey = $"{ProviderApprenticeshipsServiceConfiguration.ContentApplicationId}_{_request.ContentType}".ToLowerInvariant();
             _contentApiClientMock
                 .Setup(mock => mock.Get(_contentType, _clientId))
                 .Throws(new Exception("Error"));
 
-
             //Act
-            await _handler.Handle(_request, new CancellationToken());
+            var response = await _handler.Handle(_request, new CancellationToken());
 
             //Assert
-            _logger.Verify(x => x.LogError(It.IsAny<Exception>(), It.IsAny<string>()), Times.Once);
+            _logger.VerifyLogging($"Failed to get Content for {cacheKey}", LogLevel.Error, Times.Once());
         }
 
         [Test]

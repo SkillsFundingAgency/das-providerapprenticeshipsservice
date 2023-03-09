@@ -7,6 +7,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegisteredUser;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Services.UserIdentityService;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
 
@@ -17,7 +18,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
     {
         private IRequestHandler<UpsertRegisteredUserCommand, Unit> _handler;
         private Mock<IValidator<UpsertRegisteredUserCommand>> _validator;
-        private Mock<IUserRepository> _repository;
+        private Mock<IUserIdentityService> _userIdentityService;
 
         [SetUp]
         public void Arrange()
@@ -26,11 +27,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             _validator.Setup(x => x.Validate(It.IsAny<UpsertRegisteredUserCommand>()))
                 .Returns(new ValidationResult());
 
-            _repository = new Mock<IUserRepository>();
-            _repository.Setup(x => x.Upsert(It.IsAny<User>()))
+            _userIdentityService = new Mock<IUserIdentityService>();
+            _userIdentityService.Setup(x => x.UpsertUserIdentityAttributes(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(() => Task.FromResult(new Unit()));
 
-            _handler = new UpsertRegisteredUserCommandHandler(_validator.Object, _repository.Object);
+            _handler = new UpsertRegisteredUserCommandHandler(_validator.Object, _userIdentityService.Object);
         }
 
         [Test]
@@ -52,7 +53,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
         }
 
         [Test]
-        public async Task ThenTheRepositoryIsCalledToUpsertRegisteredUser()
+        public async Task ThenTheUserIdentityServiceIsCalledToUpsertRegisteredUser()
         {
             //Arrange
             var command = new UpsertRegisteredUserCommand
@@ -67,13 +68,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
             await _handler.Handle(command, new CancellationToken());
 
             //Assert
-            _repository.Verify(x => x.Upsert(
-                It.Is<User>(
-                    user => user.UserRef == command.UserRef
-                    && user.DisplayName == command.DisplayName
-                    && user.Email == command.Email
-                    && user.Ukprn == command.Ukprn
-                    )),
+            _userIdentityService.Verify(x => x.UpsertUserIdentityAttributes(command.UserRef, 
+                command.Ukprn,
+                command.DisplayName,
+                command.Email),
                 Times.Once);
         }
     }

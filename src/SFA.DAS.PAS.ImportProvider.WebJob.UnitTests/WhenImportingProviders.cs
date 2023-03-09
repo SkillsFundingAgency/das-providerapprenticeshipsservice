@@ -2,12 +2,11 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using System.Data;
 using System.Threading.Tasks;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.PAS.ImportProvider.WebJob.Services;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.CommitmentsV2.Api.Types.Responses;
+using System.Linq;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.UnitTests
 {
@@ -25,22 +24,22 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.UnitTests
         public class WhenImportingProvidersFixture
         {
             public IImportProviderService Sut { get; set; }
-            public Mock<IProviderCommitmentsApi> providerApiClient { get; set; }
+            public Mock<ICommitmentsV2ApiClient> commitmentsV2ApiClient { get; set; }
             public Mock<IProviderRepository> importProviderRepository { get; set; }
             
             public WhenImportingProvidersFixture()
             {
                 var autoFixture = new Fixture();
-                var response = new GetProvidersResponse();
-                response.Providers = autoFixture.CreateMany<ProviderResponse>(1600);
-                
-                providerApiClient = new Mock<IProviderCommitmentsApi>();
-                providerApiClient.Setup(x => x.GetProviders()).ReturnsAsync(response);
+                var response = new GetAllProvidersResponse();
+                response.Providers = autoFixture.CreateMany<Provider>(1600).ToList();
+
+                commitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
+                commitmentsV2ApiClient.Setup(x => x.GetProviders()).ReturnsAsync(response);
 
                 importProviderRepository = new Mock<IProviderRepository>();
-                importProviderRepository.Setup(x => x.ImportProviders(It.IsAny<ProviderResponse[]>()));
+                importProviderRepository.Setup(x => x.ImportProviders(It.IsAny<Provider[]>()));
 
-                Sut = new ImportProviderService(providerApiClient.Object, importProviderRepository.Object, Mock.Of<ILogger<ImportProviderService>>());
+                Sut = new ImportProviderService(commitmentsV2ApiClient.Object, importProviderRepository.Object, Mock.Of<ILogger<ImportProviderService>>());
             }
 
             public async Task<WhenImportingProvidersFixture> Import()
@@ -51,7 +50,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.UnitTests
 
             public WhenImportingProvidersFixture VerifyImportProviderRepositoryCalled()
             {
-                importProviderRepository.Verify(x => x.ImportProviders(It.IsAny<ProviderResponse[]>()), Times.Exactly(2));
+                importProviderRepository.Verify(x => x.ImportProviders(It.IsAny<Provider[]>()), Times.Exactly(2));
                 return this;
             }
         }
