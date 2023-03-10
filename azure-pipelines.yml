@@ -40,16 +40,6 @@ steps:
     projectName: "$(Build.DefinitionName)"
     projectKey: SkillsFundingAgency_das-providerapprenticeshipsservice
 
-- task: NuGetToolInstaller@0
-  displayName: 'Use NuGet 4.3.0'
-  inputs:
-    versionSpec: 4.x
-
-- task: NuGetCommand@2
-  displayName: 'NuGet Restore SFA.DAS.ProviderApprenticeshipsService.sln'
-  inputs:
-    restoreSolution: 'src/SFA.DAS.ProviderApprenticeshipsService.sln'
-
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore all'
   inputs:
@@ -74,14 +64,6 @@ steps:
       !**/*ClientV2.UnitTests.dll
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-
-- task: NuGetCommand@2
-  displayName: 'NuGet Pack Provider Accounts API Client'
-  inputs:
-    command: 'pack'
-    packagesToPack: 'src/SFA.DAS.PAS.Account.Api.Client/SFA.DAS.PAS.Account.Api.Client.csproj'
-    packDestination: '$(Build.ArtifactStagingDirectory)/nuget-publish'
-    versioningScheme: byBuildNumber
 
 - task: VSBuild@1
   displayName: 'Publish Provider Accounts API'
@@ -149,12 +131,12 @@ steps:
     pollingTimeoutSec: '300'
 
 - task: CopyFiles@2
-  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
-  inputs:
-    Contents: |
-     azure/**
-     **/*.dacpac
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    displayName: Copy Files to $(Build.ArtifactStagingDirectory)'
+    inputs:
+      Contents: |
+        azure/**
+      TargetFolder: $(Build.ArtifactStagingDirectory)'
+      OverWrite: true
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: Publish'
