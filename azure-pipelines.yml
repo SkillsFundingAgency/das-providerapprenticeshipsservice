@@ -118,7 +118,6 @@ steps:
   inputs:
     command: test
     projects: |
-      src/SFA.DAS.ProviderUrlHelperTests/SFA.DAS.ProviderUrlHelperTests.csproj
       src/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj
     testRunTitle: dotnet test run
 
@@ -126,7 +125,6 @@ steps:
   displayName: 'dotnet build'
   inputs:
     projects: |
-      src/SFA.DAS.ProviderUrlHelper/SFA.DAS.ProviderUrlHelper.csproj
       src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj
       src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj
     arguments: '/p:Configuration=$(buildConfiguration)'
@@ -135,7 +133,7 @@ steps:
   displayName: 'dotnet pack'
   inputs:
     command: pack
-    packagesToPack: 'src/SFA.DAS.ProviderUrlHelper/SFA.DAS.ProviderUrlHelper.csproj;src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj;src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj'
+    packagesToPack: 'src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj;src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj'
     packDirectory: '$(Build.ArtifactStagingDirectory)/nuget-publish'
     versioningScheme: byBuildNumber
     verbosityPack: Diagnostic
