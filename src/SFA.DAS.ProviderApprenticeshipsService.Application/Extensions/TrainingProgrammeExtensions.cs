@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
+using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Extensions

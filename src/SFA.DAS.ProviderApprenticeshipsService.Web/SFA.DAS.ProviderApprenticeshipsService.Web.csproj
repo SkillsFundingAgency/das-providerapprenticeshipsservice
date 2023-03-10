@@ -31,7 +31,6 @@
     <PackageReference Include="SFA.DAS.Authorization.Mvc" Version="6.0.97" />
     <PackageReference Include="SFA.DAS.Authorization.ProviderFeatures" Version="6.0.97" />
     <PackageReference Include="SFA.DAS.Authorization.ProviderPermissions" Version="6.0.97" />
-    <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="7.78.0" />
 	<PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
     <PackageReference Include="SFA.DAS.CosmosDb.Testing" Version="1.0.1" />
     <PackageReference Include="SFA.DAS.Encoding" Version="1.1.76" />
@@ -61,6 +60,7 @@
   <ItemGroup>
     <Content Update="appsettings.json">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="appsettings.Development.json">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>

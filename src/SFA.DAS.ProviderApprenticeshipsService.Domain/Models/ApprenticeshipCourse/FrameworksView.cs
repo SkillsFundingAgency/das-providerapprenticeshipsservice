@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using SFA.DAS.Commitments.Api.Types.TrainingProgramme;
+using SFA.DAS.CommitmentsV2.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse
 {

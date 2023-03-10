@@ -1,6 +1,5 @@
 ﻿using System;
-using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
@@ -11,8 +10,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Domain.Commitment
         /// Note: any commitments with CommitmentStatus == Active are filtered out before GetStatus is called on them
         /// </remarks>
         public RequestStatus GetStatus(EditStatus editStatus, int apprenticeshipCount, LastAction lastAction,
-            AgreementStatus overallAgreementStatus, LastUpdateInfo providerLastUpdateInfo,
-            long? transferSenderId, TransferApprovalStatus? transferApprovalStatus)
+            AgreementStatus overallAgreementStatus, long? transferSenderId, TransferApprovalStatus? transferApprovalStatus)
         {
             if (transferSenderId.HasValue)
             {

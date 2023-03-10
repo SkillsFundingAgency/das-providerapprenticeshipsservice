@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.Commitments.Api.Client.Configuration;
-using SFA.DAS.Http.Configuration;
+﻿using SFA.DAS.Http.Configuration;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderRelationships.Api.Client.Configuration;
@@ -31,17 +29,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public int DefaultCacheExpirationInMinutes { get; set; }
         public ZenDeskConfiguration ZenDeskSettings { get; set; }
         public SFA.DAS.Authorization.ProviderFeatures.Configuration.ProviderFeaturesConfiguration Features { get; set; }
-    }
-
-    public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
-    {
-        public string BaseUrl { get; set; }
-        public string ClientToken { get; set; }
-        public string ApiBaseUrl { get; }
-        public string Tenant { get; }
-        public string ClientId { get; }
-        public string ClientSecret { get; }
-        public string IdentifierUri { get; }
     }
 
     public class CommitmentsApiClientV2Configuration : IManagedIdentityClientConfiguration

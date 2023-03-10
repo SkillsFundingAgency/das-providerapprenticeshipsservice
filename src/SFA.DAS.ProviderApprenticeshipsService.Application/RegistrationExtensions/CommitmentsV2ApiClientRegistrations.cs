@@ -1,15 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Http;
-using SFA.DAS.Notifications.Api.Client.Configuration;
-using SFA.DAS.Notifications.Api.Client;
 using System.Net.Http;
-using SFA.DAS.Http.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
-using SFA.DAS.Commitments.Api.Client.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -21,23 +15,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensi
     {
         public static IServiceCollection AddCommitmentsV2ApiClient(this IServiceCollection services, IConfiguration configuration)
         {
-            // ICOMMITMENTSV2APICLIENT
             services.Configure<CommitmentsApiClientV2Configuration>(c => configuration.GetSection("CommitmentsApiClientV2").Bind(c));
             services.AddSingleton(cfg => cfg.GetService<IOptions<CommitmentsApiClientV2Configuration>>().Value);
 
-            // services.AddSingleton<ICommitmentsV2ApiClient, CommitmentsV2ApiClient>();
-            // services.AddHttpClient<ICommitmentsV2ApiClient, CommitmentsV2ApiClient>();
-            //.AddHttpMessageHandler<RequestIdMessageRequestHandler>()
-            //.AddHttpMessageHandler<SessionIdMessageRequestHandler>();
+            services.AddSingleton<ICommitmentsV2ApiClient>(s =>
+            {
+                ILogger<CommitmentsV2ApiClient> commitmentsV2ApiLogger = new LoggerFactory().CreateLogger<CommitmentsV2ApiClient>();
+                var commitmentsV2Config = s.GetService<CommitmentsApiClientV2Configuration>();
+                var httpClient = GetHttpV2Client(commitmentsV2Config, configuration);
 
-           services.AddSingleton<ICommitmentsV2ApiClient>(s =>
-           {
-               ILogger<CommitmentsV2ApiClient> commitmentsV2ApiLogger = new LoggerFactory().CreateLogger<CommitmentsV2ApiClient>();
-               var commitmentsV2Config = s.GetService<CommitmentsApiClientV2Configuration>();
-               var httpClient = GetHttpV2Client(commitmentsV2Config, configuration);
-
-               return new CommitmentsV2ApiClient(httpClient, commitmentsV2Config, commitmentsV2ApiLogger);
-           });
+                return new CommitmentsV2ApiClient(httpClient, commitmentsV2Config, commitmentsV2ApiLogger);
+            });
 
             return services;
         }

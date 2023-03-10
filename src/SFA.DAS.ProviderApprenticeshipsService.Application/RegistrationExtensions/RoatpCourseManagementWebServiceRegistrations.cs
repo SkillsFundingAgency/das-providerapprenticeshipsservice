@@ -1,16 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SFA.DAS.Http.TokenGenerators;
-using SFA.DAS.Http;
-using SFA.DAS.Notifications.Api.Client.Configuration;
-using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using System.Net.Http;
 using Microsoft.Extensions.Configuration;
-using SFA.DAS.Commitments.Api.Client.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using Microsoft.Extensions.Options;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.GetRoatpBetaProviderService;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions
 {

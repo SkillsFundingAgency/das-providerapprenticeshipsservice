@@ -29,7 +29,6 @@
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
     <PackageReference Include="SFA.DAS.Authorization" Version="6.0.97" />
-    <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="7.78.0" />
     <PackageReference Include="SFA.DAS.CosmosDb.Testing" Version="1.0.1" />
     <PackageReference Include="SFA.DAS.Encoding" Version="1.1.76" />
     <PackageReference Include="SFA.DAS.ProviderRelationships.Api.Client" Version="4.0.3" />
