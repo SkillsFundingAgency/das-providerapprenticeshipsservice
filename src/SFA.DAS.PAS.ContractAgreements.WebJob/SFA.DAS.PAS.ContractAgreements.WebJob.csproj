@@ -20,12 +20,6 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <None Update="App.Debug.config">
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Update="App.Release.config">
-      <DependentUpon>App.config</DependentUpon>
-    </None>
     <None Update="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
