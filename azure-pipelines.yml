@@ -131,11 +131,11 @@ steps:
     pollingTimeoutSec: '300'
 
 - task: CopyFiles@2
-    displayName: Copy Files to $(Build.ArtifactStagingDirectory)'
+    displayName: Copy Files to $(Build.ArtifactStagingDirectory)
     inputs:
       Contents: |
         azure/**
-      TargetFolder: $(Build.ArtifactStagingDirectory)'
+      TargetFolder: $(Build.ArtifactStagingDirectory)
       OverWrite: true
 
 - task: PublishBuildArtifacts@1
