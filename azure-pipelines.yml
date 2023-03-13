@@ -40,6 +40,11 @@ steps:
     projectName: "$(Build.DefinitionName)"
     projectKey: SkillsFundingAgency_das-providerapprenticeshipsservice
 
+- task: NuGetToolInstaller@1
+  displayName: 'Use NuGet 6.5.0'
+  inputs:
+    versionSpec: 6.x
+
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore all'
   inputs:
