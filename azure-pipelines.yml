@@ -65,7 +65,7 @@ steps:
     command: publish
     publishWebProjects: false
     projects: src/SFA.DAS.PAS.Account.Api/SFA.DAS.PAS.Account.Api.csproj
-    arguments: -o $(build.artifactstagingdirectory)/publish/ProviderAccountsAPI -c $(buildConfiguration) --no-build
+    arguments: -o $(build.artifactstagingdirectory)/publish/ProviderAccountsAPI -c $(buildConfiguration) --no-restore --no-build
     modifyOutputPath: true
     zipAfterPublish: true
 
@@ -75,7 +75,7 @@ steps:
     command: publish
     publishWebProjects: false
     projects: src/SFA.DAS.ProviderApprenticeshipsService.Web/SFA.DAS.ProviderApprenticeshipsService.Web.csproj
-    arguments: -o $(build.artifactstagingdirectory)/publish/ProviderPortal -c $(buildConfiguration) --no-build
+    arguments: -o $(build.artifactstagingdirectory)/publish/ProviderPortal -c $(buildConfiguration) --no-restore --no-build
     modifyOutputPath: true
     zipAfterPublish: true
 
@@ -85,7 +85,7 @@ steps:
     command: publish
     publishWebProjects: false
     projects: src/SFA.DAS.PAS.Host.WebJob/SFA.DAS.PAS.Host.WebJob.csproj
-    arguments: -o $(build.artifactstagingdirectory)/publish/ProviderWebJob -c $(buildConfiguration) --no-build
+    arguments: -o $(build.artifactstagingdirectory)/publish/ProviderWebJob -c $(buildConfiguration) --no-restore --no-build
     modifyOutputPath: true
     zipAfterPublish: true
 
