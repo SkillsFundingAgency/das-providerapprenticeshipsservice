@@ -49,15 +49,15 @@ steps:
     command: restore
     projects: "src/**/*.csproj"
 
-- task: VSTest@2
+- task: DotNetCoreCLI@2
   displayName: 'Run NUnit Tests'
   inputs:
-    testAssemblyVer2: |
-      **/bin/Release/*UnitTests.dll
-      **/bin/Release/*/*UnitTests.dll
-      !**/*ClientV2.UnitTests.dll
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: test
+    projects:  |
+      '**/bin/Release/*UnitTests.dll'
+      '**/bin/Release/*/*UnitTests.dll'
+      '!**/*ClientV2.UnitTests.dll'
+    arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: Publish Provider Accounts API
