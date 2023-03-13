@@ -4,8 +4,10 @@ trigger:
     include:
       - "master"
 
-workspace:
-  clean: all
+pool:
+  name: 'DAS - Continuous Integration Agents'
+  workspace:
+    clean: all
 
 variables:
   - group: 'BUILD Management Resources'
@@ -13,10 +15,6 @@ variables:
     value: 'release'
   - name: buildPlatform
     value: 'any cpu'
-
-pool:
-  name: 'DAS - Continuous Integration'
-  demands: Agent.OS -equals Windows_NT
 
 steps:
 - task: gittools.gittools.setup-gitversion-task.gitversion/setup@0
