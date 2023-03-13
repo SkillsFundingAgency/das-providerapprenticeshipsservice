@@ -46,14 +46,6 @@ steps:
     command: restore
     projects: "src/**/*.csproj"
 
-- task: DotNetCoreCLI@2
-  displayName: Build SFA.DAS.ProviderApprenticeshipsService.sln
-  inputs:
-    command: publish
-    publishWebProjects: false
-    projects: src/SFA.DAS.ProviderApprenticeshipsService.sln
-    arguments: -o $(build.artifactstagingdirectory)/publish -c $(buildConfiguration) --no-restore --no-build
-
 - task: VSTest@2
   displayName: 'Run NUnit Tests'
   inputs:
@@ -132,8 +124,9 @@ steps:
 - task: CopyFiles@2
   displayName: Copy Files to $(build.artifactstagingdirectory)/publish
   inputs:
-    Contents: |
+  Contents: |
         azure/**
+        src/**/bin/**/*.dacpac
     TargetFolder: $(build.artifactstagingdirectory)/publish
     OverWrite: true
 
