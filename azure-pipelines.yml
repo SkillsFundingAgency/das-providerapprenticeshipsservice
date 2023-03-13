@@ -124,9 +124,9 @@ steps:
 - task: CopyFiles@2
   displayName: Copy Files to $(build.artifactstagingdirectory)/publish
   inputs:
-  Contents: |
-        azure/**
-        src/**/bin/**/*.dacpac
+    Contents: |
+      azure/**
+      src/**/bin/**/*.dacpac
     TargetFolder: $(build.artifactstagingdirectory)/publish
     OverWrite: true
 
