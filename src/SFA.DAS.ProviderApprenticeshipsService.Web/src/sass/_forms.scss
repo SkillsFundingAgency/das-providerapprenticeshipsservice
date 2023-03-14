@@ -84,3 +84,38 @@
     }
 
 }
+
+
+.button-group {
+    $horizontal-gap: 15px;
+    $vertical-gap: 15px;
+    $button-padding: 10px;
+    $link-spacing: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    a {
+        display: inline-block;
+        max-width: 100%;
+        margin-top: $link-spacing;
+        margin-bottom: $link-spacing + $vertical-gap;
+        text-align: center;
+    }
+    .button {
+        margin-bottom: $vertical-gap;
+    }
+    @include media(tablet) {
+        margin-right: ($horizontal-gap * -1);
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: baseline;
+        .button,
+        a {
+            margin-right: $horizontal-gap;
+        }
+        a {
+            text-align: left;
+        }
+    }
+}

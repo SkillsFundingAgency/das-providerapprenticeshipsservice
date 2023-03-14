@@ -1,17 +1,15 @@
 ﻿@using SFA.DAS.ProviderUrlHelper.Framework
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings.NotificationSettingsViewModel
 @{
-    ViewBag.Title = "NotificationSettings";
+    ViewBag.Title = "Notification settings";
     ViewBag.PageId = "notification-settings";
 }
-
-
 <div class="grid-row">
     <div class="column-two-thirds">
         <form method="post">
             @Html.AntiForgeryToken()
-            <h1 class="heading-xlarge">Notification settings</h1>
-            <p>Choose whether you want to receive cohort, apprentice and recruitment notification emails.</p>
+            <p><h1 class="heading-large">Notification settings</h1></p>
+            <p>Choose whether you want to receive cohort, apprentice and recruitment notification emails. These updates will be sent to the email address you use for <a target="_blank" rel="noopener noreferrer" href="https://profile.signin.education.gov.uk/">your DfE Sign-in account (opens in new tab)</a>.</p>
             <p>Changing these settings will not affect service emails, like password resets.</p>
 
             <table>
@@ -58,8 +56,11 @@
                 </tbody>
             </table>
 
-            <button type="submit" class="button" id="submit-email-alerts">Update</button>
-            <p><a href="/" class="text-link">Cancel</a></p>
+            <div class="button-group">
+                <button type="submit" class="button" id="submit-email-alerts">Update</button>
+                <a href="/" class="text-link">Cancel</a>
+            </div>
+            
             <a href="@Url.RecruitLink($"{Model.ProviderId}")/notifications-manage">Manage the notifications of your recruitment emails</a>
         </form>
     </div>

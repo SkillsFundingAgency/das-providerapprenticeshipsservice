@@ -15,6 +15,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("~/", Name = "home")]
         public ActionResult Index()
         {
+            if (User.Identity.IsAuthenticated) return RedirectToRoute("account-home");
+
             return View();
         }
 
