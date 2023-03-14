@@ -49,13 +49,6 @@ steps:
     command: restore
     projects: "src/**/*.csproj"
 
-- task: MSBuild@1
-  displayName: Build Project Files
-  inputs:
-    solution: '**/*.csproj'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-
 - task: DotNetCoreCLI@2
   displayName: 'Run NUnit Tests'
   inputs:
