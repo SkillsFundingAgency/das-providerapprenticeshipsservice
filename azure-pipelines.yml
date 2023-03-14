@@ -50,6 +50,13 @@ steps:
     projects: "src/**/*.csproj"
 
 - task: DotNetCoreCLI@2
+  displayName: Build Project Files
+  inputs:
+    command: build
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
   displayName: 'Run NUnit Tests'
   inputs:
     command: test
