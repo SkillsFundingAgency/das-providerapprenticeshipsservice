@@ -6,142 +6,30 @@ trigger:
 
 pool:
   name: 'DAS - Continuous Integration Agents'
+  demands: LATEST_DOTNET_VERSION -equals 3.1
   workspace:
     clean: all
 
 variables:
-  - group: 'BUILD Management Resources'
-  - name: buildConfiguration
-    value: 'release'
-  - name: buildPlatform
-    value: 'any cpu'
+  - name: BuildConfiguration
+    value: release
+  - name: BuildPlatform
+    value: any cpu
 
-steps:
-- task: gittools.gittools.setup-gitversion-task.gitversion/setup@0
-  displayName: gitversion/setup
-  inputs:
-    versionSpec: 5.x
+resources:
+  repositories:
+  - repository: self
+  - repository: das-platform-building-blocks
+    type: github
+    name: SkillsFundingAgency/das-platform-building-blocks
+    ref: refs/tags/2.1.0
+    endpoint: SkillsFundingAgency
 
-- task: gittools.gittools.execute-gitversion-task.gitversion/execute@0
-  displayName: gitversion/execute
-  inputs:
-    useConfigFile: true
-    configFilePath: GitVersion.yml
-
-- task: SonarCloudPrepare@1
-  displayName: Prepare SonarCloud analysis configuration
-  condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
-  inputs:
-    SonarCloud: ESFA - SonarCloud
-    organization: $(SonarCloudOrganisationKey)
-    scannerMode: MSBuild
-    projectName: "$(Build.DefinitionName)"
-    projectKey: SkillsFundingAgency_das-providerapprenticeshipsservice
-
-- task: NuGetToolInstaller@1
-  displayName: 'Use NuGet 6.5.0'
-  inputs:
-    versionSpec: 6.x
-
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet restore all'
-  inputs:
-    command: restore
-    projects: "src/**/*.csproj"
-
-- task: DotNetCoreCLI@2
-  displayName: Build Project Files
-  inputs:
-    command: build
-    projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Run NUnit Tests'
-  inputs:
-    command: test
-    projects:  |
-      '**/bin/Release/*UnitTests.dll'
-      '**/bin/Release/*/*UnitTests.dll'
-      '!**/*ClientV2.UnitTests.dll'
-    arguments: '--configuration $(buildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: Publish Provider Accounts API
-  inputs:
-    command: publish
-    publishWebProjects: false
-    projects: src/SFA.DAS.PAS.Account.Api/SFA.DAS.PAS.Account.Api.csproj
-    arguments: -o $(build.artifactstagingdirectory)/publish/ProviderAccountsAPI -c $(buildConfiguration) --no-restore --no-build
-    modifyOutputPath: true
-    zipAfterPublish: true
-
-- task: DotNetCoreCLI@2
-  displayName: Publish Provider Portal
-  inputs:
-    command: publish
-    publishWebProjects: false
-    projects: src/SFA.DAS.ProviderApprenticeshipsService.Web/SFA.DAS.ProviderApprenticeshipsService.Web.csproj
-    arguments: -o $(build.artifactstagingdirectory)/publish/ProviderPortal -c $(buildConfiguration) --no-restore --no-build
-    modifyOutputPath: true
-    zipAfterPublish: true
-
-- task: DotNetCoreCLI@2
-  displayName: Publish Provider WebJob
-  inputs:
-    command: publish
-    publishWebProjects: false
-    projects: src/SFA.DAS.PAS.Host.WebJob/SFA.DAS.PAS.Host.WebJob.csproj
-    arguments: -o $(build.artifactstagingdirectory)/publish/ProviderWebJob -c $(buildConfiguration) --no-restore --no-build
-    modifyOutputPath: true
-    zipAfterPublish: true
-
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet test'
-  inputs:
-    command: test
-    projects: |
-      src/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj
-    testRunTitle: dotnet test run
-
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet build'
-  inputs:
-    projects: |
-      src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj
-      src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj
-    arguments: '/p:Configuration=$(buildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet pack'
-  inputs:
-    command: pack
-    packagesToPack: 'src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj;src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj'
-    packDirectory: '$(Build.ArtifactStagingDirectory)/nuget-publish'
-    versioningScheme: byBuildNumber
-    verbosityPack: Diagnostic
-
-- task: SonarCloudAnalyze@1
-  displayName: Run SonarCloud analysis
-  condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
-
-- task: SonarCloudPublish@1
-  displayName: Publish SonarCloud analysis results on build summary
-  condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
-  inputs:
-    pollingTimeoutSec: '300'
-
-- task: CopyFiles@2
-  displayName: Copy Files to $(build.artifactstagingdirectory)/publish
-  inputs:
-    Contents: |
-      azure/**
-      src/**/bin/**/*.dacpac
-    TargetFolder: $(build.artifactstagingdirectory)/publish
-    OverWrite: true
-
-- task: PublishPipelineArtifact@1
-  displayName: Publish Build Artifact
-  inputs:
-    targetPath: $(build.artifactstagingdirectory)/publish
-    artifactName: Publish
+stages:
+- stage: Build
+  jobs:
+  - template: pipeline-templates/job/code-build.yml
+    parameters:
+      BuildPlatform: $(BuildPlatform)
+      BuildConfiguration: $(BuildConfiguration)
+  - template: pipeline-templates/job/dacpac-build.yml
