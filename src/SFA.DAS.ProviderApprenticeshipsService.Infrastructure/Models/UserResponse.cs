@@ -1,20 +1,20 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Models
 {
     public class UserResponse
     {
-        [JsonProperty("name.familyname")]
+        [JsonRequiredAttribute]
         public List<string> FamilyNames { get; set; }
 
-        [JsonProperty("name.givenname")]
+        [JsonRequiredAttribute]
         public List<string> GivenNames { get; set; }
 
-        [JsonProperty("emails")]
+        [JsonRequiredAttribute]
         public List<string> Emails { get; set; }
 
-        [JsonProperty("Title")]
+        [JsonRequiredAttribute]
         public List<string> Titles { get; set; }
     }
 }

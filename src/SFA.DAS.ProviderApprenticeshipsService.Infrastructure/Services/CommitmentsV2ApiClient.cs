@@ -8,8 +8,6 @@ using SFA.DAS.Authentication.Extensions.Legacy;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using Microsoft.Extensions.Configuration;
-using System.Threading;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
 {
