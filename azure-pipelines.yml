@@ -36,6 +36,16 @@ resources:
     name: SkillsFundingAgency/das-platform-building-blocks
     ref: refs/tags/2.1.0
     endpoint: SkillsFundingAgency
+  - repository: das-platform-automation
+    type: github
+    name: SkillsFundingAgency/das-platform-automation
+    ref: refs/tags/5.1.5
+    endpoint: SkillsFundingAgency
+  pipelines:
+  - pipeline: das-employer-config
+    project: Digital Apprenticeship Service
+    source: das-employer-config
+    branch: master
 
 stages:
 - stage: Build
@@ -45,6 +55,9 @@ stages:
       BuildPlatform: $(BuildPlatform)
       BuildConfiguration: $(BuildConfiguration)
   - template: pipeline-templates/job/dacpac-build.yml
+    parameters:
+      BuildPlatform: $(BuildPlatform)
+      BuildConfiguration: $(BuildConfiguration)
 
 - stage: Deploy_AT
   dependsOn: Build
