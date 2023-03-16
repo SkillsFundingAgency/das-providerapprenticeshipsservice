@@ -8,7 +8,7 @@
     <None Remove="Queries\GetProviderAgreement\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FluentValidation.ValidatorAttribute" Version="8.0.0" />
+    <PackageReference Include="FluentValidation" Version="11.5.1" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.Abstractions" Version="7.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
