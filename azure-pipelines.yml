@@ -1,64 +1,164 @@
-parameters:
-- name: OverrideBlockOnPossibleDataLoss
-  displayName: Add /p:BlockOnPossibleDataLoss=false argument to DACPAC deployment
-  type: boolean
-  default: false
-
 trigger:
   batch: true
   branches:
     include:
       - "master"
 
-pool:
-  name: 'DAS - Continuous Integration Agents'
-  demands: LATEST_DOTNET_VERSION -equals 3.1
-  workspace:
-    clean: all
+workspace:
+  clean: all
 
 variables:
-- name: SolutionBaseName
-  value: SFA.DAS.ProviderApprenticeshipsService
-- name: BuildConfiguration
-  value: release
-- name: BuildPlatform
-  value: any cpu
-- group: RELEASE Management Resources
-- group: RELEASE das-providerapprenticeshipservice
-- name: Deploy
-  value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
+  - group: 'BUILD Management Resources'
+  - name: buildConfiguration
+    value: 'release'
+  - name: buildPlatform
+    value: 'any cpu'
 
-resources:
-  repositories:
-  - repository: self
-  - repository: das-platform-building-blocks
-    type: github
-    name: SkillsFundingAgency/das-platform-building-blocks
-    ref: refs/tags/2.1.0
-    endpoint: SkillsFundingAgency
+pool:
+  name: 'DAS - Continuous Integration'
+  demands: Agent.OS -equals Windows_NT
 
-stages:
-- stage: Build
-  jobs:
-  - template: pipeline-templates/job/code-build.yml
-    parameters:
-      BuildPlatform: $(BuildPlatform)
-      BuildConfiguration: $(BuildConfiguration)
-  - template: pipeline-templates/job/dacpac-build.yml
+steps:
+- task: gittools.gittools.setup-gitversion-task.gitversion/setup@0
+  displayName: gitversion/setup
+  inputs:
+    versionSpec: 5.x
 
-- stage: Deploy_AT
-  dependsOn: Build
-  displayName: Deploy to AT
-  condition: and(succeeded(), eq(variables.Deploy, 'true'))
-  variables:
-  - group: DevTest Management Resources
-  - group: AT DevTest Shared Resources
-  - group: AT das-providerapprenticeshipservice
-  jobs:
-  - template: pipeline-templates/job/deploy.yml
-    parameters:
-      Environment: AT
-      SolutionBaseName: $(SolutionBaseName)
-      ServiceConnection: SFA-DAS-DevTest-ARM
-      OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss  }}
-      AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
+- task: gittools.gittools.execute-gitversion-task.gitversion/execute@0
+  displayName: gitversion/execute
+  inputs:
+    useConfigFile: true
+    configFilePath: GitVersion.yml
+
+- task: SonarCloudPrepare@1
+  displayName: Prepare SonarCloud analysis configuration
+  condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
+  inputs:
+    SonarCloud: ESFA - SonarCloud
+    organization: $(SonarCloudOrganisationKey)
+    scannerMode: MSBuild
+    projectName: "$(Build.DefinitionName)"
+    projectKey: SkillsFundingAgency_das-providerapprenticeshipsservice
+
+- task: NuGetToolInstaller@0
+  displayName: 'Use NuGet 4.3.0'
+  inputs:
+    versionSpec: 4.x
+
+- task: NuGetCommand@2
+  displayName: 'NuGet Restore SFA.DAS.ProviderApprenticeshipsService.sln'
+  inputs:
+    restoreSolution: 'src/SFA.DAS.ProviderApprenticeshipsService.sln'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore all'
+  inputs:
+    command: restore
+    projects: "src/**/*.csproj"
+
+- task: VSBuild@1
+  displayName: 'Build SFA.DAS.ProviderApprenticeshipsService.sln'
+  inputs:
+    solution: 'src/SFA.DAS.ProviderApprenticeshipsService.sln'
+    msbuildArgs: '/m'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    clean: true
+
+- task: VSTest@2
+  displayName: 'Run NUnit Tests'
+  inputs:
+    testAssemblyVer2: |
+      **/bin/Release/*UnitTests.dll
+      **/bin/Release/*/*UnitTests.dll
+      !**/*ClientV2.UnitTests.dll
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet Pack Provider Accounts API Client'
+  inputs:
+    command: 'pack'
+    packagesToPack: 'src/SFA.DAS.PAS.Account.Api.Client/SFA.DAS.PAS.Account.Api.Client.csproj'
+    packDestination: '$(Build.ArtifactStagingDirectory)/nuget-publish'
+    versioningScheme: byBuildNumber
+
+- task: VSBuild@1
+  displayName: 'Publish Provider Accounts API'
+  inputs:
+    solution: 'src/SFA.DAS.PAS.Account.Api/SFA.DAS.PAS.Account.Api.csproj'
+    vsVersion: "15.0"
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/Provider Accounts API"'
+    platform: 'anycpu'
+    configuration: '$(buildConfiguration)'
+    clean: true
+
+- task: VSBuild@1
+  displayName: 'Publish Provider Portal'
+  inputs:
+    solution: 'src/SFA.DAS.ProviderApprenticeshipsService.Web/SFA.DAS.ProviderApprenticeshipsService.Web.csproj'
+    vsVersion: "15.0"
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/Provider Portal"'
+    platform: 'anycpu'
+    configuration: '$(buildConfiguration)'
+    clean: true
+
+- task: VSBuild@1
+  displayName: 'Publish Provider WebJob'
+  inputs:
+    solution: 'src/SFA.DAS.PAS.Host.WebJob/SFA.DAS.PAS.Host.WebJob.csproj'
+    vsVersion: "15.0"
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/Provider WebJob"'
+    platform: 'anycpu'
+    configuration: '$(buildConfiguration)'
+    clean: true
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet test'
+  inputs:
+    command: test
+    projects: |
+      src/SFA.DAS.ProviderUrlHelperTests/SFA.DAS.ProviderUrlHelperTests.csproj
+      src/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj
+    testRunTitle: dotnet test run
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
+  inputs:
+    projects: |
+      src/SFA.DAS.ProviderUrlHelper/SFA.DAS.ProviderUrlHelper.csproj
+      src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj
+      src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj
+    arguments: '/p:Configuration=$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet pack'
+  inputs:
+    command: pack
+    packagesToPack: 'src/SFA.DAS.ProviderUrlHelper/SFA.DAS.ProviderUrlHelper.csproj;src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj;src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj'
+    packDirectory: '$(Build.ArtifactStagingDirectory)/nuget-publish'
+    versioningScheme: byBuildNumber
+    verbosityPack: Diagnostic
+
+- task: SonarCloudAnalyze@1
+  displayName: Run SonarCloud analysis
+  condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
+
+- task: SonarCloudPublish@1
+  displayName: Publish SonarCloud analysis results on build summary
+  condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
+  inputs:
+    pollingTimeoutSec: '300'
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+  inputs:
+    Contents: |
+     azure/**
+     **/*.dacpac
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: Publish'
+  inputs:
+    ArtifactName: Publish
