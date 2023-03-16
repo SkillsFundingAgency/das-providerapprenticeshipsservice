@@ -1,0 +1,87 @@
+parameters:
+  BuildConfiguration:
+
+jobs:
+  - job: CodeBuild
+    variables:
+      - group: BUILD Management Resources
+    steps:
+      - template: azure-pipelines-templates/build/step/gitversion.yml@das-platform-building-blocks
+
+      - template: azure-pipelines-templates/build/step/app-build.yml@das-platform-building-blocks
+        parameters:
+          SonarCloudProjectKey: SkillsFundingAgency_das-providerapprenticeshipsservice
+          UnitTestProjects: |
+            '**/bin/Release/*UnitTests.dll'
+            '**/bin/Release/*/*UnitTests.dll'
+            '!**/*ClientV2.UnitTests.dll'
+          RunAcceptanceTests: false
+
+      - task: DotNetCoreCLI@2
+        displayName: Publish Provider Accounts API
+        inputs:
+          command: publish
+          publishWebProjects: false
+          projects: src/SFA.DAS.PAS.Account.Api/SFA.DAS.PAS.Account.Api.csproj
+          arguments: -o $(build.artifactstagingdirectory)/publish/ProviderAccountsAPI -c ${{ parameters.BuildConfiguration }} --no-restore --no-build
+          modifyOutputPath: true
+          zipAfterPublish: true
+
+      - task: DotNetCoreCLI@2
+        displayName: Publish Provider Portal
+        inputs:
+          command: publish
+          publishWebProjects: false
+          projects: src/SFA.DAS.ProviderApprenticeshipsService.Web/SFA.DAS.ProviderApprenticeshipsService.Web.csproj
+          arguments: -o $(build.artifactstagingdirectory)/publish/ProviderPortal -c ${{ parameters.BuildConfiguration }} --no-restore --no-build
+          modifyOutputPath: true
+          zipAfterPublish: true
+
+      - task: DotNetCoreCLI@2
+        displayName: Publish Provider WebJob
+        inputs:
+          command: publish
+          publishWebProjects: false
+          projects: src/SFA.DAS.PAS.Host.WebJob/SFA.DAS.PAS.Host.WebJob.csproj
+          arguments: -o $(build.artifactstagingdirectory)/publish/ProviderWebJob -c ${{ parameters.BuildConfiguration }} --no-restore --no-build
+          modifyOutputPath: true
+          zipAfterPublish: true
+
+      - task: DotNetCoreCLI@2
+        displayName: Test Account.API.ClientV2
+        inputs:
+          command: test
+          projects: |
+            src/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests/SFA.DAS.PAS.Account.Api.ClientV2.UnitTests.csproj
+          testRunTitle: dotnet test run
+
+      - task: DotNetCoreCLI@2
+        displayName: Build Account.API.ClientV2
+        inputs:
+          command: build
+          projects: |
+            src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj
+            src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj
+          arguments: '/p:Configuration=${{ parameters.BuildConfiguration }}'
+
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet pack'
+        inputs:
+          command: pack
+          packagesToPack: 'src/SFA.DAS.PAS.Account.Api.ClientV2/SFA.DAS.PAS.Account.Api.ClientV2.csproj;src/SFA.DAS.PAS.Account.Api.Types/SFA.DAS.PAS.Account.Api.Types.csproj'
+          packDirectory: '$(Build.ArtifactStagingDirectory)/nuget-publish'
+          versioningScheme: byBuildNumber
+          verbosityPack: Diagnostic
+
+      - task: CopyFiles@2
+        displayName: Copy Files to $(build.artifactstagingdirectory)/publish
+        inputs:
+          Contents: azure/**
+          TargetFolder: $(build.artifactstagingdirectory)/publish
+          OverWrite: true
+
+      - task: PublishPipelineArtifact@1
+        displayName: Publish Build Artifact
+        inputs:
+          targetPath: $(build.artifactstagingdirectory)/publish
+          artifactName: Publish
