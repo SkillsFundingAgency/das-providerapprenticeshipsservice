@@ -23,7 +23,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
             services.AddApprenticeshipInfoService();
             services.AddUserIdentityService();
 
-            services.AddHashingServices(configuration);
             services.AddCookieStorageService();
             services.AddLinkGenerator();
             services.AddMediatRHandlers();

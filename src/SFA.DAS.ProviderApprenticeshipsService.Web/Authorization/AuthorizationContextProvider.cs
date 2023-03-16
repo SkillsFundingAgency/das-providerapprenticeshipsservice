@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.ProviderFeatures.Context;
 using SFA.DAS.Authorization.ProviderPermissions.Context;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.Encoding;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Routing;
 
@@ -14,17 +14,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
     public class AuthorizationContextProvider : IAuthorizationContextProvider
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
+        private readonly IEncodingService _encodingService;
         private readonly ILogger<AuthorizationContextProvider> _log;
         private readonly IActionContextAccessorWrapper _actionContextAccessorWrapper;
 
         public AuthorizationContextProvider(IHttpContextAccessor httpContextAccessor,
-            IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
+            IEncodingService encodingService,
             ILogger<AuthorizationContextProvider> log,
             IActionContextAccessorWrapper actionContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
-            _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
+            _encodingService = encodingService;
             _log = log;
             _actionContextAccessorWrapper = actionContextAccessor;
         }
@@ -61,7 +61,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
                 {
                     return null;
                 }
-                return _accountLegalEntityPublicHashingService.DecodeValue(accountLegalEntityPublicHashedId);
+                return _encodingService.Decode(accountLegalEntityPublicHashedId,EncodingType.PublicAccountLegalEntityId);
                 
             }
             catch (Exception ex)

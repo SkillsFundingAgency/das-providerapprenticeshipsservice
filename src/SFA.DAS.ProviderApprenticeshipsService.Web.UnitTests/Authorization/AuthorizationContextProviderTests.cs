@@ -1,26 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Security.Principal;
 using FluentAssertions;
-using FluentAssertions.Specialized;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization.Context;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Routing;
 using SFA.DAS.Testing;
 using Fix = SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization.AuthorizationContextProviderTestsFixture;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
 {
@@ -74,7 +67,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
         public IAuthorizationContextProvider AuthorizationContextProvider { get; set; }
         public Mock<IHttpContextAccessor> HttpContext { get; set; }
         public Mock<IActionContextAccessorWrapper> ActionContextAccessorWrapper { get; set; }
-        public Mock<IAccountLegalEntityPublicHashingService> AccountLegalEntityPublicHashingService { get; set; }
+        public Mock<IEncodingService> EncodingService { get; set; }
         public string AccountLegalEntityPublicHashedIdRouteValue { get; set; }
         public long AccountLegalEntityId { get; set; }
         public string ProviderIdRouteValue { get; set; }
@@ -90,9 +83,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
             ActionContextAccessorWrapper.Setup(c => c.GetRouteData()).Returns(RouteData);
             HttpContext.Setup(c => c.HttpContext.User).Returns(new GenericPrincipal(new Mock<IIdentity>().Object, new string[0]));
 
-            AccountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
-            AuthorizationContextProvider = new AuthorizationContextProvider(HttpContext.Object, 
-                AccountLegalEntityPublicHashingService.Object, 
+            EncodingService = new Mock<IEncodingService>();
+            AuthorizationContextProvider = new AuthorizationContextProvider(HttpContext.Object,
+                EncodingService.Object, 
                 Mock.Of<ILogger<AuthorizationContextProvider>>(),
                 ActionContextAccessorWrapper.Object);
         }
@@ -117,7 +110,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
 
             HttpContext.Setup(c => c.HttpContext.Request.Query).Returns(QueryParams);
 
-            AccountLegalEntityPublicHashingService.Setup(h => h.DecodeValue(AccountLegalEntityPublicHashedIdRouteValue)).Returns(AccountLegalEntityId);
+            EncodingService.Setup(h => h.Decode(AccountLegalEntityPublicHashedIdRouteValue, EncodingType.PublicAccountLegalEntityId)).Returns(AccountLegalEntityId);
 
             return this;
         }
@@ -134,7 +127,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization
 
             HttpContext.Setup(c => c.HttpContext.Request.Query).Returns(QueryParams);
 
-            AccountLegalEntityPublicHashingService.Setup(h => h.DecodeValue(AccountLegalEntityPublicHashedIdRouteValue)).Throws<Exception>();
+            EncodingService.Setup(h => h.Decode(AccountLegalEntityPublicHashedIdRouteValue, EncodingType.PublicAccountLegalEntityId)).Throws<Exception>();
 
             return this;
         }
