@@ -1,3 +1,9 @@
+parameters:
+- name: OverrideBlockOnPossibleDataLoss
+  displayName: Add /p:BlockOnPossibleDataLoss=false argument to DACPAC deployment
+  type: boolean
+  default: false
+
 trigger:
   batch: true
   branches:
@@ -11,10 +17,16 @@ pool:
     clean: all
 
 variables:
-  - name: BuildConfiguration
-    value: release
-  - name: BuildPlatform
-    value: any cpu
+- name: SolutionBaseName
+  value: SFA.DAS.ProviderApprenticeshipsService
+- name: BuildConfiguration
+  value: release
+- name: BuildPlatform
+  value: any cpu
+- group: RELEASE Management Resources
+- group: RELEASE das-providerapprenticeshipservice
+- name: Deploy
+  value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
 
 resources:
   repositories:
@@ -33,3 +45,20 @@ stages:
       BuildPlatform: $(BuildPlatform)
       BuildConfiguration: $(BuildConfiguration)
   - template: pipeline-templates/job/dacpac-build.yml
+
+- stage: Deploy_AT
+  dependsOn: Build
+  displayName: Deploy to AT
+  condition: and(succeeded(), eq(variables.Deploy, 'true'))
+  variables:
+  - group: DevTest Management Resources
+  - group: AT DevTest Shared Resources
+  - group: AT das-providerapprenticeshipservice
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: AT
+      SolutionBaseName: $(SolutionBaseName)
+      ServiceConnection: SFA-DAS-DevTest-ARM
+      OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss  }}
+      AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
