@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.PAS.Account.Api.Authorization;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
@@ -6,6 +8,7 @@ namespace SFA.DAS.PAS.Account.Api.Controllers;
 
 [ApiVersion("1.0")]
 [ApiController]
+[Authorize(Policy = ApiRoles.ReadUserSettings)]
 [Route("api/user")]
 public class UserController : Controller
 {
@@ -21,7 +24,6 @@ public class UserController : Controller
 
     [Route("{userRef}")]
     [HttpGet]
-    //TODO [ApiAuthorize(Roles = "ReadUserSettings")]
     public async Task<IActionResult> GetUserSettings(string userRef)
     {
         _logger.Info($"Getting users settings for user: {userRef}");

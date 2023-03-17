@@ -45,4 +45,9 @@ public static class ConfigurationExtensions
     {
         return configuration["EnvironmentName"]?.StartsWith("LOCAL", StringComparison.CurrentCultureIgnoreCase) ?? false;
     }
+
+    public static bool IsDevOrLocal(this IConfiguration configuration)
+    {
+        return IsDev(configuration) || IsLocal(configuration);
+    }
 }

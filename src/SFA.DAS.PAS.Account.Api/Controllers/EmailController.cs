@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.PAS.Account.Api.Authorization;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.PAS.Account.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-
 namespace SFA.DAS.PAS.Account.Api.Controllers;
 
+[Authorize(Policy = ApiRoles.ReadAccountUsers)]
 [Route("api/email")]
 public class EmailController : Controller
 {
@@ -20,7 +22,6 @@ public class EmailController : Controller
 
     [Route("{ukprn}/send")]
     [HttpPost]
-    //TODO [ApiAuthorize(Roles = "ReadAccountUsers")]
     public async Task<IActionResult> SendEmailToAllProviderRecipients(long ukprn, ProviderEmailRequest request)
     {
         try

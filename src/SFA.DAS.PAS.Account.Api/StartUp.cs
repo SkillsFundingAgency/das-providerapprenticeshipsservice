@@ -10,6 +10,8 @@ using System.Text.Json.Serialization;
 using SFA.DAS.Api.Common.AppStart;
 using SFA.DAS.Api.Common.Configuration;
 using SFA.DAS.PAS.Account.Api.ServiceRegistrations;
+using SFA.DAS.PAS.Account.Api.Authentication;
+using SFA.DAS.PAS.Account.Api.Authorization;
 
 namespace SFA.DAS.PAS.Account.Api
 {
@@ -27,6 +29,11 @@ namespace SFA.DAS.PAS.Account.Api
         public void ConfigureServices(IServiceCollection services)
         {
             var rootConfiguration = _configuration.LoadConfiguration();
+            var isDevOrLocal= _configuration.IsDevOrLocal();
+
+            services
+                .AddApiAuthentication(_configuration)
+                .AddApiAuthorization(isDevOrLocal);
 
             services.AddOptions();
             services.AddConfigurationOptions(rootConfiguration);

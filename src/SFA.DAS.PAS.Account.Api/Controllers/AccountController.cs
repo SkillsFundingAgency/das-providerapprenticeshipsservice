@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.PAS.Account.Api.Authorization;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.PAS.Account.Api.Controllers;
 
+[Authorize(Policy = ApiRoles.ReadAccountUsers)]
 [Route("api/account")]
 public class AccountController : Controller
 {
@@ -19,7 +22,6 @@ public class AccountController : Controller
 
     [Route("{ukprn}/users")]
     [HttpGet]
-    //TODO [ApiAuthorize(Roles = "ReadAccountUsers")]
     public async Task<IActionResult> GetAccountUsers(long ukprn)
     {
         _logger.Info($"Getting account users for ukprn: {ukprn}", providerId: ukprn);
@@ -32,7 +34,6 @@ public class AccountController : Controller
 
     [Route("{ukprn}/agreement")]
     [HttpGet]
-    //TODO [ApiAuthorize(Roles = "ReadAccountUsers")]
     public async Task<IActionResult> GetAgreement(long ukprn)
     {
         _logger.Info($"Getting agreement for ukprn: {ukprn}", providerId: ukprn);
