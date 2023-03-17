@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.PAS.Account.Api.Types;
+using SFA.DAS.PAS.Account.Application.Queries.GetUser;
 using SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings;
 
 namespace SFA.DAS.PAS.Account.Api.Orchestrator;
@@ -25,6 +26,8 @@ public class UserOrchestrator : IUserOrchestrator
     {
         var userSetting = await _mediator.Send(new GetUserNotificationSettingsQuery {UserRef = userRef });
 
+        var user = await _mediator.Send(new GetUserQuery { UserRef = userRef });
+
         var setting = userSetting.NotificationSettings.SingleOrDefault();
         if (setting == null)
         {
@@ -32,6 +35,13 @@ public class UserOrchestrator : IUserOrchestrator
             return new User { };
         }
 
-        return new User { UserRef = setting.UserRef, ReceiveNotifications = setting.ReceiveNotifications };
+        return new User 
+        { 
+            UserRef = setting.UserRef, 
+            EmailAddress = user.EmailAddress,
+            DisplayName = user.Name,
+            ReceiveNotifications = setting.ReceiveNotifications,
+            IsSuperUser = user.IsSuperUser
+        };
     }
 }
