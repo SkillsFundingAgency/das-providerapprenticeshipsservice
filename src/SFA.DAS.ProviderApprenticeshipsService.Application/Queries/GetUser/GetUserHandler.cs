@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using FluentValidation.Results;
 using MediatR;
-
+using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser
@@ -26,6 +26,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser
                     new List<ValidationFailure>{ new ValidationFailure("UserRef", "UserRef is null or empty") });
             }
             var user = await _userRepository.GetUser(request.UserRef);
+
+            if (user == null) 
+            {
+                return new GetUserResponse { };
+            }
 
             return new GetUserResponse
                        {

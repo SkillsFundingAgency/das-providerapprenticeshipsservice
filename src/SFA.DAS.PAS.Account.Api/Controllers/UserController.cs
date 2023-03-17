@@ -27,8 +27,13 @@ public class UserController : Controller
     public async Task<IActionResult> GetUserSettings(string userRef)
     {
         _logger.Info($"Getting users settings for user: {userRef}");
-        var result = await _orchestrator.GetUser(userRef);
-        _logger.Info($"Found {(result == null ? "0" : "1")}  users settings for user: {userRef}");
+
+        var result = await _orchestrator.GetUserWithSettings(userRef);
+
+        if (result == null) 
+        {
+            return NotFound();
+        }
 
         return Ok(result);
     }

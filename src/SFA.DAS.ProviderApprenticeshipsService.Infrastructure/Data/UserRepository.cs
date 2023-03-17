@@ -38,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
             });
         }
 
-        public async Task<User> GetUser(string userRef)
+        public async Task<User?> GetUser(string userRef)
         {
             return await WithConnection(async c =>
             {
@@ -51,6 +51,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
                         sql: "SELECT TOP 1 * FROM [dbo].[User] WHERE UserRef = @userRef",
                         param: parameters,
                         commandType: CommandType.Text);
+
+                if (!results.Any())
+                {
+                    return null;
+                }
 
                 return results.Single();
             });
