@@ -72,8 +72,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Extensions
 
         private static HttpClient GetHttpV2Client(CommitmentsApiClientV2Configuration commitmentsV2Config, IConfiguration config)
         {
-            var isDev = config["EnvironmentName"].Equals("Development", StringComparison.CurrentCultureIgnoreCase);
-            var httpClientBuilder = !isDev
+            var httpClientBuilder = config.IsLocal()
                 ? new HttpClientBuilder()
                 : new HttpClientBuilder().WithBearerAuthorisationHeader(new ManagedIdentityTokenGenerator(commitmentsV2Config));
             

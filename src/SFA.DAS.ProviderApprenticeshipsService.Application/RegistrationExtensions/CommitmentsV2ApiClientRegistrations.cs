@@ -32,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensi
 
         private static HttpClient GetHttpV2Client(CommitmentsApiClientV2Configuration commitmentsV2Config, IConfiguration config)
         {
-            var httpClientBuilder = !config.IsDev()
+            var httpClientBuilder = config.IsLocal()
                 ? new HttpClientBuilder()
                 : new HttpClientBuilder().WithBearerAuthorisationHeader(new ManagedIdentityTokenGenerator(commitmentsV2Config));
 
