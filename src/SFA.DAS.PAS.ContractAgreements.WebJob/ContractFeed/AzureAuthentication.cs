@@ -1,8 +1,7 @@
 ﻿using System.Security.Authentication;
 using System.Threading;
 using System.Threading.Tasks;
-
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Identity.Client;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
 {
@@ -13,6 +12,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
         private readonly string _clientId;
         private readonly string _appKey;
         private readonly string _resourceId;
+        private IConfidentialClientApplication app;
 
         public AzureAuthentication(string aadInstance, string tenant, string clientId, string appKey, string resourceId)
         {
@@ -26,8 +26,14 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
         public async Task<AuthenticationResult> GetAuthenticationResult()
         {
             var authority = string.Format(_aadInstance, _tenant);
-            var authContext = new AuthenticationContext(authority);
-            var clientCredential = new ClientCredential(_clientId, _appKey);
+
+            if (app == null)
+            {
+                app = ConfidentialClientApplicationBuilder.Create(_clientId)
+                //.WithClientSecret(clientSecret) // TODO
+                .WithAuthority(authority)
+                .Build();
+            }
 
             AuthenticationResult authResult = null;
             var retryCount = 0;
@@ -38,10 +44,13 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
                 retry = false;
                 try
                 {
-                    authResult = await authContext.AcquireTokenAsync(_resourceId, clientCredential);
+                    authResult = await app.AcquireTokenForClient(
+                                        new[] { $"{_resourceId}/.default" })
+                                        .ExecuteAsync()
+                                        .ConfigureAwait(false);
                     return authResult;
                 }
-                catch (AdalException ex)
+                catch (MsalClientException ex)
                 {
                     if (ex.ErrorCode == "temporarily_unavailable")
                     {
