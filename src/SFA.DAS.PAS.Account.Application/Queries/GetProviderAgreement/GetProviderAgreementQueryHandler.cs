@@ -8,9 +8,9 @@ namespace SFA.DAS.PAS.Account.Application.Queries.GetProviderAgreement
     public class GetProviderAgreementQueryHandler : IRequestHandler<GetProviderAgreementQueryRequest, GetProviderAgreementQueryResponse>
     {
         private readonly IProviderAgreementStatusRepository _providerAgreementStatusRepository;
-        private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
+        private readonly IPasAccountApiConfiguration _configuration;
 
-        public GetProviderAgreementQueryHandler(IProviderAgreementStatusRepository providerAgreementStatusRepository, ProviderApprenticeshipsServiceConfiguration configuration)
+        public GetProviderAgreementQueryHandler(IProviderAgreementStatusRepository providerAgreementStatusRepository, IPasAccountApiConfiguration configuration)
         {
             _providerAgreementStatusRepository = providerAgreementStatusRepository;
             _configuration = configuration;

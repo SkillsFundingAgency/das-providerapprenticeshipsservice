@@ -9,11 +9,11 @@ namespace SFA.DAS.PAS.Account.Api.ClientV2.DependencyResolution
     {
         public static IServiceCollection AddPasAccountApiClient(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton(configuration.Get<PasAccountApiConfiguration>()); // CONFIG TO BE ADDED FOR PASAccountApi
+            services.AddSingleton(configuration.Get<PasAccountApiClientConfiguration>()); // CONFIG TO BE ADDED FOR PASAccountApi
 
             services.AddSingleton<IPasAccountApiClient>(s =>
             {
-                var pasConfig = s.GetService<PasAccountApiConfiguration>();
+                var pasConfig = s.GetService<PasAccountApiClientConfiguration>();
                 var loggerFactory = s.GetService<ILoggerFactory>();
                 var apiClientfactory = new PasAccountApiClientFactory(pasConfig, loggerFactory);
                 return apiClientfactory.CreateClient();

@@ -5,6 +5,30 @@ using SFA.DAS.ProviderRelationships.Api.Client.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
 {
+    public interface IProviderAgreementStatusConfiguration : IBaseConfiguration
+    {
+        public bool UseFakeIdentity { get; set; }
+        public string DatabaseConnectionString { get; set; }
+        public string ServiceBusConnectionString { get; set; }
+        public CommitmentsApiClientV2Configuration CommitmentsApiClientV2 { get; set; }
+        public NotificationsApiClientConfiguration NotificationApi { get; set; }
+        public ProviderNotificationConfiguration CommitmentNotification { get; set; }
+        public ProviderRelationshipsApiConfiguration ProviderRelationshipsApi { get; set; }
+        public string Hashstring { get; set; }
+        public int MaxBulkUploadFileSize { get; set; } // Size of file in kilobytes
+        public bool EnableEmailNotifications { get; set; }
+        public string AllowedHashstringCharacters { get; set; }
+        public string PublicHashstring { get; set; }
+        public string PublicAllowedHashstringCharacters { get; set; }
+        public string PublicAllowedAccountLegalEntityHashstringSalt { get; set; }
+        public string PublicAllowedAccountLegalEntityHashstringCharacters { get; set; }
+        public ContentClientApiConfiguration ContentApi { get; set; }
+        public string ContentApplicationId { get; set; }
+        public int DefaultCacheExpirationInMinutes { get; set; }
+        public ZenDeskConfiguration ZenDeskSettings { get; set; }
+        public SFA.DAS.Authorization.ProviderFeatures.Configuration.ProviderFeaturesConfiguration Features { get; set; }
+    }
+
     public class ProviderApprenticeshipsServiceConfiguration : IProviderAgreementStatusConfiguration
     {
         public bool UseFakeIdentity { get; set; }
@@ -16,8 +40,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public ProviderRelationshipsApiConfiguration ProviderRelationshipsApi { get; set; }
         public string Hashstring { get; set; }
         public int MaxBulkUploadFileSize { get; set; } // Size of file in kilobytes
-        public bool CheckForContractAgreements { get; set; }
-        public string ContractAgreementsUrl { get; set; }
         public bool EnableEmailNotifications { get; set; }
         public string AllowedHashstringCharacters { get; set; }
         public string PublicHashstring { get; set; }

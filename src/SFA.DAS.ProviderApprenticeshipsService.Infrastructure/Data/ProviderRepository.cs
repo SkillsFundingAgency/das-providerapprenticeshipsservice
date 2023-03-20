@@ -6,15 +6,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using Provider = SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Provider;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
     public class ProviderRepository : BaseRepository<ProviderRepository>, IProviderRepository
     {
-        public ProviderRepository(ProviderApprenticeshipsServiceConfiguration config, ILogger<ProviderRepository> logger, IConfiguration rootConfig) 
-            : base(config.DatabaseConnectionString, logger, rootConfig)
+        public ProviderRepository(ILogger<ProviderRepository> logger, IConfiguration rootConfig) 
+            : base(rootConfig.GetSection("DatabaseConnectionString").Value, logger, rootConfig)
         {
         }
 

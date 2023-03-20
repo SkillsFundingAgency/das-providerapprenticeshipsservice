@@ -32,7 +32,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IUserSettingsRepository))]
     [TestCase(typeof(IProviderAgreementStatusRepository))]
     [TestCase(typeof(IUserRepository))]
-    [TestCase(typeof(ProviderApprenticeshipsServiceConfiguration))]
+    [TestCase(typeof(IPasAccountApiConfiguration))]
     [TestCase(typeof(IRequestHandler<GetAccountUsersQuery, GetAccountUsersResponse>))]
     [TestCase(typeof(IRequestHandler<GetProviderAgreementQueryRequest, GetProviderAgreementQueryResponse>))]
     [TestCase(typeof(IRequestHandler<SendNotificationCommand, Unit>))]

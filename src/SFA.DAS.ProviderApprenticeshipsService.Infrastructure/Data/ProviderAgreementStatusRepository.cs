@@ -17,11 +17,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
         private readonly ILogger<ProviderAgreementStatusRepository> _logger;
         private readonly ICurrentDateTime _currentDateTime;
 
-        public ProviderAgreementStatusRepository(ProviderApprenticeshipsServiceConfiguration config, 
+        public ProviderAgreementStatusRepository( 
             ILogger<ProviderAgreementStatusRepository> logger, 
             ICurrentDateTime currentDateTime,
             IConfiguration rootConfig)
-            : base(config.DatabaseConnectionString, logger, rootConfig)
+            : base(rootConfig.GetSection("DatabaseConnectionString").Value, logger, rootConfig)
         {
             _logger = logger;
             _currentDateTime = currentDateTime;
