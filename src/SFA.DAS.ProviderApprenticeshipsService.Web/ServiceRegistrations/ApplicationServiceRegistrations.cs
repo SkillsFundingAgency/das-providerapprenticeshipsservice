@@ -13,6 +13,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddConfigurations(configuration);
+            services.AddAccountApiClient(configuration);
             services.AddDataRepositories();
             services.AddCommitmentsV2ApiClient(configuration);
             services.AddContentApi(configuration);

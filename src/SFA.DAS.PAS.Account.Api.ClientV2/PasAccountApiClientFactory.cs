@@ -6,10 +6,10 @@ namespace SFA.DAS.PAS.Account.Api.ClientV2
 {
     internal class PasAccountApiClientFactory
     {
-        private readonly PasAccountApiClientConfiguration _configuration;
+        private readonly PasAccountApiClientV2Configuration _configuration;
         private readonly ILoggerFactory _loggerFactory;
 
-        public PasAccountApiClientFactory(PasAccountApiClientConfiguration configuration, ILoggerFactory loggerFactory)
+        public PasAccountApiClientFactory(PasAccountApiClientV2Configuration configuration, ILoggerFactory loggerFactory)
         {
             _configuration = configuration;
             _loggerFactory = loggerFactory;
