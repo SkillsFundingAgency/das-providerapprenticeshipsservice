@@ -129,7 +129,7 @@
 
             .open {
                 a.menu-main {
-                    color: #4c2c92;
+                    color: #005ea5;
                 }
             }
         }
@@ -150,17 +150,13 @@
 
 /* - END floating menu style */
 
-.js-enabled #user-nav li.has-sub-menu > a:before {
-    border-left-color: #fff;
-}
-
 .js-enabled #user-nav li.has-sub-menu.open > a {
-    color: #4c2c92;
+    color: #005ea5;
 }
 
 .floating-menu nav#user-nav #settings-menu {
     a.sub-menu-item {
-        color: #4c2c92;
+        color: #005ea5;
     }
 }
 
@@ -170,6 +166,6 @@
 
 .js-enabled .floating-menu nav#user-nav #settings-menu a.sub-menu-item {
     @include media(tablet) {
-        color: #4c2c92;
+        color: #005ea5;
     }
 }

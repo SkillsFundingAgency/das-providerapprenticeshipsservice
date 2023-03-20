@@ -1,6 +1,7 @@
 using System.Web.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
@@ -14,10 +15,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     {
         private const string FlashMessageCookieName = "sfa-das-employerapprenticeshipsservice-flashmessage";
         private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
+        private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
 
-        protected BaseController(ICookieStorageService<FlashMessageViewModel> flashMessage)
+        protected BaseController(ICookieStorageService<FlashMessageViewModel> flashMessage, ProviderApprenticeshipsServiceConfiguration configuration)
         {
             _flashMessage = flashMessage;
+            _configuration = configuration;
         }
 
         protected string CurrentUserId;
@@ -54,6 +57,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (HttpContext.User.Identity.IsAuthenticated)
             {
                 CurrentUserId = filterContext.HttpContext.GetClaimValue(DasClaimTypes.Upn);
+                if (_configuration != null && _configuration.UseDfESignIn)
+                {
+                    ViewBag.UseDfESignIn = true;
+                }
             }
         }
 

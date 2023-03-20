@@ -1,10 +1,6 @@
 ﻿@using Microsoft.ApplicationInsights.Extensibility
-@using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 @using SFA.DAS.ProviderUrlHelper.Framework
-@{
-    var showCourseManagementLink = HttpContext.Current.Items.Contains(RoatpConstants.IsCourseManagementLinkEnabled) && HttpContext.Current.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true);
-}
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -100,9 +96,24 @@
                     <ul>
                         @if (HttpContext.Current.User.Identity.IsAuthenticated)
                         {
-                            <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
-                            <li><a href="/notification-settings" class="link-user-profile">Notification settings</a></li>
-                            <li><a href="@Url.RouteUrl("signout")">Sign out</a></li>
+                            <li><a href="" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
+                            if (ViewBag.UseDfESignIn != null && ViewBag.UseDfESignIn == true)
+                            {
+                                <li class="has-sub-menu">
+                                    <a href="/">Settings</a>
+                                    <ul role="menu" class="js-hidden" id="settings-menu">
+                                        <li><a href="/change-signin-details" class="sub-menu-item">Change your sign-in details</a></li>
+                                        <li><a href="/notification-settings" class="sub-menu-item">Notification settings</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li><a href="/notification-settings" class="link-user-profile">Notification settings</a></li>
+                            }
+                            <li>
+                                <a href="@Url.RouteUrl("signout")">Sign out</a>
+                            </li>
                         }
                         else
                         {
@@ -130,10 +141,7 @@
                     <li><a href="@Url.ProviderCommitmentsLink($"{providerId}/apprentices")" role="menuitem">Manage your apprentices</a></li>
                     <li><a href="@Url.RecruitLink($"{providerId}")">Recruit apprentices</a></li>
                     <li><a href="@Url.Action("Agreements", "Agreement", new {providerId = providerId})" role="menuitem" class="@(controllerName == "Agreement" ? "selected" : "")">Organisations and agreements</a></li>
-                    @if(showCourseManagementLink)
-                    {
-                        <li><a href="@Url.CourseManagementLink($"{providerId}/review-your-details")" role="menuitem" class="@(controllerName == "CourseManagement" ? "selected" : "")">Your standards and training venues</a></li>
-                    }
+                    <li><a href="@Url.CourseManagementLink($"{providerId}/review-your-details")" role="menuitem" class="@(controllerName == "CourseManagement" ? "selected" : "")">Your standards and training venues</a></li>
                 </ul>
             </nav>
         </div>

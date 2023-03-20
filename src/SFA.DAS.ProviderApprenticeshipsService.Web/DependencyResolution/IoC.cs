@@ -29,8 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
         {
             return new Container(c =>
             {
-                c.Policies.Add(new ConfigurationPolicy<ProviderApprenticeshipsServiceConfiguration>("SFA.DAS.ProviderApprenticeshipsService"));
-                c.Policies.Add(new ConfigurationPolicy<RoatpCourseManagementWebConfiguration>("SFA.DAS.Roatp.CourseManagement.Web"));
+                c.Policies.Add(new ConfigurationPolicy<ProviderApprenticeshipsServiceConfiguration>("SFA.DAS.ProviderApprenticeshipsService"));                
                 c.Policies.Add<CurrentDatePolicy>();
                 c.AddRegistry<AuthorizationRegistry>();
                 c.AddRegistry<DefaultRegistry>();
@@ -40,7 +39,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                 c.AddRegistry<LinkGeneratorRegistry>();
                 c.AddRegistry<EncodingRegistry>();
                 c.AddRegistry<ContentApiClientRegistry>();
-                c.AddRegistry<RoatpCourseManagementWebRegistry>();
                 c.AddRegistry<ProviderFeaturesAuthorizationRegistry>();
             });
         }

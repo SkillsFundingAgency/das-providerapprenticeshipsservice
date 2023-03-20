@@ -1769,41 +1769,45 @@ nav ul {
   .js-enabled #user-nav > ul > li > a {
     border: 1px solid #f8f8f8;
     z-index: 2; }
+    .js-enabled #user-nav > ul > li > a:focus {
+      color: #0b0c0c; }
   .js-enabled #user-nav li.has-sub-menu {
     position: relative; }
     .js-enabled #user-nav li.has-sub-menu > a {
       position: relative;
-      padding-left: 25px; }
+      padding-right: 25px; }
       .js-enabled #user-nav li.has-sub-menu > a:before {
         content: "";
         position: absolute;
         width: 0;
         height: 0;
         display: block;
-        border-width: 4px 7px;
-        border-color: rgba(0, 0, 0, 0);
-        border-left-color: black;
-        border-style: solid;
-        left: 10px;
-        top: 50%;
-        margin-top: -5px; }
-    .js-enabled #user-nav li.has-sub-menu.open > a {
-      background: #f8f8f8;
-      border-color: #bfc1c3;
-      border-bottom-color: #f8f8f8; }
-      .js-enabled #user-nav li.has-sub-menu.open > a:before {
         border-width: 7px 4px;
-        border-top-color: black;
-        border-left-color: transparent; }
+        border-color: transparent;
+        border-top-color: currentColor;
+        border-style: solid;
+        right: 12px;
+        top: 50%;
+        margin-top: -3px; }
+    .js-enabled #user-nav li.has-sub-menu.open > a {
+      background: #fff;
+      border-color: #bfc1c3;
+      border-bottom-color: #fff; }
+      .js-enabled #user-nav li.has-sub-menu.open > a:before {
+        border-bottom-color: currentColor;
+        border-top-color: transparent;
+        margin-top: -10px; }
     .js-enabled #user-nav li.has-sub-menu ul {
       position: absolute;
-      background: #f8f8f8;
+      background: #fff;
       width: 200px;
       right: 0;
       z-index: 1;
       border: 1px solid #bfc1c3;
       margin-top: -1px;
       padding: 0 10px; }
+      .js-enabled #user-nav li.has-sub-menu ul li {
+        border-top: 1px solid #b1b4b6; }
       .js-enabled #user-nav li.has-sub-menu ul li:first-child {
         border-top: none; }
 
@@ -1844,7 +1848,7 @@ li.menu-link.sub-menu-open ul {
 
 .header-organisation ul li.menu-link > a {
   position: absolute;
-  padding-left: 25px;
+  padding-right: 25px;
   right: 0;
   top: 0; }
   .header-organisation ul li.menu-link > a:before {
@@ -1853,18 +1857,18 @@ li.menu-link.sub-menu-open ul {
     width: 0;
     height: 0;
     display: block;
-    border-width: 4px 7px;
-    border-color: rgba(0, 0, 0, 0);
-    border-left-color: black;
+    border-width: 7px 4px;
+    border-color: transparent;
+    border-top-color: black;
     border-style: solid;
-    left: 10px;
+    right: 12px;
     top: 50%;
-    margin-top: -5px; }
+    margin-top: -3px; }
 
 .header-organisation ul li.menu-link.sub-menu-open > a:before {
-  border-width: 7px 4px;
-  border-top-color: black;
-  border-left-color: transparent; }
+  border-bottom-color: black;
+  border-top-color: transparent;
+  margin-top: -10px; }
 
 #page-onboard-companies-house .govuk-box-highlight {
   display: none; }
@@ -1883,17 +1887,17 @@ a#link-settings {
     width: 0;
     height: 0;
     display: block;
-    border-width: 4px 7px;
-    border-color: rgba(0, 0, 0, 0);
-    border-left-color: black;
-    border-style: solid;
-    left: 10px;
-    top: 50%;
-    margin-top: -5px; }
-  a#link-settings.open:before {
     border-width: 7px 4px;
+    border-color: transparent;
     border-top-color: black;
-    border-left-color: transparent; }
+    border-style: solid;
+    right: 12px;
+    top: 50%;
+    margin-top: -3px; }
+  a#link-settings.open:before {
+    border-bottom-color: black;
+    border-top-color: transparent;
+    margin-top: -10px; }
   a#link-settings:focus {
     outline: 0; }
 
@@ -2103,6 +2107,29 @@ legend {
 
 .form-group form {
   display: inline-block; }
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-right: -15px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline; }
+  .button-group a {
+    display: inline-block;
+    max-width: 100%;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    text-align: center; }
+  .button-group .button, .button-group .button-link {
+    margin-bottom: 15px; }
+  .button-group .button, .button-group .button-link,
+  .button-group a {
+    margin-right: 15px; }
+  .button-group a {
+    text-align: left; }
 
 table {
   margin-bottom: 20px; }
@@ -3553,6 +3580,10 @@ dl.inline-secondary {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-decoration: underline; }
+
+.govuk-notification-banner--homepage {
+  margin-top: 30px;
+  margin-bottom: 0; }
 
 .app-search-form {
   margin-bottom: 30px; }
