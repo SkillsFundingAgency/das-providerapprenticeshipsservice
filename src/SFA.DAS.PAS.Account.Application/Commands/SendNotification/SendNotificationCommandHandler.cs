@@ -40,6 +40,8 @@ namespace SFA.DAS.PAS.Account.Application.Commands.SendNotification
                 _logger.LogError(ex, $"Error calling Notification Api. Recipient: {message.Email.RecipientsAddress}");
             }
 
+            _logger.LogInformation("Email sent to recipient.");
+
             return Unit.Value;
         }
     }
