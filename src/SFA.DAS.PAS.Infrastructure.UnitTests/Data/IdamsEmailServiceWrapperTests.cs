@@ -18,14 +18,10 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Data
         [SetUp]
         public void SetUp()
         {
-            var config = new ProviderApprenticeshipsServiceConfiguration
+            var config = new ProviderNotificationConfiguration
             {
-                CommitmentNotification = new ProviderNotificationConfiguration
-                {
-                    IdamsListUsersUrl = "https://url.to/listusersforarole?roleid={0}&ukprn={1}",
-                    ClientToken = "AbbA-Rules-4.Ever"
-                },
-                
+                IdamsListUsersUrl = "https://url.to/listusersforarole?roleid={0}&ukprn={1}",
+                ClientToken = "AbbA-Rules-4.Ever"
             };
             _mockHttpClientWrapper = new Mock<IHttpClientWrapper>();
             _sut = new IdamsEmailServiceWrapper(Mock.Of<ILogger<IdamsEmailServiceWrapper>>(), config, _mockHttpClientWrapper.Object);

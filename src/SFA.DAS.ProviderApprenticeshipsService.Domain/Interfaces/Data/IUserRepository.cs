@@ -8,7 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
     public interface IUserRepository
     {
         Task Upsert(User user);
-        Task<User> GetUser(string userRef);
+        Task<User?> GetUser(string userRef);
         Task<IEnumerable<User>> GetUsers(long ukprn);
         Task DeleteUser(string userRef);
         Task SyncIdamsUsers(long ukprn, List<IdamsUser> idamsUsers);

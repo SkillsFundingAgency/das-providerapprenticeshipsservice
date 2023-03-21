@@ -1,6 +1,6 @@
 namespace SFA.DAS.PAS.Account.Application.Queries.GetUser
 {
-    public class GetUserResponse
+    public class GetUserQueryResponse
     {
         public string UserRef { get; set; }
         public string Name { get; set; }

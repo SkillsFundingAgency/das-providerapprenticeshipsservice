@@ -47,7 +47,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
             };
             getUserNotificationSettingsResponse.NotificationSettings.Add(notificationSettings);
 
-            var user = new GetUserResponse
+            var user = new GetUserQueryResponse
             {
                 UserRef = userRef,
                 IsSuperUser = superUser,
@@ -86,7 +86,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
                 NotificationSettings = new List<UserNotificationSetting>()
             };
 
-            var user = new GetUserResponse
+            var user = new GetUserQueryResponse
             {
                 UserRef = userRef,
                 IsSuperUser = superUser,
@@ -120,7 +120,7 @@ namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
             {
                 NotificationSettings = new List<UserNotificationSetting>()
             };
-            var user = new GetUserResponse { };
+            var user = new GetUserQueryResponse { };
 
             _mediator.Setup(m => m.Send(It.IsAny<GetUserNotificationSettingsQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(getUserNotificationSettingsResponse);

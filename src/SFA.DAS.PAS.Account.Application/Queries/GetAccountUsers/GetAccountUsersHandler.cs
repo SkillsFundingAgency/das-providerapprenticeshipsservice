@@ -9,7 +9,6 @@ namespace SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers
     {
         private readonly IUserSettingsRepository _userSettingsRepository;
         private readonly IUserRepository _userRepository;
-
         private readonly ILogger<GetAccountUsersHandler> _logger;
 
         public GetAccountUsersHandler(
@@ -30,13 +29,22 @@ namespace SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers
             var response = new GetAccountUsersResponse();
             _logger.LogInformation($"Getting users from repository for {request.Ukprn}");
             var providerUsers = await _userRepository.GetUsers(request.Ukprn);
-            foreach (var user in providerUsers)
+
+            if (!providerUsers.Any()) 
             {
-                var settings = await _userSettingsRepository.GetUserSetting(user.UserRef);
-                response.Add(user, settings.FirstOrDefault());
+                return response;
             }
 
             _logger.LogInformation($"Retrieved {providerUsers.Count()} users from repository for {request.Ukprn}");
+
+            foreach (var user in providerUsers)
+            {
+                var settings = await _userSettingsRepository.GetUserSetting(user.UserRef);
+                if (settings.Any())
+                {
+                    response.Add(user, settings.FirstOrDefault());
+                }
+            }
 
             return response;
         }

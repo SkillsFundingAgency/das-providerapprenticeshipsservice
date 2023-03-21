@@ -4,7 +4,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -114,13 +113,10 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests
 
                 UserRepository = new Mock<IUserRepository>();
 
-                var configuration = new ProviderApprenticeshipsServiceConfiguration
+                var configuration = new ProviderNotificationConfiguration
                 {
-                    CommitmentNotification = new ProviderNotificationConfiguration
-                    {
-                        DasUserRoleId = "UserRole",
-                        SuperUserRoleId = "SuperUserRole"
-                    }
+                    DasUserRoleId = "UserRole",
+                    SuperUserRoleId = "SuperUserRole"
                 };
 
                 Sut = new IdamsSyncService(IdamsEmailServiceWrapper.Object, UserRepository.Object, ProviderRepository.Object, Mock.Of<ILogger<IdamsSyncService>>(), configuration);

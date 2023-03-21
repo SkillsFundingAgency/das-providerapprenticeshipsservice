@@ -7,18 +7,18 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.PAS.Account.Application.Queries.GetUser
 {
-    public class GetUserHandler : IRequestHandler<GetUserQuery, GetUserResponse>
+    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, GetUserQueryResponse>
     {
         private readonly IUserRepository _userRepository;
-        private readonly ILogger<IUserRepository> _logger;
+        private readonly ILogger<GetUserQueryHandler> _logger;
 
-        public GetUserHandler(IUserRepository userRepository, ILogger<IUserRepository> logger)
+        public GetUserQueryHandler(IUserRepository userRepository, ILogger<GetUserQueryHandler> logger)
         {
             _userRepository = userRepository;
             _logger = logger;
         }
 
-        public async Task<GetUserResponse> Handle(GetUserQuery request, CancellationToken cancellationToken)
+        public async Task<GetUserQueryResponse> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(request.UserRef))
             {
@@ -30,10 +30,10 @@ namespace SFA.DAS.PAS.Account.Application.Queries.GetUser
             if (user == null) 
             {
                 _logger.LogInformation($"Unable to get user settings with ref {request.UserRef}");
-                return new GetUserResponse { };
+                return new GetUserQueryResponse { };
             }
 
-            return new GetUserResponse
+            return new GetUserQueryResponse
             {
                 UserRef = user.UserRef,
                 Name = user.DisplayName,

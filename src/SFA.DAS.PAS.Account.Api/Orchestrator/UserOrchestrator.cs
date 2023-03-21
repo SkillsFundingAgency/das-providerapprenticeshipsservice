@@ -68,7 +68,7 @@ public class UserOrchestrator : IUserOrchestrator
         return setting;
     }
 
-    private async Task<GetUserResponse> GetUserDetails(string userRef)
+    private async Task<GetUserQueryResponse> GetUserDetails(string userRef)
     {
         var user = await _mediator.Send(new GetUserQuery { UserRef = userRef });
 

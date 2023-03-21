@@ -6,12 +6,12 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
+using SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserSetting;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.GetUserNotificationSettings
+namespace SFA.DAS.PAS.Account.Application.UnitTests.Queries.GetUserNotificationSettings
 {
     [TestFixture]
     public class WhenGettingUserSettings
@@ -20,6 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.G
         private Mock<IUserSettingsRepository> _mockSettingsRepo;
         private Mock<ILogger<GetUserNotificationSettingsHandler>> _mockLogger;
         const string UserRef = "userRef";
+
         [SetUp]
         public void SetUp()
         {
