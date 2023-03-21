@@ -25,7 +25,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Extensions
             hostBuilder.ConfigureServices((context, services) =>
             {
                 services.Configure<ProviderApprenticeshipsServiceConfiguration>(context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService));
-                services.AddSingleton(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
+                services.AddSingleton<IBaseConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
 
                 services.Configure<CommitmentsApiClientV2Configuration>(context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService).GetSection("CommitmentsApiClientV2"));
                 services.AddSingleton(cfg => cfg.GetService<IOptions<CommitmentsApiClientV2Configuration>>().Value);

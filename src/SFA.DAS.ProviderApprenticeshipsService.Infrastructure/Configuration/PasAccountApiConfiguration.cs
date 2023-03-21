@@ -14,6 +14,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string ServiceBusConnectionString { get; set; }
         public bool CheckForContractAgreements { get; set; }
         public string ContractAgreementsUrl { get; set; }
-        public PasAccountApiClientConfiguration PasAccountApiClientConfiguration { get; set; }
     }
 }

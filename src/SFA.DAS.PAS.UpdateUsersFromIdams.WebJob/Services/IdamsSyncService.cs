@@ -19,20 +19,20 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services
         private readonly IUserRepository _userRepository;
         private readonly IProviderRepository _providerRepository;
         private readonly ILogger<IdamsSyncService> _logger;
-        private readonly ProviderNotificationConfiguration _configuration;
+        private readonly IProviderNotificationConfiguration _configuration;
 
         public IdamsSyncService(
             IIdamsEmailServiceWrapper idamsEmailServiceWrapper,
             IUserRepository userRepository,
             IProviderRepository providerRepository,
             ILogger<IdamsSyncService> logger,
-            ProviderApprenticeshipsServiceConfiguration configuration)
+            IProviderNotificationConfiguration configuration)
         {
             _idamsEmailServiceWrapper = idamsEmailServiceWrapper;
             _userRepository = userRepository;
             _providerRepository = providerRepository;
             _logger = logger;
-            _configuration = configuration.CommitmentNotification;
+            _configuration = configuration;
         }
 
         public async Task SyncUsers()

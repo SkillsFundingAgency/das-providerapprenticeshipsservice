@@ -9,7 +9,7 @@ namespace SFA.DAS.PAS.Account.Api.ServiceRegistrations
     {
         public static IServiceCollection AddConfigurationOptions(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton(configuration);
+            services.AddSingleton<IBaseConfiguration>(configuration.Get<PasAccountApiConfiguration>());
             services.AddSingleton<IPasAccountApiConfiguration>(configuration.Get<PasAccountApiConfiguration>());
 
             return services;

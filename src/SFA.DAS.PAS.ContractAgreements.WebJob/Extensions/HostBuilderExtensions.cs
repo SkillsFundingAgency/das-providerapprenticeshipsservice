@@ -25,9 +25,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.Extensions
             {
                 services.Configure<ContractFeedConfiguration>(context.Configuration.GetSection(ConfigurationKeys.ContractAgreements));
                 services.AddSingleton<IContractFeedConfiguration>(isp => isp.GetService<IOptions<ContractFeedConfiguration>>().Value);
-
-                services.Configure<ProviderApprenticeshipsServiceConfiguration>(context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService));
-                services.AddSingleton(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
+                services.AddSingleton<IBaseConfiguration>(isp => isp.GetService<IOptions<ContractFeedConfiguration>>().Value);
 
                 services.AddTransient<ICurrentDateTime, CurrentDateTime>();
                 services.AddTransient<IContractFeedProcessorHttpClient, ContractFeedProcessorHttpClient>();
@@ -56,7 +54,6 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.Extensions
                 builder.AddJsonFile("appsettings.json", true, true)
                        .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true, true)
                        .AddAzureTableStorage(ConfigurationKeys.ContractAgreements)
-                       .AddAzureTableStorage(ConfigurationKeys.ProviderApprenticeshipsService)
                        .AddEnvironmentVariables();
             });
         }

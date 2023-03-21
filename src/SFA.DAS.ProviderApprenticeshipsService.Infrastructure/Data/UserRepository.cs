@@ -15,8 +15,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
     {
         private readonly ILogger<UserRepository> _logger;       
 
-        public UserRepository(ILogger<UserRepository> logger, IConfiguration rootConfig) 
-            : base(rootConfig.GetSection("DatabaseConnectionString").Value, logger, rootConfig)
+        public UserRepository(IBaseConfiguration configuration, ILogger<UserRepository> logger, IConfiguration rootConfig) 
+            : base(configuration.DatabaseConnectionString, logger, rootConfig)
         {
             _logger = logger;
         }

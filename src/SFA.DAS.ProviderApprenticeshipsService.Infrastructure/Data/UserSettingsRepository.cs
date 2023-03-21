@@ -11,8 +11,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
     public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IUserSettingsRepository
     {
-        public UserSettingsRepository(ILogger<UserSettingsRepository> logger, IConfiguration rootConfig) 
-            : base(rootConfig.GetSection("DatabaseConnectionString").Value, logger, rootConfig)
+        public UserSettingsRepository(IBaseConfiguration configuration, ILogger<UserSettingsRepository> logger, IConfiguration rootConfig) 
+            : base(configuration.DatabaseConnectionString, logger, rootConfig)
         {
         }
 

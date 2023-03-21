@@ -10,6 +10,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using System;
 using SFA.DAS.Configuration;
+using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions
 {
@@ -19,8 +20,10 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions
         {
             return hostBuilder.ConfigureAppConfiguration((context, builder) =>
             {
+                var environment = context.HostingEnvironment.EnvironmentName;
+
                 builder.AddJsonFile("appsettings.json", true, true)
-                       .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true, true)
+                       .AddJsonFile($"appsettings.{environment}.json", true, true)
                        .AddAzureTableStorage(ConfigurationKeys.ProviderApprenticeshipsService)
                        .AddEnvironmentVariables();
             });
@@ -31,12 +34,17 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions
             hostBuilder.ConfigureServices((context, services) =>
             {
                 services.Configure<ProviderApprenticeshipsServiceConfiguration>(context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService));
-                services.AddSingleton(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
+                services.AddSingleton<IBaseConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
+                services.AddSingleton<IProviderNotificationConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value.CommitmentNotification);
 
                 services.AddTransient<IHttpClientWrapper, HttpClientWrapper>();
                 services.AddTransient<IIdamsEmailServiceWrapper, IdamsEmailServiceWrapper>(); 
                 services.AddTransient<IProviderRepository, ProviderRepository>();
                 services.AddTransient<IUserRepository, UserRepository>();
+                services.AddTransient<IIdamsSyncService, IdamsSyncService>();
+
+                services.AddHttpClient();
+
                 services.AddLogging();
             });
 

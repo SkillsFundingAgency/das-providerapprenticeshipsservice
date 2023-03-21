@@ -12,8 +12,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
 {
     public class ProviderRepository : BaseRepository<ProviderRepository>, IProviderRepository
     {
-        public ProviderRepository(ILogger<ProviderRepository> logger, IConfiguration rootConfig) 
-            : base(rootConfig.GetSection("DatabaseConnectionString").Value, logger, rootConfig)
+        public ProviderRepository(IBaseConfiguration configuration, ILogger<ProviderRepository> logger, IConfiguration rootConfig) 
+            : base(configuration.DatabaseConnectionString, logger, rootConfig)
         {
         }
 
