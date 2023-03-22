@@ -29,8 +29,8 @@ jobs:
             SubscriptionId: $(SubscriptionId)
             Location: $(ResourceGroupLocation)
             Environment: ${{ parameters.Environment }}
-            TemplatePath: $(System.DefaultWorkingDirectory)/das-providerapprenticeshipsservice/Publish/azure/template.json
-            ParametersPath: $(System.DefaultWorkingDirectory)/das-providerapprenticeshipsservice/Publish/azure/template.parameters.json
+            TemplatePath: $(Pipeline.Workspace)/Publish/azure/template.json
+            ParametersPath: $(Pipeline.Workspace)/Publish/azure/template.parameters.json
             IsMultiRepoCheckout: true
             TemplateSecrets:
               configurationStorageConnectionString: $(ConfigurationStorageConnectionString)
@@ -41,7 +41,7 @@ jobs:
           parameters:
             EnvironmentName: $(EnvironmentName)
             ServiceConnection: ${{ parameters.ServiceConnection }}
-            SourcePath: $(System.DefaultWorkingDirectory)/das-employer-config/Configuration/das-providerapprenticeshipservice
+            SourcePath: $(Pipeline.Workspace)/das-employer-config/Configuration/das-providerapprenticeshipservice
             StorageAccountName: $(ConfigurationStorageAccountName)
             StorageAccountResourceGroup: $(SharedEnvResourceGroup)
             TargetFileName: '*.schema.json'
@@ -59,7 +59,7 @@ jobs:
             ServerName: $(SharedSQLServerFQDN)
             SqlUsername: $(SharedSQLServerUsername)
             SqlPassword: $(SharedSQLServerPassword)
-            DacpacFile:  $(System.DefaultWorkingDirectory)/das-providerapprenticeshipsservice/dacpac/src/SFA.DAS.ProviderAgreementStatus.Database/bin/Release/SFA.DAS.ProviderAgreementStatus.Database.dacpac
+            DacpacFile: $(Pipeline.Workspace)/DacpacArtifact/src/SFA.DAS.ProviderAgreementStatus.Database/bin/Output/SFA.DAS.ProviderAgreementStatus.Database.dacpac
             DatabaseName: $(DatabaseName)
             OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss }}
             Environment: ${{ parameters.Environment }}

@@ -19,11 +19,13 @@ pool:
 variables:
 - name: SolutionBaseName
   value: SFA.DAS.ProviderApprenticeshipsService
+- name: DatabaseName
+  value: SFA.DAS.ProviderAgreementStatus.Database
 - name: BuildConfiguration
   value: release
 - name: BuildPlatform
   value: any cpu
-- group: RELEASE Management Resources
+- group: Release Management Resources
 - name: Deploy
   value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
 
@@ -51,12 +53,12 @@ stages:
   jobs:
   - template: pipeline-templates/job/code-build.yml
     parameters:
-      BuildPlatform: $(BuildPlatform)
       BuildConfiguration: $(BuildConfiguration)
-  - template: pipeline-templates/job/dacpac-build.yml
+      SolutionBaseName: $(SolutionBaseName)
+  - template: azure-pipelines-templates/build/job/dacpac-template.yml@das-platform-building-blocks
     parameters:
-      BuildPlatform: $(BuildPlatform)
-      BuildConfiguration: $(BuildConfiguration)
+      SolutionBaseName: $(SolutionBaseName).dacpac
+      SqlProjectPath: src/$(DatabaseName)/$(DatabaseName).sqlproj
 
 - stage: Deploy_AT
   dependsOn: Build
