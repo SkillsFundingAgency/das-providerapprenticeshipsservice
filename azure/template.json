@@ -95,10 +95,10 @@
         "redisConnectionType": {
             "type": "string"
         },
-        "ProviderIdamsRealm": {
+        "providerIdamsRealm": {
             "type": "string"
         },
-        "ProviderIdamsMetaDataUrl": {
+        "providerIdamsMetaDataUrl": {
             "type": "string"
         },
         "redisSessionProviderConnectionString": {
@@ -394,11 +394,11 @@
                                 },
                                 {
                                     "name": "ProviderIdamsRealm",
-                                    "value": "[parameters('ProviderIdamsRealm')]"
+                                    "value": "[parameters('providerIdamsRealm')]"
                                 },
                                 {
                                     "name": "ProviderIdamsMetaDataUrl",
-                                    "value": "[parameters('ProviderIdamsMetaDataUrl')]"
+                                    "value": "[parameters('providerIdamsMetaDataUrl')]"
                                 },
                                 {
                                     "name": "InstrumentationKey",
