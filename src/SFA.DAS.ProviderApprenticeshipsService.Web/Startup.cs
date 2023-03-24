@@ -97,8 +97,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             services.AddAndConfigureAuthentication(_configuration);
             services.AddAuthorizationServicePolicies();
 
-            
-
             services.AddProviderUiServiceRegistration(_configuration);
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
 
@@ -117,6 +115,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
 
                 })
                 .SetDefaultNavigationSection(NavigationSection.Home);
+
+            services.AddApplicationInsightsTelemetry();
 
             // Newtonsoft.Json is added for compatibility reasons
             // The recommended approach is to use System.Text.Json for serialization
