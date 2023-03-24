@@ -252,10 +252,6 @@
                   "value": "[parameters('environmentName')]"
                 },
                 {
-                  "name": "ASPNETCORE_ENVIRONMENT",
-                  "value": "[parameters('environmentName')]"
-                },
-                {
                   "name": "ConfigurationStorageConnectionString",
                   "value": "[parameters('configurationStorageConnectionString')]"
                 },
@@ -281,10 +277,6 @@
                 },
                 {
                   "name": "InstrumentationKey",
-                  "value": "[reference(concat(variables('apiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
-                },
-                {
-                  "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                   "value": "[reference(concat(variables('apiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
                 }
               ]
@@ -385,10 +377,6 @@
                   "value": "[parameters('environmentName')]"
                 },
                 {
-                  "name": "ASPNETCORE_ENVIRONMENT",
-                  "value": "[parameters('environmentName')]"
-                },
-                {
                   "name": "ConfigurationStorageConnectionString",
                   "value": "[parameters('configurationStorageConnectionString')]"
                 },
@@ -414,10 +402,6 @@
                 },
                 {
                   "name": "InstrumentationKey",
-                  "value": "[reference(concat(variables('uiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
-                },
-                {
-                  "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                   "value": "[reference(concat(variables('uiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
                 },
                 {
@@ -627,10 +611,6 @@
                 },
                 {
                   "name": "EnvironmentName",
-                  "value": "[parameters('environmentName')]"
-                },
-                {
-                  "name": "APPSETTING_EnvironmentName",
                   "value": "[parameters('environmentName')]"
                 }
               ]
