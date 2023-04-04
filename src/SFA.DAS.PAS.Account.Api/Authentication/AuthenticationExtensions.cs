@@ -6,6 +6,7 @@ using SFA.DAS.Api.Common.Configuration;
 using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.Api.Common.Infrastructure.Configuration;
 using SFA.DAS.PAS.Account.Api.Configuration;
+using System.Collections.Generic;
 
 namespace SFA.DAS.PAS.Account.Api.Authentication
 {

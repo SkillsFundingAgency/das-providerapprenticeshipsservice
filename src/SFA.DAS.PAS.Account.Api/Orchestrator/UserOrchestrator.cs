@@ -4,6 +4,8 @@ using SFA.DAS.PAS.Account.Api.Types;
 using SFA.DAS.PAS.Account.Application.Queries.GetUser;
 using SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.PAS.Account.Api.Orchestrator;
 

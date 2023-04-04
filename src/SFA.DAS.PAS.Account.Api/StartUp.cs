@@ -12,6 +12,9 @@ using SFA.DAS.Api.Common.Configuration;
 using SFA.DAS.PAS.Account.Api.ServiceRegistrations;
 using SFA.DAS.PAS.Account.Api.Authentication;
 using SFA.DAS.PAS.Account.Api.Authorization;
+using SFA.DAS.PAS.Account.Api.Filters;
+using System;
+using System.Collections.Generic;
 
 namespace SFA.DAS.PAS.Account.Api
 {
@@ -83,8 +86,9 @@ namespace SFA.DAS.PAS.Account.Api
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PasAccountApi", Version = "v1" });
                 c.OperationFilter<SwaggerVersionHeaderFilter>();
+                c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PasAccountApi", Version = "v1" });
             });
 
             services.AddApiVersioning(opt => {
@@ -103,30 +107,29 @@ namespace SFA.DAS.PAS.Account.Api
             else
             {
                 app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection()
-                .UseSwagger()
-                .UseSwaggerUI(opt =>
-                {
-                    opt.SwaggerEndpoint("/swagger/v1/swagger.json", "PAS Account API v1");
-                    opt.RoutePrefix = string.Empty;
-                })
-                .UseAuthentication();
+            }   
 
             if (!env.IsDevelopment())
             {
                 app.UseHealthChecks();
             };
-                
-            app.UseRouting()
-                .UseAuthorization()
-                .UseEndpoints(endpoints =>
+
+            app.UseHttpsRedirection()
+               .UseAuthentication()
+               .UseRouting()
+               .UseAuthorization()
+               .UseEndpoints(endpoints =>
                 {
                     endpoints.MapControllerRoute(
                         name: "default",
                         pattern: "api/{controller=Users}/{action=Index}/{id?}");
-                });
+                })
+               .UseSwagger()
+               .UseSwaggerUI(opt =>
+               {
+                   opt.SwaggerEndpoint("/swagger/v1/swagger.json", "PAS Account API v1");
+                   opt.RoutePrefix = string.Empty;
+               });
         } 
     }
 }

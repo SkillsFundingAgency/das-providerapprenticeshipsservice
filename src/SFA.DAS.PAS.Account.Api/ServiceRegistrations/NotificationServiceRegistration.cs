@@ -5,6 +5,7 @@ using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Notifications.Api.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using System.Net.Http;
 
 namespace SFA.DAS.PAS.Account.Api.ServiceRegistrations
 {
