@@ -87,7 +87,6 @@ namespace SFA.DAS.PAS.Account.Api
             services.AddSwaggerGen(c =>
             {
                 c.OperationFilter<SwaggerVersionHeaderFilter>();
-                c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PasAccountApi", Version = "v1" });
             });
 
