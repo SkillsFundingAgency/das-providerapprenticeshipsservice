@@ -1,18 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq;
 using MediatR;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Helpers;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientContent;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Validation.Text;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
 {
@@ -44,10 +35,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
             {
                 UseLegacyStyles = useLegacyStyles,
                 ContentType = type
-            }));            
+            }));
 
-            var content = userResponse;
-            return new HtmlString(content.Content);
+            return new HtmlString(userResponse.Content);
         }
 
         public HtmlString SetZenDeskLabels(params string[] labels)
@@ -64,7 +54,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
             return new HtmlString(apiCallString);
         }
 
-        private string EscapeApostrophes(string input)
+        private static string EscapeApostrophes(string input)
         {
             return input.Replace("'", @"\'");
         }
