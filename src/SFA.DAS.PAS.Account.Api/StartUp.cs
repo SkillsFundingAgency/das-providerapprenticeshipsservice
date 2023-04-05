@@ -51,21 +51,6 @@ namespace SFA.DAS.PAS.Account.Api
                 services.AddHealthChecks();
             }
 
-            if (!(rootConfiguration["EnvironmentName"]!.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase) ||
-                  rootConfiguration["EnvironmentName"]!.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)))
-            {
-                var azureAdConfiguration = rootConfiguration
-                    .GetSection("AzureAd")
-                    .Get<AzureActiveDirectoryConfiguration>();
-
-                var policies = new Dictionary<string, string>
-                {
-                    {PolicyNames.Default, RoleNames.Default},
-                };
-            
-                services.AddAuthentication(azureAdConfiguration, policies);
-            }
-
            services
                 .AddMvc(o =>
                 {
