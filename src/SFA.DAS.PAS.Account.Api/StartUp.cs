@@ -12,7 +12,6 @@ using SFA.DAS.Api.Common.Configuration;
 using SFA.DAS.PAS.Account.Api.ServiceRegistrations;
 using SFA.DAS.PAS.Account.Api.Authentication;
 using SFA.DAS.PAS.Account.Api.Authorization;
-using SFA.DAS.PAS.Account.Api.Filters;
 using System;
 using System.Collections.Generic;
 
