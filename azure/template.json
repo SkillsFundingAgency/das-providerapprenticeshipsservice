@@ -150,6 +150,9 @@
     "utcValue": {
       "type": "string",
       "defaultValue": "[utcNow()]"
+    },
+    "cdnUrl": {
+      "type": "string"
     }
   },
   "variables": {
@@ -450,8 +453,12 @@
                   "value": "[parameters('FeatureToggle').Traineeships]"
                 },
                 {
-                    "name": "ConfigNames",
-                    "value": "[variables('configNames')]"
+                  "name": "ConfigNames",
+                  "value": "[variables('configNames')]"
+                },
+                {
+                  "name": "Cdn:Url",
+                  "value": "[parameters('cdnUrl')]"
                 }
               ]
             }
