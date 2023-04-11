@@ -12,6 +12,7 @@ using SFA.DAS.PAS.Account.Api.Authentication;
 using SFA.DAS.PAS.Account.Api.Authorization;
 using System;
 using System.Collections.Generic;
+using SFA.DAS.PAS.Account.Api.Filters;
 
 namespace SFA.DAS.PAS.Account.Api
 {
@@ -68,6 +69,7 @@ namespace SFA.DAS.PAS.Account.Api
             services.AddSwaggerGen(c =>
             {
                 c.OperationFilter<SwaggerVersionHeaderFilter>();
+                c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PasAccountApi", Version = "v1" });
             });
 
