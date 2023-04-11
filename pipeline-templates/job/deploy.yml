@@ -47,7 +47,7 @@ jobs:
             TargetFileName: '*.schema.json'
             TableName: Configuration
             ConfigurationSecrets:
-              NotificationsClientToken: $(NotificationsClientToken)
+              SharedNotificationsApiClientToken: $(SharedNotificationsApiClientToken)
               CommitmentNotificationToken: $(CommitmentNotificationToken)
         - template: azure-pipelines-templates/deploy/step/app-role-assignments.yml@das-platform-building-blocks
           parameters:
