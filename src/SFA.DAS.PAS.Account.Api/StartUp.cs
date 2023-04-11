@@ -7,8 +7,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using SFA.DAS.Api.Common.Infrastructure;
 using System.Text.Json.Serialization;
-using SFA.DAS.Api.Common.AppStart;
-using SFA.DAS.Api.Common.Configuration;
 using SFA.DAS.PAS.Account.Api.ServiceRegistrations;
 using SFA.DAS.PAS.Account.Api.Authentication;
 using SFA.DAS.PAS.Account.Api.Authorization;
@@ -25,28 +23,27 @@ namespace SFA.DAS.PAS.Account.Api
         public StartUp(IConfiguration configuration, IHostEnvironment environment)
         {
             _environment = environment;
-            _configuration = configuration;
+            _configuration = configuration.BuildDasConfiguration();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var rootConfiguration = _configuration.LoadConfiguration();
-            var isDevOrLocal= _configuration.IsDevOrLocal();
+            var isDevOrLocal = _configuration.IsDevOrLocal();
 
             services
                 .AddApiAuthentication(_configuration)
                 .AddApiAuthorization(isDevOrLocal);
 
             services.AddOptions();
-            services.AddConfigurationOptions(rootConfiguration);
+            services.AddConfigurationOptions(_configuration);
             services.AddMediatRHandlers();
             services.AddOrchestrators();
             services.AddDataRepositories();
             services.AddFluentValidation();
             services.AddApplicationServices();
-            services.AddNotifications(rootConfiguration);
+            services.AddNotifications(_configuration);
 
-            if (rootConfiguration["EnvironmentName"] != "DEV")
+            if (_configuration["EnvironmentName"] != "DEV")
             {
                 services.AddHealthChecks();
             }
@@ -54,8 +51,8 @@ namespace SFA.DAS.PAS.Account.Api
            services
                 .AddMvc(o =>
                 {
-                    if (!(rootConfiguration["EnvironmentName"]!.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase) ||
-                          rootConfiguration["EnvironmentName"]!.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)))
+                    if (!(_configuration["EnvironmentName"]!.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase) ||
+                          _configuration["EnvironmentName"]!.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)))
                     {
                         o.Conventions.Add(new AuthorizeControllerModelConvention(new List<string>()));
                     }
