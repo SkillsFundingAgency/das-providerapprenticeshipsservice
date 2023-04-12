@@ -15,7 +15,7 @@ namespace SFA.DAS.PAS.Account.Api.Filters
                 Name = "Authorization",
                 In = ParameterLocation.Header,
                 Description = "access token",
-                Required = false,
+                Required = true,
                 Schema = new OpenApiSchema
                 {
                     Type = "string",
