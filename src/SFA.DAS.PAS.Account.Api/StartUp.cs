@@ -13,6 +13,7 @@ using SFA.DAS.PAS.Account.Api.Authorization;
 using System;
 using System.Collections.Generic;
 using SFA.DAS.PAS.Account.Api.Filters;
+using Microsoft.Extensions.Options;
 
 namespace SFA.DAS.PAS.Account.Api
 {
@@ -66,11 +67,37 @@ namespace SFA.DAS.PAS.Account.Api
 
             services.AddApplicationInsightsTelemetry();
 
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(options =>
             {
-                c.OperationFilter<SwaggerVersionHeaderFilter>();
-                c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PasAccountApi", Version = "v1" });
+                var securityScheme = new OpenApiSecurityScheme()
+                {
+                    Description = "Access Token. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer"
+                };
+
+                var securityRequirement = new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "bearerAuth"
+                            }
+                        },
+                        new string[] {}
+                    }
+                };
+
+                options.AddSecurityDefinition("bearerAuth", securityScheme);
+                options.AddSecurityRequirement(securityRequirement);
+                options.OperationFilter<SwaggerVersionHeaderFilter>();
+                //options.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "PasAccountApi", Version = "v1" });
             });
 
             services.AddApiVersioning(opt => {
