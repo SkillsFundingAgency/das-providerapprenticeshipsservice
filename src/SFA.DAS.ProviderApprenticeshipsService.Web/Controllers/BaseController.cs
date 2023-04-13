@@ -14,10 +14,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     {
         private const string FlashMessageCookieName = "sfa-das-providerapprenticeshipsservice-flashmessage";
         private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
+        private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
 
-        protected BaseController(ICookieStorageService<FlashMessageViewModel> flashMessage)
+        protected BaseController(ICookieStorageService<FlashMessageViewModel> flashMessage, ProviderApprenticeshipsServiceConfiguration configuration)
         {
             _flashMessage = flashMessage;
+            _configuration = configuration;
         }
 
         protected string CurrentUserId;
@@ -39,6 +41,26 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var flashMessageViewModelFromCookie = _flashMessage.Get(FlashMessageCookieName);
             _flashMessage.Delete(FlashMessageCookieName);
             return flashMessageViewModelFromCookie;
+        }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            if (filterContext.Exception is InvalidStateException)
+            {
+                filterContext.ExceptionHandled = true;
+                filterContext.Result = RedirectToAction("InvalidState", "Error");
+            }
+        }
+		protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                CurrentUserId = filterContext.HttpContext.GetClaimValue(DasClaimTypes.Upn);
+                if (_configuration != null && _configuration.UseDfESignIn)
+                {
+                    ViewBag.UseDfESignIn = true;
+                }
+            }
         }
 
         protected SignInUserModel GetSignedInUser()

@@ -154,5 +154,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
             return View(model);
         }
+
+        [HttpGet]
+        [Authorize]
+        [Route("~/change-signin-details")]
+        public ActionResult ChangeSignInDetails()
+        {
+            return View();
+        }
     }
 }

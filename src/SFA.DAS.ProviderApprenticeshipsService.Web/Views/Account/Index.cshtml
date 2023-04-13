@@ -30,6 +30,22 @@
         @Model.Message
     </p>
 }
+@if (DateTime.UtcNow < new DateTime(2023, 02, 13))
+{
+    <div class="govuk-notification-banner govuk-notification-banner--homepage" role="region" aria-labelledby="govuk-notification-banner-title-naw" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title-naw">
+                Reminder
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            <p class="govuk-notification-banner__heading">
+                National Apprenticeship Week: 6 to 12 February 2023
+            </p>
+            <p>Time to celebrate apprenticeships. Get involved with <a href="https://naw.appawards.co.uk/" class="govuk-link" target="_blank">National Apprenticeship Week</a>.</p>
+        </div>
+    </div>
+}
 
 <div class="govuk-grid-row">
     <div class="column-full home-page">
@@ -137,7 +153,6 @@
                 <div class="box">
                     <h2 class="govuk-heading-m">
                         <a asp-external-subdomain="roatp" asp-external-controller="" asp-external-action="review-your-details" asp-external-id="@Model.ProviderId" class="das-navigation__link">Your standards and training venues</a>
-                        @* <a href="@Url.CourseManagementLink($"{Model.ProviderId}/review-your-details")" class="das-navigation__link">Your standards and training venues</a> *@
                     </h2>
                     <ul class="govuk-list govuk-list--bullet">
                         <li>manage the standards you deliver</li>
@@ -195,5 +210,3 @@
         </ol>
     </div>
 </div>
-
-@Model.CovidSectionContent
