@@ -7,11 +7,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using SFA.DAS.Api.Common.Infrastructure;
 using System.Text.Json.Serialization;
-using SFA.DAS.Api.Common.AppStart;
-using SFA.DAS.Api.Common.Configuration;
 using SFA.DAS.PAS.Account.Api.ServiceRegistrations;
 using SFA.DAS.PAS.Account.Api.Authentication;
 using SFA.DAS.PAS.Account.Api.Authorization;
+using System;
+using System.Collections.Generic;
 
 namespace SFA.DAS.PAS.Account.Api
 {
@@ -23,52 +23,36 @@ namespace SFA.DAS.PAS.Account.Api
         public StartUp(IConfiguration configuration, IHostEnvironment environment)
         {
             _environment = environment;
-            _configuration = configuration;
+            _configuration = configuration.BuildDasConfiguration();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var rootConfiguration = _configuration.LoadConfiguration();
-            var isDevOrLocal= _configuration.IsDevOrLocal();
+            var isDevOrLocal = _configuration.IsDevOrLocal();
 
             services
                 .AddApiAuthentication(_configuration)
                 .AddApiAuthorization(isDevOrLocal);
 
             services.AddOptions();
-            services.AddConfigurationOptions(rootConfiguration);
+            services.AddConfigurationOptions(_configuration);
             services.AddMediatRHandlers();
             services.AddOrchestrators();
             services.AddDataRepositories();
             services.AddFluentValidation();
             services.AddApplicationServices();
-            services.AddNotifications(rootConfiguration);
+            services.AddNotifications(_configuration);
 
-            if (rootConfiguration["EnvironmentName"] != "DEV")
+            if (_configuration["EnvironmentName"] != "DEV")
             {
                 services.AddHealthChecks();
-            }
-
-            if (!(rootConfiguration["EnvironmentName"]!.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase) ||
-                  rootConfiguration["EnvironmentName"]!.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)))
-            {
-                var azureAdConfiguration = rootConfiguration
-                    .GetSection("AzureAd")
-                    .Get<AzureActiveDirectoryConfiguration>();
-
-                var policies = new Dictionary<string, string>
-                {
-                    {PolicyNames.Default, RoleNames.Default},
-                };
-            
-                services.AddAuthentication(azureAdConfiguration, policies);
             }
 
            services
                 .AddMvc(o =>
                 {
-                    if (!(rootConfiguration["EnvironmentName"]!.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase) ||
-                          rootConfiguration["EnvironmentName"]!.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)))
+                    if (!(_configuration["EnvironmentName"]!.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase) ||
+                          _configuration["EnvironmentName"]!.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)))
                     {
                         o.Conventions.Add(new AuthorizeControllerModelConvention(new List<string>()));
                     }
@@ -81,10 +65,37 @@ namespace SFA.DAS.PAS.Account.Api
 
             services.AddApplicationInsightsTelemetry();
 
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PasAccountApi", Version = "v1" });
-                c.OperationFilter<SwaggerVersionHeaderFilter>();
+                var securityScheme = new OpenApiSecurityScheme()
+                {
+                    Description = "Access Token. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                };
+
+                var securityRequirement = new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "bearerAuth"
+                            }
+                        },
+                        new string[] {}
+                    }
+                };
+
+                options.AddSecurityDefinition("bearerAuth", securityScheme);
+                options.AddSecurityRequirement(securityRequirement);
+                options.OperationFilter<SwaggerVersionHeaderFilter>();
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "PasAccountApi", Version = "v1" });
             });
 
             services.AddApiVersioning(opt => {
@@ -103,30 +114,29 @@ namespace SFA.DAS.PAS.Account.Api
             else
             {
                 app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection()
-                .UseSwagger()
-                .UseSwaggerUI(opt =>
-                {
-                    opt.SwaggerEndpoint("/swagger/v1/swagger.json", "PAS Account API v1");
-                    opt.RoutePrefix = string.Empty;
-                })
-                .UseAuthentication();
+            }   
 
             if (!env.IsDevelopment())
             {
                 app.UseHealthChecks();
             };
-                
-            app.UseRouting()
-                .UseAuthorization()
-                .UseEndpoints(endpoints =>
+
+            app.UseHttpsRedirection()
+               .UseAuthentication()
+               .UseRouting()
+               .UseAuthorization()
+               .UseEndpoints(endpoints =>
                 {
                     endpoints.MapControllerRoute(
                         name: "default",
                         pattern: "api/{controller=Users}/{action=Index}/{id?}");
-                });
+                })
+               .UseSwagger()
+               .UseSwaggerUI(opt =>
+               {
+                   opt.SwaggerEndpoint("/swagger/v1/swagger.json", "PAS Account API v1");
+                   opt.RoutePrefix = string.Empty;
+               });
         } 
     }
 }

@@ -15,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensi
     {
         public static IServiceCollection AddNotifications(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<NotificationsApiClientConfiguration>(c => configuration.GetSection("NotificationsApi").Bind(c));
+            services.Configure<NotificationsApiClientConfiguration>(c => configuration.GetSection("NotificationApi").Bind(c));
             services.AddSingleton(cfg => cfg.GetService<IOptions<NotificationsApiClientConfiguration>>().Value);
 
             services.AddTransient<INotificationsApi>(s =>

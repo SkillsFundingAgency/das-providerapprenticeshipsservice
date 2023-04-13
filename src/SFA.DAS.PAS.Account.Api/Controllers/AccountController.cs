@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.PAS.Account.Api.Authorization;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.PAS.Account.Api.Controllers;
 

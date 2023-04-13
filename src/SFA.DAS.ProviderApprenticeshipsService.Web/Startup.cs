@@ -1,41 +1,21 @@
-﻿// This Startup file is based on ASP.NET Core new project templates and is included
-// as a starting point for DI registration and HTTP request processing pipeline configuration.
-// This file will need updated according to the specific scenario of the application being upgraded.
-// For more information on ASP.NET Core startup files, see https://docs.microsoft.com/aspnet/core/fundamentals/startup
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.IO;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Builder.Extensions;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Provider.Shared.UI;
-using SFA.DAS.Provider.Shared.UI.Models;
 using SFA.DAS.Provider.Shared.UI.Startup;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Middlewares;
 using SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web
@@ -126,11 +106,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             // {
             //     options.UseMemberCasing();
             // });
-
-            //services.AddApplicationInsightsTelemetry();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

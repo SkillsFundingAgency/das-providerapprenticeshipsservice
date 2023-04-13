@@ -150,6 +150,9 @@
     "utcValue": {
       "type": "string",
       "defaultValue": "[utcNow()]"
+    },
+    "cdnUrl": {
+      "type": "string"
     }
   },
   "variables": {
@@ -160,7 +163,9 @@
     "workerAppServiceName": "[concat(variables('resourceNamePrefix'), 'wkr-as')]",
     "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
     "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]",
-    "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]"
+    "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
+    "configNames": "SFA.DAS.ProviderApprenticeshipsService,SFA.DAS.Encoding,SFA.DAS.Roatp.CourseManagement.Web,SFA.DAS.EmployerAccountAPI,SFA.DAS.ProviderUrlHelper",
+    "configNamesApi": "SFA.DAS.PasAccountApi"
   },
   "resources": [
     {
@@ -169,8 +174,7 @@
       "type": "Microsoft.Resources/resourceGroups",
       "location": "[parameters('resourceGroupLocation')]",
       "tags": "[parameters('tags')]",
-      "properties": {
-      }
+      "properties": {}
     },
     {
       "apiVersion": "2021-04-01",
@@ -252,10 +256,6 @@
                   "value": "[parameters('environmentName')]"
                 },
                 {
-                  "name": "ASPNETCORE_ENVIRONMENT",
-                  "value": "[parameters('environmentName')]"
-                },
-                {
                   "name": "ConfigurationStorageConnectionString",
                   "value": "[parameters('configurationStorageConnectionString')]"
                 },
@@ -284,8 +284,8 @@
                   "value": "[reference(concat(variables('apiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
                 },
                 {
-                  "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                  "value": "[reference(concat(variables('apiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
+                  "name": "ConfigNames",
+                  "value": "[variables('configNamesApi')]"
                 }
               ]
             }
@@ -385,10 +385,6 @@
                   "value": "[parameters('environmentName')]"
                 },
                 {
-                  "name": "ASPNETCORE_ENVIRONMENT",
-                  "value": "[parameters('environmentName')]"
-                },
-                {
                   "name": "ConfigurationStorageConnectionString",
                   "value": "[parameters('configurationStorageConnectionString')]"
                 },
@@ -414,10 +410,6 @@
                 },
                 {
                   "name": "InstrumentationKey",
-                  "value": "[reference(concat(variables('uiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
-                },
-                {
-                  "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                   "value": "[reference(concat(variables('uiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
                 },
                 {
@@ -459,6 +451,14 @@
                 {
                   "name": "FeatureToggle.Traineeships",
                   "value": "[parameters('FeatureToggle').Traineeships]"
+                },
+                {
+                  "name": "ConfigNames",
+                  "value": "[variables('configNames')]"
+                },
+                {
+                  "name": "Cdn:Url",
+                  "value": "[parameters('cdnUrl')]"
                 }
               ]
             }
@@ -627,10 +627,6 @@
                 },
                 {
                   "name": "EnvironmentName",
-                  "value": "[parameters('environmentName')]"
-                },
-                {
-                  "name": "APPSETTING_EnvironmentName",
                   "value": "[parameters('environmentName')]"
                 }
               ]

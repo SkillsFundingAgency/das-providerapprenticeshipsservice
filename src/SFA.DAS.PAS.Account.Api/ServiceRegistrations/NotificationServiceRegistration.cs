@@ -5,6 +5,7 @@ using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Notifications.Api.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using System.Net.Http;
 
 namespace SFA.DAS.PAS.Account.Api.ServiceRegistrations
 {
@@ -12,7 +13,7 @@ namespace SFA.DAS.PAS.Account.Api.ServiceRegistrations
     {
         public static IServiceCollection AddNotifications(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<NotificationsApiClientConfiguration>(configuration.GetSection("NotificationsApi"));
+            services.Configure<NotificationsApiClientConfiguration>(configuration.GetSection("NotificationApi"));
             services.AddSingleton(cfg => cfg.GetService<IOptions<NotificationsApiClientConfiguration>>().Value);
 
             services.AddTransient<INotificationsApi>(s =>
