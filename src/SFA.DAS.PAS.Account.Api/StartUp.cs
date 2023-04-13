@@ -12,8 +12,6 @@ using SFA.DAS.PAS.Account.Api.Authentication;
 using SFA.DAS.PAS.Account.Api.Authorization;
 using System;
 using System.Collections.Generic;
-using SFA.DAS.PAS.Account.Api.Filters;
-using Microsoft.Extensions.Options;
 
 namespace SFA.DAS.PAS.Account.Api
 {
@@ -75,7 +73,8 @@ namespace SFA.DAS.PAS.Account.Api
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,
-                    Scheme = "bearer"
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
                 };
 
                 var securityRequirement = new OpenApiSecurityRequirement
@@ -96,7 +95,6 @@ namespace SFA.DAS.PAS.Account.Api
                 options.AddSecurityDefinition("bearerAuth", securityScheme);
                 options.AddSecurityRequirement(securityRequirement);
                 options.OperationFilter<SwaggerVersionHeaderFilter>();
-                //options.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "PasAccountApi", Version = "v1" });
             });
 
