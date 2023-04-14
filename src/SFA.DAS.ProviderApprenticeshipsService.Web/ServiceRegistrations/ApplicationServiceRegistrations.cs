@@ -18,7 +18,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
             services.AddCommitmentsV2ApiClient(configuration);
             services.AddContentApi(configuration);
             services.AddNotifications(configuration);
-            services.AddRoatpServices(configuration);
             services.AddProviderRelationshipsApi(configuration); // TBC IF NEEDED
             services.AddFluentValidation();
             services.AddApprenticeshipInfoService();

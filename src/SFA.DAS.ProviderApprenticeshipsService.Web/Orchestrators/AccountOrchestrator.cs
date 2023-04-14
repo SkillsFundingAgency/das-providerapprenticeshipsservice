@@ -68,8 +68,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
                     ShowAcademicYearBanner = false,
                     ShowTraineeshipLink = true,
                     ShowEarningsReport = _authorizationService.IsAuthorized(ProviderFeature.FlexiblePaymentsPilot),
-                    ShowCourseManagementLink = _httpContextAccessor.HttpContext.Items.ContainsKey(RoatpConstants.IsCourseManagementLinkEnabled)
-                                              && _httpContextAccessor.HttpContext.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true),
                     BannerContent = _htmlHelpers.GetClientContentByType("banner", useLegacyStyles: true),
                     CovidSectionContent = _htmlHelpers.GetClientContentByType("covid_section", useLegacyStyles: true)
                 };

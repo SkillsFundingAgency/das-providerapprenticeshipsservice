@@ -8,7 +8,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations
     {
         public static void AddActionFilters(this IServiceCollection services)
         {
-            services.AddScoped<RoatpCourseManagementCheckActionFilter>();
             services.AddScoped<ProviderUkPrnCheckActionFilter>();
         }
     }

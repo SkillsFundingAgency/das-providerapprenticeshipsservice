@@ -8,6 +8,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -19,7 +20,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     {
         private readonly IAgreementOrchestrator _orchestrator;
 
-        public AgreementController(IAgreementOrchestrator orchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
+        public AgreementController(IAgreementOrchestrator orchestrator, 
+            ICookieStorageService<FlashMessageViewModel> flashMessage, 
+            ProviderApprenticeshipsServiceConfiguration configuration) 
+            : base(flashMessage, configuration)
         {
             _orchestrator = orchestrator;
         }

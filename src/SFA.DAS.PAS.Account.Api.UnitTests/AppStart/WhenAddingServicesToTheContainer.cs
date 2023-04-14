@@ -9,6 +9,8 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
+using SFA.DAS.PAS.Account.Api.Authentication;
+using SFA.DAS.PAS.Account.Api.Authorization;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.PAS.Account.Api.ServiceRegistrations;
 using SFA.DAS.PAS.Account.Application.Commands.SendNotification;
@@ -49,15 +51,22 @@ public class WhenAddingServicesToTheContainer
 
         serviceCollection.AddSingleton(hostEnvironment.Object);
         serviceCollection.AddSingleton(Mock.Of<IConfiguration>());
+
+        var isDevOrLocal = configuration.IsDevOrLocal();
+
+        serviceCollection
+            .AddApiAuthentication(configuration)
+            .AddApiAuthorization(isDevOrLocal);
+
         serviceCollection.AddOptions();
         serviceCollection.AddConfigurationOptions(configuration);
         serviceCollection.AddMediatRHandlers();
         serviceCollection.AddOrchestrators();
         serviceCollection.AddDataRepositories();
         serviceCollection.AddFluentValidation();
-        serviceCollection.AddLogging();
         serviceCollection.AddApplicationServices();
         serviceCollection.AddNotifications(configuration);
+        serviceCollection.AddLogging();
 
         var provider = serviceCollection.BuildServiceProvider();
 
@@ -74,7 +83,8 @@ public class WhenAddingServicesToTheContainer
                 new ("ProviderAccountsApiConfiguration:ConnectionString", "test"),
                 new ("EnvironmentName", "test"),
                 new ("ProviderApprenticeshipsServiceConfiguration:DatabaseConnectionString", "test"),
-                new ("NotificationsApi:ApiBaseUrl", "https://test")
+                new ("NotificationApi:ApiBaseUrl", "https://test"),
+                new ("NotificationApi:ClientToken", "token")
             }
         };
 

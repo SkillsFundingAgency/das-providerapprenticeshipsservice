@@ -73,7 +73,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
         public async Task Then_Set_Traineeship_Enabled_Flag()
         {
             var httpContext = new DefaultHttpContext(new FeatureCollection());
-            httpContext.Request.RouteValues.Add(RoatpConstants.IsCourseManagementLinkEnabled, true);
             _httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
 
             var model = await _orchestrator.GetAccountHomeViewModel(1);
@@ -88,7 +87,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
             // Arrange
             _authorizationService.Setup(x => x.IsAuthorized(ProviderFeature.FlexiblePaymentsPilot)).Returns(expectedResult);
             var httpContext = new DefaultHttpContext(new FeatureCollection());
-            httpContext.Items.Add(RoatpConstants.IsCourseManagementLinkEnabled, true);
             _httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
 
             // Act
@@ -98,29 +96,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
             model.ShowEarningsReport.Should().Be(expectedResult);
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public async Task Then_ShowCourseManagementLink_Is_Set_From_HttpContextAccessor(bool expectedResult)
-        {
-            // Arrange
-            var httpContext = new DefaultHttpContext(new FeatureCollection());
-            httpContext.Items.Add(RoatpConstants.IsCourseManagementLinkEnabled, expectedResult);
-            _httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
-
-            // Act
-            var model = await _orchestrator.GetAccountHomeViewModel(1);
-
-            // Assert
-            model.ShowCourseManagementLink.Should().Be(expectedResult);
-        }
-
         [TestCase("bannercontent")]
         public async Task Then_BannerContent_Is_Set_From_HtmlHelpers(string expectedBannerContentString)
         {
             // Arrange
             HtmlString expectedBannerContent = new HtmlString(expectedBannerContentString);
             var httpContext = new DefaultHttpContext(new FeatureCollection());
-            httpContext.Items.Add(RoatpConstants.IsCourseManagementLinkEnabled, true);
             _httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
             _htmlHelpers.Setup(x => x.GetClientContentByType(It.IsAny<string>(), It.IsAny<bool>())).Returns(expectedBannerContent);
 
@@ -137,7 +118,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Acc
             // Arrange
             HtmlString expectedCovidSectionContent = new HtmlString(expectedCovidSectionContentString);
             var httpContext = new DefaultHttpContext(new FeatureCollection());
-            httpContext.Items.Add(RoatpConstants.IsCourseManagementLinkEnabled, true);
             _httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
             _htmlHelpers.Setup(x => x.GetClientContentByType(It.IsAny<string>(), It.IsAny<bool>())).Returns(expectedCovidSectionContent);
 

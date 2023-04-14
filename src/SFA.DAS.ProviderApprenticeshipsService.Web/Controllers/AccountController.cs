@@ -15,6 +15,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -27,8 +28,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         public AccountController(IAccountOrchestrator accountOrchestrator,
             LinkGenerator linkGenerator,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            IAuthenticationServiceWrapper authenticationService) 
-            : base(flashMessage)
+            IAuthenticationServiceWrapper authenticationService,
+            ProviderApprenticeshipsServiceConfiguration configuration) 
+            : base(flashMessage, configuration)
         {
             _accountOrchestrator = accountOrchestrator;
             _linkGenerator = linkGenerator;
@@ -88,7 +90,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Authorize]
-        [ServiceFilter(typeof(RoatpCourseManagementCheckActionFilter))]
         [Route("~/account", Name = RouteNames.AccountHome)]
         public async Task<IActionResult> Index(string message)
         {

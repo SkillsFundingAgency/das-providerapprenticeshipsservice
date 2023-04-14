@@ -11,7 +11,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
         public bool ShowAcademicYearBanner { get; set; }
         public bool ShowTraineeshipLink { get; set; }
         public bool ShowEarningsReport { get; set; }
-        public bool ShowCourseManagementLink { get; set; }
         public HtmlString BannerContent { get; set; }
         public HtmlString CovidSectionContent { get; set; }
     }

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -43,15 +45,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             return flashMessageViewModelFromCookie;
         }
 
-        protected override void OnException(ExceptionContext filterContext)
-        {
-            if (filterContext.Exception is InvalidStateException)
-            {
-                filterContext.ExceptionHandled = true;
-                filterContext.Result = RedirectToAction("InvalidState", "Error");
-            }
-        }
-		protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (HttpContext.User.Identity.IsAuthenticated)
             {

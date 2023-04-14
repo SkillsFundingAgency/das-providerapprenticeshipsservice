@@ -13,7 +13,7 @@ namespace SFA.DAS.PAS.Account.Api.ServiceRegistrations
     {
         public static IServiceCollection AddNotifications(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<NotificationsApiClientConfiguration>(configuration.GetSection("NotificationApi"));
+            services.Configure<NotificationsApiClientConfiguration>(c => configuration.GetSection("NotificationApi").Bind(c));
             services.AddSingleton(cfg => cfg.GetService<IOptions<NotificationsApiClientConfiguration>>().Value);
 
             services.AddTransient<INotificationsApi>(s =>
