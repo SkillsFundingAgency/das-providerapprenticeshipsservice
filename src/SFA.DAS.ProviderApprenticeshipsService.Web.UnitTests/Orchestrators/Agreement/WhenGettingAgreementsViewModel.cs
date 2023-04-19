@@ -1,16 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
-using Moq;
-using NUnit.Framework;
+﻿using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitmentAgreements;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators.Mappers;
-using SFA.DAS.CommitmentsV2.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Orchestrators.Agreement;
 
@@ -72,7 +64,7 @@ public class WhenGettingAgreementsViewModel
 
         //Assert
         Assert.IsNotNull(result);
-        Assert.IsTrue(TestHelper.EnumerablesAreEqual(new[] { mappedCommitmentAgreement }, result.CommitmentAgreements));
+        result.CommitmentAgreements.Should().BeEquivalentTo(mappedCommitmentAgreement);
     }
 
     [Test]
@@ -86,13 +78,13 @@ public class WhenGettingAgreementsViewModel
 
         //Assert
         Assert.IsNotNull(result);
-        Assert.IsTrue(TestHelper.EnumerablesAreEqual(new[]
+        result.CommitmentAgreements.Should().BeEquivalentTo(new object[]
         {
-            new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "A" , AgreementID = "1" },
-            new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "B" , AgreementID = "2" },
-            new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "C" , AgreementID = "3" },
-            new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "D" , AgreementID = "4" }
-        }, result.CommitmentAgreements));
+            new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "A", AgreementID = "1" },
+            new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "B", AgreementID = "2" },
+            new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "C", AgreementID = "3" },
+            new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "D", AgreementID = "4" }
+        });
     }
 
     [Test]
@@ -106,10 +98,7 @@ public class WhenGettingAgreementsViewModel
 
         //Assert
         Assert.IsNotNull(result);
-        Assert.IsTrue(TestHelper.EnumerablesAreEqual(new[]
-        {
-            new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "A", AgreementID = "1"}
-        }, result.CommitmentAgreements));
+        result.CommitmentAgreements.Should().BeEquivalentTo(new object[] { new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "A", AgreementID = "1"} });
     }
 
     [Test]

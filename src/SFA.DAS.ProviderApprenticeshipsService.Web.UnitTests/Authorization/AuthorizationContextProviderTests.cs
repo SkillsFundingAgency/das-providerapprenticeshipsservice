@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Principal;
-using FluentAssertions;
+﻿using System.Security.Principal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
-using Moq;
-using NUnit.Framework;
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.Encoding;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
