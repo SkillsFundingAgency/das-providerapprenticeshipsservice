@@ -55,10 +55,10 @@ public class EmailOrchestrator : IEmailOrchestrator
         var commands = finalRecipients.Select(x => new SendNotificationCommand{ Email = CreateEmailForRecipient(x, message) });
         await Task.WhenAll(commands.Select(x => _mediator.Send(x)));
 
-        _logger.LogInformation($"Sent email to {finalRecipients.Count} recipients for ukprn: {providerId}", providerId);
+        _logger.LogInformation("Sent email to {FinalRecipientsCount} recipients for ukprn: {ProviderId}", finalRecipients.Count, providerId);
     }
 
-    private Email CreateEmailForRecipient(string recipient, ProviderEmailRequest source)
+    private static Email CreateEmailForRecipient(string recipient, ProviderEmailRequest source)
     {
         return new Email
         {

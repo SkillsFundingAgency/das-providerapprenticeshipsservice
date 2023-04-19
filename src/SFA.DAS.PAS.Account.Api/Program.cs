@@ -15,7 +15,7 @@ namespace SFA.DAS.PAS.Account.Api
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<StartUp>();
+                    webBuilder.UseStartup<Startup>();
                 });
     }
 }

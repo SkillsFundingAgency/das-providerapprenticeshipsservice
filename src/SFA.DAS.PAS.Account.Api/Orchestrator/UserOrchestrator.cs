@@ -24,36 +24,31 @@ public class UserOrchestrator : IUserOrchestrator
         _logger = logger;
     }
 
-    public async Task<User?> GetUserWithSettings(string userRef)
+    public async Task<User> GetUserWithSettings(string userRef)
     {
-        var user = await GetUserDetails(userRef);
+        var userResponse = await _mediator.Send(new GetUserQuery { UserRef = userRef });
 
-        if (user.UserRef == null)
+        if (string.IsNullOrEmpty(userResponse.UserRef))
         {
             return null;
         };
 
+        var user = new User
+        {
+            UserRef = userResponse.UserRef,
+            EmailAddress = userResponse.EmailAddress,
+            DisplayName = userResponse.Name,
+            IsSuperUser = userResponse.IsSuperUser
+        };
+
         var userSetting = await GetUserSetting(userRef);
 
-        if (userSetting == null)
+        if (userSetting != null)
         {
-            return new User
-            {
-                UserRef = user.UserRef,
-                EmailAddress = user.EmailAddress,
-                DisplayName = user.Name,
-                IsSuperUser = user.IsSuperUser
-            };
-        };
+            user.ReceiveNotifications = userSetting.ReceiveNotifications;
+        }
 
-        return new User
-        {
-            UserRef = user.UserRef,
-            EmailAddress = user.EmailAddress,
-            DisplayName = user.Name,
-            ReceiveNotifications = userSetting.ReceiveNotifications,
-            IsSuperUser = user.IsSuperUser
-        };
+        return user;
     }
 
     private async Task<UserNotificationSetting?> GetUserSetting(string userRef)
@@ -61,19 +56,13 @@ public class UserOrchestrator : IUserOrchestrator
         var userSetting = await _mediator.Send(new GetUserNotificationSettingsQuery { UserRef = userRef });
 
         var setting = userSetting.NotificationSettings.SingleOrDefault();
+        
         if (setting == null)
         {
-            _logger.LogInformation($"Unable to get user settings with ref {userRef}");
+            _logger.LogInformation("Unable to get user settings with ref {UserRef}", userRef);
             return null;
         }
 
         return setting;
-    }
-
-    private async Task<GetUserQueryResponse> GetUserDetails(string userRef)
-    {
-        var user = await _mediator.Send(new GetUserQuery { UserRef = userRef });
-
-        return user;
     }
 }

@@ -12,7 +12,7 @@ namespace SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers
 
         public ICollection<UserSettingPair> UserSettings { get; }
 
-        public void Add(User user, UserSetting settings)
+        public void Add(User user, UserSetting? settings)
         {
             UserSettings.Add(
                 new UserSettingPair
@@ -27,6 +27,6 @@ namespace SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers
     {
         public User User { get; set; }
 
-        public UserSetting Setting { get; set; }
+        public UserSetting? Setting { get; set; }
     }
 }
