@@ -94,6 +94,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                     }
 
                 })
+                .SetDfESignInConfiguration(_configuration.GetSection("UseDfESignIn").Get<bool>())
                 .SetDefaultNavigationSection(NavigationSection.Home);
 
             services.AddApplicationInsightsTelemetry();

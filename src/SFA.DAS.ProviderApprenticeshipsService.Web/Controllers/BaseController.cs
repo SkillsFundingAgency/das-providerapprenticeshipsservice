@@ -50,10 +50,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             if (HttpContext.User.Identity.IsAuthenticated)
             {
                 CurrentUserId = filterContext.HttpContext.GetClaimValue(DasClaimTypes.Upn);
-                if (_configuration != null && _configuration.UseDfESignIn)
-                {
-                    ViewBag.UseDfESignIn = true;
-                }
             }
         }
 
