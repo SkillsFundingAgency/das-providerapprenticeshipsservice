@@ -3,43 +3,41 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 
-namespace SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings
+namespace SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings;
+
+public class GetUserNotificationSettingsHandler : IRequestHandler<GetUserNotificationSettingsQuery, GetUserNotificationSettingsResponse>
 {
-    public class GetUserNotificationSettingsHandler : IRequestHandler<GetUserNotificationSettingsQuery, GetUserNotificationSettingsResponse>
+    private readonly IUserSettingsRepository _userRepository;
+
+    private readonly ILogger<GetUserNotificationSettingsHandler> _logger;
+
+    public GetUserNotificationSettingsHandler(IUserSettingsRepository userRepository, ILogger<GetUserNotificationSettingsHandler> logger)
     {
-        private readonly IUserSettingsRepository _userRepository;
+        _userRepository = userRepository;
+        _logger = logger;
+    }
 
-        private readonly ILogger<GetUserNotificationSettingsHandler> _logger;
+    public async Task<GetUserNotificationSettingsResponse> Handle(GetUserNotificationSettingsQuery message, CancellationToken cancellationToken)
+    {
+        var userSettings = (await _userRepository.GetUserSetting(message.UserRef)).ToList();
 
-        public GetUserNotificationSettingsHandler(IUserSettingsRepository userRepository, ILogger<GetUserNotificationSettingsHandler> logger)
+        if (!userSettings.Any())
         {
-            _userRepository = userRepository;
-            _logger = logger;
+            _logger.LogInformation("No settings found for user {UserRef}", message.UserRef);
+
+            await _userRepository.AddSettings(message.UserRef);
+            userSettings = (await _userRepository.GetUserSetting(message.UserRef)).ToList();
+
+            _logger.LogInformation("Created default settings for user {UserRef}", message.UserRef);
         }
 
-        public async Task<GetUserNotificationSettingsResponse> Handle(GetUserNotificationSettingsQuery message, CancellationToken cancellationToken)
+        return new GetUserNotificationSettingsResponse
         {
-            var userSettings = (await _userRepository.GetUserSetting(message.UserRef)).ToList();
-            if (!userSettings.Any())
+            NotificationSettings = userSettings.Select(setting => new UserNotificationSetting
             {
-                _logger.LogInformation($"No settings found for user {message.UserRef}");
-                await _userRepository.AddSettings(message.UserRef);
-                userSettings = (await _userRepository.GetUserSetting(message.UserRef)).ToList();
-                _logger.LogInformation($"Created default settings for user {message.UserRef}");
-            }
-
-            return new GetUserNotificationSettingsResponse
-                {
-                    NotificationSettings =
-                        userSettings.Select(
-                            m =>
-                            new UserNotificationSetting
-                                {
-                                    UserRef = m.UserRef,
-                                    ReceiveNotifications =
-                                        m.ReceiveNotifications,
-                                }).ToList()
-                };
-        }
+                UserRef = setting.UserRef,
+                ReceiveNotifications = setting.ReceiveNotifications,
+            }).ToList()
+        };
     }
 }
