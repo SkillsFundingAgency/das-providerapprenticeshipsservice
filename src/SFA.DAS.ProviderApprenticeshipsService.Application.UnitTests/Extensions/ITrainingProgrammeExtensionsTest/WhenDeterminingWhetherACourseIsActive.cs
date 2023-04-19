@@ -1,6 +1,4 @@
-﻿using System;
-using NUnit.Framework;
-using SFA.DAS.CommitmentsV2.Types;
+﻿using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Extensions.ITrainingProgrammeExtensionsTest;

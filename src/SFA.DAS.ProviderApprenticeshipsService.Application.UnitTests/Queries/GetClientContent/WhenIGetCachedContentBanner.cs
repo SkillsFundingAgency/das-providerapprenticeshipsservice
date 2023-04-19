@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Services;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Application.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 

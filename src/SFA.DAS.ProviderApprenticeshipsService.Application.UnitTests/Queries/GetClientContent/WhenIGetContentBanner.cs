@@ -1,9 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Moq;
-using NUnit.Framework;
+﻿using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientContent;
 using SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Extensions.LoggingMockExtensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;

@@ -1,6 +1,4 @@
-﻿using System;
-using NUnit.Framework;
-using SFA.DAS.CommitmentsV2.Types;
+﻿using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
 

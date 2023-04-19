@@ -1,60 +1,54 @@
-﻿using System;
-using System.Threading.Tasks;
-using AutoFixture;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.CommitmentsV2.Api.Types.Responses;
+﻿using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Services
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Services;
+
+[TestFixture]
+public class ApprenticeshipInfoServiceTests
 {
-    [TestFixture]
-    public class ApprenticeshipInfoServiceTests
+    private ApprenticeshipInfoService _sut;
+
+    private Mock<ICommitmentsV2ApiClient> _commitmentsV2ApiClient;
+
+    [SetUp]
+    public void Arrange()
     {
-        public ApprenticeshipInfoService _sut;
+        _commitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
 
-        private Mock<ICommitmentsV2ApiClient> _commitmentsV2ApiClient;
+        _sut = new ApprenticeshipInfoService(_commitmentsV2ApiClient.Object);
+    }
 
-        [SetUp]
-        public void Arrange()
-        {
-            _commitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
+    [Test]
+    public async Task ReturnsProvidersView()
+    {
+        var autoFixture = new Fixture();
+        var response = autoFixture.Create<GetProviderResponse>();
 
-            _sut = new ApprenticeshipInfoService(_commitmentsV2ApiClient.Object);
-        }
+        _commitmentsV2ApiClient
+            .Setup(x => x.GetProvider(response.ProviderId))
+            .Returns(Task.FromResult(response));
 
-        [Test]
-        public async Task ReturnsProvidersView()
-        {
-            var autoFixture = new Fixture();
-            var response = autoFixture.Create<GetProviderResponse>();
+        var result = await _sut.GetProvider(response.ProviderId);
 
-            _commitmentsV2ApiClient
-                .Setup(x => x.GetProvider(response.ProviderId))
-                .Returns(Task.FromResult(response));
+        _commitmentsV2ApiClient.Verify(x => x.GetProvider(response.ProviderId));
+        Assert.AreEqual(result.Provider.ProviderName, response.Name);
+        Assert.AreEqual(result.Provider.Ukprn, response.ProviderId);
+    }
 
-            var result = await _sut.GetProvider(response.ProviderId);
+    [Test]
+    public async Task WhenExceptionIsThrownReturnsNull()
+    {
+        var autoFixture = new Fixture();
+        var response = autoFixture.Create<GetProviderResponse>();
 
-            _commitmentsV2ApiClient.Verify(x => x.GetProvider(response.ProviderId));
-            Assert.AreEqual(result.Provider.ProviderName, response.Name);
-            Assert.AreEqual(result.Provider.Ukprn, response.ProviderId);
-        }
+        _commitmentsV2ApiClient
+            .Setup(x => x.GetProvider(response.ProviderId))
+            .Throws(new Exception());
 
-        [Test]
-        public async Task WhenExceptionIsThrownReturnsNull()
-        {
-            var autoFixture = new Fixture();
-            var response = autoFixture.Create<GetProviderResponse>();
+        var result = await _sut.GetProvider(response.ProviderId);
 
-            _commitmentsV2ApiClient
-                .Setup(x => x.GetProvider(response.ProviderId))
-                .Throws(new Exception());
-
-            var result = await _sut.GetProvider(response.ProviderId);
-
-            _commitmentsV2ApiClient.Verify(x => x.GetProvider(response.ProviderId));
-            Assert.IsNull(result);
-        }
+        _commitmentsV2ApiClient.Verify(x => x.GetProvider(response.ProviderId));
+        Assert.IsNull(result);
     }
 }
