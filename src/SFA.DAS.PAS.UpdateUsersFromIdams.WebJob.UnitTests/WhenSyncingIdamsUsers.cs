@@ -13,6 +13,7 @@ using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.IdamsUser;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests;
@@ -131,10 +132,7 @@ public class WhenSyncingIdamsUsers
         {
             IdamsEmailServiceWrapper
                 .Setup(x => x.GetEmailsAsync(It.IsAny<long>(), It.IsAny<string>()))
-                .Throws(new CustomHttpRequestException
-                {
-                    StatusCode = HttpStatusCode.NotFound
-                });
+                .Throws(new CustomHttpRequestException(HttpStatusCode.NotFound, null));
 
             return this;
         }

@@ -30,7 +30,7 @@ public class IdamsEmailServiceWrapperTests
     [Test]
     public void ShouldThrowIfGetUsersResponseIsEmpty()
     {
-        Assert.ThrowsAsync<ArgumentException>(() => _sut.GetEmailsAsync(10005143L, "UserRole"));
+        Assert.ThrowsAsync<InvalidOperationException>(() => _sut.GetEmailsAsync(10005143L, "UserRole"));
     }
 
     [Test]
@@ -38,7 +38,7 @@ public class IdamsEmailServiceWrapperTests
     {
         const string mockResponse = "THIS-IS-NOT-JSON";
         _mockHttpClientWrapper.Setup(m => m.GetStringAsync(It.IsAny<string>())).ReturnsAsync(mockResponse);
-        Assert.ThrowsAsync<ArgumentException>(() => _sut.GetEmailsAsync(10005143L, "UserRole"));
+        Assert.ThrowsAsync<InvalidOperationException>(() => _sut.GetEmailsAsync(10005143L, "UserRole"));
     }
 
     [Test]

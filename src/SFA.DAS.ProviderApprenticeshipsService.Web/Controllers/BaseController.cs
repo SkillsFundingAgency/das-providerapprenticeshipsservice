@@ -2,64 +2,50 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
+
+[Authorize(Policy = nameof(PolicyNames.RequireAuthenticatedUser))]
+[Authorize(Policy = nameof(PolicyNames.RequireDasPermissionRole))]
+public abstract class BaseController : Controller
 {
-    [Authorize(Policy = nameof(PolicyNames.RequireAuthenticatedUser))]
-    [Authorize(Policy = nameof(PolicyNames.RequireDasPermissionRole))]
-    public abstract class BaseController : Controller
+    private const string FlashMessageCookieName = "sfa-das-providerapprenticeshipsservice-flashmessage";
+    private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
+
+    protected BaseController(ICookieStorageService<FlashMessageViewModel> flashMessage)
     {
-        private const string FlashMessageCookieName = "sfa-das-providerapprenticeshipsservice-flashmessage";
-        private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
-        private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
+        _flashMessage = flashMessage;
+    }
 
-        protected BaseController(ICookieStorageService<FlashMessageViewModel> flashMessage, ProviderApprenticeshipsServiceConfiguration configuration)
+    protected string CurrentUserId;
+
+    protected void SetInfoMessage(string messageText, FlashMessageSeverityLevel level)
+    {
+        var message = new FlashMessageViewModel
         {
-            _flashMessage = flashMessage;
-            _configuration = configuration;
-        }
+            Message = messageText,
+            Severity = level
+        };
+        _flashMessage.Delete(FlashMessageCookieName);
 
-        protected string CurrentUserId;
+        _flashMessage.Create(message, FlashMessageCookieName);
+    }
 
-        protected void SetInfoMessage(string messageText, FlashMessageSeverityLevel level)
+    public FlashMessageViewModel GetFlashMessageViewModelFromCookie()
+    {
+        var flashMessageViewModelFromCookie = _flashMessage.Get(FlashMessageCookieName);
+        _flashMessage.Delete(FlashMessageCookieName);
+        return flashMessageViewModelFromCookie;
+    }
+
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        if (HttpContext.User.Identity.IsAuthenticated)
         {
-            var message = new FlashMessageViewModel
-            {
-                Message = messageText,
-                Severity = level
-            };
-            _flashMessage.Delete(FlashMessageCookieName);
-
-            _flashMessage.Create(message, FlashMessageCookieName);
-        }
-
-        public FlashMessageViewModel GetFlashMessageViewModelFromCookie()
-        {
-            var flashMessageViewModelFromCookie = _flashMessage.Get(FlashMessageCookieName);
-            _flashMessage.Delete(FlashMessageCookieName);
-            return flashMessageViewModelFromCookie;
-        }
-
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            if (HttpContext.User.Identity.IsAuthenticated)
-            {
-                CurrentUserId = filterContext.HttpContext.GetClaimValue(DasClaimTypes.Upn);
-            }
-        }
-
-        protected SignInUserModel GetSignedInUser()
-        {
-            return new SignInUserModel
-            {
-                DisplayName = HttpContext.GetClaimValue(DasClaimTypes.DisplayName),
-                Email = HttpContext.GetClaimValue(DasClaimTypes.Email)
-            };
+            CurrentUserId = context.HttpContext.GetClaimValue(DasClaimTypes.Upn);
         }
     }
 }

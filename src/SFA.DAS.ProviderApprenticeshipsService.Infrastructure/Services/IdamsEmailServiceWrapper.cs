@@ -6,69 +6,70 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Models;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
+namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+
+public class IdamsEmailServiceWrapper : IIdamsEmailServiceWrapper
 {
-    public class IdamsEmailServiceWrapper : IIdamsEmailServiceWrapper
+    private readonly ILogger<IdamsEmailServiceWrapper> _logger;
+    private readonly IProviderNotificationConfiguration _configuration;
+    private readonly IHttpClientWrapper _httpClientWrapper;
+
+    public IdamsEmailServiceWrapper(
+        ILogger<IdamsEmailServiceWrapper> logger,
+        IProviderNotificationConfiguration configuration,
+        IHttpClientWrapper httpClientWrapper)
     {
-        private readonly ILogger<IdamsEmailServiceWrapper> _logger;
-        private readonly IProviderNotificationConfiguration _configuration;
-        private readonly IHttpClientWrapper _httpClientWrapper;
+        _logger = logger;
+        _configuration = configuration;
+        _httpClientWrapper = httpClientWrapper;
+    }
 
-        public IdamsEmailServiceWrapper(
-            ILogger<IdamsEmailServiceWrapper> logger,
-            IProviderNotificationConfiguration configuration,
-            IHttpClientWrapper httpClientWrapper)
+    public virtual async Task<List<string>> GetEmailsAsync(long ukprn, string identities)
+    {
+        _logger.LogInformation("Getting emails for provider {Ukprn} for roles {Identities}", ukprn, identities);
+
+        var ids = identities.Split(',');
+        var tasks = ids.Select(id => GetString(string.Format(_configuration.IdamsListUsersUrl, id, ukprn)));
+        var results = await Task.WhenAll(tasks);
+
+        return results.SelectMany(result => ParseIdamsResult(result, ukprn)).ToList();
+    }
+
+    private IEnumerable<string> ParseIdamsResult(string jsonResult, long providerId)
+    {
+        try
         {
-            _logger = logger;
-            _configuration = configuration;
-            _httpClientWrapper = httpClientWrapper;
-        }
+            var result = JObject.Parse(jsonResult).SelectToken("result");
 
-        public virtual async Task<List<string>> GetEmailsAsync(long providerId, string roles)
-        {
-            _logger.LogInformation($"Getting emails for provider {providerId} for roles {roles}");
-
-            var ids = roles.Split(',');
-            var tasks = ids.Select(id => GetString(string.Format(_configuration.IdamsListUsersUrl, id, providerId)));
-            var results = await Task.WhenAll(tasks);
-
-            return results.SelectMany(result => ParseIdamsResult(result, providerId)).ToList();
-        }
-
-        private List<string> ParseIdamsResult(string jsonResult, long providerId)
-        {
-            try
+            if (result.Type == JTokenType.Array)
             {
-                var result = JObject.Parse(jsonResult).SelectToken("result");
+                var items = result.ToObject<IEnumerable<UserResponse>>();
+                return items.SelectMany(response => response.Emails).ToList();
+            }
 
-                if (result.Type == JTokenType.Array)
-                {
-                    var items = result.ToObject<IEnumerable<UserResponse>>();
-                    return items.SelectMany(m => m.Emails).ToList();
-                }
+            var item = result.ToObject<UserResponse>();
 
-                var item = result.ToObject<UserResponse>();
-                return item?.Emails ?? new List<string>(0);
-            }
-            catch (JsonSerializationException)
-            {
-                // Idams query returned no results - { result : ["internal error"] }.
-                return new List<string>();
-            }
-            catch (Exception exception)
-            {
-                var resultDescription = string.IsNullOrWhiteSpace(jsonResult) ? "empty string" : $"\"{jsonResult}\"";
-                throw new ArgumentException($"Not possible to parse {resultDescription} to {typeof(UserResponse)} for provider: {providerId}", exception);
-            }
+            return item?.Emails ?? new List<string>(0);
         }
-
-        private async Task<string> GetString(string url)
+        catch (JsonSerializationException)
         {
-            _logger.LogInformation($"Querying {url} for user details");
-            return await _httpClientWrapper.GetStringAsync(url);
+            // Idams query returned no results - { result : ["internal error"] }.
+            return Array.Empty<string>();
         }
+        catch (Exception exception)
+        {
+            var resultDescription = string.IsNullOrWhiteSpace(jsonResult) ? "empty string" : $"\"{jsonResult}\"";
+            throw new InvalidOperationException($"Not possible to parse {resultDescription} to {typeof(UserResponse)} for provider: {providerId}", exception);
+        }
+    }
+
+    private async Task<string> GetString(string url)
+    {
+        _logger.LogInformation("Querying {Url} for user details", url);
+        return await _httpClientWrapper.GetStringAsync(url);
     }
 }

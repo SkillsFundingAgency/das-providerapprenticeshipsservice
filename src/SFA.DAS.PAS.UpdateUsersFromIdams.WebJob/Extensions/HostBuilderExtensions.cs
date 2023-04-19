@@ -11,6 +11,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using System;
 using SFA.DAS.Configuration;
 using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions
 {

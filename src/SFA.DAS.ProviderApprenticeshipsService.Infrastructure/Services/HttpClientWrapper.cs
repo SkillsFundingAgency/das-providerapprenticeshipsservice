@@ -1,38 +1,36 @@
-﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
+namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+
+public class HttpClientWrapper : IHttpClientWrapper
 {
-    public class HttpClientWrapper : IHttpClientWrapper
+    private readonly HttpClient _httpClient;
+
+    public HttpClientWrapper(HttpClient httpClient)
     {
-        private readonly HttpClient _httpClient;
-
-        public HttpClientWrapper(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-        }
-
-        public async Task<string> GetStringAsync(string url)
-        {
-            var httpResponse = await _httpClient.GetAsync(url);
-
-            if (!httpResponse.IsSuccessStatusCode)
-                throw new CustomHttpRequestException
-                {
-                    StatusCode = httpResponse.StatusCode
-                };
-
-            var responseString = await httpResponse.Content.ReadAsStringAsync();
-
-            return responseString;
-        }
+        _httpClient = httpClient;
     }
 
-    public class CustomHttpRequestException : HttpRequestException
+    public async Task<string> GetStringAsync(string url)
     {
-        public HttpStatusCode StatusCode { get; set; }
-    }
+        var httpResponse = await _httpClient.GetAsync(url);
 
+        if (!httpResponse.IsSuccessStatusCode)
+        {
+            throw new CustomHttpRequestException(httpResponse.StatusCode, httpResponse.ReasonPhrase);
+        }
+
+        return await httpResponse.Content.ReadAsStringAsync();
+    }
+}
+
+[Serializable]
+public class CustomHttpRequestException : HttpRequestException
+{
+    public CustomHttpRequestException(HttpStatusCode statusCode, string reasonPhrase) 
+        :base($"An unexpected HTTP error occurred due to reason '{reasonPhrase}'.", null,  statusCode) { }
 }
