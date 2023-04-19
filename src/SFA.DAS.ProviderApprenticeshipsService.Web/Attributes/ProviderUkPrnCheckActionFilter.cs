@@ -1,7 +1,4 @@
-﻿using System.Net;
-using System.Net.Http;
-using Microsoft.AspNetCore.Mvc.Filters;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 
