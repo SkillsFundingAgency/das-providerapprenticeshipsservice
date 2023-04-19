@@ -1,12 +1,7 @@
-﻿using MediatR;
-using SFA.DAS.PAS.Account.Api.Types;
+﻿using SFA.DAS.PAS.Account.Api.Types;
 using SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers;
 using SFA.DAS.PAS.Account.Application.Queries.GetProviderAgreement;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ProviderAgreementStatus = SFA.DAS.PAS.Account.Api.Types.ProviderAgreementStatus;
 
 namespace SFA.DAS.PAS.Account.Api.Orchestrator;
@@ -15,6 +10,7 @@ public interface IAccountOrchestrator
     Task<IEnumerable<User>> GetAccountUsers(long ukprn);
     Task<ProviderAgreement> GetAgreement(long providerId);
 }
+
 public class AccountOrchestrator : IAccountOrchestrator
 {
     private readonly IMediator _mediator;

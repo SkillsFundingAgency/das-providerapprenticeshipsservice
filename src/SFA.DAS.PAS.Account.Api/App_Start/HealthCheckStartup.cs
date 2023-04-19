@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Http;
 using SFA.DAS.Api.Common.Infrastructure;
 
 namespace SFA.DAS.PAS.Account.Api;

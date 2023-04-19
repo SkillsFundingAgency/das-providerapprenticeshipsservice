@@ -1,17 +1,9 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Versioning;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using SFA.DAS.Api.Common.Infrastructure;
-using System.Text.Json.Serialization;
-using SFA.DAS.PAS.Account.Api.ServiceRegistrations;
 using SFA.DAS.PAS.Account.Api.Authentication;
 using SFA.DAS.PAS.Account.Api.Authorization;
-using System;
-using System.Collections.Generic;
+using SFA.DAS.PAS.Account.Api.ServiceRegistrations;
 
 namespace SFA.DAS.PAS.Account.Api;
 

@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace SFA.DAS.PAS.Account.Api.Authorization;
+﻿namespace SFA.DAS.PAS.Account.Api.Authorization;
 
 public static class AuthorizationExtensions
 {
