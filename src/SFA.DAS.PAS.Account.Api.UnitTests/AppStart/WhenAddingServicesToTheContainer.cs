@@ -1,5 +1,3 @@
-using FluentAssertions.Common;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -71,7 +69,7 @@ public class WhenAddingServicesToTheContainer
         var provider = serviceCollection.BuildServiceProvider();
 
         var type = provider.GetService(toResolve);
-        Assert.IsNotNull(type);
+        Assert.That(type, Is.Not.Null);
     }
 
     private static IConfigurationRoot GenerateConfiguration()

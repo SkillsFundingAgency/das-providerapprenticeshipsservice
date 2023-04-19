@@ -1,87 +1,84 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.PAS.Account.Api.Types;
 using SFA.DAS.PAS.Account.Application.Commands.SendNotification;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
-namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
+namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator;
+
+[TestFixture]
+public class WhenSendingEmailToAllProviderRecipients_UserTypes
 {
-    [TestFixture]
-    public class WhenSendingEmailToAllProviderRecipients_UserTypes
+    private Mock<IAccountOrchestrator> _accountOrchestrator;
+    private Mock<IMediator> _mediator;
+    private long _ukprn;
+    private ProviderEmailRequest _request;
+    private string _templateId;
+    private Dictionary<string, string> _tokens;
+    private User _superUser;
+    private User _normalUser;
+    private List<User> _accountUsers;
+
+    [SetUp]
+    public void Setup()
     {
-        private EmailOrchestrator _sut;
-        private Mock<IAccountOrchestrator> _accountOrchestrator;
-        private Mock<IMediator> _mediator;
-        private long _ukprn;
-        private ProviderEmailRequest _request;
-        private string _templateId;
-        private Dictionary<string, string> _tokens;
-        private User _superUser;
-        private User _normalUser;
-        private List<User> _accountUsers;
-
-        [SetUp]
-        public void Setup()
+        _ukprn = 228987165;
+        _templateId = Guid.NewGuid().ToString();
+        _tokens = new Dictionary<string, string>
         {
-            _ukprn = 228987165;
-            _templateId = Guid.NewGuid().ToString();
-            _tokens = new Dictionary<string, string>();
-            _tokens.Add("key1", "value1");
-            _tokens.Add("key2", "value2");
+            { "key1", "value1" },
+            { "key2", "value2" }
+        };
 
-            _normalUser = new User { EmailAddress = "normal@test.com", IsSuperUser = false, ReceiveNotifications = true };
-            _superUser = new User { EmailAddress = "super@test.com", IsSuperUser = true, ReceiveNotifications = true };
-            
-            _accountUsers = new List<User>();
-            _accountUsers.Add(_normalUser);
-            _accountUsers.Add(_superUser);
+        _normalUser = new User { EmailAddress = "normal@test.com", IsSuperUser = false, ReceiveNotifications = true };
+        _superUser = new User { EmailAddress = "super@test.com", IsSuperUser = true, ReceiveNotifications = true };
 
-            _accountOrchestrator = new Mock<IAccountOrchestrator>();
-            _mediator = new Mock<IMediator>();
-
-            _accountOrchestrator
-                .Setup(x => x.GetAccountUsers(_ukprn))
-                .ReturnsAsync(_accountUsers);
-
-            _request = new ProviderEmailRequest
-            {
-                TemplateId = _templateId,
-                Tokens = _tokens
-            };
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public async Task ShouldOnlySendNotificationForNormaUser(bool explicitListIsNull)
+        _accountUsers = new List<User>
         {
-            _request.ExplicitEmailAddresses = explicitListIsNull ? null : new List<string>();
+            _normalUser,
+            _superUser
+        };
 
-            _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, Mock.Of<ILogger<EmailOrchestrator>>());
-            await _sut.SendEmailToAllProviderRecipients(_ukprn, _request);
+        _accountOrchestrator = new Mock<IAccountOrchestrator>();
+        _mediator = new Mock<IMediator>();
 
-            _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c=>c.Email.RecipientsAddress == "normal@test.com"), It.IsAny<CancellationToken>()), Times.Once);
-            _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress == "super@test.com"), It.IsAny<CancellationToken>()), Times.Never);
-        }
+        _accountOrchestrator
+            .Setup(x => x.GetAccountUsers(_ukprn))
+            .ReturnsAsync(_accountUsers);
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public async Task ShouldOnlySendNotificationForSuperUser(bool explicitListIsNull)
+        _request = new ProviderEmailRequest
         {
-            _request.ExplicitEmailAddresses = explicitListIsNull ? null : new List<string>();
-            _accountUsers.Remove(_normalUser);
+            TemplateId = _templateId,
+            Tokens = _tokens
+        };
+    }
 
-            _sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, Mock.Of<ILogger<EmailOrchestrator>>());
-            await _sut.SendEmailToAllProviderRecipients(_ukprn, _request);
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldOnlySendNotificationForNormaUser(bool explicitListIsNull)
+    {
+        _request.ExplicitEmailAddresses = explicitListIsNull ? null : new List<string>();
 
-            _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress == "normal@test.com"), It.IsAny<CancellationToken>()), Times.Never);
-            _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress == "super@test.com"), It.IsAny<CancellationToken>()), Times.Once);
-        }
+        var sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, Mock.Of<ILogger<EmailOrchestrator>>());
+        await sut.SendEmailToAllProviderRecipients(_ukprn, _request);
+
+        _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress == "normal@test.com"), It.IsAny<CancellationToken>()), Times.Once);
+        _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress == "super@test.com"), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldOnlySendNotificationForSuperUser(bool explicitListIsNull)
+    {
+        _request.ExplicitEmailAddresses = explicitListIsNull ? null : new List<string>();
+        _accountUsers.Remove(_normalUser);
+
+        var sut = new EmailOrchestrator(_accountOrchestrator.Object, _mediator.Object, Mock.Of<ILogger<EmailOrchestrator>>());
+        await sut.SendEmailToAllProviderRecipients(_ukprn, _request);
+
+        _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress == "normal@test.com"), It.IsAny<CancellationToken>()), Times.Never);
+        _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress == "super@test.com"), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

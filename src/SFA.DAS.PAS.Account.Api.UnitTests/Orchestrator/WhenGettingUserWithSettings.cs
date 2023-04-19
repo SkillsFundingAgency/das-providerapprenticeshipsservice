@@ -1,138 +1,135 @@
-﻿using MediatR;
+﻿using FluentAssertions;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
-using SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings;
-using FluentAssertions;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 using SFA.DAS.PAS.Account.Application.Queries.GetUser;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserSetting;
+using SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 
-namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
+namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator;
+
+[TestFixture]
+public class WhenGettingUserWithSettings
 {
-    [TestFixture]
-    public class WhenGettingUserWithSettings
+    private IUserOrchestrator _sut;
+    private Mock<IMediator> _mediator;
+    private Mock<ILogger<UserOrchestrator>> _logger;
+
+    [SetUp]
+    public void SetUp()
     {
-        private IUserOrchestrator _sut;
-        private Mock<IMediator> _mediator;
-        private Mock<ILogger<UserOrchestrator>> _logger;
+        _mediator = new Mock<IMediator>();
+        _logger = new Mock<ILogger<UserOrchestrator>>();
+        _sut = new UserOrchestrator(_mediator.Object, _logger.Object);
+    }
 
-        [SetUp]
-        public void SetUp()
+    [Test]
+    public async Task ShouldReturnUserWithDetails()
+    {
+        // Arrange
+        const string userRef = "ISP-3320242";
+        const bool receiveNotifications = false;
+        const bool superUser = false;
+        const string email = "test@email.com";
+        const string name = "test";
+
+        var notificationSettings = new UserNotificationSetting 
         {
-            _mediator = new Mock<IMediator>();
-            _logger = new Mock<ILogger<UserOrchestrator>>();
-            _sut = new UserOrchestrator(_mediator.Object, _logger.Object);
-        }
+            ReceiveNotifications = receiveNotifications
+        };
 
-        [Test]
-        public async Task ShouldReturnUserWithDetails()
+        var getUserNotificationSettingsResponse = new GetUserNotificationSettingsResponse 
         {
-            // Arrange
-            var userRef = "ISP-3320242";
-            var receiveNotifications = false;
-            var superUser = false;
-            var email = "test@email.com";
-            var name = "test";
+            NotificationSettings = new List<UserNotificationSetting> { notificationSettings }
+        };
 
-            var notificationSettings = new UserNotificationSetting 
-            {
-                ReceiveNotifications = receiveNotifications
-            };
-
-            var getUserNotificationSettingsResponse = new GetUserNotificationSettingsResponse 
-            {
-                NotificationSettings = new List<UserNotificationSetting>()
-            };
-            getUserNotificationSettingsResponse.NotificationSettings.Add(notificationSettings);
-
-            var user = new GetUserQueryResponse
-            {
-                UserRef = userRef,
-                IsSuperUser = superUser,
-                EmailAddress = email,
-                Name = name,
-            };
-
-            _mediator.Setup(m => m.Send(It.IsAny<GetUserNotificationSettingsQuery>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(getUserNotificationSettingsResponse);
-
-            _mediator.Setup(m => m.Send(It.IsAny<GetUserQuery>(), It.IsAny<CancellationToken>()))
-               .ReturnsAsync(user);
-
-            // Act
-            var result = await _sut.GetUserWithSettings(userRef);
-
-            // Assert
-            result.UserRef.Should().Be(userRef);
-            result.ReceiveNotifications.Should().Be(receiveNotifications);
-            result.IsSuperUser.Should().Be(superUser);
-            result.EmailAddress.Should().Be(email);
-            result.DisplayName.Should().Be(name);
-        }
-
-        [Test]
-        public async Task NoNotificationSettingsFoundForUser_ShouldReturnUserWithFalseReceiveNotifications()
+        var user = new GetUserQueryResponse
         {
-            // Arrange
-            var userRef = "ISP-3320242";
-            var superUser = false;
-            var email = "test@email.com";
-            var name = "test";
+            UserRef = userRef,
+            IsSuperUser = superUser,
+            EmailAddress = email,
+            Name = name,
+        };
 
-            var getUserNotificationSettingsResponse = new GetUserNotificationSettingsResponse
-            {
-                NotificationSettings = new List<UserNotificationSetting>()
-            };
+        _mediator.Setup(m => m.Send(It.IsAny<GetUserNotificationSettingsQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(getUserNotificationSettingsResponse);
 
-            var user = new GetUserQueryResponse
-            {
-                UserRef = userRef,
-                IsSuperUser = superUser,
-                EmailAddress = email,
-                Name = name,
-            };
+        _mediator.Setup(m => m.Send(It.IsAny<GetUserQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
 
-            _mediator.Setup(m => m.Send(It.IsAny<GetUserNotificationSettingsQuery>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(getUserNotificationSettingsResponse);
+        // Act
+        var result = await _sut.GetUserWithSettings(userRef);
 
-            _mediator.Setup(m => m.Send(It.IsAny<GetUserQuery>(), It.IsAny<CancellationToken>()))
-               .ReturnsAsync(user);
+        // Assert
+        result.UserRef.Should().Be(userRef);
+        result.ReceiveNotifications.Should().Be(receiveNotifications);
+        result.IsSuperUser.Should().Be(superUser);
+        result.EmailAddress.Should().Be(email);
+        result.DisplayName.Should().Be(name);
+    }
 
-            // Act
-            var result = await _sut.GetUserWithSettings(userRef);
+    [Test]
+    public async Task NoNotificationSettingsFoundForUser_ShouldReturnUserWithFalseReceiveNotifications()
+    {
+        // Arrange
+        const string userRef = "ISP-3320242";
+        const bool superUser = false;
+        const string email = "test@email.com";
+        const string name = "test";
 
-            // Assert
-            result.UserRef.Should().Be(userRef);
-            Assert.IsFalse(result.ReceiveNotifications);
-            result.IsSuperUser.Should().Be(superUser);
-            result.EmailAddress.Should().Be(email);
-            result.DisplayName.Should().Be(name);
-        }
-
-        [Test]
-        public async Task NoUserFound_ShouldReturnNull()
+        var getUserNotificationSettingsResponse = new GetUserNotificationSettingsResponse
         {
-            // Arrange
-            var userRef = "ISP-3320242";
-            var getUserNotificationSettingsResponse = new GetUserNotificationSettingsResponse
-            {
-                NotificationSettings = new List<UserNotificationSetting>()
-            };
-            var user = new GetUserQueryResponse { };
+            NotificationSettings = new List<UserNotificationSetting>()
+        };
 
-            _mediator.Setup(m => m.Send(It.IsAny<GetUserNotificationSettingsQuery>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(getUserNotificationSettingsResponse);
+        var user = new GetUserQueryResponse
+        {
+            UserRef = userRef,
+            IsSuperUser = superUser,
+            EmailAddress = email,
+            Name = name,
+        };
 
-            _mediator.Setup(m => m.Send(It.IsAny<GetUserQuery>(), It.IsAny<CancellationToken>()))
-               .ReturnsAsync(user);
+        _mediator.Setup(m => m.Send(It.IsAny<GetUserNotificationSettingsQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(getUserNotificationSettingsResponse);
 
-            // Act
-            var result = await _sut.GetUserWithSettings(userRef);
+        _mediator.Setup(m => m.Send(It.IsAny<GetUserQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
 
-            // Assert
-            Assert.IsNull(result);
-        }
+        // Act
+        var result = await _sut.GetUserWithSettings(userRef);
+
+        // Assert
+        result.UserRef.Should().Be(userRef);
+        Assert.That(result.ReceiveNotifications, Is.False);
+        result.IsSuperUser.Should().Be(superUser);
+        result.EmailAddress.Should().Be(email);
+        result.DisplayName.Should().Be(name);
+    }
+
+    [Test]
+    public async Task NoUserFound_ShouldReturnNull()
+    {
+        // Arrange
+        const string userRef = "ISP-3320242";
+        var getUserNotificationSettingsResponse = new GetUserNotificationSettingsResponse
+        {
+            NotificationSettings = new List<UserNotificationSetting>()
+        };
+        var user = new GetUserQueryResponse { };
+
+        _mediator.Setup(m => m.Send(It.IsAny<GetUserNotificationSettingsQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(getUserNotificationSettingsResponse);
+
+        _mediator.Setup(m => m.Send(It.IsAny<GetUserQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+
+        // Act
+        var result = await _sut.GetUserWithSettings(userRef);
+
+        // Assert
+        Assert.That(result, Is.Null);
     }
 }
