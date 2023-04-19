@@ -1,39 +1,35 @@
-﻿using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+﻿using Microsoft.AspNetCore.Authorization;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
+
+[AllowAllRoles]
+[AllowAnonymous]
+public class ErrorController : Controller
 {
-    using System;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-
-    [AllowAllRoles]
-    [AllowAnonymous]
-    public class ErrorController : Controller
+    public ViewResult BadRequest()
     {
-        public ViewResult BadRequest()
-        {
-            return View("_Error400");
-        }
+        return View("_Error400");
+    }
 
-        [Route("error/403")]
-        public ViewResult Forbidden()
-        {
-            return View("_Error403");
-        }
+    [Route("error/403")]
+    public ViewResult Forbidden()
+    {
+        return View("_Error403");
+    }
 
-        public ViewResult NotFound()
-        {
-            return View("_Error404");
-        }
+    public ViewResult NotFound()
+    {
+        return View("_Error404");
+    }
 
-        public ViewResult InternalServerError(Exception ex)
-        {
-            return View("_Error500");
-        }
+    public ViewResult InternalServerError(Exception ex)
+    {
+        return View("_Error500");
+    }
 
-        public ActionResult InvalidState()
-        {
-            return View("_InvalidState");
-        }
+    public ActionResult InvalidState()
+    {
+        return View("_InvalidState");
     }
 }

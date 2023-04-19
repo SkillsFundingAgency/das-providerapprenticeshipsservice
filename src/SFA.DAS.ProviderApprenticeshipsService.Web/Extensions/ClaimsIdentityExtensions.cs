@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-using System.Security.Claims;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;

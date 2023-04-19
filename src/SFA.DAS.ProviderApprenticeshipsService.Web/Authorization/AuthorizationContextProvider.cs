@@ -1,7 +1,3 @@
-using System;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Logging;
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.ProviderFeatures.Context;
 using SFA.DAS.Authorization.ProviderPermissions.Context;

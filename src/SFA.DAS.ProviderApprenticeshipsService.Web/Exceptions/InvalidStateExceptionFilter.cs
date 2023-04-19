@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc.Filters;
 using NLog;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 

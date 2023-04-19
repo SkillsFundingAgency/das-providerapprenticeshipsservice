@@ -1,13 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
+using SFA.DAS.Authorization.Caching;
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.DependencyResolution.Microsoft;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.Authorization.Handlers;
-using SFA.DAS.Authorization.ProviderFeatures.Handlers;
-using SFA.DAS.Authorization.Caching;
 using SFA.DAS.Authorization.Logging;
+using SFA.DAS.Authorization.ProviderFeatures.Handlers;
 using SFA.DAS.Authorization.Services;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 
