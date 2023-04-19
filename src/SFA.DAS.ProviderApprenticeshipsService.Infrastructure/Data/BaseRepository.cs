@@ -13,13 +13,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 public abstract class BaseRepository<T>
 {
+    public IConfiguration Configuration { get; set; }
+
     private const string AzureResource = "https://database.windows.net/";
     private readonly string _connectionString;
-    public IConfiguration Configuration;
     private readonly ILogger<T> _logger;
     private readonly Policy _retryPolicy;
 
-    private static readonly IList<int> TransientErrorNumbers = new List<int>
+    private readonly IList<int> _transientErrorNumbers = new List<int>
     {
         // https://docs.microsoft.com/en-us/azure/sql-database/sql-database-develop-error-messages
         // https://docs.microsoft.com/en-us/azure/sql-database/sql-database-connectivity-issues
@@ -35,7 +36,7 @@ public abstract class BaseRepository<T>
         _retryPolicy = GetRetryPolicy();
     }
 
-    protected async Task<T> WithConnection<T>(Func<SqlConnection, Task<T>> getData)
+    protected async Task<TResult> WithConnection<TResult>(Func<SqlConnection, Task<TResult>> getData)
     {
         try
         {
@@ -49,20 +50,19 @@ public abstract class BaseRepository<T>
         }
         catch (TimeoutException ex)
         {
-            throw new Exception($"{GetType().FullName}.WithConnection() experienced a timeout", ex);
+            throw new InvalidOperationException($"{GetType().FullName}.WithConnection() experienced a timeout", ex);
         }
-        catch (SqlException ex) when (TransientErrorNumbers.Contains(ex.Number))
+        catch (SqlException ex) when (_transientErrorNumbers.Contains(ex.Number))
         {
-            throw new Exception($"{GetType().FullName}.WithConnection() experienced a transient SQL Exception. ErrorNumber {ex.Number}", ex);
+            throw new InvalidOperationException($"{GetType().FullName}.WithConnection() experienced a transient SQL Exception. ErrorNumber {ex.Number}", ex);
         }
         catch (SqlException ex)
         {
-            throw new Exception($"{GetType().FullName}.WithConnection() experienced a non-transient SQL exception (error code {ex.Number})", ex);
+            throw new InvalidOperationException($"{GetType().FullName}.WithConnection() experienced a non-transient SQL exception (error code {ex.Number})", ex);
         }
         catch (Exception ex)
         {
-            throw new Exception(
-                $"{GetType().FullName}.WithConnection() experienced an exception (not a SQL Exception)", ex);
+            throw new InvalidOperationException($"{GetType().FullName}.WithConnection() experienced an exception (not a SQL Exception)", ex);
         }
     }
 
@@ -81,19 +81,19 @@ public abstract class BaseRepository<T>
         }
         catch (TimeoutException ex)
         {
-            throw new Exception($"{GetType().FullName}.WithConnection() experienced a SQL timeout", ex);
+            throw new InvalidOperationException($"{GetType().FullName}.WithConnection() experienced a SQL timeout", ex);
         }
-        catch (SqlException ex) when (TransientErrorNumbers.Contains(ex.Number))
+        catch (SqlException ex) when (_transientErrorNumbers.Contains(ex.Number))
         {
-            throw new Exception($"{GetType().FullName}.WithConnection() experienced a transient SQL Exception. ErrorNumber {ex.Number}", ex);
+            throw new InvalidOperationException($"{GetType().FullName}.WithConnection() experienced a transient SQL Exception. ErrorNumber {ex.Number}", ex);
         }
         catch (SqlException ex)
         {
-            throw new Exception($"{GetType().FullName}.WithConnection() experienced a non-transient SQL exception (error code {ex.Number})", ex);
+            throw new InvalidOperationException($"{GetType().FullName}.WithConnection() experienced a non-transient SQL exception (error code {ex.Number})", ex);
         }
         catch (Exception ex)
         {
-            throw new Exception(
+            throw new InvalidOperationException(
                 $"{GetType().FullName}.WithConnection() experienced an exception (not a SQL Exception)", ex);
         }
     }
@@ -101,13 +101,13 @@ public abstract class BaseRepository<T>
     private RetryPolicy GetRetryPolicy()
     {
         return Policy
-            .Handle<SqlException>(ex => TransientErrorNumbers.Contains(ex.Number))
+            .Handle<SqlException>(ex => _transientErrorNumbers.Contains(ex.Number))
             .Or<TimeoutException>()
             .WaitAndRetry(3, retryAttempt =>
                     TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                 (exception, timespan, retryCount, context) =>
                 {
-                    _logger.LogWarning($"SqlException ({exception.Message}). Retrying...attempt {retryCount})");
+                    _logger.LogWarning("SqlException ({Message}). Retrying...attempt {RetryCount})", exception.Message, retryCount);
                 }
             );
     }

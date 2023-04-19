@@ -17,11 +17,7 @@ public class InvalidRequestException : Exception
         ErrorMessages = errorMessages;
     }
 
-    public InvalidRequestException(SerializationInfo info, StreamingContext context,
-        Dictionary<string, string> errorMessages) : base(info, context)
-    {
-        ErrorMessages = errorMessages;
-    }
+    public InvalidRequestException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
     public InvalidRequestException(IEnumerable<ValidationFailure> failures)
         : this(failures.ToDictionary(failure => failure.PropertyName, failure => failure.ErrorMessage)) { }

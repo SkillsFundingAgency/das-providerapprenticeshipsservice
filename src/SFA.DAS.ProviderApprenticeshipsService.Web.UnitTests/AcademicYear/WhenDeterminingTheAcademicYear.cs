@@ -31,8 +31,8 @@ public class WhenDeterminingTheAcademicYear
         var actualLastAcademicYearFundingPeriod = _academicYear.LastAcademicYearFundingPeriod;
 
         //Assert
-        Assert.AreEqual(expectedYearStart, actualStart);
-        Assert.AreEqual(expectedYearEnd, actualEnd);
-        Assert.AreEqual(expectedLastAcademicYearFundingPeriod, actualLastAcademicYearFundingPeriod);
+        Assert.That(expectedYearStart, Is.EqualTo(actualStart));
+        Assert.That(expectedYearEnd, Is.EqualTo(actualEnd));
+        Assert.That(expectedLastAcademicYearFundingPeriod, Is.EqualTo(actualLastAcademicYearFundingPeriod));
     }
 }

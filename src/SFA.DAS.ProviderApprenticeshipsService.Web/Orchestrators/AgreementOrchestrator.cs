@@ -35,12 +35,12 @@ public sealed class AgreementOrchestrator : IAgreementOrchestrator
 
         var filteredCommitmentAgreements = string.IsNullOrEmpty(organisation)
             ? commitmentAgreements
-            : commitmentAgreements.Where(v => string.IsNullOrWhiteSpace(organisation.ToLower()) || (string.IsNullOrWhiteSpace(v.OrganisationName) == false && v.OrganisationName.ToLower().Replace(" ", String.Empty).Contains(organisation.ToLower().Replace(" ", String.Empty))));
+            : commitmentAgreements.Where(v => string.IsNullOrWhiteSpace(organisation.ToLower()) || (!string.IsNullOrWhiteSpace(v.OrganisationName) && v.OrganisationName.ToLower().Replace(" ", string.Empty).Contains(organisation.ToLower().Replace(" ", string.Empty))));
 
         return new AgreementsViewModel
         {
             CommitmentAgreements = filteredCommitmentAgreements.ToList(),
-            AllProviderOrganisationNames = commitmentAgreements.Select(ca => ca.OrganisationName).ToList(),
+            AllProviderOrganisationNames = commitmentAgreements.Select(agreement => agreement.OrganisationName).ToList(),
             SearchText = organisation
         };
     }

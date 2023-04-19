@@ -13,13 +13,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 public class UserRepository : BaseRepository<UserRepository>, IUserRepository
 {
-    private readonly ILogger<UserRepository> _logger;       
+  
 
     public UserRepository(IBaseConfiguration configuration, ILogger<UserRepository> logger, IConfiguration rootConfig) 
-        : base(configuration.DatabaseConnectionString, logger, rootConfig)
-    {
-        _logger = logger;
-    }
+        : base(configuration.DatabaseConnectionString, logger, rootConfig) { }
 
     public async Task Upsert(User user)
     {

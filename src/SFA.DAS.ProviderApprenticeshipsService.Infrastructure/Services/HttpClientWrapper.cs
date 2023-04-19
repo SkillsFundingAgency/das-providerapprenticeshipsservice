@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 
@@ -28,7 +29,6 @@ public class HttpClientWrapper : IHttpClientWrapper
     }
 }
 
-[Serializable]
 public class CustomHttpRequestException : HttpRequestException
 {
     public CustomHttpRequestException(HttpStatusCode statusCode, string reasonPhrase) 

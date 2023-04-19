@@ -112,7 +112,7 @@ public class WhenGettingAgreementsViewModel
 
         //Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual(0, result.CommitmentAgreements.Count());
+        Assert.That(0, Is.EqualTo(result.CommitmentAgreements.Count()));
     }
 
     [Test]
@@ -126,7 +126,7 @@ public class WhenGettingAgreementsViewModel
 
         //Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual(1, result.CommitmentAgreements.Count());
+        Assert.That(1, Is.EqualTo(result.CommitmentAgreements.Count()));
     }
 
     [Test]
@@ -140,8 +140,8 @@ public class WhenGettingAgreementsViewModel
 
         //Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual(1, result.CommitmentAgreements.Count());
-        Assert.AreEqual(4, result.AllProviderOrganisationNames.Count());
+        Assert.That(1, Is.EqualTo(result.CommitmentAgreements.Count()));
+        Assert.That(4, Is.EqualTo(result.AllProviderOrganisationNames.Count()));
     }
 
     private void SetOrganisations()

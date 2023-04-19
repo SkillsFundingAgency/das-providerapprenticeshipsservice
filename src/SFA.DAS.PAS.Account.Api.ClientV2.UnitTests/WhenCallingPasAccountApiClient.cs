@@ -26,7 +26,7 @@ public class WhenCallingPasAccountApiClient
     {
         var fixture = new WhenCallingPasAccountApiClientFixture().SetupResponseForGetUser();
         var result = await fixture.PasAccountApiClient.GetUser(fixture.UserRef, CancellationToken.None);
-        Assert.AreEqual(fixture.User, result);
+        Assert.That(fixture.User, Is.EqualTo(result));
     }
 
     [Test]
@@ -42,7 +42,7 @@ public class WhenCallingPasAccountApiClient
     {
         var fixture = new WhenCallingPasAccountApiClientFixture().SetupResponseForGetAccountUsers();
         var result = await fixture.PasAccountApiClient.GetAccountUsers(fixture.ProviderId, CancellationToken.None);
-        Assert.AreEqual(fixture.Users, result);
+        Assert.That(fixture.Users, Is.EqualTo(result));
     }
 
     [Test]        
@@ -66,7 +66,7 @@ public class WhenCallingPasAccountApiClient
     {
         var fixture = new WhenCallingPasAccountApiClientFixture().SetupResponseForGetAgreement();
         var result = await fixture.PasAccountApiClient.GetAgreement(fixture.ProviderId, CancellationToken.None);
-        Assert.AreEqual(fixture.ProviderAgreementStatus, result.Status);
+        Assert.That(fixture.ProviderAgreementStatus, Is.EqualTo(result.Status));
     }
 }
 

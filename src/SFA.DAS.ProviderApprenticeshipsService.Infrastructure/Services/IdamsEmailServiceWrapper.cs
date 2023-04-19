@@ -39,7 +39,7 @@ public class IdamsEmailServiceWrapper : IIdamsEmailServiceWrapper
         return results.SelectMany(result => ParseIdamsResult(result, ukprn)).ToList();
     }
 
-    private IEnumerable<string> ParseIdamsResult(string jsonResult, long providerId)
+    private static IEnumerable<string> ParseIdamsResult(string jsonResult, long providerId)
     {
         try
         {

@@ -54,23 +54,19 @@ public  class DateTimeViewModel
     public int? Month { get; set; }
 
     public int? Year {
-        get
-        {
-            return _year;
-        }
+        get => _year;
         set
         {
             if (value < 100)
             {
                 var culture = (CultureInfo)Thread.CurrentThread.CurrentCulture.Clone();
                 culture.DateTimeFormat.Calendar.TwoDigitYearMax = MaxYear;
-                DateTime dateTimeOut;
                 _year = System.DateTime.TryParseExact(
                     $"{value.Value.ToString("00")}-1-1",
                     "yy-M-d",
                     culture,
                     DateTimeStyles.None,
-                    out dateTimeOut) ? dateTimeOut.Year : value;
+                    out var dateTimeOut) ? dateTimeOut.Year : value;
             }
             else
             {
@@ -86,15 +82,12 @@ public  class DateTimeViewModel
         return CreateDateTime(Day ?? 1, Month, Year);
     }
         
-    private DateTime? CreateDateTime(int? day, int? month, int? year)
+    private static DateTime? CreateDateTime(int? day, int? month, int? year)
     {
         if (day.HasValue && month.HasValue && year.HasValue)
         {
-            DateTime dateTimeOut;
-            if (System.DateTime.TryParseExact(
-                    $"{year.Value}-{month.Value}-{day.Value}",
-                    "yyyy-M-d",
-                    CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTimeOut))
+            if (System.DateTime.TryParseExact($"{year.Value}-{month.Value}-{day.Value}", "yyyy-M-d",
+                    CultureInfo.CurrentCulture, DateTimeStyles.None, out var dateTimeOut))
             {
                 return dateTimeOut;
             }

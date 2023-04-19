@@ -157,7 +157,7 @@ public class WhenSyncingIdamsUsers
 
         public void VerifyIdamsUsersAreSyncedInUserRepository()
         {
-            UserRepository.Verify(x => x.SyncIdamsUsers(ProviderResponse.Ukprn, It.Is<List<IdamsUser>>(p => p.Count == NormalUsers.Count + SuperUsers.Count())));
+            UserRepository.Verify(x => x.SyncIdamsUsers(ProviderResponse.Ukprn, It.Is<List<IdamsUser>>(p => p.Count == NormalUsers.Count + SuperUsers.Count)));
             UserRepository.Verify(x => x.SyncIdamsUsers(It.IsAny<long>(), It.Is<List<IdamsUser>>(p => p.Count(z => z.UserType == UserType.SuperUser) == SuperUsers.Count)));
             UserRepository.Verify(x => x.SyncIdamsUsers(It.IsAny<long>(), It.Is<List<IdamsUser>>(p => p.Count(z => z.UserType == UserType.NormalUser) == NormalUsers.Count)));
         }

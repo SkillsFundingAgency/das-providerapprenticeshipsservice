@@ -29,7 +29,7 @@ public class WhenValidatingCommand
         var result = _validator.Validate(command);
 
         //Assert
-        Assert.IsTrue(result.IsValid);
+        Assert.That(result.IsValid, Is.True);
     }
 
     [Test]
@@ -47,8 +47,8 @@ public class WhenValidatingCommand
         var result = _validator.Validate(command);
 
         //Assert
-        Assert.IsFalse(result.IsValid);
-        Assert.IsTrue(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.UserRef))));
+        Assert.That(result.IsValid, Is.False);
+        Assert.That(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.UserRef))), Is.True);
     }
 
     [Test]
@@ -66,8 +66,8 @@ public class WhenValidatingCommand
         var result = _validator.Validate(command);
 
         //Assert
-        Assert.IsFalse(result.IsValid);
-        Assert.IsTrue(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.Email))));
+        Assert.That(result.IsValid, Is.False);
+        Assert.That(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.Email))), Is.True);
     }
 
     [Test]
@@ -85,8 +85,8 @@ public class WhenValidatingCommand
         var result = _validator.Validate(command);
 
         //Assert
-        Assert.IsFalse(result.IsValid);
-        Assert.IsTrue(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.Ukprn))));
+        Assert.That(result.IsValid, Is.False);
+        Assert.That(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.Ukprn))), Is.True);
     }
 
     [Test]
@@ -104,7 +104,7 @@ public class WhenValidatingCommand
         var result = _validator.Validate(command);
 
         //Assert
-        Assert.IsFalse(result.IsValid);
-        Assert.IsTrue(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.DisplayName))));
+        Assert.That(result.IsValid, Is.False);
+        Assert.That(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.DisplayName))), Is.True);
     }
 }

@@ -12,7 +12,7 @@ public class WhenExtractingMessages
     public void ThenBanerMessageIsExtracted(string source, string expected)
     {
         var bannerMessage = ValidationMessage.ExtractBannerMessage(source);
-        Assert.AreEqual(expected, bannerMessage);
+        Assert.That(expected, Is.EqualTo(bannerMessage));
     }
 
     [TestCase("Banner||Field", "Field")]
@@ -22,6 +22,6 @@ public class WhenExtractingMessages
     public void ThenFieldMessageIsExtracted(string source, string expected)
     {
         var bannerMessage = ValidationMessage.ExtractFieldMessage(source);
-        Assert.AreEqual(expected, bannerMessage);
+        Assert.That(expected, Is.EqualTo(bannerMessage));
     }
 }

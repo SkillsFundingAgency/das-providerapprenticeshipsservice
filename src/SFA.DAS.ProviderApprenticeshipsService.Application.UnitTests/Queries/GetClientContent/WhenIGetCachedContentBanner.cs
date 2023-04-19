@@ -114,6 +114,6 @@ public class WhenIGetCachedContentBanner
         var result = await _sut.Get(_contentType, _applicationId);
 
         //Assert
-        Assert.That(apiContentBanner, Is.EqualTo(result));
+        Assert.That(result, Is.EqualTo(apiContentBanner));
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
@@ -48,8 +50,8 @@ public class IdamsEmailServiceWrapperTests
         _mockHttpClientWrapper.Setup(m => m.GetStringAsync(It.IsAny<string>())).ReturnsAsync(mockResponse);
         var res = await _sut.GetEmailsAsync(10005143L, "UserRole");
 
-        Assert.That(res.Count, Is.EqualTo(1));
-        Assert.That(res[0], Is.EqualTo("abba@email.uk"));
+        res.Count.Should().Be(1);
+        res[0].Should().Be("abba@email.uk");
     }
 
     [Test]
@@ -59,8 +61,11 @@ public class IdamsEmailServiceWrapperTests
         _mockHttpClientWrapper.Setup(m => m.GetStringAsync(It.IsAny<string>())).ReturnsAsync(mockResponse);
         var res = await _sut.GetEmailsAsync(10005143L, "UserRole");
 
-        Assert.That(res.Count, Is.EqualTo(1));
-        Assert.That(res[0], Is.EqualTo("abba@email.uk"));
+        Assert.Multiple(() =>
+        {
+            res.Count.Should().Be(1);
+            res[0].Should().Be("abba@email.uk");
+        });
     }
 
     [Test]
@@ -73,9 +78,12 @@ public class IdamsEmailServiceWrapperTests
 
         var res = await _sut.GetEmailsAsync(10005143L, "UserRole");
 
-        Assert.That(res.Count, Is.EqualTo(2));
-        Assert.That(res[0], Is.EqualTo("abba@email.uk"));
-        Assert.That(res[1], Is.EqualTo("test@email.uk"));
+        Assert.Multiple(() =>
+        {
+            res.Count.Should().Be(2);
+            res[0].Should().Be("abba@email.uk");
+            res[1].Should().Be("test@email.uk");
+        });
     }
 
     [Test]
@@ -95,23 +103,23 @@ public class IdamsEmailServiceWrapperTests
         _mockHttpClientWrapper.Setup(m => m.GetStringAsync("https://url.to/listusersforarole?roleid=SuperUserRole&ukprn=10005143")).ReturnsAsync(mockSuperUserRoleResponse);
 
         var res = await _sut.GetEmailsAsync(10005143L, "UserRole,ViewerUserRole");
-        
+
         Assert.Multiple(() =>
         {
-            Assert.That(res.Count, Is.EqualTo(4));
-            Assert.That(res[0], Is.EqualTo("abba@email.uk"));
-            Assert.That(res[1], Is.EqualTo("test@email.uk"));
-            Assert.That(res[2], Is.EqualTo("thomas@email.uk"));
-            Assert.That(res[3], Is.EqualTo("alice@email.uk"));
+            res.Count.Should().Be(4);
+            res[0].Should().Be("abba@email.uk");
+            res[1].Should().Be("test@email.uk");
+            res[2].Should().Be("thomas@email.uk");
+            res[3].Should().Be("alice@email.uk");
         });
-       
+
         var res2 = await _sut.GetEmailsAsync(10005143L, "SuperUserRole");
 
         Assert.Multiple(() =>
         {
-            Assert.That(res2.Count, Is.EqualTo(2));
-            Assert.That(res2[0], Is.EqualTo("billy@email.uk"));
-            Assert.That(res2[1], Is.EqualTo("charlie@email.uk"));
+            res2.Count.Should().Be(2);
+            res2[0].Should().Be("billy@email.uk");
+            res2[1].Should().Be("charlie@email.uk");
         });
     }
 
@@ -127,12 +135,12 @@ public class IdamsEmailServiceWrapperTests
         _mockHttpClientWrapper.Setup(m => m.GetStringAsync("https://url.to/listusersforarole?roleid=ViewerUserRole&ukprn=10005143")).ReturnsAsync(mockViewerUserRoleResponse);
 
         var res = await _sut.GetEmailsAsync(10005143L, "UserRole,ViewerUserRole");
-        
+
         Assert.Multiple(() =>
         {
-            Assert.That(res.Count, Is.EqualTo(2));
-            Assert.That(res[0], Is.EqualTo("abba@email.uk"));
-            Assert.That(res[1], Is.EqualTo("test@email.uk"));
+            res.Count.Should().Be(2);
+            res[0].Should().Be("abba@email.uk");
+            res[1].Should().Be("test@email.uk");
         });
     }
 }

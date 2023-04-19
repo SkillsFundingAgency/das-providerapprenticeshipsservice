@@ -90,7 +90,7 @@ public class ProviderAgreementStatusRepository : BaseRepository<ProviderAgreemen
 
     private async Task UpdateLatestBookmark(IDbConnection conn, IDbTransaction tran, Guid newLatestBookmark)
     {
-        _logger.LogInformation($"Updating latest bookmark to: {newLatestBookmark.ToString()}");
+        _logger.LogInformation("Updating latest bookmark to: {NewLatestBookmark}", newLatestBookmark);
 
         var parameters = new DynamicParameters();
         parameters.Add("@latestBookmark", newLatestBookmark, DbType.Guid);

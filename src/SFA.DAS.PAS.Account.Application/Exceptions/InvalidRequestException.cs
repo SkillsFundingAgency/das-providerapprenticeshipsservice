@@ -6,7 +6,7 @@ namespace SFA.DAS.PAS.Account.Application.Exceptions;
 [Serializable]
 public class InvalidRequestException : Exception
 {
-    public Dictionary<string, string> ErrorMessages { get;}
+    public Dictionary<string, string> ErrorMessages { get; private set; }
 
     public InvalidRequestException(Dictionary<string, string> errorMessages)
         : base(BuildErrorMessage(errorMessages))
@@ -14,11 +14,7 @@ public class InvalidRequestException : Exception
         ErrorMessages = errorMessages;
     }
 
-    public InvalidRequestException(SerializationInfo info, StreamingContext context,
-        Dictionary<string, string> errorMessages) : base(info, context)
-    {
-        ErrorMessages = errorMessages;
-    }
+    protected InvalidRequestException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
     public InvalidRequestException(IEnumerable<ValidationFailure> failures)
         : this(failures.ToDictionary(failure => failure.PropertyName, failure => failure.ErrorMessage))
