@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
 
@@ -14,43 +14,43 @@ public sealed class ProviderCommitmentsLogger : IProviderCommitmentsLogger
         _logger = logger;
     }
 
-    public void Trace(string message, long? providerId = default(long?), long? commitmentId = default(long?), long? apprenticeshipId = default(long?))
+    public void Trace(string message, long? providerId = default, long? commitmentId = default, long? apprenticeshipId = default)
     {
         var properties = BuildPropertyDictionary(providerId, commitmentId, apprenticeshipId);
         _logger.LogTrace(message, properties);
     }
 
-    public void Debug(string message, long? providerId = default(long?), long? commitmentId = default(long?), long? apprenticeshipId = default(long?))
+    public void Debug(string message, long? providerId = default, long? commitmentId = default, long? apprenticeshipId = default)
     {
         var properties = BuildPropertyDictionary(providerId, commitmentId, apprenticeshipId);
         _logger.LogDebug(message, properties);
     }
 
-    public void Info(string message, long? providerId = default(long?), long? commitmentId = default(long?), long? apprenticeshipId = default(long?))
+    public void Info(string message, long? providerId = default, long? commitmentId = default, long? apprenticeshipId = default)
     {
         var properties = BuildPropertyDictionary(providerId, commitmentId, apprenticeshipId);
         _logger.LogInformation(message, properties);
     }
 
-    public void Warn(string message, long? providerId = default(long?), long? commitmentId = default(long?), long? apprenticeshipId = default(long?))
+    public void Warn(string message, long? providerId = default, long? commitmentId = default, long? apprenticeshipId = default)
     {
         var properties = BuildPropertyDictionary(providerId, commitmentId, apprenticeshipId);
         _logger.LogWarning(message, properties);
     }
 
-    public void Warn(Exception ex, string message, long? providerId = default(long?), long? commitmentId = default(long?), long? apprenticeshipId = default(long?))
+    public void Warn(Exception ex, string message, long? providerId = default, long? commitmentId = default, long? apprenticeshipId = default)
     {
         var properties = BuildPropertyDictionary(providerId, commitmentId, apprenticeshipId);
         _logger.LogWarning(ex, message, properties);
     }
 
-    public void Error(Exception ex, string message, long? providerId = default(long?), long? commitmentId = default(long?), long? apprenticeshipId = default(long?))
+    public void Error(Exception ex, string message, long? providerId = default, long? commitmentId = default, long? apprenticeshipId = default)
     {
         var properties = BuildPropertyDictionary(providerId, commitmentId, apprenticeshipId);
         _logger.LogError(ex, message, properties);
     }
 
-    public void Critical(Exception ex, string message, long? providerId = default(long?), long? commitmentId = default(long?), long? apprenticeshipId = default(long?))
+    public void Critical(Exception ex, string message, long? providerId = default, long? commitmentId = default, long? apprenticeshipId = default)
     {
         var properties = BuildPropertyDictionary(providerId, commitmentId, apprenticeshipId);
         _logger.LogCritical(ex, message, properties);

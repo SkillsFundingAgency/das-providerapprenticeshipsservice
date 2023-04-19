@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using SFA.DAS.Authorization.Services;
+﻿using SFA.DAS.Authorization.Services;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UnsubscribeNotification;

@@ -2,6 +2,7 @@
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.PAS.Account.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 
 namespace SFA.DAS.PAS.Account.Api.Controllers;
 

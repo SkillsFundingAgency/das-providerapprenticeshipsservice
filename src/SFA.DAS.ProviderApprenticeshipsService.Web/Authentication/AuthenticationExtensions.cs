@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
