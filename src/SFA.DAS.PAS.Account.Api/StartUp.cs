@@ -48,20 +48,20 @@ namespace SFA.DAS.PAS.Account.Api
                 services.AddHealthChecks();
             }
 
-           services
-                .AddMvc(o =>
-                {
-                    if (!(_configuration["EnvironmentName"]!.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase) ||
-                          _configuration["EnvironmentName"]!.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)))
-                    {
-                        o.Conventions.Add(new AuthorizeControllerModelConvention(new List<string>()));
-                    }
-                    o.Conventions.Add(new ApiExplorerGroupPerVersionConvention());
-                })
-                .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                });
+            services
+                 .AddMvc(o =>
+                 {
+                     if (!(_configuration["EnvironmentName"]!.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase) ||
+                           _configuration["EnvironmentName"]!.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)))
+                     {
+                         o.Conventions.Add(new AuthorizeControllerModelConvention(new List<string>()));
+                     }
+                     o.Conventions.Add(new ApiExplorerGroupPerVersionConvention());
+                 })
+                 .AddJsonOptions(options =>
+                 {
+                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                 });
 
             services.AddApplicationInsightsTelemetry();
 
@@ -98,7 +98,8 @@ namespace SFA.DAS.PAS.Account.Api
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "PasAccountApi", Version = "v1" });
             });
 
-            services.AddApiVersioning(opt => {
+            services.AddApiVersioning(opt =>
+            {
                 opt.ApiVersionReader = new HeaderApiVersionReader("X-Version");
             });
 
@@ -114,7 +115,7 @@ namespace SFA.DAS.PAS.Account.Api
             else
             {
                 app.UseDeveloperExceptionPage();
-            }   
+            }
 
             if (!env.IsDevelopment())
             {
@@ -137,6 +138,6 @@ namespace SFA.DAS.PAS.Account.Api
                    opt.SwaggerEndpoint("/swagger/v1/swagger.json", "PAS Account API v1");
                    opt.RoutePrefix = string.Empty;
                });
-        } 
+        }
     }
 }
