@@ -1,7 +1,6 @@
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+
+public class SummaryUnsubscribeViewModel
 {
-    public class SummaryUnsubscribeViewModel
-    {
-        public bool AlreadyUnsubscribed { get; set; }
-    }
+    public bool AlreadyUnsubscribed { get; set; }
 }
