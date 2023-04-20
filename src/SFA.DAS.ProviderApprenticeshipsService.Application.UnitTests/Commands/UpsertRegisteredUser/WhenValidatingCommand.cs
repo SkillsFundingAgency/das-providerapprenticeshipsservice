@@ -47,8 +47,11 @@ public class WhenValidatingCommand
         var result = _validator.Validate(command);
 
         //Assert
-        Assert.That(result.IsValid, Is.False);
-        Assert.That(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.UserRef))), Is.True);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsValid, Is.False);
+            Assert.That(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.UserRef))), Is.True);
+        });
     }
 
     [Test]
@@ -66,8 +69,12 @@ public class WhenValidatingCommand
         var result = _validator.Validate(command);
 
         //Assert
-        Assert.That(result.IsValid, Is.False);
-        Assert.That(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.Email))), Is.True);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsValid, Is.False);
+            Assert.That(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.Email))),
+                Is.True);
+        });
     }
 
     [Test]
@@ -85,8 +92,12 @@ public class WhenValidatingCommand
         var result = _validator.Validate(command);
 
         //Assert
-        Assert.That(result.IsValid, Is.False);
-        Assert.That(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.Ukprn))), Is.True);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsValid, Is.False);
+            Assert.That(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.Ukprn))),
+                Is.True);
+        });
     }
 
     [Test]
@@ -104,7 +115,12 @@ public class WhenValidatingCommand
         var result = _validator.Validate(command);
 
         //Assert
-        Assert.That(result.IsValid, Is.False);
-        Assert.That(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.DisplayName))), Is.True);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsValid, Is.False);
+            Assert.That(
+                result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.DisplayName))),
+                Is.True);
+        });
     }
 }

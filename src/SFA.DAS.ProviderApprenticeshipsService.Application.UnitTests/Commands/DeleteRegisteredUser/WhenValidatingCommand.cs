@@ -39,7 +39,10 @@ public class WhenValidatingCommand
         var result = _validator.Validate(command);
 
         //Assert
-        Assert.That(result.IsValid, Is.False);
-        Assert.That(result.Errors.Any(x => x.PropertyName.Contains(nameof(DeleteRegisteredUserCommand.UserRef))), Is.True);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsValid, Is.False);
+            Assert.That(result.Errors.Any(x => x.PropertyName.Contains(nameof(DeleteRegisteredUserCommand.UserRef))), Is.True);
+        });
     }
 }

@@ -28,7 +28,7 @@ public class UserOrchestrator : IUserOrchestrator
         if (string.IsNullOrEmpty(userResponse.UserRef))
         {
             return null;
-        };
+        }
 
         var user = new User
         {
@@ -48,7 +48,7 @@ public class UserOrchestrator : IUserOrchestrator
         return user;
     }
 
-    private async Task<UserNotificationSetting?> GetUserSetting(string userRef)
+    private async Task<UserNotificationSetting> GetUserSetting(string userRef)
     {
         var userSetting = await _mediator.Send(new GetUserNotificationSettingsQuery { UserRef = userRef });
 

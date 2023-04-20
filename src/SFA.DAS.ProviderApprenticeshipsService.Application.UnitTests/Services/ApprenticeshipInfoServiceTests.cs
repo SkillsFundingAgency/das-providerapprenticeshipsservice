@@ -32,8 +32,12 @@ public class ApprenticeshipInfoServiceTests
         var result = await _sut.GetProvider(response.ProviderId);
 
         _commitmentsV2ApiClient.Verify(x => x.GetProvider(response.ProviderId));
-        Assert.That(result.Provider.ProviderName, Is.EqualTo(response.Name));
-        Assert.That(result.Provider.Ukprn, Is.EqualTo(response.ProviderId));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Provider.ProviderName, Is.EqualTo(response.Name));
+            Assert.That(result.Provider.Ukprn, Is.EqualTo(response.ProviderId));
+        });
     }
 
     [Test]

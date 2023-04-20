@@ -14,7 +14,13 @@ public class InvalidRequestException : Exception
         ErrorMessages = errorMessages;
     }
 
-    protected InvalidRequestException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+    protected InvalidRequestException(SerializationInfo info, StreamingContext context,
+        Dictionary<string, string> errorMessages) : base(info, context)
+    {
+        ErrorMessages = errorMessages;
+    }
+
+    public override void GetObjectData(SerializationInfo info, StreamingContext context) { }
 
     public InvalidRequestException(IEnumerable<ValidationFailure> failures)
         : this(failures.ToDictionary(failure => failure.PropertyName, failure => failure.ErrorMessage))
