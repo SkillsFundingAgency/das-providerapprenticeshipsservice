@@ -9,7 +9,8 @@ public class IEnumerableCommitmentAgreementTests
     [TestFixture]
     public class WhenCallingToDataTable
     {
-        [Test, AutoData]
+        [Test]
+        [AutoData]
         public void ThenFirstColumnIsOrganisationName(List<CommitmentAgreement> sut)
         {
             var dataTable = sut.ToDataTable();
@@ -17,9 +18,10 @@ public class IEnumerableCommitmentAgreementTests
             dataTable.Columns[0].ColumnName
                 .Should().Be(nameof(CommitmentAgreement.OrganisationName));
         }
-           
 
-        [Test, AutoData]
+
+        [Test]
+        [AutoData]
         public void ThenSecondColumnIsAgreementId(List<CommitmentAgreement> sut)
         {
             var dataTable = sut.ToDataTable();
@@ -28,7 +30,8 @@ public class IEnumerableCommitmentAgreementTests
                 .Should().Be(nameof(CommitmentAgreement.AgreementID));
         }
 
-        [Test, AutoData]
+        [Test]
+        [AutoData]
         public void ThenTheDataTableRowCountIsSameAsCommitmentAgreementsCount(List<CommitmentAgreement> sut)
         {
             var dataTable = sut.ToDataTable();
@@ -37,7 +40,8 @@ public class IEnumerableCommitmentAgreementTests
                 .Should().Be(sut.Count);
         }
 
-        [Test, AutoData]
+        [Test]
+        [AutoData]
         public void ThenEachDataRowHasCorrectValuesAssigned(List<CommitmentAgreement> sut)
         {
             var expected = new CommitmentAgreement[sut.Count];

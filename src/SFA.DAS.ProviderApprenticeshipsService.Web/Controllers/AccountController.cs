@@ -40,7 +40,7 @@ public class AccountController : BaseController
 
     [AllowAllRoles]
     [Route("~/signout", Name = RouteNames.SignOut)]
-    public async Task<IActionResult> SignOut()
+    public async Task<IActionResult> SignOutUser()
     {
         var idToken = await HttpContext.GetTokenAsync("id_token");
 
@@ -51,9 +51,8 @@ public class AccountController : BaseController
         var authenticationProperties = new AuthenticationProperties { RedirectUri = callbackUrl };
         authenticationProperties.Parameters.Clear();
         authenticationProperties.Parameters.Add("id_token", idToken);
-        SignOut(authenticationProperties, 
-            CookieAuthenticationDefaults.AuthenticationScheme,
-            WsFederationDefaults.AuthenticationScheme);
+      
+        SignOut(authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, WsFederationDefaults.AuthenticationScheme);
 
         if (User.Identity.IsAuthenticated)
         {

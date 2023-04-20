@@ -64,20 +64,6 @@ public abstract class ExecutionPolicy
         throw ex;
     }
 
-    protected static Policy CreateRetryPolicy<T>(int numberOfRetries, TimeSpan waitBetweenTries, Action<Exception> onRetryableFailure = null)
-        where T : Exception
-    {
-        var waits = new TimeSpan[numberOfRetries];
-        for (var i = 0; i < waits.Length; i++)
-        {
-            waits[i] = waitBetweenTries;
-        }
-        return Policy.Handle<T>().WaitAndRetry(waits, (ex, wait) =>
-        {
-            onRetryableFailure?.Invoke(ex);
-        });
-    }
-
     protected static Policy CreateAsyncRetryPolicy<T>(int numberOfRetries, TimeSpan waitBetweenTries, Action<Exception> onRetryableFailure = null)
         where T : Exception
     {
@@ -91,5 +77,4 @@ public abstract class ExecutionPolicy
             onRetryableFailure?.Invoke(ex);
         });
     }
-
 }
