@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.Services;
 

@@ -14,6 +14,7 @@ using SFA.DAS.Configuration;
 using SFA.DAS.PAS.ImportProvider.WebJob.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.Extensions

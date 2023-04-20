@@ -10,6 +10,7 @@ using NUnit.Framework;
 using SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserSetting;
 

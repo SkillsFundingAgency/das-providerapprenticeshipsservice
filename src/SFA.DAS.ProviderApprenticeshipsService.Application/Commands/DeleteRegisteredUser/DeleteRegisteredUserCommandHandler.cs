@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser
 {

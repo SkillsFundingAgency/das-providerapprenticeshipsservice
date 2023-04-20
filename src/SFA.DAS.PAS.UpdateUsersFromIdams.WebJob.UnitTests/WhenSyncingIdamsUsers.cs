@@ -13,6 +13,7 @@ using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.IdamsUser;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 

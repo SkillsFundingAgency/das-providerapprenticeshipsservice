@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserSetting;
 

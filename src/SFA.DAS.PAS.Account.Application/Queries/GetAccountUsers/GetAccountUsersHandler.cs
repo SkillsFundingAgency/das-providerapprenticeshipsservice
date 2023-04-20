@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 
 namespace SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers;
 

@@ -1,6 +1,7 @@
 ﻿using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.UpdateNotificationSettings;

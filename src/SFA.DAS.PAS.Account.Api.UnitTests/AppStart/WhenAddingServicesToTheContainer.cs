@@ -16,6 +16,7 @@ using SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers;
 using SFA.DAS.PAS.Account.Application.Queries.GetProviderAgreement;
 using SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;

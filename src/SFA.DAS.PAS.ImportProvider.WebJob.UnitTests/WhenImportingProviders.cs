@@ -7,6 +7,7 @@ using NUnit.Framework;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.PAS.ImportProvider.WebJob.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.UnitTests;
 

@@ -7,16 +7,15 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
 using Microsoft.Extensions.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.IdamsUser;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 public class UserRepository : BaseRepository<UserRepository>, IUserRepository
 {
-  
-
-    public UserRepository(IBaseConfiguration configuration, ILogger<UserRepository> logger, IConfiguration rootConfig) 
-        : base(configuration.DatabaseConnectionString, logger, rootConfig) { }
+    public UserRepository(IBaseConfiguration configuration, ILogger<UserRepository> logger, IConfiguration rootConfig)
+          : base(configuration.DatabaseConnectionString, logger, rootConfig) { }
 
     public async Task Upsert(User user)
     {
@@ -34,7 +33,7 @@ public class UserRepository : BaseRepository<UserRepository>, IUserRepository
         });
     }
 
-    public async Task<User?> GetUser(string userRef)
+    public async Task<User> GetUser(string userRef)
     {
         return await WithConnection(async connection =>
         {
@@ -105,11 +104,11 @@ public class UserRepository : BaseRepository<UserRepository>, IUserRepository
             var parameters = new DynamicParameters();
             parameters.Add("@ukprn", ukprn, DbType.Int64);
             parameters.Add("@users", idamsUsersTable.AsTableValuedParameter());
-           
+
             return await connection.ExecuteAsync(
                 sql: "[dbo].[SyncIdamsUsers]",
                 param: parameters,
                 commandType: CommandType.StoredProcedure);
         });
-    }   
+    }
 }

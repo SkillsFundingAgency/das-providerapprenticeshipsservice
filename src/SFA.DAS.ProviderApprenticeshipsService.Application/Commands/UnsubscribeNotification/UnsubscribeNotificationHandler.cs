@@ -7,6 +7,7 @@ using FluentValidation.Results;
 using MediatR;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UnsubscribeNotification
 {

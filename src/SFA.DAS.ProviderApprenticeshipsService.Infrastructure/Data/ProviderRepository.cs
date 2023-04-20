@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using Provider = SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Provider;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;

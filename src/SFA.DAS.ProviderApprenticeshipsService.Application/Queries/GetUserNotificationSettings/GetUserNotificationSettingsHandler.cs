@@ -5,6 +5,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserSetting;
 

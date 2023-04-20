@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.IdamsUser;
