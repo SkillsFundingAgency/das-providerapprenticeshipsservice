@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
-using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -100,10 +98,9 @@ public class WhenSendingNotification
             .Returns(Task.CompletedTask);
 
         // Act
-        var result = await _sut.Handle(command, new CancellationToken());
+        await _sut.Handle(command, new CancellationToken());
 
         // Assert
         _mockLogger.VerifyLogging("Email sent to recipient.", LogLevel.Information, Times.Once());
-        result.Should().Be(Unit.Value);
     }
 }

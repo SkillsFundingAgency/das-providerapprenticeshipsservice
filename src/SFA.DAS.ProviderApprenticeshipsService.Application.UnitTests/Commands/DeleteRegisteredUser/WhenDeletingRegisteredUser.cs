@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.DeleteRegisteredUser;
@@ -7,7 +6,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
 [TestFixture]
 public class WhenDeletingRegisteredUser
 {
-    private IRequestHandler<DeleteRegisteredUserCommand, Unit> _handler;
+    private IRequestHandler<DeleteRegisteredUserCommand> _handler;
     private Mock<IValidator<DeleteRegisteredUserCommand>> _validator;
     private Mock<IUserRepository> _userRepository;
 

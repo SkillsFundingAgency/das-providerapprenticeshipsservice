@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 
@@ -9,7 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.
 [TestFixture]
 public class WhenUpdatingUserSettings
 {
-    private IRequestHandler<UpdateUserNotificationSettingsCommand, Unit> _sut;
+    private IRequestHandler<UpdateUserNotificationSettingsCommand> _sut;
     private Mock<IUserSettingsRepository> _mockSettingsRepo;
     private Mock<IValidator<UpdateUserNotificationSettingsCommand>> _mockValidator;
 

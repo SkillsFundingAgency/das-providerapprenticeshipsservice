@@ -1,15 +1,15 @@
-﻿using FluentValidation;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
 
-public sealed class SendNotificationCommandHandler : IRequestHandler<SendNotificationCommand, Unit>
+public sealed class SendNotificationCommandHandler : IRequestHandler<SendNotificationCommand>
 {
     private readonly IValidator<SendNotificationCommand> _validator;
     private readonly IBackgroundNotificationService _backgroundNotificationService;
@@ -22,7 +22,7 @@ public sealed class SendNotificationCommandHandler : IRequestHandler<SendNotific
         _logger = logger;
     }
 
-    public async Task<Unit> Handle(SendNotificationCommand message, CancellationToken cancellationToken)
+    public async Task Handle(SendNotificationCommand message, CancellationToken cancellationToken)
     {
         var validationResult = _validator.Validate(message);
         if (!validationResult.IsValid)
@@ -42,7 +42,5 @@ public sealed class SendNotificationCommandHandler : IRequestHandler<SendNotific
         {
             _logger.LogError(ex, "Error calling Notification Api. Recipient: {EmailRecipientsAddress}", message.Email.RecipientsAddress);
         }
-
-        return Unit.Value;
     }
 }

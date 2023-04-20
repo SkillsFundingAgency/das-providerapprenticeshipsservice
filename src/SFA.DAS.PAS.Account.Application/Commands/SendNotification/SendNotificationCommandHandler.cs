@@ -6,7 +6,7 @@ using ValidationException = System.ComponentModel.DataAnnotations.ValidationExce
 
 namespace SFA.DAS.PAS.Account.Application.Commands.SendNotification;
 
-public sealed class SendNotificationCommandHandler : IRequestHandler<SendNotificationCommand, Unit>
+public sealed class SendNotificationCommandHandler : IRequestHandler<SendNotificationCommand>
 {
     private readonly IValidator<SendNotificationCommand> _validator;
     private readonly IBackgroundNotificationService _backgroundNotificationService;
@@ -19,7 +19,7 @@ public sealed class SendNotificationCommandHandler : IRequestHandler<SendNotific
         _logger = logger;
     }
 
-    public async Task<Unit> Handle(SendNotificationCommand message, CancellationToken cancellationToken)
+    public async Task Handle(SendNotificationCommand message, CancellationToken cancellationToken)
     {
         var validationResult = _validator.Validate(message);
 
@@ -43,7 +43,5 @@ public sealed class SendNotificationCommandHandler : IRequestHandler<SendNotific
         }
 
         _logger.LogInformation("Email sent to recipient.");
-
-        return Unit.Value;
     }
 }
