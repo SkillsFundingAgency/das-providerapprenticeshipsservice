@@ -6,6 +6,6 @@ public static class StringExtensions
 {
     public static string RemoveHtmlTags(this string source)
     {
-        return Regex.Replace(source, "<.*?>", string.Empty);
+        return Regex.Replace(source, "<.*?>", string.Empty, RegexOptions.None, TimeSpan.FromMilliseconds(100));
     }
 }
