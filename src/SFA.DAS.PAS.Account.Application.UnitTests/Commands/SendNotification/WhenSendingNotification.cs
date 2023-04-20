@@ -38,14 +38,14 @@ public class WhenSendingNotification
     public Task IfSendNotificationCommandMessageIsEmpty_ValidationExceptionThrown()
     {
         // Arrange
-        var command = new SendNotificationCommand { };
-        IEnumerable<ValidationFailure> failures = new List<ValidationFailure> 
-        { 
-            new ValidationFailure 
+        var command = new SendNotificationCommand(null);
+        IEnumerable<ValidationFailure> failures = new List<ValidationFailure>
+        {
+            new ValidationFailure
             {
                 ErrorMessage = "empty",
                 ErrorCode = "40023"
-            } 
+            }
         };
         _mockValidator.Setup(m => m.Validate(command))
             .Returns(new ValidationResult(failures));
@@ -61,14 +61,14 @@ public class WhenSendingNotification
     {
         // Arrange
         const string testEmailAddress = "test@email.com";
-        var testEmail = new Email 
+        var testEmail = new Email
         {
             TemplateId = "1",
             ReplyToAddress = "test@noreply.com",
             Subject = "test",
             RecipientsAddress = testEmailAddress
         };
-        var command = new SendNotificationCommand { Email = testEmail };
+        var command = new SendNotificationCommand(testEmail);
         _mockValidator.Setup(m => m.Validate(command))
             .Returns(new ValidationResult());
         _mockBackgroundNotificationService.Setup(m => m.SendEmail(testEmail))
@@ -90,10 +90,10 @@ public class WhenSendingNotification
         {
             TemplateId = "1",
             ReplyToAddress = "test@noreply.com",
-            Subject = "test",
+            Subject = "test",   
             RecipientsAddress = testEmailAddress
         };
-        var command = new SendNotificationCommand { Email = testEmail };
+        var command = new SendNotificationCommand (testEmail);
         _mockValidator.Setup(m => m.Validate(command))
             .Returns(new ValidationResult());
         _mockBackgroundNotificationService.Setup(m => m.SendEmail(testEmail))

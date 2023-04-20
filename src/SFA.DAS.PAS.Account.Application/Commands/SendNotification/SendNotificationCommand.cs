@@ -5,5 +5,10 @@ namespace SFA.DAS.PAS.Account.Application.Commands.SendNotification;
 
 public class SendNotificationCommand : IRequest<Unit>
 {
-    public Email? Email { get; set; }
+    public Email Email { get; }
+
+    public SendNotificationCommand(Email email)
+    {
+        Email = email;
+    }
 }

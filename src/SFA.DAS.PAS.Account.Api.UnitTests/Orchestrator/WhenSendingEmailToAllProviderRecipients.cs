@@ -31,9 +31,11 @@ public class WhenSendingEmailToAllProviderRecipients_AccountUsers
             "nobody@idams.com"
         };
         _templateId = Guid.NewGuid().ToString();
-        _tokens = new Dictionary<string, string>();
-        _tokens.Add("key1", "value1");
-        _tokens.Add("key2", "value2");
+        _tokens = new Dictionary<string, string>
+        {
+            { "key1", "value1" },
+            { "key2", "value2" }
+        };
 
         _accountOrchestrator = new Mock<IAccountOrchestrator>();
         _mediator = new Mock<IMediator>();
