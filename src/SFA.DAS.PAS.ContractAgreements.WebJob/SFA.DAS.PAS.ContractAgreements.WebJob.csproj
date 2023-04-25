@@ -2,8 +2,6 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<OutputType>Exe</OutputType>
-		<IsWebJobProject>true</IsWebJobProject>
-		<WebJobType>Continuous</WebJobType>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Update="NLog.xsd">
