@@ -10,9 +10,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\PublishProfiles\das-at-pas-as - Web Deploy.pubxml" />
-    <None Update="settings.job">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Domain\SFA.DAS.ProviderApprenticeshipsService.Domain.csproj" />
@@ -65,16 +62,14 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="appsettings.Development.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+	<None Update="run.cmd">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="settings.job">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
   </ItemGroup>
   <ItemGroup>
-	<Content Include="Run.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	</Content>
+	<Content Include="appsettings.json" />
   </ItemGroup>
 </Project>

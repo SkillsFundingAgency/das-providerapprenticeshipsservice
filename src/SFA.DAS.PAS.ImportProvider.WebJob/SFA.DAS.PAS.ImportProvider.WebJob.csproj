@@ -17,18 +17,14 @@
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Infrastructure\SFA.DAS.ProviderApprenticeshipsService.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="settings.job">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+	<None Update="run.cmd">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="settings.job">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-	<Content Include="Run.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	</Content>
+	<Content Include="appsettings.json" />
   </ItemGroup>
 </Project>
