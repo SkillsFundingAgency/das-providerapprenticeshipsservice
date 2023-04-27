@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<OutputType>Library</OutputType>
 	</PropertyGroup>
+
 	<ItemGroup>
-		<Content Include="..\SFA.DAS.PAS.ImportProvider.WebJob\bin\**\*" CopyToOutputDirectory="PreserveNewest">
-			<Link>app_data\Jobs\Continuous\SFA.DAS.PAS.ImportProvider.WebJob\%(RecursiveDir)%(Filename)%(Extension)</Link>
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
 		<Content Include="..\SFA.DAS.PAS.ContractAgreements.WebJob\bin\**\*" CopyToOutputDirectory="PreserveNewest">
 			<Link>app_data\Jobs\Continuous\SFA.DAS.PAS.ContractAgreements.WebJob\%(RecursiveDir)%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="..\SFA.DAS.PAS.ImportProvider.WebJob\bin\**\*" CopyToOutputDirectory="PreserveNewest">
+			<Link>app_data\Jobs\Continuous\SFA.DAS.PAS.ImportProvider.WebJob\%(RecursiveDir)%(Filename)%(Extension)</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 		<Content Include="..\SFA.DAS.PAS.UpdateUsersFromIdams.WebJob\bin\**\*" CopyToOutputDirectory="PreserveNewest">
@@ -20,14 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Web.WebJobs.Publish" Version="2.0.0" />
-		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-		<PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.14" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Include="App_Data\jobs\continuous\**" CopyToOutputDirectory="Always" />
 	</ItemGroup>
+
 </Project>
