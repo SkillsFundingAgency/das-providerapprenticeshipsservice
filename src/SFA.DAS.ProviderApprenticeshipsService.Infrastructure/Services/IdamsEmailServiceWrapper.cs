@@ -67,9 +67,9 @@ public class IdamsEmailServiceWrapper : IIdamsEmailServiceWrapper
         }
     }
 
-    private async Task<string> GetString(string url)
+    private Task<string> GetString(string url)
     {
         _logger.LogInformation("Querying {Url} for user details", url);
-        return await _httpClientWrapper.GetStringAsync(url);
+        return _httpClientWrapper.GetStringAsync(url);
     }
 }
