@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
-using Microsoft.Azure.Services.AppAuthentication;
+using Azure.Core;
+using Azure.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -42,7 +43,7 @@ public abstract class BaseRepository<T>
         {
             return await _retryPolicy.Execute(async () =>
             {
-                await using var connection = GetSqlConnection(_connectionString);
+                await using var connection = await GetSqlConnectionAsync(_connectionString);
                 await connection.OpenAsync();
 
                 return await getData(connection);
@@ -72,7 +73,7 @@ public abstract class BaseRepository<T>
         {
             await _retryPolicy.Execute(async () =>
             {
-                await using var connection = GetSqlConnection(_connectionString);
+                await using var connection = await GetSqlConnectionAsync(_connectionString);
                 await connection.OpenAsync();
                 await using var trans = connection.BeginTransaction();
                 await command(connection, trans);
@@ -112,7 +113,7 @@ public abstract class BaseRepository<T>
             );
     }
 
-    private SqlConnection GetSqlConnection(string connectionString)
+    private async Task<SqlConnection> GetSqlConnectionAsync(string connectionString)
     {
         var isLocal = Configuration["EnvironmentName"]?.Equals("LOCAL") ?? false;
         if (isLocal)
@@ -120,13 +121,15 @@ public abstract class BaseRepository<T>
             return new SqlConnection(connectionString);
         }
 
-        var azureServiceTokenProvider = new AzureServiceTokenProvider();
-        var accessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result;
+        var tokenCredential = new DefaultAzureCredential();
+        var accessToken = await tokenCredential.GetTokenAsync(
+            new TokenRequestContext(scopes: new string[] { AzureResource + "/.default" }) { }
+        );
 
         return new SqlConnection
         {
             ConnectionString = connectionString,
-            AccessToken = accessToken,
+            AccessToken = accessToken.Token,
         };
     }
 }

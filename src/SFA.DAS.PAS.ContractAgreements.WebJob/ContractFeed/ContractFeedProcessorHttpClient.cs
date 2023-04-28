@@ -24,7 +24,7 @@ public class ContractFeedProcessorHttpClient : IContractFeedProcessorHttpClient
     
     public ContractFeedProcessorHttpClient(IContractFeedConfiguration config)
     {
-        _authenticationCredentials = new AzureAuthentication(config.AADInstance, config.Tenant, config.ClientId, config.ResourceId, config.AppKey);
+        _authenticationCredentials = new AzureAuthentication(config.AADInstance, config.Tenant, config.ClientId, config.ResourceId, config.ClientSecret);
         BaseAddress = config.BaseAddress;
     }
     
