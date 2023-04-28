@@ -24,7 +24,6 @@ public static class ApplicationServiceRegistrations
 
         services.AddCookieStorageService();
         services.AddLinkGenerator();
-        services.AddMediatRHandlers();
 
         // the below is closely tied to Web, so not sure where logically best to register them
         services.AddTransient<IProviderCommitmentsLogger, ProviderCommitmentsLogger>(); // need to think where to inject it > move to Application
