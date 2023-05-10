@@ -20,14 +20,14 @@ public class IdamsSyncService : IIdamsSyncService
     private readonly IUserRepository _userRepository;
     private readonly IProviderRepository _providerRepository;
     private readonly ILogger<IdamsSyncService> _logger;
-    private readonly IProviderNotificationConfiguration _configuration;
+    private readonly ProviderNotificationConfiguration _configuration;
 
     public IdamsSyncService(
         IIdamsEmailServiceWrapper idamsEmailServiceWrapper,
         IUserRepository userRepository,
         IProviderRepository providerRepository,
         ILogger<IdamsSyncService> logger,
-        IProviderNotificationConfiguration configuration)
+        ProviderNotificationConfiguration configuration)
     {
         _idamsEmailServiceWrapper = idamsEmailServiceWrapper;
         _userRepository = userRepository;

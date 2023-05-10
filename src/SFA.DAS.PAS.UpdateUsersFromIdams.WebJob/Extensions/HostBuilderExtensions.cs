@@ -38,14 +38,14 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions
         {
             hostBuilder.ConfigureServices((context, services) =>
             {
-                services.Configure<ProviderApprenticeshipsServiceConfiguration>(context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService));
+                services.Configure<ProviderApprenticeshipsServiceConfiguration>(c => context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService).Bind(c));
                 services.AddSingleton<IBaseConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
-                services.AddSingleton<IProviderNotificationConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value.CommitmentNotification);
+                services.AddSingleton<ProviderNotificationConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value.CommitmentNotification);
 
                 services.AddTransient<IHttpClientWrapper>(s =>
                 {
-                    var config = s.GetService<ProviderApprenticeshipsServiceConfiguration>();
-                    var httpClient = GetHttpClient(config, context.Configuration);
+                    var config = s.GetService<ProviderNotificationConfiguration>();
+                    var httpClient = GetHttpClient(config);
                     return new HttpClientWrapper(httpClient);
                 });
 
@@ -74,11 +74,9 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions
             return hostBuilder.UseEnvironment(environment);
         }
 
-        private static HttpClient GetHttpClient(ProviderApprenticeshipsServiceConfiguration config, IConfiguration rootConfig)
+        private static HttpClient GetHttpClient(ProviderNotificationConfiguration config)
         {
-            var httpClient = rootConfig.IsLocal()
-                ? new HttpClientBuilder()
-                : new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config.CommitmentNotification)).Build();
+            var httpClient = new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config)).Build();
 
             return httpClient;
         }

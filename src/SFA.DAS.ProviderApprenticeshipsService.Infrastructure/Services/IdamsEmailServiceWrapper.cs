@@ -15,12 +15,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 public class IdamsEmailServiceWrapper : IIdamsEmailServiceWrapper
 {
     private readonly ILogger<IdamsEmailServiceWrapper> _logger;
-    private readonly IProviderNotificationConfiguration _configuration;
+    private readonly ProviderNotificationConfiguration _configuration;
     private readonly IHttpClientWrapper _httpClientWrapper;
 
     public IdamsEmailServiceWrapper(
         ILogger<IdamsEmailServiceWrapper> logger,
-        IProviderNotificationConfiguration configuration,
+        ProviderNotificationConfiguration configuration,
         IHttpClientWrapper httpClientWrapper)
     {
         _logger = logger;
