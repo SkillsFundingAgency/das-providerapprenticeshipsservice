@@ -1,14 +1,10 @@
-﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes
-@using SFA.DAS.ProviderUrlHelper.Framework;
+﻿@using SFA.DAS.ProviderUrlHelper.Framework;
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
-
 @model SFA.DAS.ProviderApprenticeshipsService.Web.Models.AccountHomeViewModel
 
 @{
     ViewBag.Title = Model.ProviderName;
     ViewBag.PageId = "account-home";
-    
-    var showCourseManagementLink = HttpContext.Current.Items.Contains(RoatpConstants.IsCourseManagementLinkEnabled ) && HttpContext.Current.Items[RoatpConstants.IsCourseManagementLinkEnabled].Equals(true);
 }
 
 @if (!string.IsNullOrEmpty(Model.Message))
@@ -16,6 +12,22 @@
     <p style="border: 5px solid pink; text-align: center; padding: 20px; margin-top: 20px;">
         @Model.Message
     </p>
+}
+@if (DateTime.UtcNow < new DateTime(2023, 02, 13))
+{
+    <div class="govuk-notification-banner govuk-notification-banner--homepage" role="region" aria-labelledby="govuk-notification-banner-title-naw" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title-naw">
+                Reminder
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            <p class="govuk-notification-banner__heading">
+                National Apprenticeship Week: 6 to 12 February 2023
+            </p>
+            <p>Time to celebrate apprenticeships. Get involved with <a href="https://naw.appawards.co.uk/" class="govuk-link" target="_blank">National Apprenticeship Week</a>.</p>
+        </div>
+    </div>
 }
 
 <div class="grid-row">
@@ -107,20 +119,34 @@
                     <p>Create a traineeship vacancy and manage applications.</p>
                 </div>
             }
-            
-            @if(showCourseManagementLink)
+
+            <div class="box">
+                <h2 class="heading-medium">
+                    <a href="@Url.CourseManagementLink($"{Model.ProviderId}/review-your-details")">Your standards and training venues</a>
+                </h2>
+                <ul class="list list-bullet">
+                    <li>manage the standards you deliver</li>
+                    <li>add or remove a training venue</li>
+                    <li>change your training provider overview</li>
+                </ul>
+            </div>
+
+            @if (Model.ShowEarningsReport)
             {
                 <div class="box">
                     <h2 class="heading-medium">
-                        <a href="@Url.CourseManagementLink($"{Model.ProviderId}/review-your-details")">Your standards and training venues</a>
+                        <a href="@Url.ProviderFundingLink($"{Model.ProviderId}")">Apps Indicative earnings report</a>
                     </h2>
-                    <ul class="list list-bullet">
-                        <li>manage the standards you deliver</li>
-                        <li>add or remove a training venue</li>
-                        <li>change your training provider overview</li>
-                    </ul>
+                    <p>View your expected earnings based on your submission to the Digital apprenticeship service.</p>
                 </div>
             }
+
+            <div class="box">
+                <h2 class="heading-medium">
+                    <a href="@Url.APIManagementLink($"{Model.ProviderId}/subscriptions")">Developer APIs</a>
+                </h2>
+                <p>Integrate our APIs to help with recruitment or to track apprentice progress using your own systems. You can display adverts on multiple sites or automatically update training records.</p>
+            </div>
 
         </div>
     </div>

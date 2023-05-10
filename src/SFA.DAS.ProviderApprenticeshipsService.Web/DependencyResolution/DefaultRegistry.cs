@@ -19,16 +19,15 @@ using System;
 using System.Configuration;
 using System.Reflection;
 using System.Web;
-using FeatureToggle;
 using FluentValidation;
 using MediatR;
 using SFA.DAS.Authorization.Context;
+using SFA.DAS.Authorization.Features.Services;
 using SFA.DAS.Authorization.Handlers;
 using SFA.DAS.Authorization.ProviderPermissions.Handlers;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.CookieService;
-using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.Encoding;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
@@ -62,6 +61,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
                     scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
                     scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
+                    scan.Exclude(t => t.GetInterface(nameof(IAuthorizationHandler)) != null);
+                    //scan.ExcludeType<DefaultAuthorizationContextProvider>();
                 });
 
             var environment = GetAndStoreEnvironment();
@@ -72,11 +73,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             ConfigureHashingService(config);
             For<IProviderAgreementStatusConfiguration>().Use(config);
             For<ProviderApprenticeshipsServiceConfiguration>().Use(config);
+            For<SFA.DAS.Authorization.ProviderFeatures.Configuration.ProviderFeaturesConfiguration>().Use(config.Features);
+            For<IFeatureTogglesService<DAS.Authorization.ProviderFeatures.Models.ProviderFeatureToggle>>().Use<FeatureTogglesService<DAS.Authorization.ProviderFeatures.Configuration.ProviderFeaturesConfiguration, DAS.Authorization.ProviderFeatures.Models.ProviderFeatureToggle>>();
 
             For<ICache>().Use<InMemoryCache>(); //RedisCache
             For<IAgreementStatusQueryRepository>().Use<ProviderAgreementStatusRepository>();
-            For<IAccountApiClient>().Use<AccountApiClient>();
-            For<IAccountApiConfiguration>().Use<Domain.Configuration.AccountApiConfiguration>();
 
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
@@ -84,9 +85,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
             For<IAuthorizationHandler>().Use<AuthorizationHandler>();
-
-            ConfigureFeatureToggle();
-
+            
             RegisterMediator();
 
             ConfigureProviderRelationshipsApiClient();
@@ -94,12 +93,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
             ConfigureLogging();
 
             For<EncodingConfig>().Use(x => GetEncodingConfig(environment, configurationRepository));
-        }
-
-        private void ConfigureFeatureToggle()
-        {
-            For<IBooleanToggleValueProvider>().Use<CloudConfigurationBooleanValueProvider>();
-            For<IFeatureToggleService>().Use<FeatureToggleService>();
         }
 
         private void ConfigureLogging()

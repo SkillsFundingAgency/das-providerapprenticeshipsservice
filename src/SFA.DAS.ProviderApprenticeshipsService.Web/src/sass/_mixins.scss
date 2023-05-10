@@ -4,17 +4,17 @@
     width: 0;
     height: 0;
     display: block;
-    border-width: 4px 7px;
-    border-color: rgba(0, 0, 0, 0);
-    border-left-color: $borCol;
+    border-width: 7px 4px;
+    border-color: transparent;
+    border-top-color: $borCol;
     border-style: solid;
-    left: 10px;
+    right: 12px;
     top: 50%;
-    margin-top: -5px;
+    margin-top: -3px;
 }
 
 @mixin open-arrow ($borCol: black) {
-    border-width: 7px 4px;
-    border-top-color: $borCol;
-    border-left-color: transparent;
+    border-bottom-color: $borCol;
+    border-top-color: transparent;
+    margin-top: -10px;
 }

@@ -21,7 +21,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         private readonly AccountOrchestrator _accountOrchestrator;
         private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
 
-        public AccountController(AccountOrchestrator accountOrchestrator, ProviderApprenticeshipsServiceConfiguration configuration, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage)
+        public AccountController(AccountOrchestrator accountOrchestrator, ProviderApprenticeshipsServiceConfiguration configuration, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage, configuration)
         {
             _accountOrchestrator = accountOrchestrator;
             _configuration = configuration;
@@ -137,6 +137,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var model = await _accountOrchestrator.Unsubscribe(userRef, url);
 
             return View(model);
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("~/change-signin-details")]
+        public ActionResult ChangeSignInDetails()
+        {
+            return View();
         }
     }
 }

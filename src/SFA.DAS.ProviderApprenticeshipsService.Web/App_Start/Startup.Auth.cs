@@ -32,7 +32,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
             var dfESignInConfig = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<IDfESignInServiceConfiguration>();
             var providerApprenticeshipsServiceConfig = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ProviderApprenticeshipsServiceConfiguration>();
             var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
-            var accountOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AccountOrchestrator>();
 
             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
             app.UseCookieAuthentication(new CookieAuthenticationOptions
@@ -71,14 +70,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                     MetadataAddress = ConfigurationManager.AppSettings["IdamsADFSMetadata"],
                     Notifications = new WsFederationAuthenticationNotifications
                     {
-                        SecurityTokenValidated = notification => SecurityTokenValidated(notification, logger, authenticationOrchestrator, accountOrchestrator)
+                        SecurityTokenValidated = notification => SecurityTokenValidated(notification, logger, authenticationOrchestrator)
                     }
                 });
             }
         }
         
         private async Task SecurityTokenValidated(SecurityTokenValidatedNotification<WsFederationMessage, WsFederationAuthenticationOptions> notification, IProviderCommitmentsLogger logger, 
-            AuthenticationOrchestrator orchestrator, AccountOrchestrator accountOrchestrator)
+            AuthenticationOrchestrator orchestrator)
         {
             logger.Info("SecurityTokenValidated notification called");
 

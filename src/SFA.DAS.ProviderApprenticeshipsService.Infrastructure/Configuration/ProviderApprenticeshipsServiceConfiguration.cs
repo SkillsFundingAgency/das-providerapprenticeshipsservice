@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.Commitments.Api.Client.Configuration;
+﻿using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Http.Configuration;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -30,12 +29,13 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string ContentApplicationId { get; set; }
         public int DefaultCacheExpirationInMinutes { get; set; }
         public ZenDeskConfiguration ZenDeskSettings { get; set; }
-        
+        public SFA.DAS.Authorization.ProviderFeatures.Configuration.ProviderFeaturesConfiguration Features { get; set; }
+
         /// <summary>
         /// Gets or Sets property UseDfESignIn.
         /// Property responsible for holding the DfESignIn toggle switch value.
         /// </summary>
-        public bool UseDfESignIn { get; set; } = false; 
+        public bool UseDfESignIn { get; set; } = false;
     }
 
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
@@ -83,32 +83,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public string SectionId { get; set; }
         public string SnippetKey { get; set; }
         public string CobrowsingSnippetKey { get; set; }
-    }
-
-    public class RoatpCourseManagementWebConfiguration : IRoatpCourseManagementWebConfiguration
-    {
-        public ProviderFeaturesConfiguration ProviderFeaturesConfiguration { get; set; }
-        public string DatabaseConnectionString { get; set; }
-        public string ServiceBusConnectionString { get; set; }
-    }
-    public class ProviderFeaturesConfiguration
-    {
-        public List<ProviderFeatureToggle> FeatureToggles { get; set; }
-    }
-
-    public class ProviderFeatureToggle : FeatureToggle
-    {
-        public List<ProviderFeatureToggleWhitelistItem> Whitelist { get; set; }
-    }
-
-    public class FeatureToggle
-    {
-        public string Feature { get; set; }
-        public bool IsEnabled { get; set; }
-    }
-
-    public class ProviderFeatureToggleWhitelistItem
-    {
-        public int Ukprn { get; set; }
     }
 }
