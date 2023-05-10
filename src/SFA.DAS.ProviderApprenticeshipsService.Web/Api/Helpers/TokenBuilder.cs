@@ -22,9 +22,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Api.Helpers
             _tokenData.Header.Add("typ", AuthConfig.TokenType);
             _tokenData.Header.Add("alg", JsonWebAlgorithm.GetAlgorithm(AuthConfig.Algorithm));
             _tokenData.Payload.Add("aud", AuthConfig.Aud);
-            _tokenData.Payload.Add("iss", config.DfEOidcConfiguration.ClientId);
+            _tokenData.Payload.Add("iss", config.DfEOidcClientConfiguration.ClientId);
 
-            SecretKey = System.Text.Encoding.UTF8.GetBytes(config.DfEOidcConfiguration.ApiServiceSecret);
+            SecretKey = System.Text.Encoding.UTF8.GetBytes(config.DfEOidcClientConfiguration.ApiServiceSecret);
         }
 
         public string CreateToken()

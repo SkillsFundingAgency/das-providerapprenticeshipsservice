@@ -37,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
         /// <returns>string.</returns>
         private string GetEndPoint(string userId, string userOrgId)
         {
-            return $"{_config.DfEOidcConfiguration.ApiServiceUrl}/services/{_config.DfEOidcConfiguration.ApiServiceId}/organisations/{userOrgId}/users/{userId}";
+            return $"{_config.DfEOidcConfiguration.ApiServiceUrl}/services/{_config.DfEOidcClientConfiguration.ApiServiceId}/organisations/{userOrgId}/users/{userId}";
         }
     }
 }

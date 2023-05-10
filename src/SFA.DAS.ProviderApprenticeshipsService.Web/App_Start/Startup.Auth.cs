@@ -47,8 +47,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web
                 app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
                 {
                     Authority = dfESignInConfig.DfEOidcConfiguration.BaseUrl,
-                    ClientId = dfESignInConfig.DfEOidcConfiguration.ClientId,
-                    ClientSecret = dfESignInConfig.DfEOidcConfiguration.Secret,
+                    ClientId = dfESignInConfig.DfEOidcClientConfiguration.ClientId,
+                    ClientSecret = dfESignInConfig.DfEOidcClientConfiguration.Secret,
                     GetClaimsFromUserInfoEndpoint = true,
                     PostLogoutRedirectUri = oidcRedirectUrl,
                     RedirectUri = oidcRedirectUrl,
