@@ -231,6 +231,9 @@
     <Compile Include="Interfaces\ICacheStorageService.cs" />
     <Compile Include="Interfaces\IContentApiClient.cs" />
     <Compile Include="Interfaces\IContentClientApiConfiguration.cs" />
+    <Compile Include="Interfaces\IDfESignInService.cs" />
+    <Compile Include="Interfaces\IDfESignInServiceConfiguration.cs" />
+   
     <Compile Include="Interfaces\ICommitmentsV2ApiClient.cs" />
     <Compile Include="Interfaces\IProviderRepository.cs" />
     <Compile Include="Interfaces\IProviderAgreementStatusConfiguration.cs" />
@@ -253,6 +256,9 @@
     <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Interfaces\IUserSettingsRepository.cs" />
     <Compile Include="Models\Apprenticeship\FundingStatus.cs" />
+    <Compile Include="Models\DfESignInClientConfig.cs" />
+    <Compile Include="Models\DfESignInConfig.cs" />
+    
     <Compile Include="Models\UserType.cs" />
     <Compile Include="Models\IdamsUser.cs" />
     <Compile Include="Models\Organisation\LegalEntity.cs" />

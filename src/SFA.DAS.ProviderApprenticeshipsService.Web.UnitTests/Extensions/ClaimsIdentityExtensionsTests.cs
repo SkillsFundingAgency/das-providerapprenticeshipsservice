@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using NUnit.Framework;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Constants;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Extensions
@@ -23,6 +26,34 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Extensions
 
             var roles = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
             CollectionAssert.AreEquivalent(expectedRoles, roles);
+        }
+
+        [TestCase(ClaimName.Email, "someEmail@test.com")]
+        [TestCase(ClaimName.GivenName, "some name")]
+        [TestCase(ClaimName.Organisation, "DOE")]
+        [TestCase(ClaimName.NameIdentifier, "Full Name")]
+        [TestCase(ClaimName.RoleCode, "")]
+        public void GetClaimValue_When_GivenClaimName_Return_Expected(string claimName, string expectedValue)
+        {
+            // arrange
+            var identity = GetMockClaimsIdentity();
+
+            // sut
+            var actualValue = identity.GetClaimValue(claimName);
+
+            // assert
+            Assert.AreEqual(expectedValue, actualValue);
+        }
+
+        private static ClaimsIdentity GetMockClaimsIdentity()
+        {
+            return new ClaimsIdentity(new List<Claim>
+            {
+                new Claim(ClaimName.Email, "someEmail@test.com"),
+                new Claim(ClaimName.GivenName, "some name"),
+                new Claim(ClaimName.Organisation, "DOE"),
+                new Claim(ClaimName.NameIdentifier, "Full Name"),
+            }, "TestAuthType");
         }
     }
 }

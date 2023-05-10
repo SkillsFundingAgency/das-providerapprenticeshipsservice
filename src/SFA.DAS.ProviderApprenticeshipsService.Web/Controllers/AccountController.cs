@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.Owin.Security;
+﻿using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.WsFederation;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -12,16 +9,22 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
     public class AccountController : BaseController
     {
         private readonly AccountOrchestrator _accountOrchestrator;
+        private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
 
-        public AccountController(AccountOrchestrator accountOrchestrator, ICookieStorageService<FlashMessageViewModel> flashMessage, ProviderApprenticeshipsServiceConfiguration configuration) : base(flashMessage, configuration)
+        public AccountController(AccountOrchestrator accountOrchestrator, ProviderApprenticeshipsServiceConfiguration configuration, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage, configuration)
         {
             _accountOrchestrator = accountOrchestrator;
+            _configuration = configuration;
         }
 
         [AllowAllRoles]
@@ -30,8 +33,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             if (!Request.IsAuthenticated)
             {
-                HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties {RedirectUri = "/"},
-                    WsFederationAuthenticationDefaults.AuthenticationType);
+                HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = "/" },
+                        WsFederationAuthenticationDefaults.AuthenticationType);
             }
         }
 
@@ -41,11 +44,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         {
             var callbackUrl = Url.Action("SignOutCallback", "Account", routeValues: null, protocol: Request.Url.Scheme);
 
-            var auth = Request.GetOwinContext().Authentication;
-
-            auth.SignOut(
-                new AuthenticationProperties {RedirectUri = callbackUrl},
-                WsFederationAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
+            // check if the DfESignIn configuration exist and enabled.
+            if (_configuration != null && _configuration.UseDfESignIn)
+            {
+                var authTypes = HttpContext.GetOwinContext().Authentication.GetAuthenticationTypes();
+                HttpContext.GetOwinContext().Authentication.SignOut(
+                    new AuthenticationProperties { RedirectUri = callbackUrl },
+                    authTypes.Select(t => t.AuthenticationType).ToArray());
+                Response.Redirect("/");
+            }
+            else
+            {
+                Request.GetOwinContext().Authentication.SignOut(
+                    new AuthenticationProperties { RedirectUri = callbackUrl },
+                    WsFederationAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
+            }
         }
 
         [AllowAllRoles]
