@@ -13,6 +13,9 @@ using SFA.DAS.Configuration;
 using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
+using SFA.DAS.Http.TokenGenerators;
+using SFA.DAS.Http;
+using System.Net.Http;
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions
 {
@@ -39,7 +42,13 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions
                 services.AddSingleton<IBaseConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
                 services.AddSingleton<IProviderNotificationConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value.CommitmentNotification);
 
-                services.AddTransient<IHttpClientWrapper, HttpClientWrapper>();
+                services.AddTransient<IHttpClientWrapper>(s =>
+                {
+                    var config = s.GetService<ProviderApprenticeshipsServiceConfiguration>();
+                    var httpClient = GetHttpClient(config, context.Configuration);
+                    return new HttpClientWrapper(httpClient);
+                });
+
                 services.AddTransient<IIdamsEmailServiceWrapper, IdamsEmailServiceWrapper>(); 
                 services.AddTransient<IProviderRepository, ProviderRepository>();
                 services.AddTransient<IUserRepository, UserRepository>();
@@ -63,6 +72,15 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions
             }
 
             return hostBuilder.UseEnvironment(environment);
+        }
+
+        private static HttpClient GetHttpClient(ProviderApprenticeshipsServiceConfiguration config, IConfiguration rootConfig)
+        {
+            var httpClient = rootConfig.IsLocal()
+                ? new HttpClientBuilder()
+                : new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config.CommitmentNotification)).Build();
+
+            return httpClient;
         }
     }
 }
