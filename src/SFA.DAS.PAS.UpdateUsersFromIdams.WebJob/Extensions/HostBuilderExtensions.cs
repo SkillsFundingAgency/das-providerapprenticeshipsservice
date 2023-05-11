@@ -16,6 +16,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Http;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions
 {
@@ -42,19 +43,20 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions
                 services.AddSingleton<IBaseConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
                 services.AddSingleton<ProviderNotificationConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value.CommitmentNotification);
 
-                services.AddTransient<IHttpClientWrapper>(s =>
+                services.AddHttpClient<IIdamsEmailServiceWrapper, IdamsEmailServiceWrapper>(
+                (client) =>
                 {
-                    var config = s.GetService<ProviderNotificationConfiguration>();
-                    var httpClient = GetHttpClient(config);
-                    return new HttpClientWrapper(httpClient);
+                    var isp = services.BuildServiceProvider();
+                    var config = isp.GetRequiredService<ProviderNotificationConfiguration>();
+                    var token = new JwtBearerTokenGenerator(config);
+
+                    client.BaseAddress = new Uri(config.IdamsListUsersUrl);
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token.ToString());
                 });
 
-                services.AddTransient<IIdamsEmailServiceWrapper, IdamsEmailServiceWrapper>(); 
                 services.AddTransient<IProviderRepository, ProviderRepository>();
                 services.AddTransient<IUserRepository, UserRepository>();
                 services.AddTransient<IIdamsSyncService, IdamsSyncService>();
-
-                services.AddHttpClient();
 
                 services.AddLogging();
             });
@@ -72,13 +74,6 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions
             }
 
             return hostBuilder.UseEnvironment(environment);
-        }
-
-        private static HttpClient GetHttpClient(ProviderNotificationConfiguration config)
-        {
-            var httpClient = new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config)).Build();
-
-            return httpClient;
         }
     }
 }

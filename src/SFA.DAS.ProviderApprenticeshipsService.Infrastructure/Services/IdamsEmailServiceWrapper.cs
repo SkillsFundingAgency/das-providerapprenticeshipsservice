@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -16,16 +18,16 @@ public class IdamsEmailServiceWrapper : IIdamsEmailServiceWrapper
 {
     private readonly ILogger<IdamsEmailServiceWrapper> _logger;
     private readonly ProviderNotificationConfiguration _configuration;
-    private readonly IHttpClientWrapper _httpClientWrapper;
+    private readonly HttpClient _httpClient;
 
     public IdamsEmailServiceWrapper(
         ILogger<IdamsEmailServiceWrapper> logger,
         ProviderNotificationConfiguration configuration,
-        IHttpClientWrapper httpClientWrapper)
+        HttpClient httpClient)
     {
         _logger = logger;
         _configuration = configuration;
-        _httpClientWrapper = httpClientWrapper;
+        _httpClient = httpClient;
     }
 
     public virtual async Task<List<string>> GetEmailsAsync(long ukprn, string identities)
@@ -33,7 +35,7 @@ public class IdamsEmailServiceWrapper : IIdamsEmailServiceWrapper
         _logger.LogInformation("Getting emails for provider {Ukprn} for roles {Identities}", ukprn, identities);
 
         var ids = identities.Split(',');
-        var tasks = ids.Select(id => GetString(string.Format(_configuration.IdamsListUsersUrl, id, ukprn)));
+        var tasks = ids.Select(id => GetStringAsync(string.Format(_configuration.IdamsListUsersUrl, id, ukprn)));
         var results = await Task.WhenAll(tasks);
 
         return results.SelectMany(result => ParseIdamsResult(result, ukprn)).ToList();
@@ -67,9 +69,23 @@ public class IdamsEmailServiceWrapper : IIdamsEmailServiceWrapper
         }
     }
 
-    private Task<string> GetString(string url)
+    private async Task<string> GetStringAsync(string url)
     {
         _logger.LogInformation("Querying {Url} for user details", url);
-        return _httpClientWrapper.GetStringAsync(url);
+
+        var httpResponse = await _httpClient.GetAsync(url);
+
+        if (!httpResponse.IsSuccessStatusCode)
+        {
+            throw new CustomHttpRequestException(httpResponse.StatusCode, httpResponse.ReasonPhrase);
+        }
+
+        return await httpResponse.Content.ReadAsStringAsync();
     }
+}
+
+public class CustomHttpRequestException : HttpRequestException
+{
+    public CustomHttpRequestException(HttpStatusCode statusCode, string reasonPhrase)
+        : base($"An unexpected HTTP error occurred due to reason '{reasonPhrase}'.", null, statusCode) { }
 }
