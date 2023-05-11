@@ -27,7 +27,7 @@ public class ProviderApprenticeshipsServiceConfiguration : IBaseConfiguration
     public bool UseDfESignIn { get; set; } = false;
 }
 
-public class CommitmentsApiClientV2Configuration : IManagedIdentityClientConfiguration
+public class CommitmentsApiClientV2Configuration : IAzureActiveDirectoryClientConfiguration
 {
     public string ApiBaseUrl { get; set; }
     public string Tenant { get; set; }

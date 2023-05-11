@@ -75,13 +75,9 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Extensions
         {
             var httpClientBuilder = config.IsLocal()
                 ? new HttpClientBuilder()
-                : new HttpClientBuilder().WithBearerAuthorisationHeader(new ManagedIdentityTokenGenerator(commitmentsV2Config));
+                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(commitmentsV2Config));
             
-            return httpClientBuilder
-                .WithDefaultHeaders()
-                //.WithHandler(new RequestIdMessageRequestHandler())
-                //.WithHandler(new SessionIdMessageRequestHandler())
-                .Build();
+            return httpClientBuilder.Build();
         }
     }
 }
