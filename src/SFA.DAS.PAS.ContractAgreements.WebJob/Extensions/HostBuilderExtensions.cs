@@ -15,6 +15,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using System;
 using System.Reflection;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
+using Microsoft.Identity.Client;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.Extensions
 {
@@ -27,6 +28,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.Extensions
                 services.Configure<ContractFeedConfiguration>(context.Configuration.GetSection(ConfigurationKeys.ContractAgreements));
                 services.AddSingleton<IContractFeedConfiguration>(isp => isp.GetService<IOptions<ContractFeedConfiguration>>().Value);
                 services.AddSingleton<IBaseConfiguration>(isp => isp.GetService<IOptions<ContractFeedConfiguration>>().Value);
+                services.AddSingleton<IConfidentialClientApplication, ConfidentialClientApplication>();
 
                 services.AddTransient<ICurrentDateTime, CurrentDateTime>();
                 services.AddTransient<IContractFeedProcessorHttpClient, ContractFeedProcessorHttpClient>();

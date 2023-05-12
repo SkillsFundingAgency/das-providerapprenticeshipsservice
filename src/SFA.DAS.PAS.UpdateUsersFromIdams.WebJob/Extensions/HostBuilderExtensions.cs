@@ -13,6 +13,9 @@ using SFA.DAS.Configuration;
 using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
+using SFA.DAS.Http.TokenGenerators;
+using SFA.DAS.Http;
+using System.Net.Http;
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions
 {
@@ -35,11 +38,17 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions
         {
             hostBuilder.ConfigureServices((context, services) =>
             {
-                services.Configure<ProviderApprenticeshipsServiceConfiguration>(context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService));
+                services.Configure<ProviderApprenticeshipsServiceConfiguration>(c => context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService).Bind(c));
                 services.AddSingleton<IBaseConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
-                services.AddSingleton<IProviderNotificationConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value.CommitmentNotification);
+                services.AddSingleton<ProviderNotificationConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value.CommitmentNotification);
 
-                services.AddTransient<IHttpClientWrapper, HttpClientWrapper>();
+                services.AddTransient<IHttpClientWrapper>(s =>
+                {
+                    var config = s.GetService<ProviderNotificationConfiguration>();
+                    var httpClient = GetHttpClient(config);
+                    return new HttpClientWrapper(httpClient);
+                });
+
                 services.AddTransient<IIdamsEmailServiceWrapper, IdamsEmailServiceWrapper>(); 
                 services.AddTransient<IProviderRepository, ProviderRepository>();
                 services.AddTransient<IUserRepository, UserRepository>();
@@ -63,6 +72,13 @@ namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions
             }
 
             return hostBuilder.UseEnvironment(environment);
+        }
+
+        private static HttpClient GetHttpClient(ProviderNotificationConfiguration config)
+        {
+            var httpClient = new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config)).Build();
+
+            return httpClient;
         }
     }
 }

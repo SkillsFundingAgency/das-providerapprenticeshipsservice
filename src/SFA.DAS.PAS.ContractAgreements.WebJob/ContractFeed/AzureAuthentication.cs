@@ -11,14 +11,16 @@ public class AzureAuthentication
     private readonly string _tenant;
     private readonly string _clientId;
     private readonly string _resourceId;
+    private readonly string _clientSecret;
     private IConfidentialClientApplication _app;
 
-    public AzureAuthentication(string aadInstance, string tenant, string clientId, string resourceId)
+    public AzureAuthentication(string aadInstance, string tenant, string clientId, string resourceId, string clientSecret)
     {
         _aadInstance = aadInstance;
         _tenant = tenant;
         _clientId = clientId;
         _resourceId = resourceId;
+        _clientSecret = clientSecret;
     }
 
     public async Task<AuthenticationResult> GetAuthenticationResult()
@@ -28,7 +30,7 @@ public class AzureAuthentication
         if (_app == null)
         {
             _app = ConfidentialClientApplicationBuilder.Create(_clientId)
-                //.WithClientSecret(clientSecret) // TODO
+                .WithClientSecret(_clientSecret)
                 .WithAuthority(authority)
                 .Build();
         }

@@ -20,7 +20,7 @@ public class Startup
     public Startup(IConfiguration configuration)
     {
         _configuration = configuration;
-        
+
         var config = new ConfigurationBuilder()
             .AddConfiguration(configuration)
             .SetBasePath(Directory.GetCurrentDirectory());
@@ -53,11 +53,11 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddHttpContextAccessor();
-            
+
         services.AddOptions();
-            
-        services.AddMediatR(typeof(DeleteRegisteredUserCommand));
-            
+
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<DeleteRegisteredUserCommand>());
+
         services.AddLogging();
         services.AddApplicationServices(_configuration);
         services.AddOrchestrators();
