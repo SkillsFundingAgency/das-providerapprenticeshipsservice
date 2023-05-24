@@ -28,7 +28,6 @@ using SFA.DAS.Authorization.ProviderPermissions.Handlers;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.CookieService;
-using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.Encoding;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
@@ -79,8 +78,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.DependencyResolution
 
             For<ICache>().Use<InMemoryCache>(); //RedisCache
             For<IAgreementStatusQueryRepository>().Use<ProviderAgreementStatusRepository>();
-            For<IAccountApiClient>().Use<AccountApiClient>();
-            For<IAccountApiConfiguration>().Use<Domain.Configuration.AccountApiConfiguration>();
 
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
