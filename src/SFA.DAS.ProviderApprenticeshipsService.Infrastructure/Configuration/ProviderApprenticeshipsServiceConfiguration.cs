@@ -27,6 +27,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         int DefaultCacheExpirationInMinutes { get; set; }
         ZenDeskConfiguration ZenDeskSettings { get; set; }
         SFA.DAS.Authorization.ProviderFeatures.Configuration.ProviderFeaturesConfiguration Features { get; set; }
+
+        /// <summary>
+        /// Gets or Sets UseDfESignIn Property.
+        /// </summary>
+        bool UseDfESignIn { get; set; }
     }
 
     public class ProviderApprenticeshipsServiceConfiguration : IProviderAgreementStatusConfiguration
@@ -51,6 +56,9 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public int DefaultCacheExpirationInMinutes { get; set; }
         public ZenDeskConfiguration ZenDeskSettings { get; set; }
         public SFA.DAS.Authorization.ProviderFeatures.Configuration.ProviderFeaturesConfiguration Features { get; set; }
+
+        // <inherit-doc />
+        public bool UseDfESignIn { get; set; }
     }
 
     public class CommitmentsApiClientV2Configuration : IManagedIdentityClientConfiguration

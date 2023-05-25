@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
@@ -9,8 +11,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
     [Route("{controller}")]
     public class HomeController : Controller
     {
-        public HomeController()
+        private readonly ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
+
+        public HomeController(ProviderApprenticeshipsServiceConfiguration providerApprenticeshipsServiceConfiguration)
         {
+            _providerApprenticeshipsServiceConfiguration = providerApprenticeshipsServiceConfiguration;
         }
 
         [HttpGet]
@@ -24,9 +29,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         [Route("/", Name = RouteNames.Home)]
         public IActionResult Index()
         {
-            if (User.Identity.IsAuthenticated) return RedirectToRoute(RouteNames.AccountHome);
-
-            return View();
+            return View(new HomeViewModel { UseDfESignIn = _providerApprenticeshipsServiceConfiguration.UseDfESignIn });
         }
 
         [Route("terms", Name = "terms")]
