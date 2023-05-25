@@ -47,7 +47,7 @@ public class AccountOrchestrator : IAccountOrchestrator
             _logger.LogInformation("Getting provider {ProviderId}", providerId);
 
             var providerResponse = await _mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });
-
+            var result = await _authorizationService.IsAuthorizedAsync(ProviderFeature.FlexiblePaymentsPilot);
             return new AccountHomeViewModel
             {
                 AccountStatus = AccountStatus.Active,
@@ -55,7 +55,7 @@ public class AccountOrchestrator : IAccountOrchestrator
                 ProviderId = providerId,
                 ShowAcademicYearBanner = false,
                 ShowTraineeshipLink = true,
-                ShowEarningsReport = _authorizationService.IsAuthorized(ProviderFeature.FlexiblePaymentsPilot),
+                ShowEarningsReport = result,
                 BannerContent = _htmlHelpers.GetClientContentByType("banner", useLegacyStyles: true),
                 CovidSectionContent = _htmlHelpers.GetClientContentByType("covid_section", useLegacyStyles: true)
             };

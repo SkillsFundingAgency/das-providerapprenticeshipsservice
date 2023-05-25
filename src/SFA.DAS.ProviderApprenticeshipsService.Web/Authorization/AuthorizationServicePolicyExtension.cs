@@ -29,7 +29,7 @@ public static class AuthorizationServicePolicyExtension
         services.AddSingleton<IAuthorizationHandler, AuthorizationHandler>();
 
         services.AddSingleton<IAuthorizationContext>(_ => _.GetService<IAuthorizationContextProvider>().GetAuthorizationContext());
-        services.AddSingleton<IAuthorizationContextProvider, DefaultAuthorizationContextProvider>();
+        //services.AddSingleton<IAuthorizationContextProvider, DefaultAuthorizationContextProvider>();
         services.Decorate<IAuthorizationContextProvider, AuthorizationContextCache>();
         services.Decorate<IAuthorizationHandler, AuthorizationResultLogger>();
         services.AddScoped<IAuthorizationService, AuthorizationService>();

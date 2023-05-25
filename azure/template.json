@@ -164,7 +164,7 @@
     "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
     "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]",
     "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
-    "configNames": "SFA.DAS.ProviderApprenticeshipsService,SFA.DAS.Encoding,SFA.DAS.EmployerAccountAPI,SFA.DAS.ProviderUrlHelper",
+    "configNames": "SFA.DAS.ProviderApprenticeshipsService,SFA.DAS.Encoding,SFA.DAS.ProviderUrlHelper",
     "configNamesApi": "SFA.DAS.PasAccountApi"
   },
   "resources": [
