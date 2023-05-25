@@ -37,7 +37,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensi
         private static RestHttpClient GetRestHttpClient(ProviderRelationshipsApiConfiguration config)
         {
             HttpClient httpClient = new HttpClientBuilder()
-                    .WithBearerAuthorisationHeader(new ManagedIdentityTokenGenerator(config))
+                    .WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config))
                     .WithDefaultHeaders()
                     .Build();
 
