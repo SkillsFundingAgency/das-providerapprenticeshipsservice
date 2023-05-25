@@ -47,6 +47,7 @@ jobs:
             TargetFileName: '*.schema.json'
             TableName: Configuration
             ConfigurationSecrets:
+              ProviderRegistrationsApiClientSecret: $(ProviderRegistrationsApiClientSecret)
               AADClientSecret: $(AADClientSecret)
               AADAppKey: $(AADAppKey)
               SharedNotificationsApiClientToken: $(SharedNotificationsApiClientToken)
