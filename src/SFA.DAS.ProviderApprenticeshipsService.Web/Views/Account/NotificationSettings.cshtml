@@ -55,18 +55,23 @@
                                     var falseId = $"NotificationSettings-false-{i}";
                                 }
 
-                                <label for="@trueId" class="govuk-label govuk-radios__label" aria-label="Send emails">
-                                    @* @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", true, setting.ReceiveNotifications, new { id = trueId }) *@
+                                <div class="govuk-radios__item">
                                     <input class="govuk-radios__input" id="@trueId" asp-for="@setting.ReceiveNotifications" type="radio" value="true" checked="@setting.ReceiveNotifications" />
-                                </label>
+                                    <label class="govuk-label govuk-radios__label" for="@trueId">
+                                        <span class="govuk-visually-hidden">Send emails</span>
+                                    </label>
+                                </div>
 
                             </td>
 
                             <td class="govuk-table__cell notification-row">
-                                <label for="@falseId" class="govuk-label govuk-radios__label" aria-label="Stop emails">
-                                    @* @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", false, !setting.ReceiveNotifications, new { id = falseId }) *@
+
+                                <div class="govuk-radios__item">
                                     <input class="govuk-radios__input" id="@falseId" asp-for="@setting.ReceiveNotifications" type="radio" value="false" checked="!@setting.ReceiveNotifications" />
-                                </label>
+                                    <label class="govuk-label govuk-radios__label" for="@falseId">
+                                        <span class="govuk-visually-hidden">Stop emails</span>
+                                    </label>
+                                </div>
 
                             </td>
                         </tr>
@@ -74,11 +79,11 @@
                 </tbody>
             </table>
 
-            <div class="button-group">
+            <div class="govuk-button-group">
                 <button type="submit" class="govuk-button" id="submit-email-alerts">Update</button>
-                <a href="/" class="text-link">Cancel</a>
+                <a href="/" class="govuk-link">Cancel</a>
             </div>
-            <a asp-external-subdomain="recruit" asp-external-controller="" asp-external-action="notifications-manage" asp-external-id="@Model.ProviderId">Manage the notifications of your recruitment emails</a>
+            <a asp-external-subdomain="recruit" asp-external-controller="" asp-external-action="notifications-manage" asp-external-id="@Model.ProviderId" class="govuk-link">Manage the notifications of your recruitment emails</a>
             
         </form>
     </div>
