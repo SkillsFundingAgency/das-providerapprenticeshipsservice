@@ -90,6 +90,7 @@ public class Startup
 
         services.AddApplicationInsightsTelemetry();
 
+        services.AddDataProtection(_configuration);
         // Newtonsoft.Json is added for compatibility reasons
         // The recommended approach is to use System.Text.Json for serialization
         // Visit the following link for more guidance about moving away from Newtonsoft.Json to System.Text.Json

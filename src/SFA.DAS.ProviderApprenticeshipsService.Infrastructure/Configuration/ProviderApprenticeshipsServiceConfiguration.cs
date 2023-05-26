@@ -25,6 +25,9 @@ public class ProviderApprenticeshipsServiceConfiguration : IBaseConfiguration
     /// Property responsible for holding the DfESignIn toggle switch value.
     /// </summary>
     public bool UseDfESignIn { get; set; } = false;
+
+    public string DataProtectionKeysDatabase { get; set; }
+    public string RedisConnectionString { get; set; }
 }
 
 public class CommitmentsApiClientV2Configuration : IAzureActiveDirectoryClientConfiguration

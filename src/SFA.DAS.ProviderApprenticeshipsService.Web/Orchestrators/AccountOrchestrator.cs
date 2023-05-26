@@ -42,12 +42,22 @@ public class AccountOrchestrator : IAccountOrchestrator
 
     public async Task<AccountHomeViewModel> GetAccountHomeViewModel(int providerId)
     {
+        var result = false;
+        try
+        {
+            result = await _authorizationService.IsAuthorizedAsync(ProviderFeature.FlexiblePaymentsPilot);
+        }
+        catch (Exception e)
+        {
+            _logger.LogWarning(e,"Unable to get authorization for feature");
+        }
+        
         try
         {
             _logger.LogInformation("Getting provider {ProviderId}", providerId);
 
             var providerResponse = await _mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });
-            var result = true;// await _authorizationService.IsAuthorizedAsync(ProviderFeature.FlexiblePaymentsPilot);
+            
             return new AccountHomeViewModel
             {
                 AccountStatus = AccountStatus.Active,
