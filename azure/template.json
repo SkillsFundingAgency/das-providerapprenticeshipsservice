@@ -413,10 +413,6 @@
                   "value": "[reference(concat(variables('uiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
                 },
                 {
-                  "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                  "value": "[reference(concat(variables('apiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
-                },
-                {
                   "name": "RedisSessionProviderConnectionString",
                   "value": "[parameters('redisSessionProviderConnectionString')]"
                 },
