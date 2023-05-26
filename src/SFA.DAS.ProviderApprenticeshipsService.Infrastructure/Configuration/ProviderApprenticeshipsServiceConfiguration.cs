@@ -30,12 +30,9 @@ public class ProviderApprenticeshipsServiceConfiguration : IBaseConfiguration
     public string RedisConnectionString { get; set; }
 }
 
-public class CommitmentsApiClientV2Configuration : IAzureActiveDirectoryClientConfiguration
+public class CommitmentsApiClientV2Configuration : IManagedIdentityClientConfiguration
 {
     public string ApiBaseUrl { get; set; }
-    public string Tenant { get; set; }
-    public string ClientId { get; set; }
-    public string ClientSecret { get; set; }
     public string IdentifierUri { get; set; }
 }
 
