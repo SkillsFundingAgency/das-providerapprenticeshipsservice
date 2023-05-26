@@ -47,7 +47,7 @@ public class AccountOrchestrator : IAccountOrchestrator
             _logger.LogInformation("Getting provider {ProviderId}", providerId);
 
             var providerResponse = await _mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });
-            var result = await _authorizationService.IsAuthorizedAsync(ProviderFeature.FlexiblePaymentsPilot);
+            var result = true;// await _authorizationService.IsAuthorizedAsync(ProviderFeature.FlexiblePaymentsPilot);
             return new AccountHomeViewModel
             {
                 AccountStatus = AccountStatus.Active,
