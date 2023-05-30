@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using Azure.Identity;
 using Dapper;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -12,8 +13,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IUserSettingsRepository
 {
-    public UserSettingsRepository(IBaseConfiguration configuration, ILogger<UserSettingsRepository> logger, IConfiguration rootConfig) 
-        : base(configuration.DatabaseConnectionString, logger, rootConfig) { }
+    public UserSettingsRepository(IBaseConfiguration configuration, ILogger<UserSettingsRepository> logger, IConfiguration rootConfig, ChainedTokenCredential chainedTokenCredential) 
+        : base(configuration.DatabaseConnectionString, logger, rootConfig, chainedTokenCredential) { }
 
     public async Task<IEnumerable<UserSetting>> GetUserSetting(string userRef)
     {

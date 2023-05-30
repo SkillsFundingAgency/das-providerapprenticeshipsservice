@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure.Identity;
 using Dapper;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
@@ -14,8 +15,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 public class UserRepository : BaseRepository<UserRepository>, IUserRepository
 {
-    public UserRepository(IBaseConfiguration configuration, ILogger<UserRepository> logger, IConfiguration rootConfig)
-          : base(configuration.DatabaseConnectionString, logger, rootConfig) { }
+    public UserRepository(IBaseConfiguration configuration, ILogger<UserRepository> logger, IConfiguration rootConfig, ChainedTokenCredential chainedTokenCredential)
+          : base(configuration.DatabaseConnectionString, logger, rootConfig, chainedTokenCredential) { }
 
     public async Task Upsert(User user)
     {

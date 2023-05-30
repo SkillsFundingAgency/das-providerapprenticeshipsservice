@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure.Identity;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -21,8 +22,9 @@ public class ProviderAgreementStatusRepository : BaseRepository<ProviderAgreemen
         IBaseConfiguration configuration,
         ILogger<ProviderAgreementStatusRepository> logger, 
         ICurrentDateTime currentDateTime,
-        IConfiguration rootConfig)
-        : base(configuration.DatabaseConnectionString, logger, rootConfig)
+        IConfiguration rootConfig,
+        ChainedTokenCredential chainedTokenCredential)
+        : base(configuration.DatabaseConnectionString, logger, rootConfig, chainedTokenCredential)
     {
         _logger = logger;
         _currentDateTime = currentDateTime;

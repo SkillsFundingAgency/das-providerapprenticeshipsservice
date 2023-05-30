@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Azure.Identity;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions
@@ -17,6 +18,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensi
             services.AddTransient<IUserSettingsRepository, UserSettingsRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
 
+            services.AddSingleton(new ChainedTokenCredential(
+                new ManagedIdentityCredential(),
+                new AzureCliCredential())
+            );
+            
             return services;
         }
     }

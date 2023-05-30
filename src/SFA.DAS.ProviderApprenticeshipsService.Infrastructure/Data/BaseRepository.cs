@@ -19,6 +19,7 @@ public abstract class BaseRepository<T>
     private const string AzureResource = "https://database.windows.net/";
     private readonly string _connectionString;
     private readonly ILogger<T> _logger;
+    private readonly ChainedTokenCredential _chainedTokenCredential;
     private readonly Policy _retryPolicy;
 
     private readonly IList<int> _transientErrorNumbers = new List<int>
@@ -29,10 +30,11 @@ public abstract class BaseRepository<T>
         -2, 20, 64, 233, 10053, 10054, 10060, 40143
     };
 
-    protected BaseRepository(string connectionString, ILogger<T> logger, IConfiguration configuration)
+    protected BaseRepository(string connectionString, ILogger<T> logger, IConfiguration configuration, ChainedTokenCredential chainedTokenCredential)
     {
         _connectionString = connectionString;
         _logger = logger;
+        _chainedTokenCredential = chainedTokenCredential;
         Configuration = configuration;
         _retryPolicy = GetRetryPolicy();
     }
@@ -121,9 +123,8 @@ public abstract class BaseRepository<T>
             return new SqlConnection(connectionString);
         }
 
-        var tokenCredential = new DefaultAzureCredential();
-        var accessToken = await tokenCredential.GetTokenAsync(
-            new TokenRequestContext(scopes: new string[] { AzureResource + "/.default" }) { }
+        var accessToken = await _chainedTokenCredential.GetTokenAsync(
+            new TokenRequestContext(scopes: new string[] { AzureResource }) { }
         );
 
         return new SqlConnection
