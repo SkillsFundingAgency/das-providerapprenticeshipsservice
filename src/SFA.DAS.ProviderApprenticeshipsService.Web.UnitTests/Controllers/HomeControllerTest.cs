@@ -11,7 +11,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
     {
         private Web.Controllers.HomeController _sut;
 
-        [Test]
         [TestCase(true)]
         [TestCase(false)]
 
@@ -33,6 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
 
             var vm = vr.Model as HomeViewModel;
             vm.Should().NotBeNull();
+            vm?.UseDfESignIn.Should().Be(useDfESignIn);
         }
     }
 }
