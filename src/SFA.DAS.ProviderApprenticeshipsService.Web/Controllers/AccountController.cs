@@ -10,11 +10,13 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Routing;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
 {
@@ -23,27 +25,19 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
         private readonly IAccountOrchestrator _accountOrchestrator;
         private readonly LinkGenerator _linkGenerator;
         private readonly IAuthenticationServiceWrapper _authenticationService;
+        private readonly ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
 
         public AccountController(IAccountOrchestrator accountOrchestrator,
             LinkGenerator linkGenerator,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            IAuthenticationServiceWrapper authenticationService) 
+            IAuthenticationServiceWrapper authenticationService,
+            ProviderApprenticeshipsServiceConfiguration providerApprenticeshipsServiceConfiguration) 
             : base(flashMessage)
         {
             _accountOrchestrator = accountOrchestrator;
             _linkGenerator = linkGenerator;
             _authenticationService = authenticationService;
-        }
-
-        [AllowAllRoles]
-        [Route("~/signin", Name = RouteNames.SignIn)]
-        public IActionResult SignIn()
-        {
-            if (!User.Identity.IsAuthenticated)
-            {
-                HttpContext.ChallengeAsync(WsFederationDefaults.AuthenticationScheme);
-            }
-            return RedirectToRoute(RouteNames.Home);
+            _providerApprenticeshipsServiceConfiguration = providerApprenticeshipsServiceConfiguration;
         }
 
         [AllowAllRoles]
@@ -59,9 +53,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             var authenticationProperties = new AuthenticationProperties { RedirectUri = callbackUrl };
             authenticationProperties.Parameters.Clear();
             authenticationProperties.Parameters.Add("id_token", idToken);
+
+            var authScheme = _providerApprenticeshipsServiceConfiguration.UseDfESignIn
+                ? OpenIdConnectDefaults.AuthenticationScheme
+                : WsFederationDefaults.AuthenticationScheme;
+
             SignOut(authenticationProperties, 
                     CookieAuthenticationDefaults.AuthenticationScheme,
-                    WsFederationDefaults.AuthenticationScheme);
+                    authScheme);
 
             if (User.Identity.IsAuthenticated)
             {

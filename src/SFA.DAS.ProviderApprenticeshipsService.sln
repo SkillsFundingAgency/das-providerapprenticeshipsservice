@@ -49,7 +49,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PAS.UpdateUsersFrom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PAS.Account.Application", "SFA.DAS.PAS.Account.Application\SFA.DAS.PAS.Account.Application.csproj", "{3EFBF391-30BF-4A25-8DE4-2342D571C9BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PAS.Account.Application.UnitTests", "SFA.DAS.PAS.Account.Application.UnitTests\SFA.DAS.PAS.Account.Application.UnitTests.csproj", "{54AA274D-F21D-4076-936B-B32E1952E80B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PAS.Account.Application.UnitTests", "SFA.DAS.PAS.Account.Application.UnitTests\SFA.DAS.PAS.Account.Application.UnitTests.csproj", "{54AA274D-F21D-4076-936B-B32E1952E80B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

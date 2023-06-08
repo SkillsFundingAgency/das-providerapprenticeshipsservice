@@ -18,7 +18,7 @@
 <!--	<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />-->
 <!--	<PackageReference Include="Microsoft.ApplicationInsights.NLogTarget" Version="2.21.0" />-->
 <!--	<PackageReference Include="Microsoft.ApplicationInsights.TraceListener" Version="2.21.0" />-->
-	<PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="6.0.12" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="6.0.16" />
 <!--    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />-->
 <!--    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />-->
 <!--    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.2.0" />-->
@@ -34,6 +34,7 @@
     <PackageReference Include="SFA.DAS.Authorization.ProviderPermissions" Version="6.0.97" />
 	<PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
     <PackageReference Include="SFA.DAS.CosmosDb.Testing" Version="1.0.1" />
+    <PackageReference Include="SFA.DAS.DfESignIn.Auth" Version="17.1.48" />
     <PackageReference Include="SFA.DAS.Encoding" Version="1.1.76" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.43" />
     <PackageReference Include="SFA.DAS.Provider.Shared.UI" Version="2.0.22" />
@@ -51,6 +52,7 @@
 <!--    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.9.0" />-->
 <!--    <PackageReference Include="System.ServiceModel.Federation" Version="4.9.0" />-->
     <PackageReference Include="SFA.DAS.Learners" Version="1.1.181" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.16.0" />
 <!--    <PackageReference Include="System.Spatial" Version="5.8.5" />-->
 <!--    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.13" />-->
 <!--	<PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.2.0" />-->
