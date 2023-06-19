@@ -47,8 +47,12 @@ jobs:
             TargetFileName: '*.schema.json'
             TableName: Configuration
             ConfigurationSecrets:
+              ProviderRegistrationsApiClientSecret: $(ProviderRegistrationsApiClientSecret)
+              AADClientSecret: $(AADClientSecret)
+              AADAppKey: $(AADAppKey)
               SharedNotificationsApiClientToken: $(SharedNotificationsApiClientToken)
               CommitmentNotificationToken: $(CommitmentNotificationToken)
+              DefaultSessionRedisConnectionString: $(DefaultSessionRedisConnectionString)
         - template: azure-pipelines-templates/deploy/step/app-role-assignments.yml@das-platform-building-blocks
           parameters:
             ServiceConnection: ${{ parameters.AppRoleAssignmentsServiceConnection }}
