@@ -2,13 +2,15 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.DfESignIn.Auth.AppStart;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 
 public static class AuthenticationExtensions
 {
-    public static void AddAndConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
-    {
+    
         private const string ClientName = "ProviderRoATP";
         private const string SignedOutCallbackPath = "/signout";
 

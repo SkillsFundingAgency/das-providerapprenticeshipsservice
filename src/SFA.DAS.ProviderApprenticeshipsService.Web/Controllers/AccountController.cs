@@ -26,56 +26,54 @@ public class AccountController : BaseController
 {
     private readonly IAccountOrchestrator _accountOrchestrator;
     private readonly LinkGenerator _linkGenerator;
+    private readonly IAuthenticationServiceWrapper _authenticationService;
+    private readonly ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
+
+
+
 
     public AccountController(IAccountOrchestrator accountOrchestrator,
         LinkGenerator linkGenerator,
-        ICookieStorageService<FlashMessageViewModel> flashMessage) 
+        ICookieStorageService<FlashMessageViewModel> flashMessage,
+        IAuthenticationServiceWrapper authenticationService,
+        ProviderApprenticeshipsServiceConfiguration providerApprenticeshipsServiceConfiguration)
         : base(flashMessage)
     {
-        private readonly IAccountOrchestrator _accountOrchestrator;
-        private readonly LinkGenerator _linkGenerator;
-        private readonly IAuthenticationServiceWrapper _authenticationService;
-        private readonly ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
+        _accountOrchestrator = accountOrchestrator;
+        _linkGenerator = linkGenerator;
+        _authenticationService = authenticationService;
+        _providerApprenticeshipsServiceConfiguration = providerApprenticeshipsServiceConfiguration;
+    }
 
-        public AccountController(IAccountOrchestrator accountOrchestrator,
-            LinkGenerator linkGenerator,
-            ICookieStorageService<FlashMessageViewModel> flashMessage,
-            IAuthenticationServiceWrapper authenticationService,
-            ProviderApprenticeshipsServiceConfiguration providerApprenticeshipsServiceConfiguration) 
-            : base(flashMessage)
+
+    [AllowAllRoles]
+    [Route("~/signout", Name = RouteNames.SignOut)]
+    public async Task<IActionResult> SignOut()
+    {
+        //return RedirectToRoute(RouteNames.AccountHome);
+    
+        var idToken = await HttpContext.GetTokenAsync("id_token");
+        var callbackUrl = _linkGenerator.GetPathByAction("Index", "Account", values: new
         {
-            _accountOrchestrator = accountOrchestrator;
-            _linkGenerator = linkGenerator;
-            _authenticationService = authenticationService;
-            _providerApprenticeshipsServiceConfiguration = providerApprenticeshipsServiceConfiguration;
-        }
+            message = ""
+        });
+
+        var authenticationProperties = new AuthenticationProperties {RedirectUri = callbackUrl};
+        authenticationProperties.Parameters.Clear();
+        authenticationProperties.Parameters.Add("id_token", idToken);
+
+        var authScheme = _providerApprenticeshipsServiceConfiguration.UseDfESignIn
+            ? OpenIdConnectDefaults.AuthenticationScheme
+            : WsFederationDefaults.AuthenticationScheme;
+
+        SignOut(authenticationProperties,
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            authScheme);
+        
         return RedirectToRoute(RouteNames.Home);
     }
 
-        [AllowAllRoles]
-        [Route("~/signout", Name = RouteNames.SignOut)]
-        public async Task<IActionResult> SignOut()
-        {
-            return RedirectToRoute(RouteNames.AccountHome);
-        }
-
-            var callbackUrl = _linkGenerator.GetPathByAction("Index", "Account", values: new
-            {
-                message = ""
-            });
-            var authenticationProperties = new AuthenticationProperties { RedirectUri = callbackUrl };
-            authenticationProperties.Parameters.Clear();
-            authenticationProperties.Parameters.Add("id_token", idToken);
-
-            var authScheme = _providerApprenticeshipsServiceConfiguration.UseDfESignIn
-                ? OpenIdConnectDefaults.AuthenticationScheme
-                : WsFederationDefaults.AuthenticationScheme;
-
-            SignOut(authenticationProperties, 
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    authScheme);
-
-    [HttpGet]
+[HttpGet]
     [Authorize]
     [Route("~/account", Name = RouteNames.AccountHome)]
     public async Task<IActionResult> Index(string message)

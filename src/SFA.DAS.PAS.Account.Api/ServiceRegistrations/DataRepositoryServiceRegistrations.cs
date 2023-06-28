@@ -1,4 +1,5 @@
-﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+﻿using Azure.Identity;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
@@ -12,6 +13,11 @@ public static class DataRepositoryServiceRegistrations
         services.AddTransient<IProviderAgreementStatusRepository, ProviderAgreementStatusRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
 
+        services.AddSingleton(new ChainedTokenCredential(
+            new ManagedIdentityCredential(),
+            new AzureCliCredential())
+        );
+        
         return services;
     }
 }
