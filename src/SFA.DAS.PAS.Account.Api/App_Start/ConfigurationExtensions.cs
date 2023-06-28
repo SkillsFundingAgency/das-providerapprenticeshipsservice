@@ -1,7 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.IO;
+using Microsoft.Extensions.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
-using System;
-using System.IO;
 
 namespace SFA.DAS.PAS.Account.Api;
 

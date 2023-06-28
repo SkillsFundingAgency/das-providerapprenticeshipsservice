@@ -1,42 +1,40 @@
-﻿using System.Threading.Tasks;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Services.UserIdentityService;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Application.Services.UserIdentityService;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+
+public interface IAuthenticationOrchestrator
 {
-    public interface IAuthenticationOrchestrator
+    Task<bool> SaveIdentityAttributes(string userId, string ukprn, string displayName, string email);
+}
+
+public class AuthenticationOrchestrator : IAuthenticationOrchestrator
+{
+    private readonly IProviderCommitmentsLogger _logger;
+    private readonly IUserIdentityService _userIdentityService;
+
+    public AuthenticationOrchestrator(
+        IProviderCommitmentsLogger logger,
+        IUserIdentityService userIdentityService)
     {
-        Task<bool> SaveIdentityAttributes(string userId, string ukprn, string displayName, string email);
+        _logger = logger;
+        _userIdentityService = userIdentityService;
     }
 
-    public class AuthenticationOrchestrator : IAuthenticationOrchestrator
+    public async Task<bool> SaveIdentityAttributes(string userId, string ukprn, string displayName, string email)
     {
-        private readonly IProviderCommitmentsLogger _logger;
-        private readonly IUserIdentityService _userIdentityService;
+        long parsedUkprn;
 
-        public AuthenticationOrchestrator(
-            IProviderCommitmentsLogger logger,
-            IUserIdentityService userIdentityService)
+        if (!long.TryParse(ukprn, out parsedUkprn))
         {
-            _logger = logger;
-            _userIdentityService = userIdentityService;
+            _logger.Info($"Unable to parse Ukprn \"{ukprn}\" from claims for user \"{userId}\"");
+            return false;
         }
 
-        public async Task<bool> SaveIdentityAttributes(string userId, string ukprn, string displayName, string email)
-        {
-            long parsedUkprn;
+        _logger.Info($"Updating \"{userId}\" attributes - ukprn:\"{parsedUkprn}\", displayname:\"{displayName}\", email:\"{email}\"");
 
-            if (!long.TryParse(ukprn, out parsedUkprn))
-            {
-                _logger.Info($"Unable to parse Ukprn \"{ukprn}\" from claims for user \"{userId}\"");
-                return false;
-            }
+        await _userIdentityService.UpsertUserIdentityAttributes(userId, parsedUkprn, displayName, email);
 
-            _logger.Info($"Updating \"{userId}\" attributes - ukprn:\"{parsedUkprn}\", displayname:\"{displayName}\", email:\"{email}\"");
-
-            await _userIdentityService.UpsertUserIdentityAttributes(userId, parsedUkprn, displayName, email);
-
-            return true;
-        }
+        return true;
     }
 }

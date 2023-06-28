@@ -1,10 +1,8 @@
 ﻿using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+
+public class ViewModelBase
 {
-    public class ViewModelBase
-    {
-        public FlashMessageViewModel FlashMessage { get; set; }
-    }
-    
+    public FlashMessageViewModel FlashMessage { get; set; }
 }

@@ -1,44 +1,38 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
-using System;
-using System.Linq;
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication
+public interface IAuthenticationServiceWrapper
 {
-    public interface IAuthenticationServiceWrapper
+    string GetClaimValue(string key);
+    bool IsUserAuthenticated();
+    bool TryGetClaimValue(string key, out string value);
+}
+
+public class AuthenticationServiceWrapper : IAuthenticationServiceWrapper
+{
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public AuthenticationServiceWrapper(IHttpContextAccessor httpContextAccessor)
     {
-        string GetClaimValue(string key);
-        bool IsUserAuthenticated();
-        bool TryGetClaimValue(string key, out string value);
+        _httpContextAccessor = httpContextAccessor ?? throw new NullReferenceException(nameof(httpContextAccessor));
     }
 
-    public class AuthenticationServiceWrapper : IAuthenticationServiceWrapper
+    public string GetClaimValue(string key)
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        return _httpContextAccessor.HttpContext.User.FindFirst(key).Value;
+    }
 
-        public AuthenticationServiceWrapper(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor ?? throw new NullReferenceException(nameof(httpContextAccessor));
-        }
+    public bool IsUserAuthenticated()
+    {
+        return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
+    }
 
-        public string GetClaimValue(string key)
-        {
-            return _httpContextAccessor.HttpContext.User.FindFirst(key).Value;
-        }
+    public bool TryGetClaimValue(string key, out string value)
+    {
+        var identity = _httpContextAccessor.HttpContext.User.Identity as ClaimsIdentity;
+        var claim = identity?.Claims.FirstOrDefault(c => c.Type == key);
 
-        public bool IsUserAuthenticated()
-        {
-            return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
-        }
+        value = claim?.Value;
 
-        public bool TryGetClaimValue(string key, out string value)
-        {
-            var identity = _httpContextAccessor.HttpContext.User.Identity as ClaimsIdentity;
-            var claim = identity?.Claims.FirstOrDefault(c => c.Type == key);
-
-            value = claim?.Value;
-
-            return value != null;
-        }
+        return value != null;
     }
 }

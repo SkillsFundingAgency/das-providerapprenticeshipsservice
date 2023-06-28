@@ -1,8 +1,10 @@
-﻿using System.Net;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
@@ -18,9 +20,17 @@ using Microsoft.AspNetCore.Authentication.WsFederation;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
+
+public class AccountController : BaseController
 {
-    public class AccountController : BaseController
+    private readonly IAccountOrchestrator _accountOrchestrator;
+    private readonly LinkGenerator _linkGenerator;
+
+    public AccountController(IAccountOrchestrator accountOrchestrator,
+        LinkGenerator linkGenerator,
+        ICookieStorageService<FlashMessageViewModel> flashMessage) 
+        : base(flashMessage)
     {
         private readonly IAccountOrchestrator _accountOrchestrator;
         private readonly LinkGenerator _linkGenerator;
@@ -39,12 +49,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
             _authenticationService = authenticationService;
             _providerApprenticeshipsServiceConfiguration = providerApprenticeshipsServiceConfiguration;
         }
+        return RedirectToRoute(RouteNames.Home);
+    }
 
         [AllowAllRoles]
         [Route("~/signout", Name = RouteNames.SignOut)]
         public async Task<IActionResult> SignOut()
         {
-            var idToken = await HttpContext.GetTokenAsync("id_token");
+            return RedirectToRoute(RouteNames.AccountHome);
+        }
 
             var callbackUrl = _linkGenerator.GetPathByAction("Index", "Account", values: new
             {
@@ -62,96 +75,79 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     authScheme);
 
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToRoute(RouteNames.AccountHome);
-            }
+    [HttpGet]
+    [Authorize]
+    [Route("~/account", Name = RouteNames.AccountHome)]
+    public async Task<IActionResult> Index(string message)
+    {
+        var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
 
-            return RedirectToRoute(RouteNames.Home);
-            /*
-            var auth = _httpContext.Request.Query.GetOwinContext().Authentication;
-
-            auth.SignOut(
-                new AuthenticationProperties {RedirectUri = callbackUrl},
-                WsFederationAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
-
-            if (Request.IsAuthenticated)
-            {
-                // Redirect to home page if the user is authenticated.
-                return RedirectToRoute("account-home");
-            }
-
-            return RedirectToRoute("home");
-            */
-        }
-
-        [HttpGet]
-        [Authorize]
-        [ServiceFilter(typeof(RoatpCourseManagementCheckActionFilter))]
-        [Route("~/account", Name = RouteNames.AccountHome)]
-        public async Task<IActionResult> Index(string message)
-        {
-            var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
-
-            var model = await _accountOrchestrator.GetAccountHomeViewModel(providerId);
+        var model = await _accountOrchestrator.GetAccountHomeViewModel(providerId);
                        
-            if (!string.IsNullOrEmpty(message))
-                model.Message = WebUtility.UrlDecode(message);
+        if (!string.IsNullOrEmpty(message))
+            model.Message = WebUtility.UrlDecode(message);
 
-            switch (model.AccountStatus)
-            {
-                case AccountStatus.NotListed:
-                    return View("NoAgreement", model);
-
-                case AccountStatus.NoAgreement:
-                    return View("NoAccount");
-
-                case AccountStatus.Active:
-                default:
-                    return View(model);
-            }
-        }
-
-        [HttpGet]
-        [Authorize]
-        [Route("~/notification-settings", Name = RouteNames.GetNotificationSettings)]
-        public async Task<IActionResult> NotificationSettings()
+        switch (model.AccountStatus)
         {
-            var u = User.Identity.GetClaim(DasClaimTypes.Upn);
-            var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
+            case AccountStatus.NotListed:
+                return View("NoAgreement", model);
 
-            var model = await _accountOrchestrator.GetNotificationSettings(u);
-            model.ProviderId = providerId;
+            case AccountStatus.NoAgreement:
+                return View("NoAccount");
+
+            case AccountStatus.Active:
+            default:
+                return View(model);
+        }
+    }
+
+    [HttpGet]
+    [Authorize]
+    [Route("~/notification-settings", Name = RouteNames.GetNotificationSettings)]
+    public async Task<IActionResult> NotificationSettings()
+    {
+        var u = User.Identity.GetClaim(DasClaimTypes.Upn);
+        var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
+
+        var model = await _accountOrchestrator.GetNotificationSettings(u);
+        model.ProviderId = providerId;
             
-            var flashMesssage = GetFlashMessageViewModelFromCookie();
-            if (flashMesssage != null)
-            {
-                model.FlashMessage = flashMesssage;
-            }
-            return View(model);
-        }
-
-        [HttpPost]
-        [Authorize]
-        [Route("~/notification-settings", Name = RouteNames.PostNotificationSettings)]
-        public async Task<IActionResult> NotificationSettings(NotificationSettingsViewModel model)
+        var flashMesssage = GetFlashMessageViewModelFromCookie();
+        if (flashMesssage != null)
         {
-            await _accountOrchestrator.UpdateNotificationSettings(model);
-            SetInfoMessage("Settings updated", FlashMessageSeverityLevel.Info);
-            return RedirectToRoute(RouteNames.GetNotificationSettings);
+            model.FlashMessage = flashMesssage;
         }
+        return View(model);
+    }
 
-        [HttpGet]
-        [Authorize]
-        [Route("~/notifications/unsubscribe", Name = RouteNames.UnsubscribeNotifications)]
-        public async Task<IActionResult> NotificationUnsubscribe()
-        {
-            var userRef = User.Identity.GetClaim(DasClaimTypes.Upn);
+    [HttpPost]
+    [Authorize]
+    [Route("~/notification-settings", Name = RouteNames.PostNotificationSettings)]
+    public async Task<IActionResult> NotificationSettings(NotificationSettingsViewModel model)
+    {
+        await _accountOrchestrator.UpdateNotificationSettings(model);
+        SetInfoMessage("Settings updated", FlashMessageSeverityLevel.Info);
+        return RedirectToRoute(RouteNames.GetNotificationSettings);
+    }
 
-            var url = Url.Action("NotificationSettings");
-            var model = await _accountOrchestrator.Unsubscribe(userRef, url);
+    [HttpGet]
+    [Authorize]
+    [Route("~/notifications/unsubscribe", Name = RouteNames.UnsubscribeNotifications)]
+    public async Task<IActionResult> NotificationUnsubscribe()
+    {
+        var userRef = User.Identity.GetClaim(DasClaimTypes.Upn);
 
-            return View(model);
-        }
+        var url = Url.Action("NotificationSettings");
+        var model = await _accountOrchestrator.Unsubscribe(userRef, url);
+
+        return View(model);
+    }
+
+    [HttpGet]
+    [Authorize]
+    [Route("~/change-signin-details")]
+    public ActionResult ChangeSignInDetails()
+    {
+        return View();
     }
 }

@@ -4,68 +4,67 @@ using System;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using Provider = SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Provider;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data
+namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
+
+public class ProviderRepository : BaseRepository<ProviderRepository>, IProviderRepository
 {
-    public class ProviderRepository : BaseRepository<ProviderRepository>, IProviderRepository
+    public ProviderRepository(IBaseConfiguration configuration, ILogger<ProviderRepository> logger, IConfiguration rootConfig, ChainedTokenCredential chainedTokenCredential) 
+        : base(configuration.DatabaseConnectionString, logger, rootConfig, chainedTokenCredential) { }
+
+    public async Task ImportProviders(CommitmentsV2.Api.Types.Responses.Provider[] providers)
     {
-        public ProviderRepository(IBaseConfiguration configuration, ILogger<ProviderRepository> logger, IConfiguration rootConfig) 
-            : base(configuration.DatabaseConnectionString, logger, rootConfig)
+        var providersDataTable = new DataTable();
+        providersDataTable.Columns.Add("Ukprn");
+        providersDataTable.Columns.Add("Name");
+
+        foreach (var provider in providers)
         {
+            providersDataTable.Rows.Add(provider.Ukprn, provider.Name);
         }
 
-        public async Task ImportProviders(CommitmentsV2.Api.Types.Responses.Provider[] providers)
+        await WithConnection(async connection =>
         {
-            DataTable providersDataTable = new DataTable();
-            providersDataTable.Columns.Add("Ukprn");
-            providersDataTable.Columns.Add("Name");
+            var parameters = new DynamicParameters();
+            parameters.Add("@providers", providersDataTable.AsTableValuedParameter());
+            parameters.Add("@now", DateTime.UtcNow, DbType.DateTime2);
 
-            foreach (var provider in providers)
-            {
-                providersDataTable.Rows.Add(provider.Ukprn, provider.Name);
-            }
+            return await connection.ExecuteAsync(
+                sql: "[dbo].[ImportProviders]",
+                param: parameters,
+                commandType: CommandType.StoredProcedure);
+        });
+    }
 
-            await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@providers", providersDataTable.AsTableValuedParameter());
-                parameters.Add("@now", DateTime.UtcNow, DbType.DateTime2);
-
-                return await c.ExecuteAsync(
-                    sql: "[dbo].[ImportProviders]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
-        }
-
-        public async Task<Provider> GetNextProviderForIdamsUpdate()
+    public async Task<Provider> GetNextProviderForIdamsUpdate()
+    {
+        return await WithConnection(async connection =>
         {
-            return await WithConnection(async c =>
-            {
-                var result = await c.QueryAsync<Provider>(
-                    "SELECT TOP 1 [Ukprn], [Name], [Created], [Updated], [UpdatedFromIDAMS] FROM [dbo].[Providers] P WHERE EXISTS(SELECT * FROM [dbo].[User] U WHERE U.[Ukprn] = P.[Ukprn]) ORDER BY [UpdatedFromIDAMS];",
-                    commandType: CommandType.Text);
-                return result.SingleOrDefault();
-            });
-        }
+            var result = await connection.QueryAsync<Provider>(
+                "SELECT TOP 1 [Ukprn], [Name], [Created], [Updated], [UpdatedFromIDAMS] FROM [dbo].[Providers] P WHERE EXISTS(SELECT * FROM [dbo].[User] U WHERE U.[Ukprn] = P.[Ukprn]) ORDER BY [UpdatedFromIDAMS];",
+                commandType: CommandType.Text);
+            return result.SingleOrDefault();
+        });
+    }
 
-        public async Task MarkProviderIdamsUpdated(long ukprn)
+    public async Task MarkProviderIdamsUpdated(long ukprn)
+    {
+        await WithConnection(async connection =>
         {
-            await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@ukprn", ukprn, DbType.Int64);
+            var parameters = new DynamicParameters();
+            parameters.Add("@ukprn", ukprn, DbType.Int64);
 
-                return await c.ExecuteAsync(
-                    sql: "UPDATE [dbo].[Providers] "
-                         + "SET UpdatedFromIDAMS = GETDATE() "
-                         + "WHERE Ukprn = @ukprn",
-                    param: parameters,
-                    commandType: CommandType.Text);
-            });
-        }
+            return await connection.ExecuteAsync(
+                sql: "UPDATE [dbo].[Providers] "
+                     + "SET UpdatedFromIDAMS = GETDATE() "
+                     + "WHERE Ukprn = @ukprn",
+                param: parameters,
+                commandType: CommandType.Text);
+        });
     }
 }
