@@ -1,12 +1,11 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegisteredUser
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegisteredUser;
+
+public class UpsertRegisteredUserCommand : IRequest
 {
-    public class UpsertRegisteredUserCommand : IRequest<Unit>
-    {
-        public string UserRef { get; set; }
-        public string DisplayName { get; set; }
-        public long Ukprn { get; set; }
-        public string Email { get; set; }
-    }
+    public string UserRef { get; set; }
+    public string DisplayName { get; set; }
+    public long Ukprn { get; set; }
+    public string Email { get; set; }
 }

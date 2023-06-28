@@ -1,113 +1,126 @@
-﻿using System.Linq;
-using NUnit.Framework;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegisteredUser;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegisteredUser;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.UpsertRegisteredUser
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Commands.UpsertRegisteredUser;
+
+[TestFixture]
+public class WhenValidatingCommand
 {
-    [TestFixture]
-    public class WhenValidatingCommand
+    private UpsertRegisteredUserCommandValidator _validator;
+
+    [SetUp]
+    public void Arrange()
     {
-        private UpsertRegisteredUserCommandValidator _validator;
+        _validator = new UpsertRegisteredUserCommandValidator();
+    }
 
-        [SetUp]
-        public void Arrange()
+    [Test]
+    public void ThenCommandIsValidIfAllFieldsAreProvided()
+    {
+        //Arrange
+        var command = new UpsertRegisteredUserCommand
         {
-            _validator = new UpsertRegisteredUserCommandValidator();
-        }
+            UserRef = "UserRef",
+            DisplayName = "Displayname",
+            Email = "Email",
+            Ukprn = 12345
+        };
 
-        [Test]
-        public void ThenCommandIsValidIfAllFieldsAreProvided()
+        //Act
+        var result = _validator.Validate(command);
+
+        //Assert
+        Assert.That(result.IsValid, Is.True);
+    }
+
+    [Test]
+    public void ThenUserRefIsMandatory()
+    {
+        //Arrange
+        var command = new UpsertRegisteredUserCommand
         {
-            //Arrange
-            var command = new UpsertRegisteredUserCommand
-            {
-                UserRef = "UserRef",
-                DisplayName = "Displayname",
-                Email = "Email",
-                Ukprn = 12345
-            };
+            DisplayName = "Displayname",
+            Email = "Email",
+            Ukprn = 12345
+        };
 
-            //Act
-            var result = _validator.Validate(command);
+        //Act
+        var result = _validator.Validate(command);
 
-            //Assert
-            Assert.IsTrue(result.IsValid);
-        }
-
-        [Test]
-        public void ThenUserRefIsMandatory()
+        //Assert
+        Assert.Multiple(() =>
         {
-            //Arrange
-            var command = new UpsertRegisteredUserCommand
-            {
-                DisplayName = "Displayname",
-                Email = "Email",
-                Ukprn = 12345
-            };
+            Assert.That(result.IsValid, Is.False);
+            Assert.That(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.UserRef))), Is.True);
+        });
+    }
 
-            //Act
-            var result = _validator.Validate(command);
-
-            //Assert
-            Assert.IsFalse(result.IsValid);
-            Assert.IsTrue(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.UserRef))));
-        }
-
-        [Test]
-        public void ThenEmailIsMandatory()
+    [Test]
+    public void ThenEmailIsMandatory()
+    {
+        //Arrange
+        var command = new UpsertRegisteredUserCommand
         {
-            //Arrange
-            var command = new UpsertRegisteredUserCommand
-            {
-                UserRef = "UserRef",
-                DisplayName = "Displayname",
-                Ukprn = 12345
-            };
+            UserRef = "UserRef",
+            DisplayName = "Displayname",
+            Ukprn = 12345
+        };
 
-            //Act
-            var result = _validator.Validate(command);
+        //Act
+        var result = _validator.Validate(command);
 
-            //Assert
-            Assert.IsFalse(result.IsValid);
-            Assert.IsTrue(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.Email))));
-        }
-
-        [Test]
-        public void ThenUkprnisMandatory()
+        //Assert
+        Assert.Multiple(() =>
         {
-            //Arrange
-            var command = new UpsertRegisteredUserCommand
-            {
-                UserRef = "UserRef",
-                DisplayName = "Displayname",
-                Email = "Email"
-            };
+            Assert.That(result.IsValid, Is.False);
+            Assert.That(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.Email))),
+                Is.True);
+        });
+    }
 
-            //Act
-            var result = _validator.Validate(command);
-
-            //Assert
-            Assert.IsFalse(result.IsValid);
-            Assert.IsTrue(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.Ukprn))));
-        }
-
-        [Test]
-        public void ThenDisplayNameIsMandatory()
+    [Test]
+    public void ThenUkprnisMandatory()
+    {
+        //Arrange
+        var command = new UpsertRegisteredUserCommand
         {
-            //Arrange
-            var command = new UpsertRegisteredUserCommand
-            {
-                UserRef = "UserRef",
-                Email = "Email",
-                Ukprn = 12345
-            };
+            UserRef = "UserRef",
+            DisplayName = "Displayname",
+            Email = "Email"
+        };
 
-            //Act
-            var result = _validator.Validate(command);
+        //Act
+        var result = _validator.Validate(command);
 
-            //Assert
-            Assert.IsFalse(result.IsValid);
-            Assert.IsTrue(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.DisplayName))));
-        }
+        //Assert
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsValid, Is.False);
+            Assert.That(result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.Ukprn))),
+                Is.True);
+        });
+    }
+
+    [Test]
+    public void ThenDisplayNameIsMandatory()
+    {
+        //Arrange
+        var command = new UpsertRegisteredUserCommand
+        {
+            UserRef = "UserRef",
+            Email = "Email",
+            Ukprn = 12345
+        };
+
+        //Act
+        var result = _validator.Validate(command);
+
+        //Assert
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsValid, Is.False);
+            Assert.That(
+                result.Errors.Any(x => x.PropertyName.Contains(nameof(UpsertRegisteredUserCommand.DisplayName))),
+                Is.True);
+        });
     }
 }

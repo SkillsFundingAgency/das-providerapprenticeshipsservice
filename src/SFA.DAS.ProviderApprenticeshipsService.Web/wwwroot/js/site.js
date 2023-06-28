@@ -1,6 +1,6 @@
-﻿var selectElements = $('.das-autocomplete')
+﻿const selectElements = $('.das-autocomplete')
 selectElements.each(function () {
-    var form = $(this).closest('form');
+    const form = $(this).closest('form');
     accessibleAutocomplete.enhanceSelectElement({
         selectElement: this,
         minLength: 3,
@@ -9,9 +9,9 @@ selectElements.each(function () {
         displayMenu: 'overlay',
         placeholder: $(this).data('placeholder') || '',
         onConfirm: function (opt) {
-            var txtInput = document.querySelector('#' + this.id);
-            var searchString = opt || txtInput.value;
-            var requestedOption = [].filter.call(this.selectElement.options,
+            const txtInput = document.querySelector('#' + this.id);
+            const searchString = opt || txtInput.value;
+            const requestedOption = [].filter.call(this.selectElement.options,
                 function (option) {
                     return (option.textContent || option.innerText) === searchString
                 }
@@ -25,9 +25,9 @@ selectElements.each(function () {
     });
     form.on('submit', function() {
         $('.autocomplete__input').each(function() {
-            var that = $(this);
+            const that = $(this);
             if (that.val().length === 0) {
-                var fieldId = that.attr('id'),
+                const fieldId = that.attr('id'),
                 selectField = $('#' + fieldId + '-select');
                 selectField[0].selectedIndex = 0;
             }
@@ -37,16 +37,16 @@ selectElements.each(function () {
 
 // AUTOCOMPLETE
 
-var $keywordsInput = $('#search-location');
-var $submitOnConfirm = $('#search-location').data('submit-on-selection');
-var $defaultValue = $('#search-location').data('default-value');
+const $keywordsInput = $('#search-location');
+const $submitOnConfirm = $('#search-location').data('submit-on-selection');
+const $defaultValue = $('#search-location').data('default-value');
 if ($keywordsInput.length > 0) {
     $keywordsInput.wrap('<div id="autocomplete-container" class="das-autocomplete-wrap"></div>');
-    var container = document.querySelector('#autocomplete-container');
-    var apiUrl = '/locations';
+    const container = document.querySelector('#autocomplete-container');
+    const apiUrl = '/locations';
     $(container).empty();
     function getSuggestions(query, updateResults) {
-        var results = [];
+        let results = [];
         $.ajax({
             url: apiUrl,
             type: "get",
@@ -60,7 +60,7 @@ if ($keywordsInput.length > 0) {
         });
     }
     function onConfirm() {
-        var $form = $(this.element).closest('form');
+        const $form = $(this.element).closest('form');
         setTimeout(function(){
             if ($form && $submitOnConfirm) {
                 $form.submit()
@@ -88,12 +88,12 @@ if ($keywordsInput.length > 0) {
 // If users history-1 does not come from this site, 
 // then show a link to homepage
 
-var $backLinkOrHome = $('.das-js-back-link-or-home');
-var backLinkOrHome = function () {
+const $backLinkOrHome = $('.das-js-back-link-or-home');
+const backLinkOrHome = function () {
 
-    var referrer = document.referrer;
+    const referrer = document.referrer;
 
-    var backLink = $('<a>')
+    const backLink = $('<a>')
         .attr({'href': '#', 'class': 'govuk-back-link'})
         .text('Back')
         .on('click', function (e) {
@@ -111,7 +111,7 @@ if ($backLinkOrHome) {
 }
 
 // NUMBER OF APPRENTICES RADIO
-var radioNoOfApp = $('#NumberOfApprenticesKnown-false');
+const radioNoOfApp = $('#NumberOfApprenticesKnown-false');
 if (radioNoOfApp) {
     radioNoOfApp.on('click', function () {
         $('#NumberOfApprentices').val('');

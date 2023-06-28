@@ -10,24 +10,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="12.3.2" />
-    <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
-<!--    <PackageReference Include="jQuery" Version="1.10.2" />-->
-<!--    <PackageReference Include="jQuery.Validation" Version="1.11.1" />-->
-<!--    <PackageReference Include="Microsoft.ApplicationInsights.JavaScript" Version="0.15.0-build58334" />-->
-<!--	<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />-->
-<!--	<PackageReference Include="Microsoft.ApplicationInsights.NLogTarget" Version="2.21.0" />-->
-<!--	<PackageReference Include="Microsoft.ApplicationInsights.TraceListener" Version="2.21.0" />-->
 	<PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="6.0.12" />
-<!--    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />-->
-<!--    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />-->
-<!--    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.2.0" />-->
-<!--    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Validation" Version="3.2.3" />-->
-<!--    <PackageReference Include="Modernizr" Version="2.6.2" />-->
-<!--    <PackageReference Include="NuGet.CommandLine" Version="3.3.0" />-->
-<!--    <PackageReference Include="Pipelines.Sockets.Unofficial" Version="2.2.0" />-->
-    <PackageReference Include="Polly" Version="7.2.3" />
-<!--    <PackageReference Include="Respond" Version="1.2.0" />-->
+	<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="6.0.16" />
+	<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.16" />
+	<PackageReference Include="Polly" Version="7.2.3" />
     <PackageReference Include="SFA.DAS.Account.Api.Client" Version="1.3.928" />
     <PackageReference Include="SFA.DAS.Authorization.Mvc" Version="6.0.97" />
     <PackageReference Include="SFA.DAS.Authorization.ProviderFeatures" Version="6.0.97" />
@@ -39,21 +26,9 @@
     <PackageReference Include="SFA.DAS.Provider.Shared.UI" Version="2.0.22" />
     <PackageReference Include="SFA.DAS.ProviderRelationships.Api.Client" Version="4.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.14" />
-<!--    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />-->
-<!--    <PackageReference Include="System.ComponentModel.Composition" Version="7.0.0" />-->
-<!--    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />-->
-<!--    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="7.0.1" />-->
-<!--    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0" />-->
-<!--    <PackageReference Include="System.Runtime.Caching" Version="7.0.0" />-->
-<!--    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />-->
-<!--    <PackageReference Include="System.Threading.Channels" Version="5.0.0" />-->
-<!--    <PackageReference Include="System.ServiceModel.Duplex" Version="4.9.0" />-->
-<!--    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.9.0" />-->
-<!--    <PackageReference Include="System.ServiceModel.Federation" Version="4.9.0" />-->
     <PackageReference Include="SFA.DAS.Learners" Version="1.1.181" />
-<!--    <PackageReference Include="System.Spatial" Version="5.8.5" />-->
-<!--    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.13" />-->
-<!--	<PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.2.0" />-->
+    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>

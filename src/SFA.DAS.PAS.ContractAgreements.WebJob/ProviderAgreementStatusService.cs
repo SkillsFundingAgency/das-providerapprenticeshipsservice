@@ -4,6 +4,7 @@ using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.PAS.ContractAgreements.WebJob.Interfaces;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob
 {

@@ -1,9 +1,11 @@
-﻿using SFA.DAS.Http.Configuration;
+using SFA.DAS.Http.Configuration;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderRelationships.Api.Client.Configuration;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
+namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+
+public class ProviderApprenticeshipsServiceConfiguration : IBaseConfiguration
 {
     public interface IProviderAgreementStatusConfiguration : IBaseConfiguration
     {
@@ -61,46 +63,42 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
         public bool UseDfESignIn { get; set; }
     }
 
-    public class CommitmentsApiClientV2Configuration : IManagedIdentityClientConfiguration
-    {
-        public string ApiBaseUrl { get; set; }
-        public string Tenant { get; set; }
-        public string ClientId { get; set; }
-        public string ClientSecret { get; set; }
-        public string IdentifierUri { get; set; }
-    }
+public class CommitmentsApiClientV2Configuration : IManagedIdentityClientConfiguration
+{
+    public string ApiBaseUrl { get; set; }
+    public string IdentifierUri { get; set; }
+}
 
-    public interface IProviderNotificationConfiguration
-    {
-        public bool UseProviderEmail { get; set; }
-        public bool SendEmail { get; set; }
-        public string[] ProviderTestEmails { get; set; }
-        public string IdamsListUsersUrl { get; set; }
-        public string DasUserRoleId { get; set; }
-        public string SuperUserRoleId { get; set; }
-    }
+public interface IProviderNotificationConfiguration
+{
+    public bool UseProviderEmail { get; set; }
+    public bool SendEmail { get; set; }
+    public string[] ProviderTestEmails { get; set; }
+    public string IdamsListUsersUrl { get; set; }
+    public string DasUserRoleId { get; set; }
+    public string SuperUserRoleId { get; set; }
+}
 
-    public class ProviderNotificationConfiguration : IProviderNotificationConfiguration, IJwtClientConfiguration
-    {
-        public bool UseProviderEmail { get; set; }
-        public bool SendEmail { get; set; }
-        public string[] ProviderTestEmails { get; set; }
-        public string IdamsListUsersUrl { get; set; }
-        public string DasUserRoleId { get; set; }
-        public string SuperUserRoleId { get; set; }
-        public string ClientToken { get; set; }
-    }
+public class ProviderNotificationConfiguration : IProviderNotificationConfiguration, IJwtClientConfiguration
+{
+    public bool UseProviderEmail { get; set; }
+    public bool SendEmail { get; set; }
+    public string[] ProviderTestEmails { get; set; }
+    public string IdamsListUsersUrl { get; set; }
+    public string DasUserRoleId { get; set; }
+    public string SuperUserRoleId { get; set; }
+    public string ClientToken { get; set; }
+}
 
-    public class ContentClientApiConfiguration : IContentApiConfiguration
-    {
-        public string ApiBaseUrl { get; set; }
-        public string IdentifierUri { get; set; }
-    }
+public class ContentClientApiConfiguration : IContentApiConfiguration
+{
+    public string ApiBaseUrl { get; set; }
+    public string IdentifierUri { get; set; }
+}
 
-    public class ZenDeskConfiguration
-    {
-        public string SectionId { get; set; }
-        public string SnippetKey { get; set; }
-        public string CobrowsingSnippetKey { get; set; }
-    }
+public class ZenDeskConfiguration
+{
+    public string SectionId { get; set; }
+    public string SnippetKey { get; set; }
+    public string CobrowsingSnippetKey { get; set; }
 }

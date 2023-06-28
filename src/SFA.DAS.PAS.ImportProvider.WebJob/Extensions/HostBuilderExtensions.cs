@@ -13,7 +13,7 @@ using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration;
 using SFA.DAS.PAS.ImportProvider.WebJob.Configuration;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Logging;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.Extensions
@@ -27,8 +27,11 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Extensions
                 services.Configure<ProviderApprenticeshipsServiceConfiguration>(context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService));
                 services.AddSingleton<IBaseConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
 
-                services.Configure<CommitmentsApiClientV2Configuration>(context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService).GetSection("CommitmentsApiClientV2"));
+                services.Configure<CommitmentsApiClientV2Configuration>(c => context.Configuration.GetSection(ConfigurationKeys.CommitmentsApiClientV2).Bind(c));
                 services.AddSingleton(cfg => cfg.GetService<IOptions<CommitmentsApiClientV2Configuration>>().Value);
+                services.AddHttpClient<ICommitmentsV2ApiClient, CommitmentsV2ApiClient>();
+
+                /*
                 services.AddSingleton<ICommitmentsV2ApiClient>(s =>
                 {
                     ILogger<CommitmentsV2ApiClient> commitmentsV2ApiLogger = new LoggerFactory().CreateLogger<CommitmentsV2ApiClient>();
@@ -36,7 +39,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Extensions
                     var httpClient = GetHttpV2Client(commitmentsV2Config, context.Configuration);
 
                     return new CommitmentsV2ApiClient(httpClient, commitmentsV2Config, commitmentsV2ApiLogger);
-                });
+                });*/
 
                 services.AddTransient<IProviderRepository, ProviderRepository>();
                 services.AddTransient<IImportProviderService, ImportProviderService>();
@@ -76,11 +79,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.Extensions
                 ? new HttpClientBuilder()
                 : new HttpClientBuilder().WithBearerAuthorisationHeader(new ManagedIdentityTokenGenerator(commitmentsV2Config));
             
-            return httpClientBuilder
-                .WithDefaultHeaders()
-                //.WithHandler(new RequestIdMessageRequestHandler())
-                //.WithHandler(new SessionIdMessageRequestHandler())
-                .Build();
+            return httpClientBuilder.Build();
         }
     }
 }

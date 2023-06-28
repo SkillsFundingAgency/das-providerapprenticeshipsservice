@@ -1,25 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System;
-using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using Microsoft.AspNetCore.Authentication.WsFederation;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using Microsoft.Extensions.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
+
+public static class AuthenticationExtensions
 {
-    public static class AuthenticationExtensions
+    public static void AddAndConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        public static void AddAndConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
-        {
-            var authenticationConfiguration = configuration.GetSection("ProviderIdams").Get<AuthenticationConfiguration>();
+        var authenticationConfiguration = configuration.GetSection("ProviderIdams").Get<AuthenticationConfiguration>();
             
-            services.AddAuthentication(sharedOptions =>
+        services.AddAuthentication(sharedOptions =>
             {
                 sharedOptions.DefaultScheme =
                     CookieAuthenticationDefaults.AuthenticationScheme;
@@ -37,41 +32,40 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication
             .AddCookie(options =>
             {
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
-                options.Cookie.Name = $"SFA.DAS.ProviderApprenticeshipsService.Web.Auth";
+                options.Cookie.Name = "SFA.DAS.ProviderApprenticeshipsService.Web.Auth";
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.SlidingExpiration = true;
                 options.Cookie.SameSite = SameSiteMode.None;
                 options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
             });
-            services
-                .AddOptions<WsFederationOptions>(WsFederationDefaults.AuthenticationScheme)
-                .Configure<IProviderCommitmentsLogger,IAuthenticationOrchestrator>((options, providerCommitmentsLogger,accountOrchestrator) =>
+        services
+            .AddOptions<WsFederationOptions>(WsFederationDefaults.AuthenticationScheme)
+            .Configure<IProviderCommitmentsLogger,IAuthenticationOrchestrator>((options, providerCommitmentsLogger,accountOrchestrator) =>
+            {
+                options.Events.OnSecurityTokenValidated = async (ctx) =>
                 {
-                    options.Events.OnSecurityTokenValidated = async (ctx) =>
-                    {
-                        await SecurityTokenValidated(ctx, providerCommitmentsLogger, accountOrchestrator);
-                    };
-                });
-        }
+                    await SecurityTokenValidated(ctx, providerCommitmentsLogger, accountOrchestrator);
+                };
+            });
+    }
 
-        private static async Task SecurityTokenValidated(SecurityTokenValidatedContext ctx, IProviderCommitmentsLogger logger,
-           IAuthenticationOrchestrator orchestrator)
-        {
-            logger.Info("SecurityTokenValidated notification called");
+    private static async Task SecurityTokenValidated(SecurityTokenValidatedContext ctx, IProviderCommitmentsLogger logger,
+        IAuthenticationOrchestrator orchestrator)
+    {
+        logger.Info("SecurityTokenValidated notification called");
 
-            var id = ctx.Principal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.Upn)?.Value;
-            var displayName = ctx.Principal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.DisplayName)?.Value;
-            var ukprn = ctx.Principal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.Ukprn)?.Value;
-            var email = ctx.Principal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.Email)?.Value;
+        var id = ctx.Principal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.Upn)?.Value;
+        var displayName = ctx.Principal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.DisplayName)?.Value;
+        var ukprn = ctx.Principal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.Ukprn)?.Value;
+        var email = ctx.Principal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.Email)?.Value;
 
-            ctx.HttpContext.Items.Add(ClaimsIdentity.DefaultNameClaimType, id);
-            ctx.HttpContext.Items.Add(DasClaimTypes.DisplayName, displayName);
-            ctx.HttpContext.Items.Add(DasClaimTypes.Ukprn, ukprn);
-            ctx.HttpContext.Items.Add(DasClaimTypes.Email, email);
+        ctx.HttpContext.Items.Add(ClaimsIdentity.DefaultNameClaimType, id);
+        ctx.HttpContext.Items.Add(DasClaimTypes.DisplayName, displayName);
+        ctx.HttpContext.Items.Add(DasClaimTypes.Ukprn, ukprn);
+        ctx.HttpContext.Items.Add(DasClaimTypes.Email, email);
 
-            ctx.Principal.Identities.First().MapClaimToRoles();
+        ctx.Principal.Identities.First().MapClaimToRoles();
 
-            await orchestrator.SaveIdentityAttributes(id, ukprn, displayName, email);
-        }
+        await orchestrator.SaveIdentityAttributes(id, ukprn, displayName, email);
     }
 }
