@@ -38,7 +38,7 @@ public class HomeController : Controller
     [Route("/", Name = RouteNames.Home)]
     public IActionResult Index()
     {
-        if (User.Identity.IsAuthenticated) return RedirectToRoute(RouteNames.AccountHome);
+        if (User.Identity is {IsAuthenticated: true}) return RedirectToRoute(RouteNames.AccountHome);
         return View(new HomeViewModel { UseDfESignIn = _providerApprenticeshipsServiceConfiguration.UseDfESignIn });
     }
 
