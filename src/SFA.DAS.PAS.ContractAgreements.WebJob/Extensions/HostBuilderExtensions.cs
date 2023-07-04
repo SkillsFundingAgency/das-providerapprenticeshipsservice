@@ -14,6 +14,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using System;
 using System.Reflection;
+using Azure.Identity;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using Microsoft.Identity.Client;
 
@@ -29,6 +30,11 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.Extensions
                 services.AddSingleton<IContractFeedConfiguration>(isp => isp.GetService<IOptions<ContractFeedConfiguration>>().Value);
                 services.AddSingleton<IBaseConfiguration>(isp => isp.GetService<IOptions<ContractFeedConfiguration>>().Value);
                 services.AddSingleton<IConfidentialClientApplication, ConfidentialClientApplication>();
+                
+                services.AddSingleton(new ChainedTokenCredential(
+                    new ManagedIdentityCredential(),
+                    new AzureCliCredential())
+                );
 
                 services.AddTransient<ICurrentDateTime, CurrentDateTime>();
                 services.AddTransient<IContractFeedProcessorHttpClient, ContractFeedProcessorHttpClient>();
