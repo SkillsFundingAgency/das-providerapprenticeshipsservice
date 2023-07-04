@@ -5,6 +5,7 @@ using SFA.DAS.DfESignIn.Auth.Helpers;
 using SFA.DAS.Provider.Shared.UI;
 using SFA.DAS.Provider.Shared.UI.Startup;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser;
+using IsDev = SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
