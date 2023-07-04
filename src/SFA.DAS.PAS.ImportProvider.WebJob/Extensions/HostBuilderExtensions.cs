@@ -24,11 +24,13 @@ public static class HostBuilderExtensions
         {
             services.Configure<ProviderApprenticeshipsServiceConfiguration>(
                 context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService));
+            
             services.AddSingleton<IBaseConfiguration>(isp =>
                 isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
 
             services.Configure<CommitmentsApiClientV2Configuration>(c =>
                 context.Configuration.GetSection(ConfigurationKeys.CommitmentsApiClientV2).Bind(c));
+            
             services.AddSingleton(cfg => cfg.GetService<IOptions<CommitmentsApiClientV2Configuration>>().Value);
             services.AddHttpClient<ICommitmentsV2ApiClient, CommitmentsV2ApiClient>();
 
