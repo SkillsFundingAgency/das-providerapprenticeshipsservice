@@ -1,21 +1,11 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
-using AutoFixture.NUnit3;
-using Microsoft.AspNetCore.Mvc;
-using NUnit.Framework;
+﻿using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
-using Moq;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
-using MediatR;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.UserIdentityService;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
-using DocumentFormat.OpenXml.Wordprocessing;
-using Microsoft.ApplicationInsights;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
 {
