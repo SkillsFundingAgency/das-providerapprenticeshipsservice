@@ -4,9 +4,6 @@
 		<OutputType>Exe</OutputType>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Update="NLog.xsd">
-			<SubType>Designer</SubType>
-		</None>
 		<None Include="Properties\PublishProfiles\das-at-pas-as - Web Deploy.pubxml" />
 	</ItemGroup>
 	<ItemGroup>
