@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.Extensions.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
@@ -13,15 +12,12 @@ public static class AuthenticationExtensions
     public static void AddAndConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         var authenticationConfiguration = configuration.GetSection("ProviderIdams").Get<AuthenticationConfiguration>();
-            
+
         services.AddAuthentication(sharedOptions =>
             {
-                sharedOptions.DefaultScheme =
-                    CookieAuthenticationDefaults.AuthenticationScheme;
-                sharedOptions.DefaultSignInScheme =
-                    CookieAuthenticationDefaults.AuthenticationScheme;
-                sharedOptions.DefaultChallengeScheme =
-                    WsFederationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultChallengeScheme = WsFederationDefaults.AuthenticationScheme;
             })
             .AddWsFederation(options =>
             {
@@ -38,18 +34,21 @@ public static class AuthenticationExtensions
                 options.Cookie.SameSite = SameSiteMode.None;
                 options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
             });
+
         services
             .AddOptions<WsFederationOptions>(WsFederationDefaults.AuthenticationScheme)
-            .Configure<IProviderCommitmentsLogger,IAuthenticationOrchestrator>((options, providerCommitmentsLogger,accountOrchestrator) =>
-            {
-                options.Events.OnSecurityTokenValidated = async (ctx) =>
+            .Configure<IProviderCommitmentsLogger, IAuthenticationOrchestrator>(
+                (options, providerCommitmentsLogger, accountOrchestrator) =>
                 {
-                    await SecurityTokenValidated(ctx, providerCommitmentsLogger, accountOrchestrator);
-                };
-            });
+                    options.Events.OnSecurityTokenValidated = async ctx =>
+                    {
+                        await SecurityTokenValidated(ctx, providerCommitmentsLogger, accountOrchestrator);
+                    };
+                });
     }
 
-    private static async Task SecurityTokenValidated(SecurityTokenValidatedContext ctx, IProviderCommitmentsLogger logger,
+    private static async Task SecurityTokenValidated(SecurityTokenValidatedContext ctx,
+        IProviderCommitmentsLogger logger,
         IAuthenticationOrchestrator orchestrator)
     {
         logger.Info("SecurityTokenValidated notification called");
