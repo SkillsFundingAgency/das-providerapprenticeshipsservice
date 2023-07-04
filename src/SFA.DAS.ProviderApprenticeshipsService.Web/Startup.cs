@@ -9,6 +9,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web;
@@ -19,35 +20,7 @@ public class Startup
 
     public Startup(IConfiguration configuration)
     {
-        _configuration = configuration;
-
-        var config = new ConfigurationBuilder()
-            .AddConfiguration(configuration)
-            .SetBasePath(Directory.GetCurrentDirectory());
-#if DEBUG
-        if (!configuration.IsDev())
-        {
-            config.AddJsonFile("appsettings.json", false)
-                .AddJsonFile("appsettings.Development.json", true);
-        }
-#endif
-
-        config.AddEnvironmentVariables();
-
-        if (!configuration.IsDev())
-        {
-            config.AddAzureTableStorage(options =>
-                {
-                    options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
-                    options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
-                    options.EnvironmentName = configuration["EnvironmentName"];
-                    options.PreFixConfigurationKeys = false;
-                    options.ConfigurationKeysRawJsonResult = new[] { "SFA.DAS.Encoding" };
-                }
-            );
-        }
-
-        _configuration = config.Build();
+        _configuration = configuration.BuildDasConfiguration();
     }
 
     public void ConfigureServices(IServiceCollection services)
@@ -114,9 +87,7 @@ public class Startup
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+            endpoints.MapDefaultControllerRoute();
         });
     }
 }
