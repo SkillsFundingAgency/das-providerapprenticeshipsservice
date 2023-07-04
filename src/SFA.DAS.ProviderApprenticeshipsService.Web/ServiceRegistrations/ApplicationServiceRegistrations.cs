@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
@@ -24,6 +26,7 @@ public static class ApplicationServiceRegistrations
 
         services.AddCookieStorageService();
         services.AddLinkGenerator();
+        services.AddTransient<ICurrentDateTime, CurrentDateTime>();
 
         // the below is closely tied to Web, so not sure where logically best to register them
         services.AddTransient<IProviderCommitmentsLogger, ProviderCommitmentsLogger>(); // need to think where to inject it > move to Application
