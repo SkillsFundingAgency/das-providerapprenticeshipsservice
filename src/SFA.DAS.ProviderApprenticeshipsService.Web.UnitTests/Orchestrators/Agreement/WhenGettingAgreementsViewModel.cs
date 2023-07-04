@@ -64,7 +64,7 @@ public class WhenGettingAgreementsViewModel
 
         //Assert
         Assert.IsNotNull(result);
-        result.CommitmentAgreements.Should().BeEquivalentTo(mappedCommitmentAgreement);
+        result.CommitmentAgreements.Should().AllBeEquivalentTo(mappedCommitmentAgreement);
     }
 
     [Test]

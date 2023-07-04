@@ -9,12 +9,12 @@
     <ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Infrastructure\SFA.DAS.ProviderApprenticeshipsService.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="12.3.2" />
+    <PackageReference Include="CsvHelper" Version="30.0.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
-	<PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="6.0.12" />
-	<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="6.0.16" />
-	<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.16" />
-	<PackageReference Include="Polly" Version="7.2.3" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="6.0.19" />
+	<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="6.0.19" />
+	<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.19" />
+	<PackageReference Include="Polly" Version="7.2.4" />
     <PackageReference Include="SFA.DAS.Account.Api.Client" Version="1.3.928" />
     <PackageReference Include="SFA.DAS.Authorization.Mvc" Version="6.0.97" />
     <PackageReference Include="SFA.DAS.Authorization.ProviderFeatures" Version="6.0.97" />
