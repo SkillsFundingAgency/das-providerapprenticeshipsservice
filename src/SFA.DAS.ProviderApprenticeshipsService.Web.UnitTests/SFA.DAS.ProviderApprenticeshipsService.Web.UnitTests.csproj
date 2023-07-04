@@ -21,8 +21,6 @@
   <ItemGroup>
     <PackageReference Include="AutoFixture.AutoMoq" Version="4.18.0" />
     <PackageReference Include="AutoFixture.NUnit3" Version="4.18.0" />
-    <PackageReference Include="ClosedXML" Version="0.92.1" />
-    <PackageReference Include="CompareNETObjects" Version="4.55.0.0" />
     <PackageReference Include="CsvHelper" Version="30.0.1" />
     <PackageReference Include="FluentAssertions" Version="6.11.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
@@ -46,7 +44,6 @@
     <PackageReference Include="System.ServiceModel.NetTcp" Version="6.0.0" />
     <PackageReference Include="System.ServiceModel.Federation" Version="6.0.0" />
 	<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
-    <PackageReference Include="CommonServiceLocator" Version="1.4.0" />
     <PackageReference Include="SFA.DAS.Learners" Version="1.1.181" />
     <PackageReference Include="coverlet.msbuild" Version="3.2.0">
 	    <PrivateAssets>all</PrivateAssets>
