@@ -16,25 +16,25 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
-		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.2.0" />
-		<PackageReference Include="Pipelines.Sockets.Unofficial" Version="2.2.0" />
+		<PackageReference Include="Pipelines.Sockets.Unofficial" Version="2.2.8" />
 		<PackageReference Include="Polly" Version="7.2.4" />
 		<PackageReference Include="System.ComponentModel.Composition" Version="7.0.0" />
 		<PackageReference Include="System.ComponentModel.EventBasedAsync" Version="4.3.0" />
 		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-		<PackageReference Include="System.Diagnostics.DiagnosticSource" Version="7.0.1" />
+		<PackageReference Include="System.Diagnostics.DiagnosticSource" Version="7.0.2" />
 		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0" />
 		<PackageReference Include="System.ServiceModel.Syndication" Version="7.0.0" />
 		<PackageReference Include="System.Spatial" Version="5.8.5" />
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-		<PackageReference Include="System.Threading.Channels" Version="5.0.0" />
-		<PackageReference Include="System.ServiceModel.Duplex" Version="4.9.0" />
-		<PackageReference Include="System.ServiceModel.NetTcp" Version="4.9.0" />
-		<PackageReference Include="System.ServiceModel.Federation" Version="4.9.0" />
+		<PackageReference Include="System.Threading.Channels" Version="7.0.0" />
+		<PackageReference Include="System.ServiceModel.Duplex" Version="6.0.0" />
+		<PackageReference Include="System.ServiceModel.NetTcp" Version="6.0.0" />
+		<PackageReference Include="System.ServiceModel.Federation" Version="6.0.0" />
 		<PackageReference Include="Microsoft.ApplicationInsights.NLogTarget" Version="2.21.0" />
-		<PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.36" />
+		<PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.37" />
 		<PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
 		<PackageReference Include="structuremap" Version="4.7.1" />
 		<PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
