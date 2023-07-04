@@ -13,6 +13,7 @@
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.Abstractions" Version="7.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="SFA.DAS.Authentication.Extensions.Legacy" Version="1.0.29" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.2.17" />
     <PackageReference Include="SFA.DAS.Caches" Version="1.1.4" />
