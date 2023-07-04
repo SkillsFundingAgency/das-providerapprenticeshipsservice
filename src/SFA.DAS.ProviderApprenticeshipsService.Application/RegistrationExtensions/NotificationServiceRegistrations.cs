@@ -18,9 +18,9 @@ public static class NotificationServiceRegistrations
         services.Configure<NotificationsApiClientConfiguration>(c => configuration.GetSection("NotificationApi").Bind(c));
         services.AddSingleton(cfg => cfg.GetService<IOptions<NotificationsApiClientConfiguration>>().Value);
 
-        services.AddTransient<INotificationsApi>(s =>
+        services.AddTransient<INotificationsApi>(serviceProvider =>
         {
-            var config = s.GetService<NotificationsApiClientConfiguration>();
+            var config = serviceProvider.GetService<NotificationsApiClientConfiguration>();
             var httpClient = GetHttpClient(config);
             return new NotificationsApi(httpClient, config);
         });

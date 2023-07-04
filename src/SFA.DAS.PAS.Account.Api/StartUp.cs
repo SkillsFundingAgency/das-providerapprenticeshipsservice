@@ -4,6 +4,7 @@ using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.PAS.Account.Api.Authentication;
 using SFA.DAS.PAS.Account.Api.Authorization;
 using SFA.DAS.PAS.Account.Api.ServiceRegistrations;
+using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
 
 namespace SFA.DAS.PAS.Account.Api;
 
@@ -29,7 +30,7 @@ public class Startup
         services.AddMediatRHandlers();
         services.AddOrchestrators();
         services.AddDataRepositories();
-        services.AddFluentValidation();
+        services.AddApiValidators();
         services.AddApplicationServices();
         services.AddNotifications(_configuration);
 

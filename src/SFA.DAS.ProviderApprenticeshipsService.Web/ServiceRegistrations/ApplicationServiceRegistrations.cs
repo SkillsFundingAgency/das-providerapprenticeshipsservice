@@ -18,7 +18,7 @@ public static class ApplicationServiceRegistrations
         services.AddContentApi(configuration);
         services.AddNotifications(configuration);
         services.AddProviderRelationshipsApi(configuration); // TBC IF NEEDED
-        services.AddFluentValidation();
+        services.AddValidators();
         services.AddApprenticeshipInfoService();
         services.AddUserIdentityService();
 

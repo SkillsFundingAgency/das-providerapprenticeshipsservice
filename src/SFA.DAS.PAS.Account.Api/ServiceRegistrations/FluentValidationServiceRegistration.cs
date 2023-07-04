@@ -5,7 +5,7 @@ namespace SFA.DAS.PAS.Account.Api.ServiceRegistrations;
 
 public static class FluentValidationServiceRegistration
 {
-    public static IServiceCollection AddFluentValidation(this IServiceCollection services)
+    public static IServiceCollection AddApiValidators(this IServiceCollection services)
     {
         services.AddScoped<IValidator<SendNotificationCommand>, SendNotificationCommandValidator>();
 

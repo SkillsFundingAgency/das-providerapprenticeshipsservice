@@ -15,6 +15,7 @@ using SFA.DAS.PAS.Account.Application.Commands.SendNotification;
 using SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers;
 using SFA.DAS.PAS.Account.Application.Queries.GetProviderAgreement;
 using SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings;
+using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
@@ -63,7 +64,7 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddMediatRHandlers();
         serviceCollection.AddOrchestrators();
         serviceCollection.AddDataRepositories();
-        serviceCollection.AddFluentValidation();
+        serviceCollection.AddApiValidators();
         serviceCollection.AddApplicationServices();
         serviceCollection.AddNotifications(configuration);
         serviceCollection.AddLogging();
