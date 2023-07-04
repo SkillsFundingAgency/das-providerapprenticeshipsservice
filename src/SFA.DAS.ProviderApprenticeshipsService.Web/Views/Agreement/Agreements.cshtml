@@ -44,7 +44,7 @@
     </div>
 </div>
 
-@if (!String.IsNullOrEmpty(@Model.SearchText))
+@if (!string.IsNullOrEmpty(@Model.SearchText))
 {
     <p><a href="@Url.Action("Agreements")">Clear search</a></p>
 }

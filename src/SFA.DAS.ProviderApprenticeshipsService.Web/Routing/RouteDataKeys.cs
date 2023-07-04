@@ -1,9 +1,7 @@
-﻿
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Routing
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Routing;
+
+public static class RouteDataKeys
 {
-    public static class RouteDataKeys
-    {
-        public const string ProviderId = "providerId";
-        public const string EmployerAccountLegalEntityPublicHashedId = "EmployerAccountLegalEntityPublicHashedId";
-    }
+    public const string ProviderId = "providerId";
+    public const string EmployerAccountLegalEntityPublicHashedId = "EmployerAccountLegalEntityPublicHashedId";
 }

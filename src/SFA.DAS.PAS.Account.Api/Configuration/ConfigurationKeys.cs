@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.PAS.Account.Api.Configuration
+﻿namespace SFA.DAS.PAS.Account.Api.Configuration;
+
+public static class ConfigurationKeys
 {
-    public static class ConfigurationKeys
-    {
-        public const string AzureActiveDirectoryApiConfiguration = "AzureADApiAuthentication";
-    }
+    public const string AzureActiveDirectoryApiConfiguration = "AzureADApiAuthentication";
 }

@@ -1,9 +1,8 @@
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
+
+public enum FlashMessageSeverityLevel
 {
-    public enum FlashMessageSeverityLevel
-    {
-        None,
-        Info,
-        Okay
-    }
+    None,
+    Info,
+    Okay
 }

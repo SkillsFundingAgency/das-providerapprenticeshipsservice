@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers
+namespace SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers;
+
+public class GetAccountUsersQuery : IRequest<GetAccountUsersResponse>
 {
-    public class GetAccountUsersQuery : IRequest<GetAccountUsersResponse>
-    {
-        public long Ukprn { get; set; }
-    }
+    public long Ukprn { get; set; }
 }

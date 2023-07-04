@@ -1,24 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Routing;
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
+public interface IActionContextAccessorWrapper
 {
-    public interface IActionContextAccessorWrapper
-    {
-        RouteData GetRouteData();
-    };
+    RouteData GetRouteData();
+};
 
-    public class ActionContextAccessorWrapper : IActionContextAccessorWrapper
+public class ActionContextAccessorWrapper : IActionContextAccessorWrapper
+{
+    private readonly IActionContextAccessor _actionContextAccessor;
+    public ActionContextAccessorWrapper(IActionContextAccessor actionContextAccessor)
     {
-        private readonly IActionContextAccessor _actionContextAccessor;
-        public ActionContextAccessorWrapper(IActionContextAccessor actionContextAccessor)
-        {
-            _actionContextAccessor = actionContextAccessor;
-        }
+        _actionContextAccessor = actionContextAccessor;
+    }
 
-        public RouteData GetRouteData()
-        {
-            return _actionContextAccessor.ActionContext.RouteData;
-        }
+    public RouteData GetRouteData()
+    {
+        return _actionContextAccessor.ActionContext.RouteData;
     }
 }
