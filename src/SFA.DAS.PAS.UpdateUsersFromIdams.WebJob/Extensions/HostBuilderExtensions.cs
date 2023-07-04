@@ -1,84 +1,88 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using System.Net.Http;
+using Azure.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.Http;
+using SFA.DAS.Http.Configuration;
+using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Configuration;
+using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
-using System;
-using SFA.DAS.Configuration;
-using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
-using SFA.DAS.Http.TokenGenerators;
-using SFA.DAS.Http;
-using System.Net.Http;
 
-namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions
+namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions;
+
+public static class HostBuilderExtensions
 {
-    public static class HostBuilderExtensions
+    public static IHostBuilder AddConfiguration(this IHostBuilder hostBuilder)
     {
-        public static IHostBuilder AddConfiguration(this IHostBuilder hostBuilder)
+        return hostBuilder.ConfigureAppConfiguration((context, builder) =>
         {
-            return hostBuilder.ConfigureAppConfiguration((context, builder) =>
-            {
-                var environment = context.HostingEnvironment.EnvironmentName;
+            var environment = context.HostingEnvironment.EnvironmentName;
 
-                builder.AddJsonFile("appsettings.json", true, true)
-                       .AddJsonFile($"appsettings.{environment}.json", true, true)
-                       .AddAzureTableStorage(ConfigurationKeys.ProviderApprenticeshipsService)
-                       .AddEnvironmentVariables();
-            });
-        }
+            builder.AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsettings.{environment}.json", true, true)
+                .AddAzureTableStorage(ConfigurationKeys.ProviderApprenticeshipsService)
+                .AddEnvironmentVariables();
+        });
+    }
 
-        public static IHostBuilder ConfigureServices(this IHostBuilder hostBuilder)
+    public static IHostBuilder ConfigureServices(this IHostBuilder hostBuilder)
+    {
+        hostBuilder.ConfigureServices((context, services) =>
         {
-            hostBuilder.ConfigureServices((context, services) =>
+            services.Configure<ProviderApprenticeshipsServiceConfiguration>(c =>
+                context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService).Bind(c));
+            services.AddSingleton<IBaseConfiguration>(isp =>
+                isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
+            services.AddSingleton(isp =>
+                isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value.CommitmentNotification);
+
+            services.AddTransient<IHttpClientWrapper>(s =>
             {
-                services.Configure<ProviderApprenticeshipsServiceConfiguration>(c => context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService).Bind(c));
-                services.AddSingleton<IBaseConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
-                services.AddSingleton<ProviderNotificationConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value.CommitmentNotification);
-
-                services.AddTransient<IHttpClientWrapper>(s =>
-                {
-                    var config = s.GetService<ProviderNotificationConfiguration>();
-                    var httpClient = GetHttpClient(config);
-                    return new HttpClientWrapper(httpClient);
-                });
-
-                services.AddTransient<IIdamsEmailServiceWrapper, IdamsEmailServiceWrapper>(); 
-                services.AddTransient<IProviderRepository, ProviderRepository>();
-                services.AddTransient<IUserRepository, UserRepository>();
-                services.AddTransient<IIdamsSyncService, IdamsSyncService>();
-
-                services.AddHttpClient();
-
-                services.AddLogging();
+                var config = s.GetService<ProviderNotificationConfiguration>();
+                var httpClient = GetHttpClient(config);
+                return new HttpClientWrapper(httpClient);
             });
 
-            return hostBuilder;
-        }
+            services.AddSingleton(new ChainedTokenCredential(
+                new ManagedIdentityCredential(),
+                new AzureCliCredential())
+            );
 
-       
-        public static IHostBuilder UseDasEnvironment(this IHostBuilder hostBuilder)
-        {
-            var environment = Environment.GetEnvironmentVariable("DASENV");
-            if (string.IsNullOrEmpty(environment))
-            {
-                environment = Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName);
-            }
+            services.AddTransient<IIdamsEmailServiceWrapper, IdamsEmailServiceWrapper>();
+            services.AddTransient<IProviderRepository, ProviderRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IIdamsSyncService, IdamsSyncService>();
 
-            return hostBuilder.UseEnvironment(environment);
-        }
+            services.AddHttpClient();
 
-        private static HttpClient GetHttpClient(ProviderNotificationConfiguration config)
-        {
-            var httpClient = new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config)).Build();
+            services.AddLogging();
+        });
 
-            return httpClient;
-        }
+        return hostBuilder;
+    }
+
+    public static IHostBuilder UseDasEnvironment(this IHostBuilder hostBuilder)
+    {
+        var environment = Environment.GetEnvironmentVariable("DASENV");
+        if (string.IsNullOrEmpty(environment))
+            environment = Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName);
+
+        return hostBuilder.UseEnvironment(environment);
+    }
+
+    private static HttpClient GetHttpClient(IJwtClientConfiguration config)
+    {
+        return new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config)).Build();
     }
 }
