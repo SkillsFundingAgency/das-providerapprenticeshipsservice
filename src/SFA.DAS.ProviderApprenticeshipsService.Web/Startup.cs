@@ -23,13 +23,16 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddSingleton(_configuration);
+        
+        services.AddOptions();
+        
+        services.AddLogging();
+        
         services.AddHttpContextAccessor();
 
-        services.AddOptions();
-
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<DeleteRegisteredUserCommand>());
-
-        services.AddLogging();
+        
         services.AddApplicationServices(_configuration);
         services.AddOrchestrators();
         services.AddEncodingServices(_configuration);
