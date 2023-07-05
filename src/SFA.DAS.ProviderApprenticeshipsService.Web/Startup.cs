@@ -1,6 +1,4 @@
-﻿using System.IO;
-using Microsoft.Extensions.Configuration;
-using SFA.DAS.Configuration.AzureTableStorage;
+﻿using Microsoft.Extensions.Configuration;
 using SFA.DAS.DfESignIn.Auth.Helpers;
 using SFA.DAS.Provider.Shared.UI;
 using SFA.DAS.Provider.Shared.UI.Startup;
@@ -11,7 +9,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations;
-
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web;
 
@@ -45,19 +42,12 @@ public class Startup
         services.AddProviderUiServiceRegistration(_configuration);
         services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
 
-        services.Configure<RouteOptions>(options =>
-            {
-
-            }).AddMvc(options =>
+        services.Configure<RouteOptions>(options => { }).AddMvc(options =>
             {
                 //options.AddAuthorization();
                 options.Filters.Add<InvalidStateExceptionFilter>();
                 options.ModelBinderProviders.Insert(0, new TrimStringModelBinderProvider());
-                if (!_configuration.IsDev())
-                {
-                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-                }
-
+                if (!_configuration.IsDev()) options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             })
             .SetDfESignInConfiguration(_configuration.GetSection("UseDfESignIn").Get<bool>())
             .SetDefaultNavigationSection(NavigationSection.Home);
@@ -77,18 +67,12 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        if (env.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-        }
+        if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
         app.UseAuthentication();
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthorization();
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapDefaultControllerRoute();
-        });
+        app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
     }
 }
