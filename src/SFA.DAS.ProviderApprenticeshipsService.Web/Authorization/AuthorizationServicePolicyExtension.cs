@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
-using SFA.DAS.Authorization.Caching;
+﻿using SFA.DAS.Authorization.Caching;
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.DependencyResolution.Microsoft;
 using SFA.DAS.Authorization.Handlers;
@@ -18,8 +17,16 @@ public static class AuthorizationServicePolicyExtension
 
         services.AddAuthorization(options =>
         {
-            options.AddPolicy(PolicyNames.RequireAuthenticatedUser, policy => policy.RequireAuthenticatedUser());
-            options.AddPolicy(PolicyNames.RequireDasPermissionRole, policy => policy.RequireRole(RoleNames.DasPermission));
+            options.AddPolicy(PolicyNames.RequireAuthenticatedUser, policy =>
+            {
+                policy.RequireAuthenticatedUser();
+            });
+
+            options.AddPolicy(PolicyNames.RequireDasPermissionRole, policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.RequireRole(RoleNames.DasPermission);
+            });
         });
 
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
@@ -28,7 +35,7 @@ public static class AuthorizationServicePolicyExtension
         services.AddAuthorization<AuthorizationContextProvider>();
         services.AddSingleton<IAuthorizationHandler, AuthorizationHandler>();
 
-        services.AddSingleton<IAuthorizationContext>(_ => _.GetService<IAuthorizationContextProvider>().GetAuthorizationContext());
+        services.AddSingleton(_ => _.GetService<IAuthorizationContextProvider>().GetAuthorizationContext());
         //services.AddSingleton<IAuthorizationContextProvider, DefaultAuthorizationContextProvider>();
         services.Decorate<IAuthorizationContextProvider, AuthorizationContextCache>();
         services.Decorate<IAuthorizationHandler, AuthorizationResultLogger>();
