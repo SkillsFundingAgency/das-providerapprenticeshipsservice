@@ -14,12 +14,11 @@ public class Program
 {
     public static async Task Main()
     {
-        using (var host = CreateHost())
-        {
-            await SyncIdamsUsers(host);
+        using var host = CreateHost();
+        
+        await SyncIdamsUsers(host);
 
-            await host.RunAsync();
-        }
+        await host.RunAsync();
     }
     private static async Task SyncIdamsUsers(IHost host)
     {
@@ -59,6 +58,7 @@ public class Program
         var builder = new HostBuilder()
             .UseDasEnvironment()
             .AddConfiguration()
+            .ConfigureDasLogging()
             .ConfigureServices();
 
         return builder.Build();

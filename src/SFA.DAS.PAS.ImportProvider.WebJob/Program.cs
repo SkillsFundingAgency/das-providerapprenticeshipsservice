@@ -56,6 +56,7 @@ class Program
         var builder = new HostBuilder()
             .UseDasEnvironment()
             .AddConfiguration()
+            .ConfigureDasLogging()
             .ConfigureServices();
 
         return builder.Build();

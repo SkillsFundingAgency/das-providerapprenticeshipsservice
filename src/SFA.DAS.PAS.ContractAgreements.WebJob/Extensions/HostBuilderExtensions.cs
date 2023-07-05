@@ -4,6 +4,7 @@ using Azure.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using SFA.DAS.Configuration;
@@ -58,9 +59,7 @@ public static class HostBuilderExtensions
             var environment = context.HostingEnvironment.EnvironmentName;
 
             if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST"))
-            {
                 PopulateSystemDetails(environment);
-            }
 
             builder.AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true, true)
@@ -73,9 +72,7 @@ public static class HostBuilderExtensions
     {
         var environment = Environment.GetEnvironmentVariable("DASENV");
         if (string.IsNullOrEmpty(environment))
-        {
             environment = Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName);
-        }
 
         return hostBuilder.UseEnvironment(environment);
     }
@@ -83,12 +80,25 @@ public static class HostBuilderExtensions
     private static void PopulateSystemDetails(string envName)
     {
         SystemDetails.EnvironmentName = envName;
-        
+
         var version = Assembly.GetExecutingAssembly().GetName().Version;
-        
-        if (version != null)
+
+        if (version != null) SystemDetails.VersionNumber = version.ToString();
+    }
+
+    public static IHostBuilder ConfigureDasLogging(this IHostBuilder hostBuilder)
+    {
+        hostBuilder.ConfigureLogging((context, loggingBuilder) =>
         {
-            SystemDetails.VersionNumber = version.ToString();
-        }
+            var connectionString = context.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
+            if (!string.IsNullOrEmpty(connectionString))
+            {
+                loggingBuilder.AddApplicationInsightsWebJobs(o => o.ConnectionString = connectionString);
+            }
+
+            loggingBuilder.AddConsole();
+        });
+
+        return hostBuilder;
     }
 }

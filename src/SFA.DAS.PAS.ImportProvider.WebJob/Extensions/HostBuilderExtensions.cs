@@ -3,6 +3,7 @@ using Azure.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
@@ -67,5 +68,21 @@ public static class HostBuilderExtensions
             environment = Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName);
 
         return hostBuilder.UseEnvironment(environment);
+    }
+    
+    public static IHostBuilder ConfigureDasLogging(this IHostBuilder hostBuilder)
+    {
+        hostBuilder.ConfigureLogging((context, loggingBuilder) =>
+        {
+            var connectionString = context.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
+            if (!string.IsNullOrEmpty(connectionString))
+            {
+                loggingBuilder.AddApplicationInsightsWebJobs(o => o.ConnectionString = connectionString);
+            }
+
+            loggingBuilder.AddConsole();
+        });
+
+        return hostBuilder;
     }
 }
