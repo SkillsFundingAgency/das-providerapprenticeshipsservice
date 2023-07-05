@@ -29,7 +29,6 @@ public sealed class SendNotificationCommandHandler : IRequestHandler<SendNotific
 
             throw new ValidationException(validationResult.Errors.ToString());
         }
-                
 
         _logger.LogInformation("Sending email to {EmailRecipientsAddress}. Template: {EmailTemplateId}", message.Email.RecipientsAddress, message.Email.TemplateId);
 
