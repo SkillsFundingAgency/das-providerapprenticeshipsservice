@@ -53,12 +53,11 @@ class Program
 
     private static IHost CreateHost()
     {
-        var builder = new HostBuilder()
+        return new HostBuilder()
             .UseDasEnvironment()
             .AddConfiguration()
             .ConfigureDasLogging()
-            .ConfigureServices();
-
-        return builder.Build();
+            .ConfigureServices()
+            .Build();
     }
 }

@@ -1,8 +1,7 @@
-﻿namespace SFA.DAS.PAS.ImportProvider.WebJob.Configuration
+﻿namespace SFA.DAS.PAS.ImportProvider.WebJob.Configuration;
+
+public static class ConfigurationKeys
 {
-    public static class ConfigurationKeys
-    {
-        public const string ProviderApprenticeshipsService = "SFA.DAS.ProviderApprenticeshipsService";
-        public const string CommitmentsApiClientV2 = $"{ProviderApprenticeshipsService}:CommitmentsApiClientV2";
-    }
+    public const string ProviderApprenticeshipsService = "SFA.DAS.ProviderApprenticeshipsService";
+    public const string CommitmentsApiClientV2 = $"{ProviderApprenticeshipsService}:CommitmentsApiClientV2";
 }

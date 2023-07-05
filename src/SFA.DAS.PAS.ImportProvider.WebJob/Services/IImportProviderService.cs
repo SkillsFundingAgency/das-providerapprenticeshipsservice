@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace SFA.DAS.PAS.ImportProvider.WebJob.Services
+namespace SFA.DAS.PAS.ImportProvider.WebJob.Services;
+
+public interface IImportProviderService
 {
-    public interface IImportProviderService
-    {
-        Task Import();
-    }
+    Task Import();
 }
