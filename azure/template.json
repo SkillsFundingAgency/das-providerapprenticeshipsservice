@@ -281,7 +281,7 @@
                 },
                 {
                   "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                  "value": "[reference(concat('UIAppInsights-', parameters('utcValue'))).outputs.ConnectionString.value]"
+                  "value": "[reference(concat('ApiAppInsights-', parameters('utcValue'))).outputs.ConnectionString.value]"
                 },
                 {
                   "name": "ConfigNames",
@@ -628,6 +628,10 @@
                 {
                   "name": "EnvironmentName",
                   "value": "[parameters('environmentName')]"
+                },
+                {
+                  "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                  "value": "[reference(concat('WorkerAppInsights-', parameters('utcValue'))).outputs.ConnectionString.value]"
                 }
               ]
             }
