@@ -12,6 +12,7 @@ public static class AuthenticationExtensions
 {
     private const string ClientName = "ProviderRoATP";
     private const string SignedOutCallbackPath = "/signout";
+    private static readonly string AuthCookieName = $"{typeof(AuthenticationExtensions).Assembly.GetName().Name}.Auth";
 
     public static void AddAndConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
@@ -21,7 +22,7 @@ public static class AuthenticationExtensions
         {
             services.AddAndConfigureDfESignInAuthentication(
                 configuration,
-                "SFA.DAS.ProviderApprenticeshipsService.Web.Auth",
+                AuthCookieName,
                 typeof(CustomServiceRole),
                 ClientName,
                 SignedOutCallbackPath);
@@ -46,12 +47,13 @@ public static class AuthenticationExtensions
                 .AddCookie(options =>
                 {
                     options.ExpireTimeSpan = TimeSpan.FromHours(1);
-                    options.Cookie.Name = "SFA.DAS.ProviderApprenticeshipsService.Web.Auth";
+                    options.Cookie.Name = AuthCookieName;
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     options.SlidingExpiration = true;
                     options.Cookie.SameSite = SameSiteMode.None;
                     options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
                 });
+            
             services
                 .AddOptions<WsFederationOptions>(WsFederationDefaults.AuthenticationScheme)
                 .Configure<IProviderCommitmentsLogger, IAuthenticationOrchestrator>(
