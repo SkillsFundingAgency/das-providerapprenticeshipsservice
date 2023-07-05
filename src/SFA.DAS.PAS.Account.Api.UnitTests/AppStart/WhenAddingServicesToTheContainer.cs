@@ -61,7 +61,7 @@ public class WhenAddingServicesToTheContainer
 
         serviceCollection.AddOptions();
         serviceCollection.AddConfigurationOptions(configuration);
-        serviceCollection.AddMediatRHandlers();
+        serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetAccountUsersHandler>());
         serviceCollection.AddOrchestrators();
         serviceCollection.AddDataRepositories();
         serviceCollection.AddApiValidators();

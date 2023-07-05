@@ -20,19 +20,20 @@ public class EmailController : Controller
         _logger = logger;
     }
 
-    [Route("{ukprn}/send")]
     [HttpPost]
+    [Route("{ukprn}/send")]
     public async Task<IActionResult> SendEmailToAllProviderRecipients(long ukprn, ProviderEmailRequest request)
     {
         try
         {
             await _emailOrchestrator.SendEmailToAllProviderRecipients(ukprn, request);
             _logger.Info($"Email template '{request?.TemplateId}' sent to Provider recipients successfully", ukprn);
+            
             return Ok();
         }
-        catch (Exception e)
+        catch (Exception exception)
         {
-            _logger.Error(e, $"Error sending email template '{request?.TemplateId}' to Provider recipients", ukprn);
+            _logger.Error(exception, $"Error sending email template '{request?.TemplateId}' to Provider recipients", ukprn);
             throw;
         }
     }

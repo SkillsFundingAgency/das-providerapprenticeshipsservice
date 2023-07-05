@@ -10,7 +10,6 @@ namespace SFA.DAS.PAS.Account.Api.Controllers;
 public class AccountController : Controller
 {
     private readonly IAccountOrchestrator _orchestrator;
-
     private readonly IProviderCommitmentsLogger _logger;
 
     public AccountController(IAccountOrchestrator orchestrator, IProviderCommitmentsLogger logger)
@@ -19,8 +18,8 @@ public class AccountController : Controller
         _logger = logger;
     }
 
-    [Route("{ukprn}/users")]
     [HttpGet]
+    [Route("{ukprn}/users")]
     public async Task<IActionResult> GetAccountUsers(long ukprn)
     {
         _logger.Info($"Getting account users for ukprn: {ukprn}", providerId: ukprn);
@@ -31,8 +30,8 @@ public class AccountController : Controller
         return Ok(result);
     }
 
-    [Route("{ukprn}/agreement")]
     [HttpGet]
+    [Route("{ukprn}/agreement")]
     public async Task<IActionResult> GetAgreement(long ukprn)
     {
         _logger.Info($"Getting agreement for ukprn: {ukprn}", providerId: ukprn);

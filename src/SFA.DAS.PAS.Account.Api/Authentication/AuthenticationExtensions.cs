@@ -9,12 +9,14 @@ namespace SFA.DAS.PAS.Account.Api.Authentication;
 
 public static class AuthenticationExtensions
 {
+    private const string BasicAuthScheme = "BasicAuthentication";
     public static IServiceCollection AddApiAuthentication(this IServiceCollection services, IConfiguration config)
     {
         if (config.IsDevOrLocal())
         {
-            services.AddAuthentication("BasicAuthentication")
-                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+            services
+                .AddAuthentication(BasicAuthScheme)
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>(BasicAuthScheme, null);
         }
         else
         {
@@ -23,6 +25,7 @@ public static class AuthenticationExtensions
                 .Get<AzureActiveDirectoryConfiguration>();
 
             var policies = new Dictionary<string, string> { { PolicyNames.Default, RoleNames.Default } };
+            
             services.AddAuthentication(azureAdConfiguration, policies);
             services.AddSingleton<IClaimsTransformation, AzureAdScopeClaimTransformation>();
         }

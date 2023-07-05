@@ -12,7 +12,6 @@ namespace SFA.DAS.PAS.Account.Api.Controllers;
 public class UserController : Controller
 {
     private readonly IUserOrchestrator _orchestrator;
-
     private readonly IProviderCommitmentsLogger _logger;
 
     public UserController(IUserOrchestrator orchestrator, IProviderCommitmentsLogger logger)
@@ -21,8 +20,8 @@ public class UserController : Controller
         _logger = logger;
     }
 
-    [Route("{userRef}")]
     [HttpGet]
+    [Route("{userRef}")]
     public async Task<IActionResult> GetUserSettings(string userRef)
     {
         _logger.Info($"Getting users settings for user: {userRef}");

@@ -1,4 +1,4 @@
-namespace SFA.DAS.PAS.Account.Api;
+namespace SFA.DAS.PAS.Account.Api.Authentication;
 
 public static class RoleNames
 {
