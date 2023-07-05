@@ -42,12 +42,16 @@ public class Startup
         services.AddProviderUiServiceRegistration(_configuration);
         services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
 
-        services.Configure<RouteOptions>(options => { }).AddMvc(options =>
+        services.Configure<RouteOptions>(_ => { }).AddMvc(options =>
             {
                 //options.AddAuthorization();
                 options.Filters.Add<InvalidStateExceptionFilter>();
                 options.ModelBinderProviders.Insert(0, new TrimStringModelBinderProvider());
-                if (!_configuration.IsDev()) options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                
+                if (!_configuration["EnvironmentName"].Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                }
             })
             .SetDfESignInConfiguration(_configuration.GetSection("UseDfESignIn").Get<bool>())
             .SetDefaultNavigationSection(NavigationSection.Home);
