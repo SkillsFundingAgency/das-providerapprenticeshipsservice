@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
+
+public class GetUserNotificationSettingsQuery : IRequest<GetUserNotificationSettingsResponse>
 {
-    public class GetUserNotificationSettingsQuery : IRequest<GetUserNotificationSettingsResponse>
-    {
-        public string UserRef { get; set; }
-    }
+    public string UserRef { get; set; }
 }

@@ -1,36 +1,35 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
+
+public class CookieStorageService<T> : ICookieStorageService<T>
 {
-    public class CookieStorageService<T> : ICookieStorageService<T>
+    private readonly ICookieService<T> _cookieService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public CookieStorageService(ICookieService<T> cookieService, IHttpContextAccessor httpContextAccessor)
     {
-        private readonly ICookieService<T> _cookieService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        _cookieService = cookieService;
+        _httpContextAccessor = httpContextAccessor;
+    }
 
-        public CookieStorageService(ICookieService<T> cookieService, IHttpContextAccessor httpContextAccessor)
-        {
-            _cookieService = cookieService;
-            _httpContextAccessor = httpContextAccessor;
-        }
+    public void Create(T item, string cookieName, int expiryDays = 1)
+    {
+        _cookieService.Create(_httpContextAccessor, cookieName, item, expiryDays);
+    }
 
-        public void Create(T item, string cookieName, int expiryDays = 1)
-        {
-            _cookieService.Create(_httpContextAccessor, cookieName, item, expiryDays);
-        }
+    public T Get(string cookieName)
+    {
+        return _cookieService.Get(_httpContextAccessor, cookieName);
+    }
 
-        public T Get(string cookieName)
-        {
-            return _cookieService.Get(_httpContextAccessor, cookieName);
-        }
+    public void Delete(string cookieName)
+    {
+        _cookieService.Delete(_httpContextAccessor, cookieName);
+    }
 
-        public void Delete(string cookieName)
-        {
-            _cookieService.Delete(_httpContextAccessor, cookieName);
-        }
-
-        public void Update(string cookieName, T item)
-        {
-            _cookieService.Update(_httpContextAccessor, cookieName, item);
-        }
+    public void Update(string cookieName, T item)
+    {
+        _cookieService.Update(_httpContextAccessor, cookieName, item);
     }
 }

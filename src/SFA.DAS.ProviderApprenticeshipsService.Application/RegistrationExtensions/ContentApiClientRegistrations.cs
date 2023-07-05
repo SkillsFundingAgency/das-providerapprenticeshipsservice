@@ -6,38 +6,36 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using System.Net.Http;
 using Microsoft.Extensions.Options;
+using SFA.DAS.Http.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
+
+public static class ContentApiClientRegistrations
 {
-    public static class ContentApiClientRegistrations
+    public static IServiceCollection AddContentApi(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddContentApi(this IServiceCollection services, IConfiguration configuration)
+        services.Configure<ContentClientApiConfiguration>(c => configuration.GetSection("ContentApi").Bind(c));
+        services.AddSingleton<IContentApiConfiguration>(cfg => cfg.GetService<IOptions<ContentClientApiConfiguration>>().Value);
+
+        services.AddSingleton<IContentApiClient>(s =>
         {
-            services.Configure<ContentClientApiConfiguration>(c => configuration.GetSection("ContentApi").Bind(c));
-            services.AddSingleton<IContentApiConfiguration>(cfg => cfg.GetService<IOptions<ContentClientApiConfiguration>>().Value);
+            var contentApiConfig = s.GetService<IContentApiConfiguration>();
+            var httpClient = GetHttpClient(contentApiConfig);
 
-            services.AddSingleton<IContentApiClient>(s =>
-            {
-                var contentApiConfig = s.GetService<IContentApiConfiguration>();
-                var httpClient = GetHttpClient(contentApiConfig);
+            return new ContentApiClient(httpClient, contentApiConfig);
+        });
 
-                return new ContentApiClient(httpClient, contentApiConfig);
-            });
+        return services;
+    }
 
-            return services;
-        }
+    private static HttpClient GetHttpClient(IManagedIdentityClientConfiguration config)
+    {
+        var httpClient = new HttpClientBuilder()
+            .WithBearerAuthorisationHeader(new ManagedIdentityTokenGenerator(config))
+            .WithDefaultHeaders()
+            .Build();
 
-        private static HttpClient GetHttpClient(IContentApiConfiguration config)
-        {
-            HttpClient httpClient = new HttpClientBuilder()
-                    .WithBearerAuthorisationHeader(new ManagedIdentityTokenGenerator(config))
-                    // .WithHandler(new RequestIdMessageRequestHandler())
-                    // .WithHandler(new SessionIdMessageRequestHandler())
-                    .WithDefaultHeaders()
-                    .Build();
-
-            return httpClient;
-        }
+        return httpClient;
     }
 }

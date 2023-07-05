@@ -2,25 +2,23 @@
 using System.Threading.Tasks;
 using System.Net.Http;
 using SFA.DAS.Authentication.Extensions.Legacy;
+using SFA.DAS.Http.Configuration;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services;
+
+public class ContentApiClient : ApiClientBase, IContentApiClient
 {
-    public class ContentApiClient : ApiClientBase, IContentApiClient
-    {
-        private readonly string ApiBaseUrl;
+    private readonly string _apiBaseUrl;
    
-        public ContentApiClient(HttpClient client, IContentApiConfiguration configuration) : base(client)
-        {
-            ApiBaseUrl = configuration.ApiBaseUrl.EndsWith("/")
-                ? configuration.ApiBaseUrl
-                : configuration.ApiBaseUrl + "/";
-        }
-        public async Task<string> Get(string type, string applicationId)
-        {   
-            var uri = $"{ApiBaseUrl}api/content?applicationId={applicationId}&type={type}";
-            string content = await GetAsync(uri);            
-            return content;
-        }
+    public ContentApiClient(HttpClient client, IManagedIdentityClientConfiguration configuration) : base(client)
+    {
+        _apiBaseUrl = configuration.ApiBaseUrl.EndsWith("/")
+            ? configuration.ApiBaseUrl
+            : configuration.ApiBaseUrl + "/";
+    }
+    public async Task<string> Get(string type, string applicationId)
+    {   
+        var uri = $"{_apiBaseUrl}api/content?applicationId={applicationId}&type={type}";
+        return await GetAsync(uri);
     }
 }
-    

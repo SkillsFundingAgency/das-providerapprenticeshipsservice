@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
+
+public class InvalidStateException : Exception
 {
-    public class InvalidStateException : Exception
-    {
-        public InvalidStateException(string message) : base(message) {}
-    }
+    public InvalidStateException(string message) : base(message) {}
 }
