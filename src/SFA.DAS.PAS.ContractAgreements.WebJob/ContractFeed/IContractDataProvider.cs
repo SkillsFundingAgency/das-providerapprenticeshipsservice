@@ -3,12 +3,11 @@ using System.Collections.Generic;
 
 using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
 
-namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
-{
-    public interface IContractDataProvider
-    {
-        string FindPageWithBookmark(Guid? latestBookmark);
+namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 
-        int ReadEvents(string pageToReadUri, Guid? latestBookmark, Action<IList<ContractFeedEvent>, Guid?> action);
-    }
+public interface IContractDataProvider
+{
+    string FindPageWithBookmark(Guid? latestBookmark);
+
+    int ReadEvents(string pageToReadUri, Guid? latestBookmark, Action<IList<ContractFeedEvent>, Guid?> action);
 }

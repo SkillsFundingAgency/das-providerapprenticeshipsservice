@@ -3,11 +3,11 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 
-public class ContractFeedProcessorHttpClient : IContractFeedProcessorHttpClient
+public sealed class ContractFeedProcessorHttpClient : IContractFeedProcessorHttpClient
 {
     private readonly AzureAuthentication _authenticationCredentials;
-    private static string VendorAtomMediaType = "application/vnd.sfa.contract.v1+atom+xml";
-    
+    private const string VendorAtomMediaType = "application/vnd.sfa.contract.v1+atom+xml";
+
     private static readonly HttpClient HttpClient = InitHttpClient();
 
     public string BaseAddress { get; }
@@ -28,7 +28,7 @@ public class ContractFeedProcessorHttpClient : IContractFeedProcessorHttpClient
         BaseAddress = config.BaseAddress;
     }
     
-    public virtual HttpClient GetAuthorizedHttpClient()
+    public HttpClient GetAuthorizedHttpClient()
     {
         var token = _authenticationCredentials.GetAuthenticationResult().Result.AccessToken;
         HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

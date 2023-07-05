@@ -9,79 +9,80 @@ using System.Net.Http;
 using Polly;
 using Microsoft.Extensions.Logging;
 
-namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
+namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
+
+public class ContractFeedReader : IContractFeedReader
 {
-    public class ContractFeedReader : IContractFeedReader
+    private readonly IContractFeedProcessorHttpClient _httpClient;
+    private readonly ILogger<ContractFeedReader> _logger;
+    private const string MostRecentPageUrl = "/api/contracts/notifications";
+
+    public ContractFeedReader(IContractFeedProcessorHttpClient httpClient, ILogger<ContractFeedReader> logger)
     {
-        private readonly IContractFeedProcessorHttpClient _httpClient;
-        private readonly ILogger<ContractFeedReader> _logger;
-        private const string MostRecentPageUrl = "/api/contracts/notifications";
+        _httpClient = httpClient;
+        _logger = logger;
+        LatestPageUrl = $"{_httpClient.BaseAddress}{MostRecentPageUrl}";
+    }
 
-        public ContractFeedReader(IContractFeedProcessorHttpClient httpClient, ILogger<ContractFeedReader> logger)
+    public string LatestPageUrl { get; }
+
+    public void Read(string pageUri, ReadDirection direction, Func<string, string, Navigation, bool> pageWriter)
+    {
+        var relationshipType = direction == ReadDirection.Forward ? "next-archive" : "prev-archive";
+        var continueToNextPage = true;
+
+        while (continueToNextPage && !string.IsNullOrEmpty(pageUri))
         {
-            _httpClient = httpClient;
-            _logger = logger;
-            LatestPageUrl = $"{_httpClient.BaseAddress}{MostRecentPageUrl}";
-        }
+            var response = CallEndpointAndReturnResultForFullUrl(pageUri);
+            var feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
+            var pageNavigation = GetPageNavigation(feed);
+            continueToNextPage = pageWriter(pageUri, response.Content, pageNavigation);
 
-        public string LatestPageUrl { get; }
-
-        public void Read(string pageUri, ReadDirection direction, Func<string, string, Navigation, bool> pageWriter)
-        {
-            var relationshipType = direction == ReadDirection.Forward ? "next-archive" : "prev-archive";
-            var continueToNextPage = true;
-
-            while (continueToNextPage && !string.IsNullOrEmpty(pageUri))
+            if (continueToNextPage)
             {
-                var response = CallEndpointAndReturnResultForFullUrl(pageUri);
-                SyndicationFeed feed = SyndicationFeed.Load(new XmlTextReader(new StringReader(response.Content)));
-                Navigation pageNavigation = GetPageNavigation(feed);
-                continueToNextPage = pageWriter(pageUri, response.Content, pageNavigation);
-
-                if (continueToNextPage)
+                var lastPageUri = pageUri;
+                pageUri = feed?.Links.FirstOrDefault(li => li.RelationshipType == relationshipType)?.Uri.ToString();
+                if (string.IsNullOrEmpty(pageUri)
+                    && direction == ReadDirection.Forward
+                    && LatestPageUrl != lastPageUri)
                 {
-                    var lastPageUri = pageUri;
-                    pageUri = feed?.Links.FirstOrDefault(li => li.RelationshipType == relationshipType)?.Uri.ToString();
-                    if (string.IsNullOrEmpty(pageUri)
-                        && direction == ReadDirection.Forward
-                        && LatestPageUrl != lastPageUri)
-                    {
-                        pageUri = LatestPageUrl;
-                    }
+                    pageUri = LatestPageUrl;
                 }
             }
         }
+    }
 
-        private static Navigation GetPageNavigation(SyndicationFeed feed)
+    private static Navigation GetPageNavigation(SyndicationFeed feed)
+    {
+        if (feed?.Links == null || feed.Links.Count == 0)
+            return new Navigation(null, null);
+
+        const string nextRelationshipType = "next-archive";
+        const string previousRelationshipType = "prev-archive";
+        
+        var previousLink = feed.Links.SingleOrDefault(li => li.RelationshipType == previousRelationshipType)?.Uri.ToString();
+        var nextLink = feed.Links.SingleOrDefault(li => li.RelationshipType == nextRelationshipType)?.Uri.ToString();
+
+        return new Navigation(previousLink, nextLink);
+    }
+
+    private T LogTiming<T>(string actionDescription, Func<T> func)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        var result = func();
+        stopwatch.Stop();
+        _logger.LogTrace($"It took {stopwatch.ElapsedMilliseconds} milliseconds to {actionDescription}");
+
+        return result;
+    }
+
+    private HttpResult CallEndpointAndReturnResultForFullUrl(string url)
+    {
+        var client = _httpClient.GetAuthorizedHttpClient();
+
+        try
         {
-            if (feed?.Links == null || feed.Links.Count == 0)
-                return new Navigation(null, null);
-
-            const string NextRelationshipType = "next-archive";
-            const string PreviousRelationshipType = "prev-archive";
-            string previousLink = feed.Links.SingleOrDefault(li => li.RelationshipType == PreviousRelationshipType)?.Uri.ToString();
-            string nextLink = feed.Links.SingleOrDefault(li => li.RelationshipType == NextRelationshipType)?.Uri.ToString();
-
-            return new Navigation(previousLink, nextLink);
-        }
-
-        private T LogTiming<T>(string actionDescription, Func<T> func)
-        {
-            var stopwatch = Stopwatch.StartNew();
-            var result = func();
-            stopwatch.Stop();
-            _logger.LogTrace($"It took {stopwatch.ElapsedMilliseconds} milliseconds to {actionDescription}");
-
-            return result;
-        }
-
-        private HttpResult CallEndpointAndReturnResultForFullUrl(string url)
-        {
-            var client = _httpClient.GetAuthorizedHttpClient();
-
-            try
-            {
-                var content = Policy
+            var content = Policy
                 .Handle<HttpRequestException>()
                 .Retry(3, (exception, retryCount) =>
                 {
@@ -89,41 +90,38 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
                 })
                 .Execute(() => LogTiming($"download feed page {url}", () => client.GetAsync(url).Result));
 
-                if (content.StatusCode == HttpStatusCode.NotFound)
-                    return new HttpResult(HttpStatusCode.NotFound, string.Empty);
+            if (content.StatusCode == HttpStatusCode.NotFound)
+                return new HttpResult(HttpStatusCode.NotFound, string.Empty);
 
-                content.EnsureSuccessStatusCode();
+            content.EnsureSuccessStatusCode();
 
-                return new HttpResult(content.StatusCode, content.Content.ReadAsStringAsync().Result);
-            }
-            catch (Exception ex)
-            {
-                var aggregateException = ex as AggregateException;
-                if (aggregateException != null)
-                {
-                    var aex = aggregateException;
-                    foreach (var exception in aex.InnerExceptions)
-                    {
-                        _logger.LogError(exception, $"Error in contact feed reader, calling endpoint {url}");
-                    }
-                    throw aex.InnerExceptions.First();
-                }
-                _logger.LogError(ex, $"Error in contact feed reader, calling endpoint {url}");
-                throw;
-            }
+            return new HttpResult(content.StatusCode, content.Content.ReadAsStringAsync().Result);
         }
-
-        private struct HttpResult
+        catch (Exception ex)
         {
-            public HttpResult(HttpStatusCode statusCode, string content)
+            if (ex is AggregateException aggregateException)
             {
-                StatusCode = statusCode;
-                Content = content;
+                foreach (var exception in aggregateException.InnerExceptions)
+                {
+                    _logger.LogError(exception, $"Error in contact feed reader, calling endpoint {url}");
+                }
+                throw aggregateException.InnerExceptions.First();
             }
-
-            public HttpStatusCode StatusCode { get; set; }
-
-            public string Content { get; set; }
+            _logger.LogError(ex, $"Error in contact feed reader, calling endpoint {url}");
+            throw;
         }
+    }
+
+    private struct HttpResult
+    {
+        public HttpResult(HttpStatusCode statusCode, string content)
+        {
+            StatusCode = statusCode;
+            Content = content;
+        }
+
+        public HttpStatusCode StatusCode { get; set; }
+
+        public string Content { get; set; }
     }
 }

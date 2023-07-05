@@ -26,12 +26,9 @@ public static class HostBuilderExtensions
     {
         hostBuilder.ConfigureServices((context, services) =>
         {
-            services.Configure<ContractFeedConfiguration>(
-                context.Configuration.GetSection(ConfigurationKeys.ContractAgreements));
-            services.AddSingleton<IContractFeedConfiguration>(isp =>
-                isp.GetService<IOptions<ContractFeedConfiguration>>().Value);
-            services.AddSingleton<IBaseConfiguration>(
-                isp => isp.GetService<IOptions<ContractFeedConfiguration>>().Value);
+            services.Configure<ContractFeedConfiguration>(context.Configuration.GetSection(ConfigurationKeys.ContractAgreements));
+            services.AddSingleton<IContractFeedConfiguration>(isp => isp.GetService<IOptions<ContractFeedConfiguration>>().Value);
+            services.AddSingleton<IBaseConfiguration>(isp => isp.GetService<IOptions<ContractFeedConfiguration>>().Value);
             services.AddSingleton<IConfidentialClientApplication, ConfidentialClientApplication>();
 
             services.AddSingleton(new ChainedTokenCredential(
