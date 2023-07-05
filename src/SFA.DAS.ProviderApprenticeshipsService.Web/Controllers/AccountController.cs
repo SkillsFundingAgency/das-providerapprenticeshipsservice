@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +10,15 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Routing;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
+using Microsoft.AspNetCore.Authentication.WsFederation;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 
@@ -17,52 +26,54 @@ public class AccountController : BaseController
 {
     private readonly IAccountOrchestrator _accountOrchestrator;
     private readonly LinkGenerator _linkGenerator;
+    private readonly IAuthenticationServiceWrapper _authenticationService;
+    private readonly ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
+
+
+
 
     public AccountController(IAccountOrchestrator accountOrchestrator,
         LinkGenerator linkGenerator,
-        ICookieStorageService<FlashMessageViewModel> flashMessage) 
+        ICookieStorageService<FlashMessageViewModel> flashMessage,
+        IAuthenticationServiceWrapper authenticationService,
+        ProviderApprenticeshipsServiceConfiguration providerApprenticeshipsServiceConfiguration)
         : base(flashMessage)
     {
         _accountOrchestrator = accountOrchestrator;
         _linkGenerator = linkGenerator;
+        _authenticationService = authenticationService;
+        _providerApprenticeshipsServiceConfiguration = providerApprenticeshipsServiceConfiguration;
     }
 
-    [AllowAllRoles]
-    [Route("~/signin", Name = RouteNames.SignIn)]
-    public IActionResult SignIn()
-    {
-        if (!User.Identity.IsAuthenticated)
-        {
-            HttpContext.ChallengeAsync(WsFederationDefaults.AuthenticationScheme);
-        }
-        return RedirectToRoute(RouteNames.Home);
-    }
 
     [AllowAllRoles]
     [Route("~/signout", Name = RouteNames.SignOut)]
-    public async Task<IActionResult> SignOutUser()
+    public async Task<IActionResult> SignOut()
     {
+        //return RedirectToRoute(RouteNames.AccountHome);
+    
         var idToken = await HttpContext.GetTokenAsync("id_token");
-
         var callbackUrl = _linkGenerator.GetPathByAction("Index", "Account", values: new
         {
             message = ""
         });
-        var authenticationProperties = new AuthenticationProperties { RedirectUri = callbackUrl };
+
+        var authenticationProperties = new AuthenticationProperties {RedirectUri = callbackUrl};
         authenticationProperties.Parameters.Clear();
         authenticationProperties.Parameters.Add("id_token", idToken);
-      
-        SignOut(authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, WsFederationDefaults.AuthenticationScheme);
 
-        if (User.Identity.IsAuthenticated)
-        {
-            return RedirectToRoute(RouteNames.AccountHome);
-        }
+        var authScheme = _providerApprenticeshipsServiceConfiguration.UseDfESignIn
+            ? OpenIdConnectDefaults.AuthenticationScheme
+            : WsFederationDefaults.AuthenticationScheme;
 
+        SignOut(authenticationProperties,
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            authScheme);
+        
         return RedirectToRoute(RouteNames.Home);
     }
 
-    [HttpGet]
+[HttpGet]
     [Authorize]
     [Route("~/account", Name = RouteNames.AccountHome)]
     public async Task<IActionResult> Index(string message)

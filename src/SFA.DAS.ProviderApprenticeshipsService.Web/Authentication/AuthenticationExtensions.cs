@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.Extensions.Configuration;
+using SFA.DAS.DfESignIn.Auth.AppStart;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
@@ -9,46 +10,65 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 
 public static class AuthenticationExtensions
 {
-    public static void AddAndConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
-    {
-        var authenticationConfiguration = configuration.GetSection("ProviderIdams").Get<AuthenticationConfiguration>();
+    
+        private const string ClientName = "ProviderRoATP";
+        private const string SignedOutCallbackPath = "/signout";
 
-        services.AddAuthentication(sharedOptions =>
-            {
-                sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                sharedOptions.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                sharedOptions.DefaultChallengeScheme = WsFederationDefaults.AuthenticationScheme;
-            })
-            .AddWsFederation(options =>
-            {
-                options.MetadataAddress = authenticationConfiguration.MetaDataAddress;
-                options.Wtrealm = authenticationConfiguration.WtRealm;
-                options.UseTokenLifetime = false;
-            })
-            .AddCookie(options =>
-            {
-                options.ExpireTimeSpan = TimeSpan.FromHours(1);
-                options.Cookie.Name = "SFA.DAS.ProviderApprenticeshipsService.Web.Auth";
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.SlidingExpiration = true;
-                options.Cookie.SameSite = SameSiteMode.None;
-                options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
-            });
+        public static void AddAndConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            
+            var useDfESignIn = configuration.GetSection("UseDfESignIn").Get<bool>();
 
-        services
-            .AddOptions<WsFederationOptions>(WsFederationDefaults.AuthenticationScheme)
-            .Configure<IProviderCommitmentsLogger, IAuthenticationOrchestrator>(
-                (options, providerCommitmentsLogger, accountOrchestrator) =>
-                {
-                    options.Events.OnSecurityTokenValidated = async ctx =>
+            if (useDfESignIn)
+            {
+                services.AddAndConfigureDfESignInAuthentication(
+                    configuration,
+                    $"SFA.DAS.ProviderApprenticeshipsService.Web.Auth",
+                    typeof(CustomServiceRole),
+                    ClientName,
+                    SignedOutCallbackPath);
+            }
+            else
+            {
+                var authenticationConfiguration = configuration.GetSection("ProviderIdams").Get<AuthenticationConfiguration>();
+
+                services.AddAuthentication(sharedOptions =>
                     {
-                        await SecurityTokenValidated(ctx, providerCommitmentsLogger, accountOrchestrator);
-                    };
-                });
-    }
+                        sharedOptions.DefaultScheme =
+                            CookieAuthenticationDefaults.AuthenticationScheme;
+                        sharedOptions.DefaultSignInScheme =
+                            CookieAuthenticationDefaults.AuthenticationScheme;
+                        sharedOptions.DefaultChallengeScheme =
+                            WsFederationDefaults.AuthenticationScheme;
+                    })
+                    .AddWsFederation(options =>
+                    {
+                        options.MetadataAddress = authenticationConfiguration.MetaDataAddress;
+                        options.Wtrealm = authenticationConfiguration.WtRealm;
+                        options.UseTokenLifetime = false;
+                    })
+                    .AddCookie(options =>
+                    {
+                        options.ExpireTimeSpan = TimeSpan.FromHours(1);
+                        options.Cookie.Name = $"SFA.DAS.ProviderApprenticeshipsService.Web.Auth";
+                        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                        options.SlidingExpiration = true;
+                        options.Cookie.SameSite = SameSiteMode.None;
+                        options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
+                    });
+                services
+                    .AddOptions<WsFederationOptions>(WsFederationDefaults.AuthenticationScheme)
+                    .Configure<IProviderCommitmentsLogger, IAuthenticationOrchestrator>((options, providerCommitmentsLogger, accountOrchestrator) =>
+                    {
+                        options.Events.OnSecurityTokenValidated = async (ctx) =>
+                        {
+                            await SecurityTokenValidated(ctx, providerCommitmentsLogger, accountOrchestrator);
+                        };
+                    });
+            }
+        }
 
-    private static async Task SecurityTokenValidated(SecurityTokenValidatedContext ctx,
-        IProviderCommitmentsLogger logger,
+    private static async Task SecurityTokenValidated(SecurityTokenValidatedContext ctx, IProviderCommitmentsLogger logger,
         IAuthenticationOrchestrator orchestrator)
     {
         logger.Info("SecurityTokenValidated notification called");

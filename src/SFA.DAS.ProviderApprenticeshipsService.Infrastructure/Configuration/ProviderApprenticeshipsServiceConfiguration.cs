@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Http.Configuration;
+using SFA.DAS.Http.Configuration;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderRelationships.Api.Client.Configuration;

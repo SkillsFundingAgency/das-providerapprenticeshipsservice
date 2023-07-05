@@ -82,7 +82,7 @@ public class WhenAddingServicesToTheContainer
             InitialData = new List<KeyValuePair<string, string>>
             {
                 new ("ProviderAccountsApiConfiguration:ConnectionString", "test"),
-                new ("EnvironmentName", "test"),
+                new ("EnvironmentName", "LOCAL"),
                 new ("ProviderApprenticeshipsServiceConfiguration:DatabaseConnectionString", "test"),
                 new ("NotificationApi:ApiBaseUrl", "https://test"),
                 new ("NotificationApi:ClientToken", "token")

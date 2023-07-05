@@ -68,8 +68,7 @@ public class WhenGettingAccountHomeViewModel
     public async Task Then_ShowEarningsReport_Is_Set_From_Authorization_Service(bool expectedResult)
     {
         // Arrange
-        _authorizationService.Setup(x =>x.IsAuthorizedAsync(ProviderFeature.FlexiblePaymentsPilot)).Returns(Task.FromResult(expectedResult));
-        
+        _authorizationService.Setup(x => x.IsAuthorizedAsync(ProviderFeature.FlexiblePaymentsPilot)).ReturnsAsync(expectedResult);
         // Act
         var model = await _orchestrator.GetAccountHomeViewModel(1);
 
