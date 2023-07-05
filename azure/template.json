@@ -177,6 +177,78 @@
       "properties": {}
     },
     {
+      "apiVersion": "2020-06-01",
+      "name": "[concat('UIAppInsights-', parameters('utcValue'))]",
+      "type": "Microsoft.Resources/deployments",
+      "resourceGroup": "[variables('resourceGroupName')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appInsightsName": {
+            "value": "[variables('uiAppServiceName')]"
+          },
+          "attachedService": {
+            "value": "[variables('uiAppServiceName')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[variables('resourceGroupName')]"
+      ]
+    },
+    {
+      "apiVersion": "2020-06-01",
+      "name": "[concat('ApiAppInsights-', parameters('utcValue'))]",
+      "type": "Microsoft.Resources/deployments",
+      "resourceGroup": "[variables('resourceGroupName')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appInsightsName": {
+            "value": "[variables('apiAppServiceName')]"
+          },
+          "attachedService": {
+            "value": "[variables('apiAppServiceName')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[variables('resourceGroupName')]"
+      ]
+    },
+    {
+      "apiVersion": "2020-06-01",
+      "name": "[concat('WorkerAppInsights-', parameters('utcValue'))]",
+      "type": "Microsoft.Resources/deployments",
+      "resourceGroup": "[variables('resourceGroupName')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appInsightsName": {
+            "value": "[variables('workerAppServiceName')]"
+          },
+          "attachedService": {
+            "value": "[variables('workerAppServiceName')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[variables('resourceGroupName')]"
+      ]
+    },
+    {
       "apiVersion": "2021-04-01",
       "name": "[concat(variables('apiAppServiceName'), '-application-insights-', parameters('utcValue'))]",
       "type": "Microsoft.Resources/deployments",
