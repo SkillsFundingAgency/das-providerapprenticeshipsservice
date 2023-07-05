@@ -1,10 +1,7 @@
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.WsFederation;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.DfESignIn.Auth.Constants;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
@@ -18,10 +15,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 [Route("{controller}")]
 public class HomeController : Controller
 {
-    private readonly ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
     private readonly IAuthenticationOrchestrator _authenticationOrchestrator;
+    private readonly ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
 
-    public HomeController(ProviderApprenticeshipsServiceConfiguration providerApprenticeshipsServiceConfiguration, IAuthenticationOrchestrator authenticationOrchestrator)
+    public HomeController(ProviderApprenticeshipsServiceConfiguration providerApprenticeshipsServiceConfiguration,
+        IAuthenticationOrchestrator authenticationOrchestrator)
     {
         _providerApprenticeshipsServiceConfiguration = providerApprenticeshipsServiceConfiguration;
         _authenticationOrchestrator = authenticationOrchestrator;
@@ -38,7 +36,7 @@ public class HomeController : Controller
     [Route("/", Name = RouteNames.Home)]
     public IActionResult Index()
     {
-        if (User.Identity is {IsAuthenticated: true}) return RedirectToRoute(RouteNames.AccountHome);
+        if (User.Identity is { IsAuthenticated: true }) return RedirectToRoute(RouteNames.AccountHome);
         return View(new HomeViewModel { UseDfESignIn = _providerApprenticeshipsServiceConfiguration.UseDfESignIn });
     }
 
@@ -54,7 +52,6 @@ public class HomeController : Controller
         return View();
     }
 
-        
 
     [Route("cookie-details", Name = "cookie-details")]
     public IActionResult CookieDetails()
@@ -78,16 +75,17 @@ public class HomeController : Controller
 
             await HttpContext.ChallengeAsync(authScheme);
         }
-        else if(useDfESignIn)
+        else if (useDfESignIn)
         {
             // maps the roles and save the claim details in the repository.
             await SaveIdentityAttributes();
         }
+
         return RedirectToRoute(RouteNames.AccountHome);
     }
 
     /// <summary>
-    /// Method to iterate the claims roles and save in the repository.
+    ///     Method to iterate the claims roles and save in the repository.
     /// </summary>
     /// <returns>Task</returns>
     private async Task SaveIdentityAttributes()
@@ -97,7 +95,8 @@ public class HomeController : Controller
         if (claimsPrincipal != null)
         {
             var id = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type == ClaimName.Sub)?.Value;
-            var displayName = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.DisplayName)?.Value;
+            var displayName = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.DisplayName)
+                ?.Value;
             var ukPrn = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.Ukprn)?.Value;
             var email = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type == ClaimName.Email)?.Value;
 
@@ -106,5 +105,4 @@ public class HomeController : Controller
             await _authenticationOrchestrator.SaveIdentityAttributes(id, ukPrn, displayName, email);
         }
     }
-    
 }

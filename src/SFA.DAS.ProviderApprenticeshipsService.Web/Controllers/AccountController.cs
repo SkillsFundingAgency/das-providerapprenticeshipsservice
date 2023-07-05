@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
@@ -10,15 +12,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Routing;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
-using Microsoft.AspNetCore.Authentication.WsFederation;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 
@@ -26,22 +19,16 @@ public class AccountController : BaseController
 {
     private readonly IAccountOrchestrator _accountOrchestrator;
     private readonly LinkGenerator _linkGenerator;
-    private readonly IAuthenticationServiceWrapper _authenticationService;
     private readonly ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
-
-
-
 
     public AccountController(IAccountOrchestrator accountOrchestrator,
         LinkGenerator linkGenerator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IAuthenticationServiceWrapper authenticationService,
         ProviderApprenticeshipsServiceConfiguration providerApprenticeshipsServiceConfiguration)
         : base(flashMessage)
     {
         _accountOrchestrator = accountOrchestrator;
         _linkGenerator = linkGenerator;
-        _authenticationService = authenticationService;
         _providerApprenticeshipsServiceConfiguration = providerApprenticeshipsServiceConfiguration;
     }
 
@@ -51,14 +38,14 @@ public class AccountController : BaseController
     public async Task<IActionResult> SignOut()
     {
         //return RedirectToRoute(RouteNames.AccountHome);
-    
+
         var idToken = await HttpContext.GetTokenAsync("id_token");
-        var callbackUrl = _linkGenerator.GetPathByAction("Index", "Account", values: new
+        var callbackUrl = _linkGenerator.GetPathByAction("Index", "Account", new
         {
             message = ""
         });
 
-        var authenticationProperties = new AuthenticationProperties {RedirectUri = callbackUrl};
+        var authenticationProperties = new AuthenticationProperties { RedirectUri = callbackUrl };
         authenticationProperties.Parameters.Clear();
         authenticationProperties.Parameters.Add("id_token", idToken);
 
@@ -69,11 +56,11 @@ public class AccountController : BaseController
         SignOut(authenticationProperties,
             CookieAuthenticationDefaults.AuthenticationScheme,
             authScheme);
-        
+
         return RedirectToRoute(RouteNames.Home);
     }
 
-[HttpGet]
+    [HttpGet]
     [Authorize]
     [Route("~/account", Name = RouteNames.AccountHome)]
     public async Task<IActionResult> Index(string message)
@@ -81,7 +68,7 @@ public class AccountController : BaseController
         var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
 
         var model = await _accountOrchestrator.GetAccountHomeViewModel(providerId);
-                       
+
         if (!string.IsNullOrEmpty(message))
             model.Message = WebUtility.UrlDecode(message);
 
@@ -104,17 +91,14 @@ public class AccountController : BaseController
     [Route("~/notification-settings", Name = RouteNames.GetNotificationSettings)]
     public async Task<IActionResult> NotificationSettings()
     {
-        var u = User.Identity.GetClaim(DasClaimTypes.Upn);
+        var userRef = User.Identity.GetClaim(DasClaimTypes.Upn);
         var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
 
-        var model = await _accountOrchestrator.GetNotificationSettings(u);
+        var model = await _accountOrchestrator.GetNotificationSettings(userRef);
         model.ProviderId = providerId;
-            
+
         var flashMesssage = GetFlashMessageViewModelFromCookie();
-        if (flashMesssage != null)
-        {
-            model.FlashMessage = flashMesssage;
-        }
+        if (flashMesssage != null) model.FlashMessage = flashMesssage;
         return View(model);
     }
 
