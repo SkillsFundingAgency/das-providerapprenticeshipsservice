@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
 
 namespace SFA.DAS.PAS.Account.Application.Commands.SendNotification;

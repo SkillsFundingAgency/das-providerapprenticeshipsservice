@@ -2,6 +2,7 @@
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetClientContent;
 using SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Extensions.LoggingMockExtensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.GetClientContent;

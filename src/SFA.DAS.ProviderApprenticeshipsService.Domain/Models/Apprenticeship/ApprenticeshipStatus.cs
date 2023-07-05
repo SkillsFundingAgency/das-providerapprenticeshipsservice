@@ -1,20 +1,19 @@
 ﻿using System.ComponentModel;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Apprenticeship
+namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Apprenticeship;
+
+public enum ApprenticeshipStatus
 {
-    public enum ApprenticeshipStatus
-    {
-        [Description("")]
-        None = 0,
-        [Description("Waiting to start")]
-        WaitingToStart = 1,
-        [Description("Live")]
-        Live = 2,
-        [Description("Paused")]
-        Paused = 3,
-        [Description("Stopped")]
-        Stopped = 4,
-        [Description("Finished")]
-        Finished = 5
-    }
+    [Description("")]
+    None = 0,
+    [Description("Waiting to start")]
+    WaitingToStart = 1,
+    [Description("Live")]
+    Live = 2,
+    [Description("Paused")]
+    Paused = 3,
+    [Description("Stopped")]
+    Stopped = 4,
+    [Description("Finished")]
+    Finished = 5
 }

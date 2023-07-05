@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Apprenticeship
+namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Apprenticeship;
+
+public enum FundingStatus
 {
-    public enum FundingStatus
-    {
-        [Description("Transfer funded")]
-        TransferFunded
-    }
+    [Description("Transfer funded")]
+    TransferFunded
 }

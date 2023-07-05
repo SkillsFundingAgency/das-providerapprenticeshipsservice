@@ -8,6 +8,8 @@ using System.Net.Http;
 using Microsoft.Extensions.Options;
 using SFA.DAS.Http.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
 

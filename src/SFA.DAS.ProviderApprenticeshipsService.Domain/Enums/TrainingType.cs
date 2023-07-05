@@ -1,8 +1,7 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Enums
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
+
+public enum TrainingType
 {
-    public enum TrainingType
-    {
-        Standard = 0,
-        Framework = 1
-    }
+    Standard = 0,
+    Framework = 1
 }

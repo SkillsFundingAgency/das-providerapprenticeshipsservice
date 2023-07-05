@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
+namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
+
+public interface ICurrentDateTime
 {
-    public interface ICurrentDateTime
-    {
-        DateTime Now { get; }
-    }
+    DateTime Now { get; }
 }

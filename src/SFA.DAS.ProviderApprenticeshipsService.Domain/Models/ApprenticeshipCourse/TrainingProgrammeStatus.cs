@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipCourse;
+
+public enum TrainingProgrammeStatus
 {
-    public enum TrainingProgrammeStatus
-    {
-        Pending, Active, Expired
-    }
+    Pending, Active, Expired
 }

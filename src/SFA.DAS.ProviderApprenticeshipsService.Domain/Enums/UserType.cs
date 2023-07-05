@@ -1,8 +1,7 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Enums
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
+
+public enum UserType : short
 {
-    public enum UserType : short
-    {
-        NormalUser = 0,
-        SuperUser = 1
-    }
+    NormalUser = 0,
+    SuperUser = 1
 }

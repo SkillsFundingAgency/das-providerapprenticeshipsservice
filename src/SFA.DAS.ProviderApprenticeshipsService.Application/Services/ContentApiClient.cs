@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using SFA.DAS.Authentication.Extensions.Legacy;
 using SFA.DAS.Http.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Services;
 

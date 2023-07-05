@@ -1,8 +1,7 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Enums
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
+
+public enum ProviderAgreementStatus
 {
-    public enum ProviderAgreementStatus
-    {
-        NotAgreed,
-        Agreed
-    }
+    NotAgreed,
+    Agreed
 }

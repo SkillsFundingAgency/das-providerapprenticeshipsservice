@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces
+namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
+
+public interface IHttpClientWrapper
 {
-    public interface IHttpClientWrapper
-    {
-        Task<string> GetStringAsync(string url);
-    }
+    Task<string> GetStringAsync(string url);
 }
