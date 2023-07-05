@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.DfESignIn.Auth.Constants;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -61,7 +60,6 @@ public class HomeController : Controller
 
     [HttpGet]
     [Authorize]
-    [AllowAllRoles]
     [Route("~/signin", Name = RouteNames.SignIn)]
     public async Task<IActionResult> SignIn()
     {

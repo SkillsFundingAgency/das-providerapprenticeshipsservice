@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -15,6 +14,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 
+[Authorize]
 public class AccountController : BaseController
 {
     private readonly IAccountOrchestrator _accountOrchestrator;
@@ -33,7 +33,6 @@ public class AccountController : BaseController
     }
 
 
-    [AllowAllRoles]
     [Route("~/signout", Name = RouteNames.SignOut)]
     public async Task<IActionResult> SignOut()
     {
@@ -61,7 +60,6 @@ public class AccountController : BaseController
     }
 
     [HttpGet]
-    [Authorize]
     [Route("~/account", Name = RouteNames.AccountHome)]
     public async Task<IActionResult> Index(string message)
     {
@@ -87,7 +85,6 @@ public class AccountController : BaseController
     }
 
     [HttpGet]
-    [Authorize]
     [Route("~/notification-settings", Name = RouteNames.GetNotificationSettings)]
     public async Task<IActionResult> NotificationSettings()
     {
@@ -103,7 +100,6 @@ public class AccountController : BaseController
     }
 
     [HttpPost]
-    [Authorize]
     [Route("~/notification-settings", Name = RouteNames.PostNotificationSettings)]
     public async Task<IActionResult> NotificationSettings(NotificationSettingsViewModel model)
     {
@@ -113,7 +109,6 @@ public class AccountController : BaseController
     }
 
     [HttpGet]
-    [Authorize]
     [Route("~/notifications/unsubscribe", Name = RouteNames.UnsubscribeNotifications)]
     public async Task<IActionResult> NotificationUnsubscribe()
     {
@@ -126,7 +121,6 @@ public class AccountController : BaseController
     }
 
     [HttpGet]
-    [Authorize]
     [Route("~/change-signin-details")]
     public ActionResult ChangeSignInDetails()
     {

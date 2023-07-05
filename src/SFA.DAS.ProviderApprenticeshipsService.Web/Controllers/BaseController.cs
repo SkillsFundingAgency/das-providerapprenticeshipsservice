@@ -6,7 +6,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 
-[Authorize(Policy = nameof(PolicyNames.RequireAuthenticatedUser))]
 [Authorize(Policy = nameof(PolicyNames.RequireDasPermissionRole))]
 public abstract class BaseController : Controller
 {

@@ -17,11 +17,6 @@ public static class AuthorizationServicePolicyExtension
 
         services.AddAuthorization(options =>
         {
-            options.AddPolicy(PolicyNames.RequireAuthenticatedUser, policy =>
-            {
-                policy.RequireAuthenticatedUser();
-            });
-
             options.AddPolicy(PolicyNames.RequireDasPermissionRole, policy =>
             {
                 policy.RequireAuthenticatedUser();

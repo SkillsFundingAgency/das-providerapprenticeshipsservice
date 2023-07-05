@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 
-[AllowAllRoles]
 [AllowAnonymous]
 public class ErrorController : Controller
 {
