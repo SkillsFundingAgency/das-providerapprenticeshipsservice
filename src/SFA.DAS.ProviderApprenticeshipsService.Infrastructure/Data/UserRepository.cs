@@ -48,12 +48,7 @@ public class UserRepository : BaseRepository<UserRepository>, IUserRepository
                         param: parameters,
                         commandType: CommandType.Text);
 
-            if (!results.Any())
-            {
-                return null;
-            }
-
-            return results.Single();
+            return !results.Any() ? null : results.Single();
         });
     }
 

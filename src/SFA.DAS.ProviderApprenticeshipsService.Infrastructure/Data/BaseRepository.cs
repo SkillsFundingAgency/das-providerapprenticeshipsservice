@@ -14,7 +14,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 public abstract class BaseRepository<T>
 {
-    public IConfiguration Configuration { get; set; }
+    private readonly IConfiguration _configuration;
 
     private const string AzureResource = "https://database.windows.net/";
     private readonly string _connectionString;
@@ -35,7 +35,7 @@ public abstract class BaseRepository<T>
         _connectionString = connectionString;
         _logger = logger;
         _chainedTokenCredential = chainedTokenCredential;
-        Configuration = configuration;
+        _configuration = configuration;
         _retryPolicy = GetRetryPolicy();
     }
 
@@ -117,7 +117,7 @@ public abstract class BaseRepository<T>
 
     private async Task<SqlConnection> GetSqlConnectionAsync(string connectionString)
     {
-        var isLocal = Configuration["EnvironmentName"]?.Equals("LOCAL") ?? false;
+        var isLocal = _configuration["EnvironmentName"]?.Equals("LOCAL") ?? false;
         if (isLocal)
         {
             return new SqlConnection(connectionString);

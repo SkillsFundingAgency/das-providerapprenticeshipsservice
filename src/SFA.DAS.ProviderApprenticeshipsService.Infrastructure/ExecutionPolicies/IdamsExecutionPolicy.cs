@@ -23,7 +23,7 @@ public class IdamsExecutionPolicy : ExecutionPolicy
     protected override T OnException<T>(Exception ex)
     {
         _logger.LogError(ex, "Exceeded retry limit - {Message}", ex.Message);
-        return default(T);
+        return default;
     }
 
     private void OnRetryableFailure(Exception ex)

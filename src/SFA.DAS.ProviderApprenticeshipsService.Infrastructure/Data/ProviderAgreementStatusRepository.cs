@@ -40,13 +40,13 @@ public class ProviderAgreementStatusRepository : BaseRepository<ProviderAgreemen
 
             await using var transaction = connection.BeginTransaction();
 
-            var result = (await connection.QueryAsync<ContractFeedEvent>(
+            var result = await connection.QueryAsync<ContractFeedEvent>(
                 sql:
                 "SELECT * FROM [dbo].[ContractFeedEvent] "
                 + "WHERE [ProviderId] = @providerId",
                 param: parameters,
                 commandType: CommandType.Text,
-                transaction: transaction));
+                transaction: transaction);
             transaction.Commit();
 
             return result;
