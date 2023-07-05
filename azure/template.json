@@ -1,4 +1,3 @@
-
 {
   "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json",
   "contentVersion": "1.0.0.0",
@@ -281,8 +280,8 @@
                   "value": "[parameters('idaTenant')]"
                 },
                 {
-                  "name": "InstrumentationKey",
-                  "value": "[reference(concat(variables('apiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
+                  "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                  "value": "[reference(concat('UIAppInsights-', parameters('utcValue'))).outputs.ConnectionString.value]"
                 },
                 {
                   "name": "ConfigNames",
@@ -410,8 +409,8 @@
                   "value": "[parameters('providerIdamsMetaDataUrl')]"
                 },
                 {
-                  "name": "InstrumentationKey",
-                  "value": "[reference(concat(variables('uiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
+                  "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                  "value": "[reference(concat('UIAppInsights-', parameters('utcValue'))).outputs.ConnectionString.value]"
                 },
                 {
                   "name": "RedisSessionProviderConnectionString",
