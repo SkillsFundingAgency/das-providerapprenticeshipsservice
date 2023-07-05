@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services
+namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
+
+interface IIdamsSyncService
 {
-    interface IIdamsSyncService
-    {
-        Task SyncUsers();
-    }
+    Task SyncUsers();
 }

@@ -66,18 +66,18 @@ public class IdamsSyncService : IIdamsSyncService
             //Can't get http status code from HttpRequestException is in the message hence
             if (httpRequestEx.StatusCode != HttpStatusCode.NotFound)
             {
-                string message = $"An error occurred retrieving users from Provider {provider.Ukprn}";
+                var message = $"An error occurred retrieving users from Provider {provider.Ukprn}";
                 await LogAndUpdateProviderState(httpRequestEx, provider, message);
                 throw;
             }
 
-            string httpNotFoundMessage = $"There are no super users (or any users) for Provider {provider.Ukprn}";
+            var httpNotFoundMessage = $"There are no super users (or any users) for Provider {provider.Ukprn}";
             await LogAndUpdateProviderState(httpRequestEx, provider, httpNotFoundMessage);
 
         }
         catch (Exception ex)
         {
-            string message = $"An error occurred retrieving users from Provider {provider.Ukprn}";
+            var message = $"An error occurred retrieving users from Provider {provider.Ukprn}";
             await LogAndUpdateProviderState(ex, provider, message);
             throw;
         }
