@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
-using Azure.Core;
-using Azure.Identity;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
@@ -14,12 +11,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 public abstract class BaseRepository<T>
 {
-    private readonly IConfiguration _configuration;
-
-    private const string AzureResource = "https://database.windows.net/";
     private readonly string _connectionString;
     private readonly ILogger<T> _logger;
-    private readonly ChainedTokenCredential _chainedTokenCredential;
     private readonly Policy _retryPolicy;
 
     private readonly IList<int> _transientErrorNumbers = new List<int>
@@ -30,13 +23,10 @@ public abstract class BaseRepository<T>
         -2, 20, 64, 233, 10053, 10054, 10060, 40143
     };
 
-    protected BaseRepository(string connectionString, ILogger<T> logger, IConfiguration configuration,
-        ChainedTokenCredential chainedTokenCredential)
+    protected BaseRepository(string connectionString, ILogger<T> logger)
     {
         _connectionString = connectionString;
         _logger = logger;
-        _chainedTokenCredential = chainedTokenCredential;
-        _configuration = configuration;
         _retryPolicy = GetRetryPolicy();
     }
 
@@ -46,7 +36,7 @@ public abstract class BaseRepository<T>
         {
             return await _retryPolicy.Execute(async () =>
             {
-                await using var connection = DatabaseExtensions.GetSqlConnection(_connectionString);
+                await using var connection = SqlConnectionFactory.GetConnection(_connectionString);
                 await connection.OpenAsync();
 
                 return await getData(connection);
@@ -81,7 +71,7 @@ public abstract class BaseRepository<T>
         {
             await _retryPolicy.Execute(async () =>
             {
-                await using var connection = DatabaseExtensions.GetSqlConnection(_connectionString);
+                await using var connection = SqlConnectionFactory.GetConnection(_connectionString);
                 await connection.OpenAsync();
                 await using var trans = connection.BeginTransaction();
                 await command(connection, trans);
@@ -124,24 +114,5 @@ public abstract class BaseRepository<T>
                         retryCount);
                 }
             );
-    }
-
-    private async Task<SqlConnection> GetSqlConnectionAsync(string connectionString)
-    {
-        var isLocal = _configuration["EnvironmentName"]?.Equals("LOCAL") ?? false;
-        if (isLocal)
-        {
-            return new SqlConnection(connectionString);
-        }
-
-        var accessToken = await _chainedTokenCredential.GetTokenAsync(
-            new TokenRequestContext(scopes: new string[] { AzureResource }) { }
-        );
-
-        return new SqlConnection
-        {
-            ConnectionString = connectionString,
-            AccessToken = accessToken.Token,
-        };
     }
 }

@@ -25,7 +25,7 @@ public class ProviderAgreementStatusRepository : BaseRepository<ProviderAgreemen
         ICurrentDateTime currentDateTime,
         IConfiguration rootConfig,
         ChainedTokenCredential chainedTokenCredential)
-        : base(configuration.DatabaseConnectionString, logger, rootConfig, chainedTokenCredential)
+        : base(configuration.DatabaseConnectionString, logger)
     {
         _logger = logger;
         _currentDateTime = currentDateTime;

@@ -5,11 +5,11 @@ using Microsoft.Data.SqlClient;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
-public static class DatabaseExtensions
+public static class SqlConnectionFactory
 {
     private const string AzureResource = "https://database.windows.net/";
 
-    public static SqlConnection GetSqlConnection(string connectionString)
+    public static SqlConnection GetConnection(string connectionString)
     {
         if (string.IsNullOrEmpty(connectionString))
         {
