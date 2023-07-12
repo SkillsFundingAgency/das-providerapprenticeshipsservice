@@ -30,7 +30,8 @@ public abstract class BaseRepository<T>
         -2, 20, 64, 233, 10053, 10054, 10060, 40143
     };
 
-    protected BaseRepository(string connectionString, ILogger<T> logger, IConfiguration configuration, ChainedTokenCredential chainedTokenCredential)
+    protected BaseRepository(string connectionString, ILogger<T> logger, IConfiguration configuration,
+        ChainedTokenCredential chainedTokenCredential)
     {
         _connectionString = connectionString;
         _logger = logger;
@@ -45,7 +46,7 @@ public abstract class BaseRepository<T>
         {
             return await _retryPolicy.Execute(async () =>
             {
-                await using var connection = await GetSqlConnectionAsync(_connectionString);
+                await using var connection = DatabaseExtensions.GetSqlConnection(_connectionString);
                 await connection.OpenAsync();
 
                 return await getData(connection);
@@ -57,15 +58,20 @@ public abstract class BaseRepository<T>
         }
         catch (SqlException ex) when (_transientErrorNumbers.Contains(ex.Number))
         {
-            throw new InvalidOperationException($"{GetType().FullName}.WithConnection() experienced a transient SQL Exception. ErrorNumber {ex.Number}", ex);
+            throw new InvalidOperationException(
+                $"{GetType().FullName}.WithConnection() experienced a transient SQL Exception. ErrorNumber {ex.Number}",
+                ex);
         }
         catch (SqlException ex)
         {
-            throw new InvalidOperationException($"{GetType().FullName}.WithConnection() experienced a non-transient SQL exception (error code {ex.Number})", ex);
+            throw new InvalidOperationException(
+                $"{GetType().FullName}.WithConnection() experienced a non-transient SQL exception (error code {ex.Number})",
+                ex);
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException($"{GetType().FullName}.WithConnection() experienced an exception (not a SQL Exception)", ex);
+            throw new InvalidOperationException(
+                $"{GetType().FullName}.WithConnection() experienced an exception (not a SQL Exception)", ex);
         }
     }
 
@@ -75,7 +81,7 @@ public abstract class BaseRepository<T>
         {
             await _retryPolicy.Execute(async () =>
             {
-                await using var connection = await GetSqlConnectionAsync(_connectionString);
+                await using var connection = DatabaseExtensions.GetSqlConnection(_connectionString);
                 await connection.OpenAsync();
                 await using var trans = connection.BeginTransaction();
                 await command(connection, trans);
@@ -88,11 +94,15 @@ public abstract class BaseRepository<T>
         }
         catch (SqlException ex) when (_transientErrorNumbers.Contains(ex.Number))
         {
-            throw new InvalidOperationException($"{GetType().FullName}.WithConnection() experienced a transient SQL Exception. ErrorNumber {ex.Number}", ex);
+            throw new InvalidOperationException(
+                $"{GetType().FullName}.WithConnection() experienced a transient SQL Exception. ErrorNumber {ex.Number}",
+                ex);
         }
         catch (SqlException ex)
         {
-            throw new InvalidOperationException($"{GetType().FullName}.WithConnection() experienced a non-transient SQL exception (error code {ex.Number})", ex);
+            throw new InvalidOperationException(
+                $"{GetType().FullName}.WithConnection() experienced a non-transient SQL exception (error code {ex.Number})",
+                ex);
         }
         catch (Exception ex)
         {
@@ -110,7 +120,8 @@ public abstract class BaseRepository<T>
                     TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                 (exception, timespan, retryCount, context) =>
                 {
-                    _logger.LogWarning("SqlException ({Message}). Retrying...attempt {RetryCount})", exception.Message, retryCount);
+                    _logger.LogWarning("SqlException ({Message}). Retrying...attempt {RetryCount})", exception.Message,
+                        retryCount);
                 }
             );
     }
