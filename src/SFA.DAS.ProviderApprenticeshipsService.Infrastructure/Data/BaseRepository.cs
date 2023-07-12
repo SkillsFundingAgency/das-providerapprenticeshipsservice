@@ -36,7 +36,7 @@ public abstract class BaseRepository<T>
         {
             return await _retryPolicy.Execute(async () =>
             {
-                await using var connection = await SqlConnectionFactory.GetConnectionAsync(_connectionString);
+                await using var connection = await SqlConnectionFactory.GetConnectionAsync(_connectionString, _logger);
                 await connection.OpenAsync();
 
                 return await getData(connection);
@@ -71,7 +71,7 @@ public abstract class BaseRepository<T>
         {
             await _retryPolicy.Execute(async () =>
             {
-                await using var connection = await SqlConnectionFactory.GetConnectionAsync(_connectionString);
+                await using var connection = await SqlConnectionFactory.GetConnectionAsync(_connectionString, _logger);
                 await connection.OpenAsync();
                 await using var trans = connection.BeginTransaction();
                 await command(connection, trans);

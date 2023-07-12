@@ -4,6 +4,7 @@ using Azure.Core;
 using Azure.Identity;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
@@ -11,7 +12,7 @@ public static class SqlConnectionFactory
 {
     private const string AzureResource = "https://database.windows.net/";
 
-    public static async Task<SqlConnection> GetConnectionAsync(string connectionString)
+    public static async Task<SqlConnection> GetConnectionAsync(string connectionString, ILogger logger)
     {
         if (string.IsNullOrEmpty(connectionString))
         {
@@ -23,9 +24,11 @@ public static class SqlConnectionFactory
 
         if (!useManagedIdentity)
         {
+            logger.LogInformation("SqlConnectionFactory is not using managed identity.");
             return new SqlConnection(connectionString);
         }
 
+        logger.LogInformation("SqlConnectionFactory is using managed identity.");
         var azureServiceTokenProvider = new AzureServiceTokenProvider();
 
         return new SqlConnection
