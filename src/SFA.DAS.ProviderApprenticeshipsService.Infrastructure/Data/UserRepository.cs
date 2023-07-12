@@ -15,7 +15,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 public class UserRepository : BaseRepository<UserRepository>, IUserRepository
 {
-    public UserRepository(IBaseConfiguration configuration, ILogger<UserRepository> logger, IConfiguration rootConfig, ChainedTokenCredential chainedTokenCredential)
+    public UserRepository(IBaseConfiguration configuration, ILogger<UserRepository> logger)
           : base(configuration.DatabaseConnectionString, logger) { }
 
     public async Task Upsert(User user)

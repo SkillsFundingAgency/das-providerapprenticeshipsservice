@@ -22,9 +22,7 @@ public class ProviderAgreementStatusRepository : BaseRepository<ProviderAgreemen
     public ProviderAgreementStatusRepository(
         IBaseConfiguration configuration,
         ILogger<ProviderAgreementStatusRepository> logger, 
-        ICurrentDateTime currentDateTime,
-        IConfiguration rootConfig,
-        ChainedTokenCredential chainedTokenCredential)
+        ICurrentDateTime currentDateTime)
         : base(configuration.DatabaseConnectionString, logger)
     {
         _logger = logger;

@@ -13,7 +13,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IUserSettingsRepository
 {
-    public UserSettingsRepository(IBaseConfiguration configuration, ILogger<UserSettingsRepository> logger, IConfiguration rootConfig, ChainedTokenCredential chainedTokenCredential) 
+    public UserSettingsRepository(IBaseConfiguration configuration, ILogger<UserSettingsRepository> logger) 
         : base(configuration.DatabaseConnectionString, logger) { }
 
     public async Task<IEnumerable<UserSetting>> GetUserSetting(string userRef)
