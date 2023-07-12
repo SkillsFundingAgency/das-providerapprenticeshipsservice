@@ -24,11 +24,11 @@ public static class SqlConnectionFactory
 
         if (!useManagedIdentity)
         {
-            logger.LogInformation("SqlConnectionFactory is not using managed identity.");
+            logger.LogWarning("SqlConnectionFactory is not using managed identity.");
             return new SqlConnection(connectionString);
         }
 
-        logger.LogInformation("SqlConnectionFactory is using managed identity.");
+        logger.LogWarning("SqlConnectionFactory is using managed identity.");
         var azureServiceTokenProvider = new AzureServiceTokenProvider();
 
         return new SqlConnection
