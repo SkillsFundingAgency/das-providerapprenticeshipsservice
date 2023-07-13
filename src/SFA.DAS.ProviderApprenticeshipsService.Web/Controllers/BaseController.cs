@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
@@ -16,8 +15,6 @@ public abstract class BaseController : Controller
     {
         _flashMessage = flashMessage;
     }
-
-    protected string CurrentUserId;
 
     protected void SetInfoMessage(string messageText, FlashMessageSeverityLevel level)
     {
@@ -36,13 +33,5 @@ public abstract class BaseController : Controller
         var flashMessageViewModelFromCookie = _flashMessage.Get(FlashMessageCookieName);
         _flashMessage.Delete(FlashMessageCookieName);
         return flashMessageViewModelFromCookie;
-    }
-
-    public override void OnActionExecuting(ActionExecutingContext context)
-    {
-        if (HttpContext.User.Identity.IsAuthenticated)
-        {
-            CurrentUserId = context.HttpContext.GetClaimValue(DasClaimTypes.Upn);
-        }
     }
 }
