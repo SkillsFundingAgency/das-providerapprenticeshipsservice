@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
