@@ -94,8 +94,11 @@ public class AccountController : BaseController
         var model = await _accountOrchestrator.GetNotificationSettings(userRef);
         model.ProviderId = providerId;
 
-        var flashMesssage = GetFlashMessageViewModelFromCookie();
-        if (flashMesssage != null) model.FlashMessage = flashMesssage;
+        var flashMessage = GetFlashMessageViewModelFromCookie();
+        if (flashMessage != null)
+        {
+            model.FlashMessage = flashMessage;
+        }
         return View(model);
     }
 
@@ -105,6 +108,7 @@ public class AccountController : BaseController
     {
         await _accountOrchestrator.UpdateNotificationSettings(model);
         SetInfoMessage("Settings updated", FlashMessageSeverityLevel.Info);
+        
         return RedirectToRoute(RouteNames.GetNotificationSettings);
     }
 
