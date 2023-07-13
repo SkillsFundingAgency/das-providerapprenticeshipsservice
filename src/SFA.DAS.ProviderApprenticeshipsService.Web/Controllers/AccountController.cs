@@ -18,44 +18,34 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 public class AccountController : BaseController
 {
     private readonly IAccountOrchestrator _accountOrchestrator;
-    private readonly LinkGenerator _linkGenerator;
     private readonly ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
 
     public AccountController(IAccountOrchestrator accountOrchestrator,
-        LinkGenerator linkGenerator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         ProviderApprenticeshipsServiceConfiguration providerApprenticeshipsServiceConfiguration)
         : base(flashMessage)
     {
         _accountOrchestrator = accountOrchestrator;
-        _linkGenerator = linkGenerator;
         _providerApprenticeshipsServiceConfiguration = providerApprenticeshipsServiceConfiguration;
     }
 
-
     [Route("~/signout", Name = RouteNames.SignOut)]
-    public async Task<IActionResult> SignOut()
+    public async Task<IActionResult> SignOutProvider()
     {
-        //return RedirectToRoute(RouteNames.AccountHome);
-
         var idToken = await HttpContext.GetTokenAsync("id_token");
-        var callbackUrl = _linkGenerator.GetPathByAction("Index", "Account", new
-        {
-            message = ""
-        });
 
-        var authenticationProperties = new AuthenticationProperties { RedirectUri = callbackUrl };
+        var authenticationProperties = new AuthenticationProperties();
         authenticationProperties.Parameters.Clear();
         authenticationProperties.Parameters.Add("id_token", idToken);
 
         var authScheme = _providerApprenticeshipsServiceConfiguration.UseDfESignIn
             ? OpenIdConnectDefaults.AuthenticationScheme
             : WsFederationDefaults.AuthenticationScheme;
-
+        
         SignOut(authenticationProperties,
             CookieAuthenticationDefaults.AuthenticationScheme,
             authScheme);
-
+       
         return RedirectToRoute(RouteNames.Home);
     }
 
@@ -99,6 +89,7 @@ public class AccountController : BaseController
         {
             model.FlashMessage = flashMessage;
         }
+
         return View(model);
     }
 
@@ -108,7 +99,7 @@ public class AccountController : BaseController
     {
         await _accountOrchestrator.UpdateNotificationSettings(model);
         SetInfoMessage("Settings updated", FlashMessageSeverityLevel.Info);
-        
+
         return RedirectToRoute(RouteNames.GetNotificationSettings);
     }
 
