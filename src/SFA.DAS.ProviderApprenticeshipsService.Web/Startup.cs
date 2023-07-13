@@ -25,15 +25,15 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton(_configuration);
-        
+
         services.AddOptions();
-        
+
         services.AddLogging();
-        
+
         services.AddHttpContextAccessor();
-        
+
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<DeleteRegisteredUserCommand>());
-        
+
         services.AddApplicationServices(_configuration);
         services.AddOrchestrators();
         services.AddEncodingServices(_configuration);
@@ -48,10 +48,9 @@ public class Startup
 
         services.Configure<RouteOptions>(_ => { }).AddMvc(options =>
             {
-                //options.AddAuthorization();
                 options.Filters.Add<InvalidStateExceptionFilter>();
                 options.ModelBinderProviders.Insert(0, new TrimStringModelBinderProvider());
-                
+
                 if (!_configuration["EnvironmentName"].Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase))
                 {
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
@@ -63,19 +62,14 @@ public class Startup
         services.AddApplicationInsightsTelemetry();
 
         services.AddDataProtection(_configuration);
-        // Newtonsoft.Json is added for compatibility reasons
-        // The recommended approach is to use System.Text.Json for serialization
-        // Visit the following link for more guidance about moving away from Newtonsoft.Json to System.Text.Json
-        // https://docs.microsoft.com/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to
-        // .AddNewtonsoftJson(options =>
-        // {
-        //     options.UseMemberCasing();
-        // });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
 
         app.UseAuthentication();
         app.UseStaticFiles();
