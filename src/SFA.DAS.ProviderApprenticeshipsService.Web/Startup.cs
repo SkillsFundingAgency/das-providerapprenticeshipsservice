@@ -3,6 +3,7 @@ using SFA.DAS.DfESignIn.Auth.Helpers;
 using SFA.DAS.Provider.Shared.UI;
 using SFA.DAS.Provider.Shared.UI.Startup;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
@@ -30,6 +31,8 @@ public class Startup
         services.AddLogging();
         
         services.AddHttpContextAccessor();
+        var providerApprenticeshipsConfig = _configuration.Get<ProviderApprenticeshipsServiceConfiguration>();
+        services.AddEntityFramework(providerApprenticeshipsConfig);
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<DeleteRegisteredUserCommand>());
         

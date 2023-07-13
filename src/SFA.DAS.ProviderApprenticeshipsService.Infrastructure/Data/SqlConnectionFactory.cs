@@ -10,7 +10,7 @@ public static class SqlConnectionFactory
 {
     private const string AzureResource = "https://database.windows.net/";
 
-    public static async Task<SqlConnection> GetConnectionAsync(string connectionString, ILogger logger)
+    public static async Task<SqlConnection> GetConnectionAsync(string connectionString)
     {
         if (string.IsNullOrEmpty(connectionString))
         {
@@ -23,12 +23,8 @@ public static class SqlConnectionFactory
 
         if (!useManagedIdentity)
         {
-            logger.LogWarning("{TypeName} is not using managed identity.", nameof(SqlConnectionFactory));
-            
             return connection;
         }
-
-        logger.LogWarning("{TypeName} is using managed identity.", nameof(SqlConnectionFactory));
 
         connection.AccessToken = await new AzureServiceTokenProvider().GetAccessTokenAsync(AzureResource);
 
