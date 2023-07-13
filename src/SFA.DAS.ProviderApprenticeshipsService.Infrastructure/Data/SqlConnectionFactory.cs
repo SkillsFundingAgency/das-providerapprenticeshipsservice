@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Azure.Core;
-using Azure.Identity;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
@@ -19,22 +17,27 @@ public static class SqlConnectionFactory
             throw new ArgumentNullException(nameof(connectionString));
         }
 
-        var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
-        var useManagedIdentity = !connectionStringBuilder.IntegratedSecurity && string.IsNullOrEmpty(connectionStringBuilder.UserID);
+        var useManagedIdentity = ConnectionUsesManagedIdentity(connectionString);
+
+        var connection = new SqlConnection(connectionString);
 
         if (!useManagedIdentity)
         {
-            logger.LogWarning("SqlConnectionFactory is not using managed identity.");
-            return new SqlConnection(connectionString);
+            logger.LogWarning("{TypeName} is not using managed identity.", nameof(SqlConnectionFactory));
+            
+            return connection;
         }
 
-        logger.LogWarning("SqlConnectionFactory is using managed identity.");
-        var azureServiceTokenProvider = new AzureServiceTokenProvider();
+        logger.LogWarning("{TypeName} is using managed identity.", nameof(SqlConnectionFactory));
 
-        return new SqlConnection
-        {
-            ConnectionString = connectionString,
-            AccessToken = await azureServiceTokenProvider.GetAccessTokenAsync(AzureResource)
-        };
+        connection.AccessToken = await new AzureServiceTokenProvider().GetAccessTokenAsync(AzureResource);
+
+        return connection;
+    }
+
+    private static bool ConnectionUsesManagedIdentity(string connectionString)
+    {
+        var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+        return !connectionStringBuilder.IntegratedSecurity && string.IsNullOrEmpty(connectionStringBuilder.UserID);
     }
 }
