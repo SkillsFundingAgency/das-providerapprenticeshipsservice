@@ -26,7 +26,7 @@ public static class SqlConnectionFactory
         }
 
         connection.AccessToken = await new AzureServiceTokenProvider().GetAccessTokenAsync(AzureResource);
-
+        
         return connection;
     }
 
