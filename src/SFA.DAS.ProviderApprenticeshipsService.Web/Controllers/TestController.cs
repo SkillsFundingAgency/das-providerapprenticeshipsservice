@@ -7,10 +7,12 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 public class TestController : Controller
 {
     private readonly ProviderApprenticeshipsDbContext _dbContext;
+    private readonly ILogger<TestController> _logger;
 
-    public TestController(ProviderApprenticeshipsDbContext dbContext)
+    public TestController(ProviderApprenticeshipsDbContext dbContext, ILogger<TestController> logger)
     {
         _dbContext = dbContext;
+        _logger = logger;
     }
     
     [HttpGet]
@@ -20,11 +22,13 @@ public class TestController : Controller
         try
         {
             await _dbContext.Database.CanConnectAsync();
-            return Json("success");
+            _logger.LogWarning("DbContext connect success.");
         }
         catch (Exception e)
         {
-            return Json(e);
+            _logger.LogError("DbContext connect failure.", e);
         }
+
+        return RedirectToAction("Index", "Home");
     }
 }
