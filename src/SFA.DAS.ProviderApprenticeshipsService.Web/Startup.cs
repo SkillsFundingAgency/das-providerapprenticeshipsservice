@@ -31,9 +31,7 @@ public class Startup
         services.AddLogging();
         
         services.AddHttpContextAccessor();
-        var providerApprenticeshipsConfig = _configuration.Get<ProviderApprenticeshipsServiceConfiguration>();
-        services.AddEntityFramework(providerApprenticeshipsConfig);
-
+        
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<DeleteRegisteredUserCommand>());
         
         services.AddApplicationServices(_configuration);
