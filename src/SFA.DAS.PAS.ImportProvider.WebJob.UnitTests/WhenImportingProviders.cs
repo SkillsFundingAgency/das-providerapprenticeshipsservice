@@ -26,9 +26,8 @@ public class WhenImportingProviders
 
     private class WhenImportingProvidersFixture
     {
-        private IImportProviderService Sut { get; }
-        private Mock<ICommitmentsV2ApiClient> CommitmentsV2ApiClient { get; }
-        private Mock<IProviderRepository> ImportProviderRepository { get; }
+        private readonly IImportProviderService _sut;
+        private readonly Mock<IProviderRepository> _importProviderRepository;
             
         public WhenImportingProvidersFixture()
         {
@@ -38,23 +37,23 @@ public class WhenImportingProviders
                 Providers = autoFixture.CreateMany<Provider>(1600).ToList()
             };
 
-            CommitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
-            CommitmentsV2ApiClient.Setup(x => x.GetProviders()).ReturnsAsync(response);
+            var commitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
+            commitmentsV2ApiClient.Setup(x => x.GetProviders()).ReturnsAsync(response);
 
-            ImportProviderRepository = new Mock<IProviderRepository>();
-            ImportProviderRepository.Setup(x => x.ImportProviders(It.IsAny<Provider[]>()));
+            _importProviderRepository = new Mock<IProviderRepository>();
+            _importProviderRepository.Setup(x => x.ImportProviders(It.IsAny<Provider[]>()));
 
-            Sut = new ImportProviderService(CommitmentsV2ApiClient.Object, ImportProviderRepository.Object, Mock.Of<ILogger<ImportProviderService>>());
+            _sut = new ImportProviderService(commitmentsV2ApiClient.Object, _importProviderRepository.Object, Mock.Of<ILogger<ImportProviderService>>());
         }
 
         public async Task Import()
         {
-            await Sut.Import();
+            await _sut.Import();
         }
 
         public void VerifyImportProviderRepositoryCalled()
         {
-            ImportProviderRepository.Verify(x => x.ImportProviders(It.IsAny<Provider[]>()), Times.Exactly(2));
+            _importProviderRepository.Verify(x => x.ImportProviders(It.IsAny<Provider[]>()), Times.Exactly(2));
         }
     }
 }
