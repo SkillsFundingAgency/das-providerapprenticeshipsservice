@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
@@ -18,35 +16,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 public class AccountController : BaseController
 {
     private readonly IAccountOrchestrator _accountOrchestrator;
-    private readonly ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
 
     public AccountController(IAccountOrchestrator accountOrchestrator,
-        ICookieStorageService<FlashMessageViewModel> flashMessage,
-        ProviderApprenticeshipsServiceConfiguration providerApprenticeshipsServiceConfiguration)
+        ICookieStorageService<FlashMessageViewModel> flashMessage)
         : base(flashMessage)
     {
         _accountOrchestrator = accountOrchestrator;
-        _providerApprenticeshipsServiceConfiguration = providerApprenticeshipsServiceConfiguration;
     }
 
     [Route("~/signout", Name = RouteNames.SignOut)]
-    public async Task<IActionResult> SignOutProvider()
+    public async Task ProviderSignOut()
     {
-        var idToken = await HttpContext.GetTokenAsync("id_token");
-
-        var authenticationProperties = new AuthenticationProperties();
-        authenticationProperties.Parameters.Clear();
-        authenticationProperties.Parameters.Add("id_token", idToken);
-
-        var authScheme = _providerApprenticeshipsServiceConfiguration.UseDfESignIn
-            ? OpenIdConnectDefaults.AuthenticationScheme
-            : WsFederationDefaults.AuthenticationScheme;
-        
-        SignOut(authenticationProperties,
-            CookieAuthenticationDefaults.AuthenticationScheme,
-            authScheme);
-       
-        return RedirectToRoute(RouteNames.Home);
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        await HttpContext.SignOutAsync(WsFederationDefaults.AuthenticationScheme, new AuthenticationProperties
+        {
+            RedirectUri = ""
+        });
     }
 
     [HttpGet]
