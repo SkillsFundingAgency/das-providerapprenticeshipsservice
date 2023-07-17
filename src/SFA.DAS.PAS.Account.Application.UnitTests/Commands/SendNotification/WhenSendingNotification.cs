@@ -9,8 +9,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.PAS.Account.Application.Commands.SendNotification;
-using SFA.DAS.PAS.Application.UnitTests.Extensions;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.PAS.Account.Application.UnitTests.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
 
@@ -37,10 +36,10 @@ public class WhenSendingNotification
     public Task IfSendNotificationCommandMessageIsEmpty_ValidationExceptionThrown()
     {
         // Arrange
-        var command = new SendNotificationCommand(null);
+        var command = new SendNotificationCommand(null!);
         IEnumerable<ValidationFailure> failures = new List<ValidationFailure>
         {
-            new ValidationFailure
+            new()
             {
                 ErrorMessage = "empty",
                 ErrorCode = "40023"
@@ -60,6 +59,7 @@ public class WhenSendingNotification
     {
         // Arrange
         const string testEmailAddress = "test@email.com";
+        
         var testEmail = new Email
         {
             TemplateId = "1",
@@ -67,9 +67,11 @@ public class WhenSendingNotification
             Subject = "test",
             RecipientsAddress = testEmailAddress
         };
+        
         var command = new SendNotificationCommand(testEmail);
         _mockValidator.Setup(m => m.Validate(command))
             .Returns(new ValidationResult());
+        
         _mockBackgroundNotificationService.Setup(m => m.SendEmail(testEmail))
             .ThrowsAsync(new Exception("Error"));
 
@@ -93,10 +95,10 @@ public class WhenSendingNotification
             RecipientsAddress = testEmailAddress
         };
         var command = new SendNotificationCommand (testEmail);
-        _mockValidator.Setup(m => m.Validate(command))
-            .Returns(new ValidationResult());
-        _mockBackgroundNotificationService.Setup(m => m.SendEmail(testEmail))
-            .Returns(Task.CompletedTask);
+        
+        _mockValidator.Setup(m => m.Validate(command)).Returns(new ValidationResult());
+        
+        _mockBackgroundNotificationService.Setup(m => m.SendEmail(testEmail)).Returns(Task.CompletedTask);
 
         // Act
         await _sut.Handle(command, new CancellationToken());

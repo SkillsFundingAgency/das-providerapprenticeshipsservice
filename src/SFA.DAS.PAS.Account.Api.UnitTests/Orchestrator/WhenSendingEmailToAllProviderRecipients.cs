@@ -30,6 +30,7 @@ public class WhenSendingEmailToAllProviderRecipients_AccountUsers
             "test2@example.com",
             "nobody@idams.com"
         };
+        
         _templateId = Guid.NewGuid().ToString();
         _tokens = new Dictionary<string, string>
         {

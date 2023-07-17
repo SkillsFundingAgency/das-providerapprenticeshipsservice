@@ -9,7 +9,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserSetting;
@@ -114,7 +113,7 @@ public class WhenGettingAccountUsers
             });
 
         _mockUserSettingsRepo.Setup(m => m.GetUserSetting(UserRef))
-            .ReturnsAsync(new List<UserSetting> { new UserSetting
+            .ReturnsAsync(new List<UserSetting> { new()
                 {
                     ReceiveNotifications = true,
                     UserId = 1,

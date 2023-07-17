@@ -35,6 +35,7 @@ public class WhenSendingEmailToAllProviderRecipients_ExplicitEmailAddresses
             "test4@example.com",
             "nobody@idams.com"
         };
+        
         _templateId = Guid.NewGuid().ToString();
         _tokens = new Dictionary<string, string>();
         _tokens.Add("key1", "value1");
@@ -42,12 +43,12 @@ public class WhenSendingEmailToAllProviderRecipients_ExplicitEmailAddresses
 
         _accountUsers = new List<User>
         {
-            new User
+            new()
             {
                 EmailAddress = "test3@example.com",
                 ReceiveNotifications = false
             },
-            new User
+            new()
             {
                 EmailAddress = "test4@example.com",
                 ReceiveNotifications = true

@@ -1,31 +1,26 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SFA.DAS.PAS.Application.UnitTests.Extensions
+namespace SFA.DAS.PAS.Account.Application.UnitTests.Extensions;
+
+public static class LoggingMockExtensions
 {
-    public static class LoggingMockExtensions
+    // https://adamstorr.azurewebsites.net/blog/mocking-ilogger-with-moq
+    public static Mock<ILogger<T>> VerifyLogging<T>(this Mock<ILogger<T>> logger, string expectedMessage, LogLevel expectedLogLevel = LogLevel.Debug, Times? times = null)
     {
-        // https://adamstorr.azurewebsites.net/blog/mocking-ilogger-with-moq
-        public static Mock<ILogger<T>> VerifyLogging<T>(this Mock<ILogger<T>> logger, string expectedMessage, LogLevel expectedLogLevel = LogLevel.Debug, Times? times = null)
-        {
-            times ??= Times.Once();
+        times ??= Times.Once();
 
-            Func<object, Type, bool> state = (v, t) => v.ToString().CompareTo(expectedMessage) == 0;
+        Func<object, Type, bool> state = (v, t) => v.ToString().CompareTo(expectedMessage) == 0;
 
-            logger.Verify(
-                x => x.Log(
-                    It.Is<LogLevel>(l => l == expectedLogLevel),
-                    It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => state(v, t)),
-                    It.IsAny<Exception>(),
-                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), (Times)times);
+        logger.Verify(
+            x => x.Log(
+                It.Is<LogLevel>(l => l == expectedLogLevel),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => state(v, t)),
+                It.IsAny<Exception>(),
+                It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), (Times)times);
 
-            return logger;
-        }
+        return logger;
     }
 }

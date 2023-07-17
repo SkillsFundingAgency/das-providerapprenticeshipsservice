@@ -18,7 +18,8 @@ public class WhenCallingPasAccountApiClient
     {
         var fixture = new WhenCallingPasAccountApiClientFixture();
         await fixture.PasAccountApiClient.GetUser(fixture.UserRef, CancellationToken.None);
-        fixture.MockRestHttpClient.Verify(x => x.Get<User>($"api/user/{fixture.UserRef}", null, CancellationToken.None));
+        fixture.MockRestHttpClient.Verify(x =>
+            x.Get<User>($"api/user/{fixture.UserRef}", null, CancellationToken.None));
     }
 
     [Test]
@@ -34,7 +35,8 @@ public class WhenCallingPasAccountApiClient
     {
         var fixture = new WhenCallingPasAccountApiClientFixture();
         await fixture.PasAccountApiClient.GetAccountUsers(fixture.ProviderId, CancellationToken.None);
-        fixture.MockRestHttpClient.Verify(x => x.Get<IEnumerable<User>>($"api/account/{fixture.ProviderId}/users", null, CancellationToken.None));
+        fixture.MockRestHttpClient.Verify(x =>
+            x.Get<IEnumerable<User>>($"api/account/{fixture.ProviderId}/users", null, CancellationToken.None));
     }
 
     [Test]
@@ -45,12 +47,16 @@ public class WhenCallingPasAccountApiClient
         Assert.That(fixture.Users, Is.EqualTo(result));
     }
 
-    [Test]        
+    [Test]
     public async Task SendEmailToAllProviderRecipients_VerifyUrlAndDataIsCorrectPassedIn()
     {
         var fixture = new WhenCallingPasAccountApiClientFixture();
-        await fixture.PasAccountApiClient.SendEmailToAllProviderRecipients(fixture.ProviderId, fixture.ProviderEmailRequest, CancellationToken.None);
-        fixture.MockRestHttpClient.Verify(x => x.PostAsJson<ProviderEmailRequest>($"api/email/{fixture.ProviderId}/send", fixture.ProviderEmailRequest, CancellationToken.None));
+        await fixture.PasAccountApiClient.SendEmailToAllProviderRecipients(fixture.ProviderId,
+            fixture.ProviderEmailRequest, CancellationToken.None);
+        
+        fixture.MockRestHttpClient.Verify(x =>
+            x.PostAsJson($"api/email/{fixture.ProviderId}/send", fixture.ProviderEmailRequest,
+                CancellationToken.None));
     }
 
     [Test]
@@ -58,7 +64,8 @@ public class WhenCallingPasAccountApiClient
     {
         var fixture = new WhenCallingPasAccountApiClientFixture();
         await fixture.PasAccountApiClient.GetAgreement(fixture.ProviderId, CancellationToken.None);
-        fixture.MockRestHttpClient.Verify(x => x.Get<ProviderAgreement>($"api/account/{fixture.ProviderId}/agreement", null, CancellationToken.None));
+        fixture.MockRestHttpClient.Verify(x =>
+            x.Get<ProviderAgreement>($"api/account/{fixture.ProviderId}/agreement", null, CancellationToken.None));
     }
 
     [Test]
@@ -76,10 +83,10 @@ public class WhenCallingPasAccountApiClientFixture
     public Mock<IRestHttpClient> MockRestHttpClient { get; }
     public long ProviderId { get; }
     public string UserRef { get; }
-    public User User{ get; }
+    public User User { get; }
     public List<User> Users { get; }
     public ProviderEmailRequest ProviderEmailRequest { get; }
-    public ProviderAgreementStatus ProviderAgreementStatus { get; set; }
+    public ProviderAgreementStatus ProviderAgreementStatus { get; }
 
     public WhenCallingPasAccountApiClientFixture()
     {
@@ -90,7 +97,7 @@ public class WhenCallingPasAccountApiClientFixture
         Users = new List<User>();
         PasAccountApiClient = new PasAccountApiClient(MockRestHttpClient.Object);
         ProviderEmailRequest = autoFixture.Create<ProviderEmailRequest>();
-        ProviderAgreementStatus = ProviderAgreementStatus.Agreed ;
+        ProviderAgreementStatus = ProviderAgreementStatus.Agreed;
     }
 
     public WhenCallingPasAccountApiClientFixture SetupResponseForGetUser()

@@ -33,7 +33,6 @@ public class WhenGettingAccountUsers
     [Test]
     public async Task ShouldReturnUsers()
     {
-
         var response = new GetAccountUsersResponse();
 
         response.Add(_superUser, _fixture.Build<UserSetting>().With(m => m.ReceiveNotifications, true).Create());

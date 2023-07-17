@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserSetting;
@@ -20,7 +19,7 @@ namespace SFA.DAS.PAS.Account.Application.UnitTests.Queries.GetUserNotificationS
         private GetUserNotificationSettingsHandler _sut;
         private Mock<IUserSettingsRepository> _mockSettingsRepo;
         private Mock<ILogger<GetUserNotificationSettingsHandler>> _mockLogger;
-        const string UserRef = "userRef";
+        private const string UserRef = "userRef";
 
         [SetUp]
         public void SetUp()
@@ -34,7 +33,7 @@ namespace SFA.DAS.PAS.Account.Application.UnitTests.Queries.GetUserNotificationS
         public async Task ThenGettingUsersSettings()
         {
             _mockSettingsRepo.Setup(m => m.GetUserSetting(UserRef))
-                .ReturnsAsync(new List<UserSetting> {new UserSetting { ReceiveNotifications = true, UserId = 1, UserRef = UserRef} });
+                .ReturnsAsync(new List<UserSetting> {new() { ReceiveNotifications = true, UserId = 1, UserRef = UserRef} });
 
             var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef =  UserRef}, new CancellationToken());
 

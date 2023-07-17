@@ -31,6 +31,7 @@ public class WhenSendingEmailToAllProviderRecipients_OptOut
             "test1@example.com",
             "test2@example.com"
         };
+        
         _templateId = Guid.NewGuid().ToString();
         _tokens = new Dictionary<string, string>();
         _tokens.Add("key1", "value1");
