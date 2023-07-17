@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.ProviderApprenticeshipsService.Application.Services;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
@@ -60,7 +59,6 @@ public class WhenIGetCachedContentBanner
         //Arrange
         var cachedContentBanner = "<p>From cache: find out how you can pause your apprenticeships<p>";
 
-
         _cacheStorageServiceMock
             .Setup(mock => mock.TryGet(CacheKey, out cachedContentBanner))
             .Returns(true);
@@ -75,8 +73,6 @@ public class WhenIGetCachedContentBanner
     [Test]
     public async Task WhenBannerDoesNotExistInCache_ThenGetApiContent()
     {
-        //Arrange
-
         //Act
         await _sut.Get(_contentType, _applicationId);
 

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserSetting;
@@ -14,6 +13,7 @@ public class WhenGettingUserSettings
     private Mock<IUserSettingsRepository> _mockSettingsRepo;
     private Mock<ILogger<GetUserNotificationSettingsHandler>> _mockLogger;
     const string UserRef = "userRef";
+
     [SetUp]
     public void SetUp()
     {
@@ -26,20 +26,24 @@ public class WhenGettingUserSettings
     public async Task ThenGettingUsersSettings()
     {
         _mockSettingsRepo.Setup(m => m.GetUserSetting(UserRef))
-            .ReturnsAsync(new List<UserSetting> {new UserSetting { ReceiveNotifications = true, UserId = 1, UserRef = UserRef} });
+            .ReturnsAsync(
+                new List<UserSetting> { new() { ReceiveNotifications = true, UserId = 1, UserRef = UserRef } });
 
-        var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef =  UserRef}, new CancellationToken());
+        var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef = UserRef },
+            new CancellationToken());
 
         result.NotificationSettings.Count.Should().Be(1);
 
         _mockSettingsRepo.Verify(m => m.GetUserSetting(It.IsAny<string>()), Times.Once);
-        result.NotificationSettings.First().Should().BeEquivalentTo(new UserNotificationSetting { UserRef = UserRef, ReceiveNotifications = true });
+        result.NotificationSettings.First().Should().BeEquivalentTo(new UserNotificationSetting
+            { UserRef = UserRef, ReceiveNotifications = true });
     }
 
     [Test]
     public async Task ThenCreatingSettingsIfNoSettingsFoundGettingUsersSettings()
     {
-        var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef = UserRef }, new CancellationToken());
+        var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef = UserRef },
+            new CancellationToken());
 
         result.NotificationSettings.Count.Should().Be(0);
 

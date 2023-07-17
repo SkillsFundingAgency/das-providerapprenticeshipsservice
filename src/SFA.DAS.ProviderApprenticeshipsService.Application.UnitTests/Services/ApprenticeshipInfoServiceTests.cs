@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Services;

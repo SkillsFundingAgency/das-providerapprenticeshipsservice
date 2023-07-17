@@ -12,7 +12,7 @@ public class WhenGettingAgreementsViewModel
     private AgreementOrchestrator _orchestrator;
     private Mock<IMediator> _mediator;
     private Mock<IAgreementMapper> _agreementMapper;
-    private const long providerId = 54321L;
+    private const long ProviderId = 54321L;
 
     [SetUp]
     public void Setup()
@@ -60,7 +60,7 @@ public class WhenGettingAgreementsViewModel
             .Returns(mappedCommitmentAgreement);
 
         //Act
-        var result = await _orchestrator.GetAgreementsViewModel(providerId, string.Empty);
+        var result = await _orchestrator.GetAgreementsViewModel(ProviderId, string.Empty);
 
         //Assert
         Assert.IsNotNull(result);
@@ -74,7 +74,7 @@ public class WhenGettingAgreementsViewModel
         SetOrganisations();
 
         //Act
-        var result = await _orchestrator.GetAgreementsViewModel(providerId, string.Empty);
+        var result = await _orchestrator.GetAgreementsViewModel(ProviderId, string.Empty);
 
         //Assert
         Assert.IsNotNull(result);
@@ -94,7 +94,7 @@ public class WhenGettingAgreementsViewModel
         SetOrganisations();
 
         //Act
-        var result = await _orchestrator.GetAgreementsViewModel(providerId, "A");
+        var result = await _orchestrator.GetAgreementsViewModel(ProviderId, "A");
 
         //Assert
         Assert.IsNotNull(result);
@@ -108,7 +108,7 @@ public class WhenGettingAgreementsViewModel
         SetOrganisations();
 
         //Act
-        var result = await _orchestrator.GetAgreementsViewModel(providerId, "V");
+        var result = await _orchestrator.GetAgreementsViewModel(ProviderId, "V");
 
         //Assert
         Assert.IsNotNull(result);
@@ -122,7 +122,7 @@ public class WhenGettingAgreementsViewModel
         SetOrganisations();
 
         //Act
-        var result = await _orchestrator.GetAgreementsViewModel(providerId, "D");
+        var result = await _orchestrator.GetAgreementsViewModel(ProviderId, "D");
 
         //Assert
         Assert.IsNotNull(result);
@@ -136,7 +136,7 @@ public class WhenGettingAgreementsViewModel
         SetOrganisations();
 
         //Act
-        var result = await _orchestrator.GetAgreementsViewModel(providerId, "D");
+        var result = await _orchestrator.GetAgreementsViewModel(ProviderId, "D");
 
         //Assert
         Assert.IsNotNull(result);

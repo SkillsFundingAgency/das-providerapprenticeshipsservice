@@ -55,88 +55,72 @@ public class AuthorizationContextProviderTestsFixture
         public const string Ukprn = "Ukprn";
     }
 
-    public IAuthorizationContextProvider AuthorizationContextProvider { get; set; }
-    public Mock<IHttpContextAccessor> HttpContext { get; set; }
-    public Mock<IActionContextAccessorWrapper> ActionContextAccessorWrapper { get; set; }
-    public Mock<IEncodingService> EncodingService { get; set; }
-    public string AccountLegalEntityPublicHashedIdRouteValue { get; set; }
-    public long AccountLegalEntityId { get; set; }
-    public string ProviderIdRouteValue { get; set; }
+    private readonly IAuthorizationContextProvider _authorizationContextProvider;
+    private readonly Mock<IHttpContextAccessor> _httpContext;
+    private readonly Mock<IEncodingService> _encodingService;
+    private readonly RouteData _routeData;
+    
+    private IQueryCollection _queryParams;
+    private string _providerIdRouteValue;
+    private string _accountLegalEntityPublicHashedIdRouteValue;
+    
     public long ProviderId { get; set; }
-    public RouteData RouteData { get; set; }
-    public IQueryCollection QueryParams { get; set; }
+    public long AccountLegalEntityId { get; set; }
+    
 
     public AuthorizationContextProviderTestsFixture()
     {
-        RouteData = new RouteData();
-        ActionContextAccessorWrapper = new Mock<IActionContextAccessorWrapper>();
-        HttpContext = new Mock<IHttpContextAccessor>();
-        ActionContextAccessorWrapper.Setup(c => c.GetRouteData()).Returns(RouteData);
-        HttpContext.Setup(c => c.HttpContext.User).Returns(new GenericPrincipal(new Mock<IIdentity>().Object, Array.Empty<string>()));
+        _routeData = new RouteData();
+        
+        var actionContextAccessorWrapper = new Mock<IActionContextAccessorWrapper>();
+        actionContextAccessorWrapper.Setup(c => c.GetRouteData()).Returns(_routeData);
+        
+        _httpContext = new Mock<IHttpContextAccessor>();
+        _httpContext.Setup(c => c.HttpContext.User).Returns(new GenericPrincipal(new Mock<IIdentity>().Object, Array.Empty<string>()));
 
-        EncodingService = new Mock<IEncodingService>();
-        AuthorizationContextProvider = new AuthorizationContextProvider(HttpContext.Object,
-            EncodingService.Object, 
+        _encodingService = new Mock<IEncodingService>();
+        
+        _authorizationContextProvider = new AuthorizationContextProvider(_httpContext.Object,
+            _encodingService.Object, 
             Mock.Of<ILogger<AuthorizationContextProvider>>(),
-            ActionContextAccessorWrapper.Object);
+            actionContextAccessorWrapper.Object);
     }
 
     public IAuthorizationContext GetAuthorizationContext()
     {
-        return AuthorizationContextProvider.GetAuthorizationContext();
+        return _authorizationContextProvider.GetAuthorizationContext();
     }
 
     public AuthorizationContextProviderTestsFixture SetValidAccountLegalEntityPublicHashedId()
     {
-        AccountLegalEntityPublicHashedIdRouteValue = "ABC123";
+        _accountLegalEntityPublicHashedIdRouteValue = "ABC123";
         AccountLegalEntityId = 123;
             
         var accountLegalEntityPublicHashedId = new Dictionary<string, StringValues>()
         {
-            { RouteDataKeys.EmployerAccountLegalEntityPublicHashedId, new StringValues(AccountLegalEntityPublicHashedIdRouteValue) }
+            { RouteDataKeys.EmployerAccountLegalEntityPublicHashedId, new StringValues(_accountLegalEntityPublicHashedIdRouteValue) }
         };
-        QueryParams = new QueryCollection(accountLegalEntityPublicHashedId);
+        _queryParams = new QueryCollection(accountLegalEntityPublicHashedId);
 
-        HttpContext.Setup(c => c.HttpContext.Request.Query).Returns(QueryParams);
+        _httpContext.Setup(c => c.HttpContext.Request.Query).Returns(_queryParams);
 
-        EncodingService.Setup(h => h.Decode(AccountLegalEntityPublicHashedIdRouteValue, EncodingType.PublicAccountLegalEntityId)).Returns(AccountLegalEntityId);
+        _encodingService.Setup(h => h.Decode(_accountLegalEntityPublicHashedIdRouteValue, EncodingType.PublicAccountLegalEntityId)).Returns(AccountLegalEntityId);
 
         return this;
     }
 
-    public AuthorizationContextProviderTestsFixture SetInvalidHashAccountLegalEntityPublicHashedId()
+    public void SetValidProviderId()
     {
-        AccountLegalEntityPublicHashedIdRouteValue = "AAA";
-
-        var accountLegalEntityPublicHashedId = new Dictionary<string, StringValues>()
-        {
-            { RouteDataKeys.EmployerAccountLegalEntityPublicHashedId, new StringValues(AccountLegalEntityPublicHashedIdRouteValue) }
-        };
-        QueryParams = new QueryCollection(accountLegalEntityPublicHashedId);
-
-        HttpContext.Setup(c => c.HttpContext.Request.Query).Returns(QueryParams);
-
-        EncodingService.Setup(h => h.Decode(AccountLegalEntityPublicHashedIdRouteValue, EncodingType.PublicAccountLegalEntityId)).Throws<Exception>();
-
-        return this;
-    }
-    
-    public AuthorizationContextProviderTestsFixture SetValidProviderId()
-    {
-        ProviderIdRouteValue = "123";
+        _providerIdRouteValue = "123";
         ProviderId = 123;
 
-        RouteData.Values[RouteDataKeys.ProviderId] = ProviderIdRouteValue;
-
-        return this;
+        _routeData.Values[RouteDataKeys.ProviderId] = _providerIdRouteValue;
     }
 
-    public AuthorizationContextProviderTestsFixture SetInvalidProviderId()
+    public void SetInvalidProviderId()
     {
-        ProviderIdRouteValue = "Skunk";
+        _providerIdRouteValue = "Skunk";
 
-        RouteData.Values[RouteDataKeys.ProviderId] = ProviderIdRouteValue;
-
-        return this;
+        _routeData.Values[RouteDataKeys.ProviderId] = _providerIdRouteValue;
     }
 }

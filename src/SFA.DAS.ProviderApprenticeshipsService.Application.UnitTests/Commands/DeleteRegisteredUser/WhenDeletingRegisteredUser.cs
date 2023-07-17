@@ -31,7 +31,7 @@ public class WhenDeletingRegisteredUser
             .Returns(new ValidationResult(
                 new List<ValidationFailure>
                 {
-                    new ValidationFailure("TEST", "ERROR")
+                    new("TEST", "ERROR")
                 }
             ));
 

@@ -1,7 +1,6 @@
 ﻿using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitmentAgreements;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.UnitTests.Queries.GetCommitmentAgreements;
@@ -29,8 +28,8 @@ public class WhenGettingCommitmentAgreements
         {
             ProviderCommitmentAgreement = new List<ProviderCommitmentAgreement>
             {
-                new ProviderCommitmentAgreement {AccountLegalEntityPublicHashedId = "A1", LegalEntityName = "L1"},
-                new ProviderCommitmentAgreement {AccountLegalEntityPublicHashedId = "A2", LegalEntityName = "L2"},
+                new() { AccountLegalEntityPublicHashedId = "A1", LegalEntityName = "L1" },
+                new() { AccountLegalEntityPublicHashedId = "A2", LegalEntityName = "L2" },
             }
         };
 

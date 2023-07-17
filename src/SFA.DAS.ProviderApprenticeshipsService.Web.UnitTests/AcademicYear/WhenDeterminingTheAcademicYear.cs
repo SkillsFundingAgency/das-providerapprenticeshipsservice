@@ -1,5 +1,4 @@
-﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.AcademicYear;
 

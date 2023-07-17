@@ -24,7 +24,11 @@ public class WhenDeterminingTheStatusOfACourseOnSpecificDate
     public void ThenTheCourseEffectiveDatesAreUsedToDetermineTheStatus(DateTime? courseStart, DateTime? courseEnd, DateTime effectiveDate, TrainingProgrammeStatus expectStatus)
     {
         //Arrange
-        var course = new TrainingProgramme {EffectiveFrom = courseStart, EffectiveTo = courseEnd};
+        var course = new TrainingProgramme
+        {
+            EffectiveFrom = courseStart, 
+            EffectiveTo = courseEnd
+        };
 
         //Act
         var result = course.GetStatusOn(effectiveDate);
