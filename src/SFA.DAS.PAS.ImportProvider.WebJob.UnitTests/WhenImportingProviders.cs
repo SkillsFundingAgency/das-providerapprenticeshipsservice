@@ -6,7 +6,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.PAS.ImportProvider.WebJob.Services;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 
@@ -19,15 +18,17 @@ public class WhenImportingProviders
     public async Task ProvidersAreImportedAndStoredInDb()
     {
         var fixture = new WhenImportingProvidersFixture();
+        
         await fixture.Import();
+        
         fixture.VerifyImportProviderRepositoryCalled();
     }
 
-    public class WhenImportingProvidersFixture
+    private class WhenImportingProvidersFixture
     {
-        public IImportProviderService Sut { get; set; }
-        public Mock<ICommitmentsV2ApiClient> CommitmentsV2ApiClient { get; set; }
-        public Mock<IProviderRepository> ImportProviderRepository { get; set; }
+        private IImportProviderService Sut { get; }
+        private Mock<ICommitmentsV2ApiClient> CommitmentsV2ApiClient { get; }
+        private Mock<IProviderRepository> ImportProviderRepository { get; }
             
         public WhenImportingProvidersFixture()
         {
@@ -46,16 +47,14 @@ public class WhenImportingProviders
             Sut = new ImportProviderService(CommitmentsV2ApiClient.Object, ImportProviderRepository.Object, Mock.Of<ILogger<ImportProviderService>>());
         }
 
-        public async Task<WhenImportingProvidersFixture> Import()
+        public async Task Import()
         {
             await Sut.Import();
-            return this;
         }
 
-        public WhenImportingProvidersFixture VerifyImportProviderRepositoryCalled()
+        public void VerifyImportProviderRepositoryCalled()
         {
             ImportProviderRepository.Verify(x => x.ImportProviders(It.IsAny<Provider[]>()), Times.Exactly(2));
-            return this;
         }
     }
 }

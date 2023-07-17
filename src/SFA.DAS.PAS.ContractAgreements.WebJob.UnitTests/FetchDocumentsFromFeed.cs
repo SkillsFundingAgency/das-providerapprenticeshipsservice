@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses;
@@ -20,7 +19,7 @@ public class FetchDocumentsFromFeed
     {
         // Feed is set to have 13 pages
         var helper = new TestHelper(UrlToApi);
-        var repository = new InMemoryProviderAgreementStatusRepository(Mock.Of<ILogger<InMemoryProviderAgreementStatusRepository>>());
+        var repository = new InMemoryProviderAgreementStatusRepository();
         var service = helper.SetUpProviderAgreementStatusService(repository);
 
         await service.UpdateProviderAgreementStatuses();
@@ -33,9 +32,9 @@ public class FetchDocumentsFromFeed
     public async Task UpdatesBookmarkIfNewItemOnLatestPage()
     {
         var helper = new TestHelper(UrlToApi);
-        var repository = new InMemoryProviderAgreementStatusRepository(Mock.Of<ILogger<InMemoryProviderAgreementStatusRepository>>());
+        var repository = new InMemoryProviderAgreementStatusRepository();
 
-        await repository.AddContractEventsForPage(new List<ContractFeedEvent> { new ContractFeedEvent
+        await repository.AddContractEventsForPage(new List<ContractFeedEvent> { new()
         {
             FundingTypeCode = "MAIN",
             HierarchyType = "CONTRACT",
@@ -58,9 +57,9 @@ public class FetchDocumentsFromFeed
     public async Task UpdatesBookmarkIfPageIsNowFull()
     {
         var helper = new TestHelper(UrlToApi);
-        var repository = new InMemoryProviderAgreementStatusRepository(Mock.Of<ILogger<InMemoryProviderAgreementStatusRepository>>());
+        var repository = new InMemoryProviderAgreementStatusRepository();
 
-        await repository.AddContractEventsForPage(new List<ContractFeedEvent> { new ContractFeedEvent
+        await repository.AddContractEventsForPage(new List<ContractFeedEvent> { new()
         {
             FundingTypeCode = "MAIN",
             HierarchyType = "CONTRACT",

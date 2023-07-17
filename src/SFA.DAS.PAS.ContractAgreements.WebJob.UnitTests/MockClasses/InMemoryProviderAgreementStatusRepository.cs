@@ -2,23 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.ContractFeed;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses;
 
 public sealed class InMemoryProviderAgreementStatusRepository : IProviderAgreementStatusRepository
 {
-    private readonly ILogger<InMemoryProviderAgreementStatusRepository> _logger;
-
     public readonly List<ContractFeedEvent> Data;
     public Guid? LastBookmarkRead;
 
-    public InMemoryProviderAgreementStatusRepository(ILogger<InMemoryProviderAgreementStatusRepository> logger)
+    public InMemoryProviderAgreementStatusRepository()
     {
-        _logger = logger;
         Data = new List<ContractFeedEvent>();
     }
 
