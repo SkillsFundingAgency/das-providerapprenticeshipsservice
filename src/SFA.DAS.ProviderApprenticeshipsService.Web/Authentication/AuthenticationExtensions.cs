@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.DfESignIn.Auth.AppStart;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
@@ -82,8 +81,6 @@ public static class AuthenticationExtensions
         ctx.HttpContext.Items.Add(DasClaimTypes.DisplayName, displayName);
         ctx.HttpContext.Items.Add(DasClaimTypes.Ukprn, ukprn);
         ctx.HttpContext.Items.Add(DasClaimTypes.Email, email);
-
-        ctx.Principal.Identities.First().MapClaimToRoles();
 
         await orchestrator.SaveIdentityAttributes(id, ukprn, displayName, email);
     }

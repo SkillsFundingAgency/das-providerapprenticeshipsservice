@@ -11,6 +11,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 
 public static class AuthorizationServicePolicyExtension
 {
+    private const string ProviderDaa = "DAA";
+    private const string ProviderDab = "DAB";
+    private const string ProviderDac = "DAC";
+    private const string ProviderDav = "DAV";
+    
     public static void AddAuthorizationServicePolicies(this IServiceCollection services)
     {
         services.AddHttpContextAccessor();
@@ -20,7 +25,7 @@ public static class AuthorizationServicePolicyExtension
             options.AddPolicy(PolicyNames.RequireDasPermissionRole, policy =>
             {
                 policy.RequireAuthenticatedUser();
-                policy.RequireRole(RoleNames.DasPermission);
+                policy.RequireClaim(DasClaimTypes.Service, ProviderDaa, ProviderDab, ProviderDac, ProviderDav);
             });
         });
 

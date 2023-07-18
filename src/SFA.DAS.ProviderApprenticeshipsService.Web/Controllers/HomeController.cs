@@ -97,9 +97,7 @@ public class HomeController : Controller
                 ?.Value;
             var ukPrn = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.Ukprn)?.Value;
             var email = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type == ClaimName.Email)?.Value;
-
-            claimsPrincipal.MapClaimToRoles();
-
+            
             await _authenticationOrchestrator.SaveIdentityAttributes(id, ukPrn, displayName, email);
         }
     }
