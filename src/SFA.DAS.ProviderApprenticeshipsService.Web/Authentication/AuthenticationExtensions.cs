@@ -9,10 +9,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 
 public static class AuthenticationExtensions
 {
-    private const string ClientName = "ProviderRoATP";
-    private const string SignedOutCallbackPath = "/signout";
-    private static readonly string AuthCookieName = $"{typeof(AuthenticationExtensions).Assembly.GetName().Name}.Auth";
-
     public static void AddAndConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         var useDfESignIn = configuration.GetSection("UseDfESignIn").Get<bool>();
@@ -21,10 +17,10 @@ public static class AuthenticationExtensions
         {
             services.AddAndConfigureDfESignInAuthentication(
                 configuration,
-                AuthCookieName,
+                "SFA.DAS.ProviderApprenticeshipService",
                 typeof(CustomServiceRole),
-                ClientName,
-                SignedOutCallbackPath);
+                "ProviderRoATP",
+                "/signout");
         }
         else
         {
@@ -46,7 +42,7 @@ public static class AuthenticationExtensions
                 .AddCookie(options =>
                 {
                     options.ExpireTimeSpan = TimeSpan.FromHours(1);
-                    options.Cookie.Name = AuthCookieName;
+                    options.Cookie.Name = $"{typeof(AuthenticationExtensions).Assembly.GetName().Name}.Auth";
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     options.SlidingExpiration = true;
                     options.Cookie.SameSite = SameSiteMode.None;
