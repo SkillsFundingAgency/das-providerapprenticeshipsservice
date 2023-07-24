@@ -17,7 +17,7 @@ public static class AuthenticationExtensions
         public static void AddAndConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             
-            var useDfESignIn = configuration.GetSection("RoatpCourseManagement:UseDfESignIn").Get<bool>();
+            var useDfESignIn = configuration.GetSection("UseDfESignIn").Get<bool>();
 
             if (useDfESignIn)
             {
