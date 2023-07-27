@@ -35,8 +35,10 @@ public class HomeController : Controller
     [Route("/", Name = RouteNames.Home)]
     public IActionResult Index()
     {
-        if (User.Identity is { IsAuthenticated: true }) return RedirectToRoute(RouteNames.AccountHome);
-        return View(new HomeViewModel { UseDfESignIn = _providerApprenticeshipsServiceConfiguration.UseDfESignIn });
+        // if the DfESignIn is enabled, then redirect the user to the Start Page.
+        if (!_providerApprenticeshipsServiceConfiguration.UseDfESignIn) return RedirectToRoute(RouteNames.AccountHome);
+
+        return View();
     }
 
     [Route("privacy", Name = "privacy")]
