@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
@@ -16,19 +18,25 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 public class AccountController : BaseController
 {
     private readonly IAccountOrchestrator _accountOrchestrator;
+    private readonly IConfiguration _configuration;
 
     public AccountController(IAccountOrchestrator accountOrchestrator,
-        ICookieStorageService<FlashMessageViewModel> flashMessage)
+        ICookieStorageService<FlashMessageViewModel> flashMessage, IConfiguration configuration)
         : base(flashMessage)
     {
         _accountOrchestrator = accountOrchestrator;
+        _configuration = configuration;
     }
 
     [Route("~/signout", Name = RouteNames.SignOut)]
     public async Task ProviderSignOut()
     {
+        var authScheme = _configuration.GetSection("UseDfESignIn").Get<bool>()
+            ? OpenIdConnectDefaults.AuthenticationScheme
+            : WsFederationDefaults.AuthenticationScheme;
+
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        await HttpContext.SignOutAsync(WsFederationDefaults.AuthenticationScheme, new AuthenticationProperties
+        await HttpContext.SignOutAsync(authScheme, new AuthenticationProperties
         {
             RedirectUri = ""
         });
