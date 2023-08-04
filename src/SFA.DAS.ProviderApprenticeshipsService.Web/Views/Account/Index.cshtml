@@ -33,22 +33,20 @@
         @Model.Message
     </p>
 }
-@if (DateTime.UtcNow < new DateTime(2023, 02, 13))
-{
-    <div class="govuk-notification-banner govuk-notification-banner--homepage" role="region" aria-labelledby="govuk-notification-banner-title-naw" data-module="govuk-notification-banner">
-        <div class="govuk-notification-banner__header">
-            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title-naw">
-                Reminder
-            </h2>
-        </div>
-        <div class="govuk-notification-banner__content">
-            <p class="govuk-notification-banner__heading">
-                National Apprenticeship Week: 6 to 12 February 2023
-            </p>
-            <p>Time to celebrate apprenticeships. Get involved with <a href="https://naw.appawards.co.uk/" class="govuk-link" target="_blank" rel="noopener">National Apprenticeship Week</a>.</p>
-        </div>
+
+<div class="govuk-notification-banner govuk-notification-banner--homepage" role="region" aria-labelledby="govuk-notification-banner-title-naw" data-module="govuk-notification-banner">
+    <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title-naw">
+            Important
+        </h2>
     </div>
-}
+    <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">
+            From [date], You will soon need a DfE Sign-in account to access this service.
+        </p>
+        <p><a href="https://help.signin.education.gov.uk/moving-to-DfE-Sign-in" target="_blank" rel="external noreferrer noopener">Get more information about the move to DfE Sign-in</a></p>
+    </div>
+</div>
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full home-page">
