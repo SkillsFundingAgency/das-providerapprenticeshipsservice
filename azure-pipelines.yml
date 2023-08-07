@@ -103,6 +103,22 @@ stages:
       ServiceConnection: SFA-DAS-DevTest-ARM
       OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss  }}
       AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
+
+- stage: Deploy_PP
+  dependsOn: Build
+  displayName: Deploy to PP
+  variables:
+    - group: PreProd Management Resources
+    - group: PreProd Shared Resources
+    - group: PREPROD das-providerapprenticeshipsservice
+  jobs:
+    - template: pipeline-templates/job/deploy.yml
+      parameters:
+        Environment: PP
+        ServiceConnection: SFA-DIG-PreProd-ARM
+        AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
+        OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss  }}
+        AADGroupObjectIdArray: $(AdminAADGroupObjectId),$(DevAADGroupObjectId)
     
 - stage: Deploy_DEMO
   dependsOn: Build
