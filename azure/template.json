@@ -302,7 +302,7 @@
                 {
                   "name": "EnvironmentName",
                   "value": "[parameters('environmentName')]"
-                },                
+                },
                 {
                   "name": "ConfigurationStorageConnectionString",
                   "value": "[parameters('configurationStorageConnectionString')]"
