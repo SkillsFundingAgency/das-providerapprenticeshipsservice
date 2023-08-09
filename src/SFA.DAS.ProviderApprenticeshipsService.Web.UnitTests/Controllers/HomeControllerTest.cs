@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.UserIdentityService;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Home;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
 {
@@ -18,7 +16,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
         private ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
         private Mock<IUserIdentityService> _userIdentityService;
         private Mock<IProviderCommitmentsLogger> _logger;
-        private Mock<IConfiguration> _configuration;
 
         [SetUp]
         public void Arrange()
@@ -29,21 +26,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
                 .Returns(Task.FromResult(Unit.Value));
             _providerApprenticeshipsServiceConfiguration = new ProviderApprenticeshipsServiceConfiguration();
             _mockAuthenticationOrchestrator = new Mock<IAuthenticationOrchestrator>();
-            _configuration = new Mock<IConfiguration>();
         }
 
         [Test]
-        [TestCase("LOCAL")]
-        [TestCase("TEST")]
-        [TestCase("PP")]
-        [TestCase("PREPROD")]
-        [TestCase("")]
-        public void Index_When_DfESignIn_True_ShouldReturnHomeView(string environment)
+        public void Index_When_DfESignIn_True_ShouldReturnHomeView()
         {
             //arrange
             _providerApprenticeshipsServiceConfiguration.UseDfESignIn = true;
-            _configuration.SetupGet(x => x[It.Is<string>(s => s == "ResourceEnvironmentName")]).Returns(environment);
-            _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object, _configuration.Object);
+            _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object);
 
             // sut
             var result = _sut.Index();
@@ -52,9 +42,6 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
 
             // assert
             vr.Should().NotBeNull();
-
-            var actualModel = vr?.Model as HomeViewModel;
-            actualModel?.ResetPasswordLink.Should().NotBeNull();
         }
 
         [Test]
@@ -63,7 +50,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
             //arrange
 
             _providerApprenticeshipsServiceConfiguration.UseDfESignIn = false;
-            _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object, _configuration.Object);
+            _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object);
 
             // sut
             var result = _sut.Index();
@@ -90,7 +77,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
             }, authType));
 
             _providerApprenticeshipsServiceConfiguration.UseDfESignIn = true;
-            _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object, _configuration.Object);
+            _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object);
             _sut.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
             // sut
