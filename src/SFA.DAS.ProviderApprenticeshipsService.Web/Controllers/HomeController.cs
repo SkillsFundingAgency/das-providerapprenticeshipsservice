@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 using SFA.DAS.DfESignIn.Auth.Constants;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Home;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
@@ -14,14 +16,16 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 [Route("{controller}")]
 public class HomeController : Controller
 {
+    private readonly IConfiguration _configuration;
     private readonly IAuthenticationOrchestrator _authenticationOrchestrator;
     private readonly ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
 
     public HomeController(ProviderApprenticeshipsServiceConfiguration providerApprenticeshipsServiceConfiguration,
-        IAuthenticationOrchestrator authenticationOrchestrator)
+        IAuthenticationOrchestrator authenticationOrchestrator, IConfiguration configuration)
     {
         _providerApprenticeshipsServiceConfiguration = providerApprenticeshipsServiceConfiguration;
         _authenticationOrchestrator = authenticationOrchestrator;
+        _configuration = configuration;
     }
 
     [HttpGet]
@@ -38,7 +42,7 @@ public class HomeController : Controller
         // if the DfESignIn is enabled, then redirect the user to the Start Page.
         if (!_providerApprenticeshipsServiceConfiguration.UseDfESignIn) return RedirectToRoute(RouteNames.AccountHome);
 
-        return View();
+        return View(new HomeViewModel(_configuration["ResourceEnvironmentName"]));
     }
 
     [Route("privacy", Name = "privacy")]

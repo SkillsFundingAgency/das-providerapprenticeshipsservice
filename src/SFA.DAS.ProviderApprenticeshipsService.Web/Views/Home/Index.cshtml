@@ -1,3 +1,4 @@
+@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.Home.HomeViewModel
 @{
     ViewBag.Title = "Apprentice service for training providers - Apprenticeships";
     ViewBag.PageId = "home-page";
@@ -27,9 +28,11 @@
     </div>
     <div class="govuk-notification-banner__content">
         <p class="govuk-notification-banner__heading">
-            From [date], You will soon need a DfE Sign-in account to access this service.
+            The way you access this service has changed. You need a DfE Sign-in account to access the Apprenticeship service for training providers.
         </p>
-        <p><a href="https://help.signin.education.gov.uk/moving-to-DfE-Sign-in" target="_blank" rel="external noreferrer noopener">Get more information about the move to DfE Sign-in</a></p>
+        <p class="govuk-body">
+            To set up an account, <a href="@Model.ResetPasswordLink" target="_blank" rel="external noreferrer noopener">enter your email address on the forgotten password page</a> and follow the instructions.
+        </p>
     </div>
 </div>
 <div class="govuk-grid-row">
