@@ -115,10 +115,10 @@ stages:
     - template: pipeline-templates/job/deploy.yml
       parameters:
         Environment: PP
+        SolutionBaseName: $(SolutionBaseName)
         ServiceConnection: SFA-DIG-PreProd-ARM
         AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
         OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss  }}
-        AADGroupObjectIdArray: $(AdminAADGroupObjectId),$(DevAADGroupObjectId)
     
 - stage: Deploy_DEMO
   dependsOn: Build
