@@ -1,33 +1,40 @@
-﻿using System;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegisteredUser;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Application.Services.UserIdentityService;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+
+public interface IAuthenticationOrchestrator
 {
-    public class AuthenticationOrchestrator
+    Task<bool> SaveIdentityAttributes(string userId, string ukprn, string displayName, string email);
+}
+
+public class AuthenticationOrchestrator : IAuthenticationOrchestrator
+{
+    private readonly IProviderCommitmentsLogger _logger;
+    private readonly IUserIdentityService _userIdentityService;
+
+    public AuthenticationOrchestrator(
+        IProviderCommitmentsLogger logger,
+        IUserIdentityService userIdentityService)
     {
-        private readonly IMediator _mediator;
-        private readonly IProviderCommitmentsLogger _logger;
+        _logger = logger;
+        _userIdentityService = userIdentityService;
+    }
 
-        public AuthenticationOrchestrator(IMediator mediator, IProviderCommitmentsLogger logger)
+    public async Task<bool> SaveIdentityAttributes(string userId, string ukprn, string displayName, string email)
+    {
+        long parsedUkprn;
+
+        if (!long.TryParse(ukprn, out parsedUkprn))
         {
-            _mediator = mediator;
-            _logger = logger;
+            _logger.Info($"Unable to parse Ukprn \"{ukprn}\" from claims for user \"{userId}\"");
+            return false;
         }
 
-        public async Task SaveIdentityAttributes(string userId, long ukprn, string displayName, string email)
-        {
-            _logger.Info($"Updating \"{userId}\" attributes - ukprn:\"{ukprn}\", displayname:\"{displayName}\", email:\"{email}\"");
+        _logger.Info($"Updating \"{userId}\" attributes - ukprn:\"{parsedUkprn}\", displayname:\"{displayName}\", email:\"{email}\"");
 
-            await _mediator.Send(new UpsertRegisteredUserCommand
-            {
-                UserRef = userId,
-                DisplayName = displayName,
-                Ukprn = ukprn,
-                Email = email
-            });
-        }
+        await _userIdentityService.UpsertUserIdentityAttributes(userId, parsedUkprn, displayName, email);
+
+        return true;
     }
 }

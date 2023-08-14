@@ -5,7 +5,7 @@
 #### Requirements
 
 - Ensure you have the latest .pfx certificates for employer and provider in both **Local Machine** and **Current User** certificate stores (DevOps can assist)
-- Install [.NET Framework 4.6.2](https://dotnet.microsoft.com/download/dotnet-framework/net462)
+- Install [.NET 6.0] (https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 - Install [Visual Studio 2019](https://www.visualstudio.com/downloads/) with these workloads:
     - ASP.NET and web development
     - Azure development
@@ -51,8 +51,8 @@ values (NEWID(), '10005077', 'CONTRACT', 'LEVY', 'APPROVED', 'APPROVED', GETDATE
 - Close all instances of "Microsoft Azure storage emulator" within the system tray
 
 - Set SFA.DAS.ProviderApprenticeshipService startup projects to 'Multiple startup projects'. The **only** projects set to start should be: 
-  - SFA.DAS.API (PAS Account API)
-  - SFA.DAS.CloudService (PAS Web UI)
+  - SFA.DAS.PAS.Account.Api (PAS Account API)
+  - SFA.DAS.ProviderApprenticeshipsService.Web (PAS Web UI)
   
 - Clean the SFA.DAS.ProviderApprenticeshipService solution
 - Rebuild the SFA.DAS.ProviderApprenticeshipService solution
@@ -74,14 +74,14 @@ values (NEWID(), '10005077', 'CONTRACT', 'LEVY', 'APPROVED', 'APPROVED', GETDATE
   - [SFA.DAS.ProviderApprenticeshipService](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-providerapprenticeshipservice/SFA.DAS.ProviderApprenticeshipsService.json)
   - [SFA.DAS.ProviderUrlHelper](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-providerapprenticeshipservice/SFA.DAS.ProviderUrlHelper.json)
   - [SFA.DAS.ContractAgreements](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-providerapprenticeshipservice/SFA.DAS.ContractAgreements.json)
-  - [SFA.DAS.PasAccountApiClient](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-providerapprenticeshipservice/SFA.DAS.PASAccountApiClient.json)
+  - [SFA.DAS.PasAccountApi](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-providerapprenticeshipservice/SFA.DAS.PASAccountApi.json)
 
 - Create a Configuration table in your (Development) local Azure Storage account.
 - Add a row to the Configuration table for each configuraiton json file with fields:
   - PartitionKey: LOCAL, RowKey: SFA.DAS.ProviderApprenticeshipService_1.0, Data: {{[The contents of the local config json file](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-providerapprenticeshipservice/SFA.DAS.ProviderApprenticeshipsService.json)}}.
   - PartitionKey: LOCAL, RowKey: SFA.DAS.ProviderUrlHelper_1.0, Data: {{[The contents of the local config json file](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-providerapprenticeshipservice/SFA.DAS.ProviderUrlHelper.json)}}.
   - PartitionKey: LOCAL, RowKey: SFA.DAS.ContractAgreements_1.0, Data: {{[The contents of the local config json file](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-providerapprenticeshipservice/SFA.DAS.ContractAgreements.json)}}.
-  - PartitionKey: LOCAL, RowKey: SFA.DAS.PasAccountApiClient_1.0, Data: {{[The contents of the local config json file](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-providerapprenticeshipservice/SFA.DAS.PASAccountApiClient.json)}}.
+  - PartitionKey: LOCAL, RowKey: SFA.DAS.PasAccountApi_1.0, Data: {{[The contents of the local config json file](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-providerapprenticeshipservice/SFA.DAS.PASAccountApi.json)}}.
 
 - Update Configuration to amend database connection strings
   - SFA.DAS.ProviderApprenticeshipService_1.0, Data : "Data Source={{local instance name}};Initial Catalog={{database name}};Integrated Security=True;Pooling=False;Connect Timeout=30" }

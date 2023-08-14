@@ -1,35 +1,38 @@
-﻿using System.Threading.Tasks;
-using System.Web.Http;
-
-using SFA.DAS.PAS.Account.Api.Attributes;
+﻿using SFA.DAS.PAS.Account.Api.Authorization;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 
-namespace SFA.DAS.PAS.Account.Api.Controllers
+namespace SFA.DAS.PAS.Account.Api.Controllers;
+
+[ApiVersion("1.0")]
+[ApiController]
+[Authorize(Policy = ApiRoles.ReadUserSettings)]
+[Route("api/user")]
+public class UserController : Controller
 {
-    [RoutePrefix("api/user")]
-    public class UserController : ApiController
+    private readonly IUserOrchestrator _orchestrator;
+    private readonly IProviderCommitmentsLogger _logger;
+
+    public UserController(IUserOrchestrator orchestrator, IProviderCommitmentsLogger logger)
     {
-        private readonly UserOrchestrator _orchestrator;
+        _orchestrator = orchestrator;
+        _logger = logger;
+    }
 
-        private readonly IProviderCommitmentsLogger _logger;
+    [HttpGet]
+    [Route("{userRef}")]
+    public async Task<IActionResult> GetUserSettings(string userRef)
+    {
+        _logger.Info($"Getting users settings for user: {userRef}");
 
-        public UserController(UserOrchestrator orchestrator, IProviderCommitmentsLogger logger)
+        var result = await _orchestrator.GetUserWithSettings(userRef);
+
+        if (result == null) 
         {
-            _orchestrator = orchestrator;
-            _logger = logger;
+            return NotFound();
         }
 
-        [Route("{userRef}")]
-        [HttpGet]
-        [ApiAuthorize(Roles = "ReadUserSettings")]
-        public async Task<IHttpActionResult> GetUserSettings(string userRef)
-        {
-            _logger.Info($"Getting users settings for user: {userRef}");
-            var result = await _orchestrator.GetUser(userRef);
-            _logger.Info($"Found {(result == null ? "0" : "1")}  users settings for user: {userRef}");
-
-            return Ok(result);
-        }
+        return Ok(result);
     }
 }

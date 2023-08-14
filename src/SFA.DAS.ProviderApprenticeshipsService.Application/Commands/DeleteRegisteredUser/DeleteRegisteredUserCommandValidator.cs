@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser;
+
+public class DeleteRegisteredUserCommandValidator : AbstractValidator<DeleteRegisteredUserCommand>
 {
-    public class DeleteRegisteredUserCommandValidator : AbstractValidator<DeleteRegisteredUserCommand>
+    public DeleteRegisteredUserCommandValidator()
     {
-        public DeleteRegisteredUserCommandValidator()
-        {
-            RuleFor(x => x.UserRef).NotEmpty();
-        }
+        RuleFor(x => x.UserRef).NotEmpty();
     }
 }

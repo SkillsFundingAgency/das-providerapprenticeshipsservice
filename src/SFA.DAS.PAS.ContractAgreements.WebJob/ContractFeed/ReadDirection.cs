@@ -1,8 +1,7 @@
-﻿namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed
+﻿namespace SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
+
+public enum ReadDirection
 {
-    public enum ReadDirection
-    {
-        Forward,
-        Backward
-    }
+    Forward,
+    Backward
 }

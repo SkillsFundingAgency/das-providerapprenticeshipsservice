@@ -1,179 +1,185 @@
 using System;
-using AutoFixture;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.NLog.Logger;
+using AutoFixture;
+using Microsoft.Extensions.Logging;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.IdamsUser;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
-namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests
+namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.UnitTests;
+
+[TestFixture]
+public class WhenSyncingIdamsUsers
 {
-    [TestFixture]
-    public class WhenSyncingIdamsUsers
+    [Test]
+    public async Task Then_WeGetNextProviderToProcess()
     {
+        var f = new WhenSyncingIdamsUsersFixture();
+        await f.Sut.SyncUsers();
+        f.VerifyItGetsTheNextProvider();
+    }
 
-        [Test]
-        public async Task Then_WeGetNextProviderToProcess()
+    [Test]
+    public async Task Then_WeCallIdamsServiceForThisProvider()
+    {
+        var f = new WhenSyncingIdamsUsersFixture();
+        await f.Sut.SyncUsers();
+        f.VerifyWeCallIdamsServiceForThisProvider();
+    }
+
+    [Test]
+    public async Task Then_TheNormalAndSuperUsersAreSyncedWithLocalUsers()
+    {
+        var f = new WhenSyncingIdamsUsersFixture();
+        await f.Sut.SyncUsers();
+        f.VerifyIdamsUsersAreSyncedInUserRepository();
+    }
+
+    [Test]
+    public async Task Then_WeMarkProviderAsUpdated()
+    {
+        var f = new WhenSyncingIdamsUsersFixture();
+        await f.Sut.SyncUsers();
+        f.VerifyItMarksProviderAsIdamsUpdated();
+    }
+
+    [Test]
+    public void AndWhenIdamsThrowsAnException_Then_TheExceptionIsRethrown()
+    {
+        var f = new WhenSyncingIdamsUsersFixture().SetupIdamsToThrowException();
+        Assert.ThrowsAsync<ApplicationException>(() => f.Sut.SyncUsers());
+    }
+
+    [Test]
+    public void AndWhenIdamsThrowsAnException_Then_WeStillMarkProviderAsUpdated()
+    {
+        var f = new WhenSyncingIdamsUsersFixture().SetupIdamsToThrowException();
+        Assert.ThrowsAsync<ApplicationException>(() => f.Sut.SyncUsers());
+        f.VerifyItMarksProviderAsIdamsUpdated();
+    }
+
+    [Test]
+    public async Task AndWhenThereAreNoProviders_Then_WeDontCallTheIdamsService()
+    {
+        var f = new WhenSyncingIdamsUsersFixture().WithNoProviders();
+        await f.Sut.SyncUsers();
+        f.VerifyIdamsServiceIsNotCalled();
+    }
+
+    [Test]
+    public void AndWhenIdamsThrowsAnHttp404RequestException_Then_WeStillMarkProviderAsUpdatedButWeDoNotThrowException()
+    {
+        var f = new WhenSyncingIdamsUsersFixture().SetupIdamsToThrowHttpRequestException();
+        Assert.DoesNotThrowAsync(() => f.Sut.SyncUsers());
+        f.VerifyItMarksProviderAsIdamsUpdated();
+    }
+
+    public class WhenSyncingIdamsUsersFixture
+    {
+        public WhenSyncingIdamsUsersFixture()
         {
-            var f = new WhenSyncingIdamsUsersFixture();
-            await f.Sut.SyncUsers();
-            f.VerifyItGetsTheNextProvider();
+            var autoFixture = new Fixture();
+            _providerResponse = autoFixture.Create<Provider>();
+            _superUsers = autoFixture.CreateMany<string>().ToList();
+            _normalUsers = autoFixture.CreateMany<string>().ToList();
+            var combinedUsers = _normalUsers.Concat(_superUsers).ToList();
+
+            _providerRepository = new Mock<IProviderRepository>();
+            _providerRepository.Setup(x => x.GetNextProviderForIdamsUpdate()).ReturnsAsync(_providerResponse);
+
+            _idamsEmailServiceWrapper = new Mock<IIdamsEmailServiceWrapper>();
+            _idamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>(), "UserRole"))
+                .ReturnsAsync(combinedUsers);
+            
+            _idamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>(), "SuperUserRole"))
+                .ReturnsAsync(_superUsers);
+
+            _userRepository = new Mock<IUserRepository>();
+
+            var configuration = new ProviderNotificationConfiguration
+            {
+                DasUserRoleId = "UserRole",
+                SuperUserRoleId = "SuperUserRole"
+            };
+
+            Sut = new IdamsSyncService(_idamsEmailServiceWrapper.Object, _userRepository.Object,
+                _providerRepository.Object, Mock.Of<ILogger<IdamsSyncService>>(), configuration);
         }
 
-        [Test]
-        public async Task Then_WeCallIdamsServiceForThisProvider()
+        private readonly Mock<IIdamsEmailServiceWrapper> _idamsEmailServiceWrapper;
+        private readonly Mock<IUserRepository> _userRepository;
+        private readonly Mock<IProviderRepository> _providerRepository;
+        private readonly Provider _providerResponse;
+        private readonly List<string> _superUsers;
+        private readonly List<string> _normalUsers;
+
+        public IdamsSyncService Sut { get; }
+
+        public WhenSyncingIdamsUsersFixture SetupIdamsToThrowException()
         {
-            var f = new WhenSyncingIdamsUsersFixture();
-            await f.Sut.SyncUsers();
-            f.VerifyWeCallIdamsServiceForThisProvider();
+            _idamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>(), It.IsAny<string>()))
+                .Throws<ApplicationException>();
+            return this;
         }
 
-        [Test]
-        public async Task Then_TheNormalAndSuperUsersAreSyncedWithLocalUsers()
+        public WhenSyncingIdamsUsersFixture SetupIdamsToThrowHttpRequestException()
         {
-            var f = new WhenSyncingIdamsUsersFixture();
-            await f.Sut.SyncUsers();
-            f.VerifyIdamsUsersAreSyncedInUserRepository();
+            _idamsEmailServiceWrapper
+                .Setup(x => x.GetEmailsAsync(It.IsAny<long>(), It.IsAny<string>()))
+                .Throws(new CustomHttpRequestException(HttpStatusCode.NotFound, null));
+
+            return this;
         }
 
-        [Test]
-        public async Task Then_WeMarkProviderAsUpdated()
+        public WhenSyncingIdamsUsersFixture WithNoProviders()
         {
-            var f = new WhenSyncingIdamsUsersFixture();
-            await f.Sut.SyncUsers();
-            f.VerifyItMarksProviderAsIdamsUpdated();
+            _providerRepository.Setup(x => x.GetNextProviderForIdamsUpdate()).ReturnsAsync((Provider)null);
+            return this;
         }
 
-        [Test]
-        public void AndWhenIdamsThrowsAnException_Then_TheExceptionIsRethrown()
+
+        public void VerifyItGetsTheNextProvider()
         {
-            var f = new WhenSyncingIdamsUsersFixture().SetupIdamsToThrowException();
-            Assert.ThrowsAsync<ApplicationException>( () =>  f.Sut.SyncUsers());
+            _providerRepository.Verify(x => x.GetNextProviderForIdamsUpdate());
         }
 
-        [Test]
-        public void AndWhenIdamsThrowsAnException_Then_WeStillMarkProviderAsUpdated()
+        public void VerifyWeCallIdamsServiceForThisProvider()
         {
-            var f = new WhenSyncingIdamsUsersFixture().SetupIdamsToThrowException();
-            Assert.ThrowsAsync<ApplicationException>(() => f.Sut.SyncUsers());
-            f.VerifyItMarksProviderAsIdamsUpdated();
+            _idamsEmailServiceWrapper.Verify(x => x.GetEmailsAsync(_providerResponse.Ukprn, "UserRole"));
+            _idamsEmailServiceWrapper.Verify(x => x.GetEmailsAsync(_providerResponse.Ukprn, "SuperUserRole"));
         }
 
-        [Test]
-        public async Task AndWhenThereAreNoProviders_Then_WeDontCallTheIdamsService()
+        public void VerifyIdamsUsersAreSyncedInUserRepository()
         {
-            var f = new WhenSyncingIdamsUsersFixture().WithNoProviders();
-            await f.Sut.SyncUsers();
-            f.VerifyIdamsServiceIsNotCalled();
+            _userRepository.Verify(x => x.SyncIdamsUsers(_providerResponse.Ukprn,
+                It.Is<List<IdamsUser>>(p => p.Count == _normalUsers.Count + _superUsers.Count)));
+            
+            _userRepository.Verify(x => x.SyncIdamsUsers(It.IsAny<long>(),
+                It.Is<List<IdamsUser>>(p => p.Count(z => z.UserType == UserType.SuperUser) == _superUsers.Count)));
+            
+            _userRepository.Verify(x => x.SyncIdamsUsers(It.IsAny<long>(),
+                It.Is<List<IdamsUser>>(p => p.Count(z => z.UserType == UserType.NormalUser) == _normalUsers.Count)));
         }
 
-        [Test]
-        public void AndWhenIdamsThrowsAnHttp404RequestException_Then_WeStillMarkProviderAsUpdatedButWeDoNotThrowException()
+        public void VerifyItMarksProviderAsIdamsUpdated()
         {
-            var f = new WhenSyncingIdamsUsersFixture().SetupIdamsToThrowHttpRequestException();
-            Assert.DoesNotThrowAsync(() => f.Sut.SyncUsers());
-            f.VerifyItMarksProviderAsIdamsUpdated();
+            _providerRepository.Verify(x => x.MarkProviderIdamsUpdated(_providerResponse.Ukprn));
         }
 
-        public class WhenSyncingIdamsUsersFixture
+        public void VerifyIdamsServiceIsNotCalled()
         {
-            public Mock<IIdamsEmailServiceWrapper> IdamsEmailServiceWrapper { get; set; }
-            public Mock<IUserRepository> UserRepository { get; set; }
-            public Mock<IProviderRepository> ProviderRepository { get; set; }
-            public Provider ProviderResponse { get; set; }
-            public List<string> SuperUsers { get; set; }
-            public List<string> NormalUsers { get; set; }
-            public List<string> CombinedUsers { get; set; }
-
-            public IdamsSyncService Sut { get; set; }
-
-            public WhenSyncingIdamsUsersFixture()
-            {
-                var autoFixture = new Fixture();
-                ProviderResponse = autoFixture.Create<Provider>();
-                SuperUsers = autoFixture.CreateMany<string>().ToList();
-                NormalUsers = autoFixture.CreateMany<string>().ToList();
-                CombinedUsers = NormalUsers.Concat(SuperUsers).ToList();
-
-                ProviderRepository = new Mock<IProviderRepository>();
-                ProviderRepository.Setup(x => x.GetNextProviderForIdamsUpdate()).ReturnsAsync(ProviderResponse);
-
-                IdamsEmailServiceWrapper = new Mock<IIdamsEmailServiceWrapper>();
-                IdamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>(), "UserRole")).ReturnsAsync(CombinedUsers);
-                IdamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>(), "SuperUserRole")).ReturnsAsync(SuperUsers);
-
-                UserRepository = new Mock<IUserRepository>();
-
-                var configuration = new ProviderApprenticeshipsServiceConfiguration
-                {
-                    CommitmentNotification = new ProviderNotificationConfiguration
-                    {
-                        DasUserRoleId = "UserRole",
-                        SuperUserRoleId = "SuperUserRole"
-                    }
-                };
-
-                Sut = new IdamsSyncService(IdamsEmailServiceWrapper.Object, UserRepository.Object, ProviderRepository.Object, Mock.Of<ILog>(), configuration);
-            }
-
-            public WhenSyncingIdamsUsersFixture SetupIdamsToThrowException()
-            {
-                IdamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>(), It.IsAny<string>())).Throws<ApplicationException>();
-                return this;
-            }
-            public WhenSyncingIdamsUsersFixture SetupIdamsToThrowHttpRequestException()
-            {
-                IdamsEmailServiceWrapper
-                    .Setup(x => x.GetEmailsAsync(It.IsAny<long>(), It.IsAny<string>()))
-                    .Throws(new CustomHttpRequestException
-                    {
-                        StatusCode = HttpStatusCode.NotFound
-                    });
-
-                return this;
-            }
-
-            public WhenSyncingIdamsUsersFixture WithNoProviders()
-            {
-                ProviderRepository.Setup(x => x.GetNextProviderForIdamsUpdate()).ReturnsAsync((Provider)null);
-                return this;
-            }
-
-
-            public void VerifyItGetsTheNextProvider()
-            {
-                ProviderRepository.Verify(x=>x.GetNextProviderForIdamsUpdate());
-            }
-
-            public void VerifyWeCallIdamsServiceForThisProvider()
-            {
-               IdamsEmailServiceWrapper.Verify(x=>x.GetEmailsAsync(ProviderResponse.Ukprn, "UserRole"));
-               IdamsEmailServiceWrapper.Verify(x=>x.GetEmailsAsync(ProviderResponse.Ukprn, "SuperUserRole"));
-            }
-
-            public void VerifyIdamsUsersAreSyncedInUserRepository()
-            {
-                UserRepository.Verify(x => x.SyncIdamsUsers(ProviderResponse.Ukprn, It.Is<List<IdamsUser>>(p => p.Count == NormalUsers.Count() + SuperUsers.Count())));
-                UserRepository.Verify(x => x.SyncIdamsUsers(It.IsAny<long>(), It.Is<List<IdamsUser>>(p => p.Count(z => z.UserType == UserType.SuperUser) == SuperUsers.Count())));
-                UserRepository.Verify(x => x.SyncIdamsUsers(It.IsAny<long>(), It.Is<List<IdamsUser>>(p => p.Count(z => z.UserType == UserType.NormalUser) == NormalUsers.Count())));
-            }
-
-            public void VerifyItMarksProviderAsIdamsUpdated()
-            {
-                ProviderRepository.Verify(x => x.MarkProviderIdamsUpdated(ProviderResponse.Ukprn));
-            }
-
-            public void VerifyIdamsServiceIsNotCalled()
-            {
-                IdamsEmailServiceWrapper.Verify(x => x.GetEmailsAsync(It.IsAny<long>(), "UserRole"), Times.Never);
-                IdamsEmailServiceWrapper.Verify(x => x.GetEmailsAsync(It.IsAny<long>(), "SuperUserRole"), Times.Never);
-            }
+            _idamsEmailServiceWrapper.Verify(x => x.GetEmailsAsync(It.IsAny<long>(), "UserRole"), Times.Never);
+            _idamsEmailServiceWrapper.Verify(x => x.GetEmailsAsync(It.IsAny<long>(), "SuperUserRole"), Times.Never);
         }
     }
 }

@@ -1,27 +1,40 @@
-﻿@using Newtonsoft.Json;
-@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.Agreement.AgreementsViewModel
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.Agreement.AgreementsViewModel
 
 @{
     ViewBag.Title = "Organisations and Agreements";
     ViewBag.PageID = "organisations-and-agreements";
 }
 
+@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
+@section breadcrumb {
+    <partial name="_BreadCrumbs" />
+}
+
+@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
+@section Styles {
+    <link href="/css/app.css" rel="stylesheet" no-cdn />
+}
+
+@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
+@section Scripts {
+    <script src="/js/site.js" no-cdn></script>
+}
 
 
-<h1 class="heading-xlarge">Organisations and agreements</h1>
+<h1 class="govuk-heading-xl">Organisations and agreements</h1>
 <p>Listed below is every organisation you work with on the apprenticeship service and their agreement ID.</p>
 <p>If you are adding apprentices using file upload, you must include the agreement ID to identify the correct employer.</p>
-<div class="grid-row">
-    <div class="column-two-thirds">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
         <form method="get" action="@Url.Action("Agreements")">
-            <div class="app-search-form">
-                <label for="search-form-example" class="form-label">
+            <div class="das-search-form">
+                <label for="search-form-example" class="govuk-label govuk-label--m">
                     Search organisation name
                 </label>
-                <div class="app-search-form__group">
-                    <input id="search-form-example" title="Search" name="organisation" value="@Model.SearchText" class="form-control app-search-form__input app-autocomplete" type="text">
-                    <div class="app-search-form__button-wrap">
-                        <button class="button app-search-form__button" type="submit">
+                <div class="das-search-form__group">
+                    <input id="search-form-example" title="Search" name="organisation" value="@Model.SearchText" class="govuk-input das-search-form__input" type="text">
+                    <div class="das-search-form__button-wrap">
+                        <button class="govuk-button das-search-form__button" type="submit">
                             Search Organisation
                         </button>
                     </div>
@@ -31,7 +44,7 @@
     </div>
 </div>
 
-@if (!String.IsNullOrEmpty(@Model.SearchText))
+@if (!string.IsNullOrEmpty(@Model.SearchText))
 {
     <p><a href="@Url.Action("Agreements")">Clear search</a></p>
 }
@@ -42,21 +55,21 @@
 }
 else
 {
-    <table>
-        <thead>
-            <tr>
-                <th scope="col">Organisation</th>
-                <th scope="col">Agreement ID</th>
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Organisation</th>
+                <th scope="col" class="govuk-table__header">Agreement ID</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="govuk-table__body">
             @foreach (var cohortAgreement in Model.CommitmentAgreements)
             {
-                <tr>
-                    <td>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">
                         @cohortAgreement.OrganisationName
                     </td>
-                    <td>
+                    <td class="govuk-table__cell">
                         @cohortAgreement.AgreementID
                     </td>
                 </tr>
@@ -65,14 +78,3 @@ else
     </table>
 }
 
-@section PreFooterJS {
-    <script>
-        var autoCompleteSource = @Html.Raw(JsonConvert.SerializeObject(Model.AllProviderOrganisationNames));
-    </script>
-}
-
-@section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="javascript:window.history.back();" class="back-link">Back</a>
-    </div>
-}

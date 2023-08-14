@@ -3,10 +3,25 @@
     ViewBag.PageId = "Access denied";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Access denied</h1>
+@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
+@section breadcrumb {
+    <partial name="_BreadCrumbs" />
+}
+
+@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
+@section Styles {
+    <link href="/css/app.css" rel="stylesheet" no-cdn />    
+}
+
+@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
+@section Scripts {
+    <script src="/js/site.js" no-cdn></script>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Access denied</h1>
         <p>You don't have permission to access the Apprenticeship Service.</p>
-        <p>If you want to access this service, <a href="https://www.gov.uk/government/collections/register-of-apprenticeship-training-providers" target="_blank" rel="external">you'll need to apply to the register of apprenticeship training providers</a>.</p>
+        <p>If you want to access this service, <a href="https://www.gov.uk/government/collections/register-of-apprenticeship-training-providers" target="_blank" rel="external noopener">you'll need to apply to the register of apprenticeship training providers</a>.</p>
     </div>
 </div>

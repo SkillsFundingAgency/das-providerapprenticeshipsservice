@@ -1,39 +1,35 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web.Hosting;
-using SFA.DAS.NLog.Logger;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
+namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+
+public class BackgroundNotificationService : IBackgroundNotificationService
 {
-    public class BackgroundNotificationService : IBackgroundNotificationService
+    private readonly ILogger<BackgroundNotificationService> _logger;
+    private readonly INotificationsApi _notificationsApi;
+
+    public BackgroundNotificationService(ILogger<BackgroundNotificationService> logger, INotificationsApi notificationsApi)
     {
-        private readonly ILog _logger;
-        private readonly INotificationsApi _notificationsApi;
+        _logger = logger;
+        _notificationsApi = notificationsApi;
+    }
 
-        public BackgroundNotificationService(ILog logger, INotificationsApi notificationsApi)
+    public async Task SendEmail(Email email)
+    {
+        _logger.LogDebug("Sending email with ID: [{SystemId}] in a background task.", email.SystemId);
+
+        try
         {
-            _logger = logger;
-            _notificationsApi = notificationsApi;
+            await _notificationsApi.SendEmail(email);
         }
-
-        public Task SendEmail(Email email)
+        catch (Exception ex)
         {
-            _logger.Debug($"Sending email to [{email.RecipientsAddress}] in a background task.");
-            HostingEnvironment.QueueBackgroundWorkItem(async cancellationToken =>
-            {
-                try
-                {
-                    await _notificationsApi.SendEmail(email);
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error(ex, $"Error using the Notification Api when trying to send email {email.RecipientsAddress}.");
-                }
-            });
-            return Task.CompletedTask;
+            _logger.LogError(ex, "Error using the Notification Api when trying to send email with ID: [{SystemId}].", email.SystemId);
         }
     }
 }

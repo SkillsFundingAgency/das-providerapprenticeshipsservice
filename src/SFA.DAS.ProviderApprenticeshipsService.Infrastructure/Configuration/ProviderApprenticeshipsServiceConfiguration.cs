@@ -1,87 +1,72 @@
-﻿using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Http.Configuration;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
 using SFA.DAS.ProviderRelationships.Api.Client.Configuration;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration
+namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+
+public class ProviderApprenticeshipsServiceConfiguration : IBaseConfiguration
 {
-    public class ProviderApprenticeshipsServiceConfiguration : IProviderAgreementStatusConfiguration
-    {
-        public bool UseFakeIdentity { get; set; }
-        public string DatabaseConnectionString { get; set; }
-        public string ServiceBusConnectionString { get; set; }
-        public CommitmentsApiClientV2Configuration CommitmentsApiClientV2 { get; set; }
-        public NotificationsApiClientConfiguration NotificationApi { get; set; }
-        public ProviderNotificationConfiguration CommitmentNotification { get; set; }
-        public ProviderRelationshipsApiConfiguration ProviderRelationshipsApi { get; set; }
-        public string Hashstring { get; set; }
-        public int MaxBulkUploadFileSize { get; set; } // Size of file in kilobytes
-        public bool CheckForContractAgreements { get; set; }
-        public string ContractAgreementsUrl { get; set; }
-        public bool EnableEmailNotifications { get; set; }
-        public string AllowedHashstringCharacters { get; set; }
-        public string PublicHashstring { get; set; }
-        public string PublicAllowedHashstringCharacters { get; set; }
-        public string PublicAllowedAccountLegalEntityHashstringSalt { get; set; }
-        public string PublicAllowedAccountLegalEntityHashstringCharacters { get; set; }
-        public ContentClientApiConfiguration ContentApi { get; set; }
-        public string ContentApplicationId { get; set; }
-        public int DefaultCacheExpirationInMinutes { get; set; }
-        public ZenDeskConfiguration ZenDeskSettings { get; set; }
-        public SFA.DAS.Authorization.ProviderFeatures.Configuration.ProviderFeaturesConfiguration Features { get; set; }
+    public bool UseFakeIdentity { get; set; }
+    public string DatabaseConnectionString { get; set; }
+    public string ServiceBusConnectionString { get; set; }
+    public CommitmentsApiClientV2Configuration CommitmentsApiClientV2 { get; set; }
+    public NotificationsApiClientConfiguration NotificationApi { get; set; }
+    public ProviderNotificationConfiguration CommitmentNotification { get; set; }
+    public ProviderRelationshipsApiConfiguration ProviderRelationshipsApi { get; set; }
+    public int MaxBulkUploadFileSize { get; set; } // Size of file in kilobytes
+    public ContentClientApiConfiguration ContentApi { get; set; }
+    public string ContentApplicationId { get; set; }
+    public int DefaultCacheExpirationInMinutes { get; set; }
+    public ZenDeskConfiguration ZenDeskSettings { get; set; }
+    public SFA.DAS.Authorization.ProviderFeatures.Configuration.ProviderFeaturesConfiguration Features { get; set; }
+    /// <summary>
+    /// Gets or Sets property UseDfESignIn.
+    /// Property responsible for holding the DfESignIn toggle switch value.
+    /// </summary>
+    public bool UseDfESignIn { get; set; } = false;
 
-        /// <summary>
-        /// Gets or Sets property UseDfESignIn.
-        /// Property responsible for holding the DfESignIn toggle switch value.
-        /// </summary>
-        public bool UseDfESignIn { get; set; } = false;
-    }
+    public string DataProtectionKeysDatabase { get; set; }
+    public string RedisConnectionString { get; set; }
+}
 
-    public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
-    {
-        public string BaseUrl { get; set; }
-        public string ClientToken { get; set; }
-        public string ApiBaseUrl { get; }
-        public string Tenant { get; }
-        public string ClientId { get; }
-        public string ClientSecret { get; }
-        public string IdentifierUri { get; }
-    }
+public class CommitmentsApiClientV2Configuration : IManagedIdentityClientConfiguration
+{
+    public string ApiBaseUrl { get; set; }
+    public string IdentifierUri { get; set; }
+}
 
-    public class CommitmentsApiClientV2Configuration : IManagedIdentityClientConfiguration
-    {
-        public string ApiBaseUrl { get; set; }
-        public string Tenant { get; set; }
-        public string ClientId { get; set; }
-        public string ClientSecret { get; set; }
-        public string IdentifierUri { get; set; }
-    }
+public interface IProviderNotificationConfiguration
+{
+    public bool UseProviderEmail { get; set; }
+    public bool SendEmail { get; set; }
+    public string[] ProviderTestEmails { get; set; }
+    public string IdamsListUsersUrl { get; set; }
+    public string DasUserRoleId { get; set; }
+    public string SuperUserRoleId { get; set; }
+}
 
-    public class ProviderNotificationConfiguration : IJwtClientConfiguration
-    {
-        public bool SendEmail { get; set; }
+public class ProviderNotificationConfiguration : IProviderNotificationConfiguration, IJwtClientConfiguration
+{
+    public bool UseProviderEmail { get; set; }
+    public bool SendEmail { get; set; }
+    public string[] ProviderTestEmails { get; set; }
+    public string IdamsListUsersUrl { get; set; }
+    public string DasUserRoleId { get; set; }
+    public string SuperUserRoleId { get; set; }
+    public string ClientToken { get; set; }
+}
 
-        public string IdamsListUsersUrl { get; set; }
+public class ContentClientApiConfiguration : IContentApiConfiguration
+{
+    public string ApiBaseUrl { get; set; }
+    public string IdentifierUri { get; set; }
+}
 
-        public string DasUserRoleId { get; set; }
-
-        public string SuperUserRoleId { get; set; }
-
-        public string ClientToken { get; set; }
-
-    }
-
-    public class ContentClientApiConfiguration : IContentApiConfiguration
-    {
-        public string ApiBaseUrl { get; set; }
-        public string IdentifierUri { get; set; }
-    }
-
-    public class ZenDeskConfiguration
-    {
-        public string SectionId { get; set; }
-        public string SnippetKey { get; set; }
-        public string CobrowsingSnippetKey { get; set; }
-    }
+public class ZenDeskConfiguration
+{
+    public string SectionId { get; set; }
+    public string SnippetKey { get; set; }
+    public string CobrowsingSnippetKey { get; set; }
 }

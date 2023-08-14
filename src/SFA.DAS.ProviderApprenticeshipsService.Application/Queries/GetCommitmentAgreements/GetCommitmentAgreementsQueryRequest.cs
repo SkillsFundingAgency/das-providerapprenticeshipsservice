@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitmentAgreements
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetCommitmentAgreements;
+
+public class GetCommitmentAgreementsQueryRequest : IRequest<GetCommitmentAgreementsQueryResponse>
 {
-    public class GetCommitmentAgreementsQueryRequest : IRequest<GetCommitmentAgreementsQueryResponse>
-    {
-        public long ProviderId { get; set; }
-    }
+    public long ProviderId { get; set; }
 }

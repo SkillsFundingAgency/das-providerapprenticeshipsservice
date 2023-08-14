@@ -1,67 +1,90 @@
-﻿@using SFA.DAS.ProviderUrlHelper.Framework
-@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings.NotificationSettingsViewModel
+﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings.NotificationSettingsViewModel
 @{
     ViewBag.Title = "Notification settings";
     ViewBag.PageId = "notification-settings";
 }
-<div class="grid-row">
-    <div class="column-two-thirds">
+
+@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
+
+@section breadcrumb {
+    <partial name="_BreadCrumbs"/>
+}
+
+@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
+
+@section Styles {
+    <link href="/css/app.css" rel="stylesheet" no-cdn/>
+}
+
+@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
+
+@section Scripts {
+    <script src="/js/site.js" no-cdn></script>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
         <form method="post">
-            @Html.AntiForgeryToken()
-            <p><h1 class="heading-large">Notification settings</h1></p>
+            <h1 class="govuk-heading-xl">Notification settings</h1>
             <p>Choose whether you want to receive cohort, apprentice and recruitment notification emails. These updates will be sent to the email address you use for <a target="_blank" rel="noopener noreferrer" href="https://profile.signin.education.gov.uk/">your DfE Sign-in account (opens in new tab)</a>.</p>
             <p>Changing these settings will not affect service emails, like password resets.</p>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col">Account name</th>
-                        <th scope="col">Emails</th>
-                        <th scope="col">No emails</th>
-                    </tr>
+            
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Account name</th>
+                    <th scope="col" class="govuk-table__header">Emails</th>
+                    <th scope="col" class="govuk-table__header">No emails</th>
+                </tr>
                 </thead>
-                <tbody>
-                    @for (var i = 0; i < Model.NotificationSettings.Count; i++)
-                    {
-                        var setting = Model.NotificationSettings[i];
+                <tbody class="govuk-table__body">
+                @for (var i = 0; i < Model.NotificationSettings.Count; i++)
+                {
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell notification-row">
+                            @Model.NotificationSettings[i].UserRef
 
-                        <tr>
-                            <td class="notification-row">
-                                @setting.UserRef
+                            @Html.Hidden($"NotificationSettings[{i}].UserRef", Model.NotificationSettings[i].UserRef)
+                        </td>
 
-                                @Html.Hidden($"NotificationSettings[{i}].UserRef", setting.UserRef)
-                            </td>
+                        <td class="govuk-table__cell notification-row">
 
-                            <td class="notification-row">
+                            @{
+                                var trueId = $"NotificationSettings[{i}].ReceiveNotifications-true";
+                                var falseId = $"NotificationSettings[{i}].ReceiveNotifications-false";
+                            }
 
-                                @{
-                                    var trueId = $"NotificationSettings-true-{i}";
-                                    var falseId = $"NotificationSettings-false-{i}";
-                                }
-
-                                <label for="@trueId" class="block-label selection-button-radio" aria-label="Send emails">
-                                    @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", true, setting.ReceiveNotifications, new { id = trueId })
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="@trueId" asp-for="@Model.NotificationSettings[i].ReceiveNotifications" checked="@Model.NotificationSettings[i].ReceiveNotifications" type="radio" value="@bool.TrueString"/>
+                                <label class="govuk-label govuk-radios__label" for="@trueId">
+                                    <span class="govuk-visually-hidden">Send emails</span>
                                 </label>
+                            </div>
 
-                            </td>
+                        </td>
 
-                            <td class="notification-row">
-                                <label for="@falseId" class="block-label selection-button-radio" aria-label="Stop emails">
-                                    @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", false, !setting.ReceiveNotifications, new { id = falseId })
+                        <td class="govuk-table__cell notification-row">
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="@falseId" asp-for="@Model.NotificationSettings[i].ReceiveNotifications" checked="@(!Model.NotificationSettings[i].ReceiveNotifications)" type="radio" value="@bool.FalseString"/>
+                                <label class="govuk-label govuk-radios__label" for="@falseId">
+                                    <span class="govuk-visually-hidden">Stop emails</span>
                                 </label>
+                            </div>
 
-                            </td>
-                        </tr>
-                    }
+                        </td>
+                    </tr>
+                }
                 </tbody>
             </table>
 
-            <div class="button-group">
-                <button type="submit" class="button" id="submit-email-alerts">Update</button>
-                <a href="/" class="text-link">Cancel</a>
+            <div class="govuk-button-group">
+                <button type="submit" class="govuk-button" id="submit-email-alerts">Update</button>
+                <a href="/" class="govuk-link">Cancel</a>
             </div>
             
-            <a href="@Url.RecruitLink($"{Model.ProviderId}")/notifications-manage">Manage the notifications of your recruitment emails</a>
+            <a asp-external-subdomain="recruit" asp-external-controller="" asp-external-action="notifications-manage" asp-external-id="@Model.ProviderId" class="govuk-link">Manage the notifications of your recruitment emails</a>
+
         </form>
     </div>
 </div>

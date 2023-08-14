@@ -1,42 +1,40 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.PAS.Account.Api.Attributes;
+﻿using SFA.DAS.PAS.Account.Api.Authorization;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.PAS.Account.Api.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 
-namespace SFA.DAS.PAS.Account.Api.Controllers
+namespace SFA.DAS.PAS.Account.Api.Controllers;
+
+[Authorize(Policy = ApiRoles.ReadAccountUsers)]
+[Route("api/email")]
+public class EmailController : Controller
 {
-    [RoutePrefix("api/email")]
-    public class EmailController : ApiController
+    private readonly IEmailOrchestrator _emailOrchestrator;
+
+    private readonly IProviderCommitmentsLogger _logger;
+
+    public EmailController(IEmailOrchestrator emailOrchestrator, IProviderCommitmentsLogger logger)
     {
-        private readonly EmailOrchestrator _emailOrchestrator;
+        _emailOrchestrator = emailOrchestrator;
+        _logger = logger;
+    }
 
-        private readonly IProviderCommitmentsLogger _logger;
-
-        public EmailController(EmailOrchestrator emailOrchestrator, IProviderCommitmentsLogger logger)
+    [HttpPost]
+    [Route("{ukprn}/send")]
+    public async Task<IActionResult> SendEmailToAllProviderRecipients([FromRoute]long ukprn, [FromBody] ProviderEmailRequest request)
+    {
+        try
         {
-            _emailOrchestrator = emailOrchestrator;
-            _logger = logger;
+            await _emailOrchestrator.SendEmailToAllProviderRecipients(ukprn, request);
+            _logger.Info($"Email template '{request?.TemplateId}' sent to Provider recipients successfully", ukprn);
+            
+            return Ok();
         }
-
-        [Route("{ukprn}/send")]
-        [HttpPost]
-        [ApiAuthorize(Roles = "ReadAccountUsers")]
-        public async Task<IHttpActionResult> SendEmailToAllProviderRecipients(long ukprn, ProviderEmailRequest request)
+        catch (Exception exception)
         {
-            try
-            {
-                await _emailOrchestrator.SendEmailToAllProviderRecipients(ukprn, request);
-                _logger.Info($"Email template '{request?.TemplateId}' sent to Provider recipients successfully", ukprn);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, $"Error sending email template '{request?.TemplateId}' to Provider recipients", ukprn);
-                throw;
-            }
+            _logger.Error(exception, $"Error sending email template '{request?.TemplateId}' to Provider recipients", ukprn);
+            throw;
         }
     }
 }

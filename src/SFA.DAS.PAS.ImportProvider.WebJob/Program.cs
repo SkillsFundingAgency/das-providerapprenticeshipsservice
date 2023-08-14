@@ -1,36 +1,63 @@
 ﻿using System;
 using System.Diagnostics;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.PAS.ImportProvider.WebJob.DependencyResolution;
-using SFA.DAS.PAS.ImportProvider.WebJob.Importer;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.PAS.ImportProvider.WebJob.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using SFA.DAS.PAS.ImportProvider.WebJob.Extensions;
+using System.Threading.Tasks;
 
-namespace SFA.DAS.PAS.ImportProvider.WebJob
+namespace SFA.DAS.PAS.ImportProvider.WebJob;
+
+class Program
 {
-    // To learn more about Microsoft Azure WebJobs SDK, please see https://go.microsoft.com/fwlink/?LinkID=320976
-    class Program
+    public static async Task Main()
     {
-        static void Main()
+        using var host = CreateHost();
+
+        await ImportProvider(host);
+
+        await host.RunAsync();
+    }
+    private static async Task ImportProvider(IHost host)
+    {
+        ILoggerFactory loggerFactory = new LoggerFactory();
+        ILogger logger = loggerFactory.CreateLogger<Program>();
+
+        try
         {
-            try
-            {
-                var container = IoC.Initialize();
-                var logger = container.GetInstance<ILog>();
-                logger.Info("Import Provider job started");
-                var timer = Stopwatch.StartNew();
+            logger.LogInformation("ImportProvider job started");
+            var timer = Stopwatch.StartNew();
 
-                var service = container.GetInstance<ImportProviderService>();
+            var importService = host.Services.GetService<IImportProviderService>();
+            await importService.Import();
 
-                service.Import().Wait();
-                timer.Stop();
-
-                logger.Info($"ImportProvider job done, Took: {timer.ElapsedMilliseconds} milliseconds");
-            }
-            catch (Exception ex)
-            {
-                ILog exLogger = new NLogLogger();
-                exLogger.Error(ex, "Error running ImportProvider WebJob");
-                throw;
-            }
+            timer.Stop();
+            logger.LogInformation($"ImportProvider job done, Took: {timer.ElapsedMilliseconds} milliseconds");
         }
+        catch (AggregateException exc)
+        {
+            logger.LogError(exc, "Error running ImportProvider WebJob");
+            exc.Handle(ex =>
+            {
+                logger.LogError(ex, "Inner exception running ImportProvider WebJob");
+                return false;
+            });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error running ImportProvider WebJob");
+            throw;
+        }
+    }
+
+    private static IHost CreateHost()
+    {
+        return new HostBuilder()
+            .UseDasEnvironment()
+            .AddConfiguration()
+            .ConfigureDasLogging()
+            .ConfigureServices()
+            .Build();
     }
 }

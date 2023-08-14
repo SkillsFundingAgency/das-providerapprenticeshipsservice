@@ -4,26 +4,41 @@
     ViewBag.HideNavBar = true;
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Terms of use</h1>
+@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
+@section breadcrumb {
+    <partial name="_BreadCrumbs" />
+}
+
+@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
+@section Styles {
+    <link href="/css/app.css" rel="stylesheet" no-cdn />
+}
+
+@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
+@section Scripts {
+    <script src="/js/site.js" no-cdn></script>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Terms of use</h1>
 
 
         <p>You must sign out of this service at the end of each session.</p>
         <p>You must not do any of the following when using this service:</p>
 
        
-        <ul class="list list-bullet">
+        <ul class="govuk-list govuk-list--bullet">
             <li>input untruthful or inaccurate information</li>
             <li>upload any files that contain computer viruses or malware</li>
-            <li>commit any cybercrime as described by the <a href="http://www.legislation.gov.uk/ukpga/1990/18/contents" target="_blank" rel="external">Computer Misue Act 1990</a></li>
+            <li>commit any cybercrime as described by the <a href="http://www.legislation.gov.uk/ukpga/1990/18/contents" target="_blank" rel="external noopener">Computer Misue Act 1990</a></li>
             <li>share your sign in details with anybody else</li>
         </ul>
 
        <p>Your contact details and information associated with your account will be collected and used for the administration of your account.</p>
 
         <p>We will not:</p>
-        <ul class="list list-bullet">
+        <ul class="govuk-list govuk-list--bullet">
             <li>use or disclose this information for other purposes (except where we're legally required to do so)</li>
             <li>use your details for any marketing purposes or for any reason unrelated to the use of your account</li>
         </ul>

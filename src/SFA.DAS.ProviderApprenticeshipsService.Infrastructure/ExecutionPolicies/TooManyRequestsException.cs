@@ -1,12 +1,12 @@
-﻿using System.Web;
+﻿using System;
+using System.Runtime.Serialization;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies
+namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.ExecutionPolicies;
+
+[Serializable]
+public class TooManyRequestsException : Exception
 {
-    public class TooManyRequestsException : HttpException
-    {
-        public TooManyRequestsException()
-            : base(429, "Rate limit has been reached")
-        {
-        }
-    }
+    public TooManyRequestsException() : base("Rate limit has been reached") { }
+
+    protected TooManyRequestsException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 }

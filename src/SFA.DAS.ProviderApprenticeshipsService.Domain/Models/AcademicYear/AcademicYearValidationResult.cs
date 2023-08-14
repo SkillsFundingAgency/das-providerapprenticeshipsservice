@@ -1,8 +1,7 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.AcademicYear
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.AcademicYear;
+
+public enum AcademicYearValidationResult
 {
-    public enum AcademicYearValidationResult
-    {
-        Success,
-        NotWithinFundingPeriod
-    }
+    Success,
+    NotWithinFundingPeriod
 }

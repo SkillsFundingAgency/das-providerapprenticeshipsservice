@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions
+@inject IHtmlHelpers HtmlHelper;
 
 <script type="text/javascript">
     window.zESettings = {
@@ -13,12 +14,12 @@
             },
             helpCenter: {
                 filter: {
-                    section: @Html.GetZenDeskSnippetSectionId()
+                    section: @HtmlHelper.GetZenDeskSnippetSectionId()
                 }
             }
         }
     };
 </script>
-<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=@Html.GetZenDeskSnippetKey()"></script>
-<script id="co-snippet" src="https://embed-euw1.rcrsv.io/@Html.GetZenDeskCobrowsingSnippetKey()?zwwi=1"></script>
-@Html.SetZenDeskLabels($"{(!string.IsNullOrEmpty(ViewBag.ZenDeskLabel) ? ViewBag.ZenDeskLabel : ViewBag.Title)}")
+<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=@HtmlHelper.GetZenDeskSnippetKey()" integrity="sha384-aGMIknMWVwotvAKAt25fjiAWqluHhoxFNsOIaWigf3ZKTDPm+fsStNbjr13kQoOd" crossorigin="anonymous"></script>
+<script id="co-snippet" src="https://embed-euw1.rcrsv.io/@HtmlHelper.GetZenDeskCobrowsingSnippetKey()?zwwi=1"></script>
+@HtmlHelper.SetZenDeskLabels($"{(!string.IsNullOrEmpty(ViewBag.ZenDeskLabel) ? ViewBag.ZenDeskLabel : ViewBag.Title)}")

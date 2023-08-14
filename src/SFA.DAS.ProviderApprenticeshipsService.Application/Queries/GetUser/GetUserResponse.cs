@@ -1,9 +1,8 @@
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser
-{
-    public class GetUserResponse
-    {
-        public string Name { get; set; }
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 
-        public string EmailAddress { get; set; }
-    }
+public class GetUserResponse
+{
+    public string Name { get; set; }
+
+    public string EmailAddress { get; set; }
 }

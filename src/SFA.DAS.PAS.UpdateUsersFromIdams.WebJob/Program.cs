@@ -1,44 +1,65 @@
 ﻿using System;
 using System.Diagnostics;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.DependencyResolution;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions;
+using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
 
-namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob
+namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob;
+
+public class Program
 {
-    static class Program
+    public static async Task Main()
     {
-        static void Main(string[] args)
+        using var host = CreateHost();
+        
+        await SyncIdamsUsers(host);
+
+        await host.RunAsync();
+    }
+    private static async Task SyncIdamsUsers(IHost host)
+    {
+        ILoggerFactory loggerFactory = new LoggerFactory();
+        ILogger logger = loggerFactory.CreateLogger<Program>();
+
+        try
         {
-            try
-            {
-                var container = IoC.Initialize();
-                var logger = container.GetInstance<ILog>();
-                logger.Info("UpdateUsersFromIdams job started");
-                var timer = Stopwatch.StartNew();
+            logger.LogInformation("UpdateUsersFromIdams job started");
+            var timer = Stopwatch.StartNew();
 
-                var service = container.GetInstance<IIdamsSyncService>();
+            var service = host.Services.GetService<IIdamsSyncService>();
+            await service.SyncUsers();
 
-                service.SyncUsers().Wait();
-                timer.Stop();
+            timer.Stop();
 
-                logger.Info($"UpdateUsersFromIdams job done, Took: {timer.ElapsedMilliseconds} milliseconds");
-            }
-            catch (AggregateException exc)
-            {
-                ILog exLogger = new NLogLogger();
-                exLogger.Error(exc, "Error running UpdateUsersFromIdams WebJob");
-                exc.Handle(ex =>
-                {
-                    exLogger.Error(ex, "Inner exception running UpdateUsersFromIdams WebJob");
-                    return false;
-                });
-            }
-            catch (Exception ex)
-            {
-                ILog exLogger = new NLogLogger();
-                exLogger.Error(ex, "Error running UpdateUsersFromIdams WebJob");
-                throw;
-            }
+            logger.LogInformation($"UpdateUsersFromIdams job done, Took: {timer.ElapsedMilliseconds} milliseconds");
         }
+        catch (AggregateException exc)
+        {
+            logger.LogError(exc, "Error running UpdateUsersFromIdams WebJob");
+            exc.Handle(ex =>
+            {
+                logger.LogError(ex, "Inner exception running UpdateUsersFromIdams WebJob");
+                return false;
+            });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error running UpdateUsersFromIdams WebJob");
+            throw;
+        }
+    }
+
+    private static IHost CreateHost()
+    {
+        return new HostBuilder()
+            .UseDasEnvironment()
+            .AddConfiguration()
+            .ConfigureDasLogging()
+            .ConfigureServices()
+            .Build();
     }
 }

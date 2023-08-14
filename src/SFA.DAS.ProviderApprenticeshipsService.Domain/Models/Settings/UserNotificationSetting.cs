@@ -1,11 +1,10 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
+
+public class UserNotificationSetting
 {
-    public class UserNotificationSetting
-    {
-        public string UserRef { get; set; }
+    public string UserRef { get; set; }
 
-        public string Email { get; set; }
+    public string Email { get; set; }
 
-        public bool ReceiveNotifications { get; set; }
-    }
+    public bool ReceiveNotifications { get; set; }
 }

@@ -5,86 +5,80 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
-
+using Microsoft.Extensions.Logging;
 using Moq;
-
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests.MockClasses;
 
-namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests
+namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests;
+
+public class TestHelper
 {
-    public class TestHelper
+    public Mock<IContractFeedProcessorHttpClient> MockFeedProcessorClient;
+
+    private readonly string _urlToApi;
+
+    public TestHelper(string urlToApi)
     {
-        public Mock<IContractFeedProcessorHttpClient> MockFeedProcessorClient;
+        _urlToApi = urlToApi;
+    }
 
-        private readonly string _urlToApi;
+    public ProviderAgreementStatusService SetUpProviderAgreementStatusService(
+        InMemoryProviderAgreementStatusRepository repository)
+    {
+        MockFeedProcessorClient = GetMockFeedProcessorClient();
 
-        public TestHelper(string urlToApi)
+        var reader = new ContractFeedReader(MockFeedProcessorClient.Object, Mock.Of<ILogger<ContractFeedReader>>());
+        var dataProvider = new ContractFeedProcessor(reader, new MockContractFeedEventValidator(), Mock.Of<ILogger<ContractFeedProcessor>>());
+
+        var service = new ProviderAgreementStatusService(dataProvider, repository, Mock.Of<ILogger<ProviderAgreementStatusService>>());
+
+        return service;
+    }
+
+    private Mock<IContractFeedProcessorHttpClient> GetMockFeedProcessorClient()
+    {
+        var fakeResponseHandler = new FakeResponseHandler();
+
+        for (var index = 0; index < 13; index++)
         {
-            _urlToApi = urlToApi;
+            var endOfUrl = index == 0 ? "" : $"/{index}";
+            fakeResponseHandler.AddFakeResponse(new Uri($"{_urlToApi}/api/contracts/notifications{endOfUrl}"), CreateTestData(index));
         }
-
-        public ProviderAgreementStatusService SetUpProviderAgreementStatusService(
-            InMemoryProviderAgreementStatusRepository repository)
-        {
-            MockFeedProcessorClient = GetMockFeedProcessorClient();
-
-            var reader = new ContractFeedReader(MockFeedProcessorClient.Object, Mock.Of<ILog>());
-            var dataProvider = new ContractFeedProcessor(reader, new MockContractFeedEventValidator(), Mock.Of<ILog>());
-
-            var service = new ProviderAgreementStatusService(dataProvider, repository, Mock.Of<ILog>());
-
-            return service;
-        }
-
-        private Mock<IContractFeedProcessorHttpClient> GetMockFeedProcessorClient()
-        {
-            var fakeResponseHandler = new FakeResponseHandler();
-
-            for (int i = 0; i < 13; i++)
-            {
-                var endOfUrl = i == 0 ? "" : $"/{i}";
-                fakeResponseHandler.AddFakeResponse(
-                    new Uri($"{_urlToApi}/api/contracts/notifications{endOfUrl}"), CreateTestData(i)
-                );
-            }
             
-            var mockFeedProcessorClient = new Mock<IContractFeedProcessorHttpClient>();
-            mockFeedProcessorClient.Setup(m => m.BaseAddress).Returns(_urlToApi);
-            mockFeedProcessorClient.Setup(m => m.GetAuthorizedHttpClient()).Returns(() => new HttpClient(fakeResponseHandler));
-            return mockFeedProcessorClient;
+        var mockFeedProcessorClient = new Mock<IContractFeedProcessorHttpClient>();
+        mockFeedProcessorClient.Setup(m => m.BaseAddress).Returns(_urlToApi);
+        mockFeedProcessorClient.Setup(m => m.GetAuthorizedHttpClient()).Returns(() => new HttpClient(fakeResponseHandler));
+        
+        return mockFeedProcessorClient;
+    }
+
+    private static HttpResponseMessage CreateTestData(int fileNo)
+    {
+        var fileName = fileNo < 1 ? "latest" : $"{fileNo:D3}";
+        var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var fileContent = File.ReadAllText(dir + $"\\TestData\\{fileName}.xml");
+        return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(fileContent) };
+    }
+
+    private class FakeResponseHandler : DelegatingHandler
+    {
+        private readonly Dictionary<Uri, HttpResponseMessage> _fakeResponses = new();
+
+        public void AddFakeResponse(Uri uri, HttpResponseMessage responseMessage)
+        {
+            _fakeResponses.Add(uri, responseMessage);
         }
 
-        private HttpResponseMessage CreateTestData(int fileNo)
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
         {
-            var fileName = fileNo < 1 ? "latest" : $"{fileNo:D3}";
-            var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var fileContent = File.ReadAllText(dir + $"\\TestData\\{fileName}.xml");
-            return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(fileContent) };
-        }
-
-        private class FakeResponseHandler : DelegatingHandler
-        {
-            private readonly Dictionary<Uri, HttpResponseMessage> _FakeResponses = new Dictionary<Uri, HttpResponseMessage>();
-
-            public void AddFakeResponse(Uri uri, HttpResponseMessage responseMessage)
+            if (_fakeResponses.ContainsKey(request.RequestUri))
             {
-                _FakeResponses.Add(uri, responseMessage);
+                return Task.FromResult(_fakeResponses[request.RequestUri]);
             }
 
-            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
-            {
-                if (_FakeResponses.ContainsKey(request.RequestUri))
-                {
-                    return Task.FromResult(_FakeResponses[request.RequestUri]);
-                }
-                else
-                {
-                    return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotFound) { RequestMessage = request });
-                }
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotFound) { RequestMessage = request });
 
-            }
         }
     }
 }

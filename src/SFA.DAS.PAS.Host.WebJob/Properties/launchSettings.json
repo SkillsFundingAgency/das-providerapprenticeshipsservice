@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "SFA.DAS.PAS.Host.WebJob": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\IIS Express\\iisexpress.exe",
+      "commandLineArgs": "/path:\"$(SolutionDir)$(ProjectName)\""
+    }
+  }
+}

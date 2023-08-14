@@ -1,45 +1,65 @@
 ﻿using System;
 using System.Diagnostics;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.PAS.ContractAgreements.WebJob.DependencyResolution;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.PAS.ContractAgreements.WebJob.Extensions;
+using SFA.DAS.PAS.ContractAgreements.WebJob.Interfaces;
 
-namespace SFA.DAS.PAS.ContractAgreements.WebJob
+namespace SFA.DAS.PAS.ContractAgreements.WebJob;
+
+public class Program
 {
-    // To learn more about Microsoft Azure WebJobs SDK, please see http://go.microsoft.com/fwlink/?LinkID=320976
-    class Program
+    public static async Task Main()
     {
-        static void Main()
+        using var host = CreateHost();
+        await UpdateProviderAgreementStatuses(host);
+
+        await host.RunAsync();
+    }
+
+    private static async Task UpdateProviderAgreementStatuses(IHost host)
+    {
+        ILoggerFactory loggerFactory = new LoggerFactory();
+        ILogger logger = loggerFactory.CreateLogger<Program>();
+
+        try
         {
-            try
-            {
-                var container = IoC.Initialize();
-                var logger = container.GetInstance<ILog>();
-                logger.Info("ContractAgreements job started");
-                var timer = Stopwatch.StartNew();
+            logger.LogInformation("ContractAgreements job started");
 
-                var service = container.GetInstance<ProviderAgreementStatusService>();
-                service.UpdateProviderAgreementStatuses().Wait();
+            var timer = Stopwatch.StartNew();
 
-                timer.Stop();
+            var providerAgreementStatusService = host.Services.GetService<IProviderAgreementStatusService>();
+            await providerAgreementStatusService.UpdateProviderAgreementStatuses();
 
-                logger.Info($"ContractAgreements job done, Took: {timer.ElapsedMilliseconds} milliseconds");
-            }
-            catch (AggregateException exc)
-            {
-                ILog exLogger = new NLogLogger();
-                exLogger.Error(exc, "Error running ContractAgreements WebJob");
-                exc.Handle(ex =>
-                {
-                    exLogger.Error(ex, "Inner exception running ContractAgreements WebJob");
-                    return false;
-                });
-            }
-            catch (Exception ex)
-            {
-                ILog exLogger = new NLogLogger();
-                exLogger.Error(ex, "Error running ContractAgreements WebJob");
-                throw;
-            }
+            timer.Stop();
+
+            logger.LogInformation($"ContractAgreements job done, Took: {timer.ElapsedMilliseconds} milliseconds");
         }
+        catch (AggregateException exc)
+        {
+            logger.LogError(exc, "Error running ContractAgreements WebJob");
+            exc.Handle(ex =>
+            {
+                logger.LogError(ex, "Inner exception running ContractAgreements WebJob");
+                return false;
+            });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error running ContractAgreements WebJob");
+            throw;
+        }
+    }
+
+    private static IHost CreateHost()
+    {
+        return new HostBuilder()
+            .UseDasEnvironment()
+            .AddConfiguration()
+            .ConfigureDasLogging()
+            .ConfigureServices()
+            .Build();
     }
 }

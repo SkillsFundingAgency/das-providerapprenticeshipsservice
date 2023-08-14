@@ -2,38 +2,29 @@
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Services.UserIdentityService;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegisteredUser
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpsertRegisteredUser;
+
+public class UpsertRegisteredUserCommandHandler : IRequestHandler<UpsertRegisteredUserCommand>
 {
-    public class UpsertRegisteredUserCommandHandler: AsyncRequestHandler<UpsertRegisteredUserCommand>
+    private readonly IValidator<UpsertRegisteredUserCommand> _validator;
+    private readonly IUserIdentityService _userIdentityService;
+
+    public UpsertRegisteredUserCommandHandler(
+        IValidator<UpsertRegisteredUserCommand> validator,
+        IUserIdentityService userIdentityService)
     {
-        private readonly IValidator<UpsertRegisteredUserCommand> _validator;
-        private readonly IUserRepository _userRepository;
+        _validator = validator;
+        _userIdentityService = userIdentityService;
+    }
 
-        public UpsertRegisteredUserCommandHandler(
-            IValidator<UpsertRegisteredUserCommand> validator,
-            IUserRepository userRepository)
-        {
-            _validator = validator;
-            _userRepository = userRepository;
-        }
+    public async Task Handle(UpsertRegisteredUserCommand message, CancellationToken cancellationToken)
+    {
+        var validationResult = _validator.Validate(message);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
 
-        protected override Task Handle(UpsertRegisteredUserCommand message, CancellationToken cancellationToken)
-        {
-            var validationResult = _validator.Validate(message);
-            if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.Errors);
-
-            return _userRepository.Upsert(new User
-            {
-                UserRef = message.UserRef,
-                DisplayName = message.DisplayName,
-                Email = message.Email,
-                Ukprn = message.Ukprn,
-                IsDeleted = false
-            });
-        }
+        await _userIdentityService.UpsertUserIdentityAttributes(message.UserRef, message.Ukprn, message.DisplayName, message.Email);
     }
 }

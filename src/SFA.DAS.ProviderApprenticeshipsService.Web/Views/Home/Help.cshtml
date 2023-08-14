@@ -2,13 +2,28 @@
 @{ViewBag.Title = "Manage apprenticeships service help"; }
 @{ViewBag.HideNav = "true"; }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">
+@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
+@* @section breadcrumb { *@
+@*     <partial name="_BreadCrumbs" /> *@
+@* } *@
+
+@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
+@section Styles {
+    <link href="/css/app.css" rel="stylesheet" no-cdn />
+}
+
+@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
+@section Scripts {
+    <script src="/js/site.js" no-cdn></script>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
             @ViewBag.Title
         </h1>
         <p>Contact the <strong>Manage apprenticeships</strong> service helpdesk on:</p>
-        <ul class="list list-bullet">
+        <ul class="govuk-list govuk-list--bullet">
             <li>08000 150 600</li>
             <li><a href="mailto:helpdesk@manage-apprenticeships.service.gov.uk">helpdesk@manage-apprenticeships.service.gov.uk</a></li>
         </ul>

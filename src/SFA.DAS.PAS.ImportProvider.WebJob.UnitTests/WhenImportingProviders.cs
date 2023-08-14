@@ -1,60 +1,59 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AutoFixture;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.PAS.ImportProvider.WebJob.Importer;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using System.Data;
-using System.Threading.Tasks;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.CommitmentsV2.Api.Types.Responses;
+using SFA.DAS.PAS.ImportProvider.WebJob.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 
-namespace SFA.DAS.PAS.ImportProvider.WebJob.UnitTests
+namespace SFA.DAS.PAS.ImportProvider.WebJob.UnitTests;
+
+[TestFixture]
+public class WhenImportingProviders
 {
-    [TestFixture]
-    public class WhenImportingProviders
+    [Test]
+    public async Task ProvidersAreImportedAndStoredInDb()
     {
-        [Test]
-        public async Task ProvidersAreImportedAndStoredInDb()
+        var fixture = new WhenImportingProvidersFixture();
+        
+        await fixture.Import();
+        
+        fixture.VerifyImportProviderRepositoryCalled();
+    }
+
+    private class WhenImportingProvidersFixture
+    {
+        private readonly IImportProviderService _sut;
+        private readonly Mock<IProviderRepository> _importProviderRepository;
+            
+        public WhenImportingProvidersFixture()
         {
-            var fixture = new WhenImportingProvidersFixture();
-            await fixture.Import();
-            fixture.VerifyImportProviderRepositoryCalled();
+            var autoFixture = new Fixture();
+            var response = new GetAllProvidersResponse
+            {
+                Providers = autoFixture.CreateMany<Provider>(1600).ToList()
+            };
+
+            var commitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
+            commitmentsV2ApiClient.Setup(x => x.GetProviders()).ReturnsAsync(response);
+
+            _importProviderRepository = new Mock<IProviderRepository>();
+            _importProviderRepository.Setup(x => x.ImportProviders(It.IsAny<Provider[]>()));
+
+            _sut = new ImportProviderService(commitmentsV2ApiClient.Object, _importProviderRepository.Object, Mock.Of<ILogger<ImportProviderService>>());
         }
 
-        public class WhenImportingProvidersFixture
+        public async Task Import()
         {
-            public ImportProviderService Sut { get; set; }
-            public Mock<IProviderCommitmentsApi> providerApiClient { get; set; }
-            public Mock<IProviderRepository> importProviderRepository { get; set; }
-            
-            public WhenImportingProvidersFixture()
-            {
-                var autoFixture = new Fixture();
-                var response = new GetProvidersResponse();
-                response.Providers = autoFixture.CreateMany<ProviderResponse>(1600);
-                
-                providerApiClient = new Mock<IProviderCommitmentsApi>();
-                providerApiClient.Setup(x => x.GetProviders()).ReturnsAsync(response);
+            await _sut.Import();
+        }
 
-                importProviderRepository = new Mock<IProviderRepository>();
-                importProviderRepository.Setup(x => x.ImportProviders(It.IsAny<DataTable>()));
-
-                Sut = new ImportProviderService(providerApiClient.Object, importProviderRepository.Object, Mock.Of<ILog>());
-            }
-
-            public async Task<WhenImportingProvidersFixture> Import()
-            {
-                await Sut.Import();
-                return this;
-            }
-
-            public WhenImportingProvidersFixture VerifyImportProviderRepositoryCalled()
-            {
-                importProviderRepository.Verify(x => x.ImportProviders(It.IsAny<DataTable>()), Times.Exactly(2));
-                return this;
-            }
+        public void VerifyImportProviderRepositoryCalled()
+        {
+            _importProviderRepository.Verify(x => x.ImportProviders(It.IsAny<Provider[]>()), Times.Exactly(2));
         }
     }
 }

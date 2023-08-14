@@ -1,88 +1,82 @@
-﻿using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetAccountUsers;
-using SFA.DAS.ProviderApprenticeshipsService.Domain;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
+using SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserProfile;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserSetting;
 
-namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator
+namespace SFA.DAS.PAS.Account.Api.UnitTests.Orchestrator;
+
+[TestFixture]
+public class WhenGettingAccountUsers
 {
-    [TestFixture]
-    public class WhenGettingAccountUsers
+    private AccountOrchestrator _sut;
+    private Mock<IMediator> _mediator;
+    private Fixture _fixture;
+    private User _normalUser;
+    private User _superUser;
+
+    [SetUp]
+    public void SetUp()
     {
-        private AccountOrchestrator _sut;
-        private Mock<IMediator> _mediator;
-        private Fixture _fixture;
-        private User _normalUser;
-        private User _superUser;
+        _fixture = new Fixture();
+        _mediator = new Mock<IMediator>();
+        _sut = new AccountOrchestrator(_mediator.Object);
+        _normalUser = _fixture.Build<User>().With(u => u.UserType, UserType.NormalUser).Create();
+        _superUser = _fixture.Build<User>().With(u => u.UserType, UserType.SuperUser).Create();
+    }
 
-        [SetUp]
-        public void SetUp()
-        {
-            _fixture = new Fixture();
-            _mediator = new Mock<IMediator>();
-            _sut = new AccountOrchestrator(_mediator.Object, Mock.Of<IProviderCommitmentsLogger>());
-            _normalUser = _fixture.Build<User>().With(u => u.UserType, UserType.NormalUser).Create();
-            _superUser = _fixture.Build<User>().With(u => u.UserType, UserType.SuperUser).Create();
-        }
+    [Test]
+    public async Task ShouldReturnUsers()
+    {
+        var response = new GetAccountUsersResponse();
 
-        [Test]
-        public async Task ShouldReturnUsers()
-        {
+        response.Add(_superUser, _fixture.Build<UserSetting>().With(m => m.ReceiveNotifications, true).Create());
+        response.Add(_normalUser, _fixture.Build<UserSetting>().With(m => m.ReceiveNotifications, false).Create());
 
-            var response = new GetAccountUsersResponse();
+        _mediator.Setup(m => m.Send(It.IsAny<GetAccountUsersQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+        var result = (await _sut.GetAccountUsers(12345)).ToArray();
 
-            response.Add(_superUser, _fixture.Build<UserSetting>().With(m => m.ReceiveNotifications, true).Create());
-            response.Add(_normalUser, _fixture.Build<UserSetting>().With(m => m.ReceiveNotifications, false).Create());
+        result.Length.Should().Be(2);
+        result[0].UserRef.Should().Be(_superUser.UserRef);
+        result[0].ReceiveNotifications.Should().BeTrue();
+        result[0].IsSuperUser.Should().BeTrue();
+        result[0].DisplayName.Should().Be(_superUser.DisplayName);
+        result[1].UserRef.Should().Be(_normalUser.UserRef);
+        result[1].ReceiveNotifications.Should().BeFalse();
+        result[1].IsSuperUser.Should().BeFalse();
+        result[1].DisplayName.Should().Be(_normalUser.DisplayName);
+    }
 
-            _mediator.Setup(m => m.Send(It.IsAny<GetAccountUsersQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
-            var result = (await _sut.GetAccountUsers(12345)).ToArray();
+    [Test]
+    public async Task UserShouldReceiveEmailIfNotSettings()
+    {
+        var response = new GetAccountUsersResponse();
+        response.Add(_fixture.Build<User>().With(m => m.UserRef, "userRef1").Create(), null);
+        response.Add(_fixture.Build<User>().With(m => m.UserRef, "userRef2").Create(), _fixture.Build<UserSetting>().With(m => m.ReceiveNotifications, false).Create());
 
-            result.Length.Should().Be(2);
-            result[0].UserRef.Should().Be(_superUser.UserRef);
-            result[0].ReceiveNotifications.Should().BeTrue();
-            result[0].IsSuperUser.Should().BeTrue();
-            result[0].DisplayName.Should().Be(_superUser.DisplayName);
-            result[1].UserRef.Should().Be(_normalUser.UserRef);
-            result[1].ReceiveNotifications.Should().BeFalse();
-            result[1].IsSuperUser.Should().BeFalse();
-            result[1].DisplayName.Should().Be(_normalUser.DisplayName);
-        }
+        _mediator.Setup(m => m.Send(It.IsAny<GetAccountUsersQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+        var result = (await _sut.GetAccountUsers(12345)).ToArray();
 
-        [Test]
-        public async Task UserShouldReceiveEmailIfNotSettings()
-        {
-            var response = new GetAccountUsersResponse();
-            response.Add(_fixture.Build<User>().With(m => m.UserRef, "userRef1").Create(), null);
-            response.Add(_fixture.Build<User>().With(m => m.UserRef, "userRef2").Create(), _fixture.Build<UserSetting>().With(m => m.ReceiveNotifications, false).Create());
+        result.Length.Should().Be(2);
+        result[0].UserRef.Should().Be("userRef1");
+        result[0].ReceiveNotifications.Should().BeTrue();
+        result[1].UserRef.Should().Be("userRef2");
+        result[1].ReceiveNotifications.Should().BeFalse();
+    }
 
-            _mediator.Setup(m => m.Send(It.IsAny<GetAccountUsersQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
-            var result = (await _sut.GetAccountUsers(12345)).ToArray();
+    [Test]
+    public async Task NoUsersReturned()
+    {
+        var response = new GetAccountUsersResponse();
 
-            result.Length.Should().Be(2);
-            result[0].UserRef.Should().Be("userRef1");
-            result[0].ReceiveNotifications.Should().BeTrue();
-            result[1].UserRef.Should().Be("userRef2");
-            result[1].ReceiveNotifications.Should().BeFalse();
-        }
+        _mediator.Setup(m => m.Send(It.IsAny<GetAccountUsersQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+        var result = (await _sut.GetAccountUsers(12345)).ToArray();
 
-        [Test]
-        public async Task NoUsersReturned()
-        {
-            var response = new GetAccountUsersResponse();
-
-            _mediator.Setup(m => m.Send(It.IsAny<GetAccountUsersQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
-            var result = (await _sut.GetAccountUsers(12345)).ToArray();
-
-            result.Length.Should().Be(0);
-        }
+        result.Length.Should().Be(0);
     }
 }

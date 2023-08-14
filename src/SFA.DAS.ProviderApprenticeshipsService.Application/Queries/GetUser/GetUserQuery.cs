@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
+
+public class GetUserQuery : IRequest<GetUserResponse>
 {
-    public class GetUserQuery : IRequest<GetUserResponse>
-    {
-        public string UserRef { get; set; }
-    }
+    public string UserRef { get; set; }
 }

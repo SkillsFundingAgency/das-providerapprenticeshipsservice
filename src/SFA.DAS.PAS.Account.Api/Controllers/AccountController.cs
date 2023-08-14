@@ -1,51 +1,44 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.PAS.Account.Api.Attributes;
+﻿using SFA.DAS.PAS.Account.Api.Authorization;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 
-//todo: looks like automapper package is not used and can be removed
+namespace SFA.DAS.PAS.Account.Api.Controllers;
 
-namespace SFA.DAS.PAS.Account.Api.Controllers
+[Authorize(Policy = ApiRoles.ReadAccountUsers)]
+[Route("api/account")]
+public class AccountController : Controller
 {
-    [RoutePrefix("api/account")]
-    public class AccountController : ApiController
+    private readonly IAccountOrchestrator _orchestrator;
+    private readonly IProviderCommitmentsLogger _logger;
+
+    public AccountController(IAccountOrchestrator orchestrator, IProviderCommitmentsLogger logger)
     {
-        private readonly AccountOrchestrator _orchestrator;
+        _orchestrator = orchestrator;
+        _logger = logger;
+    }
 
-        private readonly IProviderCommitmentsLogger _logger;
+    [HttpGet]
+    [Route("{ukprn}/users")]
+    public async Task<IActionResult> GetAccountUsers(long ukprn)
+    {
+        _logger.Info($"Getting account users for ukprn: {ukprn}", providerId: ukprn);
+        var result = await _orchestrator.GetAccountUsers(ukprn);
 
-        public AccountController(AccountOrchestrator orchestrator, IProviderCommitmentsLogger logger)
-        {
-            _orchestrator = orchestrator;
-            _logger = logger;
-        }
+        _logger.Info($"Found {result.Count()} user accounts for ukprn: {ukprn}", providerId: ukprn);
 
-        [Route("{ukprn}/users")]
-        [HttpGet]
-        [ApiAuthorize(Roles = "ReadAccountUsers")]
-        public async Task<IHttpActionResult> GetAccountUsers(long ukprn)
-        {
-            _logger.Info($"Getting account users for ukprn: {ukprn}", providerId: ukprn);
-            var result = await _orchestrator.GetAccountUsers(ukprn);
+        return Ok(result);
+    }
 
-            _logger.Info($"Found {result.Count()} user accounts for ukprn: {ukprn}", providerId: ukprn);
+    [HttpGet]
+    [Route("{ukprn}/agreement")]
+    public async Task<IActionResult> GetAgreement(long ukprn)
+    {
+        _logger.Info($"Getting agreement for ukprn: {ukprn}", providerId: ukprn);
+        var result = await _orchestrator.GetAgreement(ukprn);
 
-            return Ok(result);
-        }
+        _logger.Info($"Ukprn: {ukprn} has agreement status: {result.Status}", providerId: ukprn);
 
-        [Route("{ukprn}/agreement")]
-        [HttpGet]
-        [ApiAuthorize(Roles = "ReadAccountUsers")]
-        public async Task<IHttpActionResult> GetAgreement(long ukprn)
-        {
-            _logger.Info($"Getting agreement for ukprn: {ukprn}", providerId: ukprn);
-            var result = await _orchestrator.GetAgreement(ukprn);
-
-            _logger.Info($"Ukprn: {ukprn} has agreement status: {result.Status}", providerId: ukprn);
-
-            return Ok(result);
-        }
+        return Ok(result);
     }
 }

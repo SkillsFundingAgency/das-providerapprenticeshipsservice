@@ -1,37 +1,40 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-
 using FluentValidation.Results;
 using MediatR;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser
+public class GetUserHandler : IRequestHandler<GetUserQuery, GetUserResponse>
 {
-    public class GetUserHandler : IRequestHandler<GetUserQuery, GetUserResponse>
+    private readonly IUserRepository _userRepository;
+
+    public GetUserHandler(IUserRepository userRepository)
     {
-        private readonly IUserRepository _userRepository;
+        _userRepository = userRepository;
+    }
 
-        public GetUserHandler(IUserRepository userRepository)
+    public async Task<GetUserResponse> Handle(GetUserQuery request, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrEmpty(request.UserRef))
         {
-            _userRepository = userRepository;
+            throw new InvalidRequestException(
+                new List<ValidationFailure>{ new ValidationFailure("UserRef", "UserRef is null or empty") });
+        }
+        var user = await _userRepository.GetUser(request.UserRef);
+
+        if (user == null) 
+        {
+            return new GetUserResponse { };
         }
 
-        public async Task<GetUserResponse> Handle(GetUserQuery request, CancellationToken cancellationToken)
+        return new GetUserResponse
         {
-            if (string.IsNullOrEmpty(request.UserRef))
-            {
-                throw new InvalidRequestException(
-                    new List<ValidationFailure>{ new ValidationFailure("UserRef", "UserRef is null or empty") });
-            }
-            var user = await _userRepository.GetUser(request.UserRef);
-
-            return new GetUserResponse
-                       {
-                           Name = user.DisplayName,
-                           EmailAddress = user.Email
-                       };
-        }
+            Name = user.DisplayName,
+            EmailAddress = user.Email
+        };
     }
 }

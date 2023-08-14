@@ -1,38 +1,65 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using SFA.DAS.PAS.Account.Api.Types;
+using SFA.DAS.PAS.Account.Application.Queries.GetUser;
+using SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 
-using MediatR;
+namespace SFA.DAS.PAS.Account.Api.Orchestrator;
 
-using SFA.DAS.PAS.Account.Api.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-
-namespace SFA.DAS.PAS.Account.Api.Orchestrator
+public interface IUserOrchestrator
 {
-    public class UserOrchestrator
+    Task<User> GetUserWithSettings(string userRef);
+}
+
+public class UserOrchestrator : IUserOrchestrator
+{
+    private readonly IMediator _mediator;
+    private readonly ILogger<UserOrchestrator> _logger;
+
+    public UserOrchestrator(IMediator mediator, ILogger<UserOrchestrator> logger)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+        _logger = logger;
+    }
 
-        private readonly IProviderCommitmentsLogger _logger;
+    public async Task<User> GetUserWithSettings(string userRef)
+    {
+        var userResponse = await _mediator.Send(new GetUserQuery { UserRef = userRef });
 
-        public UserOrchestrator(IMediator mediator, IProviderCommitmentsLogger logger)
+        if (string.IsNullOrEmpty(userResponse.UserRef))
         {
-            _mediator = mediator;
-            _logger = logger;
+            return null;
         }
 
-        public async Task<User> GetUser(string userRef)
+        var user = new User
         {
-            var userSetting = await _mediator.Send(new GetUserNotificationSettingsQuery {UserRef = userRef });
+            UserRef = userResponse.UserRef,
+            EmailAddress = userResponse.EmailAddress,
+            DisplayName = userResponse.Name,
+            IsSuperUser = userResponse.IsSuperUser
+        };
 
-            var setting = userSetting.NotificationSettings.SingleOrDefault();
-            if (setting == null)
-            {
-                _logger.Info($"Unable to get user with ref {userRef}");
-                return null;
-            }
+        var userSetting = await GetUserSetting(userRef);
 
-            return new User { UserRef = setting.UserRef, ReceiveNotifications = setting.ReceiveNotifications };
+        if (userSetting != null)
+        {
+            user.ReceiveNotifications = userSetting.ReceiveNotifications;
         }
+
+        return user;
+    }
+
+    private async Task<UserNotificationSetting> GetUserSetting(string userRef)
+    {
+        var userSetting = await _mediator.Send(new GetUserNotificationSettingsQuery { UserRef = userRef });
+
+        var setting = userSetting.NotificationSettings.SingleOrDefault();
+        
+        if (setting == null)
+        {
+            _logger.LogInformation("Unable to get user settings with ref {UserRef}", userRef);
+            return null;
+        }
+
+        return setting;
     }
 }

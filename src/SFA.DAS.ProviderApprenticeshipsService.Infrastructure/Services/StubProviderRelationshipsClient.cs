@@ -8,62 +8,61 @@ using SFA.DAS.ProviderRelationships.Api.Client;
 using SFA.DAS.ProviderRelationships.Types.Dtos;
 using SFA.DAS.ProviderRelationships.Types.Models;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services
+namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+
+public class StubProviderRelationshipsApiClient : IProviderRelationshipsApiClient
 {
-    public class StubProviderRelationshipsApiClient : IProviderRelationshipsApiClient
+    private readonly HttpClient _httpClient;
+
+    public StubProviderRelationshipsApiClient()
     {
-        private readonly HttpClient _httpClient;
+        _httpClient = new HttpClient {BaseAddress = new System.Uri("https://sfa-stub-providerrelationships.herokuapp.com/api/data")};
+    }
 
-        public StubProviderRelationshipsApiClient()
+    private async Task<IList<AccountProviderLegalEntityDto>> GetPermissionsForProvider(long providerId, Operation operation, CancellationToken cancellationToken)
+    {
+        var response = await _httpClient.GetAsync($"{providerId}", cancellationToken).ConfigureAwait(false);
+        var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+        var items = JsonConvert.DeserializeObject<List<AccountProviderLegalEntityDtoWrapper>>(content);
+
+        return items.Where(x => x.Permissions.Contains(operation)).Select(item => (AccountProviderLegalEntityDto)item).ToList();
+    }
+
+    public async Task<GetAccountProviderLegalEntitiesWithPermissionResponse> GetAccountProviderLegalEntitiesWithPermission(
+        GetAccountProviderLegalEntitiesWithPermissionRequest request,
+        CancellationToken cancellationToken = new())
+    {
+        return new GetAccountProviderLegalEntitiesWithPermissionResponse
         {
-            _httpClient = new HttpClient {BaseAddress = new System.Uri("https://sfa-stub-providerrelationships.herokuapp.com/api/data")};
-        }
+            AccountProviderLegalEntities = await GetPermissionsForProvider(request.Ukprn, request.Operation, cancellationToken).ConfigureAwait(false)
+        };
+    }
 
-        private async Task<IList<AccountProviderLegalEntityDto>> GetPermissionsForProvider(long providerId, Operation operation, CancellationToken cancellationToken)
-        {
-            var response = await _httpClient.GetAsync($"{providerId}", cancellationToken).ConfigureAwait(false);
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var items = JsonConvert.DeserializeObject<List<AccountProviderLegalEntityDtoWrapper>>(content);
+    public async Task<bool> HasPermission(HasPermissionRequest request, CancellationToken cancellationToken = new())
+    {
+        var result = await GetPermissionsForProvider(request.Ukprn, request.Operation, cancellationToken).ConfigureAwait(false);
+        return result.Any();
+    }
 
-            return items.Where(x => x.Permissions.Contains(operation)).Select(item => (AccountProviderLegalEntityDto)item).ToList();
-        }
+    public async Task<bool> HasRelationshipWithPermission(HasRelationshipWithPermissionRequest request,
+        CancellationToken cancellationToken = new())
+    {
+        return (await GetAccountProviderLegalEntitiesWithPermission(new GetAccountProviderLegalEntitiesWithPermissionRequest
+            { Ukprn = request.Ukprn, Operation = request.Operation }, cancellationToken)).AccountProviderLegalEntities.Any();
+    }
 
-        public async Task<GetAccountProviderLegalEntitiesWithPermissionResponse> GetAccountProviderLegalEntitiesWithPermission(
-            GetAccountProviderLegalEntitiesWithPermissionRequest request,
-            CancellationToken cancellationToken = new CancellationToken())
-        {
-            return new GetAccountProviderLegalEntitiesWithPermissionResponse
-            {
-                AccountProviderLegalEntities = await GetPermissionsForProvider(request.Ukprn, request.Operation, cancellationToken).ConfigureAwait(false)
-            };
-        }
+    public Task Ping(CancellationToken cancellationToken = default)
+    {
+        throw new System.NotImplementedException();
+    }
 
-        public async Task<bool> HasPermission(HasPermissionRequest request, CancellationToken cancellationToken = new CancellationToken())
-        {
-            var result = await GetPermissionsForProvider(request.Ukprn, request.Operation, cancellationToken).ConfigureAwait(false);
-            return result.Any();
-        }
+    public Task RevokePermissions(RevokePermissionsRequest request, CancellationToken cancellationToken = default)
+    {
+        throw new System.NotImplementedException();
+    }
 
-        public async Task<bool> HasRelationshipWithPermission(HasRelationshipWithPermissionRequest request,
-            CancellationToken cancellationToken = new CancellationToken())
-        {
-            return (await GetAccountProviderLegalEntitiesWithPermission(new GetAccountProviderLegalEntitiesWithPermissionRequest
-                { Ukprn = request.Ukprn, Operation = request.Operation }, cancellationToken)).AccountProviderLegalEntities.Any();
-        }
-
-        public Task Ping(CancellationToken cancellationToken = default)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task RevokePermissions(RevokePermissionsRequest request, CancellationToken cancellationToken = default)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public class AccountProviderLegalEntityDtoWrapper : AccountProviderLegalEntityDto
-        {
-            public List<Operation> Permissions { get; set; }          
-        }
+    public class AccountProviderLegalEntityDtoWrapper : AccountProviderLegalEntityDto
+    {
+        public List<Operation> Permissions { get; set; }          
     }
 }
