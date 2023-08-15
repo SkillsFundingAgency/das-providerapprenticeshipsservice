@@ -265,3 +265,4 @@ sh.exe.stackdump
 *.clef
 *.DS_Store
 /src/SFA.DAS.ProviderApprenticeshipsService.Web/internal-nlog.txt
+/src/SFA.DAS.ProviderApprenticeshipsService.Web/appsettings.Development.json
