@@ -4,21 +4,6 @@
     ViewBag.HideNavBar = true;
 }
 
-@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
-@section breadcrumb {
-    <partial name="_BreadCrumbs" />
-}
-
-@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
-@section Styles {
-    <link href="/css/app.css" rel="stylesheet" no-cdn />
-}
-
-@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
-@section Scripts {
-    <script src="/js/site.js" no-cdn></script>
-}
-<div class="das-cookie-banner"></div>
 <div class="govuk-grid-row das-cookie-settings" id="cookie-settings">
     <div class="govuk-grid-column-two-thirds">
         <div class="das-notification das-notification--success das-cookie-settings__confirmation" data-cookie-confirmation="true" tabindex="0">

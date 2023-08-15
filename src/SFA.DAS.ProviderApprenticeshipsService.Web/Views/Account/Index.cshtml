@@ -9,24 +9,6 @@
     var selected = ViewData.SelectedNavigationSection();
 }
 
-@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
-
-@section breadcrumb {
-    <partial name="_BreadCrumbs"/>
-}
-
-@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
-
-@section Styles {
-    <link href="/css/app.css" rel="stylesheet" no-cdn/>
-}
-
-@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
-
-@section Scripts {
-    <script src="/js/site.js" no-cdn></script>
-}
-
 @if (!string.IsNullOrEmpty(Model.Message))
 {
     <p style="border: 5px solid pink; text-align: center; padding: 20px; margin-top: 20px;">
