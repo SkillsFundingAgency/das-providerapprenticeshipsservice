@@ -4,22 +4,7 @@
     ViewBag.HideNavBar = true;
 }
 
-@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
-@section breadcrumb {
-    <partial name="_BreadCrumbs" />
-}
-
-@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
-@section Styles {
-    <link href="/css/app.css" rel="stylesheet" no-cdn />
-}
-
-@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
-@section Scripts {
-    <script src="/js/site.js" no-cdn></script>
-}
-
-<div class="govuk-grid-row">
+<div class="govuk-grid-row das-cookie-settings" id="cookie-settings">
     <div class="govuk-grid-column-two-thirds">
         <div class="das-notification das-notification--success das-cookie-settings__confirmation" data-cookie-confirmation="true" tabindex="0">
             <section aria-live="polite" role="region">
@@ -48,29 +33,29 @@
                     We use 2 types of cookie. You can choose which cookies you're happy for us to use.
                 </p>
                 <div class="govuk-form-group">
-                    <fieldset aria-describedby="hint-cookie-1">
-                        <legend>
-                            <h3 class="govuk-heading-m">Cookies that measure website use</h3>
-                        </legend>
-                        <div id="hint-cookie-1" class="form-hint">
+                    <fieldset class="govuk-fieldset" aria-describedby="hint-cookie-1">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Cookies that measure website use</legend>
+                        <div id="hint-cookie-1" class="govuk-hint">
                             <p>We use Google Analytics to measure how you use the webservice so we can improve it based on user needs. We do not allow Google to use or share the data about how you use this service.</p>
                             <p>Google Analytics sets cookies that store anonymised information about:</p>
-                            <ul class="govuk-list govuk-list--bullet">
+                            <ul class="govuk-list govuk-list--bullet govuk-hint">
                                 <li>how you got to the service</li>
-                                <li>the pages you visit on <a href="http://gov.uk/">GOV.UK</a> and government digital services, and how long you spend on each page</li>
+                                <li>the pages you visit on GOV.UK and government digital services, and how long you spend on each page</li>
                                 <li>what you click on while you're visiting the service</li>
                             </ul>
                             <p>Cookies may be set by other third-party services to do things like measure how you view YouTube videos that are on the service.</p>
                             <p>If you have an account with other services provided by the Education and Skills Funding Agency, the information collected using analytics cookies will be linked to your account. This will help us make the service work better for you.</p>
                         </div>
-                        <label for="radio-cookie-analytics-0" class="govuk-label govuk-radios__label">
-                            <input type="radio" class="govuk-radios__input" name="cookies-AnalyticsConsent" id="radio-cookie-analytics-0" value="on">
-                            Use cookies that measure my service use
-                        </label>
-                        <label for="radio-cookie-analytics-1" class="govuk-label govuk-radios__label">
-                            <input type="radio" class="govuk-radios__input" name="cookies-AnalyticsConsent" id="radio-cookie-analytics-1" value="off">
-                            Do not use cookies that measure my service use
-                        </label>
+                        <div class="govuk-radios">
+                            <div class="gem-c-radio govuk-radios__item">
+                                <input type="radio" name="cookies-AnalyticsConsent" id="radio-cookie-analytics-0" value="on" class="govuk-radios__input">
+                                <label for="radio-cookie-analytics-0" class="govuk-label govuk-radios__label">Use cookies that measure my service use</label>
+                            </div>
+                            <div class="gem-c-radio govuk-radios__item">
+                                <input type="radio" name="cookies-AnalyticsConsent" id="radio-cookie-analytics-1" value="off" class="govuk-radios__input">
+                                <label for="radio-cookie-analytics-1" class="govuk-label govuk-radios__label">Do not use cookies that measure my service use</label>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
                 <h3 class="govuk-heading-m">
