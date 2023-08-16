@@ -57,6 +57,7 @@ public class Startup
                 }
             })
             .SetDfESignInConfiguration(_configuration.GetSection("UseDfESignIn").Get<bool>())
+            .EnableCookieBanner()
             .SetDefaultNavigationSection(NavigationSection.Home);
 
         services.AddApplicationInsightsTelemetry();

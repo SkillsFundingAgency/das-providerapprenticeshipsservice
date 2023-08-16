@@ -9,24 +9,6 @@
     var selected = ViewData.SelectedNavigationSection();
 }
 
-@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
-
-@section breadcrumb {
-    <partial name="_BreadCrumbs"/>
-}
-
-@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
-
-@section Styles {
-    <link href="/css/app.css" rel="stylesheet" no-cdn/>
-}
-
-@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
-
-@section Scripts {
-    <script src="/js/site.js" no-cdn></script>
-}
-
 @if (!string.IsNullOrEmpty(Model.Message))
 {
     <p style="border: 5px solid pink; text-align: center; padding: 20px; margin-top: 20px;">
@@ -50,14 +32,12 @@
     </div>
 }
 
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full home-page">
+
         @Model.BannerContent
-        <h1 class="govuk-heading-xl">@Model.ProviderName</h1>
+        <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">@Model.ProviderName</h1>
         <p class="govuk-hint">UKPRN: @Model.ProviderId</p>
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-    </div>
-</div>
+
 
 
 <div class="das-cards">
@@ -199,7 +179,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h3 class="govuk-heading-m">Instructions for the apprentices' employer</h3>
-        <p>Employers need to <a href="https://www.gov.uk/guidance/manage-apprenticeship-funds" target="_blank" rel="noopener" title="Register to manage their apprenticeship funds">register to manage their apprenticeship funds</a>. </p>
+        <p>Employers need to <a href="https://www.gov.uk/guidance/manage-apprenticeship-funds" target="_blank" rel="noopener" class="govuk-link">register to manage their apprenticeship funds</a>. </p>
         <p>Once they've registered they need to:</p>
         <ol class="govuk-list govuk-list--number">
             <li>Add the PAYE schemes that the apprentices will be paid through.</li>
