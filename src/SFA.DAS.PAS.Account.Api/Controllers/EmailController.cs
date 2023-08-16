@@ -22,7 +22,7 @@ public class EmailController : Controller
 
     [HttpPost]
     [Route("{ukprn}/send")]
-    public async Task<IActionResult> SendEmailToAllProviderRecipients(long ukprn, ProviderEmailRequest request)
+    public async Task<IActionResult> SendEmailToAllProviderRecipients([FromRoute]long ukprn, [FromBody] ProviderEmailRequest request)
     {
         try
         {

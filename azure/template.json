@@ -126,7 +126,8 @@
       "type": "string"
     },
     "elasticPoolName": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": ""
     },
     "databaseSkuName": {
       "type": "string"

@@ -19,19 +19,17 @@ public class BackgroundNotificationService : IBackgroundNotificationService
         _notificationsApi = notificationsApi;
     }
 
-    public Task SendEmail(Email email)
+    public async Task SendEmail(Email email)
     {
         _logger.LogDebug("Sending email with ID: [{SystemId}] in a background task.", email.SystemId);
 
         try
         {
-            _notificationsApi.SendEmail(email);
+            await _notificationsApi.SendEmail(email);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error using the Notification Api when trying to send email with ID: [{SystemId}].", email.SystemId);
         }
-
-        return Task.CompletedTask;
     }
 }

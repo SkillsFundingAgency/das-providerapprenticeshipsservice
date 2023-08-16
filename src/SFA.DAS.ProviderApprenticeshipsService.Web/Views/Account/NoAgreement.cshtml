@@ -1,20 +1,5 @@
 ﻿@model SFA.DAS.ProviderApprenticeshipsService.Web.Models.AccountHomeViewModel
 
-@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
-@section breadcrumb {
-    <partial name="_BreadCrumbs" />
-}
-
-@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
-@section Styles {
-    <link href="/css/app.css" rel="stylesheet" no-cdn />    
-}
-
-@* ReSharper disable once Razor.SectionNotResolved - in shared provider layout *@
-@section Scripts {
-    <script src="/js/site.js" no-cdn></script>
-}
-
 @{
     ViewBag.Title = @Model.ProviderName;
     ViewBag.PageId = "account-noagreement";

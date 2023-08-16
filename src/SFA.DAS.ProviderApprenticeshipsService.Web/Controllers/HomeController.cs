@@ -9,7 +9,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 
-[Route("{controller}")]
+[Route("")]
 public class HomeController : Controller
 {
     private readonly IAuthenticationOrchestrator _authenticationOrchestrator;
@@ -36,6 +36,12 @@ public class HomeController : Controller
         // if the DfESignIn is enabled, then redirect the user to the Start Page.
         if (!_providerApprenticeshipsServiceConfiguration.UseDfESignIn) return RedirectToRoute(RouteNames.AccountHome);
 
+        return View();
+    }
+
+    [Route("terms", Name = "terms")]
+    public ActionResult Terms()
+    {
         return View();
     }
 
