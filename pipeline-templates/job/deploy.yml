@@ -58,7 +58,6 @@ jobs:
             ServiceConnection: ${{ parameters.AppRoleAssignmentsServiceConnection }}
             ResourceName: $(UiAppServiceName)
             Tenant: $(Tenant)
-            AADGroupObjectIdArray: $(AdminAADGroupObjectId),$(DevAADGroupObjectId)
             IsMultiRepoCheckout: true
         - template: azure-pipelines-templates/deploy/step/sql-dacpac-deploy.yml@das-platform-building-blocks
           parameters:
