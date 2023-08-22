@@ -23,10 +23,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void Forbidden_Shows_Correct_View_When_UseDfESignIn_True()
+        [TestCase("test", "https://test-services.signin.education.gov.uk/organisations")]
+        [TestCase("pp", "https://test-services.signin.education.gov.uk/organisations")]
+        [TestCase("local", "https://test-services.signin.education.gov.uk/organisations")]
+        [TestCase("prd", "https://services.signin.education.gov.uk/organisations")]
+        public void Forbidden_Shows_Correct_View_When_UseDfESignIn_True(string env, string helpLink)
         {
             //arrange
-            _mockConfiguration.Setup(x => x["ResourceEnvironmentName"]).Returns("test");
+            _mockConfiguration.Setup(x => x["ResourceEnvironmentName"]).Returns(env);
             _providerApprenticeshipsServiceConfiguration.UseDfESignIn = true;
 
             //sut
@@ -34,7 +38,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
 
             Assert.That(actual, Is.Not.Null);
             var actualModel = actual?.Model as Error403ViewModel;
-            Assert.AreEqual("https://test-services.signin.education.gov.uk/organisations", actualModel?.HelpPageLink);
+            Assert.AreEqual(helpLink, actualModel?.HelpPageLink);
         }
     }
 }
