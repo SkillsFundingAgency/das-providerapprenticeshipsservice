@@ -38,7 +38,7 @@ public class AccountController : BaseController
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         await HttpContext.SignOutAsync(authScheme, new AuthenticationProperties
         {
-            RedirectUri = ""
+            RedirectUri = "/"
         });
     }
 
