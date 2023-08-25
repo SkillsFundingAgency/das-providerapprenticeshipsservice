@@ -36,10 +36,7 @@ public class AccountController : BaseController
             : WsFederationDefaults.AuthenticationScheme;
 
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        await HttpContext.SignOutAsync(authScheme, new AuthenticationProperties
-        {
-            RedirectUri = "/"
-        });
+        await HttpContext.SignOutAsync(authScheme, new AuthenticationProperties());
     }
 
     [HttpGet]

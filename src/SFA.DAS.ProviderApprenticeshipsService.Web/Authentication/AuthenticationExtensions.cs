@@ -20,7 +20,7 @@ public static class AuthenticationExtensions
                 "SFA.DAS.ProviderApprenticeshipService",
                 typeof(CustomServiceRole),
                 "ProviderRoATP",
-                "/signout-callback-oidc",
+                "/signout",
                 "/");
         }
         else
