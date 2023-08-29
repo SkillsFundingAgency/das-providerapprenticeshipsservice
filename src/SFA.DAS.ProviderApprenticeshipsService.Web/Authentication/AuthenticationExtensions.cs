@@ -21,7 +21,7 @@ public static class AuthenticationExtensions
                 typeof(CustomServiceRole),
                 "ProviderRoATP",
                 "/signout",
-                "/");
+                "");
         }
         else
         {
