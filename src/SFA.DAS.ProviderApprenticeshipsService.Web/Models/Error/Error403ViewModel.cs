@@ -6,13 +6,13 @@
 
         public Error403ViewModel(string environment)
         {
-            if (!environment.Equals("prd", StringComparison.CurrentCultureIgnoreCase))
+            if (!string.IsNullOrEmpty(environment) && !environment.Equals("prd", StringComparison.CurrentCultureIgnoreCase))
             {
                 _integrationUrlPart = "test-";
             }
         }
 
         public bool UseDfESignIn { get; set; }
-        public string HelpPageLink => $"https://{_integrationUrlPart}services.signin.education.gov.uk/organisations";
+        public string HelpPageLink => $"https://{_integrationUrlPart}services.signin.education.gov.uk/approvals/select-organisation?action=request-service";
     }
 }

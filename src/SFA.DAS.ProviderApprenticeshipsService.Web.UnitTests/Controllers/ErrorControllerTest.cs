@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Error;
@@ -23,22 +22,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
         }
 
         [Test]
-        [TestCase("test", "https://test-services.signin.education.gov.uk/organisations")]
-        [TestCase("pp", "https://test-services.signin.education.gov.uk/organisations")]
-        [TestCase("local", "https://test-services.signin.education.gov.uk/organisations")]
-        [TestCase("prd", "https://services.signin.education.gov.uk/organisations")]
-        public void Forbidden_Shows_Correct_View_When_UseDfESignIn_True(string env, string helpLink)
+        [TestCase("test", "https://test-services.signin.education.gov.uk/approvals/select-organisation?action=request-service", true)]
+        [TestCase("pp", "https://test-services.signin.education.gov.uk/approvals/select-organisation?action=request-service", true)]
+        [TestCase("local", "https://test-services.signin.education.gov.uk/approvals/select-organisation?action=request-service", false)]
+        [TestCase("prd", "https://services.signin.education.gov.uk/approvals/select-organisation?action=request-service", false)]
+        public void Forbidden_Shows_Correct_View_When_UseDfESignIn_True(string env, string helpLink, bool useDfESignIn)
         {
             //arrange
             _mockConfiguration.Setup(x => x["ResourceEnvironmentName"]).Returns(env);
-            _providerApprenticeshipsServiceConfiguration.UseDfESignIn = true;
+            _providerApprenticeshipsServiceConfiguration.UseDfESignIn = useDfESignIn;
 
             //sut
-            var actual = _controller.Forbidden() as ViewResult;
+            var actual = _controller.Forbidden();
 
             Assert.That(actual, Is.Not.Null);
             var actualModel = actual?.Model as Error403ViewModel;
             Assert.AreEqual(helpLink, actualModel?.HelpPageLink);
+            Assert.AreEqual(useDfESignIn, actualModel?.UseDfESignIn);
         }
     }
 }
