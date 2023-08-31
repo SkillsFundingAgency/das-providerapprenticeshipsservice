@@ -29,26 +29,54 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void Index_When_DfESignIn_True_ShouldReturnHomeView()
+        public void Index_When_DfESignIn_False_And_User_Not_Authenticated_ShouldRedirectToAccount()
         {
             //arrange
-            _providerApprenticeshipsServiceConfiguration.UseDfESignIn = true;
+            _providerApprenticeshipsServiceConfiguration.UseDfESignIn = false;
             _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object);
+            _sut.ControllerContext.HttpContext = new DefaultHttpContext { User = null! };
 
             // sut
             var result = _sut.Index();
 
-            var vr = result as ViewResult;
+            // assert
+            var vr = result as RedirectToRouteResult;
+
+            vr.Should().NotBeNull();
+            vr.RouteName.Should().NotBeNullOrEmpty();
+            vr.RouteName.Should().Be(RouteNames.AccountHome);
+        }
+
+        [Test, AutoData]
+        public void Index_When_DfESignIn_True_And_User_Authenticated_ShouldRedirectToAccount(
+            string nameIdentifier,
+            string name,
+            string authType)
+        {
+            //arrange
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
+                new(ClaimTypes.NameIdentifier, nameIdentifier),
+                new(ClaimTypes.Name, name)
+            }, authType));
+            _providerApprenticeshipsServiceConfiguration.UseDfESignIn = true;
+            _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object);
+            _sut.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+            // sut
+            var result = _sut.Index();
 
             // assert
+            var vr = result as RedirectToRouteResult;
+
             vr.Should().NotBeNull();
+            vr.RouteName.Should().NotBeNullOrEmpty();
+            vr.RouteName.Should().Be(RouteNames.AccountHome);
         }
 
         [Test]
         public void Index_When_DfESignIn_False_ShouldRedirectToAccount()
         {
             //arrange
-
             _providerApprenticeshipsServiceConfiguration.UseDfESignIn = false;
             _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object);
 
