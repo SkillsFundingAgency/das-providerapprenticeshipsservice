@@ -33,8 +33,9 @@ public class HomeController : Controller
     [Route("/", Name = RouteNames.Home)]
     public IActionResult Index()
     {
-        // if the DfESignIn is enabled, then redirect the user to the Start Page.
-        if (!_providerApprenticeshipsServiceConfiguration.UseDfESignIn) return RedirectToRoute(RouteNames.AccountHome);
+        // if the DfESignIn is enabled or user is authenticated, then redirect the user to the Start Page.
+        if (!_providerApprenticeshipsServiceConfiguration.UseDfESignIn || User.Identity is { IsAuthenticated: true }) 
+            return RedirectToRoute(RouteNames.AccountHome);
 
         return View();
     }
