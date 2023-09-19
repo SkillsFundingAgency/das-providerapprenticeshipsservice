@@ -16,6 +16,7 @@ public static class ApplicationServiceRegistrations
     {
         services.AddConfigurations(configuration);
         services.AddAccountApiClient(configuration);
+        services.AddRecruitApi(configuration);
         services.AddDataRepositories();
         services.AddCommitmentsV2ApiClient(configuration);
         services.AddContentApi(configuration);

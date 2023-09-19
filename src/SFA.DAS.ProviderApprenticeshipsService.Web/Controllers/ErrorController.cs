@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using SFA.DAS.Provider.Shared.UI.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Error;
 
@@ -47,5 +48,12 @@ public class ErrorController : Controller
     public ActionResult InvalidState()
     {
         return View("_InvalidState");
+    }
+
+    [Route("error/401")]
+    [HideNavigationBar(hideAccountHeader: false, hideNavigationLinks: true)]
+    public ViewResult UnAuthorized()
+    {
+        return View("_Error401");
     }
 }
