@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Logging;
@@ -16,7 +15,7 @@ public static class ApplicationServiceRegistrations
     {
         services.AddConfigurations(configuration);
         services.AddAccountApiClient(configuration);
-        services.AddRecruitApi(configuration);
+        services.AddTrainingProviderApi(configuration);
         services.AddDataRepositories();
         services.AddCommitmentsV2ApiClient(configuration);
         services.AddContentApi(configuration);

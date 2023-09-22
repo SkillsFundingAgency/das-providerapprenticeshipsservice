@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.TrainingProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
@@ -11,25 +10,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authentication
     public class TrainingProviderAuthorizationHandlerTest
     {
         [Test, MoqAutoData]
-        public async Task Then_The_Provider_Is_Valid_And_True_Returned(
+        public async Task Then_The_ProviderStatus_Is_Valid_And_True_Returned(
             long ukprn,
-            GetProviderResponseItem apiResponse,
-            [Frozen] Mock<ITrainingProviderService> trainingProviderService,
+            GetProviderStatusResult apiResponse,
+            [Frozen] Mock<ITrainingProviderApiClient> trainingProviderApiClient,
             [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             AuthorizationHandlerContext context,
             TrainingProviderAuthorizationHandler handler)
         {
             //Arrange
-            apiResponse.ProviderTypeId = (int) ProviderTypeIdentifier.MainProvider;
-            apiResponse.StatusId = (int) ProviderStatusType.Active;
+            apiResponse.IsValidProvider = true;
             var claims = new List<Claim>()
             {
                 new Claim(DasClaimTypes.Ukprn, ukprn.ToString()),
             };
             var identity = new ClaimsIdentity(claims, "TestAuthType");
             httpContextAccessor.Setup(x => x.HttpContext.User.Identity).Returns(identity);
-            trainingProviderService
-                .Setup(x => x.GetProviderDetails(ukprn)).ReturnsAsync(apiResponse);
+            trainingProviderApiClient.Setup(x => x.GetProviderStatus(ukprn)).ReturnsAsync(apiResponse);
 
             //Act
             var actual = await handler.IsProviderAuthorized(context, true);
@@ -39,25 +36,48 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authentication
         }
 
         [Test, MoqAutoData]
-        public async Task Then_The_Provider_Is_InValid_And_False_Returned(
+        public async Task Then_The_ProviderStatus_Is_InValid_And_False_Returned(
             long ukprn,
-            GetProviderResponseItem apiResponse,
-            [Frozen] Mock<ITrainingProviderService> trainingProviderService,
+            GetProviderStatusResult apiResponse,
+            [Frozen] Mock<ITrainingProviderApiClient> trainingProviderApiClient,
             [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             AuthorizationHandlerContext context,
             TrainingProviderAuthorizationHandler handler)
         {
             //Arrange
-            apiResponse.ProviderTypeId = (int)ProviderTypeIdentifier.EPAO;
-            apiResponse.StatusId = (int)ProviderStatusType.ActiveButNotTakingOnApprentices;
+            apiResponse.IsValidProvider = false;
             var claims = new List<Claim>()
             {
                 new Claim(DasClaimTypes.Ukprn, ukprn.ToString()),
             };
             var identity = new ClaimsIdentity(claims, "TestAuthType");
             httpContextAccessor.Setup(x => x.HttpContext.User.Identity).Returns(identity);
-            trainingProviderService
-                .Setup(x => x.GetProviderDetails(ukprn)).ReturnsAsync(apiResponse);
+            trainingProviderApiClient.Setup(x => x.GetProviderStatus(ukprn)).ReturnsAsync(apiResponse);
+
+            //Act
+            var actual = await handler.IsProviderAuthorized(context, true);
+
+            //Assert
+            actual.Should().BeFalse();
+        }
+
+        [Test, MoqAutoData]
+        public async Task Then_The_ProviderStatus_Is_Null_And_False_Returned(
+            long ukprn,
+            GetProviderStatusResult apiResponse,
+            [Frozen] Mock<ITrainingProviderApiClient> trainingProviderApiClient,
+            [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
+            AuthorizationHandlerContext context,
+            TrainingProviderAuthorizationHandler handler)
+        {
+            //Arrange
+            var claims = new List<Claim>()
+            {
+                new Claim(DasClaimTypes.Ukprn, ukprn.ToString()),
+            };
+            var identity = new ClaimsIdentity(claims, "TestAuthType");
+            httpContextAccessor.Setup(x => x.HttpContext.User.Identity).Returns(identity);
+            trainingProviderApiClient.Setup(x => x.GetProviderStatus(ukprn)).ReturnsAsync((GetProviderStatusResult)null);
 
             //Act
             var actual = await handler.IsProviderAuthorized(context, true);
