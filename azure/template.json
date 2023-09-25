@@ -119,6 +119,9 @@
     "useStubProviderRelationships": {
       "type": "string"
     },
+    "UseStubProviderValidation": {
+      "type": "string"
+    },
     "sharedManagementResourceGroup": {
       "type": "string"
     },
@@ -456,6 +459,10 @@
                 {
                   "name": "UseStubProviderRelationships",
                   "value": "[parameters('useStubProviderRelationships')]"
+                },
+                {
+                  "name": "UseStubProviderValidation",
+                  "value": "[parameters('useStubProviderValidation')]"
                 },
                 {
                   "name": "FeatureToggle.ManageReservations",

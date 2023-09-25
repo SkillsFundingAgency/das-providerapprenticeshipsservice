@@ -17,6 +17,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication
         /// <returns>boolean.</returns>
         Task<bool> IsProviderAuthorized(AuthorizationHandlerContext context, bool allowAllUserRoles);
     }
+
+    // <inherit-doc />
     public class TrainingProviderAuthorizationHandler : ITrainingProviderAuthorizationHandler
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -30,6 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication
             _trainingProviderApiClient = trainingProviderApiClient;
         }
 
+        // <inherit-doc />
         public async Task<bool> IsProviderAuthorized(AuthorizationHandlerContext context, bool allowAllUserRoles)
         {
             var ukprn = GetProviderId();
