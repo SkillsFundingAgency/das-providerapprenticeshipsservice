@@ -120,8 +120,7 @@
       "type": "string"
     },
     "UseStubProviderValidation": {
-      "type": "string",
-      "defaultValue": "false"
+      "type": "string"
     },
     "sharedManagementResourceGroup": {
       "type": "string"
