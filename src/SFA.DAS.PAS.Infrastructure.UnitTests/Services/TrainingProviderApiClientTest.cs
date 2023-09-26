@@ -44,52 +44,52 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Services
         }
 
         [Test]
-        public async Task When_ProviderStatus_Found_Then_Data_FromOuterApiIsReturned()
+        public async Task When_ProviderDetails_Found_Then_Data_FromOuterApiIsReturned()
         {
             // Arrange
             var ukprn = _fixture.Create<long>();
-            var expected = _fixture.Create<GetProviderStatusResult>();
+            var expected = _fixture.Create<GetProviderSummaryResult>();
 
-            _mockHttp.When($"{OuterApiBaseAddress}/api/providers/{ukprn}/validate")
+            _mockHttp.When($"{OuterApiBaseAddress}/api/providers/{ukprn}")
                 .Respond("application/json", 
                     JsonSerializer.Serialize(expected));
 
             // Act
-            var actual = await _sut.GetProviderStatus(ukprn);
+            var actual = await _sut.GetProviderDetails(ukprn);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
-        public async Task When_ProviderStatus_NotFound_Then_Data_FromOuterApiIsNotFound()
+        public async Task When_ProviderDetails_NotFound_Then_Data_FromOuterApiIsNotFound()
         {
             // Arrange
             var ukprn = _fixture.Create<long>();
-            _mockHttp.When($"{OuterApiBaseAddress}/api/providers/{ukprn}/validate")
+            _mockHttp.When($"{OuterApiBaseAddress}/api/providers/{ukprn}")
                 .Respond("application/json", 
-                    JsonSerializer.Serialize((GetProviderStatusResult)null));
+                    JsonSerializer.Serialize((GetProviderSummaryResult)null));
 
             // Act
-            var actual = await _sut.GetProviderStatus(ukprn);
+            var actual = await _sut.GetProviderDetails(ukprn);
 
             // Assert
             actual.Should().BeNull();
         }
 
         [Test]
-        public async Task When_ProviderStatus_InternalServerError_Then_Data_FromOuterApiIsNotFound()
+        public async Task When_ProviderDetails_InternalServerError_Then_Data_FromOuterApiIsNotFound()
         {
             // Arrange
             var ukprn = _fixture.Create<long>();
 
             var error = @"{""Code"":""ServiceUnavailable"", ""Message"" : ""Service Unavailable.""}";
 
-            _mockHttp.When(HttpMethod.Get, $"{OuterApiBaseAddress}/api/providers/{ukprn}/validate")
+            _mockHttp.When(HttpMethod.Get, $"{OuterApiBaseAddress}/api/providers/{ukprn}")
                 .Respond(HttpStatusCode.InternalServerError, "application/json", JsonSerializer.Serialize(error));
 
             // Act
-            var actual = await _sut.GetProviderStatus(ukprn);
+            var actual = await _sut.GetProviderDetails(ukprn);
 
             // Assert
             actual.Should().BeNull();

@@ -20,7 +20,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
             var isStubProviderValidationEnabled = GetUseStubProviderValidationSetting();
 
             // logic to check if the provider is authorized if not redirect the user to 401 un-authorized page.
-            if (isStubProviderValidationEnabled && !(await _handler.IsProviderAuthorized(context, true)))
+            if (!isStubProviderValidationEnabled && !(await _handler.IsProviderAuthorized(context, true)))
             {
                 var mvcContext = context.Resource as DefaultHttpContext;
                 mvcContext?.Response.Redirect("/error/401");

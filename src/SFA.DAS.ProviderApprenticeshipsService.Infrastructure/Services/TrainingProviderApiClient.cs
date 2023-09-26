@@ -32,11 +32,11 @@ public class TrainingProviderApiClient : ITrainingProviderApiClient
     /// </summary>
     /// <param name="providerId">ukprn number.</param>
     /// <returns>GetProviderStatusResult</returns>
-    public async Task<GetProviderStatusResult> GetProviderStatus(long providerId)
+    public async Task<GetProviderSummaryResult> GetProviderDetails(long providerId)
     {
-        _logger.LogInformation("Getting Training Provider Status for ukprn:{0} returned OK", providerId);
+        _logger.LogInformation("Getting Training Provider Details for ukprn:{0} returned OK", providerId);
 
-        var url = $"{BaseUrl()}api/providers/{providerId}/validate";
+        var url = $"{BaseUrl()}api/providers/{providerId}";
         var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
 
         await AddAuthenticationHeader(requestMessage);
@@ -47,7 +47,7 @@ public class TrainingProviderApiClient : ITrainingProviderApiClient
             case HttpStatusCode.OK:
                 _logger.LogInformation("{Url} returned OK", url);
                 var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                return JsonConvert.DeserializeObject<GetProviderStatusResult>(json);
+                return JsonConvert.DeserializeObject<GetProviderSummaryResult>(json);
             case HttpStatusCode.NotFound:
                 _logger.LogInformation("{Url} returned not found status code", url);
                 return default;

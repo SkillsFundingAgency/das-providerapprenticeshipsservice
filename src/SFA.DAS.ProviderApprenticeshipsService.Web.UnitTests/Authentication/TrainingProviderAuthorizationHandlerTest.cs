@@ -12,21 +12,21 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authentication
         [Test, MoqAutoData]
         public async Task Then_The_ProviderStatus_Is_Valid_And_True_Returned(
             long ukprn,
-            GetProviderStatusResult apiResponse,
+            GetProviderSummaryResult apiResponse,
             [Frozen] Mock<ITrainingProviderApiClient> trainingProviderApiClient,
             [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             AuthorizationHandlerContext context,
             TrainingProviderAuthorizationHandler handler)
         {
             //Arrange
-            apiResponse.IsValidProvider = true;
+            apiResponse.CanAccessApprenticeshipService = true;
             var claims = new List<Claim>()
             {
                 new Claim(DasClaimTypes.Ukprn, ukprn.ToString()),
             };
             var identity = new ClaimsIdentity(claims, "TestAuthType");
             httpContextAccessor.Setup(x => x.HttpContext.User.Identity).Returns(identity);
-            trainingProviderApiClient.Setup(x => x.GetProviderStatus(ukprn)).ReturnsAsync(apiResponse);
+            trainingProviderApiClient.Setup(x => x.GetProviderDetails(ukprn)).ReturnsAsync(apiResponse);
 
             //Act
             var actual = await handler.IsProviderAuthorized(context, true);
@@ -36,23 +36,23 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authentication
         }
 
         [Test, MoqAutoData]
-        public async Task Then_The_ProviderStatus_Is_InValid_And_False_Returned(
+        public async Task Then_The_ProviderDetails_Is_InValid_And_False_Returned(
             long ukprn,
-            GetProviderStatusResult apiResponse,
+            GetProviderSummaryResult apiResponse,
             [Frozen] Mock<ITrainingProviderApiClient> trainingProviderApiClient,
             [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             AuthorizationHandlerContext context,
             TrainingProviderAuthorizationHandler handler)
         {
             //Arrange
-            apiResponse.IsValidProvider = false;
+            apiResponse.CanAccessApprenticeshipService = false;
             var claims = new List<Claim>()
             {
                 new Claim(DasClaimTypes.Ukprn, ukprn.ToString()),
             };
             var identity = new ClaimsIdentity(claims, "TestAuthType");
             httpContextAccessor.Setup(x => x.HttpContext.User.Identity).Returns(identity);
-            trainingProviderApiClient.Setup(x => x.GetProviderStatus(ukprn)).ReturnsAsync(apiResponse);
+            trainingProviderApiClient.Setup(x => x.GetProviderDetails(ukprn)).ReturnsAsync(apiResponse);
 
             //Act
             var actual = await handler.IsProviderAuthorized(context, true);
@@ -62,9 +62,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authentication
         }
 
         [Test, MoqAutoData]
-        public async Task Then_The_ProviderStatus_Is_Null_And_False_Returned(
+        public async Task Then_The_ProviderDetails_Is_Null_And_False_Returned(
             long ukprn,
-            GetProviderStatusResult apiResponse,
             [Frozen] Mock<ITrainingProviderApiClient> trainingProviderApiClient,
             [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             AuthorizationHandlerContext context,
@@ -77,7 +76,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authentication
             };
             var identity = new ClaimsIdentity(claims, "TestAuthType");
             httpContextAccessor.Setup(x => x.HttpContext.User.Identity).Returns(identity);
-            trainingProviderApiClient.Setup(x => x.GetProviderStatus(ukprn)).ReturnsAsync((GetProviderStatusResult)null);
+            trainingProviderApiClient.Setup(x => x.GetProviderDetails(ukprn)).ReturnsAsync((GetProviderSummaryResult)null);
 
             //Act
             var actual = await handler.IsProviderAuthorized(context, true);

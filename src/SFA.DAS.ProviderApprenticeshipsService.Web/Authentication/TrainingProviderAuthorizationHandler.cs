@@ -36,8 +36,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication
         public async Task<bool> IsProviderAuthorized(AuthorizationHandlerContext context, bool allowAllUserRoles)
         {
             var ukprn = GetProviderId();
-            var providerStatus = await _trainingProviderApiClient.GetProviderStatus(ukprn);
-            return providerStatus is { IsValidProvider: true };
+            var providerDetails = await _trainingProviderApiClient.GetProviderDetails(ukprn);
+
+            // Condition to check if the Provider Details has permission to access Apprenticeship Services based on the property value "CanAccessApprenticeshipService" set to True.
+            return providerDetails is { CanAccessApprenticeshipService: true };
         }
 
         private long GetProviderId()
