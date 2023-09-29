@@ -38,10 +38,10 @@ public class CommitmentsApiClientV2Configuration : IManagedIdentityClientConfigu
     public string IdentifierUri { get; set; }
 }
 
-public class TrainingProviderApiClientConfiguration : IManagedIdentityClientConfiguration
+public record TrainingProviderApiClientConfiguration : IManagedIdentityClientConfiguration
 {
-    public string ApiBaseUrl { get; set; }
-    public string IdentifierUri { get; set; }
+    public string ApiBaseUrl { get; init; }
+    public string IdentifierUri { get; init; }
 }
 
 public interface IProviderNotificationConfiguration

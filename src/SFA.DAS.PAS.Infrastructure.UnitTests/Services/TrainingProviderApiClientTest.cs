@@ -2,8 +2,8 @@
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Moq.Protected;
 using NUnit.Framework;
-using RichardSzalay.MockHttp;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.TrainingProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
@@ -11,6 +11,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.PAS.Infrastructure.UnitTests.Services
@@ -18,7 +19,7 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Services
     public class TrainingProviderApiClientTest
     {
         private const string OuterApiBaseAddress = "http://outer-api";
-        private MockHttpMessageHandler _mockHttp = null!;
+        private Mock<HttpMessageHandler> _mockHttpsMessageHandler = null!;
         private Fixture _fixture = null!;
         private TrainingProviderApiClient _sut = null!;
         private TrainingProviderApiClientConfiguration _config = null!;
@@ -28,19 +29,13 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Services
         public void SetUp()
         {
             _fixture = new Fixture();
-            _mockHttp = new MockHttpMessageHandler();
             _config = _fixture
                 .Build<TrainingProviderApiClientConfiguration>()
                 .With(x =>x.ApiBaseUrl, OuterApiBaseAddress)
                 .With(x => x.IdentifierUri, "")
-                .Create<TrainingProviderApiClientConfiguration>();
+                .Create();
             _logger = new Mock<ILogger<TrainingProviderApiClient>>();
-
-            var client = new HttpClient(_mockHttp)
-            {
-                BaseAddress = new Uri(OuterApiBaseAddress),
-            };
-            _sut = new TrainingProviderApiClient(client, _config, _logger.Object);
+            _mockHttpsMessageHandler = new Mock<HttpMessageHandler>();
         }
 
         [Test]
@@ -50,9 +45,19 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Services
             var ukprn = _fixture.Create<long>();
             var expected = _fixture.Create<GetProviderSummaryResult>();
 
-            _mockHttp.When($"{OuterApiBaseAddress}/api/providers/{ukprn}")
-                .Respond("application/json", 
-                    JsonSerializer.Serialize(expected));
+            _mockHttpsMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(JsonSerializer.Serialize(expected)),
+                    RequestMessage = new HttpRequestMessage()
+                });
+            var httpClient = new HttpClient(_mockHttpsMessageHandler.Object)
+            {
+                BaseAddress = new Uri(OuterApiBaseAddress),
+            };
+            _sut = new TrainingProviderApiClient(httpClient, _config, _logger.Object);
 
             // Act
             var actual = await _sut.GetProviderDetails(ukprn);
@@ -66,9 +71,19 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Services
         {
             // Arrange
             var ukprn = _fixture.Create<long>();
-            _mockHttp.When($"{OuterApiBaseAddress}/api/providers/{ukprn}")
-                .Respond("application/json", 
-                    JsonSerializer.Serialize((GetProviderSummaryResult)null));
+            _mockHttpsMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Content = new StringContent(""),
+                    RequestMessage = new HttpRequestMessage()
+                });
+            var httpClient = new HttpClient(_mockHttpsMessageHandler.Object)
+            {
+                BaseAddress = new Uri(OuterApiBaseAddress),
+            };
+            _sut = new TrainingProviderApiClient(httpClient, _config, _logger.Object);
 
             // Act
             var actual = await _sut.GetProviderDetails(ukprn);
@@ -83,10 +98,19 @@ namespace SFA.DAS.PAS.Infrastructure.UnitTests.Services
             // Arrange
             var ukprn = _fixture.Create<long>();
 
-            var error = @"{""Code"":""ServiceUnavailable"", ""Message"" : ""Service Unavailable.""}";
-
-            _mockHttp.When(HttpMethod.Get, $"{OuterApiBaseAddress}/api/providers/{ukprn}")
-                .Respond(HttpStatusCode.InternalServerError, "application/json", JsonSerializer.Serialize(error));
+            _mockHttpsMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Content = new StringContent(""),
+                    RequestMessage = new HttpRequestMessage()
+                });
+            var httpClient = new HttpClient(_mockHttpsMessageHandler.Object)
+            {
+                BaseAddress = new Uri(OuterApiBaseAddress),
+            };
+            _sut = new TrainingProviderApiClient(httpClient, _config, _logger.Object);
 
             // Act
             var actual = await _sut.GetProviderDetails(ukprn);

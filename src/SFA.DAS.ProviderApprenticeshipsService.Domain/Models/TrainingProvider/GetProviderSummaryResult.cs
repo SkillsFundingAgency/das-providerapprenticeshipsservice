@@ -10,6 +10,10 @@
         public string ContactUrl { get; set; }
         public int ProviderTypeId { get; set; }
         public int StatusId { get; set; }
+        /// <summary>
+        /// Gets or sets the CanAccessApprenticeshipService Property.
+        /// Property responsible for determining whether Provider is allowed to use PAS services.
+        /// </summary>
         public bool CanAccessApprenticeshipService { get; set; }
         public ProviderAddress Address { get; set; }
     }
