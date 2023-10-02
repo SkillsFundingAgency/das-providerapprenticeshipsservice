@@ -64,7 +64,7 @@
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageReference Include="Pipelines.Sockets.Unofficial" Version="2.2.8" />
-    <PackageReference Include="StackExchange.Redis" Version="2.6.116" />
+    <PackageReference Include="StackExchange.Redis" Version="2.6.122" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0" />
     <PackageReference Include="System.Threading.Channels" Version="7.0.0" />
