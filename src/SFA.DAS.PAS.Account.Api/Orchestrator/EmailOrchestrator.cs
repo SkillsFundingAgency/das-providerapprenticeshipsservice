@@ -36,7 +36,7 @@ public class EmailOrchestrator : IEmailOrchestrator
         }
         else
         {
-            recipients = accountUsers.Any(user => !user.IsSuperUser) 
+            recipients = accountUsers.Any(user => !user.IsSuperUser && user.ReceiveNotifications) 
                 ? accountUsers.Where(user => !user.IsSuperUser).Select(x => x.EmailAddress).ToList()
                 : accountUsers.Select(user => user.EmailAddress).ToList();
         }
