@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.Provider.Shared.UI.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Error;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
@@ -33,6 +34,14 @@ public class ErrorController : Controller
         {
             UseDfESignIn = _providerApprenticeshipsServiceConfiguration.UseDfESignIn
         });
+    }
+    
+    [Authorize(Policy = nameof(PolicyNames.AuthenticatedUser))]
+    [HideNavigationBar(hideAccountHeader: false, hideNavigationLinks: true)]
+    [Route("error/403/invalid-status")]
+    public ViewResult ForbiddenInvalidStatus()
+    {
+        return View("_Error401");
     }
 
     public ViewResult NotFound()
