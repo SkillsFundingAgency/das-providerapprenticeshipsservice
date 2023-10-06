@@ -27,7 +27,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization
             if (!isStubProviderValidationEnabled && !(await _handler.IsProviderAuthorized(context, true)))
             {
                 var mvcContext = context.Resource as DefaultHttpContext;
-                mvcContext?.Response.Redirect("/error/401");
+                mvcContext?.Response.Redirect("/error/403/invalid-status");
             }
 
             context.Succeed(requirement);

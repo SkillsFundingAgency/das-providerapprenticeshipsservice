@@ -21,36 +21,27 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication
     // <inherit-doc />
     public class TrainingProviderAuthorizationHandler : ITrainingProviderAuthorizationHandler
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ITrainingProviderApiClient _trainingProviderApiClient;
 
         public TrainingProviderAuthorizationHandler(
-            IHttpContextAccessor httpContextAccessor,
             ITrainingProviderApiClient trainingProviderApiClient)
         {
-            _httpContextAccessor = httpContextAccessor;
             _trainingProviderApiClient = trainingProviderApiClient;
         }
 
         // <inherit-doc />
         public async Task<bool> IsProviderAuthorized(AuthorizationHandlerContext context, bool allowAllUserRoles)
         {
-            var ukprn = GetProviderId();
+            if (!long.TryParse(context.User.Identity.GetClaim(DasClaimTypes.Ukprn),
+                    out var ukprn))
+            {
+                return false;
+            }
             
             var providerDetails = await _trainingProviderApiClient.GetProviderDetails(ukprn);
 
             // Condition to check if the Provider Details has permission to access Apprenticeship Services based on the property value "CanAccessApprenticeshipService" set to True.
             return providerDetails is { CanAccessApprenticeshipService: true };
         }
-
-        #region "Private Methods"
-        private long GetProviderId()
-        {
-            if (long.TryParse(_httpContextAccessor.HttpContext?.User.Identity.GetClaim(DasClaimTypes.Ukprn), out var providerId))
-                return providerId;
-
-            throw new InvalidOperationException("AuthorizationContextProvider error - Unable to extract ProviderId");
-        }
-        #endregion
     }
 }
