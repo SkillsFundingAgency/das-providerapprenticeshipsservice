@@ -12,4 +12,5 @@ public interface IUserRepository
     Task<IEnumerable<User>> GetUsers(long ukprn);
     Task DeleteUser(string userRef);
     Task SyncIdamsUsers(long ukprn, List<IdamsUser> idamsUsers);
+    Task<User> GetUserByEmail(string email);
 }
