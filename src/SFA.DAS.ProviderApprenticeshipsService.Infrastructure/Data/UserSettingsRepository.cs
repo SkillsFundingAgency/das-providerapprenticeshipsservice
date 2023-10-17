@@ -38,7 +38,7 @@ public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IU
                 return userSettings;
             }
             
-            sql = "SELECT top1 us.* FROM [dbo].[UserSettings] us inner join [dbo].[User] u on u.id = us.userid " +
+            sql = "SELECT top 1 us.* FROM [dbo].[UserSettings] us inner join [dbo].[User] u on u.id = us.userid " +
                   "WHERE u.Email = @email ordery by lastlogin desc";
             parameters.Add("@email", email, DbType.String);  
             userSettings = await connection.QueryAsync<UserSetting>(
