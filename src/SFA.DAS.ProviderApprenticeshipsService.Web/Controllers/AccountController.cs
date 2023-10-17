@@ -85,7 +85,7 @@ public class AccountController : BaseController
         var name = User.Identity.GetClaim(DasClaimTypes.Upn) ?? User.Identity.GetClaim(DasClaimTypes.DisplayName);
         foreach (var userNotificationSetting in model.NotificationSettings)
         {
-            userNotificationSetting.UserRef = name;
+            userNotificationSetting.Name = name;
         }
 
         return View(model);

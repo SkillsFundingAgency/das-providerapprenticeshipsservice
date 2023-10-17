@@ -5,13 +5,15 @@
 }
 
 <div class="govuk-grid-row">
+    
     <div class="govuk-grid-column-two-thirds">
+        <partial name="_ModalMessage" model="@Model"/>
         <form method="post">
             <h1 class="govuk-heading-xl">Notification settings</h1>
-            <p>Choose whether you want to receive cohort, apprentice and recruitment notification emails. These updates will be sent to the email address you use for 
+            <p>Choose whether you want to receive cohort, apprentice and recruitment notification emails. These updates will be sent to the email address you use for
                 <a target="_blank" rel="noopener noreferrer" href="https://profile.signin.education.gov.uk/" class="govuk-link">your DfE Sign-in account (opens in new tab)</a>.</p>
             <p>Changing these settings will not affect service emails, like password resets.</p>
-            
+
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
@@ -25,7 +27,7 @@
                 {
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell notification-row">
-                            @Model.NotificationSettings[i].UserRef
+                            @Model.NotificationSettings[i].Name
 
                             @Html.Hidden($"NotificationSettings[{i}].UserRef", Model.NotificationSettings[i].UserRef)
                         </td>
@@ -65,7 +67,7 @@
                 <button type="submit" class="govuk-button" id="submit-email-alerts">Update</button>
                 <a href="/" class="govuk-link govuk-link--no-visited-state">Cancel</a>
             </div>
-            
+
             <p><a asp-external-subdomain="recruit" asp-external-controller="" asp-external-action="notifications-manage" asp-external-id="@Model.ProviderId" class="govuk-link">Manage the notifications of your recruitment emails</a></p>
 
         </form>
