@@ -39,7 +39,7 @@ public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IU
             }
             
             sql = "SELECT top 1 us.* FROM [dbo].[UserSettings] us inner join [dbo].[User] u on u.id = us.userid " +
-                  "WHERE u.Email = @email ordery by lastlogin desc";
+                  "WHERE u.Email = @email order by lastlogin desc";
             parameters.Add("@email", email, DbType.String);  
             userSettings = await connection.QueryAsync<UserSetting>(
                 sql: sql,
