@@ -16,7 +16,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 public interface IAccountOrchestrator
 {
     Task<AccountHomeViewModel> GetAccountHomeViewModel(int providerId);
-    Task<NotificationSettingsViewModel> GetNotificationSettings(string userRef);
+    Task<NotificationSettingsViewModel> GetNotificationSettings(string userRef, string email);
     Task UpdateNotificationSettings(NotificationSettingsViewModel model);
     Task<SummaryUnsubscribeViewModel> Unsubscribe(string userRef, string urlSettingsPage);
 }
@@ -78,13 +78,14 @@ public class AccountOrchestrator : IAccountOrchestrator
         }
     }
 
-    public async Task<NotificationSettingsViewModel> GetNotificationSettings(string userRef)
+    public async Task<NotificationSettingsViewModel> GetNotificationSettings(string userRef, string email)
     {
         _logger.LogInformation("Getting setting for user {UserRef}", userRef);
 
         var response = await _mediator.Send(new GetUserNotificationSettingsQuery
         {
-            UserRef = userRef
+            UserRef = userRef,
+            Email = email
         });
 
         var model = new NotificationSettingsViewModel
