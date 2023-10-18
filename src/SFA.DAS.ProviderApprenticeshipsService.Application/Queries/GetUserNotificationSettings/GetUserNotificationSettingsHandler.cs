@@ -23,14 +23,14 @@ public class GetUserNotificationSettingsHandler : IRequestHandler<GetUserNotific
 
     public async Task<GetUserNotificationSettingsResponse> Handle(GetUserNotificationSettingsQuery message, CancellationToken cancellationToken)
     {
-        var userSettings = (await _userRepository.GetUserSetting(message.UserRef)).ToList();
+        var userSettings = (await _userRepository.GetUserSetting(message.UserRef, message.Email)).ToList();
 
         if (!userSettings.Any())
         {
             _logger.LogInformation("No settings found for user {UserRef}", message.UserRef);
                 
             await _userRepository.AddSettings(message.UserRef);
-            userSettings = (await _userRepository.GetUserSetting(message.UserRef)).ToList();
+            userSettings = (await _userRepository.GetUserSetting(message.UserRef, message.Email)).ToList();
 
             _logger.LogInformation("Created default settings for user {UserRef}", message.UserRef);
         }

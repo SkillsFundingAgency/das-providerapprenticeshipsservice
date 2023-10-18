@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Azure.Identity;
 using Dapper;
@@ -16,17 +17,36 @@ public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IU
     public UserSettingsRepository(IBaseConfiguration configuration, ILogger<UserSettingsRepository> logger) 
         : base(configuration.DatabaseConnectionString, logger) { }
 
-    public async Task<IEnumerable<UserSetting>> GetUserSetting(string userRef)
+    public async Task<IEnumerable<UserSetting>> GetUserSetting(string userRef, string email)
     {
         return await WithConnection(async connection =>
         {
+            IEnumerable<UserSetting> userSettings = null;
             var parameters = new DynamicParameters();
-            parameters.Add("@userRef", userRef, DbType.String);
+            var sql = "SELECT * FROM [dbo].[UserSettings] WHERE UserRef = @userRef";
+            if (!string.IsNullOrEmpty(userRef))
+            {
+                parameters.Add("@userRef", userRef, DbType.String);  
+                userSettings = await connection.QueryAsync<UserSetting>(
+                    sql: sql,
+                    param: parameters,
+                    commandType: CommandType.Text);
+            }
 
-            return await connection.QueryAsync<UserSetting>(
-                sql: "SELECT * FROM [dbo].[UserSettings] WHERE UserRef = @userRef",
+            if (userSettings != null && userSettings.Any())
+            {
+                return userSettings;
+            }
+            
+            sql = "SELECT top 1 us.* FROM [dbo].[UserSettings] us inner join [dbo].[User] u on u.id = us.userid " +
+                  "WHERE u.Email = @email order by lastlogin desc";
+            parameters.Add("@email", email, DbType.String);  
+            userSettings = await connection.QueryAsync<UserSetting>(
+                sql: sql,
                 param: parameters,
                 commandType: CommandType.Text);
+
+            return userSettings;
         });
     }
 

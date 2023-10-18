@@ -68,16 +68,24 @@ public class AccountController : BaseController
     [Route("~/notification-settings", Name = RouteNames.GetNotificationSettings)]
     public async Task<IActionResult> NotificationSettings()
     {
-        var userRef = User.Identity.GetClaim(DasClaimTypes.Upn);
+        var userRef = User.Identity.GetClaim(DasClaimTypes.Upn) ?? User.Identity.GetClaim("sub");
+        var email = User.Identity.GetClaim(DasClaimTypes.DfEEmail);
         var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
 
-        var model = await _accountOrchestrator.GetNotificationSettings(userRef);
+        
+        
+        var model = await _accountOrchestrator.GetNotificationSettings(userRef, email);
         model.ProviderId = providerId;
 
         var flashMessage = GetFlashMessageViewModelFromCookie();
         if (flashMessage != null)
         {
             model.FlashMessage = flashMessage;
+        }
+        var name = User.Identity.GetClaim(DasClaimTypes.Upn) ?? User.Identity.GetClaim(DasClaimTypes.DisplayName);
+        foreach (var userNotificationSetting in model.NotificationSettings)
+        {
+            userNotificationSetting.Name = name;
         }
 
         return View(model);

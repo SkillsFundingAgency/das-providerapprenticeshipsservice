@@ -107,4 +107,22 @@ public class UserRepository : BaseRepository<UserRepository>, IUserRepository
                 commandType: CommandType.StoredProcedure);
         });
     }
+
+    public async Task<User> GetUserByEmail(string email)
+    {
+        return await WithConnection(async connection =>
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@email", email, DbType.String);
+
+            var results =
+                await
+                    connection.QueryAsync<User>(
+                        sql: "SELECT TOP 1 * FROM [dbo].[User] WHERE Email = @email order by lastlogin desc",
+                        param: parameters,
+                        commandType: CommandType.Text);
+
+            return !results.Any() ? null : results.Single();
+        });
+    }
 }

@@ -82,7 +82,7 @@ public class WhenGettingAccountUsers
                 }
             });
 
-        _mockUserSettingsRepo.Setup(m => m.GetUserSetting(UserRef))
+        _mockUserSettingsRepo.Setup(m => m.GetUserSetting(UserRef,"email"))
             .ReturnsAsync(new List<UserSetting> { });
 
         // Act
@@ -112,7 +112,7 @@ public class WhenGettingAccountUsers
                 }
             });
 
-        _mockUserSettingsRepo.Setup(m => m.GetUserSetting(UserRef))
+        _mockUserSettingsRepo.Setup(m => m.GetUserSetting(UserRef, "email"))
             .ReturnsAsync(new List<UserSetting> { new()
                 {
                     ReceiveNotifications = true,

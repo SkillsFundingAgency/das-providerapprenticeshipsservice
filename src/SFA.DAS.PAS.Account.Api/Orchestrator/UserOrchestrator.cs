@@ -38,7 +38,7 @@ public class UserOrchestrator : IUserOrchestrator
             IsSuperUser = userResponse.IsSuperUser
         };
 
-        var userSetting = await GetUserSetting(userRef);
+        var userSetting = await GetUserSetting(userRef, userResponse.EmailAddress);
 
         if (userSetting != null)
         {
@@ -48,9 +48,9 @@ public class UserOrchestrator : IUserOrchestrator
         return user;
     }
 
-    private async Task<UserNotificationSetting> GetUserSetting(string userRef)
+    private async Task<UserNotificationSetting> GetUserSetting(string userRef, string email)
     {
-        var userSetting = await _mediator.Send(new GetUserNotificationSettingsQuery { UserRef = userRef });
+        var userSetting = await _mediator.Send(new GetUserNotificationSettingsQuery { UserRef = userRef, Email = email});
 
         var setting = userSetting.NotificationSettings.SingleOrDefault();
         

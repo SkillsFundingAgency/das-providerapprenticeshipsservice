@@ -22,6 +22,11 @@ public class UserIdentityService : IUserIdentityService
 
     public async Task<Unit> UpsertUserIdentityAttributes(string userId, long ukprn, string displayName, string email)
     {
+        var user = await _userRepository.GetUserByEmail(email);
+        if (user != null)
+        {
+            userId = user.UserRef;
+        }
         await _userRepository.Upsert(new User
         {
             UserRef = userId,
