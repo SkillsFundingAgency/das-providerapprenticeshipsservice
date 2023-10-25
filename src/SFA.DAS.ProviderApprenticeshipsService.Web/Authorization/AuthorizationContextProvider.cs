@@ -81,6 +81,6 @@ public class AuthorizationContextProvider : IAuthorizationContextProvider
 
     private string GetUserEmail()
     {
-        return _httpContextAccessor.HttpContext.User.Identity.GetClaim(DasClaimTypes.Email);
+        return _httpContextAccessor.HttpContext.User.Identity.GetClaim(DasClaimTypes.Email) ?? _httpContextAccessor.HttpContext.User.Identity.GetClaim(DasClaimTypes.DfEEmail);
     }
 }

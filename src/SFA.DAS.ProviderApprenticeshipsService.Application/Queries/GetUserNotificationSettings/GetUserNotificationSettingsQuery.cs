@@ -5,4 +5,5 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNoti
 public class GetUserNotificationSettingsQuery : IRequest<GetUserNotificationSettingsResponse>
 {
     public string UserRef { get; set; }
+    public string Email { get; set; }
 }

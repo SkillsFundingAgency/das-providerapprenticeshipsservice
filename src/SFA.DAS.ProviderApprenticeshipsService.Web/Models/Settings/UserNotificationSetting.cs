@@ -5,4 +5,5 @@ public class UserNotificationSetting
     public string UserRef { get; set; }
 
     public bool ReceiveNotifications { get; set; }
+    public string Name { get; set; }
 }

@@ -13,6 +13,7 @@ public class WhenGettingUserSettings
     private Mock<IUserSettingsRepository> _mockSettingsRepo;
     private Mock<ILogger<GetUserNotificationSettingsHandler>> _mockLogger;
     const string UserRef = "userRef";
+    private const string Email = "email@test.com";
 
     [SetUp]
     public void SetUp()
@@ -23,31 +24,33 @@ public class WhenGettingUserSettings
     }
 
     [Test]
-    public async Task ThenGettingUsersSettings()
+    public async Task ThenGettingUsersSettingsByRefWhenNotNull()
     {
-        _mockSettingsRepo.Setup(m => m.GetUserSetting(UserRef))
+        _mockSettingsRepo.Setup(m => m.GetUserSetting(UserRef, Email))
             .ReturnsAsync(
                 new List<UserSetting> { new() { ReceiveNotifications = true, UserId = 1, UserRef = UserRef } });
 
-        var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef = UserRef },
+        var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef = UserRef, Email = Email},
             new CancellationToken());
 
         result.NotificationSettings.Count.Should().Be(1);
 
-        _mockSettingsRepo.Verify(m => m.GetUserSetting(It.IsAny<string>()), Times.Once);
+        _mockSettingsRepo.Verify(m => m.GetUserSetting(UserRef, Email), Times.Once);
         result.NotificationSettings.First().Should().BeEquivalentTo(new UserNotificationSetting
             { UserRef = UserRef, ReceiveNotifications = true });
     }
+    
 
     [Test]
     public async Task ThenCreatingSettingsIfNoSettingsFoundGettingUsersSettings()
     {
-        var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef = UserRef },
+        var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef = UserRef, Email = Email},
             new CancellationToken());
 
         result.NotificationSettings.Count.Should().Be(0);
 
-        _mockSettingsRepo.Verify(m => m.AddSettings(It.IsAny<string>()), Times.Exactly(1));
-        _mockSettingsRepo.Verify(m => m.GetUserSetting(It.IsAny<string>()), Times.Exactly(2));
+        _mockSettingsRepo.Verify(m => m.AddSettings(UserRef), Times.Exactly(1));
+        _mockSettingsRepo.Verify(m => m.GetUserSetting(UserRef, Email), Times.Exactly(2));
     }
+    
 }
