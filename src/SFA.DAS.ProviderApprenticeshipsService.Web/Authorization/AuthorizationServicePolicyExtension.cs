@@ -19,13 +19,19 @@ public static class AuthorizationServicePolicyExtension
     public static void AddAuthorizationServicePolicies(this IServiceCollection services)
     {
         services.AddHttpContextAccessor();
+        
 
         services.AddAuthorization(options =>
         {
+            options.AddPolicy(PolicyNames.AuthenticatedUser, policy =>
+            {
+                policy.RequireAuthenticatedUser();
+            });
             options.AddPolicy(PolicyNames.RequireDasPermissionRole, policy =>
             {
                 policy.RequireAuthenticatedUser();
                 policy.RequireClaim(DasClaimTypes.Service, ProviderDaa, ProviderDab, ProviderDac, ProviderDav);
+                policy.Requirements.Add(new TrainingProviderAllRolesRequirement()); //Policy requirement to check if the signed provider is a Main or Employer Profile.
             });
         });
 
@@ -41,5 +47,7 @@ public static class AuthorizationServicePolicyExtension
         services.Decorate<IAuthorizationHandler, AuthorizationResultLogger>();
         services.AddScoped<IAuthorizationService, AuthorizationService>();
         services.AddSingleton<IDefaultAuthorizationHandler, DefaultAuthorizationHandler>();
+        services.AddSingleton<ITrainingProviderAuthorizationHandler, TrainingProviderAuthorizationHandler>();
+        services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, TrainingProviderAllRolesAuthorizationHandler>();
     }
 }

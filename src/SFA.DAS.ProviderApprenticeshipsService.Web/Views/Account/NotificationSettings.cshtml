@@ -4,60 +4,71 @@
     ViewBag.PageId = "notification-settings";
 }
 
+<partial name="_ModalMessage" model="@Model" />
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form method="post">
             <h1 class="govuk-heading-xl">Notification settings</h1>
-            <p>Choose whether you want to receive cohort, apprentice and recruitment notification emails. These updates will be sent to the email address you use for 
-                <a target="_blank" rel="noopener noreferrer" href="https://profile.signin.education.gov.uk/" class="govuk-link">your DfE Sign-in account (opens in new tab)</a>.</p>
+            <p>Choose whether you want to receive cohort, apprentice and recruitment notification emails. These updates
+                will be sent to the email address you use for
+                <a target="_blank" rel="noopener noreferrer" href="https://profile.signin.education.gov.uk/"
+                    class="govuk-link">your DfE Sign-in account (opens in new tab)</a>.
+            </p>
             <p>Changing these settings will not affect service emails, like password resets.</p>
-            
+
             <table class="govuk-table">
                 <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header">Account name</th>
-                    <th scope="col" class="govuk-table__header">Emails</th>
-                    <th scope="col" class="govuk-table__header">No emails</th>
-                </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Account name</th>
+                        <th scope="col" class="govuk-table__header">Emails</th>
+                        <th scope="col" class="govuk-table__header">No emails</th>
+                    </tr>
                 </thead>
                 <tbody class="govuk-table__body">
-                @for (var i = 0; i < Model.NotificationSettings.Count; i++)
-                {
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell notification-row">
-                            @Model.NotificationSettings[i].UserRef
+                    @for (var i = 0; i < Model.NotificationSettings.Count; i++)
+                    {
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell notification-row">
+                                @Model.NotificationSettings[i].Name
 
-                            @Html.Hidden($"NotificationSettings[{i}].UserRef", Model.NotificationSettings[i].UserRef)
-                        </td>
+                                @Html.Hidden($"NotificationSettings[{i}].UserRef", Model.NotificationSettings[i].UserRef)
+                            </td>
 
-                        <td class="govuk-table__cell notification-row">
+                            <td class="govuk-table__cell notification-row">
 
-                            @{
-                                var trueId = $"NotificationSettings[{i}].ReceiveNotifications-true";
-                                var falseId = $"NotificationSettings[{i}].ReceiveNotifications-false";
-                            }
+                                @{
+                                    var trueId = $"NotificationSettings[{i}].ReceiveNotifications-true";
+                                    var falseId = $"NotificationSettings[{i}].ReceiveNotifications-false";
+                                }
 
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="@trueId" asp-for="@Model.NotificationSettings[i].ReceiveNotifications" checked="@Model.NotificationSettings[i].ReceiveNotifications" type="radio" value="@bool.TrueString"/>
-                                <label class="govuk-label govuk-radios__label" for="@trueId">
-                                    <span class="govuk-visually-hidden">Send emails</span>
-                                </label>
-                            </div>
+                                <div class="govuk-radios__item">
+                                    <input class="govuk-radios__input" id="@trueId"
+                                        asp-for="@Model.NotificationSettings[i].ReceiveNotifications"
+                                        checked="@Model.NotificationSettings[i].ReceiveNotifications" type="radio"
+                                        value="@bool.TrueString" />
+                                    <label class="govuk-label govuk-radios__label" for="@trueId">
+                                        <span class="govuk-visually-hidden">Send emails</span>
+                                    </label>
+                                </div>
 
-                        </td>
+                            </td>
 
-                        <td class="govuk-table__cell notification-row">
+                            <td class="govuk-table__cell notification-row">
 
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="@falseId" asp-for="@Model.NotificationSettings[i].ReceiveNotifications" checked="@(!Model.NotificationSettings[i].ReceiveNotifications)" type="radio" value="@bool.FalseString"/>
-                                <label class="govuk-label govuk-radios__label" for="@falseId">
-                                    <span class="govuk-visually-hidden">Stop emails</span>
-                                </label>
-                            </div>
+                                <div class="govuk-radios__item">
+                                    <input class="govuk-radios__input" id="@falseId"
+                                        asp-for="@Model.NotificationSettings[i].ReceiveNotifications"
+                                        checked="@(!Model.NotificationSettings[i].ReceiveNotifications)" type="radio"
+                                        value="@bool.FalseString" />
+                                    <label class="govuk-label govuk-radios__label" for="@falseId">
+                                        <span class="govuk-visually-hidden">Stop emails</span>
+                                    </label>
+                                </div>
 
-                        </td>
-                    </tr>
-                }
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
 
@@ -65,8 +76,10 @@
                 <button type="submit" class="govuk-button" id="submit-email-alerts">Update</button>
                 <a href="/" class="govuk-link govuk-link--no-visited-state">Cancel</a>
             </div>
-            
-            <p><a asp-external-subdomain="recruit" asp-external-controller="" asp-external-action="notifications-manage" asp-external-id="@Model.ProviderId" class="govuk-link">Manage the notifications of your recruitment emails</a></p>
+
+            <p><a asp-external-subdomain="recruit" asp-external-controller="" asp-external-action="notifications-manage"
+                    asp-external-id="@Model.ProviderId" class="govuk-link">Manage the notifications of your recruitment
+                    emails</a></p>
 
         </form>
     </div>

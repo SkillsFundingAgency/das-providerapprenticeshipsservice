@@ -2,19 +2,27 @@
 @using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types
 @model dynamic
 
-@{ var model = Model as ViewModelBase; }
+@{
+    var model = Model as ViewModelBase;
+}
 
 @if (model?.FlashMessage != null)
 {
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            <div class="green-box-alert">
-                @if (model.FlashMessage.Severity == FlashMessageSeverityLevel.Okay)
-                {
-                    <i class="icon-green-tick"></i>
-                }
-                @Html.Raw(model.FlashMessage.Message)
+    <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-notification-banner govuk-notification-banner--success" role="alert"
+            aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+            <div class="govuk-notification-banner__header">
+                <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                    Success
+                </h2>
             </div>
-         </div>
+            <div class="govuk-notification-banner__content">
+                <h3 class="govuk-notification-banner__heading">
+                    @Html.Raw(model.FlashMessage.Message)
+                    </h3>
+                </div>
+            </div>
+        </div>
     </div>
 }

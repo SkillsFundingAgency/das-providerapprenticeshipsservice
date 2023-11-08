@@ -8,6 +8,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageS
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Account;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
@@ -36,10 +37,7 @@ public class AccountController : BaseController
             : WsFederationDefaults.AuthenticationScheme;
 
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        await HttpContext.SignOutAsync(authScheme, new AuthenticationProperties
-        {
-            RedirectUri = ""
-        });
+        await HttpContext.SignOutAsync(authScheme, new AuthenticationProperties());
     }
 
     [HttpGet]
@@ -71,16 +69,24 @@ public class AccountController : BaseController
     [Route("~/notification-settings", Name = RouteNames.GetNotificationSettings)]
     public async Task<IActionResult> NotificationSettings()
     {
-        var userRef = User.Identity.GetClaim(DasClaimTypes.Upn);
+        var userRef = User.Identity.GetClaim(DasClaimTypes.Upn) ?? User.Identity.GetClaim("sub");
+        var email = User.Identity.GetClaim(DasClaimTypes.DfEEmail);
         var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
 
-        var model = await _accountOrchestrator.GetNotificationSettings(userRef);
+        
+        
+        var model = await _accountOrchestrator.GetNotificationSettings(userRef, email);
         model.ProviderId = providerId;
 
         var flashMessage = GetFlashMessageViewModelFromCookie();
         if (flashMessage != null)
         {
             model.FlashMessage = flashMessage;
+        }
+        var name = User.Identity.GetClaim(DasClaimTypes.Upn) ?? User.Identity.GetClaim(DasClaimTypes.DisplayName);
+        foreach (var userNotificationSetting in model.NotificationSettings)
+        {
+            userNotificationSetting.Name = name;
         }
 
         return View(model);
@@ -112,6 +118,6 @@ public class AccountController : BaseController
     [Route("~/change-signin-details")]
     public ActionResult ChangeSignInDetails()
     {
-        return View();
+        return View(new ChangeOfDetailsViewModel(_configuration["ResourceEnvironmentName"]));
     }
 }

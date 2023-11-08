@@ -34,7 +34,7 @@ public class WhenUpdatingUserSettings
 
         await _sut.Handle(_command, new CancellationToken());
 
-        _mockSettingsRepo.Verify(m => m.GetUserSetting(It.IsAny<string>()), Times.Never);
+        _mockSettingsRepo.Verify(m => m.GetUserSetting(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         _mockSettingsRepo.Verify(m => m.UpdateUserSettings(_command.UserRef, _command.ReceiveNotifications), Times.Once);
     }
 
@@ -47,7 +47,7 @@ public class WhenUpdatingUserSettings
 
         Assert.ThrowsAsync<InvalidRequestException>(() => _sut.Handle(_command, new CancellationToken()));
 
-        _mockSettingsRepo.Verify(m => m.GetUserSetting(It.IsAny<string>()), Times.Never);
+        _mockSettingsRepo.Verify(m => m.GetUserSetting(It.IsAny<string>(),It.IsAny<string>()), Times.Never);
         _mockSettingsRepo.Verify(m => m.UpdateUserSettings(It.IsAny<string>(), It.IsAny<bool>()), Times.Never);
     }
 }

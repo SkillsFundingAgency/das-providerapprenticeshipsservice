@@ -12,6 +12,7 @@ public class ProviderApprenticeshipsServiceConfiguration : IBaseConfiguration
     public string DatabaseConnectionString { get; set; }
     public string ServiceBusConnectionString { get; set; }
     public CommitmentsApiClientV2Configuration CommitmentsApiClientV2 { get; set; }
+    public TrainingProviderApiClientConfiguration TrainingProviderApiClientConfiguration { get; set; }
     public NotificationsApiClientConfiguration NotificationApi { get; set; }
     public ProviderNotificationConfiguration CommitmentNotification { get; set; }
     public ProviderRelationshipsApiConfiguration ProviderRelationshipsApi { get; set; }
@@ -35,6 +36,12 @@ public class CommitmentsApiClientV2Configuration : IManagedIdentityClientConfigu
 {
     public string ApiBaseUrl { get; set; }
     public string IdentifierUri { get; set; }
+}
+
+public record TrainingProviderApiClientConfiguration : IManagedIdentityClientConfiguration
+{
+    public string ApiBaseUrl { get; init; }
+    public string IdentifierUri { get; init; }
 }
 
 public interface IProviderNotificationConfiguration

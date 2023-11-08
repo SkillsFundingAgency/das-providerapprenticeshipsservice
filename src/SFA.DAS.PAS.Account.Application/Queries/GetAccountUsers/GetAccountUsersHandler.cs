@@ -42,7 +42,7 @@ public class GetAccountUsersHandler : IRequestHandler<GetAccountUsersQuery, GetA
 
         foreach (var user in providerUsers)
         {
-            var settings = (await _userSettingsRepository.GetUserSetting(user.UserRef)).ToList();
+            var settings = (await _userSettingsRepository.GetUserSetting(user.UserRef, user.Email)).ToList();
           
             if (settings.Any())
             {

@@ -20,7 +20,8 @@ public static class AuthenticationExtensions
                 "SFA.DAS.ProviderApprenticeshipService",
                 typeof(CustomServiceRole),
                 "ProviderRoATP",
-                "/signout");
+                "/signout",
+                "");
         }
         else
         {

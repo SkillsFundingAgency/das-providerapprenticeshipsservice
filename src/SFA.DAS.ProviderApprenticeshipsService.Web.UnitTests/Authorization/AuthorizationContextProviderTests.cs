@@ -8,9 +8,66 @@ using SFA.DAS.Encoding;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Routing;
 using SFA.DAS.Testing;
+using SFA.DAS.Testing.AutoFixture;
 using Fix = SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization.AuthorizationContextProviderTestsFixture;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Authorization;
+
+
+public class AuthorizationContextProviderTestsNotFluent
+{
+    
+    [Test, MoqAutoData]
+    public async Task Then_The_Request_And_Feature_Is_Authorised_For_Non_DfeSign_In_Email(
+        string email,
+        long ukprn,
+        string legalEntity,
+        [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
+        [Frozen] Mock<IActionContextAccessorWrapper> actionContextWrapper,
+        AuthorizationContextProvider provider)
+    {
+        var httpContextBase = new Mock<HttpContext>();
+        var httpRequest = new Mock<HttpRequest>();
+        httpRequest.Setup(x => x.Query[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId]).Returns("");
+        var claim = new Claim(DasClaimTypes.Email, email);
+        var claimUkprn = new Claim(DasClaimTypes.Ukprn, ukprn.ToString());
+        var claimsPrinciple = new ClaimsPrincipal(new[] { new ClaimsIdentity(new[] { claim, claimUkprn }) });
+        httpContextBase.Setup(x => x.User).Returns(claimsPrinciple);
+        httpContextBase.Setup(x => x.Request).Returns(httpRequest.Object);
+        httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContextBase.Object);
+        
+        var actual = provider.GetAuthorizationContext();
+        
+        Assert.IsNotNull(actual);
+        actual.Get<long>("ukprn").Should().Be(ukprn);
+        actual.Get<string>("UserEmail").Should().Be(email);
+    }
+    [Test, MoqAutoData]
+    public async Task Then_The_Request_And_Feature_Is_Authorised_For_DfeSign_In_Email(
+        string email,
+        long ukprn,
+        string legalEntity,
+        [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
+        [Frozen] Mock<IActionContextAccessorWrapper> actionContextWrapper,
+        AuthorizationContextProvider provider)
+    {
+        var httpContextBase = new Mock<HttpContext>();
+        var httpRequest = new Mock<HttpRequest>();
+        httpRequest.Setup(x => x.Query[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId]).Returns("");
+        var claim = new Claim(DasClaimTypes.DfEEmail, email);
+        var claimUkprn = new Claim(DasClaimTypes.Ukprn, ukprn.ToString());
+        var claimsPrinciple = new ClaimsPrincipal(new[] { new ClaimsIdentity(new[] { claim, claimUkprn }) });
+        httpContextBase.Setup(x => x.User).Returns(claimsPrinciple);
+        httpContextBase.Setup(x => x.Request).Returns(httpRequest.Object);
+        httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContextBase.Object);
+        
+        var actual = provider.GetAuthorizationContext();
+        
+        Assert.IsNotNull(actual);
+        actual.Get<long>("ukprn").Should().Be(ukprn);
+        actual.Get<string>("UserEmail").Should().Be(email);
+    }
+}
 
 [TestFixture]
 [Parallelizable]
