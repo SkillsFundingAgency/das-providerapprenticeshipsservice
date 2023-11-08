@@ -8,6 +8,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageS
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Account;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
@@ -117,6 +118,6 @@ public class AccountController : BaseController
     [Route("~/change-signin-details")]
     public ActionResult ChangeSignInDetails()
     {
-        return View();
+        return View(new ChangeOfDetailsViewModel(_configuration["ResourceEnvironmentName"]));
     }
 }
