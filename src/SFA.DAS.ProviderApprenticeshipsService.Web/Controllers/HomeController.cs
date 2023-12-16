@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.DfESignIn.Auth.Constants;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -74,9 +73,7 @@ public class HomeController : Controller
         if (User.Identity is { IsAuthenticated: false })
         {
             // choose the authScheme based on the SSO.
-            var authScheme = useDfESignIn
-                ? OpenIdConnectDefaults.AuthenticationScheme
-                : WsFederationDefaults.AuthenticationScheme;
+            var authScheme = OpenIdConnectDefaults.AuthenticationScheme;
 
             await HttpContext.ChallengeAsync(authScheme);
         }
