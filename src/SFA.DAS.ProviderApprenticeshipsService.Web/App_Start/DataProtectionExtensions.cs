@@ -26,7 +26,7 @@ public static class AddDataProtectionExtensions
         var redis = ConnectionMultiplexer
             .Connect($"{redisConnectionString},{dataProtectionKeysDatabase}");
 
-        services.AddDataProtection(options => { options.ApplicationDiscriminator = "das-provider";})
+        services.AddDataProtection()
             .SetApplicationName("das-provider")
             .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
 
