@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
@@ -32,12 +31,8 @@ public class AccountController : BaseController
     [Route("~/signout", Name = RouteNames.SignOut)]
     public async Task ProviderSignOut()
     {
-        var authScheme = _configuration.GetSection("UseDfESignIn").Get<bool>()
-            ? OpenIdConnectDefaults.AuthenticationScheme
-            : WsFederationDefaults.AuthenticationScheme;
-
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        await HttpContext.SignOutAsync(authScheme, new AuthenticationProperties());
+        await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties());
     }
 
     [HttpGet]

@@ -32,7 +32,6 @@ public static class ApplicationServiceRegistrations
         // the below is closely tied to Web, so not sure where logically best to register them
         services.AddTransient<IProviderCommitmentsLogger, ProviderCommitmentsLogger>(); // need to think where to inject it > move to Application
         services.AddScoped<IHtmlHelpers, HtmlHelpers>(); // to be grouped to somewhere else
-        services.AddScoped<IAuthenticationServiceWrapper, AuthenticationServiceWrapper>(); // this is unused atm, to be confirmed if this is a preferred way in AccountController
 
         return services;
     }
