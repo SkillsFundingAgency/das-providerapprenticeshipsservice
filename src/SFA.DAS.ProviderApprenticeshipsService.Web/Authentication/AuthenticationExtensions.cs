@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.DfESignIn.Auth.AppStart;
+using SFA.DAS.DfESignIn.Auth.Enums;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
@@ -19,7 +20,7 @@ public static class AuthenticationExtensions
                 configuration,
                 "SFA.DAS.ProviderApprenticeshipService",
                 typeof(CustomServiceRole),
-                "ProviderRoATP",
+                ClientName.ProviderRoatp,
                 "/signout",
                 "");
         }
