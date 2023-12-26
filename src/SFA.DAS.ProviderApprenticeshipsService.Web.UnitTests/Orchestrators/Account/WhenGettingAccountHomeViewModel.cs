@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Globalization;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Features;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
@@ -17,6 +19,7 @@ public class WhenGettingAccountHomeViewModel
     private Mock<ICurrentDateTime> _currentDateTime;
     private Mock<IAuthorizationService> _authorizationService;
     private Mock<IHtmlHelpers> _htmlHelpers;
+    private ProviderApprenticeshipsServiceConfiguration _configuration;
 
     [SetUp]
     public void Arrange()
@@ -36,12 +39,15 @@ public class WhenGettingAccountHomeViewModel
         _currentDateTime = new Mock<ICurrentDateTime>();
         _authorizationService = new Mock<IAuthorizationService>();
         _htmlHelpers = new Mock<IHtmlHelpers>();
+        _configuration = new ProviderApprenticeshipsServiceConfiguration();
 
         _orchestrator = new AccountOrchestrator(
             _mediator.Object,
             Mock.Of<ILogger<AccountOrchestrator>>(),
             _authorizationService.Object,
-            _htmlHelpers.Object
+            _htmlHelpers.Object,
+            _currentDateTime.Object,
+            _configuration
         );
     }
 
@@ -56,11 +62,24 @@ public class WhenGettingAccountHomeViewModel
     }
 
     [Test]
-    public async Task Then_Set_Traineeship_Enabled_Flag()
+    public async Task Then_Set_Traineeship_Enabled_Flag_Before_Configured_Date()
     {
+        _configuration.TraineeshipCutOffDate = new DateTime(2023, 10, 30).AddMilliseconds(-1).ToString(CultureInfo.CurrentCulture);
+        _currentDateTime.Setup(x => x.Now).Returns(new DateTime(2023, 10, 30));
+        
         var model = await _orchestrator.GetAccountHomeViewModel(1);
 
         model.ShowTraineeshipLink.Should().Be(true);
+    }
+    
+    [Test]
+    public async Task Then_Traineeship_Link_Disabled_After_Configured_Date()
+    {
+        _currentDateTime.Setup(x => x.Now).Returns(new DateTime(2023, 10, 30));
+        
+        var model = await _orchestrator.GetAccountHomeViewModel(1);
+
+        model.ShowTraineeshipLink.Should().Be(false);
     }
 
     [TestCase(true)]

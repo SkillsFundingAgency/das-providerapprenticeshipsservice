@@ -30,6 +30,7 @@ public class ProviderApprenticeshipsServiceConfiguration : IBaseConfiguration
 
     public string DataProtectionKeysDatabase { get; set; }
     public string RedisConnectionString { get; set; }
+    public string TraineeshipCutOffDate { get; set; }
 }
 
 public class CommitmentsApiClientV2Configuration : IManagedIdentityClientConfiguration
