@@ -7,6 +7,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Features;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
@@ -27,17 +29,23 @@ public class AccountOrchestrator : IAccountOrchestrator
     private readonly ILogger<AccountOrchestrator> _logger;
     private readonly IAuthorizationService _authorizationService;
     private readonly IHtmlHelpers _htmlHelpers;
+    private readonly ICurrentDateTime _currentDateTime;
+    private readonly ProviderApprenticeshipsServiceConfiguration _configuration;
 
     public AccountOrchestrator(
         IMediator mediator,
         ILogger<AccountOrchestrator> logger,
         IAuthorizationService authorizationService,
-        IHtmlHelpers htmlHelpers)
+        IHtmlHelpers htmlHelpers, 
+        ICurrentDateTime currentDateTime,
+        ProviderApprenticeshipsServiceConfiguration configuration)
     {
         _mediator = mediator;
         _logger = logger;
         _authorizationService = authorizationService;
         _htmlHelpers = htmlHelpers;
+        _currentDateTime = currentDateTime;
+        _configuration = configuration;
     }
 
     public async Task<AccountHomeViewModel> GetAccountHomeViewModel(int providerId)
@@ -54,6 +62,12 @@ public class AccountOrchestrator : IAccountOrchestrator
         
         try
         {
+
+            DateTime.TryParse(_configuration.TraineeshipCutOffDate, out var traineeshipCutOffDate);
+            var showTraineeshipLink =
+                traineeshipCutOffDate != DateTime.MinValue && traineeshipCutOffDate < DateTime.UtcNow;
+            
+            
             _logger.LogInformation("Getting provider {ProviderId}", providerId);
 
             var providerResponse = await _mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });
@@ -64,7 +78,7 @@ public class AccountOrchestrator : IAccountOrchestrator
                 ProviderName = providerResponse.ProvidersView.Provider.ProviderName,
                 ProviderId = providerId,
                 ShowAcademicYearBanner = false,
-                ShowTraineeshipLink = true,
+                ShowTraineeshipLink = showTraineeshipLink,
                 ShowEarningsReport = result,
                 BannerContent = _htmlHelpers.GetClientContentByType("banner", useLegacyStyles: true),
                 CovidSectionContent = _htmlHelpers.GetClientContentByType("covid_section", useLegacyStyles: true)
