@@ -65,7 +65,7 @@ public class AccountOrchestrator : IAccountOrchestrator
 
             DateTime.TryParse(_configuration.TraineeshipCutOffDate, out var traineeshipCutOffDate);
             var showTraineeshipLink =
-                traineeshipCutOffDate != DateTime.MinValue && traineeshipCutOffDate < DateTime.UtcNow;
+                traineeshipCutOffDate != DateTime.MinValue && traineeshipCutOffDate > _currentDateTime.Now;
             
             
             _logger.LogInformation("Getting provider {ProviderId}", providerId);
