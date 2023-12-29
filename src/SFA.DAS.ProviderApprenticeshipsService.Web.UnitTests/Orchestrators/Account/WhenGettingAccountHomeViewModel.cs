@@ -64,8 +64,8 @@ public class WhenGettingAccountHomeViewModel
     [Test]
     public async Task Then_Set_Traineeship_Enabled_Flag_Before_Configured_Date()
     {
-        _configuration.TraineeshipCutOffDate = new DateTime(2023, 10, 30).AddMilliseconds(-1).ToString(CultureInfo.CurrentCulture);
-        _currentDateTime.Setup(x => x.Now).Returns(new DateTime(2023, 10, 30));
+        _configuration.TraineeshipCutOffDate = new DateTime(2023, 10, 30).ToString(CultureInfo.CurrentCulture);
+        _currentDateTime.Setup(x => x.Now).Returns(new DateTime(2023, 10, 30).AddMilliseconds(-1));
         
         var model = await _orchestrator.GetAccountHomeViewModel(1);
 
@@ -75,7 +75,8 @@ public class WhenGettingAccountHomeViewModel
     [Test]
     public async Task Then_Traineeship_Link_Disabled_After_Configured_Date()
     {
-        _currentDateTime.Setup(x => x.Now).Returns(new DateTime(2023, 10, 30));
+        _configuration.TraineeshipCutOffDate = new DateTime(2023, 10, 30).ToString(CultureInfo.CurrentCulture);
+        _currentDateTime.Setup(x => x.Now).Returns(new DateTime(2023, 10, 30).AddMilliseconds(1));
         
         var model = await _orchestrator.GetAccountHomeViewModel(1);
 
