@@ -26,7 +26,7 @@ public class GetUserNotificationSettingsHandler : IRequestHandler<GetUserNotific
         {
             _logger.LogInformation("No settings found for user {UserRef}", message.UserRef);
 
-            await _userRepository.AddSettings(message.UserRef);
+            await _userRepository.AddSettings(message.Email);
             userSettings = (await _userRepository.GetUserSetting(message.UserRef, message.Email)).ToList();
 
             _logger.LogInformation("Created default settings for user {UserRef}", message.UserRef);
