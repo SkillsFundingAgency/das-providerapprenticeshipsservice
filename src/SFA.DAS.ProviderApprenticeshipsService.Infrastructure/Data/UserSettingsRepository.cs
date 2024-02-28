@@ -77,7 +77,7 @@ public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IU
             return await connection.ExecuteAsync(
                 sql: "UPDATE [dbo].[UserSettings] "
                      + "SET ReceiveNotifications = @receiveNotifications "
-                     + "WHERE UserRef = @email",
+                     + "WHERE UserRef = (Select top 1 UserRef from User where email = @email order by lastlogin desc)",
                 param: parameters,
                 commandType: CommandType.Text);
         });
