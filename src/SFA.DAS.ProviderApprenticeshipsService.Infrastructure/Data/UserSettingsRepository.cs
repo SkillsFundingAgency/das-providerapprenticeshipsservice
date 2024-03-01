@@ -60,7 +60,7 @@ public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IU
             return await connection.ExecuteAsync(
                 sql: "INSERT INTO [dbo].[UserSettings] (UserId, UserRef) "
                      + "SELECT top 1 [Id] as UserId,[UserRef] FROM[dbo].[User] "
-                     + "WHERE u.Email = @email order by lastlogin desc",
+                     + "WHERE Email = @email order by lastlogin desc ",
                 param: parameters,
                 commandType: CommandType.Text);
         });
