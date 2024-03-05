@@ -50,17 +50,17 @@ public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IU
         });
     }
     
-    public async Task AddSettings(string email)
+    public async Task AddSettings(string userRef)
     {
         await WithConnection(async connection =>
         {
             var parameters = new DynamicParameters();
-            parameters.Add("@email", email, DbType.String);
+            parameters.Add("@userRef", userRef, DbType.String);
 
             return await connection.ExecuteAsync(
                 sql: "INSERT INTO [dbo].[UserSettings] (UserId, UserRef) "
-                     + "SELECT top 1 [Id] as UserId,[UserRef] FROM[dbo].[User] "
-                     + "WHERE Email = @email order by lastlogin desc ",
+                     + "SELECT top 1 [Id] as UserId,[UserRef] FROM [dbo].[User] "
+                     + "WHERE UserRef = @userRef order by lastlogin desc ",
                 param: parameters,
                 commandType: CommandType.Text);
         });
@@ -77,7 +77,7 @@ public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IU
             return await connection.ExecuteAsync(
                 sql: "UPDATE [dbo].[UserSettings] "
                      + "SET ReceiveNotifications = @receiveNotifications "
-                     + "WHERE UserRef = (Select top 1 UserRef from User where email = @email order by lastlogin desc)",
+                     + "WHERE UserRef = (Select top 1 UserRef from [dbo].[User]  where email = @email order by lastlogin desc)",
                 param: parameters,
                 commandType: CommandType.Text);
         });

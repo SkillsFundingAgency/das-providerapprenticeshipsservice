@@ -45,6 +45,7 @@ public class GetUserNotificationSettingsHandler : IRequestHandler<GetUserNotific
                             UserRef = m.UserRef,
                             ReceiveNotifications =
                                 m.ReceiveNotifications,
+                            Email = message.Email
                         }).ToList()
         };
     }
