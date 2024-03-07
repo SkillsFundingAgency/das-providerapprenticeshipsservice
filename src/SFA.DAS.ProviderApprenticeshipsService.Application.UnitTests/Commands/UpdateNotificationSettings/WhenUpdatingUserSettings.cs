@@ -12,7 +12,7 @@ public class WhenUpdatingUserSettings
     private Mock<IUserSettingsRepository> _mockSettingsRepo;
     private Mock<IValidator<UpdateUserNotificationSettingsCommand>> _mockValidator;
 
-    private const string UserRef = "userRef";
+    private const string Email = "userRef@user.test";
 
     private UpdateUserNotificationSettingsCommand _command;
 
@@ -24,7 +24,7 @@ public class WhenUpdatingUserSettings
 
         _sut = new UpdateUserNotificationSettingsHandler(_mockSettingsRepo.Object, _mockValidator.Object, Mock.Of<IProviderCommitmentsLogger>());
 
-        _command = new UpdateUserNotificationSettingsCommand { UserRef = UserRef, ReceiveNotifications = true };
+        _command = new UpdateUserNotificationSettingsCommand { Email = Email, ReceiveNotifications = true };
     }
 
     [Test]
@@ -35,7 +35,7 @@ public class WhenUpdatingUserSettings
         await _sut.Handle(_command, new CancellationToken());
 
         _mockSettingsRepo.Verify(m => m.GetUserSetting(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-        _mockSettingsRepo.Verify(m => m.UpdateUserSettings(_command.UserRef, _command.ReceiveNotifications), Times.Once);
+        _mockSettingsRepo.Verify(m => m.UpdateUserSettings(_command.Email, _command.ReceiveNotifications), Times.Once);
     }
 
     [Test]

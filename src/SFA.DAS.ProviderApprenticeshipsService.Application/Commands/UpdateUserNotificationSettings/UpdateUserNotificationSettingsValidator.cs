@@ -6,7 +6,7 @@ public class UpdateUserNotificationSettingsValidator : AbstractValidator<UpdateU
 {
     public UpdateUserNotificationSettingsValidator()
     {
-        RuleFor(m => m.UserRef).NotNull().NotEmpty();
+        RuleFor(m => m.Email).NotNull().NotEmpty();
     }
 
 }

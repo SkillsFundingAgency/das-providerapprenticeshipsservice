@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
-using SFA.DAS.DfESignIn.Auth.Helpers;
 using SFA.DAS.Provider.Shared.UI;
 using SFA.DAS.Provider.Shared.UI.Startup;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
@@ -56,7 +54,7 @@ public class Startup
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 }
             })
-            .SetDfESignInConfiguration(_configuration.GetSection("UseDfESignIn").Get<bool>())
+            .SetDfESignInConfiguration(true)
             .EnableCookieBanner()
             .SetDefaultNavigationSection(NavigationSection.Home);
 

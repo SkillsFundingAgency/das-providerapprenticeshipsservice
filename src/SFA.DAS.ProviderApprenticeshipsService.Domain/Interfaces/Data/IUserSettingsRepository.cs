@@ -10,5 +10,5 @@ public interface IUserSettingsRepository
 
     Task AddSettings(string userRef);
 
-    Task UpdateUserSettings(string userRef, bool receiveNotifications);
+    Task UpdateUserSettings(string email, bool receiveNotifications);
 }

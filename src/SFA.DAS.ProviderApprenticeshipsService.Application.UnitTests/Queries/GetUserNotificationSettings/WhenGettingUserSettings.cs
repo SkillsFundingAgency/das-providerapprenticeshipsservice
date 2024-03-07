@@ -37,7 +37,7 @@ public class WhenGettingUserSettings
 
         _mockSettingsRepo.Verify(m => m.GetUserSetting(UserRef, Email), Times.Once);
         result.NotificationSettings.First().Should().BeEquivalentTo(new UserNotificationSetting
-            { UserRef = UserRef, ReceiveNotifications = true });
+            { UserRef = UserRef, ReceiveNotifications = true, Email = Email});
     }
     
 

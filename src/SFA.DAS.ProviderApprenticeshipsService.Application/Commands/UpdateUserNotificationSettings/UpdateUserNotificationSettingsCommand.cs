@@ -4,7 +4,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUser
 
 public class UpdateUserNotificationSettingsCommand : IRequest
 {
-    public string UserRef { get; set; }
+    public string Email { get; set; }
 
     public bool ReceiveNotifications { get; set; }
 }

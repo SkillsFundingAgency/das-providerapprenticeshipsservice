@@ -119,7 +119,7 @@ public class AccountOrchestrator : IAccountOrchestrator
 
         await _mediator.Send(new UpdateUserNotificationSettingsCommand
         {
-            UserRef = setting.UserRef,
+            Email = setting.Email,
             ReceiveNotifications = setting.ReceiveNotifications
         });
 
@@ -148,7 +148,7 @@ public class AccountOrchestrator : IAccountOrchestrator
 
         return
             notificationSettings.Select(m =>
-                    new UserNotificationSetting { UserRef = m.UserRef, ReceiveNotifications = m.ReceiveNotifications })
+                    new UserNotificationSetting { UserRef = m.UserRef, ReceiveNotifications = m.ReceiveNotifications, Email = m.Email })
                 .ToList();
     }
 
