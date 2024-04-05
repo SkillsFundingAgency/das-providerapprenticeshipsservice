@@ -25,8 +25,8 @@ public static class ProviderRelationshipsApiClientRegistrations
         {
             services.AddSingleton<IProviderRelationshipsApiClient>(s =>
             {
-                var config = s.GetService<ProviderRelationshipsApiConfiguration>();
-                var restHttpClient = GetRestHttpClient(config);
+                var apiClientConfiguration = s.GetService<ProviderRelationshipsApiConfiguration>();
+                var restHttpClient = GetRestHttpClient(apiClientConfiguration, configuration);
 
                 return new ProviderRelationshipsApiClient(restHttpClient);
             });
@@ -35,14 +35,16 @@ public static class ProviderRelationshipsApiClientRegistrations
         return services;
     }
 
-    private static RestHttpClient GetRestHttpClient(IAzureActiveDirectoryClientConfiguration config)
+    private static RestHttpClient GetRestHttpClient(IAzureActiveDirectoryClientConfiguration apiClientConfiguration, IConfiguration config)
     {
-        var httpClient = new HttpClientBuilder()
-            .WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config))
+		var httpClient = config.IsLocal()
+				? new HttpClientBuilder()
+				: new HttpClientBuilder()
+            .WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(apiClientConfiguration))
             .WithDefaultHeaders()
             .Build();
 
-        return new RestHttpClient(httpClient);
+		return new RestHttpClient(httpClient);
     }
 
     private static bool GetUseStubProviderRelationshipsSetting(IConfiguration configuration)

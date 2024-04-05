@@ -32,7 +32,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensi
 
         private static HttpClient GetHttpClient(TrainingProviderApiClientConfiguration apiClientConfiguration, IConfiguration config)
         {
-            var httpClientBuilder = !config.IsLocal()
+            var httpClientBuilder = config.IsLocal()
                 ? new HttpClientBuilder()
                 : new HttpClientBuilder().WithBearerAuthorisationHeader(new ManagedIdentityTokenGenerator(apiClientConfiguration));
             return httpClientBuilder.Build();

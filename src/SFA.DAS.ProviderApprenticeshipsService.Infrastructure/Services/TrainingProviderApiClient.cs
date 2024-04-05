@@ -76,6 +76,11 @@ public class TrainingProviderApiClient : ITrainingProviderApiClient
             httpRequestMessage.Headers.Add("X-Version", "1.0");
             httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
+        else
+        { 
+            httpRequestMessage.Headers.Remove("X-Version");
+            httpRequestMessage.Headers.Add("X-Version", "1.0");
+        }
     }
     #endregion
 }
