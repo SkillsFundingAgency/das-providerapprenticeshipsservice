@@ -36,7 +36,7 @@ public class AccountOrchestrator : IAccountOrchestrator
         IMediator mediator,
         ILogger<AccountOrchestrator> logger,
         IAuthorizationService authorizationService,
-        IHtmlHelpers htmlHelpers, 
+        IHtmlHelpers htmlHelpers,
         ICurrentDateTime currentDateTime,
         ProviderApprenticeshipsServiceConfiguration configuration)
     {
@@ -57,25 +57,25 @@ public class AccountOrchestrator : IAccountOrchestrator
         }
         catch (Exception e)
         {
-            _logger.LogWarning(e,"Unable to get authorization for feature");
+            _logger.LogWarning(e, "Unable to get authorization for feature");
         }
-        
+
         try
         {
 
             DateTime.TryParse(_configuration.TraineeshipCutOffDate, out var traineeshipCutOffDate);
             var showTraineeshipLink =
                 traineeshipCutOffDate != DateTime.MinValue && traineeshipCutOffDate > _currentDateTime.Now;
-            
-            
+
+
             _logger.LogInformation("Getting provider {ProviderId}", providerId);
 
             var providerResponse = await _mediator.Send(new GetProviderQueryRequest { UKPRN = providerId });
-            
+
             return new AccountHomeViewModel
             {
                 AccountStatus = AccountStatus.Active,
-                ProviderName = providerResponse.ProvidersView.Provider.ProviderName,
+                ProviderName = providerResponse.Provider.Name,
                 ProviderId = providerId,
                 ShowAcademicYearBanner = false,
                 ShowTraineeshipLink = showTraineeshipLink,
@@ -86,7 +86,7 @@ public class AccountOrchestrator : IAccountOrchestrator
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex,"Provider {ProviderId} details not found in provider information service", providerId);
+            _logger.LogWarning(ex, "Provider {ProviderId} details not found in provider information service", providerId);
 
             return new AccountHomeViewModel { AccountStatus = AccountStatus.NoAgreement };
         }

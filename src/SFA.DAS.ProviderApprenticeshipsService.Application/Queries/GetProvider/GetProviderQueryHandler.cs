@@ -1,27 +1,26 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 
 public class GetProviderQueryHandler : IRequestHandler<GetProviderQueryRequest, GetProviderQueryResponse>
 {
-    private readonly IApprenticeshipInfoService _apprenticeshipInfoService;
+    private readonly IProviderRepository _providerRepository;
 
-    public GetProviderQueryHandler(IApprenticeshipInfoService apprenticeshipInfoService)
+    public GetProviderQueryHandler(IProviderRepository providerRepository)
     {
-        _apprenticeshipInfoService = apprenticeshipInfoService;
+        _providerRepository = providerRepository;
     }
 
     public async Task<GetProviderQueryResponse> Handle(GetProviderQueryRequest message, CancellationToken cancellationToken)
     {
-        var provider = await _apprenticeshipInfoService.GetProvider(message.UKPRN);
+        var provider = await _providerRepository.GetProvider(message.UKPRN);
 
         return new GetProviderQueryResponse
         {
-            ProvidersView = provider
+            Provider = provider
         };
     }
 }
