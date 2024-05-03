@@ -74,12 +74,12 @@ public class ProviderRepository : BaseRepository<ProviderRepository>, IProviderR
             var parameters = new DynamicParameters();
             parameters.Add("@ukprn", ukprn, DbType.Int64);
 
-            var result = await connection.QueryAsync(
+            var result = await connection.QueryAsync<Provider>(
                 sql: "SELECT * FROM [dbo].[Providers] "
                      + "WHERE Ukprn = @ukprn",
                 param: parameters,
                 commandType: CommandType.Text);
             return result.SingleOrDefault();
-        });
+        });      
     }
 }
