@@ -195,6 +195,17 @@
             display adverts on multiple sites or automatically update training records.</p>
     </div>
 
+    <div class="das-card">
+        <h2 class="govuk-heading-m">
+            <a asp-external-subdomain="providerfeedback" asp-external-controller="feedback" asp-external-action=""
+               asp-external-id="@Model.ProviderId" class="govuk-link">Your feedback</a>
+            @* a href="@Url.ProviderFeedbackLink($"{Model.ProviderId}/providerFeedback")" class="govuk-link">Feedback</a> *@
+        </h2>
+        <p>
+            Your feedback from employers and apprentices.
+        </p>
+    </div>
+
 </div>
 
 
