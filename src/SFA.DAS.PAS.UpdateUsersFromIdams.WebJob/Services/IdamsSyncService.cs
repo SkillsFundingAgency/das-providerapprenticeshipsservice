@@ -4,36 +4,39 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using SFA.DAS.DfESignIn.Auth.Configuration;
+using SFA.DAS.DfESignIn.Auth.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.DfESignInUser;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.IdamsUser;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
 
 public class IdamsSyncService : IIdamsSyncService
 {
-    private readonly IIdamsEmailServiceWrapper _idamsEmailServiceWrapper;
     private readonly IUserRepository _userRepository;
     private readonly IProviderRepository _providerRepository;
     private readonly ILogger<IdamsSyncService> _logger;
-    private readonly ProviderNotificationConfiguration _configuration;
+    private readonly IApiHelper _apiHelper;
+    private readonly DfEOidcConfiguration _dfEOidcConfiguration;
 
     public IdamsSyncService(
-        IIdamsEmailServiceWrapper idamsEmailServiceWrapper,
         IUserRepository userRepository,
         IProviderRepository providerRepository,
         ILogger<IdamsSyncService> logger,
-        ProviderNotificationConfiguration configuration)
+        IApiHelper apiHelper,
+        DfEOidcConfiguration dfEOidcConfiguration)
     {
-        _idamsEmailServiceWrapper = idamsEmailServiceWrapper;
         _userRepository = userRepository;
         _providerRepository = providerRepository;
         _logger = logger;
-        _configuration = configuration;
+        _apiHelper = apiHelper;
+        _dfEOidcConfiguration = dfEOidcConfiguration;
     }
 
     public async Task SyncUsers()
@@ -92,16 +95,17 @@ public class IdamsSyncService : IIdamsSyncService
 
     private async Task<List<IdamsUser>> GetIdamsUsers(long providerId)
     {
-        var idamsUsersTask = _idamsEmailServiceWrapper.GetEmailsAsync(providerId, _configuration.DasUserRoleId);
-        var idamsSuperUsersTask = _idamsEmailServiceWrapper.GetEmailsAsync(providerId, _configuration.SuperUserRoleId);
+        var response = await _apiHelper.Get<DfeUser>($"{_dfEOidcConfiguration.APIServiceUrl}/organisations/{providerId}/users");
+        if (response == null)
+        {
+            return new List<IdamsUser>();
+        }
+        var idamsUsers = response.Users.Where(c=>c.UserStatus ==1 ).Distinct();
+        var idamsSuperUsers = new List<IdamsUser>();
 
-        await Task.WhenAll(idamsUsersTask, idamsSuperUsersTask);
+        var idamsNormalUsers = idamsUsers.Where(u => !idamsSuperUsers.Any(su => su.Email.Equals(u.Email, StringComparison.InvariantCultureIgnoreCase)));
 
-        var idamsUsers = (await idamsUsersTask).Distinct();
-        var idamsSuperUsers = (await idamsSuperUsersTask).Distinct();
-
-        var idamsNormalUsers = idamsUsers.Where(u => !idamsSuperUsers.Any(su => su.Equals(u, StringComparison.InvariantCultureIgnoreCase)));
-
-        return idamsNormalUsers.Select(u => new IdamsUser { Email = u, UserType = UserType.NormalUser }).Concat(idamsSuperUsers.Select(su => new IdamsUser { Email = su, UserType = UserType.SuperUser })).ToList();
+        return idamsNormalUsers.Select(u => new IdamsUser { Email = u.Email, UserType = UserType.NormalUser }).Concat(idamsSuperUsers.Select(su => new IdamsUser { Email = su.Email, UserType = UserType.SuperUser })).ToList();
     }
 }
+
