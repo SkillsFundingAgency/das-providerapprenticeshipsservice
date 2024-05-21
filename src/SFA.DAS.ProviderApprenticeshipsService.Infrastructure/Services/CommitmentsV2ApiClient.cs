@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.Authentication.Extensions.Legacy;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -36,7 +35,7 @@ public class CommitmentsV2ApiClient : ApiClientBase, ICommitmentsV2ApiClient
     {
         var url = $"{BaseUrl()}api/authorization/features/providers/{providerId}/apprentice-email-required";
         _logger.LogInformation("Getting {Url}", url);
-        
+
         var response = await _httpClient.GetAsync(url);
 
         switch (response.StatusCode)
@@ -82,14 +81,6 @@ public class CommitmentsV2ApiClient : ApiClientBase, ICommitmentsV2ApiClient
     {
         var url = $"{BaseUrl()}api/providers/{providerId}/commitmentagreements";
         var response = JsonConvert.DeserializeObject<GetProviderCommitmentAgreementResponse>(await GetAsync(url));
-
-        return response;
-    }
-
-    public async Task<GetProviderResponse> GetProvider(long providerId)
-    {
-        var url = $"{BaseUrl()}api/providers/{providerId}";
-        var response = JsonConvert.DeserializeObject<GetProviderResponse>(await GetAsync(url));
 
         return response;
     }

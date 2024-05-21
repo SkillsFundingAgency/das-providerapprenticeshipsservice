@@ -4,7 +4,6 @@ using SFA.DAS.Authorization.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Features;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
@@ -29,11 +28,7 @@ public class WhenGettingAccountHomeViewModel
             .Setup(x => x.Send(It.IsAny<GetProviderQueryRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new GetProviderQueryResponse
             {
-                ProvidersView = new ProvidersView
-                {
-                    CreatedDate = new DateTime(2000, 1, 1),
-                    Provider = new Domain.Models.ApprenticeshipProvider.Provider()
-                }
+                Provider = new Domain.Models.Provider()
             });
 
         _currentDateTime = new Mock<ICurrentDateTime>();
@@ -66,18 +61,18 @@ public class WhenGettingAccountHomeViewModel
     {
         _configuration.TraineeshipCutOffDate = new DateTime(2023, 10, 30).ToString(CultureInfo.CurrentCulture);
         _currentDateTime.Setup(x => x.Now).Returns(new DateTime(2023, 10, 30).AddMilliseconds(-1));
-        
+
         var model = await _orchestrator.GetAccountHomeViewModel(1);
 
         model.ShowTraineeshipLink.Should().Be(true);
     }
-    
+
     [Test]
     public async Task Then_Traineeship_Link_Disabled_After_Configured_Date()
     {
         _configuration.TraineeshipCutOffDate = new DateTime(2023, 10, 30).ToString(CultureInfo.CurrentCulture);
         _currentDateTime.Setup(x => x.Now).Returns(new DateTime(2023, 10, 30).AddMilliseconds(1));
-        
+
         var model = await _orchestrator.GetAccountHomeViewModel(1);
 
         model.ShowTraineeshipLink.Should().Be(false);
