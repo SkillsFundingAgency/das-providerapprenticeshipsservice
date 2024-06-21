@@ -1,5 +1,6 @@
 ﻿using System;
 using Azure.Identity;
+using Microsoft.Azure.WebJobs.Logging.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -76,6 +77,8 @@ public static class HostBuilderExtensions
             if (!string.IsNullOrEmpty(connectionString))
             {
                 loggingBuilder.AddApplicationInsightsWebJobs(o => o.ConnectionString = connectionString);
+                loggingBuilder.AddFilter<ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Information);
+                loggingBuilder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Information);
             }
 
             loggingBuilder.AddConsole();
