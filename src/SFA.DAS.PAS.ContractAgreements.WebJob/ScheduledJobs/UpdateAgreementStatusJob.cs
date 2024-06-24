@@ -18,7 +18,7 @@ namespace SFA.DAS.PAS.ContractAgreements.WebJob.ScheduledJobs
             _logger = logger;
         }
 
-        public async Task UpdateAgreementStatus([TimerTrigger("* */15 * * * *", RunOnStartup = true)] TimerInfo timerInfo)
+        public async Task UpdateAgreementStatus([TimerTrigger("0 * * * * *", RunOnStartup = true)] TimerInfo timerInfo)
         {
             try
             {
