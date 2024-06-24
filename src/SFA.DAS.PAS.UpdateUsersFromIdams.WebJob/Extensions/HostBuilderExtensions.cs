@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using Azure.Identity;
+using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.Azure.WebJobs.Logging.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,14 +14,13 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.DfESignIn.Auth.Api.Client;
 using SFA.DAS.DfESignIn.Auth.Api.Helpers;
-using SFA.DAS.DfESignIn.Auth.AppStart;
 using SFA.DAS.DfESignIn.Auth.Configuration;
-using SFA.DAS.DfESignIn.Auth.Enums;
 using SFA.DAS.DfESignIn.Auth.Interfaces;
 using SFA.DAS.Http;
 using SFA.DAS.Http.Configuration;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Configuration;
+using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.ScheduledJobs;
 using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
@@ -88,6 +88,7 @@ public static class HostBuilderExtensions
             services.AddTransient<IProviderRepository, ProviderRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IIdamsSyncService, IdamsSyncService>();
+            services.AddTransient<UpdateUserPreferences>();
 
             services.AddHttpClient();
 
@@ -95,6 +96,17 @@ public static class HostBuilderExtensions
         });
 
         return hostBuilder;
+    }
+
+    public static IHostBuilder ConfigureDasWebJobs(this IHostBuilder builder)
+    {
+        builder.ConfigureWebJobs(b => { b.AddTimers(); });
+
+#pragma warning disable 618
+        builder.ConfigureServices(s => s.AddSingleton<IWebHookProvider>(p => null));
+#pragma warning restore 618
+
+        return builder;
     }
 
     public static IHostBuilder UseDasEnvironment(this IHostBuilder hostBuilder)

@@ -15,8 +15,10 @@ public class Program
     public static async Task Main()
     {
         using var host = CreateHost();
-        
-        await SyncIdamsUsers(host);
+
+        var logger = host.Services.GetService<ILogger<Program>>();
+
+        logger.LogInformation("SFA.DAS.PAS.UpdateUsersFrom....WebJob starting up ...");
 
         await host.RunAsync();
     }
@@ -59,6 +61,7 @@ public class Program
             .UseDasEnvironment()
             .AddConfiguration()
             .ConfigureDasLogging()
+            .ConfigureDasWebJobs()
             .ConfigureServices()
             .Build();
     }
