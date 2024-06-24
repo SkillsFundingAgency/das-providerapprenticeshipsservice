@@ -14,7 +14,7 @@ public class Program
 
         var logger = host.Services.GetService<ILogger<Program>>();
 
-        logger.LogInformation("SFA.DAS.PAS.UpdateUsersFrom....WebJob starting up ...");
+        logger.LogInformation("SFA.DAS.PAS.UpdateUsersFromIdams.WebJob starting up ...");
 
         await host.RunAsync();
     }

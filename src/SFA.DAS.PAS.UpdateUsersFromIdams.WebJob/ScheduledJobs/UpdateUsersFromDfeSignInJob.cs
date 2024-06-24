@@ -7,18 +7,18 @@ using System.Diagnostics;
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.ScheduledJobs
 {
-    public class UpdateUsersFromDfeSignIn
+    public class UpdateUsersFromDfeSignInJob
     {
         private readonly IIdamsSyncService _idamsSyncService;
-        private readonly ILogger<UpdateUsersFromDfeSignIn> _logger;
+        private readonly ILogger<UpdateUsersFromDfeSignInJob> _logger;
 
-        public UpdateUsersFromDfeSignIn(IIdamsSyncService idamsSyncService, ILogger<UpdateUsersFromDfeSignIn> logger)
+        public UpdateUsersFromDfeSignInJob(IIdamsSyncService idamsSyncService, ILogger<UpdateUsersFromDfeSignInJob> logger)
         {
             _idamsSyncService = idamsSyncService;
             _logger = logger;
         }
 
-        public async Task UdateUserPreferencesJob([TimerTrigger("* */15 * * * *", RunOnStartup = true)] TimerInfo timerInfo)
+        public async Task UpdateUsers([TimerTrigger("* */15 * * * *", RunOnStartup = true)] TimerInfo timerInfo)
         {
             _logger.LogInformation("UpdateUsersFromDfESignIn job started");
             try

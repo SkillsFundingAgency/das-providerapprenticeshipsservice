@@ -88,7 +88,7 @@ public static class HostBuilderExtensions
             services.AddTransient<IProviderRepository, ProviderRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IIdamsSyncService, IdamsSyncService>();
-            services.AddTransient<UpdateUsersFromDfeSignIn>();
+            services.AddTransient<UpdateUsersFromDfeSignInJob>();
 
             services.AddHttpClient();
 
