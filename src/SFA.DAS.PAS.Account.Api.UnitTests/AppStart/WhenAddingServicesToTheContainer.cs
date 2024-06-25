@@ -4,9 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using NServiceBus;
 using NUnit.Framework;
-using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.PAS.Account.Api.Authentication;
 using SFA.DAS.PAS.Account.Api.Authorization;
 using SFA.DAS.PAS.Account.Api.Orchestrator;
@@ -16,11 +15,11 @@ using SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers;
 using SFA.DAS.PAS.Account.Application.Queries.GetProviderAgreement;
 using SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.PAS.Account.Api.UnitTests.AppStart;
@@ -41,8 +40,6 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<GetProviderAgreementQueryRequest, GetProviderAgreementQueryResponse>))]
     [TestCase(typeof(IRequestHandler<SendNotificationCommand>))]
     [TestCase(typeof(IRequestHandler<GetUserNotificationSettingsQuery, GetUserNotificationSettingsResponse>))]
-    [TestCase(typeof(NotificationsApiClientConfiguration))]
-    [TestCase(typeof(INotificationsApi))]
     public void Then_The_Dependencies_Are_Correctly_Resolved(Type toResolve)
     {
         var hostEnvironment = new Mock<IWebHostEnvironment>();
@@ -67,9 +64,9 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddDataRepositories();
         serviceCollection.AddApiValidators();
         serviceCollection.AddApplicationServices();
-        serviceCollection.AddNotifications(configuration);
         serviceCollection.AddLogging();
-
+        serviceCollection.AddTransient<IBackgroundNotificationService, BackgroundNotificationService>();
+        serviceCollection.AddTransient<IMessageSession, StubMessageSession>();
         var provider = serviceCollection.BuildServiceProvider();
 
         var type = provider.GetService(toResolve);
@@ -82,16 +79,26 @@ public class WhenAddingServicesToTheContainer
         {
             InitialData = new List<KeyValuePair<string, string>>
             {
-                new ("ProviderAccountsApiConfiguration:ConnectionString", "test"),
-                new ("EnvironmentName", "LOCAL"),
-                new ("ProviderApprenticeshipsServiceConfiguration:DatabaseConnectionString", "test"),
-                new ("NotificationApi:ApiBaseUrl", "https://test"),
-                new ("NotificationApi:ClientToken", "token")
+                new("ProviderAccountsApiConfiguration:ConnectionString", "test"),
+                new("EnvironmentName", "LOCAL"),
+                new("ProviderApprenticeshipsServiceConfiguration:DatabaseConnectionString", "test"),
+                new("NotificationApi:ApiBaseUrl", "https://test"),
+                new("NotificationApi:ClientToken", "token")
             }
         };
 
         var provider = new MemoryConfigurationProvider(configSource);
 
-        return new ConfigurationRoot(new List<IConfigurationProvider> {provider});
+        return new ConfigurationRoot(new List<IConfigurationProvider> { provider });
     }
+}
+
+public class StubMessageSession : IMessageSession
+{
+    public Task Send(object message, SendOptions options) => throw new NotImplementedException();
+    public Task Send<T>(Action<T> messageConstructor, SendOptions options) => throw new NotImplementedException();
+    public Task Publish(object message, PublishOptions options) => throw new NotImplementedException();
+    public Task Publish<T>(Action<T> messageConstructor, PublishOptions publishOptions) => throw new NotImplementedException();
+    public Task Subscribe(Type eventType, SubscribeOptions options) => throw new NotImplementedException();
+    public Task Unsubscribe(Type eventType, UnsubscribeOptions options) => throw new NotImplementedException();
 }

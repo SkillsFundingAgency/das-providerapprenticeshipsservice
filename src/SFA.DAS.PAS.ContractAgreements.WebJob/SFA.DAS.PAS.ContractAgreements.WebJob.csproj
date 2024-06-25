@@ -2,6 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<OutputType>Exe</OutputType>
+		<LangVersion>latestmajor</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="Properties\PublishProfiles\das-at-pas-as - Web Deploy.pubxml" />

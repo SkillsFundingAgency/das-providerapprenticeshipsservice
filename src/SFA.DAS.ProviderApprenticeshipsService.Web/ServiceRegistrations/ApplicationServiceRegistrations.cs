@@ -19,7 +19,7 @@ public static class ApplicationServiceRegistrations
         services.AddDataRepositories();
         services.AddCommitmentsV2ApiClient(configuration);
         services.AddContentApi(configuration);
-        services.AddNotifications(configuration);
+        services.AddTransient<IBackgroundNotificationService, BackgroundNotificationService>();
         services.AddProviderRelationshipsApi(configuration); // TBC IF NEEDED
         services.AddValidators();
         services.AddUserIdentityService();

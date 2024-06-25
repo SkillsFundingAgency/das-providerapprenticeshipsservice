@@ -5,6 +5,7 @@
     <TargetFramework>net6.0</TargetFramework>
 	<IsWebJobProject>true</IsWebJobProject>
 	<WebJobType>Continuous</WebJobType>
+	<LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
 	
   <ItemGroup>

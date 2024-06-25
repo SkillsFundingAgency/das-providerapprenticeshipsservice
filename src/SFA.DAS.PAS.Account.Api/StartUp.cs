@@ -1,10 +1,17 @@
 ﻿using Microsoft.Extensions.Configuration;
+using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Api.Common.Infrastructure;
+using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
 using SFA.DAS.PAS.Account.Api.Authentication;
 using SFA.DAS.PAS.Account.Api.Authorization;
 using SFA.DAS.PAS.Account.Api.ServiceRegistrations;
 using SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers;
+using SFA.DAS.ProviderApprenticeshipsService.Application;
+using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
+using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 
 namespace SFA.DAS.PAS.Account.Api;
 
@@ -31,7 +38,11 @@ public class Startup
         services.AddDataRepositories();
         services.AddApiValidators();
         services.AddApplicationServices();
-        services.AddNotifications(_configuration);
+        services.AddTransient<IBackgroundNotificationService, BackgroundNotificationService>();
+        
+        services
+            .AddUnitOfWork()
+            .AddNServiceBusClientUnitOfWork();
 
         if (!isDevOrLocal)
         {
@@ -54,6 +65,18 @@ public class Startup
         services.AddDasSwagger();
         services.AddApiVersioning(opt => opt.ApiVersionReader = new HeaderApiVersionReader("X-Version"));
         services.AddApplicationInsightsTelemetry();
+    }
+    
+    public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
+    {
+        serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal(), ServiceBusEndpointType.Api);
+
+        // Replacing ClientOutboxPersisterV2 with a local version to fix unit of work issue due to propogating Task up the chain rather than awaiting on DB Command.
+        // not clear why this fixes the issue. Attempted to make the change in SFA.DAS.Nservicebus.SqlServer however it conflicts when upgraded with SFA.DAS.UnitOfWork.Nservicebus
+        // which would require upgrading to NET6 to resolve.
+        var serviceDescriptor = serviceProvider.FirstOrDefault(serv => serv.ServiceType == typeof(IClientOutboxStorageV2));
+        serviceProvider.Remove(serviceDescriptor);
+        serviceProvider.AddScoped<IClientOutboxStorageV2, ClientOutboxPersisterV2>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

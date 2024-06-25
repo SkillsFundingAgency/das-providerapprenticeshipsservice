@@ -1,35 +1,43 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Notifications.Api.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
+using NServiceBus;
+using SFA.DAS.Notifications.Messages.Commands;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+
+public interface IBackgroundNotificationService
+{
+    Task SendEmail(NotificationEmail email);
+}
+
+public record NotificationEmail(string TemplateId, string RecipientsAddress, IReadOnlyDictionary<string, string> Tokens);
 
 public class BackgroundNotificationService : IBackgroundNotificationService
 {
     private readonly ILogger<BackgroundNotificationService> _logger;
-    private readonly INotificationsApi _notificationsApi;
+    private readonly IMessageSession _publisher;
 
-    public BackgroundNotificationService(ILogger<BackgroundNotificationService> logger, INotificationsApi notificationsApi)
+    public BackgroundNotificationService(ILogger<BackgroundNotificationService> logger, IMessageSession publisher)
     {
         _logger = logger;
-        _notificationsApi = notificationsApi;
+        _publisher = publisher;
     }
 
-    public async Task SendEmail(Email email)
+    public async Task SendEmail(NotificationEmail email)
     {
-        _logger.LogDebug("Sending email with ID: [{SystemId}] in a background task.", email.SystemId);
+        _logger.LogDebug("Sending email with TemplateID: [{TemplateId}] in a background task.", email.TemplateId);
+
+        var command = new SendEmailCommand(email.TemplateId, email.RecipientsAddress, email.Tokens);
 
         try
         {
-            await _notificationsApi.SendEmail(email);
+            await _publisher.Send(command);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error using the Notification Api when trying to send email with ID: [{SystemId}].", email.SystemId);
+            _logger.LogError(ex, "Error using the Notification Api when trying to send email with TemplateId: [{TemplateId}].", email.TemplateId);
         }
     }
 }
