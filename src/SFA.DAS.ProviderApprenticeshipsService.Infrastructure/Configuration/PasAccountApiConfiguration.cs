@@ -8,10 +8,18 @@ public interface IPasAccountApiConfiguration : IBaseConfiguration
     string ContractAgreementsUrl { get; set; }
 }
 
-public class PasAccountApiConfiguration : IPasAccountApiConfiguration
+public interface IServiceBusConfiguration
+{
+    public string ServiceBusConnectionString { get; set; }
+    public string NServiceBusLicense { get; set; }
+    public string DatabaseConnectionString { get; set; }
+}
+
+public class PasAccountApiConfiguration : IPasAccountApiConfiguration, IServiceBusConfiguration
 {
     public string DatabaseConnectionString { get; set; }
     public string ServiceBusConnectionString { get; set; }
+    public string NServiceBusLicense { get; set; }
     public bool CheckForContractAgreements { get; set; }
     public string ContractAgreementsUrl { get; set; }
 }

@@ -20,7 +20,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
-using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.PAS.Account.Api.UnitTests.AppStart;
 
@@ -36,6 +35,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IProviderAgreementStatusRepository))]
     [TestCase(typeof(IUserRepository))]
     [TestCase(typeof(IPasAccountApiConfiguration))]
+    [TestCase(typeof(IServiceBusConfiguration))]
     [TestCase(typeof(IRequestHandler<GetAccountUsersQuery, GetAccountUsersResponse>))]
     [TestCase(typeof(IRequestHandler<GetProviderAgreementQueryRequest, GetProviderAgreementQueryResponse>))]
     [TestCase(typeof(IRequestHandler<SendNotificationCommand>))]
@@ -58,7 +58,7 @@ public class WhenAddingServicesToTheContainer
             .AddApiAuthorization(isDevOrLocal);
 
         serviceCollection.AddOptions();
-        serviceCollection.AddConfigurationOptions(configuration);
+        serviceCollection.AddConfiguration(configuration);
         serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetAccountUsersHandler>());
         serviceCollection.AddOrchestrators();
         serviceCollection.AddDataRepositories();

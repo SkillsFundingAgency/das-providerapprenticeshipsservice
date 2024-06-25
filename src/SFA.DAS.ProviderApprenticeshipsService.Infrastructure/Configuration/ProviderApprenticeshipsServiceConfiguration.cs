@@ -6,7 +6,7 @@ using SFA.DAS.ProviderRelationships.Api.Client.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
-public class ProviderApprenticeshipsServiceConfiguration : IBaseConfiguration
+public class ProviderApprenticeshipsServiceConfiguration : IBaseConfiguration, IServiceBusConfiguration
 {
     public bool UseFakeIdentity { get; set; }
     public string DatabaseConnectionString { get; set; }

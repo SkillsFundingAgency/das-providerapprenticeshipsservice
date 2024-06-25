@@ -13,7 +13,6 @@ public static class ApplicationServiceRegistrations
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddConfigurations(configuration);
         services.AddAccountApiClient(configuration);
         services.AddTrainingProviderApi(configuration);
         services.AddDataRepositories();

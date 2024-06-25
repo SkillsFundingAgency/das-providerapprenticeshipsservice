@@ -26,7 +26,7 @@ public static class NServiceBusServiceRegistrations
     public static void StartNServiceBus(this UpdateableServiceProvider services, bool isDevOrLocal, ServiceBusEndpointType endpointType)
     {
         var endPointName = $"SFA.DAS.ProviderApprenticeshipsService.{endpointType}";
-        var pasConfiguration = services.GetService<ProviderApprenticeshipsServiceConfiguration>();
+        var pasConfiguration = services.GetService<IServiceBusConfiguration>();
        
         var databaseConnectionString = pasConfiguration.DatabaseConnectionString;
 

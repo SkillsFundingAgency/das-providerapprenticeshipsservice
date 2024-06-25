@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
 using SFA.DAS.Provider.Shared.UI;
@@ -6,6 +7,7 @@ using SFA.DAS.Provider.Shared.UI.Startup;
 using SFA.DAS.ProviderApprenticeshipsService.Application;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
+using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
@@ -29,10 +31,13 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton(_configuration);
-
         services.AddOptions();
-
-        services.AddLogging();
+        services.AddConfigurationOptions(_configuration);
+        services.AddLogging(builder =>
+        {
+            builder.AddFilter<ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Information);
+            builder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Information);
+        });
 
         services.AddHttpContextAccessor();
 

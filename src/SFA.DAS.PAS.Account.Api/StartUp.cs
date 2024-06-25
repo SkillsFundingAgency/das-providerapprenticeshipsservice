@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
@@ -12,6 +13,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
+using ConfigurationServiceRegistrations = SFA.DAS.PAS.Account.Api.ServiceRegistrations.ConfigurationServiceRegistrations;
 
 namespace SFA.DAS.PAS.Account.Api;
 
@@ -28,11 +30,16 @@ public class Startup
     {
         var isDevOrLocal = _configuration.IsDevOrLocal();
         
-        services.AddLogging();
+        services.AddLogging(builder =>
+        {
+            builder.AddFilter<ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Information);
+            builder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Information);
+        });
+        
         services.AddApiAuthentication(_configuration);
         services.AddApiAuthorization(isDevOrLocal);
         services.AddOptions();
-        services.AddConfigurationOptions(_configuration);
+        services.AddConfiguration(_configuration);
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetAccountUsersHandler>());
         services.AddOrchestrators();
         services.AddDataRepositories();
