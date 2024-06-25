@@ -4,12 +4,10 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.PAS.ContractAgreements.WebJob.Interfaces;
-using SFA.DAS.PAS.ContractAgreements.WebJob.ScheduledJobs;
 using SFA.DAS.PAS.ImportProvider.WebJob.ScheduledJobs;
 using SFA.DAS.PAS.ImportProvider.WebJob.Services;
 
-namespace SFA.DAS.PAS.ContractAgreements.WebJob.UnitTests;
+namespace SFA.DAS.PAS.ImportProvider.WebJob.UnitTests;
 
 [TestFixture]
 public class WhenImportProvidersJobIsRun
