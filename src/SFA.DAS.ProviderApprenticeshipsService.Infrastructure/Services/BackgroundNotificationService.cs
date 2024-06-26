@@ -27,7 +27,7 @@ public class BackgroundNotificationService : IBackgroundNotificationService
 
     public async Task SendEmail(NotificationEmail email)
     {
-        _logger.LogDebug("Sending email with TemplateID: [{TemplateId}] in a background task.", email.TemplateId);
+        _logger.LogInformation("Sending email with TemplateID: [{TemplateId}] in a background task.", email.TemplateId);
 
         var command = new SendEmailCommand(email.TemplateId, email.RecipientsAddress, email.Tokens);
 
