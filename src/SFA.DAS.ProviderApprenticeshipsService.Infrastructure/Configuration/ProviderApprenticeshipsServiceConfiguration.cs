@@ -1,12 +1,11 @@
+using SFA.DAS.Authorization.ProviderFeatures.Configuration;
 using SFA.DAS.Http.Configuration;
-using SFA.DAS.Notifications.Api.Client.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
 using SFA.DAS.ProviderRelationships.Api.Client.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
-public class ProviderApprenticeshipsServiceConfiguration : IBaseConfiguration, IServiceBusConfiguration
+public class ProviderApprenticeshipsServiceConfiguration : IBaseConfiguration
 {
     public bool UseFakeIdentity { get; set; }
     public string DatabaseConnectionString { get; set; }
@@ -21,7 +20,7 @@ public class ProviderApprenticeshipsServiceConfiguration : IBaseConfiguration, I
     public string ContentApplicationId { get; set; }
     public int DefaultCacheExpirationInMinutes { get; set; }
     public ZenDeskConfiguration ZenDeskSettings { get; set; }
-    public SFA.DAS.Authorization.ProviderFeatures.Configuration.ProviderFeaturesConfiguration Features { get; set; }
+    public ProviderFeaturesConfiguration Features { get; set; }
     /// <summary>
     /// Gets or Sets property UseDfESignIn.
     /// Property responsible for holding the DfESignIn toggle switch value.

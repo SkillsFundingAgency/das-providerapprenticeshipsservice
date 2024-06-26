@@ -9,7 +9,7 @@ using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.Hosting;
 using SFA.DAS.NServiceBus.SqlServer.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Exceptions;
-using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
 using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
@@ -26,7 +26,7 @@ public static class NServiceBusServiceRegistrations
     public static void StartNServiceBus(this UpdateableServiceProvider services, bool isDevOrLocal, ServiceBusEndpointType endpointType)
     {
         var endPointName = $"SFA.DAS.ProviderApprenticeshipsService.{endpointType}";
-        var pasConfiguration = services.GetService<IServiceBusConfiguration>();
+        var pasConfiguration = services.GetService<IBaseConfiguration>();
        
         var databaseConnectionString = pasConfiguration.DatabaseConnectionString;
 

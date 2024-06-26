@@ -14,6 +14,7 @@ using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Configuration;
 using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
