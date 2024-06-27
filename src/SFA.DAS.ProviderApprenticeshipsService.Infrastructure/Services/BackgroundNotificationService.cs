@@ -37,7 +37,7 @@ public class BackgroundNotificationService : IBackgroundNotificationService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error using the Notification Api when trying to send email with TemplateId: [{TemplateId}].", email.TemplateId);
+            _logger.LogError(ex, "Error using the Message Bus when trying to send email with TemplateId: [{TemplateId}].", email.TemplateId);
         }
     }
 }
