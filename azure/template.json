@@ -104,6 +104,9 @@
     "redisSessionProviderConnectionString": {
       "type": "securestring"
     },
+    "sharedServiceBusName": {
+      "type": "string"
+    },
     "featureToggle": {
       "type": "object",
       "defaultValue": {
