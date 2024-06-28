@@ -710,7 +710,7 @@
         },
         "parameters": {
           "principalId": {
-            "value": "[createArray(reference(concat(variables('uiAppServiceName'), '-', parameters('utcValue'))).outputs.managedServiceIdentityId.value, reference(concat(variables('apiAppServiceName'), '-', parameters('utcValue'))).outputs.managedServiceIdentityId.value" },
+            "value": "[createArray(reference(concat(variables('uiAppServiceName'), '-', parameters('utcValue'))).outputs.managedServiceIdentityId.value, reference(concat(variables('apiAppServiceName'), '-', parameters('utcValue'))).outputs.managedServiceIdentityId.value[copyIndex()]]"},
           "assignmentType": {
             "value": "ServiceBusOwner"
           },
