@@ -13,7 +13,7 @@ public static class EndpointConfigurationExtensions
     {
         if (isLocal)
         {
-            config.UseLearningTransport();
+            config.UseLearningTransport(s => s.AddRouting());
         }
         else
         {
