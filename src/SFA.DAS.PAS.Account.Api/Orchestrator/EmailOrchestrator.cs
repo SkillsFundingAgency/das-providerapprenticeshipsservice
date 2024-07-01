@@ -1,6 +1,6 @@
-﻿using SFA.DAS.Notifications.Api.Types;
-using SFA.DAS.PAS.Account.Api.Types;
+﻿using SFA.DAS.PAS.Account.Api.Types;
 using SFA.DAS.PAS.Account.Application.Commands.SendNotification;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.PAS.Account.Api.Orchestrator;
 
@@ -36,7 +36,7 @@ public class EmailOrchestrator : IEmailOrchestrator
         }
         else
         {
-            recipients = accountUsers.Any(user => !user.IsSuperUser) 
+            recipients = accountUsers.Any(user => !user.IsSuperUser)
                 ? accountUsers.Where(user => !user.IsSuperUser).Select(x => x.EmailAddress).ToList()
                 : accountUsers.Select(user => user.EmailAddress).ToList();
         }
@@ -54,16 +54,8 @@ public class EmailOrchestrator : IEmailOrchestrator
         _logger.LogInformation("Sent email to {FinalRecipientsCount} recipients for ukprn: {ProviderId}", finalRecipients.Count, providerId);
     }
 
-    private static Email CreateEmailForRecipient(string recipient, ProviderEmailRequest source)
+    private static NotificationEmail CreateEmailForRecipient(string recipient, ProviderEmailRequest source)
     {
-        return new Email
-        {
-            RecipientsAddress = recipient,
-            TemplateId = source.TemplateId,
-            Tokens = new Dictionary<string, string>(source.Tokens),
-            ReplyToAddress = "noreply@sfa.gov.uk",
-            Subject = "x",
-            SystemId = "x"
-        };
+        return new NotificationEmail(source.TemplateId, recipient, new Dictionary<string, string>(source.Tokens));
     }
 }

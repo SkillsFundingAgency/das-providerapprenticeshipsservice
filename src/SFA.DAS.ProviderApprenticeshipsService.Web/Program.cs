@@ -1,4 +1,5 @@
 ﻿using NLog.Web;
+using SFA.DAS.NServiceBus.Configuration.MicrosoftDependencyInjection;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web;
 
@@ -16,6 +17,7 @@ public class Program
     private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .UseNLog()
+            .UseNServiceBusContainer()
             .ConfigureLogging(options => options.SetMinimumLevel(LogLevel.Information))
             .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
 }
