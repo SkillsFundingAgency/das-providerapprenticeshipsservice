@@ -699,7 +699,7 @@
     },
     {
       "apiVersion": "2020-06-01",
-      "name": "[concat(variables('apiAppServiceName'), 'role-assignments-', parameters('utcValue'))]",
+      "name": "[concat('role-assignments-pas', copyIndex(), '-', parameters('utcValue'))]",
       "type": "Microsoft.Resources/deployments",
       "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
       "properties": {
@@ -713,7 +713,7 @@
             "value": "[createArray(reference(concat(variables('uiAppServiceName'), '-', parameters('utcValue'))).outputs.managedServiceIdentityId.value, reference(concat(variables('uiAppServiceName'), '-', parameters('utcValue'))).outputs.stagingManagedServiceIdentityId.value, reference(concat(variables('apiAppServiceName'), '-', parameters('utcValue'))).outputs.managedServiceIdentityId.value, reference(concat(variables('apiAppServiceName'), '-', parameters('utcValue'))).outputs.stagingManagedServiceIdentityId.value)[copyIndex()]]"
           },
           "assignmentType": {
-            "value": "ServiceBusSender"
+            "value": "ServiceBusOwner"
           },
           "resourceName": {
             "value": "[parameters('sharedServiceBusName')]"
