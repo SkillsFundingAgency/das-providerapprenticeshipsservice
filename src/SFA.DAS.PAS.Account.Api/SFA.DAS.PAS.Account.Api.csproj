@@ -19,6 +19,7 @@
 		<PackageReference Include="SFA.DAS.Api.Common" Version="1.0.28" />
 		<PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
 		<PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.43" />
+		<PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="9.0.28" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.6.2" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.6.2" />
 	</ItemGroup>

@@ -12,6 +12,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
+using SFA.DAS.UnitOfWork.Mvc.Extensions;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 using ConfigurationServiceRegistrations = SFA.DAS.PAS.Account.Api.ServiceRegistrations.ConfigurationServiceRegistrations;
 
@@ -102,6 +103,7 @@ public class Startup
             .UseAuthentication()
             .UseRouting()
             .UseAuthorization()
+            .UseUnitOfWork()
             .UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

@@ -15,6 +15,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations;
 using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
+using SFA.DAS.UnitOfWork.Mvc.Extensions;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web;
@@ -98,6 +99,7 @@ public class Startup
         }
 
         app.UseAuthentication();
+        app.UseUnitOfWork();
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthorization();
