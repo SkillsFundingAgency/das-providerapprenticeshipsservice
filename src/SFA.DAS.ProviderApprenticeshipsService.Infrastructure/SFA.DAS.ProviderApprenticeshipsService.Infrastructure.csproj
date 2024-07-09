@@ -26,6 +26,6 @@
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.43" />
     <PackageReference Include="SFA.DAS.ProviderRelationships.Api.Client" Version="4.0.3" />
     <PackageReference Include="StackExchange.Redis" Version="2.6.116" />
-    <PackageReference Include="System.Text.Json" Version="7.0.3" />
+    <PackageReference Include="System.Text.Json" Version="8.0.4" />
   </ItemGroup>
 </Project>
