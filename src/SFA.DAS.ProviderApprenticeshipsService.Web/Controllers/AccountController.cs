@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
@@ -11,6 +12,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Account;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 
@@ -73,13 +75,11 @@ public class AccountController : BaseController
         var userRef = User.Identity.GetClaim(DasClaimTypes.Upn) ?? User.Identity.GetClaim("sub");
         var email = User.Identity.GetClaim(DasClaimTypes.DfEEmail);
         var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
-        
-        _logger.LogInformation("AccountController.NotificationSettings(). Upn Claim: {Upn}}. Sub Claim: {Sub}. Dfe Email Claim: {Email}.",
-            User.Identity.GetClaim(DasClaimTypes.Upn),
-            User.Identity.GetClaim("sub"),
-            User.Identity.GetClaim(DasClaimTypes.DfEEmail)
-            );
-        
+
+        _logger.LogInformation("AccountController.NotificationSettings(). Claims: {Claims}",
+           JsonSerializer.Serialize(User.Claims.Select(x => new { x.Type, x.Value }))
+        );
+
         var model = await _accountOrchestrator.GetNotificationSettings(userRef, email);
         model.ProviderId = providerId;
 
@@ -88,6 +88,7 @@ public class AccountController : BaseController
         {
             model.FlashMessage = flashMessage;
         }
+
         var name = User.Identity.GetClaim(DasClaimTypes.Upn) ?? User.Identity.GetClaim(DasClaimTypes.DisplayName);
         foreach (var userNotificationSetting in model.NotificationSettings)
         {
