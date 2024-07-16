@@ -92,8 +92,8 @@ public class AccountOrchestrator : IAccountOrchestrator
 
     public async Task<NotificationSettingsViewModel> GetNotificationSettings(string userRef, string email)
     {
-        _logger.LogInformation("Getting setting for user {UserRef}", userRef);
-
+        _logger.LogInformation("Getting setting for user {UserRef} with email {Email}", userRef, email);
+        
         var response = await _mediator.Send(new GetUserNotificationSettingsQuery
         {
             UserRef = userRef,

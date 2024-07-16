@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Account;
@@ -38,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
         {
             //arrange
             _mockConfiguration.Setup(x => x["ResourceEnvironmentName"]).Returns(env);
-            _controller = new AccountController(_mockAccountOrchestrator.Object, _mockCookieStorageService.Object, _mockConfiguration.Object)
+            _controller = new AccountController(_mockAccountOrchestrator.Object, _mockCookieStorageService.Object, _mockConfiguration.Object, Mock.Of<ILogger<AccountController>>())
             {
                 ControllerContext = new ControllerContext()
             };

@@ -19,13 +19,17 @@ public class AccountController : BaseController
 {
     private readonly IAccountOrchestrator _accountOrchestrator;
     private readonly IConfiguration _configuration;
+    private readonly ILogger<AccountController> _logger;
 
     public AccountController(IAccountOrchestrator accountOrchestrator,
-        ICookieStorageService<FlashMessageViewModel> flashMessage, IConfiguration configuration)
+        ICookieStorageService<FlashMessageViewModel> flashMessage,
+        IConfiguration configuration,
+        ILogger<AccountController> logger)
         : base(flashMessage)
     {
         _accountOrchestrator = accountOrchestrator;
         _configuration = configuration;
+        _logger = logger;
     }
 
     [Route("~/signout", Name = RouteNames.SignOut)]
@@ -44,7 +48,9 @@ public class AccountController : BaseController
         var model = await _accountOrchestrator.GetAccountHomeViewModel(providerId);
 
         if (!string.IsNullOrEmpty(message))
+        {
             model.Message = WebUtility.UrlDecode(message);
+        }
 
         switch (model.AccountStatus)
         {
@@ -67,8 +73,12 @@ public class AccountController : BaseController
         var userRef = User.Identity.GetClaim(DasClaimTypes.Upn) ?? User.Identity.GetClaim("sub");
         var email = User.Identity.GetClaim(DasClaimTypes.DfEEmail);
         var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
-
         
+        _logger.LogInformation("AccountController.NotificationSettings(). Upn Claim: {Upn}}. Sub Claim: {Sub}. Dfe Email Claim: {Email}.",
+            User.Identity.GetClaim(DasClaimTypes.Upn),
+            User.Identity.GetClaim("sub"),
+            User.Identity.GetClaim(DasClaimTypes.DfEEmail)
+            );
         
         var model = await _accountOrchestrator.GetNotificationSettings(userRef, email);
         model.ProviderId = providerId;
