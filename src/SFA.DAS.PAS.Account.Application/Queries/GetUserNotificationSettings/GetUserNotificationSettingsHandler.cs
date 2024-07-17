@@ -1,6 +1,6 @@
+using System.Text.Json;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 
@@ -21,15 +21,18 @@ public class GetUserNotificationSettingsHandler : IRequestHandler<GetUserNotific
     public async Task<GetUserNotificationSettingsResponse> Handle(GetUserNotificationSettingsQuery message, CancellationToken cancellationToken)
     {
         var userSettings = (await _userRepository.GetUserSetting(message.UserRef, message.Email)).ToList();
+        
+        _logger.LogInformation("Attempted to retrieve settings for user {UserRef} with email {Email}. UserSettings result: {Settings}", message.UserRef, message.Email, JsonSerializer.Serialize(userSettings));
 
         if (!userSettings.Any())
         {
-            _logger.LogInformation("No settings found for user {UserRef}", message.UserRef);
+            _logger.LogInformation("No settings found. Creating user settings for userRef {UserRef} using email {Email}", message.UserRef, message.Email);
 
             await _userRepository.AddSettings(message.Email);
+            
             userSettings = (await _userRepository.GetUserSetting(message.UserRef, message.Email)).ToList();
 
-            _logger.LogInformation("Created default settings for user {UserRef}", message.UserRef);
+            _logger.LogInformation("Created default settings for user {UserRef}. UserSettings result: {Settings}", message.UserRef, JsonSerializer.Serialize(userSettings));
         }
 
         return new GetUserNotificationSettingsResponse

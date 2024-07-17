@@ -39,7 +39,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
         {
             //arrange
             _mockConfiguration.Setup(x => x["ResourceEnvironmentName"]).Returns(env);
-            _controller = new AccountController(_mockAccountOrchestrator.Object, _mockCookieStorageService.Object, _mockConfiguration.Object)
+            _controller = new AccountController(_mockAccountOrchestrator.Object, _mockCookieStorageService.Object, _mockConfiguration.Object, Mock.Of<ILogger<AccountController>>())
             {
                 ControllerContext = new ControllerContext()
             };

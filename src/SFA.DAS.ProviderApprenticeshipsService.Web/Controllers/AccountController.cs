@@ -21,14 +21,16 @@ public class AccountController : BaseController
 {
     private readonly IAccountOrchestrator _accountOrchestrator;
     private readonly IConfiguration _configuration;
-    
+    private ILogger<AccountController> _logger;
+
     public AccountController(IAccountOrchestrator accountOrchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IConfiguration configuration)
+        IConfiguration configuration, ILogger<AccountController> logger)
         : base(flashMessage)
     {
         _accountOrchestrator = accountOrchestrator;
         _configuration = configuration;
+        _logger = logger;
     }
 
     [Route("~/signout", Name = RouteNames.SignOut)]
@@ -72,6 +74,10 @@ public class AccountController : BaseController
         var userRef = User.Identity.GetClaim(DasClaimTypes.Upn) ?? User.Identity.GetClaim("sub");
         var email = User.Identity.GetClaim(DasClaimTypes.DfEEmail);
         var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
+        
+        _logger.LogInformation("AccountController.NotificationSettings(). Claims: {Claims}",
+            JsonSerializer.Serialize(User.Claims.Select(x => new { x.Type, x.Value }))
+        );
 
         var model = await _accountOrchestrator.GetNotificationSettings(userRef, email);
         model.ProviderId = providerId;
