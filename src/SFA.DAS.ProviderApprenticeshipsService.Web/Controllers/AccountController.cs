@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
@@ -12,7 +11,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Account;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 
@@ -21,16 +19,13 @@ public class AccountController : BaseController
 {
     private readonly IAccountOrchestrator _accountOrchestrator;
     private readonly IConfiguration _configuration;
-    private ILogger<AccountController> _logger;
 
     public AccountController(IAccountOrchestrator accountOrchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IConfiguration configuration, ILogger<AccountController> logger)
-        : base(flashMessage)
+        IConfiguration configuration) : base(flashMessage)
     {
         _accountOrchestrator = accountOrchestrator;
         _configuration = configuration;
-        _logger = logger;
     }
 
     [Route("~/signout", Name = RouteNames.SignOut)]
@@ -74,10 +69,6 @@ public class AccountController : BaseController
         var userRef = User.Identity.GetClaim(DasClaimTypes.Upn) ?? User.Identity.GetClaim("sub");
         var email = User.Identity.GetClaim(DasClaimTypes.DfEEmail);
         var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
-        
-        _logger.LogInformation("AccountController.NotificationSettings(). Claims: {Claims}",
-            JsonSerializer.Serialize(User.Claims.Select(x => new { x.Type, x.Value }))
-        );
 
         var model = await _accountOrchestrator.GetNotificationSettings(userRef, email);
         model.ProviderId = providerId;

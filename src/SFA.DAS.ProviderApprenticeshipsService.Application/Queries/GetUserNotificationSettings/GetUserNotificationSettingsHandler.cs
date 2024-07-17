@@ -28,13 +28,13 @@ public class GetUserNotificationSettingsHandler : IRequestHandler<GetUserNotific
 
         if (!userSettings.Any())
         {
-            _logger.LogInformation("No settings found. Creating user settings for userRef {UserRef} using email {Email}", message.UserRef, message.Email);
+            _logger.LogInformation("No settings found. Creating user settings for userRef {UserRef}", message.UserRef);
 
             await _userRepository.AddSettings(message.Email);
             
             userSettings = (await _userRepository.GetUserSetting(message.UserRef, message.Email)).ToList();
 
-            _logger.LogInformation("Created default settings for user {UserRef}. UserSettings result: {Settings}", message.UserRef, JsonSerializer.Serialize(userSettings));
+            _logger.LogInformation("Created default settings for user {UserRef}", message.UserRef);
         }
 
         return new GetUserNotificationSettingsResponse
