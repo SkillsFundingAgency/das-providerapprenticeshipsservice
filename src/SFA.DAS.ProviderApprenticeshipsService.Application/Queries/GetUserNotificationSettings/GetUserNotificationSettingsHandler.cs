@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
@@ -27,26 +28,23 @@ public class GetUserNotificationSettingsHandler : IRequestHandler<GetUserNotific
 
         if (!userSettings.Any())
         {
-            _logger.LogInformation("No settings found for user {UserRef}", message.UserRef);
-                
-            await _userRepository.AddSettings(message.UserRef);
+            _logger.LogInformation("No settings found. Creating user settings for userRef {UserRef} using email {Email}", message.UserRef, message.Email);
+
+            await _userRepository.AddSettings(message.Email);
+            
             userSettings = (await _userRepository.GetUserSetting(message.UserRef, message.Email)).ToList();
 
-            _logger.LogInformation("Created default settings for user {UserRef}", message.UserRef);
+            _logger.LogInformation("Created default settings for user {UserRef}. UserSettings result: {Settings}", message.UserRef, JsonSerializer.Serialize(userSettings));
         }
 
         return new GetUserNotificationSettingsResponse
         {
-            NotificationSettings =
-                userSettings.Select(
-                    m =>
-                        new UserNotificationSetting
-                        {
-                            UserRef = m.UserRef,
-                            ReceiveNotifications =
-                                m.ReceiveNotifications,
-                            Email = message.Email
-                        }).ToList()
+            NotificationSettings = userSettings.Select(userSetting => new UserNotificationSetting
+            {
+                UserRef = userSetting.UserRef,
+                ReceiveNotifications = userSetting.ReceiveNotifications,
+                Email = message.Email
+            }).ToList()
         };
     }
 }
