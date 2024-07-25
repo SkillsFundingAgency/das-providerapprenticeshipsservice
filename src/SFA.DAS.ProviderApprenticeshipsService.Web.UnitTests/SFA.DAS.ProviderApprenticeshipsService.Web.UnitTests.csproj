@@ -19,12 +19,12 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AutoFixture.AutoMoq" Version="4.18.0" />
-    <PackageReference Include="AutoFixture.NUnit3" Version="4.18.0" />
-    <PackageReference Include="CsvHelper" Version="30.0.1" />
-    <PackageReference Include="FluentAssertions" Version="6.11.0" />
+    <PackageReference Include="AutoFixture.AutoMoq" Version="4.18.1" />
+    <PackageReference Include="AutoFixture.NUnit3" Version="4.18.1" />
+    <PackageReference Include="CsvHelper" Version="33.0.1" />
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Moq" Version="4.16.1" />
+    <PackageReference Include="Moq" Version="4.20.70" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageReference Include="SFA.DAS.Authorization" Version="6.0.97" />
@@ -42,9 +42,9 @@
     <PackageReference Include="System.ServiceModel.Duplex" Version="6.0.0" />
     <PackageReference Include="System.ServiceModel.NetTcp" Version="6.0.0" />
     <PackageReference Include="System.ServiceModel.Federation" Version="6.0.0" />
-	<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
+	<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageReference Include="SFA.DAS.Learners" Version="1.1.181" />
-    <PackageReference Include="coverlet.msbuild" Version="3.2.0">
+    <PackageReference Include="coverlet.msbuild" Version="6.0.2">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
