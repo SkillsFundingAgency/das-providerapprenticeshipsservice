@@ -8,4 +8,5 @@ public interface IProviderRepository
     Task ImportProviders(CommitmentsV2.Api.Types.Responses.Provider[] providers);
     Task<Provider> GetNextProviderForIdamsUpdate();
     Task MarkProviderIdamsUpdated(long ukprn);
+    Task<Provider> GetProvider(long ukprn);
 }

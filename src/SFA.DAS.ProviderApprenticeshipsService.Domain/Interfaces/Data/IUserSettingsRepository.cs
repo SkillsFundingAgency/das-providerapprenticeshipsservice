@@ -8,7 +8,7 @@ public interface IUserSettingsRepository
 {
     Task<IEnumerable<UserSetting>> GetUserSetting(string userRef, string email);
 
-    Task AddSettings(string userRef);
+    Task AddSettings(string email);
 
     Task UpdateUserSettings(string email, bool receiveNotifications);
 }

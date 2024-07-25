@@ -185,17 +185,23 @@
 
     <div class="das-card">
         <h2 class="govuk-heading-m">
+            <a asp-external-subdomain="feedback" asp-external-controller="" asp-external-action=""
+            class="govuk-link">Your feedback</a>
+        </h2>
+        <p>
+            Your feedback from employers and apprentices.
+        </p>
+    </div>
+    <div class="das-card">
+        <h2 class="govuk-heading-m">
             <a asp-external-subdomain="requesttraining" asp-external-controller=""
                asp-external-action="active" asp-external-id="@Model.ProviderId"
                class="govuk-link @(selected == NavigationSection.EmployerDemand ? "govuk-link--current" : "")">
                 View employer requests for training
             </a>
-            @* <a href="@Url.EmployerDemandLink($"{Model.ProviderId}/find-apprenticeship-opportunities")">Find employers
-            that need a training provider</a> *@
         </h2>
         <p>View employer requests, share your contact details with employers and see other courses you could offer.</p>
     </div>
-
 </div>
 
 
