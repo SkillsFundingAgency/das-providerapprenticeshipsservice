@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
 
-interface IIdamsSyncService
+public interface IIdamsSyncService
 {
     Task SyncUsers();
 }
