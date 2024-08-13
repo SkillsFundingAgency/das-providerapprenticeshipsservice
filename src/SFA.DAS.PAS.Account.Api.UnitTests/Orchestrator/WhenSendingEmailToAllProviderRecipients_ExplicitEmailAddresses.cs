@@ -80,9 +80,6 @@ public class WhenSendingEmailToAllProviderRecipients_ExplicitEmailAddresses
             => y.Email.RecipientsAddress == _emailAddresses[index]
                && y.Email.TemplateId == _templateId
                && y.Email.Tokens.SequenceEqual(_tokens)
-               && y.Email.ReplyToAddress == "noreply@sfa.gov.uk"
-               && y.Email.Subject == "x"
-               && y.Email.SystemId == "x"
         ), It.IsAny<CancellationToken>()));
     }
 

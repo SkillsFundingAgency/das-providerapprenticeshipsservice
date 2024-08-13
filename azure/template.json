@@ -104,6 +104,9 @@
     "redisSessionProviderConnectionString": {
       "type": "securestring"
     },
+    "sharedServiceBusName": {
+      "type": "string"
+    },
     "featureToggle": {
       "type": "object",
       "defaultValue": {
@@ -692,6 +695,34 @@
             "value": "[parameters('logAnalyticsWorkspaceName')]"
           }
         }
+      }
+    },
+    {
+      "apiVersion": "2020-06-01",
+      "name": "[concat('role-assignments-pas', copyIndex(), '-', parameters('utcValue'))]",
+      "type": "Microsoft.Resources/deployments",
+      "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'role-assignments/role-assignment-service-bus.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "principalId": {
+            "value": "[createArray(reference(concat(variables('uiAppServiceName'), '-', parameters('utcValue'))).outputs.managedServiceIdentityId.value, reference(concat(variables('uiAppServiceName'), '-', parameters('utcValue'))).outputs.stagingManagedServiceIdentityId.value, reference(concat(variables('apiAppServiceName'), '-', parameters('utcValue'))).outputs.managedServiceIdentityId.value, reference(concat(variables('apiAppServiceName'), '-', parameters('utcValue'))).outputs.stagingManagedServiceIdentityId.value)[copyIndex()]]"
+          },
+          "assignmentType": {
+            "value": "ServiceBusOwner"
+          },
+          "resourceName": {
+            "value": "[parameters('sharedServiceBusName')]"
+          }
+        }
+      },
+      "copy": {
+        "name": "role-assignments",
+        "count": 4
       }
     }
   ],
