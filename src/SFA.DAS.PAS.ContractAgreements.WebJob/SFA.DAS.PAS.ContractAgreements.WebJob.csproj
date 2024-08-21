@@ -2,6 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<OutputType>Exe</OutputType>
+		<LangVersion>latestmajor</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="Properties\PublishProfiles\das-at-pas-as - Web Deploy.pubxml" />
@@ -12,7 +13,7 @@
 		<ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Web\SFA.DAS.ProviderApprenticeshipsService.Web.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
+		<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Logging.ApplicationInsights" Version="3.0.35" />
 		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
@@ -31,7 +32,7 @@
 		<PackageReference Include="System.ServiceModel.Duplex" Version="6.0.0" />
 		<PackageReference Include="System.ServiceModel.NetTcp" Version="6.0.0" />
 		<PackageReference Include="System.ServiceModel.Federation" Version="6.0.0" />
-		<PackageReference Include="Microsoft.ApplicationInsights.NLogTarget" Version="2.21.0" />
+		<PackageReference Include="Microsoft.ApplicationInsights.NLogTarget" Version="2.22.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="5.0.0" />
 		<PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
 		<PackageReference Include="structuremap" Version="4.7.1" />

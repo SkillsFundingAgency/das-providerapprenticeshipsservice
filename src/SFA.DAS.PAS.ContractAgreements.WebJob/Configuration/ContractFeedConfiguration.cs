@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
 
@@ -26,4 +27,5 @@ public class ContractFeedConfiguration : IContractFeedConfiguration
     public string DatabaseConnectionString { get; set; }
     // Needed?
     public string ServiceBusConnectionString { get; set; }
+    public string NServiceBusLicense { get; set; }
 }

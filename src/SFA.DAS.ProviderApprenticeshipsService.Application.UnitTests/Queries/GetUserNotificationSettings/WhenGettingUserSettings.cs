@@ -40,7 +40,6 @@ public class WhenGettingUserSettings
             { UserRef = UserRef, ReceiveNotifications = true, Email = Email});
     }
     
-
     [Test]
     public async Task ThenCreatingSettingsIfNoSettingsFoundGettingUsersSettings()
     {
@@ -49,8 +48,7 @@ public class WhenGettingUserSettings
 
         result.NotificationSettings.Count.Should().Be(0);
 
-        _mockSettingsRepo.Verify(m => m.AddSettings(UserRef), Times.Exactly(1));
+        _mockSettingsRepo.Verify(m => m.AddSettings(Email), Times.Exactly(1));
         _mockSettingsRepo.Verify(m => m.GetUserSetting(UserRef, Email), Times.Exactly(2));
     }
-    
 }

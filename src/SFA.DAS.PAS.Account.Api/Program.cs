@@ -1,3 +1,5 @@
+using SFA.DAS.NServiceBus.Configuration.MicrosoftDependencyInjection;
+
 namespace SFA.DAS.PAS.Account.Api;
 
 public class Program
@@ -9,6 +11,7 @@ public class Program
 
     private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
+            .UseNServiceBusContainer()
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();

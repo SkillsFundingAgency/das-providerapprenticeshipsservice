@@ -13,13 +13,12 @@ public static class ApplicationServiceRegistrations
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddConfigurations(configuration);
         services.AddAccountApiClient(configuration);
         services.AddTrainingProviderApi(configuration);
         services.AddDataRepositories();
         services.AddCommitmentsV2ApiClient(configuration);
         services.AddContentApi(configuration);
-        services.AddNotifications(configuration);
+        services.AddTransient<IBackgroundNotificationService, BackgroundNotificationService>();
         services.AddProviderRelationshipsApi(configuration); // TBC IF NEEDED
         services.AddValidators();
         services.AddUserIdentityService();
