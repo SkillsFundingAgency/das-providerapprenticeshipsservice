@@ -11,8 +11,6 @@ public sealed class SendNotificationCommandValidator : AbstractValidator<SendNot
         When(x => x.Email != null, () =>
         {
             RuleFor(x => x.Email.RecipientsAddress).NotEmpty();
-            RuleFor(x => x.Email.ReplyToAddress).NotEmpty();
-            RuleFor(x => x.Email.Subject).NotEmpty();
             RuleFor(x => x.Email.TemplateId).NotEmpty();
         });
     }

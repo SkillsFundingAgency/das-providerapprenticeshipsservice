@@ -72,10 +72,7 @@ public class HomeController : Controller
         var useDfESignIn = _providerApprenticeshipsServiceConfiguration.UseDfESignIn;
         if (User.Identity is { IsAuthenticated: false })
         {
-            // choose the authScheme based on the SSO.
-            var authScheme = OpenIdConnectDefaults.AuthenticationScheme;
-
-            await HttpContext.ChallengeAsync(authScheme);
+            await HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme);
         }
         else if (useDfESignIn)
         {

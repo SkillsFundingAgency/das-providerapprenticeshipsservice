@@ -155,10 +155,6 @@
     {
         <div class="das-card">
             <h2 class="govuk-heading-m">
-                @* This would need another domain using traineeship *@
-                @* <a asp-external-subdomain="recruit" asp-external-controller="" asp-external-id="@Model.ProviderId"
-            class="govuk-link @(selected == NavigationSection.Recruit ? "govuk-link--current" : "")">Recruit
-            trainees</a> *@
                 <a href="@Url.TraineeshipLink($"{Model.ProviderId}")" class="govuk-link">Recruit trainees</a>
             </h2>
             <p>Create a traineeship vacancy and manage applications.</p>
@@ -197,6 +193,16 @@
         </h2>
         <p>Integrate our APIs to help with recruitment or to track apprentice progress using your own systems. You can
             display adverts on multiple sites or automatically update training records.</p>
+    </div>
+
+    <div class="das-card">
+        <h2 class="govuk-heading-m">
+            <a asp-external-subdomain="feedback" asp-external-controller="" asp-external-action=""
+            class="govuk-link">Your feedback</a>
+        </h2>
+        <p>
+            Your feedback from employers and apprentices.
+        </p>
     </div>
 
 </div>

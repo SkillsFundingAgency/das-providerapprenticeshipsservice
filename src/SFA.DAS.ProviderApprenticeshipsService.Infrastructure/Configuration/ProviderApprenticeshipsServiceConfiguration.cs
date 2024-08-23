@@ -1,6 +1,5 @@
+using SFA.DAS.Authorization.ProviderFeatures.Configuration;
 using SFA.DAS.Http.Configuration;
-using SFA.DAS.Notifications.Api.Client.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
 using SFA.DAS.ProviderRelationships.Api.Client.Configuration;
 
@@ -11,9 +10,9 @@ public class ProviderApprenticeshipsServiceConfiguration : IBaseConfiguration
     public bool UseFakeIdentity { get; set; }
     public string DatabaseConnectionString { get; set; }
     public string ServiceBusConnectionString { get; set; }
+    public string NServiceBusLicense { get; set; }
     public CommitmentsApiClientV2Configuration CommitmentsApiClientV2 { get; set; }
     public TrainingProviderApiClientConfiguration TrainingProviderApiClientConfiguration { get; set; }
-    public NotificationsApiClientConfiguration NotificationApi { get; set; }
     public ProviderNotificationConfiguration CommitmentNotification { get; set; }
     public ProviderRelationshipsApiConfiguration ProviderRelationshipsApi { get; set; }
     public int MaxBulkUploadFileSize { get; set; } // Size of file in kilobytes
@@ -21,7 +20,7 @@ public class ProviderApprenticeshipsServiceConfiguration : IBaseConfiguration
     public string ContentApplicationId { get; set; }
     public int DefaultCacheExpirationInMinutes { get; set; }
     public ZenDeskConfiguration ZenDeskSettings { get; set; }
-    public SFA.DAS.Authorization.ProviderFeatures.Configuration.ProviderFeaturesConfiguration Features { get; set; }
+    public ProviderFeaturesConfiguration Features { get; set; }
     /// <summary>
     /// Gets or Sets property UseDfESignIn.
     /// Property responsible for holding the DfESignIn toggle switch value.
@@ -30,6 +29,7 @@ public class ProviderApprenticeshipsServiceConfiguration : IBaseConfiguration
 
     public string DataProtectionKeysDatabase { get; set; }
     public string RedisConnectionString { get; set; }
+    public string TraineeshipCutOffDate { get; set; }
 }
 
 public class CommitmentsApiClientV2Configuration : IManagedIdentityClientConfiguration

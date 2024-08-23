@@ -51,7 +51,7 @@ namespace SFA.DAS.PAS.Account.Application.UnitTests.Queries.GetUserNotificationS
 
             result.NotificationSettings.Count.Should().Be(0);
 
-            _mockSettingsRepo.Verify(m => m.AddSettings(UserRef), Times.Exactly(1));
+            _mockSettingsRepo.Verify(m => m.AddSettings(Email), Times.Exactly(1));
             _mockSettingsRepo.Verify(m => m.GetUserSetting(UserRef, Email), Times.Exactly(2));
         }
     }

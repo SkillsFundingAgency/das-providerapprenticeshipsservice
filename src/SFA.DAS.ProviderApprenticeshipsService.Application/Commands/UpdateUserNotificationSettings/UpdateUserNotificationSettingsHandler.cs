@@ -30,9 +30,6 @@ public class UpdateUserNotificationSettingsHandler : IRequestHandler<UpdateUserN
         if (!validationResult.IsValid)
             throw new InvalidRequestException(validationResult.Errors);
 
-        await _userSettingsRepository.UpdateUserSettings(command.UserRef, command.ReceiveNotifications);
-
-        _logger.Trace($"User settings updated for user {command.UserRef}");
-
+        await _userSettingsRepository.UpdateUserSettings(command.Email, command.ReceiveNotifications);
     }
 }

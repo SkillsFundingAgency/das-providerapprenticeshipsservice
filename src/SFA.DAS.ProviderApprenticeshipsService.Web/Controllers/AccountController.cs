@@ -21,8 +21,8 @@ public class AccountController : BaseController
     private readonly IConfiguration _configuration;
 
     public AccountController(IAccountOrchestrator accountOrchestrator,
-        ICookieStorageService<FlashMessageViewModel> flashMessage, IConfiguration configuration)
-        : base(flashMessage)
+        ICookieStorageService<FlashMessageViewModel> flashMessage,
+        IConfiguration configuration) : base(flashMessage)
     {
         _accountOrchestrator = accountOrchestrator;
         _configuration = configuration;
@@ -44,7 +44,9 @@ public class AccountController : BaseController
         var model = await _accountOrchestrator.GetAccountHomeViewModel(providerId);
 
         if (!string.IsNullOrEmpty(message))
+        {
             model.Message = WebUtility.UrlDecode(message);
+        }
 
         switch (model.AccountStatus)
         {
@@ -68,8 +70,6 @@ public class AccountController : BaseController
         var email = User.Identity.GetClaim(DasClaimTypes.DfEEmail);
         var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
 
-        
-        
         var model = await _accountOrchestrator.GetNotificationSettings(userRef, email);
         model.ProviderId = providerId;
 
@@ -78,6 +78,7 @@ public class AccountController : BaseController
         {
             model.FlashMessage = flashMessage;
         }
+
         var name = User.Identity.GetClaim(DasClaimTypes.Upn) ?? User.Identity.GetClaim(DasClaimTypes.DisplayName);
         foreach (var userNotificationSetting in model.NotificationSettings)
         {

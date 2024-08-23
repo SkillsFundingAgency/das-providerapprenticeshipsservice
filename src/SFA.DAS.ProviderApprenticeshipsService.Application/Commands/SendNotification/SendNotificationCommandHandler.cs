@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
@@ -26,13 +25,13 @@ public sealed class SendNotificationCommandHandler : IRequestHandler<SendNotific
     public async Task Handle(SendNotificationCommand message, CancellationToken cancellationToken)
     {
         var validationResult = _validator.Validate(message);
+        
         if (!validationResult.IsValid)
         {
             _logger.LogInformation("Invalid SendNotificationCommand, not sending");
             throw new ValidationException(validationResult.Errors.ToString());
         }
                 
-
         _logger.LogInformation("Sending email to {EmailRecipientsAddress}. Template: {EmailTemplateId}", message.Email.RecipientsAddress, message.Email.TemplateId);
 
         try

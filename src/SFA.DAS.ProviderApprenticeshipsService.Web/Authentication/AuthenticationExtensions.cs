@@ -15,6 +15,5 @@ public static class AuthenticationExtensions
             ClientName.ProviderRoatp,
             "/signout",
             "");
-        
     }
 }
