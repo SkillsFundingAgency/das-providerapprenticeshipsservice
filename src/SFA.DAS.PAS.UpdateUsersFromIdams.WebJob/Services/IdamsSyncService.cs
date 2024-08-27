@@ -98,8 +98,12 @@ public class IdamsSyncService : IIdamsSyncService
         var response = await _apiHelper.Get<DfeUser>($"{_dfEOidcConfiguration.APIServiceUrl}/organisations/{providerId}/users");
         if (response == null)
         {
+            _logger.LogInformation($"{_dfEOidcConfiguration.APIServiceUrl}/organisations/{providerId}/users - None found");
             return new List<IdamsUser>();
         }
+        
+        _logger.LogInformation($"{_dfEOidcConfiguration.APIServiceUrl}/organisations/{providerId}/users - Found {response.Users.Count}");
+
         var idamsUsers = response.Users.Where(c=>c.UserStatus ==1 ).Distinct();
         var idamsSuperUsers = new List<IdamsUser>();
 
