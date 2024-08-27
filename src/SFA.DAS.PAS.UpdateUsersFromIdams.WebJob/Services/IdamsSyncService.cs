@@ -104,6 +104,11 @@ public class IdamsSyncService : IIdamsSyncService
         
         _logger.LogInformation($"{_dfEOidcConfiguration.APIServiceUrl}/organisations/{providerId}/users - Found {response.Users.Count}");
 
+        foreach (var user in response.Users)
+        {
+            _logger.LogInformation("Email {0} has Roles Count {1} with Status {2} ", user.Email, user.Roles.Count, user.UserStatus);
+        }
+
         var idamsUsers = response.Users.Where(c=>c.UserStatus ==1 ).Distinct();
         var idamsSuperUsers = new List<IdamsUser>();
 
