@@ -106,7 +106,7 @@ public class IdamsSyncService : IIdamsSyncService
 
         foreach (var user in response.Users)
         {
-            _logger.LogInformation("Email {0} has Roles Count {1} with Status {2} ", user.Email, user.Roles.Count, user.UserStatus);
+            _logger.LogInformation("Provider {0} : Email {1} has Roles \"{2}\" with Status {3} ", providerId, user.Email, string.Join(",", user.Roles), user.UserStatus);
         }
 
         var idamsUsers = response.Users.Where(c=>c.UserStatus ==1 ).Distinct();
