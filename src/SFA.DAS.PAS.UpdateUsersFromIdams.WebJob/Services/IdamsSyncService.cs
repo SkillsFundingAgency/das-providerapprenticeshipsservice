@@ -4,12 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using SFA.DAS.DfESignIn.Auth.Configuration;
 using SFA.DAS.DfESignIn.Auth.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.DfESignInUser;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.IdamsUser;
@@ -104,14 +102,11 @@ public class IdamsSyncService : IIdamsSyncService
         
         _logger.LogInformation($"{_dfEOidcConfiguration.APIServiceUrl}/organisations/{providerId}/users - Found {response.Users.Count}");
 
-        foreach (var user in response.Users)
-        {
-            _logger.LogInformation("Provider {0} : Email {1} has Roles \"{2}\" with Status {3} ", providerId, user.Email, string.Join(",", user.Roles), user.UserStatus);
-        }
-
         var idamsUsers = response.Users.Where(c=>c.UserStatus ==1 ).Distinct();
+        
+        // TODO Remove I think as next 2 statements appear to be pointless, as they do nothing
         var idamsSuperUsers = new List<IdamsUser>();
-
+        
         var idamsNormalUsers = idamsUsers.Where(u => !idamsSuperUsers.Any(su => su.Email.Equals(u.Email, StringComparison.InvariantCultureIgnoreCase)));
 
         return idamsNormalUsers.Select(u => new IdamsUser { Email = u.Email, UserType = UserType.NormalUser }).Concat(idamsSuperUsers.Select(su => new IdamsUser { Email = su.Email, UserType = UserType.SuperUser })).ToList();
