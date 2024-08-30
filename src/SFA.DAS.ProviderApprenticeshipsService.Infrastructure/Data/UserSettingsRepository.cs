@@ -4,21 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserSetting;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
-public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IUserSettingsRepository
+public class UserSettingsRepository(
+    IBaseConfiguration configuration,
+    ILogger<UserSettingsRepository> logger)
+    : BaseRepository<UserSettingsRepository>(configuration.DatabaseConnectionString, logger), IUserSettingsRepository
 {
-    public UserSettingsRepository(
-        IBaseConfiguration configuration, 
-        ILogger<UserSettingsRepository> logger)
-        : base(configuration.DatabaseConnectionString, logger)
-    {
-    }
-
     public async Task<IEnumerable<UserSetting>> GetUserSetting(string userRef, string email)
     {
         return await WithConnection(async connection =>
@@ -103,9 +99,11 @@ public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IU
                                     ReceiveNotifications = @receiveNotifications 
                                 WHERE UserRef = 
                                 (
-                                    SELECT TOP 1 UserRef 
+                                    SELECT TOP 1 
+                                        UserRef 
                                     FROM [dbo].[User] 
-                                    WHERE Email = @email ORDER BY LastLogin DESC
+                                    WHERE Email = @email
+                                    ORDER BY LastLogin DESC
                                 )";
             
             return await connection.ExecuteAsync(

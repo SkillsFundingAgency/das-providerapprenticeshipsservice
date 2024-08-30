@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using SFA.DAS.Notifications.Api.Types;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
 
 public class SendNotificationCommand : IRequest
 {
-    public Email Email { get; set; }
+    public NotificationEmail Email { get; set; }
 }
