@@ -121,7 +121,7 @@
         <h2 class="govuk-heading-m">
             <a asp-external-subdomain="find-employers" asp-external-controller=""
                 asp-external-action="find-apprenticeship-opportunities" asp-external-id="@Model.ProviderId"
-                class="govuk-link @(selected == NavigationSection.EmployerDemand ? "govuk-link--current" : "")">Find
+                class="govuk-link">Find
                 employers that need a training provider</a>
             @* <a href="@Url.EmployerDemandLink($"{Model.ProviderId}/find-apprenticeship-opportunities")">Find employers
             that need a training provider</a> *@
@@ -144,7 +144,7 @@
         <h2 class="govuk-heading-m">
             <a asp-external-subdomain="providerregistrations" asp-external-controller=""
                 asp-external-action="registration/invitedemployers" asp-external-id="@Model.ProviderId"
-                class="govuk-link @(selected == NavigationSection.EmployerDemand ? "govuk-link--current" : "")">Manage
+                class="govuk-link">Manage
                 employer invitations</a>
             @* <a href="@Url.RegistrationLink($"{Model.ProviderId}/registration/invitedemployers")">Manage employer
             invitations</a> *@
