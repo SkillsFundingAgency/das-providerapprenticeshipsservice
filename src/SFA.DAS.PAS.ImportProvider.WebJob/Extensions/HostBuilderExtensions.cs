@@ -1,5 +1,7 @@
 ﻿using System;
 using Azure.Identity;
+using Microsoft.Azure.WebJobs.Host.Config;
+using Microsoft.Azure.WebJobs.Logging.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,6 +10,7 @@ using Microsoft.Extensions.Options;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.PAS.ImportProvider.WebJob.Configuration;
+using SFA.DAS.PAS.ImportProvider.WebJob.ScheduledJobs;
 using SFA.DAS.PAS.ImportProvider.WebJob.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
@@ -41,10 +44,23 @@ public static class HostBuilderExtensions
 
             services.AddTransient<IProviderRepository, ProviderRepository>();
             services.AddTransient<IImportProviderService, ImportProviderService>();
+            services.AddTransient<ImportProvidersJob>();
+
             services.AddLogging();
         });
 
         return hostBuilder;
+    }
+
+    public static IHostBuilder ConfigureDasWebJobs(this IHostBuilder builder)
+    {
+        builder.ConfigureWebJobs(b => { b.AddTimers(); });
+
+#pragma warning disable 618
+        builder.ConfigureServices(s => s.AddSingleton<IWebHookProvider>(p => null));
+#pragma warning restore 618
+
+        return builder;
     }
 
     public static IHostBuilder AddConfiguration(this IHostBuilder hostBuilder)
@@ -77,6 +93,8 @@ public static class HostBuilderExtensions
             if (!string.IsNullOrEmpty(connectionString))
             {
                 loggingBuilder.AddApplicationInsightsWebJobs(o => o.ConnectionString = connectionString);
+                loggingBuilder.AddFilter<ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Information);
+                loggingBuilder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Information);
             }
 
             loggingBuilder.AddConsole();

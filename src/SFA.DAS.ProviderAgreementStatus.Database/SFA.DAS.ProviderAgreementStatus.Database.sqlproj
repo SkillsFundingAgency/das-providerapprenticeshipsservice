@@ -62,6 +62,7 @@
     <Folder Include="UserDefinedTypes" />
     <Folder Include="AdhocScripts" />
     <Folder Include="AdhocScripts\Manual" />
+    <Folder Include="Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ClientOutboxData.sql" />

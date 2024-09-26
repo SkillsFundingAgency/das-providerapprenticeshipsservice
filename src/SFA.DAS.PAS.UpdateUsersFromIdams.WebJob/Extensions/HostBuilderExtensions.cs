@@ -1,17 +1,26 @@
 ﻿using System;
 using System.Net.Http;
 using Azure.Identity;
+using Microsoft.Azure.WebJobs.Host.Config;
+using Microsoft.Azure.WebJobs.Logging.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Polly;
+using Polly.Extensions.Http;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.DfESignIn.Auth.Api.Client;
+using SFA.DAS.DfESignIn.Auth.Api.Helpers;
+using SFA.DAS.DfESignIn.Auth.Configuration;
+using SFA.DAS.DfESignIn.Auth.Interfaces;
 using SFA.DAS.Http;
 using SFA.DAS.Http.Configuration;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Configuration;
+using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.ScheduledJobs;
 using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
@@ -33,7 +42,7 @@ public static class HostBuilderExtensions
 
             builder.AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{environment}.json", true, true)
-                .AddAzureTableStorage(ConfigurationKeys.ProviderApprenticeshipsService)
+                .AddAzureTableStorage(new []{ConfigurationKeys.ProviderApprenticeshipsService,ConfigurationKeys.DfESignInService})
                 .AddEnvironmentVariables();
         });
     }
@@ -42,13 +51,28 @@ public static class HostBuilderExtensions
     {
         hostBuilder.ConfigureServices((context, services) =>
         {
+            
             services.Configure<ProviderApprenticeshipsServiceConfiguration>(c =>
                 context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService).Bind(c));
+            
+            services.Configure<DfEOidcConfiguration>(context.Configuration.GetSection($"{ConfigurationKeys.DfESignInService}:DfEOidcConfiguration"));
+            services.Configure<DfEOidcConfiguration>(context.Configuration.GetSection($"{ConfigurationKeys.DfESignInService}:DfEOidcConfiguration_ProviderRoATP"));
+            
+            services.AddSingleton(cfg => cfg.GetService<IOptions<DfEOidcConfiguration>>().Value);
             services.AddSingleton<IBaseConfiguration>(isp =>
                 isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
             services.AddSingleton(isp =>
                 isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value.CommitmentNotification);
 
+            services.AddHttpClient<IApiHelper, DfeSignInApiHelper>
+                (
+                    options => options.Timeout = TimeSpan.FromMinutes(30)
+                )
+                .SetHandlerLifetime(TimeSpan.FromMinutes(10))
+                .AddPolicyHandler(HttpClientRetryPolicy());
+            services.AddTransient<ITokenDataSerializer, TokenDataSerializer>();
+            services.AddTransient<ITokenBuilder, TokenBuilder>();
+            
             services.AddTransient<IHttpClientWrapper>(s =>
             {
                 var config = s.GetService<ProviderNotificationConfiguration>();
@@ -65,6 +89,7 @@ public static class HostBuilderExtensions
             services.AddTransient<IProviderRepository, ProviderRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IIdamsSyncService, IdamsSyncService>();
+            services.AddTransient<UpdateUsersFromDfeSignInJob>();
 
             services.AddHttpClient();
 
@@ -72,6 +97,17 @@ public static class HostBuilderExtensions
         });
 
         return hostBuilder;
+    }
+
+    public static IHostBuilder ConfigureDasWebJobs(this IHostBuilder builder)
+    {
+        builder.ConfigureWebJobs(b => { b.AddTimers(); });
+
+#pragma warning disable 618
+        builder.ConfigureServices(s => s.AddSingleton<IWebHookProvider>(p => null));
+#pragma warning restore 618
+
+        return builder;
     }
 
     public static IHostBuilder UseDasEnvironment(this IHostBuilder hostBuilder)
@@ -96,11 +132,21 @@ public static class HostBuilderExtensions
             if (!string.IsNullOrEmpty(connectionString))
             {
                 loggingBuilder.AddApplicationInsightsWebJobs(o => o.ConnectionString = connectionString);
+                loggingBuilder.AddFilter<ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Information);
+                loggingBuilder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Information);
             }
 
             loggingBuilder.AddConsole();
         });
 
         return hostBuilder;
+    }
+    private static IAsyncPolicy<HttpResponseMessage> HttpClientRetryPolicy()
+    {
+        return HttpPolicyExtensions
+            .HandleTransientHttpError()
+            .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2,
+                retryAttempt)));
     }
 }
