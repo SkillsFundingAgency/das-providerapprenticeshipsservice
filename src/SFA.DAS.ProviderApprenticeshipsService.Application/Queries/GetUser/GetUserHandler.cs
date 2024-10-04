@@ -8,15 +8,8 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 
-public class GetUserHandler : IRequestHandler<GetUserQuery, GetUserResponse>
+public class GetUserHandler(IUserRepository userRepository) : IRequestHandler<GetUserQuery, GetUserResponse>
 {
-    private readonly IUserRepository _userRepository;
-
-    public GetUserHandler(IUserRepository userRepository)
-    {
-        _userRepository = userRepository;
-    }
-
     public async Task<GetUserResponse> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(request.UserRef))
@@ -24,7 +17,7 @@ public class GetUserHandler : IRequestHandler<GetUserQuery, GetUserResponse>
             throw new InvalidRequestException(
                 new List<ValidationFailure>{ new ValidationFailure("UserRef", "UserRef is null or empty") });
         }
-        var user = await _userRepository.GetUser(request.UserRef);
+        var user = await userRepository.GetUser(request.UserRef);
 
         if (user == null) 
         {
