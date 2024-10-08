@@ -132,7 +132,7 @@
         <h2 class="govuk-heading-m">
             <a asp-external-subdomain="providerregistrations" asp-external-controller=""
                 asp-external-action="registration/invitedemployers" asp-external-id="@Model.ProviderId"
-                class="govuk-link @(selected == NavigationSection.EmployerDemand ? "govuk-link--current" : "")">Manage
+                class="govuk-link @(selected == NavigationSection.Home ? "govuk-link--current" : "")">Manage
                 employer invitations</a>
             @* <a href="@Url.RegistrationLink($"{Model.ProviderId}/registration/invitedemployers")">Manage employer
             invitations</a> *@
