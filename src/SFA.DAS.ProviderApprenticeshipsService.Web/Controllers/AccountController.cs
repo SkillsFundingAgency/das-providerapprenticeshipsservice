@@ -65,7 +65,14 @@ public class AccountController(
         var email = User.Identity.GetClaim(DasClaimTypes.DfEEmail);
         var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
         
-        logger.LogInformation("AccountController.NotificationSettings. userRef: '{UserRef}'. email: '{Email}'. claims: '{Claims}'.", userRef, email, JsonConvert.SerializeObject(User.Claims.ToDictionary(x => x.Type, x => x.Value)));
+        logger.LogInformation("AccountController.NotificationSettings. userRef: '{UserRef}'. email: '{Email}'. claims: '{Claims}'.", 
+            userRef, 
+            email, 
+            JsonConvert.SerializeObject(User.Claims.Select(x => new
+            {
+                x.Type,
+                x.Value
+            })));
 
         var model = await accountOrchestrator.GetNotificationSettings(userRef, email);
         model.ProviderId = providerId;
