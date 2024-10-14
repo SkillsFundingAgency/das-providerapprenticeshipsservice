@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using Azure.Identity;
+using Microsoft.Azure.WebJobs.Host.Config;
+using Microsoft.Azure.WebJobs.Logging.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,6 +14,7 @@ using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
 using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.PAS.ContractAgreements.WebJob.Interfaces;
+using SFA.DAS.PAS.ContractAgreements.WebJob.ScheduledJobs;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
@@ -45,10 +48,23 @@ public static class HostBuilderExtensions
             services.AddTransient<IContractDataProvider, ContractFeedProcessor>();
             services.AddTransient<IProviderAgreementStatusRepository, ProviderAgreementStatusRepository>();
             services.AddTransient<IProviderAgreementStatusService, ProviderAgreementStatusService>();
+            services.AddTransient<UpdateAgreementStatusJob>();
+
             services.AddLogging();
         });
 
         return hostBuilder;
+    }
+
+    public static IHostBuilder ConfigureDasWebJobs(this IHostBuilder builder)
+    {
+        builder.ConfigureWebJobs(b => { b.AddTimers(); });
+
+#pragma warning disable 618
+        builder.ConfigureServices(s => s.AddSingleton<IWebHookProvider>(p => null));
+#pragma warning restore 618
+
+        return builder;
     }
 
     public static IHostBuilder AddConfiguration(this IHostBuilder hostBuilder)
@@ -93,6 +109,8 @@ public static class HostBuilderExtensions
             if (!string.IsNullOrEmpty(connectionString))
             {
                 loggingBuilder.AddApplicationInsightsWebJobs(o => o.ConnectionString = connectionString);
+                loggingBuilder.AddFilter<ApplicationInsightsLoggerProvider>(string.Empty, Microsoft.Extensions.Logging.LogLevel.Information);
+                loggingBuilder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", Microsoft.Extensions.Logging.LogLevel.Information);
             }
 
             loggingBuilder.AddConsole();
