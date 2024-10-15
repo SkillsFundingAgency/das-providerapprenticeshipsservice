@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
@@ -18,7 +19,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 public class AccountController(
     IAccountOrchestrator accountOrchestrator,
     ICookieStorageService<FlashMessageViewModel> flashMessage,
-    IConfiguration configuration)
+    IConfiguration configuration,
+    ILogger<AccountController> logger)
     : BaseController(flashMessage)
 {
     [Route("~/signout", Name = RouteNames.SignOut)]
@@ -62,6 +64,15 @@ public class AccountController(
         var userRef = User.GetUserRef();
         var email = User.Identity.GetClaim(DasClaimTypes.DfEEmail);
         var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
+        
+        logger.LogInformation("AccountController.NotificationSettings. userRef: '{UserRef}'. email: '{Email}'. claims: '{Claims}'.", 
+            userRef, 
+            email, 
+            JsonConvert.SerializeObject(User.Claims.Select(x => new
+            {
+                x.Type,
+                x.Value
+            })));
 
         var model = await accountOrchestrator.GetNotificationSettings(userRef, email);
         model.ProviderId = providerId;
