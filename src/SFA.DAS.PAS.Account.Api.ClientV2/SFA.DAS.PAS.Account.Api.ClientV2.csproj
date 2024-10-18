@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Authors>DAS</Authors>
     <Description>Client library V2 for accessing Provider Account API</Description>
     <PackageLicense>https://github.com/SkillsFundingAgency/das-providerapprenticeshipsservice/blob/master/LICENSE</PackageLicense>

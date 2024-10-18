@@ -63,7 +63,7 @@ public class WhenGettingAgreementsViewModel
         var result = await _orchestrator.GetAgreementsViewModel(ProviderId, string.Empty);
 
         //Assert
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
         result.CommitmentAgreements.Should().AllBeEquivalentTo(mappedCommitmentAgreement);
     }
 
@@ -77,7 +77,7 @@ public class WhenGettingAgreementsViewModel
         var result = await _orchestrator.GetAgreementsViewModel(ProviderId, string.Empty);
 
         //Assert
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
         result.CommitmentAgreements.Should().BeEquivalentTo(new object[]
         {
             new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "A", AgreementID = "1" },
@@ -97,7 +97,7 @@ public class WhenGettingAgreementsViewModel
         var result = await _orchestrator.GetAgreementsViewModel(ProviderId, "A");
 
         //Assert
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
         result.CommitmentAgreements.Should().BeEquivalentTo(new object[] { new Web.Models.Agreement.CommitmentAgreement { OrganisationName = "A", AgreementID = "1"} });
     }
 
@@ -111,7 +111,7 @@ public class WhenGettingAgreementsViewModel
         var result = await _orchestrator.GetAgreementsViewModel(ProviderId, "V");
 
         //Assert
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
         Assert.That(0, Is.EqualTo(result.CommitmentAgreements.Count()));
     }
 
@@ -125,7 +125,7 @@ public class WhenGettingAgreementsViewModel
         var result = await _orchestrator.GetAgreementsViewModel(ProviderId, "D");
 
         //Assert
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
         Assert.That(1, Is.EqualTo(result.CommitmentAgreements.Count()));
     }
 
@@ -139,7 +139,7 @@ public class WhenGettingAgreementsViewModel
         var result = await _orchestrator.GetAgreementsViewModel(ProviderId, "D");
 
         //Assert
-        Assert.IsNotNull(result);
+        result.Should().NotBeNull();
         Assert.That(1, Is.EqualTo(result.CommitmentAgreements.Count()));
         Assert.That(4, Is.EqualTo(result.AllProviderOrganisationNames.Count()));
     }
