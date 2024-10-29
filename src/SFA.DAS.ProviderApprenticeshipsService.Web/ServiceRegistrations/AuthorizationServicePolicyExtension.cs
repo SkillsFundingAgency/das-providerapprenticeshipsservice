@@ -36,11 +36,10 @@ public static class AuthorizationServicePolicyExtension
         services.AddAuthorization<AuthorizationContextProvider>();
         services.AddSingleton<IAuthorizationHandler, AuthorizationHandler>();
 
-        services.AddSingleton(_ => _.GetService<IAuthorizationContextProvider>().GetAuthorizationContext());
+        services.AddSingleton(provider => provider.GetService<IAuthorizationContextProvider>().GetAuthorizationContext());
         services.Decorate<IAuthorizationContextProvider, AuthorizationContextCache>();
         services.Decorate<IAuthorizationHandler, AuthorizationResultLogger>();
         services.AddScoped<IAuthorizationService, AuthorizationService>();
-        services.AddSingleton<IDefaultAuthorizationHandler, DefaultAuthorizationHandler>();
         services.AddSingleton<ITrainingProviderAuthorizationHandler, TrainingProviderAuthorizationHandler>();
         services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, TrainingProviderAllRolesAuthorizationHandler>();
     }

@@ -20,4 +20,10 @@ public static class AuthorizationContextExtensions
         authorizationContext.Set(AuthorizationContextKey.Ukprn, ukprn);
         authorizationContext.Set(AuthorizationContextKey.UserEmail, userEmail);
     }
+    
+    public static (long Ukprn, string UserEmail) GetProviderFeatureValues(this IAuthorizationContext authorizationContext)
+    {
+        return (authorizationContext.Get<long>(AuthorizationContextKeys.Ukprn),
+            authorizationContext.Get<string>(AuthorizationContextKeys.UserEmail));
+    }
 }

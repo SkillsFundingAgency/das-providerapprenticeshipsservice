@@ -11,6 +11,11 @@ public class AuthorizationResult
     {
     }
     
+    public AuthorizationResult(AuthorizationError error)
+    {
+        _errors.Add(error);
+    }
+    
     public AuthorizationResult(IEnumerable<AuthorizationError> errors)
     {
         _errors.AddRange(errors);

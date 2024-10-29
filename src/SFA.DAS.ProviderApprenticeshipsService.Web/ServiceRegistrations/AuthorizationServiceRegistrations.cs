@@ -13,12 +13,9 @@ public static class AuthorizationServiceRegistrations
             .AddMemoryCache()
             .AddScoped<IAuthorizationContextProvider>(p => new AuthorizationContextCache(p.GetService<T>()))
             .AddScoped<IAuthorizationService, AuthorizationService>()
-            .AddScoped<IDefaultAuthorizationHandler, DefaultAuthorizationHandler>()
             .AddScoped<T>()
             .AddScoped(p => p.GetService<IAuthorizationContextProvider>().GetAuthorizationContext());
-
-        services.Decorate<IAuthorizationService, AuthorizationServiceWithDefaultHandler>();
-
+        
         return services;
     }
 }
