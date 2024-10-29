@@ -47,7 +47,7 @@ public class Startup
         services.AddApplicationServices(_configuration);
         services.AddOrchestrators();
         services.AddEncodingServices(_configuration);
-        services.AddFeatureToggleService(_configuration);
+        services.AddFeatureToggleService();
         services.AddActionFilters();
 
         services.AddAndConfigureAuthentication(_configuration);

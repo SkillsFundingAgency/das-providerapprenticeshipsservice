@@ -9,6 +9,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;

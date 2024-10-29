@@ -4,31 +4,20 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Routing;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 
-public class AuthorizationContextProvider : IAuthorizationContextProvider
+public class AuthorizationContextProvider(
+    IHttpContextAccessor httpContextAccessor,
+    IEncodingService encodingService,
+    ILogger<AuthorizationContextProvider> log,
+    IActionContextAccessorWrapper actionContextAccessor)
+    : IAuthorizationContextProvider
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IEncodingService _encodingService;
-    private readonly ILogger<AuthorizationContextProvider> _log;
-    private readonly IActionContextAccessorWrapper _actionContextAccessorWrapper;
-
-    public AuthorizationContextProvider(IHttpContextAccessor httpContextAccessor,
-        IEncodingService encodingService,
-        ILogger<AuthorizationContextProvider> log,
-        IActionContextAccessorWrapper actionContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor;
-        _encodingService = encodingService;
-        _log = log;
-        _actionContextAccessorWrapper = actionContextAccessor;
-    }
-
     public IAuthorizationContext GetAuthorizationContext()
     {
         var authorizationContext = new AuthorizationContext();
             
-        var routeData = _actionContextAccessorWrapper.GetRouteData();
+        var routeData = actionContextAccessor.GetRouteData();
         var ukprn = GetProviderId(routeData.Values);
-        var accountLegalEntityId = GetAccountLegalEntityId(_httpContextAccessor.HttpContext.Request.Query[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId]);
+        var accountLegalEntityId = GetAccountLegalEntityId(httpContextAccessor.HttpContext.Request.Query[RouteDataKeys.EmployerAccountLegalEntityPublicHashedId]);
         if (accountLegalEntityId != null)
         {
             authorizationContext.AddProviderPermissionValues(accountLegalEntityId.Value, ukprn);
@@ -54,12 +43,12 @@ public class AuthorizationContextProvider : IAuthorizationContextProvider
             {
                 return null;
             }
-            return _encodingService.Decode(accountLegalEntityPublicHashedId,EncodingType.PublicAccountLegalEntityId);
+            return encodingService.Decode(accountLegalEntityPublicHashedId,EncodingType.PublicAccountLegalEntityId);
                 
         }
         catch (Exception ex)
         {
-            _log.LogWarning(ex, "Unable to extract AccountLegalEntityId");
+            log.LogWarning(ex, "Unable to extract AccountLegalEntityId");
         }
         
         return null;
@@ -67,17 +56,21 @@ public class AuthorizationContextProvider : IAuthorizationContextProvider
 
     private long GetProviderId(RouteValueDictionary routeValueDictionary)
     {
-        if (long.TryParse(_httpContextAccessor.HttpContext.User.Identity.GetClaim(DasClaimTypes.Ukprn), out var providerId))
+        if (long.TryParse(httpContextAccessor.HttpContext.User.Identity.GetClaim(DasClaimTypes.Ukprn), out var providerId))
+        {
             return providerId;
+        }
 
         if (long.TryParse((string) routeValueDictionary[RouteDataKeys.ProviderId], out providerId))
+        {
             return providerId;
+        }
 
         throw new InvalidOperationException("AuthorizationContextProvider error - Unable to extract ProviderId");
     }
 
     private string GetUserEmail()
     {
-        return _httpContextAccessor.HttpContext.User.Identity.GetClaim(DasClaimTypes.Email) ?? _httpContextAccessor.HttpContext.User.Identity.GetClaim(DasClaimTypes.DfEEmail);
+        return httpContextAccessor.HttpContext.User.Identity.GetClaim(DasClaimTypes.Email) ?? httpContextAccessor.HttpContext.User.Identity.GetClaim(DasClaimTypes.DfEEmail);
     }
 }

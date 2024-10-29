@@ -17,19 +17,4 @@ public static class OptionExtensions
             throw new NotImplementedException("Combining options (to specify OR) by comma separating them is not currently supported");
         }
     }
-
-    public static bool IsSameAs(this IReadOnlyCollection<string> lhs, IReadOnlyCollection<string> rhs)
-    {
-        if (ReferenceEquals(lhs, rhs))
-        {
-            return true;
-        }
-
-        if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null) || lhs.Count != rhs.Count)
-        {
-            return false;
-        }
-
-        return lhs.SequenceEqual(rhs);
-    }
 }

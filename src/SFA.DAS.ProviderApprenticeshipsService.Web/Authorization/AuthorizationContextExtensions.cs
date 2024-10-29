@@ -14,22 +14,10 @@ public static class AuthorizationContextExtensions
         authorizationContext.Set(AuthorizationContextKey.Ukprn, ukprn);
         authorizationContext.Set(AuthorizationContextKey.AccountLegalEntityId, accountLegalEntityId);
     }
-        
-    internal static (long Ukprn, long AccountLegalEntityId) GetProviderPermissionValues(this IAuthorizationContext authorizationContext)
-    {
-        return (authorizationContext.Get<long>(AuthorizationContextKey.Ukprn),
-            authorizationContext.Get<long>(AuthorizationContextKey.AccountLegalEntityId));
-    }
     
     public static void AddProviderFeatureValues(this IAuthorizationContext authorizationContext, long ukprn, string userEmail)
     {
         authorizationContext.Set(AuthorizationContextKey.Ukprn, ukprn);
         authorizationContext.Set(AuthorizationContextKey.UserEmail, userEmail);
-    }
-        
-    internal static (long Ukprn, string UserEmail) GetProviderFeatureValues(this IAuthorizationContext authorizationContext)
-    {
-        return (authorizationContext.Get<long>(AuthorizationContextKey.Ukprn),
-            authorizationContext.Get<string>(AuthorizationContextKey.UserEmail));
     }
 }

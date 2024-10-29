@@ -1,9 +1,11 @@
 ﻿using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Caching;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Handlers;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Logging;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Services;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations;
 
 public static class AuthorizationServicePolicyExtension
 {

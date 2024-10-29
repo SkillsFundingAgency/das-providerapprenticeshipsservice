@@ -5,16 +5,10 @@ public interface IActionContextAccessorWrapper
     RouteData GetRouteData();
 };
 
-public class ActionContextAccessorWrapper : IActionContextAccessorWrapper
+public class ActionContextAccessorWrapper(IActionContextAccessor actionContextAccessor) : IActionContextAccessorWrapper
 {
-    private readonly IActionContextAccessor _actionContextAccessor;
-    public ActionContextAccessorWrapper(IActionContextAccessor actionContextAccessor)
-    {
-        _actionContextAccessor = actionContextAccessor;
-    }
-
     public RouteData GetRouteData()
     {
-        return _actionContextAccessor.ActionContext.RouteData;
+        return actionContextAccessor.ActionContext.RouteData;
     }
 }
