@@ -1,11 +1,7 @@
-﻿using SFA.DAS.Authorization.Caching;
-using SFA.DAS.Authorization.Context;
-using SFA.DAS.Authorization.DependencyResolution.Microsoft;
-using SFA.DAS.Authorization.Handlers;
-using SFA.DAS.Authorization.Logging;
-using SFA.DAS.Authorization.ProviderFeatures.Handlers;
-using SFA.DAS.Authorization.Services;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Caching;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Handlers;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Logging;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 
@@ -15,18 +11,15 @@ public static class AuthorizationServicePolicyExtension
     private const string ProviderDab = "DAB";
     private const string ProviderDac = "DAC";
     private const string ProviderDav = "DAV";
-    
+
     public static void AddAuthorizationServicePolicies(this IServiceCollection services)
     {
         services.AddHttpContextAccessor();
-        
+
 
         services.AddAuthorization(options =>
         {
-            options.AddPolicy(PolicyNames.AuthenticatedUser, policy =>
-            {
-                policy.RequireAuthenticatedUser();
-            });
+            options.AddPolicy(PolicyNames.AuthenticatedUser, policy => { policy.RequireAuthenticatedUser(); });
             options.AddPolicy(PolicyNames.RequireDasPermissionRole, policy =>
             {
                 policy.RequireAuthenticatedUser();
