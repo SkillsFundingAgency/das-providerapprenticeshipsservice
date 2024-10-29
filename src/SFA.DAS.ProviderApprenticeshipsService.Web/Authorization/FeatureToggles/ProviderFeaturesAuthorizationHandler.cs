@@ -1,8 +1,8 @@
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Errors;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Handlers;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Handlers;
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.FeatureToggles;
 
 public class ProviderFeaturesAuthorizationHandler(IFeatureTogglesService<FeatureToggle> featureTogglesService)
     : IAuthorizationHandler

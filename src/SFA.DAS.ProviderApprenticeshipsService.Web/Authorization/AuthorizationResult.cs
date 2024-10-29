@@ -28,6 +28,11 @@ public class AuthorizationResult
         return this;
     }
     
+    public bool HasError<T>() where T : AuthorizationError
+    {
+        return _errors.OfType<T>().Any();
+    }
+    
     public override string ToString()
     {
         return $"{nameof(IsAuthorized)}: {IsAuthorized}, {nameof(Errors)}: {(_errors.Count > 0 ? string.Join(", ", _errors.Select(e => e.Message)) : "None")}";

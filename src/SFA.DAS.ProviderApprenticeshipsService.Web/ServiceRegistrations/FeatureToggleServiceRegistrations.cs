@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.FeatureToggles;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Handlers;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Services;
 

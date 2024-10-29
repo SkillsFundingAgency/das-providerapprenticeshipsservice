@@ -1,10 +1,9 @@
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Models;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.FeatureToggles;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Handlers;
 
-public class AuthorizationHandler(IFeatureTogglesService<FeatureToggle> featureTogglesService)
-    : IAuthorizationHandler
+public class AuthorizationHandler(IFeatureTogglesService<FeatureToggle> featureTogglesService) : IAuthorizationHandler
 {
     public string Prefix => "Feature.";
 

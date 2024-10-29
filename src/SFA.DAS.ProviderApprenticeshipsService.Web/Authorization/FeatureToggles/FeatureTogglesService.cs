@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Models;
 
-namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Services;
+namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.FeatureToggles;
 
 public interface IFeatureTogglesService<out T> where T : FeatureToggle, new()
 {

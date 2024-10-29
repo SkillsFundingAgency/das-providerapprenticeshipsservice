@@ -16,7 +16,7 @@ public class TrainingProviderAllRolesAuthorizationHandler(ITrainingProviderAutho
 
         // check if the stub is activated to by-pass the validation. Mostly used for local development purpose.
         // logic to check if the provider is authorized if not redirect the user to 401 un-authorized page.
-        if (!isStubProviderValidationEnabled && !(await handler.IsProviderAuthorized(context, true)))
+        if (!isStubProviderValidationEnabled && !await handler.IsProviderAuthorized(context, true))
         {
             var mvcContext = context.Resource as DefaultHttpContext;
             mvcContext?.Response.Redirect("/error/403/invalid-status");
