@@ -14,22 +14,8 @@ public static class AuthorizationServicePolicyExtension
     private const string ProviderDac = "DAC";
     private const string ProviderDav = "DAV";
 
-    public static void AddAuthorizationServicePolicies(this IServiceCollection services)
+    public static IServiceCollection AddAuthorizationServices(this IServiceCollection services)
     {
-        services.AddHttpContextAccessor();
-
-
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy(PolicyNames.AuthenticatedUser, policy => { policy.RequireAuthenticatedUser(); });
-            options.AddPolicy(PolicyNames.RequireDasPermissionRole, policy =>
-            {
-                policy.RequireAuthenticatedUser();
-                policy.RequireClaim(DasClaimTypes.Service, ProviderDaa, ProviderDab, ProviderDac, ProviderDav);
-                policy.Requirements.Add(new TrainingProviderAllRolesRequirement()); //Policy requirement to check if the signed provider is a Main or Employer Profile.
-            });
-        });
-
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         services.AddSingleton<IActionContextAccessorWrapper, ActionContextAccessorWrapper>();
 
@@ -42,5 +28,23 @@ public static class AuthorizationServicePolicyExtension
         services.AddScoped<IAuthorizationService, AuthorizationService>();
         services.AddSingleton<ITrainingProviderAuthorizationHandler, TrainingProviderAuthorizationHandler>();
         services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, TrainingProviderAllRolesAuthorizationHandler>();
+
+        return services;
+    }
+    
+    public static IServiceCollection AddAuthorizationPolicies(this IServiceCollection services)
+    {
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy(PolicyNames.AuthenticatedUser, policy => { policy.RequireAuthenticatedUser(); });
+            options.AddPolicy(PolicyNames.RequireDasPermissionRole, policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.RequireClaim(DasClaimTypes.Service, ProviderDaa, ProviderDab, ProviderDac, ProviderDav);
+                policy.Requirements.Add(new TrainingProviderAllRolesRequirement()); //Policy requirement to check if the signed provider is a Main or Employer Profile.
+            });
+        });
+
+        return services;
     }
 }

@@ -8,7 +8,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations;
 
 public static class FeatureToggleServiceRegistrations
 {
-    public static IServiceCollection AddFeatureToggleService(this IServiceCollection services)
+    public static IServiceCollection AddProviderFeatures(this IServiceCollection services)
     {
         services.AddSingleton<ProviderFeaturesConfiguration>(provider =>
         {

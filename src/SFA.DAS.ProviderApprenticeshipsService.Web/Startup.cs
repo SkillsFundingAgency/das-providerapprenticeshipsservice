@@ -31,27 +31,30 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddHttpContextAccessor();
         services.AddSingleton(_configuration);
         services.AddOptions();
         services.AddConfigurationOptions(_configuration);
+
         services.AddLogging(builder =>
         {
             builder.AddFilter<ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Information);
             builder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Information);
         });
 
-        services.AddHttpContextAccessor();
-
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<DeleteRegisteredUserCommand>());
 
         services.AddApplicationServices(_configuration);
         services.AddOrchestrators();
         services.AddEncodingServices(_configuration);
-        services.AddFeatureToggleService();
+        services.AddProviderFeatures();
         services.AddActionFilters();
 
         services.AddAndConfigureAuthentication(_configuration);
-        services.AddAuthorizationServicePolicies();
+
+        services
+            .AddAuthorizationServices()
+            .AddAuthorizationPolicies();
 
         services
             .AddUnitOfWork()
@@ -73,12 +76,12 @@ public class Startup
             .SetDfESignInConfiguration(true)
             .EnableCookieBanner()
             .SetDefaultNavigationSection(NavigationSection.Home);
+        
+        services.AddDataProtection(_configuration);
 
         services.AddApplicationInsightsTelemetry();
-
-        services.AddDataProtection(_configuration);
     }
-    
+
     public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
     {
         serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal(), ServiceBusEndpointType.Web);
