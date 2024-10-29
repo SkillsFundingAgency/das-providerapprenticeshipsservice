@@ -33,7 +33,6 @@
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.6.2" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="9.0.28" />
 		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.20" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.6.2" />
 		<PackageReference Include="Microsoft.identityModel.Protocols.OpenIdConnect" Version="7.6.2" />
 	</ItemGroup>
