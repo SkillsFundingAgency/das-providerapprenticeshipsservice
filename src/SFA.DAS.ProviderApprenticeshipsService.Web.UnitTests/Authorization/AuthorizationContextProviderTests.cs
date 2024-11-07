@@ -37,7 +37,7 @@ public class AuthorizationContextProviderTestsNotFluent
         
         var actual = provider.GetAuthorizationContext();
         
-        Assert.IsNotNull(actual);
+        actual.Should().NotBeNull();
         actual.Get<long>("ukprn").Should().Be(ukprn);
         actual.Get<string>("UserEmail").Should().Be(email);
     }
@@ -62,8 +62,8 @@ public class AuthorizationContextProviderTestsNotFluent
         httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContextBase.Object);
         
         var actual = provider.GetAuthorizationContext();
-        
-        Assert.IsNotNull(actual);
+
+        actual.Should().NotBeNull();
         actual.Get<long>("ukprn").Should().Be(ukprn);
         actual.Get<string>("UserEmail").Should().Be(email);
     }
