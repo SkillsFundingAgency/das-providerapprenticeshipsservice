@@ -32,8 +32,7 @@ public class UserIdentityService : IUserIdentityService
             UserRef = userId,
             DisplayName = displayName,
             Email = email,
-            Ukprn = ukprn,
-            IsDeleted = false
+            Ukprn = ukprn
         });
 
         return Unit.Value;
