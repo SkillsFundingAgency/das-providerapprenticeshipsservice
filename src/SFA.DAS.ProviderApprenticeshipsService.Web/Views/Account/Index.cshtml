@@ -47,8 +47,8 @@
     <div class="das-card">
         <h2 class="govuk-heading-m">
             <a asp-external-subdomain="approvals" asp-external-controller="unapproved"
-                asp-external-action="add/entry-method" asp-external-id="@Model.ProviderId"
-                class="govuk-link @(selected == NavigationSection.YourCohorts ? "govuk-link--current" : "")">Add new
+               asp-external-action="add/entry-method" asp-external-id="@Model.ProviderId"
+               class="govuk-link @(selected == NavigationSection.YourCohorts ? "govuk-link--current" : "")">Add new
                 apprentices</a>
             @* <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved/add/entry-method")">Add new
             apprentices</a> *@
@@ -59,6 +59,17 @@
             <li>create a new cohort</li>
             <li>add to an existing cohort</li>
         </ul>
+    </div>
+
+    <div class="das-card">
+        <h2 class="govuk-heading-m">
+            <a asp-external-subdomain="relationships" asp-external-controller="addEmployer"
+               asp-external-action="start" asp-external-id="@Model.ProviderId"
+               class="govuk-link">Add an employer</a>
+        </h2>
+        <p>
+            Ask an employer to create an apprenticeship service account, add you as a training provider and set your permissions.
+        </p>
     </div>
 
     <div class="das-card">
@@ -76,12 +87,21 @@
     <div class="das-card">
         <h2 class="govuk-heading-m">
             <a asp-external-subdomain="approvals" asp-external-controller="unapproved"
-                asp-external-id="@Model.ProviderId"
-                class="govuk-link @(selected == NavigationSection.YourCohorts ? "govuk-link--current" : "")">Apprentice
+               asp-external-id="@Model.ProviderId"
+               class="govuk-link @(selected == NavigationSection.YourCohorts ? "govuk-link--current" : "")">Apprentice
                 requests</a>
             @* <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved")">Apprentice requests</a> *@
         </h2>
         <p>Review, edit, approve and add apprentices.</p>
+    </div>
+
+    <div class="das-card">
+        <h2 class="govuk-heading-m">
+            <a asp-external-subdomain="relationships" asp-external-controller="employers"
+               asp-external-id="@Model.ProviderId"
+               class="govuk-link">Manage employers and manage permissions</a>
+        </h2>
+        <p>View your current employers and permissions, and ask an employer to update your permissions.</p>
     </div>
 
     <div class="das-card">
@@ -117,28 +137,6 @@
         <p>Create a vacancy to recruit an apprentice and manage applications.</p>
     </div>
 
-    <div class="das-card">
-        <h2 class="govuk-heading-m">
-            <a asp-external-controller="Agreements" asp-external-id="@Model.ProviderId"
-                class="govuk-link @(selected == NavigationSection.Agreements ? "govuk-link--current" : "")">Organisations
-                and agreements</a>
-            @* <a href="@Url.Action("Agreements", "Agreement", new {providerId = Model.ProviderId})">Organisations and
-            agreements</a> *@
-        </h2>
-        <p>Find and view organisations and their agreement IDs.</p>
-    </div>
-
-    <div class="das-card">
-        <h2 class="govuk-heading-m">
-            <a asp-external-subdomain="providerregistrations" asp-external-controller=""
-                asp-external-action="registration/invitedemployers" asp-external-id="@Model.ProviderId"
-                class="govuk-link @(selected == NavigationSection.Home ? "govuk-link--current" : "")">Manage
-                employer invitations</a>
-            @* <a href="@Url.RegistrationLink($"{Model.ProviderId}/registration/invitedemployers")">Manage employer
-            invitations</a> *@
-        </h2>
-        <p>Invite employers to create an apprenticeship service account</p>
-    </div>
     @if (Model.ShowTraineeshipLink)
     {
         <div class="das-card">
