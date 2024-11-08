@@ -33,10 +33,10 @@ namespace SFA.DAS.PAS.Account.Application.UnitTests.Queries.GetUserNotificationS
         [Test]
         public async Task ThenGettingUsersSettings()
         {
-            _mockSettingsRepo.Setup(m => m.GetUserSetting(UserRef,Email))
-                .ReturnsAsync(new List<UserSetting> {new() { ReceiveNotifications = true, UserId = 1, UserRef = UserRef} });
+            _mockSettingsRepo.Setup(m => m.GetUserSetting(UserRef, Email))
+                .ReturnsAsync(new List<UserSetting> { new() { ReceiveNotifications = true, UserId = 1, UserRef = UserRef } });
 
-            var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef =  UserRef, Email = Email}, new CancellationToken());
+            var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef = UserRef, Email = Email }, new CancellationToken());
 
             result.NotificationSettings.Count.Should().Be(1);
 
@@ -47,11 +47,11 @@ namespace SFA.DAS.PAS.Account.Application.UnitTests.Queries.GetUserNotificationS
         [Test]
         public async Task ThenCreatingSettingsIfNoSettingsFoundGettingUsersSettings()
         {
-            var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef = UserRef, Email = Email}, new CancellationToken());
+            var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef = UserRef, Email = Email }, new CancellationToken());
 
             result.NotificationSettings.Count.Should().Be(0);
 
-            _mockSettingsRepo.Verify(m => m.AddSettings(Email), Times.Exactly(1));
+            _mockSettingsRepo.Verify(m => m.AddSettings(Email, false), Times.Exactly(1));
             _mockSettingsRepo.Verify(m => m.GetUserSetting(UserRef, Email), Times.Exactly(2));
         }
     }
