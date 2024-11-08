@@ -75,13 +75,22 @@
     <div class="das-card">
         <h2 class="govuk-heading-m">
             <a asp-external-subdomain="securefunding" asp-external-controller="reservations"
-                asp-external-id="@Model.ProviderId"
-                class="govuk-link @(selected == NavigationSection.Reservations ? "govuk-link--current" : "")">Get
+               asp-external-id="@Model.ProviderId"
+               class="govuk-link @(selected == NavigationSection.Reservations ? "govuk-link--current" : "")">Get
                 funding for non-levy employers</a>
             @* <a href="@Url.ReservationsLink($"{Model.ProviderId}/reservations")">Get funding for non-levy
             employers</a> *@
         </h2>
         <p>Secure funding for a non-levy employer to train an apprentice.</p>
+    </div>
+
+    <div class="das-card">
+        <h2 class="govuk-heading-m">
+            <a asp-external-subdomain="relationships" asp-external-controller="employers"
+               asp-external-id="@Model.ProviderId"
+               class="govuk-link">View employers and manage permissions</a>
+        </h2>
+        <p>View your current employers and permissions, and ask an employer to update your permissions.</p>
     </div>
 
     <div class="das-card">
@@ -93,15 +102,6 @@
             @* <a href="@Url.ProviderCommitmentsLink($"{Model.ProviderId}/unapproved")">Apprentice requests</a> *@
         </h2>
         <p>Review, edit, approve and add apprentices.</p>
-    </div>
-
-    <div class="das-card">
-        <h2 class="govuk-heading-m">
-            <a asp-external-subdomain="relationships" asp-external-controller="employers"
-               asp-external-id="@Model.ProviderId"
-               class="govuk-link">Manage employers and manage permissions</a>
-        </h2>
-        <p>View your current employers and permissions, and ask an employer to update your permissions.</p>
     </div>
 
     <div class="das-card">
