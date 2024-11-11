@@ -15,55 +15,38 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
 
-public class IdamsSyncService : IIdamsSyncService
+public class IdamsSyncService(
+    IUserRepository userRepository,
+    IProviderRepository providerRepository,
+    ILogger<IdamsSyncService> logger,
+    IApiHelper apiHelper,
+    DfEOidcConfiguration dfEOidcConfiguration)
+    : IIdamsSyncService
 {
-    private readonly IUserRepository _userRepository;
-    private readonly IProviderRepository _providerRepository;
-    private readonly ILogger<IdamsSyncService> _logger;
-    private readonly IApiHelper _apiHelper;
-    private readonly DfEOidcConfiguration _dfEOidcConfiguration;
-
-    public IdamsSyncService(
-        IUserRepository userRepository,
-        IProviderRepository providerRepository,
-        ILogger<IdamsSyncService> logger,
-        IApiHelper apiHelper,
-        DfEOidcConfiguration dfEOidcConfiguration)
-    {
-        _userRepository = userRepository;
-        _providerRepository = providerRepository;
-        _logger = logger;
-        _apiHelper = apiHelper;
-        _dfEOidcConfiguration = dfEOidcConfiguration;
-    }
-
     public async Task SyncUsers()
     {
-        List<IdamsUser> idamsUsers;
-
-        var provider = await _providerRepository.GetNextProviderForIdamsUpdate();
+        var provider = await providerRepository.GetNextProviderForIdamsUpdate();
 
         if (provider == null)
         {
-            _logger.LogInformation($"SyncUsers - No Provider Found");
+            logger.LogInformation("SyncUsers - No Provider Found");
             return;
         }
 
-        _logger.LogInformation($"SyncUsers For Provider {provider.Ukprn} has started");
+        logger.LogInformation("SyncUsers For Provider {Ukprn} has started", provider.Ukprn);
 
         try
         {
-            _logger.LogInformation($"Retrieving DAS Users and Super Users for Provider {provider.Ukprn}");
-            idamsUsers = await GetIdamsUsers(provider.Ukprn);
+            logger.LogInformation("Retrieving DAS Users for Provider {Ukprn}", provider.Ukprn);
+            var idamsUsers = await GetIdamsUsers(provider.Ukprn);
 
-            _logger.LogInformation($"Synchronise Users with IDAMS for Provider {provider.Ukprn}");
-            await _userRepository.SyncIdamsUsers(provider.Ukprn, idamsUsers);
+            logger.LogInformation("Synchronise Users with IDAMS for Provider {Ukprn}", provider.Ukprn);
+            await userRepository.SyncIdamsUsers(provider.Ukprn, idamsUsers);
 
-            await _providerRepository.MarkProviderIdamsUpdated(provider.Ukprn);
+            await providerRepository.MarkProviderIdamsUpdated(provider.Ukprn);
         }
         catch (CustomHttpRequestException httpRequestEx)
         {
-
             //Can't get http status code from HttpRequestException is in the message hence
             if (httpRequestEx.StatusCode != HttpStatusCode.NotFound)
             {
@@ -72,9 +55,8 @@ public class IdamsSyncService : IIdamsSyncService
                 throw;
             }
 
-            var httpNotFoundMessage = $"There are no super users (or any users) for Provider {provider.Ukprn}";
+            var httpNotFoundMessage = $"There are no users for Provider {provider.Ukprn}";
             await LogAndUpdateProviderState(httpRequestEx, provider, httpNotFoundMessage);
-
         }
         catch (Exception ex)
         {
@@ -82,34 +64,32 @@ public class IdamsSyncService : IIdamsSyncService
             await LogAndUpdateProviderState(ex, provider, message);
             throw;
         }
-
     }
 
     private Task LogAndUpdateProviderState(Exception ex, Provider provider, string errorMessage)
     {
-        _logger.LogWarning(ex, errorMessage);
-        return _providerRepository.MarkProviderIdamsUpdated(provider.Ukprn);
+        logger.LogWarning(ex, errorMessage);
+        return providerRepository.MarkProviderIdamsUpdated(provider.Ukprn);
     }
 
-    private async Task<List<IdamsUser>> GetIdamsUsers(long providerId)
+    private async Task<IEnumerable<IdamsUser>> GetIdamsUsers(long providerId)
     {
-        var response = await _apiHelper.Get<DfeUser>($"{_dfEOidcConfiguration.APIServiceUrl}/organisations/{providerId}/users");
+        var response = await apiHelper.Get<DfeUser>($"{dfEOidcConfiguration.APIServiceUrl}/organisations/{providerId}/users");
+        
         if (response == null)
         {
-            _logger.LogInformation($"{_dfEOidcConfiguration.APIServiceUrl}/organisations/{providerId}/users - None found");
-            return new List<IdamsUser>();
+            logger.LogInformation("{APIServiceUrl}/organisations/{ProviderId}/users - None found", dfEOidcConfiguration.APIServiceUrl, providerId);
+            return [];
         }
-        
-        _logger.LogInformation($"{_dfEOidcConfiguration.APIServiceUrl}/organisations/{providerId}/users - Found {response.Users.Count}");
 
-        var idamsUsers = response.Users.Where(c=>c.UserStatus ==1 ).Distinct();
-        
-        // TODO Remove I think as next 2 statements appear to be pointless, as they do nothing
-        var idamsSuperUsers = new List<IdamsUser>();
-        
-        var idamsNormalUsers = idamsUsers.Where(u => !idamsSuperUsers.Any(su => su.Email.Equals(u.Email, StringComparison.InvariantCultureIgnoreCase)));
+        logger.LogInformation("{APIServiceUrl}/organisations/{ProviderId}/users - Found {UsersCount}", dfEOidcConfiguration.APIServiceUrl, providerId, response.Users.Count);
 
-        return idamsNormalUsers.Select(u => new IdamsUser { Email = u.Email, UserType = UserType.NormalUser }).Concat(idamsSuperUsers.Select(su => new IdamsUser { Email = su.Email, UserType = UserType.SuperUser })).ToList();
+        return response.Users
+            .Where(c => c.UserStatus == 1)
+            .Distinct()
+            .Select(x => new IdamsUser
+            {
+                Email = x.Email,
+            });
     }
 }
-

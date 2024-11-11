@@ -44,24 +44,13 @@ public record TrainingProviderApiClientConfiguration : IManagedIdentityClientCon
     public string IdentifierUri { get; init; }
 }
 
-public interface IProviderNotificationConfiguration
+public class ProviderNotificationConfiguration :  IJwtClientConfiguration
 {
     public bool UseProviderEmail { get; set; }
     public bool SendEmail { get; set; }
     public string[] ProviderTestEmails { get; set; }
     public string IdamsListUsersUrl { get; set; }
     public string DasUserRoleId { get; set; }
-    public string SuperUserRoleId { get; set; }
-}
-
-public class ProviderNotificationConfiguration : IProviderNotificationConfiguration, IJwtClientConfiguration
-{
-    public bool UseProviderEmail { get; set; }
-    public bool SendEmail { get; set; }
-    public string[] ProviderTestEmails { get; set; }
-    public string IdamsListUsersUrl { get; set; }
-    public string DasUserRoleId { get; set; }
-    public string SuperUserRoleId { get; set; }
     public string ClientToken { get; set; }
 }
 

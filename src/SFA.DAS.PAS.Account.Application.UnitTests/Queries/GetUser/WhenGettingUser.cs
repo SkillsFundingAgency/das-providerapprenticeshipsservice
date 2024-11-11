@@ -29,16 +29,15 @@ public class WhenGettingUser
     }
 
     [Test]
-    public Task IfUserRefIsNullOrEmpty_InvalidRequestExceptionThrown()
+    public void IfUserRefIsNullOrEmpty_InvalidRequestExceptionThrown()
     {
         // Arrange
         const string emptyUserRef = "";
         var query = new GetUserQuery { UserRef = emptyUserRef };
 
-        // Act and Assert
-        Assert.That(async () => await _sut.Handle(query, new CancellationToken()), Throws.TypeOf<InvalidRequestException>());
-
-        return Task.CompletedTask;
+        var action = () => _sut.Handle(query, new CancellationToken());
+        
+        action.Should().ThrowAsync<InvalidRequestException>();
     }
 
     [Test]
@@ -53,7 +52,7 @@ public class WhenGettingUser
         var result = await _sut.Handle(query, new CancellationToken());
 
         // Assert
-        Assert.That(result.UserRef, Is.Null);
+        result.UserRef.Should().BeNull();
     }
 
     [Test]
@@ -62,10 +61,10 @@ public class WhenGettingUser
         // Arrange
         const string displayName = "testName";
         const string email = "testEmail";
-        const UserType testUserType = UserType.NormalUser;
         var query = new GetUserQuery { UserRef = UserRef };
 
-        _mockUserRepository.Setup(m => m.GetUser(UserRef))
+        _mockUserRepository
+            .Setup(m => m.GetUser(UserRef))
             .ReturnsAsync(new User
             {
                 UserRef = UserRef,
@@ -74,17 +73,15 @@ public class WhenGettingUser
                 Id = 1,
                 IsDeleted = false,
                 Ukprn = 143243,
-                UserType = testUserType
             });
 
         // Act
         var result = await _sut.Handle(query, new CancellationToken());
 
         // Assert
-        Assert.That(result.UserRef, Is.Not.Null);
+        result.UserRef.Should().NotBeNull();
         result.UserRef.Should().Be(UserRef);
         result.Name.Should().Be(displayName);
-        result.IsSuperUser.Should().Be(false);
         result.EmailAddress.Should().Be(email);
     }
 }

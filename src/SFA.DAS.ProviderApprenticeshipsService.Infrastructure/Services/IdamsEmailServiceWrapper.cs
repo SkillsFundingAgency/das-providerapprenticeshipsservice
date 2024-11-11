@@ -12,28 +12,18 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Models;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 
-public class IdamsEmailServiceWrapper : IIdamsEmailServiceWrapper
+public class IdamsEmailServiceWrapper(
+    ILogger<IdamsEmailServiceWrapper> logger,
+    ProviderNotificationConfiguration configuration,
+    IHttpClientWrapper httpClientWrapper)
+    : IIdamsEmailServiceWrapper
 {
-    private readonly ILogger<IdamsEmailServiceWrapper> _logger;
-    private readonly ProviderNotificationConfiguration _configuration;
-    private readonly IHttpClientWrapper _httpClientWrapper;
-
-    public IdamsEmailServiceWrapper(
-        ILogger<IdamsEmailServiceWrapper> logger,
-        ProviderNotificationConfiguration configuration,
-        IHttpClientWrapper httpClientWrapper)
-    {
-        _logger = logger;
-        _configuration = configuration;
-        _httpClientWrapper = httpClientWrapper;
-    }
-
     public virtual async Task<List<string>> GetEmailsAsync(long ukprn, string identities)
     {
-        _logger.LogInformation("Getting emails for provider {Ukprn} for roles {Identities}", ukprn, identities);
+        logger.LogInformation("Getting emails for provider {Ukprn} for roles {Identities}", ukprn, identities);
 
         var ids = identities.Split(',');
-        var tasks = ids.Select(id => GetString(string.Format(_configuration.IdamsListUsersUrl, id, ukprn)));
+        var tasks = ids.Select(id => GetString(string.Format(configuration.IdamsListUsersUrl, id, ukprn)));
         var results = await Task.WhenAll(tasks);
 
         return results.SelectMany(result => ParseIdamsResult(result, ukprn)).ToList();
@@ -53,7 +43,7 @@ public class IdamsEmailServiceWrapper : IIdamsEmailServiceWrapper
 
             var item = result.ToObject<UserResponse>();
 
-            return item?.Emails ?? new List<string>(0);
+            return item?.Emails ?? [];
         }
         catch (JsonSerializationException)
         {
@@ -69,7 +59,7 @@ public class IdamsEmailServiceWrapper : IIdamsEmailServiceWrapper
 
     private Task<string> GetString(string url)
     {
-        _logger.LogInformation("Querying {Url} for user details", url);
-        return _httpClientWrapper.GetStringAsync(url);
+        logger.LogInformation("Querying {Url} for user details", url);
+        return httpClientWrapper.GetStringAsync(url);
     }
 }

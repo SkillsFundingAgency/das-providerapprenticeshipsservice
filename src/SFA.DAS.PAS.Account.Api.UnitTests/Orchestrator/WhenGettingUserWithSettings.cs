@@ -31,7 +31,6 @@ public class WhenGettingUserWithSettings
         // Arrange
         const string userRef = "ISP-3320242";
         const bool receiveNotifications = false;
-        const bool superUser = false;
         const string email = "test@email.com";
         const string name = "test";
 
@@ -42,13 +41,12 @@ public class WhenGettingUserWithSettings
 
         var getUserNotificationSettingsResponse = new GetUserNotificationSettingsResponse 
         {
-            NotificationSettings = new List<UserNotificationSetting> { notificationSettings }
+            NotificationSettings = [notificationSettings]
         };
 
         var user = new GetUserQueryResponse
         {
             UserRef = userRef,
-            IsSuperUser = superUser,
             EmailAddress = email,
             Name = name,
         };
@@ -65,7 +63,6 @@ public class WhenGettingUserWithSettings
         // Assert
         result.UserRef.Should().Be(userRef);
         result.ReceiveNotifications.Should().Be(receiveNotifications);
-        result.IsSuperUser.Should().Be(superUser);
         result.EmailAddress.Should().Be(email);
         result.DisplayName.Should().Be(name);
     }
@@ -75,19 +72,17 @@ public class WhenGettingUserWithSettings
     {
         // Arrange
         const string userRef = "ISP-3320242";
-        const bool superUser = false;
         const string email = "test@email.com";
         const string name = "test";
 
         var getUserNotificationSettingsResponse = new GetUserNotificationSettingsResponse
         {
-            NotificationSettings = new List<UserNotificationSetting>()
+            NotificationSettings = []
         };
 
         var user = new GetUserQueryResponse
         {
             UserRef = userRef,
-            IsSuperUser = superUser,
             EmailAddress = email,
             Name = name,
         };
@@ -103,8 +98,7 @@ public class WhenGettingUserWithSettings
 
         // Assert
         result.UserRef.Should().Be(userRef);
-        Assert.That(result.ReceiveNotifications, Is.False);
-        result.IsSuperUser.Should().Be(superUser);
+        result.ReceiveNotifications.Should().BeFalse();
         result.EmailAddress.Should().Be(email);
         result.DisplayName.Should().Be(name);
     }
@@ -116,7 +110,7 @@ public class WhenGettingUserWithSettings
         const string userRef = "ISP-3320242";
         var getUserNotificationSettingsResponse = new GetUserNotificationSettingsResponse
         {
-            NotificationSettings = new List<UserNotificationSetting>()
+            NotificationSettings = []
         };
         var user = new GetUserQueryResponse { };
 
@@ -130,6 +124,6 @@ public class WhenGettingUserWithSettings
         var result = await _sut.GetUserWithSettings(userRef);
 
         // Assert
-        Assert.That(result, Is.Null);
+        result.Should().BeNull();
     }
 }

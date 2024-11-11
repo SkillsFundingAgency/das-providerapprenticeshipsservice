@@ -5,37 +5,35 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
 using ProviderAgreementStatus = SFA.DAS.PAS.Account.Api.Types.ProviderAgreementStatus;
 
 namespace SFA.DAS.PAS.Account.Api.Orchestrator;
+
 public interface IAccountOrchestrator
 {
     Task<IEnumerable<User>> GetAccountUsers(long ukprn);
     Task<ProviderAgreement> GetAgreement(long providerId);
 }
 
-public class AccountOrchestrator : IAccountOrchestrator
+public class AccountOrchestrator(IMediator mediator) : IAccountOrchestrator
 {
-    private readonly IMediator _mediator;
-
-    public AccountOrchestrator(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     public async Task<IEnumerable<User>> GetAccountUsers(long ukprn)
     {
-        var result = await _mediator.Send(new GetAccountUsersQuery { Ukprn = ukprn });
+        var result = await mediator.Send(new GetAccountUsersQuery { Ukprn = ukprn });
 
-        return result.UserSettings.Select(
-            m =>
-                new User { EmailAddress = m.User.Email, DisplayName = m.User.DisplayName, ReceiveNotifications = m.Setting?.ReceiveNotifications ?? true, UserRef = m.User.UserRef, 
-                    IsSuperUser = m.User.UserType == UserType.SuperUser });
+        return result.UserSettings.Select(m => new User
+            {
+                EmailAddress = m.User.Email,
+                DisplayName = m.User.DisplayName,
+                ReceiveNotifications = m.Setting?.ReceiveNotifications ?? true,
+                UserRef = m.User.UserRef
+            }
+        );
     }
 
     public async Task<ProviderAgreement> GetAgreement(long providerId)
     {
-        var data = await _mediator.Send(
+        var data = await mediator.Send(
             new GetProviderAgreementQueryRequest
             {
-                ProviderId = providerId 
+                ProviderId = providerId
             });
 
         return new ProviderAgreement

@@ -42,7 +42,7 @@ public class WhenGettingAccountUsers
 
         // Act and Assert
         Assert.That(async () => await _sut.Handle(query, new CancellationToken()), Throws.TypeOf<ValidationException>());
-            
+
         return Task.CompletedTask;
     }
 
@@ -70,7 +70,9 @@ public class WhenGettingAccountUsers
         var query = new GetAccountUsersQuery { Ukprn = ukprn };
 
         _mockUserRepo.Setup(m => m.GetUsers(ukprn))
-            .ReturnsAsync(new List<User> { new User
+            .ReturnsAsync(new List<User>
+            {
+                new User
                 {
                     Id = 1,
                     UserRef = UserRef,
@@ -78,11 +80,10 @@ public class WhenGettingAccountUsers
                     Email = "email",
                     Ukprn = ukprn,
                     IsDeleted = false,
-                    UserType = UserType.NormalUser
                 }
             });
 
-        _mockUserSettingsRepo.Setup(m => m.GetUserSetting(UserRef,"email"))
+        _mockUserSettingsRepo.Setup(m => m.GetUserSetting(UserRef, "email"))
             .ReturnsAsync(new List<UserSetting> { });
 
         // Act
@@ -100,7 +101,9 @@ public class WhenGettingAccountUsers
         var query = new GetAccountUsersQuery { Ukprn = ukprn };
 
         _mockUserRepo.Setup(m => m.GetUsers(ukprn))
-            .ReturnsAsync(new List<User> { new User
+            .ReturnsAsync(new List<User>
+            {
+                new User
                 {
                     Id = 1,
                     UserRef = UserRef,
@@ -108,12 +111,13 @@ public class WhenGettingAccountUsers
                     Email = "email",
                     Ukprn = ukprn,
                     IsDeleted = false,
-                    UserType = UserType.NormalUser
                 }
             });
 
         _mockUserSettingsRepo.Setup(m => m.GetUserSetting(UserRef, "email"))
-            .ReturnsAsync(new List<UserSetting> { new()
+            .ReturnsAsync(new List<UserSetting>
+            {
+                new()
                 {
                     ReceiveNotifications = true,
                     UserId = 1,

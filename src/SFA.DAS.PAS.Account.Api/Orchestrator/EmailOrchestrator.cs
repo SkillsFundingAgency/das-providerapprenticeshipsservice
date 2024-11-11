@@ -9,36 +9,24 @@ public interface IEmailOrchestrator
     Task SendEmailToAllProviderRecipients(long providerId, ProviderEmailRequest providerEmailRequest);
 }
 
-public class EmailOrchestrator : IEmailOrchestrator
+public class EmailOrchestrator(IAccountOrchestrator accountOrchestrator, IMediator mediator, ILogger<EmailOrchestrator> logger)
+    : IEmailOrchestrator
 {
-    private readonly IAccountOrchestrator _accountOrchestrator;
-    private readonly IMediator _mediator;
-    private readonly ILogger<EmailOrchestrator> _logger;
-
-    public EmailOrchestrator(IAccountOrchestrator accountOrchestrator, IMediator mediator, ILogger<EmailOrchestrator> logger)
-    {
-        _accountOrchestrator = accountOrchestrator;
-        _mediator = mediator;
-        _logger = logger;
-    }
-
     public async Task SendEmailToAllProviderRecipients(long providerId, ProviderEmailRequest providerEmailRequest)
     {
         List<string> recipients;
 
-        var accountUsers = (await _accountOrchestrator.GetAccountUsers(providerId)).ToList();
+        var accountUsers = (await accountOrchestrator.GetAccountUsers(providerId)).ToList();
 
         if (providerEmailRequest.ExplicitEmailAddresses != null && providerEmailRequest.ExplicitEmailAddresses.Any())
         {
-            _logger.LogInformation("Explicit recipients requested for email");
+            logger.LogInformation("Explicit recipients requested for email");
 
             recipients = providerEmailRequest.ExplicitEmailAddresses.ToList();
         }
         else
         {
-            recipients = accountUsers.Any(user => !user.IsSuperUser)
-                ? accountUsers.Where(user => !user.IsSuperUser).Select(x => x.EmailAddress).ToList()
-                : accountUsers.Select(user => user.EmailAddress).ToList();
+            recipients = accountUsers.Select(user => user.EmailAddress).ToList();
         }
 
         var optedOutList = accountUsers.Where(user => !user.ReceiveNotifications).Select(x => x.EmailAddress).ToList();
@@ -49,9 +37,9 @@ public class EmailOrchestrator : IEmailOrchestrator
 
         var commands = finalRecipients.Select(recipient => new SendNotificationCommand(CreateEmailForRecipient(recipient, providerEmailRequest)));
 
-        await Task.WhenAll(commands.Select(command => _mediator.Send(command)));
+        await Task.WhenAll(commands.Select(command => mediator.Send(command)));
 
-        _logger.LogInformation("Sent email to {FinalRecipientsCount} recipients for ukprn: {ProviderId}", finalRecipients.Count, providerId);
+        logger.LogInformation("Sent email to {FinalRecipientsCount} recipients for ukprn: {ProviderId}", finalRecipients.Count, providerId);
     }
 
     private static NotificationEmail CreateEmailForRecipient(string recipient, ProviderEmailRequest source)

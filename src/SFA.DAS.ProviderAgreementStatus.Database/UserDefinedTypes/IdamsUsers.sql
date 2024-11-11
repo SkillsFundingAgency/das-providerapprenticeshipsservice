@@ -1,5 +1,4 @@
 ﻿CREATE TYPE [dbo].[IdamsUsers] AS TABLE
 (
-    [Email] NVARCHAR(255) NOT NULL PRIMARY KEY,
-    [UserType] SMALLINT NOT NULL
+    [Email] NVARCHAR(255) NOT NULL PRIMARY KEY
 )

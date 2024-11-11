@@ -10,20 +10,11 @@ public interface IUserOrchestrator
     Task<User> GetUserWithSettings(string userRef);
 }
 
-public class UserOrchestrator : IUserOrchestrator
+public class UserOrchestrator(IMediator mediator, ILogger<UserOrchestrator> logger) : IUserOrchestrator
 {
-    private readonly IMediator _mediator;
-    private readonly ILogger<UserOrchestrator> _logger;
-
-    public UserOrchestrator(IMediator mediator, ILogger<UserOrchestrator> logger)
-    {
-        _mediator = mediator;
-        _logger = logger;
-    }
-
     public async Task<User> GetUserWithSettings(string userRef)
     {
-        var userResponse = await _mediator.Send(new GetUserQuery { UserRef = userRef });
+        var userResponse = await mediator.Send(new GetUserQuery { UserRef = userRef });
 
         if (string.IsNullOrEmpty(userResponse.UserRef))
         {
@@ -34,8 +25,7 @@ public class UserOrchestrator : IUserOrchestrator
         {
             UserRef = userResponse.UserRef,
             EmailAddress = userResponse.EmailAddress,
-            DisplayName = userResponse.Name,
-            IsSuperUser = userResponse.IsSuperUser
+            DisplayName = userResponse.Name
         };
 
         var userSetting = await GetUserSetting(userRef, userResponse.EmailAddress);
@@ -50,13 +40,13 @@ public class UserOrchestrator : IUserOrchestrator
 
     private async Task<UserNotificationSetting> GetUserSetting(string userRef, string email)
     {
-        var userSetting = await _mediator.Send(new GetUserNotificationSettingsQuery { UserRef = userRef, Email = email});
+        var userSetting = await mediator.Send(new GetUserNotificationSettingsQuery { UserRef = userRef, Email = email});
 
         var setting = userSetting.NotificationSettings.SingleOrDefault();
         
         if (setting == null)
         {
-            _logger.LogInformation("Unable to get user settings with ref {UserRef}", userRef);
+            logger.LogInformation("Unable to get user settings with ref {UserRef}", userRef);
             return null;
         }
 

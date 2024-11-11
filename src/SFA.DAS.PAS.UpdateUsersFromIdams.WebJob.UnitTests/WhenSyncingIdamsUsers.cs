@@ -41,7 +41,7 @@ public class WhenSyncingIdamsUsers
     }
 
     [Test]
-    public async Task Then_TheNormalAndSuperUsersAreSyncedWithLocalUsers()
+    public async Task Then_TheUsersAreSyncedWithLocalUsers()
     {
         var f = new WhenSyncingIdamsUsersFixture();
         await f.Sut.SyncUsers();
@@ -96,7 +96,7 @@ public class WhenSyncingIdamsUsers
 
             var users = autoFixture.Build<User>().With(c => c.UserStatus , 1).CreateMany().ToList();
             
-            _normalUsers = autoFixture.Build<DfeUser>().With(c=>c.Users, users).Create();
+            _users = autoFixture.Build<DfeUser>().With(c=>c.Users, users).Create();
             
             _providerRepository = new Mock<IProviderRepository>();
             _providerRepository.Setup(x => x.GetNextProviderForIdamsUpdate()).ReturnsAsync(_providerResponse);
@@ -104,7 +104,7 @@ public class WhenSyncingIdamsUsers
 
             _apiHelper = new Mock<IApiHelper>();
             _apiHelper
-                .Setup(x => x.Get<DfeUser>(It.IsAny<string>())).ReturnsAsync(_normalUsers);
+                .Setup(x => x.Get<DfeUser>(It.IsAny<string>())).ReturnsAsync(_users);
 
             _configuration = new DfEOidcConfiguration
             {
@@ -118,7 +118,7 @@ public class WhenSyncingIdamsUsers
         private readonly Mock<IUserRepository> _userRepository;
         private readonly Mock<IProviderRepository> _providerRepository;
         private readonly Provider _providerResponse;
-        private readonly DfeUser _normalUsers;
+        private readonly DfeUser _users;
         private readonly Mock<IApiHelper> _apiHelper;
         private readonly DfEOidcConfiguration _configuration;
 
@@ -160,9 +160,8 @@ public class WhenSyncingIdamsUsers
 
         public void VerifyIdamsUsersAreSyncedInUserRepository()
         {
-            
             _userRepository.Verify(x => x.SyncIdamsUsers(It.IsAny<long>(),
-                It.Is<List<IdamsUser>>(p => p.Count(z => z.UserType == UserType.NormalUser) == _normalUsers.Users.Count)));
+                It.Is<IEnumerable<IdamsUser>>(p => p.Count() == _users.Users.Count)));
         }
 
         public void VerifyItMarksProviderAsIdamsUpdated()
