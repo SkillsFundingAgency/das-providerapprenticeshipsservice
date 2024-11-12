@@ -163,16 +163,16 @@ public class ProviderFeaturesAuthorizationHandlerTestsFixture
     public List<string> Options { get; set; }
     public IAuthorizationContext AuthorizationContext { get; set; }
     public IAuthorizationHandler Handler { get; set; }
-    public Mock<IFeatureTogglesService<FeatureToggle>> FeatureTogglesService { get; set; }
+    public Mock<IFeatureTogglesService<ProviderFeatureToggle>> FeatureTogglesService { get; set; }
 
     public const long Ukprn = 1;
     public const string UserEmail = "foo@bar.com";
 
     public ProviderFeaturesAuthorizationHandlerTestsFixture()
     {
-        Options = new List<string>();
+        Options = [];
         AuthorizationContext = new AuthorizationContext();
-        FeatureTogglesService = new Mock<IFeatureTogglesService<FeatureToggle>>();
+        FeatureTogglesService = new Mock<IFeatureTogglesService<ProviderFeatureToggle>>();
         Handler = new ProviderFeaturesAuthorizationHandler(FeatureTogglesService.Object);
     }
 
