@@ -4,7 +4,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Handlers;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.FeatureToggles;
 
-public class ProviderFeaturesAuthorizationHandler(IFeatureTogglesService<FeatureToggle> featureTogglesService)
+public class ProviderFeaturesAuthorizationHandler(IFeatureTogglesService<ProviderFeatureToggle> featureTogglesService)
     : IAuthorizationHandler
 {
     public string Prefix => "ProviderFeature.";
