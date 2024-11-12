@@ -247,7 +247,7 @@ public class ProviderFeaturesAuthorizationHandlerTestsFixture
             whitelist.Add(new ProviderFeatureToggleWhitelistItem { Ukprn = isUkprnWhitelisted == true ? Ukprn : 0, UserEmails = userEmails });
         }
 
-        FeatureTogglesService.Setup(s => s.GetFeatureToggle(option)).Returns(new FeatureToggle { Feature = "ProviderRelationships", IsEnabled = isEnabled, Whitelist = whitelist });
+        FeatureTogglesService.Setup(s => s.GetFeatureToggle(option)).Returns(new ProviderFeatureToggle { Feature = "ProviderRelationships", IsEnabled = isEnabled, Whitelist = whitelist });
 
         return this;
     }
