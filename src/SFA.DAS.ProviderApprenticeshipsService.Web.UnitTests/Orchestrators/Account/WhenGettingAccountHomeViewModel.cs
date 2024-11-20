@@ -1,10 +1,11 @@
 ﻿using System.Globalization;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Authorization.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Features;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
