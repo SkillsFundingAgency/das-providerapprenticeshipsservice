@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging.ApplicationInsights;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
+using OpenTelemetry.Logs;
 using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
 using SFA.DAS.Provider.Shared.UI;
 using SFA.DAS.Provider.Shared.UI.Startup;
@@ -10,7 +10,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.ServiceRegistrations;
@@ -31,27 +30,30 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddHttpContextAccessor();
         services.AddSingleton(_configuration);
         services.AddOptions();
         services.AddConfigurationOptions(_configuration);
+
         services.AddLogging(builder =>
         {
-            builder.AddFilter<ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Information);
-            builder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Information);
+            builder.AddFilter<OpenTelemetryLoggerProvider>(string.Empty, LogLevel.Information);
+            builder.AddFilter<OpenTelemetryLoggerProvider>("Microsoft", LogLevel.Information);
         });
-
-        services.AddHttpContextAccessor();
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<DeleteRegisteredUserCommand>());
 
         services.AddApplicationServices(_configuration);
         services.AddOrchestrators();
         services.AddEncodingServices(_configuration);
-        services.AddFeatureToggleService(_configuration);
+        services.AddProviderFeatures();
         services.AddActionFilters();
 
         services.AddAndConfigureAuthentication(_configuration);
-        services.AddAuthorizationServicePolicies();
+
+        services
+            .AddAuthorizationServices()
+            .AddAuthorizationPolicies();
 
         services
             .AddUnitOfWork()
@@ -74,11 +76,11 @@ public class Startup
             .EnableCookieBanner()
             .SetDefaultNavigationSection(NavigationSection.Home);
 
-        services.AddApplicationInsightsTelemetry();
-
         services.AddDataProtection(_configuration);
+
+        services.AddOpenTelemetryRegistration(_configuration);
     }
-    
+
     public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
     {
         serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal(), ServiceBusEndpointType.Web);

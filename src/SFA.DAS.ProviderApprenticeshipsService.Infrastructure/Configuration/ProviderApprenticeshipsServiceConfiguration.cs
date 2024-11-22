@@ -1,4 +1,3 @@
-using SFA.DAS.Authorization.ProviderFeatures.Configuration;
 using SFA.DAS.Http.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
 using SFA.DAS.ProviderRelationships.Api.Client.Configuration;
