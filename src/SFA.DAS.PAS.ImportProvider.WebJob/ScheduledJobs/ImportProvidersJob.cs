@@ -18,7 +18,7 @@ namespace SFA.DAS.PAS.ImportProvider.WebJob.ScheduledJobs
             _logger = logger;
         }
 
-        public async Task ImportProviders([TimerTrigger("0 0 0 * * *", RunOnStartup = true)] TimerInfo timerInfo)
+        public async Task ImportProviders([TimerTrigger("%ImportProvidersJobSchedule%", RunOnStartup = true)] TimerInfo timerInfo)
         {
             try
             {
