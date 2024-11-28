@@ -1,12 +1,10 @@
-using MediatR;
-using Microsoft.Extensions.Logging;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 using System.Linq;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Settings;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
 
@@ -21,8 +19,8 @@ public class GetUserNotificationSettingsHandler(IUserSettingsRepository userRepo
         {
             logger.LogInformation("No settings found. Creating user settings for userRef {UserRef}", message.UserRef);
 
-            await userRepository.AddSettings(message.Email);
-            
+            await userRepository.AddSettings(message.Email, true);
+
             userSettings = (await userRepository.GetUserSetting(message.UserRef, message.Email)).ToList();
 
             logger.LogInformation("Created default settings for user {UserRef}", message.UserRef);
