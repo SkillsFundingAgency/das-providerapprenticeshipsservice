@@ -17,8 +17,7 @@ public class WhenGettingAccountUsers
     private AccountOrchestrator _sut;
     private Mock<IMediator> _mediator;
     private Fixture _fixture;
-    private User _normalUser;
-    private User _superUser;
+    private User _user;
 
     [SetUp]
     public void SetUp()
@@ -26,8 +25,7 @@ public class WhenGettingAccountUsers
         _fixture = new Fixture();
         _mediator = new Mock<IMediator>();
         _sut = new AccountOrchestrator(_mediator.Object);
-        _normalUser = _fixture.Build<User>().With(u => u.UserType, UserType.NormalUser).Create();
-        _superUser = _fixture.Build<User>().With(u => u.UserType, UserType.SuperUser).Create();
+        _user = _fixture.Build<User>().Create();
     }
 
     [Test]
@@ -35,21 +33,15 @@ public class WhenGettingAccountUsers
     {
         var response = new GetAccountUsersResponse();
 
-        response.Add(_superUser, _fixture.Build<UserSetting>().With(m => m.ReceiveNotifications, true).Create());
-        response.Add(_normalUser, _fixture.Build<UserSetting>().With(m => m.ReceiveNotifications, false).Create());
+        response.Add(_user, _fixture.Build<UserSetting>().With(m => m.ReceiveNotifications, true).Create());
 
         _mediator.Setup(m => m.Send(It.IsAny<GetAccountUsersQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
         var result = (await _sut.GetAccountUsers(12345)).ToArray();
 
-        result.Length.Should().Be(2);
-        result[0].UserRef.Should().Be(_superUser.UserRef);
+        result.Length.Should().Be(1);
+        result[0].UserRef.Should().Be(_user.UserRef);
         result[0].ReceiveNotifications.Should().BeTrue();
-        result[0].IsSuperUser.Should().BeTrue();
-        result[0].DisplayName.Should().Be(_superUser.DisplayName);
-        result[1].UserRef.Should().Be(_normalUser.UserRef);
-        result[1].ReceiveNotifications.Should().BeFalse();
-        result[1].IsSuperUser.Should().BeFalse();
-        result[1].DisplayName.Should().Be(_normalUser.DisplayName);
+        result[0].DisplayName.Should().Be(_user.DisplayName);
     }
 
     [Test]

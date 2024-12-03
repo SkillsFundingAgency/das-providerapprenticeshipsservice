@@ -14,20 +14,23 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.IdamsUser;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
-public class UserRepository : BaseRepository<UserRepository>, IUserRepository
+public class UserRepository(
+    IBaseConfiguration configuration,
+    ILogger<UserRepository> logger)
+    : BaseRepository<UserRepository>(configuration.DatabaseConnectionString, logger),
+        IUserRepository
 {
-    public UserRepository(IBaseConfiguration configuration, ILogger<UserRepository> logger)
-          : base(configuration.DatabaseConnectionString, logger) { }
-
     public async Task Upsert(User user)
     {
         await WithConnection(async connection =>
         {
             var parameters = new DynamicParameters();
+
             parameters.Add("@userRef", user.UserRef, DbType.String);
             parameters.Add("@displayName", user.DisplayName, DbType.String);
             parameters.Add("@ukprn", user.Ukprn, DbType.Int64);
             parameters.Add("@email", user.Email, DbType.String);
+
             return await connection.ExecuteAsync(
                 sql: "[dbo].[UpsertUser]",
                 param: parameters,
@@ -42,14 +45,13 @@ public class UserRepository : BaseRepository<UserRepository>, IUserRepository
             var parameters = new DynamicParameters();
             parameters.Add("@userRef", userRef, DbType.String);
 
-            var results =
-                await
-                    connection.QueryAsync<User>(
-                        sql: "SELECT TOP 1 * FROM [dbo].[User] WHERE UserRef = @userRef",
-                        param: parameters,
-                        commandType: CommandType.Text);
+            var results = (await connection.QueryAsync<User>(
+                    sql: "SELECT TOP 1 * FROM [dbo].[User] WHERE UserRef = @userRef",
+                    param: parameters,
+                    commandType: CommandType.Text))
+                .ToList();
 
-            return !results.Any() ? null : results.Single();
+            return results.Count == 0 ? null : results.Single();
         });
     }
 
@@ -60,12 +62,10 @@ public class UserRepository : BaseRepository<UserRepository>, IUserRepository
             var parameters = new DynamicParameters();
             parameters.Add("@ukprn", ukprn, DbType.Int64);
 
-            var results =
-                await
-                    connection.QueryAsync<User>(
-                        sql: "SELECT * FROM [dbo].[User] WHERE Ukprn = @ukprn AND IsDeleted=0",
-                        param: parameters,
-                        commandType: CommandType.Text);
+            var results = await connection.QueryAsync<User>(
+                sql: "SELECT * FROM [dbo].[User] WHERE Ukprn = @ukprn AND IsDeleted=0",
+                param: parameters,
+                commandType: CommandType.Text);
 
             return results;
         });
@@ -85,15 +85,15 @@ public class UserRepository : BaseRepository<UserRepository>, IUserRepository
         });
     }
 
-    public async Task SyncIdamsUsers(long ukprn, List<IdamsUser> idamsUsers)
+    public async Task SyncIdamsUsers(long ukprn, IEnumerable<IdamsUser> idamsUsers)
     {
-        var idamsUsersTable = new DataTable();
+        using var idamsUsersTable = new DataTable();
+
         idamsUsersTable.Columns.Add("Email");
-        idamsUsersTable.Columns.Add("UserType");
 
         foreach (var idamsUser in idamsUsers)
         {
-            idamsUsersTable.Rows.Add(idamsUser.Email, (short)idamsUser.UserType);
+            idamsUsersTable.Rows.Add(idamsUser.Email);
         }
 
         await WithConnection(async connection =>
@@ -116,14 +116,13 @@ public class UserRepository : BaseRepository<UserRepository>, IUserRepository
             var parameters = new DynamicParameters();
             parameters.Add("@email", email, DbType.String);
 
-            var results =
-                await
-                    connection.QueryAsync<User>(
-                        sql: "SELECT TOP 1 * FROM [dbo].[User] WHERE Email = @email order by lastlogin desc",
-                        param: parameters,
-                        commandType: CommandType.Text);
+            var results = (await connection.QueryAsync<User>(
+                    sql: "SELECT TOP 1 * FROM [dbo].[User] WHERE Email = @email order by lastlogin desc",
+                    param: parameters,
+                    commandType: CommandType.Text))
+                .ToList();
 
-            return !results.Any() ? null : results.Single();
+            return results.Count == 0 ? null : results.Single();
         });
     }
 }

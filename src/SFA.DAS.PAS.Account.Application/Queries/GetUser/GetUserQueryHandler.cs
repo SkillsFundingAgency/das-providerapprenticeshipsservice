@@ -7,37 +7,28 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 
 namespace SFA.DAS.PAS.Account.Application.Queries.GetUser;
 
-public class GetUserQueryHandler : IRequestHandler<GetUserQuery, GetUserQueryResponse>
+public class GetUserQueryHandler(IUserRepository userRepository, ILogger<GetUserQueryHandler> logger)
+    : IRequestHandler<GetUserQuery, GetUserQueryResponse>
 {
-    private readonly IUserRepository _userRepository;
-    private readonly ILogger<GetUserQueryHandler> _logger;
-
-    public GetUserQueryHandler(IUserRepository userRepository, ILogger<GetUserQueryHandler> logger)
-    {
-        _userRepository = userRepository;
-        _logger = logger;
-    }
-
     public async Task<GetUserQueryResponse> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(request.UserRef))
         {
             throw new InvalidRequestException(new List<ValidationFailure>{ new("UserRef", "UserRef is null or empty") });
         }
-        var user = await _userRepository.GetUser(request.UserRef);
+        var user = await userRepository.GetUser(request.UserRef);
 
         if (user == null) 
         {
-            _logger.LogInformation("Unable to get user settings with ref {UserRef}", request.UserRef);
-            return new GetUserQueryResponse { };
+            logger.LogInformation("Unable to get user settings with ref {UserRef}", request.UserRef);
+            return new GetUserQueryResponse();
         }
 
         return new GetUserQueryResponse
         {
             UserRef = user.UserRef,
             Name = user.DisplayName,
-            EmailAddress = user.Email,
-            IsSuperUser = user.UserType.Equals(UserType.SuperUser)
+            EmailAddress = user.Email
         };
     }
 }

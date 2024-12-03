@@ -7,9 +7,9 @@ AS
     SET [IsDeleted] = 1
     WHERE Ukprn = @Ukprn AND [Email] NOT IN (SELECT Email FROM @users)
 
-	-- Undelete Users who are in the list for provider and set the UserType 
+	-- Undelete Users who are in the list for provider 
     UPDATE [dbo].[User]
-    SET [IsDeleted] = 0, [UserType] = n.UserType
+    SET [IsDeleted] = 0
 	FROM @users n 
 	INNER JOIN [dbo].[User] u ON n.[Email] = u.[Email]
     WHERE u.Ukprn = @Ukprn
