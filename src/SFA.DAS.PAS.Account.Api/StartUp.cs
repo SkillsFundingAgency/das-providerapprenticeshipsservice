@@ -14,7 +14,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
 using SFA.DAS.UnitOfWork.Mvc.Extensions;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
-using ConfigurationServiceRegistrations = SFA.DAS.PAS.Account.Api.ServiceRegistrations.ConfigurationServiceRegistrations;
 
 namespace SFA.DAS.PAS.Account.Api;
 
@@ -30,13 +29,13 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         var isDevOrLocal = _configuration.IsDevOrLocal();
-        
+
         services.AddLogging(builder =>
         {
             builder.AddFilter<ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Information);
             builder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Information);
         });
-        
+
         services.AddApiAuthentication(_configuration);
         services.AddApiAuthorization(isDevOrLocal);
         services.AddOptions();
@@ -47,7 +46,7 @@ public class Startup
         services.AddApiValidators();
         services.AddApplicationServices();
         services.AddTransient<IBackgroundNotificationService, BackgroundNotificationService>();
-        
+
         services
             .AddUnitOfWork()
             .AddNServiceBusClientUnitOfWork();
@@ -74,7 +73,7 @@ public class Startup
         services.AddApiVersioning(opt => opt.ApiVersionReader = new HeaderApiVersionReader("X-Version"));
         services.AddApplicationInsightsTelemetry();
     }
-    
+
     public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
     {
         serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal(), ServiceBusEndpointType.Api);
