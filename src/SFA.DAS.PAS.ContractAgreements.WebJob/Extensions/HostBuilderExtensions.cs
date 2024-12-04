@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using Azure.Identity;
+﻿using Azure.Identity;
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.Azure.WebJobs.Logging.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
@@ -15,13 +13,15 @@ using SFA.DAS.PAS.ContractAgreements.WebJob.Configuration;
 using SFA.DAS.PAS.ContractAgreements.WebJob.ContractFeed;
 using SFA.DAS.PAS.ContractAgreements.WebJob.Interfaces;
 using SFA.DAS.PAS.ContractAgreements.WebJob.ScheduledJobs;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+using System;
+using System.Reflection;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.Extensions;
 
@@ -49,8 +49,9 @@ public static class HostBuilderExtensions
             services.AddTransient<IProviderAgreementStatusRepository, ProviderAgreementStatusRepository>();
             services.AddTransient<IProviderAgreementStatusService, ProviderAgreementStatusService>();
             services.AddTransient<UpdateAgreementStatusJob>();
-
-            services.AddLogging();
+            services.AddLogging()
+                .AddTelemetryRegistration((IConfigurationRoot)context.Configuration)
+                .AddApplicationInsightsTelemetry();
         });
 
         return hostBuilder;

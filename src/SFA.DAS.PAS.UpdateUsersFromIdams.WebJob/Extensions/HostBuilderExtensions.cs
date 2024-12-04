@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using Azure.Identity;
+﻿using Azure.Identity;
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.Azure.WebJobs.Logging.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
@@ -22,13 +20,15 @@ using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Configuration;
 using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.ScheduledJobs;
 using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+using System;
+using System.Net.Http;
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions;
 
@@ -42,7 +42,7 @@ public static class HostBuilderExtensions
 
             builder.AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{environment}.json", true, true)
-                .AddAzureTableStorage(new []{ConfigurationKeys.ProviderApprenticeshipsService,ConfigurationKeys.DfESignInService})
+                .AddAzureTableStorage(new[] { ConfigurationKeys.ProviderApprenticeshipsService, ConfigurationKeys.DfESignInService })
                 .AddEnvironmentVariables();
         });
     }
@@ -51,13 +51,13 @@ public static class HostBuilderExtensions
     {
         hostBuilder.ConfigureServices((context, services) =>
         {
-            
+
             services.Configure<ProviderApprenticeshipsServiceConfiguration>(c =>
                 context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService).Bind(c));
-            
+
             services.Configure<DfEOidcConfiguration>(context.Configuration.GetSection($"{ConfigurationKeys.DfESignInService}:DfEOidcConfiguration"));
             services.Configure<DfEOidcConfiguration>(context.Configuration.GetSection($"{ConfigurationKeys.DfESignInService}:DfEOidcConfiguration_ProviderRoATP"));
-            
+
             services.AddSingleton(cfg => cfg.GetService<IOptions<DfEOidcConfiguration>>().Value);
             services.AddSingleton<IBaseConfiguration>(isp =>
                 isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
@@ -72,7 +72,7 @@ public static class HostBuilderExtensions
                 .AddPolicyHandler(HttpClientRetryPolicy());
             services.AddTransient<ITokenDataSerializer, TokenDataSerializer>();
             services.AddTransient<ITokenBuilder, TokenBuilder>();
-            
+
             services.AddTransient<IHttpClientWrapper>(s =>
             {
                 var config = s.GetService<ProviderNotificationConfiguration>();
@@ -93,7 +93,9 @@ public static class HostBuilderExtensions
 
             services.AddHttpClient();
 
-            services.AddLogging();
+            services.AddLogging()
+                .AddTelemetryRegistration((IConfigurationRoot)context.Configuration)
+                .AddApplicationInsightsTelemetry();
         });
 
         return hostBuilder;
@@ -123,7 +125,7 @@ public static class HostBuilderExtensions
     {
         return new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config)).Build();
     }
-    
+
     public static IHostBuilder ConfigureDasLogging(this IHostBuilder hostBuilder)
     {
         hostBuilder.ConfigureLogging((context, loggingBuilder) =>
