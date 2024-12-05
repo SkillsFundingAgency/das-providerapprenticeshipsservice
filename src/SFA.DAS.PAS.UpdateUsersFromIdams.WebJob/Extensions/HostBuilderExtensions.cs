@@ -1,4 +1,6 @@
-﻿using Azure.Identity;
+﻿using System;
+using System.Net.Http;
+using Azure.Identity;
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.Azure.WebJobs.Logging.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
@@ -27,8 +29,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
-using System;
-using System.Net.Http;
 
 namespace SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Extensions;
 
