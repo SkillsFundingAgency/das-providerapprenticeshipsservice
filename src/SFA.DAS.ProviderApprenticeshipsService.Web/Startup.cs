@@ -8,6 +8,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Application;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.DeleteRegisteredUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authentication;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Exceptions;
@@ -78,7 +79,9 @@ public class Startup
 
         services.AddDataProtection(_configuration);
 
-        services.AddOpenTelemetryRegistration(_configuration);
+        services.AddLogging()
+            .AddTelemetryRegistration((IConfigurationRoot)_configuration)
+            .AddApplicationInsightsTelemetry();
     }
 
     public void ConfigureContainer(UpdateableServiceProvider serviceProvider)

@@ -1,5 +1,4 @@
-﻿using System;
-using Azure.Identity;
+﻿using Azure.Identity;
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.Azure.WebJobs.Logging.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
@@ -12,13 +11,14 @@ using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.PAS.ImportProvider.WebJob.Configuration;
 using SFA.DAS.PAS.ImportProvider.WebJob.ScheduledJobs;
 using SFA.DAS.PAS.ImportProvider.WebJob.Services;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+using System;
 
 namespace SFA.DAS.PAS.ImportProvider.WebJob.Extensions;
 
@@ -29,11 +29,11 @@ public static class HostBuilderExtensions
         hostBuilder.ConfigureServices((context, services) =>
         {
             services.Configure<ProviderApprenticeshipsServiceConfiguration>(context.Configuration.GetSection(ConfigurationKeys.ProviderApprenticeshipsService));
-            
+
             services.AddSingleton<IBaseConfiguration>(isp => isp.GetService<IOptions<ProviderApprenticeshipsServiceConfiguration>>().Value);
 
             services.Configure<CommitmentsApiClientV2Configuration>(c => context.Configuration.GetSection(ConfigurationKeys.CommitmentsApiClientV2).Bind(c));
-            
+
             services.AddSingleton(cfg => cfg.GetService<IOptions<CommitmentsApiClientV2Configuration>>().Value);
             services.AddHttpClient<ICommitmentsV2ApiClient, CommitmentsV2ApiClient>();
 
@@ -46,7 +46,9 @@ public static class HostBuilderExtensions
             services.AddTransient<IImportProviderService, ImportProviderService>();
             services.AddTransient<ImportProvidersJob>();
 
-            services.AddLogging();
+            services.AddLogging()
+                .AddTelemetryRegistration((IConfigurationRoot)context.Configuration)
+                .AddApplicationInsightsTelemetry();
         });
 
         return hostBuilder;
@@ -84,7 +86,7 @@ public static class HostBuilderExtensions
 
         return hostBuilder.UseEnvironment(environment);
     }
-    
+
     public static IHostBuilder ConfigureDasLogging(this IHostBuilder hostBuilder)
     {
         hostBuilder.ConfigureLogging((context, loggingBuilder) =>

@@ -1,6 +1,5 @@
 using SFA.DAS.Http.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
-using SFA.DAS.ProviderRelationships.Api.Client.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
@@ -13,7 +12,6 @@ public class ProviderApprenticeshipsServiceConfiguration : IBaseConfiguration
     public CommitmentsApiClientV2Configuration CommitmentsApiClientV2 { get; set; }
     public TrainingProviderApiClientConfiguration TrainingProviderApiClientConfiguration { get; set; }
     public ProviderNotificationConfiguration CommitmentNotification { get; set; }
-    public ProviderRelationshipsApiConfiguration ProviderRelationshipsApi { get; set; }
     public int MaxBulkUploadFileSize { get; set; } // Size of file in kilobytes
     public ContentClientApiConfiguration ContentApi { get; set; }
     public string ContentApplicationId { get; set; }

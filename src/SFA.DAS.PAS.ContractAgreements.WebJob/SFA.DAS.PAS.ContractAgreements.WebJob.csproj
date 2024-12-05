@@ -32,7 +32,6 @@
 		<PackageReference Include="System.ServiceModel.Duplex" Version="6.0.0" />
 		<PackageReference Include="System.ServiceModel.NetTcp" Version="8.0.0" />
 		<PackageReference Include="System.ServiceModel.Federation" Version="8.0.0" />
-		<PackageReference Include="Microsoft.ApplicationInsights.NLogTarget" Version="2.22.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="5.0.0" />
 		<PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
 		<PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
