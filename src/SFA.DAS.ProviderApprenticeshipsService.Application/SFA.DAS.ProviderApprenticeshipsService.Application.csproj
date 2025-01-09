@@ -23,7 +23,6 @@
     <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Types" Version="9.0.2" />
     <PackageReference Include="SFA.DAS.CosmosDb.Testing" Version="1.0.1" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.43" />
-    <PackageReference Include="SFA.DAS.ProviderRelationships.Api.Client" Version="4.0.3" />
     <PackageReference Include="StackExchange.Redis" Version="2.8.16" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.ComponentModel.Composition" Version="8.0.0" />
@@ -32,7 +31,6 @@
     <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Caching" Version="8.0.1" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-    <PackageReference Include="NLog" Version="5.3.4" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="16.0.21" />
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="16.0.21" />
     <PackageReference Include="SFA.DAS.UnitOfWork" Version="9.0.28" />
