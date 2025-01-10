@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<LangVersion>latest</LangVersion>
-		<TargetFramework>net6.0</TargetFramework>
+		<LangVersion>latestmajor</LangVersion>
+		<TargetFramework>net8.0</TargetFramework>
 		<Description>Types returned by the PAS Account API</Description>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>

@@ -37,8 +37,8 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
 
             Assert.That(actual, Is.Not.Null);
             var actualModel = actual?.Model as Error403ViewModel;
-            Assert.AreEqual(helpLink, actualModel?.HelpPageLink);
-            Assert.AreEqual(useDfESignIn, actualModel?.UseDfESignIn);
+            actualModel?.HelpPageLink.Should().Be(helpLink);
+            actualModel?.UseDfESignIn.Should().Be(useDfESignIn);
         }
     }
 }

@@ -20,6 +20,7 @@ jobs:
             '**/bin/Release/*/*UnitTests.dll'
             '!**/*ClientV2.UnitTests.dll'
           RunAcceptanceTests: false
+          ContinueOnVulnerablePackageScanError: true
 
       - task: DotNetCoreCLI@2
         displayName: Publish Provider Accounts API

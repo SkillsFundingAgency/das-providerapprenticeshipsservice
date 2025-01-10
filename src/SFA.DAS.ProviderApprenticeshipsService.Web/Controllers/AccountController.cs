@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
@@ -15,19 +16,13 @@ using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 
 [Authorize]
-public class AccountController : BaseController
+public class AccountController(
+    IAccountOrchestrator accountOrchestrator,
+    ICookieStorageService<FlashMessageViewModel> flashMessage,
+    IConfiguration configuration,
+    ILogger<AccountController> logger)
+    : BaseController(flashMessage)
 {
-    private readonly IAccountOrchestrator _accountOrchestrator;
-    private readonly IConfiguration _configuration;
-
-    public AccountController(IAccountOrchestrator accountOrchestrator,
-        ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IConfiguration configuration) : base(flashMessage)
-    {
-        _accountOrchestrator = accountOrchestrator;
-        _configuration = configuration;
-    }
-
     [Route("~/signout", Name = RouteNames.SignOut)]
     public async Task ProviderSignOut()
     {
@@ -41,7 +36,7 @@ public class AccountController : BaseController
     {
         var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
 
-        var model = await _accountOrchestrator.GetAccountHomeViewModel(providerId);
+        var model = await accountOrchestrator.GetAccountHomeViewModel(providerId);
 
         if (!string.IsNullOrEmpty(message))
         {
@@ -66,11 +61,20 @@ public class AccountController : BaseController
     [Route("~/notification-settings", Name = RouteNames.GetNotificationSettings)]
     public async Task<IActionResult> NotificationSettings()
     {
-        var userRef = User.Identity.GetClaim(DasClaimTypes.Upn) ?? User.Identity.GetClaim("sub");
+        var userRef = User.GetUserRef();
         var email = User.Identity.GetClaim(DasClaimTypes.DfEEmail);
         var providerId = int.Parse(User.Identity.GetClaim(DasClaimTypes.Ukprn));
+        
+        logger.LogInformation("AccountController.NotificationSettings. userRef: '{UserRef}'. email: '{Email}'. claims: '{Claims}'.", 
+            userRef, 
+            email, 
+            JsonConvert.SerializeObject(User.Claims.Select(x => new
+            {
+                x.Type,
+                x.Value
+            })));
 
-        var model = await _accountOrchestrator.GetNotificationSettings(userRef, email);
+        var model = await accountOrchestrator.GetNotificationSettings(userRef, email);
         model.ProviderId = providerId;
 
         var flashMessage = GetFlashMessageViewModelFromCookie();
@@ -92,7 +96,7 @@ public class AccountController : BaseController
     [Route("~/notification-settings", Name = RouteNames.PostNotificationSettings)]
     public async Task<IActionResult> NotificationSettings(NotificationSettingsViewModel model)
     {
-        await _accountOrchestrator.UpdateNotificationSettings(model);
+        await accountOrchestrator.UpdateNotificationSettings(model);
         SetInfoMessage("Settings updated", FlashMessageSeverityLevel.Info);
 
         return RedirectToRoute(RouteNames.GetNotificationSettings);
@@ -102,10 +106,10 @@ public class AccountController : BaseController
     [Route("~/notifications/unsubscribe", Name = RouteNames.UnsubscribeNotifications)]
     public async Task<IActionResult> NotificationUnsubscribe()
     {
-        var userRef = User.Identity.GetClaim(DasClaimTypes.Upn);
+        var userRef = User.GetUserRef();
 
         var url = Url.Action("NotificationSettings");
-        var model = await _accountOrchestrator.Unsubscribe(userRef, url);
+        var model = await accountOrchestrator.Unsubscribe(userRef, url);
 
         return View(model);
     }
@@ -114,6 +118,6 @@ public class AccountController : BaseController
     [Route("~/change-signin-details")]
     public ActionResult ChangeSignInDetails()
     {
-        return View(new ChangeOfDetailsViewModel(_configuration["ResourceEnvironmentName"]));
+        return View(new ChangeOfDetailsViewModel(configuration["ResourceEnvironmentName"]));
     }
 }

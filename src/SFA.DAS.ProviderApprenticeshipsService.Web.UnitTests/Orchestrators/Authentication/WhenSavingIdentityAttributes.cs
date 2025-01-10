@@ -32,7 +32,7 @@ public class WhenSavingIdentityAttributes
         var result = await _orchestrator.SaveIdentityAttributes("UserRef", ukprn, "DisplayName", "Email");
 
         //Assert
-        Assert.IsTrue(result);
+        result.Should().BeTrue();
     }
 
     [Test]
@@ -45,6 +45,6 @@ public class WhenSavingIdentityAttributes
         var result = await _orchestrator.SaveIdentityAttributes("UserRef", ukprn, "DisplayName", "Email");
 
         //Assert
-        Assert.IsFalse(result);
+        result.Should().BeFalse();
     }
 }

@@ -4,35 +4,31 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserSetting;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
-public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IUserSettingsRepository
+public class UserSettingsRepository(
+    IBaseConfiguration configuration,
+    ILogger<UserSettingsRepository> logger)
+    : BaseRepository<UserSettingsRepository>(configuration.DatabaseConnectionString, logger), IUserSettingsRepository
 {
-    public UserSettingsRepository(
-        IBaseConfiguration configuration, 
-        ILogger<UserSettingsRepository> logger)
-        : base(configuration.DatabaseConnectionString, logger)
-    {
-    }
-
     public async Task<IEnumerable<UserSetting>> GetUserSetting(string userRef, string email)
     {
         return await WithConnection(async connection =>
         {
             IEnumerable<UserSetting> userSettings = null;
             var parameters = new DynamicParameters();
-            
+
             var sql = @"SELECT
 	                        UserId
 	                        ,UserRef
 	                        ,ReceiveNotifications
                         FROM [dbo].[UserSettings]  
                         WHERE UserRef = @userRef";
-            
+
             if (!string.IsNullOrEmpty(userRef))
             {
                 parameters.Add("@userRef", userRef, DbType.String);
@@ -67,18 +63,19 @@ public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IU
         });
     }
 
-    public async Task AddSettings(string email)
+    public async Task AddSettings(string email, bool receiveNotifications = false)
     {
         await WithConnection(async connection =>
         {
             var parameters = new DynamicParameters();
             parameters.Add("@email", email, DbType.String);
+            parameters.Add("@receiveNotifications", receiveNotifications, DbType.Boolean);
 
             const string sql = @"INSERT INTO [dbo].[UserSettings] (UserId, UserRef, ReceiveNotifications)
                                 SELECT TOP 1
 	                                [Id] As UserId
 	                                ,[UserRef]
-	                                ,0 AS ReceiveNotifications
+	                                ,@receiveNotifications AS ReceiveNotifications
                                 FROM [dbo].[User]
                                 WHERE Email = @Email
                                 ORDER BY LastLogin DESC";
@@ -103,11 +100,13 @@ public class UserSettingsRepository : BaseRepository<UserSettingsRepository>, IU
                                     ReceiveNotifications = @receiveNotifications 
                                 WHERE UserRef = 
                                 (
-                                    SELECT TOP 1 UserRef 
+                                    SELECT TOP 1 
+                                        UserRef 
                                     FROM [dbo].[User] 
-                                    WHERE Email = @email ORDER BY LastLogin DESC
+                                    WHERE Email = @email
+                                    ORDER BY LastLogin DESC
                                 )";
-            
+
             return await connection.ExecuteAsync(
                 sql: sql,
                 param: parameters,

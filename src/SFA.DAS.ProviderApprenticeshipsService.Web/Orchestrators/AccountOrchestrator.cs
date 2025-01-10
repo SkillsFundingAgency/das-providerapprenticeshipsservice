@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Authorization.Services;
-using SFA.DAS.Notifications.Api.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
+﻿using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UnsubscribeNotification;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
@@ -9,6 +7,9 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotifica
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Features;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
+using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Settings;
@@ -152,21 +153,15 @@ public class AccountOrchestrator : IAccountOrchestrator
 
     private static SendNotificationCommand BuildNotificationCommand(string emailAddress, string userDisplayName, string urlToSettingsPage)
     {
+        const string templateId = "ProviderUnsubscribeAlertSummaryNotification";
+        
         return new SendNotificationCommand
         {
-            Email = new Email
+            Email = new NotificationEmail(templateId, emailAddress, new Dictionary<string, string>
             {
-                RecipientsAddress = emailAddress,
-                ReplyToAddress = "noreply@sfa.gov.uk",
-                Subject = "<Test Employer Notification>", // Replaced by Notify Service
-                SystemId = "x", // Don't need to populate
-                TemplateId = "ProviderUnsubscribeAlertSummaryNotification",
-                Tokens = new Dictionary<string, string>
-                {
-                    { "name", userDisplayName },
-                    { "link_to_notify_settings", urlToSettingsPage }
-                }
-            }
+                { "name", userDisplayName },
+                { "link_to_notify_settings", urlToSettingsPage }
+            })
         };
     }
 }

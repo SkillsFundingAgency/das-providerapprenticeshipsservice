@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
-using SFA.DAS.Authorization.Context;
 using SFA.DAS.Encoding;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Routing;
@@ -18,7 +17,7 @@ public class AuthorizationContextProviderTestsNotFluent
 {
     
     [Test, MoqAutoData]
-    public async Task Then_The_Request_And_Feature_Is_Authorised_For_Non_DfeSign_In_Email(
+    public void Then_The_Request_And_Feature_Is_Authorised_For_Non_DfeSign_In_Email(
         string email,
         long ukprn,
         string legalEntity,
@@ -38,12 +37,13 @@ public class AuthorizationContextProviderTestsNotFluent
         
         var actual = provider.GetAuthorizationContext();
         
-        Assert.IsNotNull(actual);
+        actual.Should().NotBeNull();
         actual.Get<long>("ukprn").Should().Be(ukprn);
         actual.Get<string>("UserEmail").Should().Be(email);
     }
+    
     [Test, MoqAutoData]
-    public async Task Then_The_Request_And_Feature_Is_Authorised_For_DfeSign_In_Email(
+    public void Then_The_Request_And_Feature_Is_Authorised_For_DfeSign_In_Email(
         string email,
         long ukprn,
         string legalEntity,
@@ -62,8 +62,8 @@ public class AuthorizationContextProviderTestsNotFluent
         httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContextBase.Object);
         
         var actual = provider.GetAuthorizationContext();
-        
-        Assert.IsNotNull(actual);
+
+        actual.Should().NotBeNull();
         actual.Get<long>("ukprn").Should().Be(ukprn);
         actual.Get<string>("UserEmail").Should().Be(email);
     }

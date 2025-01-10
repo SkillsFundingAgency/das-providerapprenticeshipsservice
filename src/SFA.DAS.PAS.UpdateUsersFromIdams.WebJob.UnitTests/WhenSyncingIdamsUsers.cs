@@ -7,11 +7,14 @@ using AutoFixture;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.DfESignIn.Auth.Configuration;
+using SFA.DAS.DfESignIn.Auth.Interfaces;
 using SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Enums;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models;
+using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.DfESignInUser;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.IdamsUser;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
@@ -90,52 +93,49 @@ public class WhenSyncingIdamsUsers
         {
             var autoFixture = new Fixture();
             _providerResponse = autoFixture.Create<Provider>();
-            _superUsers = autoFixture.CreateMany<string>().ToList();
-            _normalUsers = autoFixture.CreateMany<string>().ToList();
-            var combinedUsers = _normalUsers.Concat(_superUsers).ToList();
 
+            var users = autoFixture.Build<User>().With(c => c.UserStatus , 1).CreateMany().ToList();
+            
+            _normalUsers = autoFixture.Build<DfeUser>().With(c=>c.Users, users).Create();
+            
             _providerRepository = new Mock<IProviderRepository>();
             _providerRepository.Setup(x => x.GetNextProviderForIdamsUpdate()).ReturnsAsync(_providerResponse);
-
-            _idamsEmailServiceWrapper = new Mock<IIdamsEmailServiceWrapper>();
-            _idamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>(), "UserRole"))
-                .ReturnsAsync(combinedUsers);
-            
-            _idamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>(), "SuperUserRole"))
-                .ReturnsAsync(_superUsers);
-
             _userRepository = new Mock<IUserRepository>();
 
-            var configuration = new ProviderNotificationConfiguration
+            _apiHelper = new Mock<IApiHelper>();
+            _apiHelper
+                .Setup(x => x.Get<DfeUser>(It.IsAny<string>())).ReturnsAsync(_normalUsers);
+
+            _configuration = new DfEOidcConfiguration
             {
-                DasUserRoleId = "UserRole",
-                SuperUserRoleId = "SuperUserRole"
+                APIServiceUrl = "https://some.test.url"
             };
 
-            Sut = new IdamsSyncService(_idamsEmailServiceWrapper.Object, _userRepository.Object,
-                _providerRepository.Object, Mock.Of<ILogger<IdamsSyncService>>(), configuration);
+            Sut = new IdamsSyncService(_userRepository.Object,
+                _providerRepository.Object, Mock.Of<ILogger<IdamsSyncService>>(), _apiHelper.Object, _configuration);
         }
 
-        private readonly Mock<IIdamsEmailServiceWrapper> _idamsEmailServiceWrapper;
         private readonly Mock<IUserRepository> _userRepository;
         private readonly Mock<IProviderRepository> _providerRepository;
         private readonly Provider _providerResponse;
-        private readonly List<string> _superUsers;
-        private readonly List<string> _normalUsers;
+        private readonly DfeUser _normalUsers;
+        private readonly Mock<IApiHelper> _apiHelper;
+        private readonly DfEOidcConfiguration _configuration;
 
         public IdamsSyncService Sut { get; }
 
         public WhenSyncingIdamsUsersFixture SetupIdamsToThrowException()
         {
-            _idamsEmailServiceWrapper.Setup(x => x.GetEmailsAsync(It.IsAny<long>(), It.IsAny<string>()))
+            _apiHelper
+                .Setup(x => x.Get<DfeUser>(It.IsAny<string>()))
                 .Throws<ApplicationException>();
             return this;
         }
 
         public WhenSyncingIdamsUsersFixture SetupIdamsToThrowHttpRequestException()
         {
-            _idamsEmailServiceWrapper
-                .Setup(x => x.GetEmailsAsync(It.IsAny<long>(), It.IsAny<string>()))
+            _apiHelper
+                .Setup(x => x.Get<DfeUser>(It.IsAny<string>()))
                 .Throws(new CustomHttpRequestException(HttpStatusCode.NotFound, null));
 
             return this;
@@ -155,20 +155,14 @@ public class WhenSyncingIdamsUsers
 
         public void VerifyWeCallIdamsServiceForThisProvider()
         {
-            _idamsEmailServiceWrapper.Verify(x => x.GetEmailsAsync(_providerResponse.Ukprn, "UserRole"));
-            _idamsEmailServiceWrapper.Verify(x => x.GetEmailsAsync(_providerResponse.Ukprn, "SuperUserRole"));
+            _apiHelper.Verify(x => x.Get<DfeUser>($"{_configuration.APIServiceUrl}/organisations/{_providerResponse.Ukprn}/users"), Times.Once);
         }
 
         public void VerifyIdamsUsersAreSyncedInUserRepository()
         {
-            _userRepository.Verify(x => x.SyncIdamsUsers(_providerResponse.Ukprn,
-                It.Is<List<IdamsUser>>(p => p.Count == _normalUsers.Count + _superUsers.Count)));
             
             _userRepository.Verify(x => x.SyncIdamsUsers(It.IsAny<long>(),
-                It.Is<List<IdamsUser>>(p => p.Count(z => z.UserType == UserType.SuperUser) == _superUsers.Count)));
-            
-            _userRepository.Verify(x => x.SyncIdamsUsers(It.IsAny<long>(),
-                It.Is<List<IdamsUser>>(p => p.Count(z => z.UserType == UserType.NormalUser) == _normalUsers.Count)));
+                It.Is<List<IdamsUser>>(p => p.Count(z => z.UserType == UserType.NormalUser) == _normalUsers.Users.Count)));
         }
 
         public void VerifyItMarksProviderAsIdamsUpdated()
@@ -178,8 +172,7 @@ public class WhenSyncingIdamsUsers
 
         public void VerifyIdamsServiceIsNotCalled()
         {
-            _idamsEmailServiceWrapper.Verify(x => x.GetEmailsAsync(It.IsAny<long>(), "UserRole"), Times.Never);
-            _idamsEmailServiceWrapper.Verify(x => x.GetEmailsAsync(It.IsAny<long>(), "SuperUserRole"), Times.Never);
+            _apiHelper.Verify(x => x.Get<DfeUser>(It.IsAny<string>()), Times.Never);
         }
     }
 }

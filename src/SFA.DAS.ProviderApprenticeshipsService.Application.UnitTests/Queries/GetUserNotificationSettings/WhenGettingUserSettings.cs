@@ -30,25 +30,25 @@ public class WhenGettingUserSettings
             .ReturnsAsync(
                 new List<UserSetting> { new() { ReceiveNotifications = true, UserId = 1, UserRef = UserRef } });
 
-        var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef = UserRef, Email = Email},
+        var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef = UserRef, Email = Email },
             new CancellationToken());
 
         result.NotificationSettings.Count.Should().Be(1);
 
         _mockSettingsRepo.Verify(m => m.GetUserSetting(UserRef, Email), Times.Once);
         result.NotificationSettings.First().Should().BeEquivalentTo(new UserNotificationSetting
-            { UserRef = UserRef, ReceiveNotifications = true, Email = Email});
+        { UserRef = UserRef, ReceiveNotifications = true, Email = Email });
     }
-    
+
     [Test]
     public async Task ThenCreatingSettingsIfNoSettingsFoundGettingUsersSettings()
     {
-        var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef = UserRef, Email = Email},
+        var result = await _sut.Handle(new GetUserNotificationSettingsQuery { UserRef = UserRef, Email = Email },
             new CancellationToken());
 
         result.NotificationSettings.Count.Should().Be(0);
 
-        _mockSettingsRepo.Verify(m => m.AddSettings(Email), Times.Exactly(1));
+        _mockSettingsRepo.Verify(m => m.AddSettings(Email, true), Times.Exactly(1));
         _mockSettingsRepo.Verify(m => m.GetUserSetting(UserRef, Email), Times.Exactly(2));
     }
 }
