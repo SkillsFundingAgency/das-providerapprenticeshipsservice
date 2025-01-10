@@ -78,3 +78,13 @@ public class ZenDeskConfiguration
     public string SnippetKey { get; set; }
     public string CobrowsingSnippetKey { get; set; }
 }
+
+public class ProviderPRWebConfiguration : IProviderPRWebConfiguration
+{
+    public string BaseUrl { get; set; }
+}
+
+public interface IProviderPRWebConfiguration
+{
+    string BaseUrl { get; set; }
+}

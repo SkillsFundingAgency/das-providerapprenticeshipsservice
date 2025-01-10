@@ -9,8 +9,6 @@ public static class OrchestratorsServiceRegistrations
     {
         services.AddTransient<IAgreementMapper, AgreementMapper>();
         services.AddTransient<IAccountOrchestrator, AccountOrchestrator>();
-        services.AddTransient<IAgreementOrchestrator, AgreementOrchestrator>();
         services.AddTransient<IAuthenticationOrchestrator, AuthenticationOrchestrator>();
-
     }
 }

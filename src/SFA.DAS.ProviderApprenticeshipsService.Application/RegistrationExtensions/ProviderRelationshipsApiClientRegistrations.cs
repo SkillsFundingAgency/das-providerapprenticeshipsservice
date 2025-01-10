@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SFA.DAS.ProviderRelationships.Api.Client.Configuration;
+using SFA.DAS.Http;
+using SFA.DAS.Http.Configuration;
+using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.ProviderRelationships.Api.Client;
-using SFA.DAS.Http.TokenGenerators;
-using SFA.DAS.Http;
-using System.Net.Http;
-using SFA.DAS.Http.Configuration;
+using SFA.DAS.ProviderRelationships.Api.Client.Configuration;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
 
