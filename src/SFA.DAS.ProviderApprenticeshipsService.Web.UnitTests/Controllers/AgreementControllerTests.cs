@@ -31,7 +31,7 @@ public sealed class AgreementControllerTests
         Assert.Multiple(() =>
         {
             Assert.That(result, Is.Not.Null);
-            Assert.IsInstanceOf<RedirectResult>(result);
+            Assert.That(result, Is.InstanceOf<RedirectResult>());
             Assert.That(ProviderRelationshipsBaseUrl, Is.EqualTo(result.Url));
         });
     }
