@@ -2,10 +2,10 @@
 using SFA.DAS.Provider.Shared.UI;
 using SFA.DAS.Provider.Shared.UI.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.CookieStorageService;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Attributes;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Models.Types;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 
@@ -15,20 +15,17 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Controllers;
 [Route("{providerId}/agreements")]
 public class AgreementController : BaseController
 {
-    private readonly IAgreementOrchestrator _orchestrator;
+    private readonly IProviderPRWebConfiguration _providerPRWebConfiguration;
 
-    public AgreementController(IAgreementOrchestrator orchestrator, 
-        ICookieStorageService<FlashMessageViewModel> flashMessage) 
-        : base(flashMessage)
+    public AgreementController(ICookieStorageService<FlashMessageViewModel> flashMessage, IProviderPRWebConfiguration providerPRWebConfiguration) : base(flashMessage)
     {
-        _orchestrator = orchestrator;
+        _providerPRWebConfiguration = providerPRWebConfiguration;
     }
 
     [HttpGet]
     [Route("", Name = RouteNames.GetAgreements)]
-    public async Task<IActionResult> Agreements(long providerId, string organisation = "")
+    public IActionResult Agreements(long providerId, string organisation = "")
     {
-        var model = await _orchestrator.GetAgreementsViewModel(providerId, organisation);
-        return View(model);
+        return RedirectPermanent(_providerPRWebConfiguration.BaseUrl);
     }
 }

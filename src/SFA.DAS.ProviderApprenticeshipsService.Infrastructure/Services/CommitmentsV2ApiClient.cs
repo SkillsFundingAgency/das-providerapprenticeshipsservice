@@ -77,14 +77,6 @@ public class CommitmentsV2ApiClient : ApiClientBase, ICommitmentsV2ApiClient
         }
     }
 
-    public async Task<GetProviderCommitmentAgreementResponse> GetProviderCommitmentAgreement(long providerId)
-    {
-        var url = $"{BaseUrl()}api/providers/{providerId}/commitmentagreements";
-        var response = JsonConvert.DeserializeObject<GetProviderCommitmentAgreementResponse>(await GetAsync(url));
-
-        return response;
-    }
-
     public async Task<GetAllProvidersResponse> GetProviders()
     {
         var url = $"{BaseUrl()}api/providers";
