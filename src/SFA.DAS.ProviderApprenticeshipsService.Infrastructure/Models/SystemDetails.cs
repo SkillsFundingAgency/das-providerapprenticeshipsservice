@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.ProviderApprenticeshipsService.Web.Models;
+﻿namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Models;
 
 public static class SystemDetails
 {

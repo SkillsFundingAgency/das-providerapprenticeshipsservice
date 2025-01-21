@@ -19,9 +19,9 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Extensions;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
-using SFA.DAS.ProviderApprenticeshipsService.Web.Models;
 using System;
 using System.Reflection;
+using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Models;
 
 namespace SFA.DAS.PAS.ContractAgreements.WebJob.Extensions;
 
