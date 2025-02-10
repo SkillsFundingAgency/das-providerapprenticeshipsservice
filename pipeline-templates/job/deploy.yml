@@ -86,4 +86,5 @@ jobs:
             ServiceConnection: ${{ parameters.ServiceConnection }}
             AppServiceName: $(WorkerAppServiceName)
             DeploymentPackagePath: $(Pipeline.Workspace)/Publish/ProviderWebJob/SFA.DAS.PAS.Host.WebJob.zip
+            ResourceGroupName: $(ResourceGroupName)
             DeploymentType: zipDeploy
