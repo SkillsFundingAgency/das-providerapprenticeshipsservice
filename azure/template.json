@@ -644,6 +644,14 @@
                 {
                   "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
                   "value": "[reference(concat('WorkerAppInsights-', parameters('utcValue'))).outputs.ConnectionString.value]"
+                },
+                {
+                  "name": "WEBSITE_RUN_FROM_PACKAGE",
+                  "value": "1"
+                },
+                {
+                  "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
+                  "value": "1"
                 }
               ]
             }
