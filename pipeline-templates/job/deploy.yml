@@ -88,3 +88,6 @@ jobs:
             DeploymentPackagePath: $(Pipeline.Workspace)/Publish/ProviderWebJob/SFA.DAS.PAS.Host.WebJob.zip
             ResourceGroupName: $(ResourceGroupName)
             DeploymentType: zipDeploy
+        - template: azure-pipelines-templates/deploy/step/retain-on-success.yml@das-platform-building-blocks
+          parameters:
+            Environment: ${{ parameters.Environment }}
