@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.DfESignIn.Auth.Constants;
@@ -81,6 +82,14 @@ public class HomeController : Controller
         }
 
         return RedirectToRoute(RouteNames.AccountHome);
+    }
+    
+    [Route("signout", Name = RouteNames.SignOut)]
+    [Route("service/signout")]
+    public async Task ProviderSignOut()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties());
     }
 
     /// <summary>
