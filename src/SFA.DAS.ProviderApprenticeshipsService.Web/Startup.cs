@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using OpenTelemetry.Logs;
+using SFA.DAS.DfESignIn.Auth.Extensions;
 using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
 using SFA.DAS.Provider.Shared.UI;
 using SFA.DAS.Provider.Shared.UI.Startup;
@@ -73,7 +74,6 @@ public class Startup
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 }
             })
-            .SetDfESignInConfiguration(true)
             .EnableCookieBanner()
             .SetDefaultNavigationSection(NavigationSection.Home);
 
@@ -108,6 +108,10 @@ public class Startup
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthorization();
-        app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapSessionKeepAliveEndpoint();
+            endpoints.MapDefaultControllerRoute();
+        });
     }
 }
