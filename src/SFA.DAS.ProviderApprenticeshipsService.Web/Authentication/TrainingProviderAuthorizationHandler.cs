@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Extensions;
 
@@ -19,26 +20,22 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.Authentication
     }
 
     // <inherit-doc />
-    public class TrainingProviderAuthorizationHandler : ITrainingProviderAuthorizationHandler
+    public class TrainingProviderAuthorizationHandler(
+        ILogger<TrainingProviderAuthorizationHandler> logger,
+        ITrainingProviderApiClient trainingProviderApiClient)
+        : ITrainingProviderAuthorizationHandler
     {
-        private readonly ITrainingProviderApiClient _trainingProviderApiClient;
-
-        public TrainingProviderAuthorizationHandler(
-            ITrainingProviderApiClient trainingProviderApiClient)
-        {
-            _trainingProviderApiClient = trainingProviderApiClient;
-        }
-
         // <inherit-doc />
         public async Task<bool> IsProviderAuthorized(AuthorizationHandlerContext context, bool allowAllUserRoles)
         {
+            logger.LogInformation("Logged in claims: {Claims}", JsonSerializer.Serialize(context.User.Claims));
             if (!long.TryParse(context.User.Identity.GetClaim(DasClaimTypes.Ukprn),
                     out var ukprn))
             {
                 return false;
             }
             
-            var providerDetails = await _trainingProviderApiClient.GetProviderDetails(ukprn);
+            var providerDetails = await trainingProviderApiClient.GetProviderDetails(ukprn);
 
             // Condition to check if the Provider Details has permission to access Apprenticeship Services based on the property value "CanAccessApprenticeshipService" set to True.
             return providerDetails is { CanAccessApprenticeshipService: true };
