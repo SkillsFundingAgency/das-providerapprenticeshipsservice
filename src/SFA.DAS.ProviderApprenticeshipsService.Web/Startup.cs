@@ -73,7 +73,6 @@ public class Startup
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 }
             })
-            .SetDfESignInConfiguration(true)
             .EnableCookieBanner()
             .SetDefaultNavigationSection(NavigationSection.Home);
 
