@@ -74,7 +74,8 @@ public class Startup
                 }
             })
             .EnableCookieBanner()
-            .SetDefaultNavigationSection(NavigationSection.Home);
+            .SetDefaultNavigationSection(NavigationSection.Home)
+            .EnableGoogleAnalytics();
 
         services.AddDataProtection(_configuration);
 
