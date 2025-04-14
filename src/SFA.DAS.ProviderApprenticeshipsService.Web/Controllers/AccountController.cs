@@ -24,6 +24,7 @@ public class AccountController(
     : BaseController(flashMessage)
 {
     [Route("~/signout", Name = RouteNames.SignOut)]
+    [Route("~/service/signout")]
     public async Task ProviderSignOut()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
