@@ -25,7 +25,7 @@ public class AccountController(
 {
     [Route("~/signout", Name = RouteNames.SignOut)]
     [Route("~/service/signout")]
-    public async Task ProviderSignOut()
+    public async Task<IActionResult> ProviderSignOut()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties());
