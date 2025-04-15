@@ -24,10 +24,13 @@ public class AccountController(
     : BaseController(flashMessage)
 {
     [Route("~/signout", Name = RouteNames.SignOut)]
-    public async Task ProviderSignOut()
+    [Route("~/service/signout")]
+    public async Task<IActionResult> ProviderSignOut()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties());
+
+        return View("AutoSignOut");
     }
 
     [HttpGet]
