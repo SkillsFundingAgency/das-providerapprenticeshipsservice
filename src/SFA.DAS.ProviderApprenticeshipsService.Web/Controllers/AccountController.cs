@@ -29,6 +29,8 @@ public class AccountController(
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties());
+
+        return View("AutoSignOut");
     }
 
     [HttpGet]
