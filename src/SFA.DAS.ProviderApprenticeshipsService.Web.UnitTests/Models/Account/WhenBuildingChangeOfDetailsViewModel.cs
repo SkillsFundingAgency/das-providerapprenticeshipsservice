@@ -18,10 +18,11 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Models.Account
             }
         }
 
-        [Test]
-        public void Then_The_ProfileService_Link_Is_Correct_For_Pre_Production_Environment()
+        [TestCase("preprod")]
+        [TestCase("pp")]
+        public void Then_The_ProfileService_Link_Is_Correct_For_Pre_Production_Environment(string environment)
         {
-            var actual = new ChangeOfDetailsViewModel("preprod");
+            var actual = new ChangeOfDetailsViewModel(environment);
 
             using (new AssertionScope())
             {

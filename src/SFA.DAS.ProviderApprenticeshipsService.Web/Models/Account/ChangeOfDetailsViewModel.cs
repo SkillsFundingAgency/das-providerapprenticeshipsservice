@@ -13,6 +13,7 @@
                     _integrationUrlPart = string.Empty;
                     break;
                 case true when environment.Equals("preprod", StringComparison.CurrentCultureIgnoreCase):
+                case true when environment.Equals("pp", StringComparison.CurrentCultureIgnoreCase):
                     _integrationUrlPart = "pp-";
                     break;
                 default:
