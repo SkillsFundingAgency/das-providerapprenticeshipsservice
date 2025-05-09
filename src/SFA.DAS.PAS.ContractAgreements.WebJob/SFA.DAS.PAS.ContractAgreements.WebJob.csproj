@@ -13,7 +13,7 @@
 		<ProjectReference Include="..\SFA.DAS.ProviderApprenticeshipsService.Web\SFA.DAS.ProviderApprenticeshipsService.Web.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Logging.ApplicationInsights" Version="3.0.41" />
 		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
@@ -36,7 +36,12 @@
 		<PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
 		<PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
 	</ItemGroup>
-	<UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll" />
+  <!--TRANSITIVE PACKAGES -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
+  </ItemGroup>
+  <!--END OF TRANSITIVE PACKAGES-->
+  <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll" />
 	<Target Name="AfterCompile" Condition="Exists('App.$(Configuration).config')">
 		<TransformXml Source="App.config" Destination="$(IntermediateOutputPath)$(TargetFileName).config" Transform="App.$(Configuration).config" />
 		<ItemGroup>

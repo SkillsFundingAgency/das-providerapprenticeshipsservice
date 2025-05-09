@@ -15,6 +15,11 @@
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+  <!--TRANSITIVE PACKAGES -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
+  </ItemGroup>
+  <!--END OF TRANSITIVE PACKAGES-->
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.PAS.UpdateUsersFromIdams.WebJob\SFA.DAS.PAS.UpdateUsersFromIdams.WebJob.csproj" />
   </ItemGroup>
