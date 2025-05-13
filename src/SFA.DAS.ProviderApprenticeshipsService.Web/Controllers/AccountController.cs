@@ -25,12 +25,12 @@ public class AccountController(
 {
     [Route("~/signout", Name = RouteNames.SignOut)]
     [Route("~/service/signout")]
-    public async Task<IActionResult> ProviderSignOut()
+    public async Task ProviderSignOut([FromQuery] bool autoSignOut = false)
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties());
+        await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
 
-        return View("AutoSignOut");
+        TempData["AutoSignOut"] = autoSignOut;
     }
 
     [HttpGet]

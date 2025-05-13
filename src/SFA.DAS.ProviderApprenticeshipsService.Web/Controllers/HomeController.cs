@@ -21,6 +21,14 @@ public class HomeController : Controller
         _authenticationOrchestrator = authenticationOrchestrator;
     }
 
+    [Route("~/signed-out", Name = "signed-out")]
+    [AllowAnonymous]
+    public IActionResult ProviderSignedOut()
+    {
+        var autoSignOut = TempData["AutoSignOut"] as bool? ?? false;
+        return autoSignOut ? View("AutoSignOut") : View("SignedOut");
+    }
+    
     [HttpGet]
     [Route("help")]
     public IActionResult Help()
