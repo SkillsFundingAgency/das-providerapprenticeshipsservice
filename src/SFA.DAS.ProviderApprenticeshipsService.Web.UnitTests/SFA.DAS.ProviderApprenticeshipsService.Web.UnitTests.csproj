@@ -41,7 +41,6 @@
     <PackageReference Include="System.ServiceModel.Duplex" Version="6.0.0" />
     <PackageReference Include="System.ServiceModel.NetTcp" Version="8.0.0" />
     <PackageReference Include="System.ServiceModel.Federation" Version="8.0.0" />
-	<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="SFA.DAS.Learners" Version="1.1.181" />
     <PackageReference Include="coverlet.msbuild" Version="6.0.2">
 	    <PrivateAssets>all</PrivateAssets>
