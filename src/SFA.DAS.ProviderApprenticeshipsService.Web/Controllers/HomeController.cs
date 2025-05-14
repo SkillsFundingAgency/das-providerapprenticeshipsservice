@@ -26,7 +26,7 @@ public class HomeController : Controller
     public IActionResult ProviderSignedOut()
     {
         var autoSignOut = TempData["AutoSignOut"] as bool? ?? false;
-        return autoSignOut ? View("AutoSignOut") : View("SignedOut");
+        return autoSignOut ? View("AutoSignOut") : RedirectToAction("Index", "Home");
     }
     
     [HttpGet]
