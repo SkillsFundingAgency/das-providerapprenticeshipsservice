@@ -6,10 +6,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Content Include="..\SFA.DAS.PAS.ContractAgreements.WebJob\bin\**\*" CopyToOutputDirectory="PreserveNewest">
-			<Link>app_data\Jobs\Continuous\SFA.DAS.PAS.ContractAgreements.WebJob\%(RecursiveDir)%(Filename)%(Extension)</Link>
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
 		<Content Include="..\SFA.DAS.PAS.ImportProvider.WebJob\bin\**\*" CopyToOutputDirectory="PreserveNewest">
 			<Link>app_data\Jobs\Continuous\SFA.DAS.PAS.ImportProvider.WebJob\%(RecursiveDir)%(Filename)%(Extension)</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
