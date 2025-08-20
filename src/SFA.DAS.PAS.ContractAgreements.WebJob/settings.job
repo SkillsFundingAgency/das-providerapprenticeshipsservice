@@ -1,3 +1,4 @@
-﻿{
-  "is_singleton": true
+{
+  "is_singleton": true,
+  "is_disabled": true
 }
