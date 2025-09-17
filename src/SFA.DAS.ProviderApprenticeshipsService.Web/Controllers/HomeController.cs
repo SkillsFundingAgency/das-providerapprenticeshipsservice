@@ -28,7 +28,7 @@ public class HomeController : Controller
         var autoSignOut = TempData["AutoSignOut"] as bool? ?? false;
         return autoSignOut ? View("AutoSignOut") : RedirectToAction("Index", "Home");
     }
-    
+
     [HttpGet]
     [Route("help")]
     public IActionResult Help()
@@ -41,7 +41,7 @@ public class HomeController : Controller
     public IActionResult Index()
     {
         // if the DfESignIn is enabled or user is authenticated, then redirect the user to the Start Page.
-        if (!_providerApprenticeshipsServiceConfiguration.UseDfESignIn || User.Identity is { IsAuthenticated: true }) 
+        if (!_providerApprenticeshipsServiceConfiguration.UseDfESignIn || User.Identity is { IsAuthenticated: true })
             return RedirectToRoute(RouteNames.AccountHome);
 
         return View();
@@ -49,6 +49,12 @@ public class HomeController : Controller
 
     [Route("terms", Name = "terms")]
     public ActionResult Terms()
+    {
+        return View();
+    }
+
+    [Route("accessibility", Name = "accessibility")]
+    public ActionResult Accessibility()
     {
         return View();
     }
@@ -106,7 +112,7 @@ public class HomeController : Controller
                 ?.Value;
             var ukPrn = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type == DasClaimTypes.Ukprn)?.Value;
             var email = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type == ClaimName.Email)?.Value;
-            
+
             await _authenticationOrchestrator.SaveIdentityAttributes(id, ukPrn, displayName, email);
         }
     }
