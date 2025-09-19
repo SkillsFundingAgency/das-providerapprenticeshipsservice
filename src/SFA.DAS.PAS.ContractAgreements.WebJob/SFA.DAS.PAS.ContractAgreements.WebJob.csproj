@@ -19,6 +19,7 @@
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="Pipelines.Sockets.Unofficial" Version="2.2.8" />
 		<PackageReference Include="Polly" Version="8.4.2" />
+		<PackageReference Include="SFA.DAS.Provider.Shared.UI" Version="2.0.53" />
 		<PackageReference Include="System.ComponentModel.Composition" Version="8.0.0" />
 		<PackageReference Include="System.ComponentModel.EventBasedAsync" Version="4.3.0" />
 		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
