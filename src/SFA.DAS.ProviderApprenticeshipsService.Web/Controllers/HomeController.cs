@@ -53,7 +53,7 @@ public class HomeController : Controller
         return View();
     }
 
-    [Route("accessibility", Name = "accessibility")]
+    [Route("accessibility", Name = RouteNames.Accessibility)]
     public ActionResult Accessibility()
     {
         return View();
