@@ -10,4 +10,5 @@ public static class RouteNames
     public const string PostNotificationSettings = "post-notification-settings";
     public const string UnsubscribeNotifications = "unsubscribe-notification";
     public const string GetAgreements = "get-agreements";
+    public const string Accessibility = "accessibility";
 }
