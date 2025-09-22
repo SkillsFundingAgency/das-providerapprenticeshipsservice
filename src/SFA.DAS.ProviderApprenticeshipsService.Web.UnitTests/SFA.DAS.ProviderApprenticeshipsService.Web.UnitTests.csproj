@@ -30,7 +30,6 @@
     <PackageReference Include="SFA.DAS.Authorization" Version="6.0.97" />
     <PackageReference Include="SFA.DAS.CosmosDb.Testing" Version="1.0.1" />
     <PackageReference Include="SFA.DAS.Encoding" Version="1.1.76" />
-    <PackageReference Include="SFA.DAS.Provider.Shared.UI" Version="2.0.53" />
     <PackageReference Include="SFA.DAS.Testing" Version="2.0.19" />
     <PackageReference Include="SFA.DAS.Testing.AutoFixture" Version="3.0.169" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
