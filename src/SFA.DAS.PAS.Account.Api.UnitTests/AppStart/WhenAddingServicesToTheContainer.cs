@@ -12,7 +12,6 @@ using SFA.DAS.PAS.Account.Api.Orchestrator;
 using SFA.DAS.PAS.Account.Api.ServiceRegistrations;
 using SFA.DAS.PAS.Account.Application.Commands.SendNotification;
 using SFA.DAS.PAS.Account.Application.Queries.GetAccountUsers;
-using SFA.DAS.PAS.Account.Application.Queries.GetProviderAgreement;
 using SFA.DAS.PAS.Account.Application.Queries.GetUserNotificationSettings;
 using SFA.DAS.ProviderApprenticeshipsService.Application.RegistrationExtensions;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
@@ -33,12 +32,10 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IProviderCommitmentsLogger))]
     [TestCase(typeof(ICurrentDateTime))]
     [TestCase(typeof(IUserSettingsRepository))]
-    [TestCase(typeof(IProviderAgreementStatusRepository))]
     [TestCase(typeof(IUserRepository))]
     [TestCase(typeof(IPasAccountApiConfiguration))]
     [TestCase(typeof(IBaseConfiguration))]
     [TestCase(typeof(IRequestHandler<GetAccountUsersQuery, GetAccountUsersResponse>))]
-    [TestCase(typeof(IRequestHandler<GetProviderAgreementQueryRequest, GetProviderAgreementQueryResponse>))]
     [TestCase(typeof(IRequestHandler<SendNotificationCommand>))]
     [TestCase(typeof(IRequestHandler<GetUserNotificationSettingsQuery, GetUserNotificationSettingsResponse>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved(Type toResolve)
