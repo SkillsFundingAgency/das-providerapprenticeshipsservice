@@ -11,7 +11,6 @@ public static class DataRepositoryServiceRegistrations
     {
         services.AddTransient<IUserSettingsRepository, UserSettingsRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
-        services.AddTransient<IProviderAgreementStatusRepository, ProviderAgreementStatusRepository>();
         services.AddTransient<IProviderRepository, ProviderRepository>();
 
         services.AddSingleton(new ChainedTokenCredential(
