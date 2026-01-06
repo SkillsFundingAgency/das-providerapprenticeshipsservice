@@ -10,7 +10,6 @@ public class AccountHomeViewModel
     public string Message { get; set; }
     public bool ShowAcademicYearBanner { get; set; }
     public bool ShowTraineeshipLink { get; set; }
-    public bool ShowEarningsReport { get; set; }
     public HtmlString BannerContent { get; set; }
     public HtmlString CovidSectionContent { get; set; }
 }

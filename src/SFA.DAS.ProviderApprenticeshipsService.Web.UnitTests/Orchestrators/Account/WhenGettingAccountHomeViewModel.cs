@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Features;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Web.Authorization;
@@ -77,19 +76,6 @@ public class WhenGettingAccountHomeViewModel
         var model = await _orchestrator.GetAccountHomeViewModel(1);
 
         model.ShowTraineeshipLink.Should().Be(false);
-    }
-
-    [TestCase(true)]
-    [TestCase(false)]
-    public async Task Then_ShowEarningsReport_Is_Set_From_Authorization_Service(bool expectedResult)
-    {
-        // Arrange
-        _authorizationService.Setup(x => x.IsAuthorizedAsync(ProviderFeature.FlexiblePaymentsPilot)).ReturnsAsync(expectedResult);
-        // Act
-        var model = await _orchestrator.GetAccountHomeViewModel(1);
-
-        // Assert
-        model.ShowEarningsReport.Should().Be(expectedResult);
     }
 
     [TestCase("bannercontent")]
