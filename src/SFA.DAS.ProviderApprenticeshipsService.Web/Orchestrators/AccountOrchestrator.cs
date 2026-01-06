@@ -4,7 +4,6 @@ using SFA.DAS.ProviderApprenticeshipsService.Application.Commands.UpdateUserNoti
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Queries.GetUserNotificationSettings;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Features;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Services;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Services;
@@ -51,16 +50,6 @@ public class AccountOrchestrator : IAccountOrchestrator
 
     public async Task<AccountHomeViewModel> GetAccountHomeViewModel(int providerId)
     {
-        var result = false;
-        try
-        {
-            result = await _authorizationService.IsAuthorizedAsync(ProviderFeature.FlexiblePaymentsPilot);
-        }
-        catch (Exception e)
-        {
-            _logger.LogWarning(e, "Unable to get authorization for feature");
-        }
-
         try
         {
             DateTime.TryParse(_configuration.TraineeshipCutOffDate, out var traineeshipCutOffDate);
@@ -78,7 +67,6 @@ public class AccountOrchestrator : IAccountOrchestrator
                 ProviderId = providerId,
                 ShowAcademicYearBanner = false,
                 ShowTraineeshipLink = showTraineeshipLink,
-                ShowEarningsReport = result,
                 BannerContent = _htmlHelpers.GetClientContentByType("banner", useLegacyStyles: true),
                 CovidSectionContent = _htmlHelpers.GetClientContentByType("covid_section", useLegacyStyles: true)
             };
