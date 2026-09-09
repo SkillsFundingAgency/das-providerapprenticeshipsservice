@@ -10,10 +10,12 @@
 			<Link>app_data\Jobs\Continuous\SFA.DAS.PAS.ImportProvider.WebJob\%(RecursiveDir)%(Filename)%(Extension)</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
-		<Content Include="..\SFA.DAS.PAS.UpdateUsersFromIdams.WebJob\bin\**\*" CopyToOutputDirectory="PreserveNewest">
+		<!--
+    Will be readded once the connection to DFE Signin issue is resolved
+    <Content Include="..\SFA.DAS.PAS.UpdateUsersFromIdams.WebJob\bin\**\*" CopyToOutputDirectory="PreserveNewest">
 			<Link>app_data\Jobs\Continuous\SFA.DAS.PAS.UpdateUsersFromIdams.WebJob\%(RecursiveDir)%(Filename)%(Extension)</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
+		</Content>-->
 	</ItemGroup>
 
 	<ItemGroup>
