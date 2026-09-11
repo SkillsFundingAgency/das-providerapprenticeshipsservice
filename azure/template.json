@@ -182,25 +182,27 @@
             "defaultValue": false
         }
     },
-    "variables": {
-        "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/",
-        "resourceNamePrefix": "[toLower(concat('das-', parameters('resourceEnvironmentName'),'-', parameters('serviceName')))]",
-        "apiAppServiceName": "[concat(variables('resourceNamePrefix'), 'api-as')]",
-        "uiAppServiceName": "[concat(variables('resourceNamePrefix'), 'ui-as')]",
-        "workerAppServiceName": "[concat(variables('resourceNamePrefix'), 'wkr-as')]",
-        "functionAppName": "[concat(variables('resourceNamePrefix'), '-fa')]",
-        "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
-        "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]",
-        "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
-        "configNames": "SFA.DAS.ProviderApprenticeshipsService,SFA.DAS.Encoding,SFA.DAS.ProviderUrlHelper,SFA.DAS.Provider.DfeSignIn",
-        "configNamesApi": "SFA.DAS.PasAccountApi",
-        "configNamesJobs": "SFA.DAS.PAS.Jobs,SFA.DAS.Provider.DfeSignIn",
-        "routeTableId": {
-            "id": "[resourceId(subscription().subscriptionId, parameters('sharedEnvResourceGroup'), 'Microsoft.Network/routeTables', parameters('SharedRouteTableName'))]"
-        },
-        "emptyObject": {},
-        "privateLinkScopeName": "[toLower(concat('das-', parameters('resourceEnvironmentName'),'-shared-ampls'))]"
+  "variables": {
+    "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/",
+    "resourceNamePrefix": "[toLower(concat('das-', parameters('resourceEnvironmentName'),'-', parameters('serviceName')))]",
+    "apiAppServiceName": "[concat(variables('resourceNamePrefix'), 'api-as')]",
+    "uiAppServiceName": "[concat(variables('resourceNamePrefix'), 'ui-as')]",
+    "workerAppServiceName": "[concat(variables('resourceNamePrefix'), 'wkr-as')]",
+    "functionAppName": "[concat(variables('resourceNamePrefix'), '-fa')]",
+    "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
+    "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]",
+    "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
+    "configNames": "SFA.DAS.ProviderApprenticeshipsService,SFA.DAS.Encoding,SFA.DAS.ProviderUrlHelper,SFA.DAS.Provider.DfeSignIn",
+    "configNamesApi": "SFA.DAS.PasAccountApi",
+    "configNamesJobs": "SFA.DAS.PAS.Jobs,SFA.DAS.Provider.DfeSignIn",
+    "routeTableId": {
+      "id": "[resourceId(subscription().subscriptionId, parameters('sharedEnvResourceGroup'), 'Microsoft.Network/routeTables', parameters('SharedRouteTableName'))]"
     },
+    "emptyObject": {},
+    "privateLinkScopeName": "[toLower(concat('das-', parameters('resourceEnvironmentName'),'-shared-ampls'))]",
+    "synchroniseProvidersFunctionSchedule": "0 0 0 * * *",
+    "synchroniseUsersFunctionSchedule": "* */15 * * * *"
+  },
     "resources": [
         {
             "apiVersion": "2021-04-01",
@@ -903,6 +905,14 @@
                                 {
                                     "name": "WEBSITE_RUN_FROM_PACKAGE",
                                     "value": "1"
+                                },
+                                {
+                                    "name": "SynchroniseProvidersFunctionSchedule",
+                                    "value": "[variables('synchroniseProvidersFunctionSchedule')]"
+                                },
+                                {
+                                    "name": "SynchroniseUsersFunctionSchedule",
+                                    "value": "[variables('synchroniseUsersFunctionSchedule')]"
                                 }
                             ]
                         }

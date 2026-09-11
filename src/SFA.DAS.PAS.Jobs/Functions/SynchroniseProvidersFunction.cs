@@ -8,7 +8,7 @@ namespace SFA.DAS.PAS.Jobs.Functions;
 public class SynchroniseProvidersFunction(IImportProviderService importProviderService, ILogger<SynchroniseProvidersFunction> logger)
 {
     [Function(nameof(SynchroniseProvidersFunction))]
-    public async Task Run([TimerTrigger("%SynchroniseProvidersFunctionSchedule%", RunOnStartup = true)] TimerInfo timerInfo)
+    public async Task Run([TimerTrigger("%SynchroniseProvidersFunctionSchedule%", RunOnStartup = false)] TimerInfo timerInfo)
     {
         logger.LogInformation("SynchroniseProvidersFunction started");
 
