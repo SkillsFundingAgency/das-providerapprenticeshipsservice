@@ -142,6 +142,15 @@
         "tags": {
             "type": "object"
         },
+        "sharedEnvVirtualNetworkName": {
+            "type": "string"
+        },
+        "subnetServiceEndpointList": {
+            "type": "array"
+        },
+        "subnetDelegations": {
+            "type": "array"
+        },
         "workerSubnetObject": {
             "type": "object"
         },
