@@ -161,6 +161,9 @@
         "cdnUrl": {
             "type": "string"
         },
+        "workerAccessRestrictions": {
+            "type": "array"
+        },
         "EnableRouteTableAssociation": {
             "type": "bool",
             "defaultValue": false,
