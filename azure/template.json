@@ -142,6 +142,9 @@
         "tags": {
             "type": "object"
         },
+        "workerSubnetObject": {
+            "type": "object"
+        },
         "utcValue": {
             "type": "string",
             "defaultValue": "[utcNow()]"
