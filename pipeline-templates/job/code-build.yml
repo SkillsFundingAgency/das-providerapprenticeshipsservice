@@ -42,13 +42,23 @@ jobs:
           modifyOutputPath: true
           zipAfterPublish: true
 
+      # - task: DotNetCoreCLI@2
+      #   displayName: Publish Provider WebJob
+      #   inputs:
+      #     command: publish
+      #     publishWebProjects: false
+      #     projects: src/SFA.DAS.PAS.Host.WebJob/SFA.DAS.PAS.Host.WebJob.csproj
+      #     arguments: -o $(build.artifactstagingdirectory)/publish/ProviderWebJob -c ${{ parameters.BuildConfiguration }} --no-restore --no-build
+      #     modifyOutputPath: true
+      #     zipAfterPublish: true
+
       - task: DotNetCoreCLI@2
-        displayName: Publish Provider WebJob
+        displayName: Publish - dotnet publish SFA.DAS.PAS.Jobs
         inputs:
           command: publish
-          publishWebProjects: false
-          projects: src/SFA.DAS.PAS.Host.WebJob/SFA.DAS.PAS.Host.WebJob.csproj
-          arguments: -o $(build.artifactstagingdirectory)/publish/ProviderWebJob -c ${{ parameters.BuildConfiguration }} --no-restore --no-build
+          publishWebProjects: false #set to false as this setting (which defaults to true) will parse the entire repo for web projects
+          projects: src/SFA.DAS.PAS.Jobs/SFA.DAS.PAS.Jobs.csproj
+          arguments: -o $(build.artifactstagingdirectory)/publish -c ${{ parameters.BuildConfiguration }} --no-build
           modifyOutputPath: true
           zipAfterPublish: true
 

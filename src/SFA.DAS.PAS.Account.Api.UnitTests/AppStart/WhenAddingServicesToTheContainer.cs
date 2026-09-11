@@ -34,7 +34,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IUserSettingsRepository))]
     [TestCase(typeof(IUserRepository))]
     [TestCase(typeof(IPasAccountApiConfiguration))]
-    [TestCase(typeof(IBaseConfiguration))]
+    [TestCase(typeof(IDatabaseConfiguration))]
     [TestCase(typeof(IRequestHandler<GetAccountUsersQuery, GetAccountUsersResponse>))]
     [TestCase(typeof(IRequestHandler<SendNotificationCommand>))]
     [TestCase(typeof(IRequestHandler<GetUserNotificationSettingsQuery, GetUserNotificationSettingsResponse>))]

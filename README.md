@@ -115,6 +115,46 @@ confusion of different data sources.
 - [Recruit](https://github.com/SkillsFundingAgency/das-recruit)
 - [Provider Registrations](https://github.com/SkillsFundingAgency/das-provider-registrations)
 
+### Jobs
+The `SFA.DAS.PAS.Jobs` project contains functions to import providers from Roatp and to update users from DfE Sign In. 
+
+#### Configuration
+- Obtain the [SFA.DAS.PAS.Jobs.json](https://github.com/SkillsFundingAgency/das-employer-config/tree/master/das-providerapprenticeshipservice/SFA.DAS.PAS.Jobs.json) from the `das-employer-config` 
+- Add a row to the Configuration table with fields: 
+  - PartitionKey: LOCAL
+  - RowKey: SFA.DAS.PAS.Jobs_1.0
+  - Data: {The contents of the `SFA.DAS.PAS.Jobs.json` file}
+
+#### Functions summary
+| Function Name | Trigger | Description |
+|---------------|---------|-------------|
+| SynchroniseProvidersFunction | Timer | Imports provider from Roatp V1 API. |
+| SynchroniseUsersFunction | Timer | Updates users from DfE Sign In. |
+
+- In the `SFA.DAS.PAS.Jobs` project, add `local.settings.json` file with following content:
+```json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true;",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "ConfigurationStorageConnectionString": "UseDevelopmentStorage=true;",
+    "ConfigNames": "SFA.DAS.PAS.Jobs,SFA.DAS.Provider.DfeSignIn",
+    "Version": "1.0",
+    "EnvironmentName": "LOCAL",
+    "SynchroniseProvidersFunctionSchedule": "0 0 0 * * *",
+    "SynchroniseUsersFunctionSchedule": "* */15 * * * *"
+  }
+}
+```
+
 
 
 

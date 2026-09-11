@@ -11,7 +11,7 @@ using SFA.DAS.ProviderApprenticeshipsService.Domain.Models.UserSetting;
 namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 public class UserSettingsRepository(
-    IBaseConfiguration configuration,
+    IDatabaseConfiguration configuration,
     ILogger<UserSettingsRepository> logger)
     : BaseRepository<UserSettingsRepository>(configuration.DatabaseConnectionString, logger), IUserSettingsRepository
 {
