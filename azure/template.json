@@ -23,20 +23,8 @@
         "sharedEnvResourceGroup": {
             "type": "string"
         },
-        "sharedEnvVirtualNetworkName": {
-            "type": "string"
-        },
         "deployPrivateLinkedScopedResource": {
             "type": "bool"
-        },
-        "workerSubnetObject": {
-            "type": "object"
-        },
-        "subnetServiceEndpointList": {
-            "type": "array"
-        },
-        "subnetDelegations": {
-            "type": "array"
         },
         "aspSize": {
             "type": "string",
@@ -75,9 +63,6 @@
             "type": "array"
         },
         "backEndAccessRestrictions": {
-            "type": "array"
-        },
-        "workerAccessRestrictions": {
             "type": "array"
         },
         "logLevel": {
