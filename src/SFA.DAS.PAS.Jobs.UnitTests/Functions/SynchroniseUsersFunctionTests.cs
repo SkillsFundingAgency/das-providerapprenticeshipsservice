@@ -8,12 +8,12 @@ using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.PAS.Jobs.UnitTests.Functions;
 
-public class SynchorniseUsersFunctionTests
+public class SynchroniseUsersFunctionTests
 {
     [Test, MoqAutoData]
     public async Task WhenUpdateUsersFromDfeSignIn_AndSyncSucceeds_ThenCallsUserSyncServiceOnce(
         [Frozen] Mock<IUserSyncService> userSyncService,
-        [Greedy] SynchorniseUsersFunction sut)
+        [Greedy] SynchroniseUsersFunction sut)
     {
         await sut.Run(null);
 
