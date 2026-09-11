@@ -194,6 +194,7 @@
         "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
         "configNames": "SFA.DAS.ProviderApprenticeshipsService,SFA.DAS.Encoding,SFA.DAS.ProviderUrlHelper,SFA.DAS.Provider.DfeSignIn",
         "configNamesApi": "SFA.DAS.PasAccountApi",
+        "configNamesJobs": "SFA.DAS.PAS.Jobs,SFA.DAS.Provider.DfeSignIn",
         "routeTableId": {
             "id": "[resourceId(subscription().subscriptionId, parameters('sharedEnvResourceGroup'), 'Microsoft.Network/routeTables', parameters('SharedRouteTableName'))]"
         },
@@ -869,7 +870,7 @@
                                 },
                                 {
                                     "name": "ConfigNames",
-                                    "value": "[variables('configNames')]"
+                                    "value": "[variables('configNamesJobs')]"
                                 },
                                 {
                                     "name": "Version",

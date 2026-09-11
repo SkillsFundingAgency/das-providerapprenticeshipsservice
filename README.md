@@ -128,7 +128,7 @@ The `SFA.DAS.PAS.Jobs` project contains functions to import providers from Roatp
 #### Functions summary
 | Function Name | Trigger | Description |
 |---------------|---------|-------------|
-| SynchroniseProvidersFunction | Timer | Imports provider from Roatp API. |
+| SynchroniseProvidersFunction | Timer | Imports provider from Roatp V1 API. |
 | SynchroniseUsersFunction | Timer | Updates users from DfE Sign In. |
 
 - In the `SFA.DAS.PAS.Jobs` project, add `local.settings.json` file with following content:
