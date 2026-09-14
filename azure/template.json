@@ -188,7 +188,7 @@
     "apiAppServiceName": "[concat(variables('resourceNamePrefix'), 'api-as')]",
     "uiAppServiceName": "[concat(variables('resourceNamePrefix'), 'ui-as')]",
     "workerAppServiceName": "[concat(variables('resourceNamePrefix'), 'wkr-as')]",
-    "functionAppName": "[concat(variables('resourceNamePrefix'), '-fa')]",
+    "functionAppName": "[concat(variables('resourceNamePrefix'), 'wkr-fa')]",
     "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
     "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]",
     "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
