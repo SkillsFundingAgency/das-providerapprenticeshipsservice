@@ -201,7 +201,7 @@
     "emptyObject": {},
     "privateLinkScopeName": "[toLower(concat('das-', parameters('resourceEnvironmentName'),'-shared-ampls'))]",
     "synchroniseProvidersFunctionSchedule": "0 0 0 * * *",
-    "synchroniseUsersFunctionSchedule": "* */15 * * * *"
+    "synchroniseUsersFunctionSchedule": "0 */15 * * * *"
   },
     "resources": [
         {
