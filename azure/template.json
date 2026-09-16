@@ -801,7 +801,6 @@
                 }
             },
             "dependsOn": [
-                "[variables('resourceGroupName')]",
                 "[concat(variables('workerAppServiceName'), '-app-service-plan-', parameters('utcValue'))]"
             ]
         },
@@ -828,9 +827,7 @@
                     }
                 }
             },
-            "dependsOn": [
-                "[variables('resourceGroupName')]"
-            ]
+            "dependsOn": []
         },
         {
             "apiVersion": "2021-04-01",

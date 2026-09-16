@@ -42,16 +42,6 @@ jobs:
           modifyOutputPath: true
           zipAfterPublish: true
 
-      # - task: DotNetCoreCLI@2
-      #   displayName: Publish Provider WebJob
-      #   inputs:
-      #     command: publish
-      #     publishWebProjects: false
-      #     projects: src/SFA.DAS.PAS.Host.WebJob/SFA.DAS.PAS.Host.WebJob.csproj
-      #     arguments: -o $(build.artifactstagingdirectory)/publish/ProviderWebJob -c ${{ parameters.BuildConfiguration }} --no-restore --no-build
-      #     modifyOutputPath: true
-      #     zipAfterPublish: true
-
       - task: DotNetCoreCLI@2
         displayName: Publish - dotnet publish SFA.DAS.PAS.Jobs
         inputs:
