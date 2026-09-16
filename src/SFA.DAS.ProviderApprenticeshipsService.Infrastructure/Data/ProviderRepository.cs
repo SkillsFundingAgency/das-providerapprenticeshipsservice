@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Azure.Identity;
 using Dapper;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Data;
 using Provider = SFA.DAS.ProviderApprenticeshipsService.Domain.Models.Provider;
@@ -14,7 +13,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Data;
 
 public class ProviderRepository : BaseRepository<ProviderRepository>, IProviderRepository
 {
-    public ProviderRepository(IBaseConfiguration configuration, ILogger<ProviderRepository> logger)
+    public ProviderRepository(IDatabaseConfiguration configuration, ILogger<ProviderRepository> logger)
         : base(configuration.DatabaseConnectionString, logger) { }
 
     public async Task ImportProviders(CommitmentsV2.Api.Types.Responses.Provider[] providers)
@@ -81,6 +80,6 @@ public class ProviderRepository : BaseRepository<ProviderRepository>, IProviderR
                 param: parameters,
                 commandType: CommandType.Text);
             return result.SingleOrDefault();
-        });      
+        });
     }
 }
