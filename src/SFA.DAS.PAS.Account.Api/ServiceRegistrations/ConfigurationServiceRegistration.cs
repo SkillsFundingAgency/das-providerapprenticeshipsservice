@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
 
@@ -11,6 +10,7 @@ public static class ConfigurationServiceRegistrations
     {
         services.AddSingleton<IBaseConfiguration>(configuration.Get<PasAccountApiConfiguration>());
         services.AddSingleton<IPasAccountApiConfiguration>(configuration.Get<PasAccountApiConfiguration>());
+        services.AddSingleton<IDatabaseConfiguration>(configuration.Get<PasAccountApiConfiguration>());
 
         return services;
     }

@@ -1,8 +1,7 @@
 ﻿namespace SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Configurations;
 
-public interface IBaseConfiguration
+public interface IBaseConfiguration : IDatabaseConfiguration
 {
-    string DatabaseConnectionString { get; set; }
     string ServiceBusConnectionString { get; set; }
     public string NServiceBusLicense { get; set; }
 }

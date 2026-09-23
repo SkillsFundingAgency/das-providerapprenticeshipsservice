@@ -76,7 +76,7 @@ public class WhenCallingPasAccountApiClientFixture
         MockRestHttpClient = new Mock<IRestHttpClient>();
         UserRef = autoFixture.Create<string>();
         User = autoFixture.Create<User>();
-        Users = new List<User>();
+        Users = [];
         PasAccountApiClient = new PasAccountApiClient(MockRestHttpClient.Object);
         ProviderEmailRequest = autoFixture.Create<ProviderEmailRequest>();
     }
