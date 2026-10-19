@@ -28,7 +28,7 @@
 		<PackageReference Include="SFA.DAS.Learners" Version="1.1.181" />
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.19.1" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="9.0.28" />
-		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.9" />
+		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.19.1" />
 		<PackageReference Include="Microsoft.identityModel.Protocols.OpenIdConnect" Version="8.19.1" />
 	</ItemGroup>
