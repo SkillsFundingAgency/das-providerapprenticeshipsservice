@@ -29,10 +29,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void Index_When_DfESignIn_False_And_User_Not_Authenticated_ShouldRedirectToAccount()
+        public void Index_When_DfESignIn_True_And_User_Not_Authenticated_ShouldRedirectToAccount()
         {
             //arrange
-            _providerApprenticeshipsServiceConfiguration.UseDfESignIn = false;
+            _providerApprenticeshipsServiceConfiguration.UseDfESignIn = true;
             _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object);
             _sut.ControllerContext.HttpContext = new DefaultHttpContext { User = null! };
 
@@ -74,10 +74,10 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void Index_When_DfESignIn_False_ShouldRedirectToAccount()
+        public void Index_When_DfESignIn_True_ShouldRedirectToAccount()
         {
             //arrange
-            _providerApprenticeshipsServiceConfiguration.UseDfESignIn = false;
+            _providerApprenticeshipsServiceConfiguration.UseDfESignIn = true;
             _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object);
 
             // sut

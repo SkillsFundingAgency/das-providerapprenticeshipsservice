@@ -41,7 +41,7 @@ public class HomeController : Controller
     public IActionResult Index()
     {
         // if the DfESignIn is enabled or user is authenticated, then redirect the user to the Start Page.
-        if (!_providerApprenticeshipsServiceConfiguration.UseDfESignIn || User.Identity is { IsAuthenticated: true })
+        if (_providerApprenticeshipsServiceConfiguration.UseDfESignIn || User.Identity is { IsAuthenticated: true })
             return RedirectToRoute(RouteNames.AccountHome);
 
         return View();
