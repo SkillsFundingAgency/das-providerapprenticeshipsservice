@@ -13,12 +13,14 @@ public class HomeController : Controller
 {
     private readonly IAuthenticationOrchestrator _authenticationOrchestrator;
     private readonly ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
+    private readonly ILogger<HomeController> _logger;
 
     public HomeController(ProviderApprenticeshipsServiceConfiguration providerApprenticeshipsServiceConfiguration,
-        IAuthenticationOrchestrator authenticationOrchestrator)
+        IAuthenticationOrchestrator authenticationOrchestrator, ILogger<HomeController> logger)
     {
         _providerApprenticeshipsServiceConfiguration = providerApprenticeshipsServiceConfiguration;
         _authenticationOrchestrator = authenticationOrchestrator;
+        _logger = logger;
     }
 
     [Route("~/signed-out", Name = "signed-out")]
@@ -40,6 +42,16 @@ public class HomeController : Controller
     [Route("/", Name = RouteNames.Home)]
     public IActionResult Index()
     {
+        var useDfESignIn = _providerApprenticeshipsServiceConfiguration.UseDfESignIn;
+        var isAuthenticated = User.Identity?.IsAuthenticated;
+        var referer = Request.Headers["Referer"].ToString();
+
+        _logger.LogInformation(
+            "Home Index: UseDfESignIn={UseDfESignIn}, IsAuthenticated={IsAuthenticated}, Referer={Referer}",
+            useDfESignIn,
+            isAuthenticated,
+            referer);
+
         // if the DfESignIn is enabled or user is authenticated, then redirect the user to the Start Page.
         if (!_providerApprenticeshipsServiceConfiguration.UseDfESignIn || User.Identity is { IsAuthenticated: true })
             return RedirectToRoute(RouteNames.AccountHome);

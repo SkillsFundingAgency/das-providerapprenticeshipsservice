@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Application.Services.UserIdentityService;
 using SFA.DAS.ProviderApprenticeshipsService.Domain.Interfaces.Logging;
 using SFA.DAS.ProviderApprenticeshipsService.Infrastructure.Configuration;
@@ -16,12 +17,14 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
         private ProviderApprenticeshipsServiceConfiguration _providerApprenticeshipsServiceConfiguration;
         private Mock<IUserIdentityService> _userIdentityService;
         private Mock<IProviderCommitmentsLogger> _logger;
+        private Mock<ILogger<Web.Controllers.HomeController>> _homeLogger;
 
         [SetUp]
         public void Arrange()
         {
             _userIdentityService = new Mock<IUserIdentityService>();
             _logger = new Mock<IProviderCommitmentsLogger>();
+            _homeLogger = new Mock<ILogger<Web.Controllers.HomeController>>();
             _userIdentityService.Setup(x => x.UpsertUserIdentityAttributes(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(Unit.Value));
             _providerApprenticeshipsServiceConfiguration = new ProviderApprenticeshipsServiceConfiguration();
@@ -33,7 +36,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
         {
             //arrange
             _providerApprenticeshipsServiceConfiguration.UseDfESignIn = false;
-            _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object);
+            _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object, _homeLogger.Object);
             _sut.ControllerContext.HttpContext = new DefaultHttpContext { User = null! };
 
             // sut
@@ -59,7 +62,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
                 new(ClaimTypes.Name, name)
             }, authType));
             _providerApprenticeshipsServiceConfiguration.UseDfESignIn = true;
-            _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object);
+            _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object, _homeLogger.Object);
             _sut.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
             // sut
@@ -78,7 +81,15 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
         {
             //arrange
             _providerApprenticeshipsServiceConfiguration.UseDfESignIn = false;
-            _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object);
+            _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object, _homeLogger.Object);
+
+            _sut.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = new ClaimsPrincipal(new ClaimsIdentity())
+                }
+            };
 
             // sut
             var result = _sut.Index();
@@ -105,7 +116,7 @@ namespace SFA.DAS.ProviderApprenticeshipsService.Web.UnitTests.Controllers
             }, authType));
 
             _providerApprenticeshipsServiceConfiguration.UseDfESignIn = true;
-            _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object);
+            _sut = new Web.Controllers.HomeController(_providerApprenticeshipsServiceConfiguration, _mockAuthenticationOrchestrator.Object, _homeLogger.Object);
             _sut.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
 
             // sut
