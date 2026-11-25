@@ -37,28 +37,20 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <div class="govuk-notification-banner govuk-notification-banner--homepage" role="region"
-             aria-labelledby="govuk-notification-banner-title-naw" data-module="govuk-notification-banner">
+             aria-labelledby="govuk-notification-banner-title-ilr" data-module="govuk-notification-banner">
             <div class="govuk-notification-banner__header">
-                <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title-naw">
+                <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title-ilr">
                     Important
                 </h2>
             </div>
             <div class="govuk-notification-banner__content">
                 <p class="govuk-notification-banner__heading">
-                    You can continue to add learners manually until Autumn 2026
+                    You can now <a asp-external-subdomain="approvals" asp-external-controller="unapproved"
+                                  asp-external-action="add/entry-method" asp-external-id="@Model.ProviderId"
+                                  class="govuk-link">add multiple learners</a> from the Individualised Learner Record (ILR).
                 </p>
                 <p>
-                    This is to give you more time to adopt the individualised learner record (ILR) option.
-                </p>
-                <p>
-                    We will be <b>removing the option to add learners manually in Autumn 2026.</b> We will confirm the date closer to the time.
-                </p>
-                <p>
-                    We recommend using the ILR option so your organisation is ready for these changes.
-                </p>
-
-                <p>
-                    The CSV bulk upload option will remain available whilst we improve the ILR option to add multiple learners.
+                    You can still add learners manually.
                 </p>
             </div>
         </div>
